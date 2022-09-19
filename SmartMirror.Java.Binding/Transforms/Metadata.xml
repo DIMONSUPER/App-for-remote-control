@@ -1,0 +1,26 @@
+﻿<metadata>
+
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.datastore']/class[@name='RequestedScopeDataSource']/method[@name='cursorToObject']" name="managedOverride">override</attr>
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.datastore']/class[@name='AppInfoDataSource']/method[@name='cursorToObject']" name="managedOverride">override</attr>
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.datastore']/class[@name='AuthorizationTokenDataSource']/method[@name='cursorToObject']" name="managedOverride">override</attr>
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.datastore']/class[@name='CodePairDataSource']/method[@name='cursorToObject']" name="managedOverride">override</attr>
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.datastore']/class[@name='ProfileDataSource']/method[@name='cursorToObject']" name="managedOverride">override</attr>
+
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.dataobject']/class[@name='RequestedScope']/method[@name='getDataSource']" name="managedOverride">override</attr>
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.dataobject']/class[@name='AccessAtzToken']/method[@name='getDataSource']" name="managedOverride">override</attr>
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.dataobject']/class[@name='AppInfo']/method[@name='getDataSource']" name="managedOverride">override</attr>
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.dataobject']/class[@name='Profile']/method[@name='getDataSource']" name="managedOverride">override</attr>
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.dataobject']/class[@name='CodePair']/method[@name='getDataSource']" name="managedOverride">override</attr>
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.dataobject']/class[@name='AuthorizationToken']/method[@name='getDataSource']" name="managedReturn">Com.Amazon.Identity.Auth.Device.Datastore.AbstractDataSource</attr>
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.dataobject']/class[@name='AuthorizationToken']/method[@name='getDataSource']" name="managedType">Com.Amazon.Identity.Auth.Device.Datastore.AbstractDataSource</attr>
+
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.endpoint']/class[@name='OneTimeCodeRequest']/method[@name='getEndPoint']" name="visibility">protected</attr>
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.endpoint']/class[@name='OneTimeCodeRequest']/method[@name='generateResponse']" name="managedOverride">override</attr>
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.endpoint']/class[@name='ProfileRequest']/method[@name='generateResponse']" name="managedOverride">override</attr>
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.endpoint']/class[@name='LogoutRequest']/method[@name='generateResponse']" name="managedOverride">override</attr>
+
+	<attr path="/api/package[@name='com.amazon.identity.auth.device.api.authorization']/class[@name='AuthorizeRequest.Builder']/method[@name='build']" name="managedOverride">override</attr>
+
+</metadata>
+
+

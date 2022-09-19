@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartMirror", "SmartMirror\SmartMirror.csproj", "{B00C7C0C-C7E5-45A5-BFDF-01E4892890AC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartMirror.Java.Binding", "SmartMirror.Java.Binding\SmartMirror.Java.Binding.csproj", "{E642BCDA-8701-43BE-A8DC-A8F2A077C606}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{B00C7C0C-C7E5-45A5-BFDF-01E4892890AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B00C7C0C-C7E5-45A5-BFDF-01E4892890AC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B00C7C0C-C7E5-45A5-BFDF-01E4892890AC}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{E642BCDA-8701-43BE-A8DC-A8F2A077C606}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E642BCDA-8701-43BE-A8DC-A8F2A077C606}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E642BCDA-8701-43BE-A8DC-A8F2A077C606}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E642BCDA-8701-43BE-A8DC-A8F2A077C606}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

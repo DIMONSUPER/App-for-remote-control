@@ -1,5 +1,8 @@
 ﻿using System.Diagnostics;
+using CommunityToolkit.Maui;
 using Prism.Navigation;
+using SmartMirror.Platforms.Services;
+using SmartMirror.Services.Amazon;
 using SmartMirror.ViewModels;
 using SmartMirror.Views;
 
@@ -13,6 +16,7 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder()
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
             .UsePrism(prism => prism.RegisterTypes(RegisterTypes).OnAppStart(OnAppStart))
             .ConfigureFonts(fonts =>
             {
@@ -31,6 +35,8 @@ public static class MauiProgram
     private static void RegisterTypes(IContainerRegistry containerRegistry)
     {
         containerRegistry.RegisterForNavigation<MainPage>();
+
+        containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
     }
 
     private static void OnAppStart(INavigationService navigationService)
