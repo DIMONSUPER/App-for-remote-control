@@ -1,7 +1,7 @@
 ﻿
 using System.Runtime.CompilerServices;
 
-namespace SmartMirror;
+namespace SmartMirror.Helpers;
 
 public class AOResult
 {

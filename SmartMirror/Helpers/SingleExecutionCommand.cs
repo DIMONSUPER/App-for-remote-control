@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace SmartMirror;
+namespace SmartMirror.Helpers;
 
 public class SingleExecutionCommand : ICommand
 {

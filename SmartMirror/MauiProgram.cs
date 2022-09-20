@@ -3,6 +3,7 @@ using CommunityToolkit.Maui;
 using Prism.Navigation;
 using SmartMirror.Platforms.Services;
 using SmartMirror.Services.Amazon;
+using SmartMirror.Services.Rest;
 using SmartMirror.ViewModels;
 using SmartMirror.Views;
 
@@ -36,6 +37,7 @@ public static class MauiProgram
     {
         containerRegistry.RegisterForNavigation<MainPage>();
 
+        containerRegistry.RegisterSingleton<IRestService, RestService>();
         containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
     }
 

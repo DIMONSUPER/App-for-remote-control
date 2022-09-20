@@ -1,8 +1,10 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.OS;
 using Com.Amazon.Identity.Auth.Device.Api.Authorization;
 using Com.Amazon.Identity.Auth.Device.Api.Workflow;
+using Org.Json;
 using SmartMirror.Platforms.Services;
 
 namespace SmartMirror;
@@ -19,7 +21,6 @@ namespace SmartMirror;
 public class MainActivity : MauiAppCompatActivity
 {
     private RequestContext _currentRequestContext;
-    private CustomAuthorizeListener _currentListener;
 
     #region -- Overrides --
 
@@ -34,19 +35,27 @@ public class MainActivity : MauiAppCompatActivity
 
     #region -- Public helpers --
 
-    public void StartAmazonAuthorization(EventHandler<AuthorizeResult> eventHandler)
+    public void StartAmazonAuthorization(AuthorizeListener authorizeListener, string codeChallenge)
     {
-        _currentListener ??= new CustomAuthorizeListener(eventHandler);
-
         if (_currentRequestContext is null)
         {
             _currentRequestContext = RequestContext.Create(this);
-            _currentRequestContext.RegisterListener(_currentListener);
+            _currentRequestContext.RegisterListener(authorizeListener);
         }
 
+        var scopeData = new JSONObject();
+        var productInstanceAttributes = new JSONObject();
+
+        productInstanceAttributes.Put("deviceSerialNumber", Constants.Amazon.PRODUCT_DSN);
+        scopeData.Put("productInstanceAttributes", productInstanceAttributes);
+        scopeData.Put("productID", Constants.Amazon.PRODUCT_ID);
+
         AuthorizationManager.Authorize(new AuthorizeRequest.Builder(_currentRequestContext)
-                        .AddScopes(ProfileScope.Profile(), ProfileScope.PostalCode())
-                        .Build());
+            .AddScopes(ScopeFactory.ScopeNamed("alexa:voice_service:pre_auth"), ScopeFactory.ScopeNamed("alexa:all", scopeData))
+            .AddScopes(ProfileScope.Profile())
+            .ForGrantType(AuthorizeRequest.GrantType.AuthorizationCode)
+            .WithProofKeyParameters(codeChallenge, "S256")
+            .Build());
     }
 
     #endregion
