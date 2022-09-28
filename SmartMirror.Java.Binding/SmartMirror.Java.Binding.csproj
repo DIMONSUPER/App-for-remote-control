@@ -8,11 +8,17 @@
   <ItemGroup>
     <None Remove="Jars\login-with-amazon-sdk.jar" />
     <None Remove="Jars\" />
+    <None Remove="Microsoft.Maui.Dependencies" />
+    <None Remove="Microsoft.Maui.Extensions" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedJar Include="Jars\login-with-amazon-sdk.jar" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Jars\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Maui.Dependencies" Version="6.0.540" />
+    <PackageReference Include="Microsoft.Maui.Extensions" Version="6.0.540" />
   </ItemGroup>
 </Project>
