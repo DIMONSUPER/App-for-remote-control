@@ -41,8 +41,7 @@ public partial class CustomCarouselView : ContentView
     public static readonly BindableProperty TextColorProperty = BindableProperty.Create(
         propertyName: nameof(TextColor),
         returnType: typeof(Color),
-        declaringType: typeof(CustomCarouselView),
-        defaultValue: Color.FromArgb("#D0D1D3"));
+        declaringType: typeof(CustomCarouselView));
 
     public Color TextColor
     {
@@ -197,13 +196,11 @@ public partial class CustomCarouselView : ContentView
         var label = new Label
         {
             Text = viewModel.Title,
-            FontFamily = FontNames.InterBold,
-            FontSize = 20,
             Padding = new(42, 12),
-            TextColor = TextColor,
         };
 
         label.SetBinding(Label.TextProperty, new Binding(nameof(viewModel.Title), source: viewModel));
+        label.SetDynamicResource(Label.StyleProperty, "tstyle_i10");
 
         var dataTrigger = new DataTrigger(typeof(Label))
         {
