@@ -11,6 +11,8 @@ namespace SmartMirror.ViewModels
         {
         }
 
+        #region -- Overrides --
+
         public async override void OnAppearing()
         {
             base.OnAppearing();
@@ -21,6 +23,8 @@ namespace SmartMirror.ViewModels
                 .AddSegment<MainPageViewModel>()
                 .Navigate();
         }
+
+        #endregion
     }
 }
 

@@ -3,7 +3,7 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                        xmlns:views="clr-namespace:SmartMirror.Views"
                        x:Class="SmartMirror.Views.SplashScreenPage"
-                       BackgroundColor="#989898"
+                       Background="{StaticResource GrayGradientBrush}"
                        Title="SplashScreenPage">
 
         <Image Source="home.png"
