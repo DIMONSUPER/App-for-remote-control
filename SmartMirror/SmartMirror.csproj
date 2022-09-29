@@ -65,6 +65,7 @@
 		<None Remove="ViewModels\Tabs\" />
 		<None Remove="Extensions\" />
 		<None Remove="Microsoft.Extensions.Localization" />
+		<None Remove="Resources\Strings\" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Prism.DryIoc.Maui" Version="8.1.273-pre" />
@@ -92,6 +93,7 @@
 		<Folder Include="Resources\DataTemplateSelectors\" />
 		<Folder Include="ViewModels\Tabs\" />
 		<Folder Include="Extensions\" />
+		<Folder Include="Resources\Strings\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\MainPage.xaml">

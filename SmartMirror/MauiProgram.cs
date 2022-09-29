@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Maui;
 using SmartMirror.Platforms.Services;
-using SmartMirror.Resources.Fonts;
 using SmartMirror.Services.Amazon;
 using SmartMirror.Services.Rest;
 using SmartMirror.ViewModels;
@@ -21,9 +20,9 @@ public static class MauiProgram
             .UsePrism(prism => prism.RegisterTypes(RegisterTypes).OnAppStart(OnAppStart))
             .ConfigureFonts(fonts =>
             {
-                fonts.AddFont("Inter-Medium-500.ttf", FontNames.InterMedium);
-                fonts.AddFont("Inter-SemiBold-600.ttf", FontNames.InterSemiBold);
-                fonts.AddFont("Inter-Bold-700.ttf", FontNames.InterBold);
+                fonts.AddFont("Inter-Medium-500.ttf", "InterMedium");
+                fonts.AddFont("Inter-SemiBold-600.ttf", "InterSemiBold");
+                fonts.AddFont("Inter-Bold-700.ttf", "InterBold");
             });
 
         return builder.Build();
