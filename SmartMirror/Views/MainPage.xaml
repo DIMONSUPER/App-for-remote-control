@@ -2,36 +2,13 @@
 <views:BaseContentPage xmlns:views="clr-namespace:SmartMirror.Views"
                        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                       xmlns:vm="clr-namespace:SmartMirror.ViewModels"
-                       x:DataType="vm:MainPageViewModel"
-                       x:Class="SmartMirror.Views.MainPage">
+                       xmlns:controls="clr-namespace:SmartMirror.Controls"
+                       x:Class="SmartMirror.Views.MainPage"
+                       x:Name="mainPage">
 
     <views:BaseContentPage.Content>
-
-        <Grid BackgroundColor="White">
-
-            <Label Text="InterMedium text"
-                   VerticalOptions="Start"
-                   HorizontalOptions="Center"
-                   FontFamily="InterMedium"
-                   TextColor="Black"
-                   FontSize="36"/>
-
-            <Label Text="InterSemiBold text"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand"
-                   FontFamily="InterSemiBold"
-                   TextColor="Black"
-                   FontSize="36"/>
-
-            <Label Text="InterBold text"
-                   VerticalOptions="EndAndExpand"
-                   HorizontalOptions="Center"
-                   FontFamily="InterBold"
-                   TextColor="Black"
-                   FontSize="36"/>
-
-        </Grid>
+        <controls:CustomCarouselView Background="{StaticResource GrayGradientBrush}"
+                                     ItemsSource="{Binding Items}"/>
 
     </views:BaseContentPage.Content>
 
