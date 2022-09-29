@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Runtime.CompilerServices;
-using SmartMirror.Resources.Fonts;
 using SmartMirror.ViewModels.Tabs;
 
 namespace SmartMirror.Controls;
