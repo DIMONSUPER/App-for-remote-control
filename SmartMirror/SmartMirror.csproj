@@ -54,6 +54,7 @@
 		<None Remove="Models\Amazon\" />
 		<None Remove="Services\Rest\" />
 		<None Remove="Newtonsoft.Json" />
+		<None Remove="Resources\Strings\" />
 		<None Remove="Microsoft.Maui.Dependencies" />
 		<None Remove="Microsoft.Maui.Extensions" />
 		<None Remove="Controls\" />
@@ -61,6 +62,8 @@
 		<None Remove="Resources\DataTemplates\" />
 		<None Remove="Resources\DataTemplateSelectors\" />
 		<None Remove="ViewModels\Tabs\" />
+		<None Remove="Extensions\" />
+		<None Remove="Microsoft.Extensions.Localization" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Prism.DryIoc.Maui" Version="8.1.273-pre" />
@@ -81,11 +84,13 @@
 		<Folder Include="Models\" />
 		<Folder Include="Models\Amazon\" />
 		<Folder Include="Services\Rest\" />
+		<Folder Include="Resources\Strings\" />
 		<Folder Include="Controls\" />
 		<Folder Include="Views\Tabs\" />
 		<Folder Include="Resources\DataTemplates\" />
 		<Folder Include="Resources\DataTemplateSelectors\" />
 		<Folder Include="ViewModels\Tabs\" />
+		<Folder Include="Extensions\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\MainPage.xaml">
@@ -113,6 +118,17 @@
 	</ItemGroup>
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0-android' ">
 		<ProjectReference Include="..\SmartMirror.Java.Binding\SmartMirror.Java.Binding.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Update="Resources\Strings\Strings.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Update="Resources\Strings\Strings.Designer.cs">
+	    <DependentUpon>Strings.resx</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
 		<AndroidKeyStore>True</AndroidKeyStore>
