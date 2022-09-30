@@ -35,6 +35,7 @@ public static class MauiProgram
     private static void RegisterTypes(IContainerRegistry containerRegistry)
     {
         containerRegistry.RegisterForNavigation<MainPage>();
+        containerRegistry.RegisterForNavigation<SplashScreenPage>();
 
         containerRegistry.RegisterSingleton<IRestService, RestService>();
         containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
@@ -42,7 +43,9 @@ public static class MauiProgram
 
     private static void OnAppStart(INavigationService navigationService)
     {
-        navigationService.CreateBuilder().AddNavigationPage().AddSegment<MainPageViewModel>().Navigate(HandleErrors);
+        navigationService.CreateBuilder()
+            .AddSegment<SplashScreenPageViewModel>()
+            .Navigate(HandleErrors);
     }
 
     private static void HandleErrors(Exception exception)

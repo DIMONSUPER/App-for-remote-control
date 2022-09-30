@@ -35,7 +35,8 @@
 		<MauiFont Include="Resources\Fonts\*" />
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" />
+		<!-- SplashScreen -->
+		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#989898"/>-->
 	</ItemGroup>
 	<ItemGroup>
 		<None Remove="Prism.DryIoc.Maui" />
