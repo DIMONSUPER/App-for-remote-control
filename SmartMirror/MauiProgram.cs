@@ -44,7 +44,6 @@ public static class MauiProgram
     private static void OnAppStart(INavigationService navigationService)
     {
         navigationService.CreateBuilder()
-            .AddNavigationPage()
             .AddSegment<SplashScreenPageViewModel>()
             .Navigate(HandleErrors);
     }

@@ -20,6 +20,7 @@ namespace SmartMirror.ViewModels
             await Task.Delay(2000);
 
             NavigationService.CreateBuilder()
+                .AddNavigationPage()
                 .AddSegment<MainPageViewModel>()
                 .Navigate();
         }
