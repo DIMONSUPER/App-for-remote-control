@@ -101,7 +101,7 @@
 
                             <Label.Triggers>
 
-                                <DataTrigger Binding="{Binding IsEnabled}" Value="false" TargetType="Label">
+                                <DataTrigger Binding="{Binding Source={x:Reference switch}, Path=IsToggled}" Value="false" TargetType="Label">
                                     <Setter Property="Text" Value="{extensions:Translate Closed}"/>
                                     <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
                                 </DataTrigger>
@@ -110,7 +110,8 @@
 
                         </Label>
 
-                        <Switch IsToggled="{Binding IsEnabled}"
+                        <Switch x:Name="switch"
+                                IsToggled="{Binding Status}"
                                 WidthRequest="42"
                                 HeightRequest="24"
                                 VerticalOptions="Start"

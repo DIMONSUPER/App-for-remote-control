@@ -1,25 +1,31 @@
 ﻿using System.Collections.ObjectModel;
+using SmartMirror.Models;
+using SmartMirror.Services.Mock;
+using Device = SmartMirror.Models.Device;
 
 namespace SmartMirror.ViewModels.Tabs;
 
 public class RoomsViewModel : BaseTabViewModel
 {
-    public RoomsViewModel()
+    private readonly IMockService _mokcService;
+
+    public RoomsViewModel(IMockService mockService)
     {
         Title = "Rooms";
+        _mokcService = mockService;
     }
 
     #region -- Public properties --
 
-    private ObservableCollection<TemporaryModel> _favoriteAccessories;
-    public ObservableCollection<TemporaryModel> FavoriteAccessories
+    private ObservableCollection<Device> _favoriteAccessories;
+    public ObservableCollection<Device> FavoriteAccessories
     {
         get => _favoriteAccessories;
         set => SetProperty(ref _favoriteAccessories, value);
     }
 
-    private ObservableCollection<TemporaryModel> _rooms;
-    public ObservableCollection<TemporaryModel> Rooms
+    private ObservableCollection<Room> _rooms;
+    public ObservableCollection<Room> Rooms
     {
         get => _rooms;
         set => SetProperty(ref _rooms, value);
@@ -33,20 +39,8 @@ public class RoomsViewModel : BaseTabViewModel
     {
         base.Initialize(parameters);
 
-        FavoriteAccessories = new()
-        {
-            new() { Name = "Garage Door", Type = "GarageDoor", IsEnabled = true },
-            new() { Name = "Front Door", Type = "FrontDoor", IsEnabled = true },
-            new() { Name = "Fan", Type = "Fan", IsEnabled = true, RoomName = "Living Room", Description = "68%" },
-        };
-
-        Rooms = new()
-        {
-            new() { Name = "Dining Room", Description = "5 Accessories" },
-            new() { Name = "Downstairs", Description = "4 Accessories" },
-            new() { Name = "Front Door", Description = "2 Accessories" },
-            new() { Name = "Garage", Description = "12 Accessories" },
-        };
+        FavoriteAccessories = new(_mokcService.GetDevices());
+        Rooms = new(_mokcService.GetRooms());
     }
 
     #endregion

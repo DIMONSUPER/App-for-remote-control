@@ -66,6 +66,8 @@
 		<None Remove="Extensions\" />
 		<None Remove="Microsoft.Extensions.Localization" />
 		<None Remove="Resources\Strings\" />
+		<None Remove="Enums\" />
+		<None Remove="Services\Mock\" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Prism.DryIoc.Maui" Version="8.1.273-pre" />
@@ -94,6 +96,8 @@
 		<Folder Include="ViewModels\Tabs\" />
 		<Folder Include="Extensions\" />
 		<Folder Include="Resources\Strings\" />
+		<Folder Include="Enums\" />
+		<Folder Include="Services\Mock\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\MainPage.xaml">

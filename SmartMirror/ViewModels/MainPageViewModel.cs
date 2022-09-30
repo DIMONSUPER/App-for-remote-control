@@ -1,17 +1,22 @@
 ﻿using System.Collections.ObjectModel;
+using SmartMirror.Services.Mock;
 using SmartMirror.ViewModels.Tabs;
 
 namespace SmartMirror.ViewModels;
 
 public class MainPageViewModel : BaseViewModel
 {
+    private IMockService _mockService;
     public MainPageViewModel(
-        INavigationService navigationService)
+        INavigationService navigationService,
+        IMockService mockService)
         : base(navigationService)
     {
+        _mockService = mockService;
+
         Items = new()
         {
-            new RoomsViewModel(),
+            new RoomsViewModel(_mockService),
             new NotificationsViewModel(),
             new CamerasViewModel(),
             new ScenariosViewModel(),
