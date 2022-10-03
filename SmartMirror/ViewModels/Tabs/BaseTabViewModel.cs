@@ -1,6 +1,6 @@
 ﻿namespace SmartMirror.ViewModels.Tabs;
 
-public class BaseTabViewModel : BindableBase, IInitialize
+public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware
 {
     public BaseTabViewModel()
     {
@@ -27,6 +27,18 @@ public class BaseTabViewModel : BindableBase, IInitialize
     #region -- IInitialize implementation --
 
     public virtual void Initialize(INavigationParameters parameters)
+    {
+    }
+
+    #endregion
+
+    #region -- IPageLifecycleAware implementation --
+
+    public virtual void OnAppearing()
+    {
+    }
+
+    public virtual void OnDisappearing()
     {
     }
 

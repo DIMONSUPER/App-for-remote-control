@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DataTemplate xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              x:Class="SmartMirror.Resources.DataTemplates.RoomsTemplate">
+
+    <Grid WidthRequest="307"
+          HeightRequest="172">
+
+        <!-- BORDER AND ICON -->
+        <Border Stroke="White"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 9"
+                BackgroundColor="#3A3A3C"
+                Padding="24">
+
+        </Border>
+
+        <!-- NAME AND DESCRIPTION -->
+        <Grid RowSpacing="0"
+              VerticalOptions="End"
+              Margin="24"
+              HorizontalOptions="Fill"
+              RowDefinitions="Auto">
+
+            <VerticalStackLayout HorizontalOptions="Start"
+                                 VerticalOptions="End"
+                                 Spacing="0">
+
+                <Label Text="{Binding Name}"
+                       VerticalTextAlignment="End"
+                       Style="{x:DynamicResource tstyle_i11}"/>
+
+                <Label Text="{Binding Description}"
+                       Margin="0,6,0,0"
+                       VerticalTextAlignment="End"
+                       Style="{x:DynamicResource tstyle_i5}"/>
+
+            </VerticalStackLayout>
+
+        </Grid>
+
+    </Grid>
+
+</DataTemplate>
+

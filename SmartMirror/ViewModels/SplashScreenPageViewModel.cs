@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Prism.Navigation;
 
 namespace SmartMirror.ViewModels
@@ -21,8 +22,18 @@ namespace SmartMirror.ViewModels
 
             NavigationService.CreateBuilder()
                 .AddNavigationPage()
-                .AddSegment<MainPageViewModel>()
-                .Navigate();
+                .AddSegment<MainTabbedPageViewModel>()
+                .Navigate(HandleErrors);
+        }
+
+        #endregion
+
+        #region -- Private helpers --
+
+        private static void HandleErrors(Exception exception)
+        {
+            Debug.WriteLine(exception.Message);
+            Debugger.Break();
         }
 
         #endregion

@@ -1,8 +1,8 @@
 ﻿namespace SmartMirror.Views.Tabs;
 
-public partial class CamerasView : ContentView
+public partial class RoomsPage : BaseTabContentPage
 {
-	public CamerasView()
+	public RoomsPage()
 	{
 		InitializeComponent();
 	}

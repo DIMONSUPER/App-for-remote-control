@@ -1,11 +1,15 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Maui;
+using Microsoft.Maui.Controls.Compatibility.Hosting;
+using SmartMirror.Controls;
+using SmartMirror.Platforms.Android.Renderers;
 using SmartMirror.Platforms.Services;
 using SmartMirror.Services.Amazon;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Rest;
 using SmartMirror.ViewModels;
 using SmartMirror.Views;
+using SmartMirror.Views.Tabs;
 
 namespace SmartMirror;
 
@@ -18,6 +22,8 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder()
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
+            .UseMauiCompatibility()
+            .ConfigureMauiHandlers(OnConfigureMauiHandlers)
             .UsePrism(prism => prism.RegisterTypes(RegisterTypes).OnAppStart(OnAppStart))
             .ConfigureFonts(fonts =>
             {
@@ -35,8 +41,12 @@ public static class MauiProgram
 
     private static void RegisterTypes(IContainerRegistry containerRegistry)
     {
-        containerRegistry.RegisterForNavigation<MainPage>();
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
+        containerRegistry.RegisterForNavigation<MainTabbedPage>();
+        containerRegistry.RegisterForNavigation<RoomsPage>();
+        containerRegistry.RegisterForNavigation<NotificationsPage>();
+        containerRegistry.RegisterForNavigation<CamerasPage>();
+        containerRegistry.RegisterForNavigation<ScenariosPage>();
 
         containerRegistry.RegisterSingleton<IRestService, RestService>();
         containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
@@ -54,6 +64,11 @@ public static class MauiProgram
     {
         Debug.WriteLine(exception.Message);
         Debugger.Break();
+    }
+
+    private static void OnConfigureMauiHandlers(IMauiHandlersCollection handlers)
+    {
+        handlers.AddCompatibilityRenderer(typeof(CustomTabbedPage), typeof(CustomTabbedPageRenderer));
     }
 
     #endregion
