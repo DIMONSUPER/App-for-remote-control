@@ -1,25 +1,31 @@
 ﻿using System.Collections.ObjectModel;
+using SmartMirror.Models;
+using SmartMirror.Services.Mock;
+using Device = SmartMirror.Models.Device;
 
 namespace SmartMirror.ViewModels.Tabs;
 
 public class RoomsViewModel : BaseTabViewModel
 {
-    public RoomsViewModel()
+    private readonly ISmartHomeMockService _smartHomeMockService;
+
+    public RoomsViewModel(ISmartHomeMockService smartHomeMockService)
     {
         Title = "Rooms";
+        _smartHomeMockService = smartHomeMockService;
     }
 
     #region -- Public properties --
 
-    private ObservableCollection<TemporaryModel> _favoriteAccessories;
-    public ObservableCollection<TemporaryModel> FavoriteAccessories
+    private ObservableCollection<Device> _favoriteAccessories;
+    public ObservableCollection<Device> FavoriteAccessories
     {
         get => _favoriteAccessories;
         set => SetProperty(ref _favoriteAccessories, value);
     }
 
-    private ObservableCollection<TemporaryModel> _rooms;
-    public ObservableCollection<TemporaryModel> Rooms
+    private ObservableCollection<Room> _rooms;
+    public ObservableCollection<Room> Rooms
     {
         get => _rooms;
         set => SetProperty(ref _rooms, value);
@@ -33,38 +39,10 @@ public class RoomsViewModel : BaseTabViewModel
     {
         base.Initialize(parameters);
 
-        FavoriteAccessories = new()
-        {
-            new() { Name = "Garage Door", Type = "GarageDoor", IsEnabled = true },
-            new() { Name = "Front Door", Type = "FrontDoor", IsEnabled = true },
-            new() { Name = "Fan", Type = "Fan", IsEnabled = true, RoomName = "Living Room", Description = "68%" },
-        };
-
-        Rooms = new()
-        {
-            new() { Name = "Dining Room", Description = "5 Accessories" },
-            new() { Name = "Downstairs", Description = "4 Accessories" },
-            new() { Name = "Front Door", Description = "2 Accessories" },
-            new() { Name = "Garage", Description = "12 Accessories" },
-        };
+        FavoriteAccessories = new(_smartHomeMockService.GetDevices());
+        Rooms = new(_smartHomeMockService.GetRooms());
     }
 
     #endregion
-}
-
-//TODO: replace this with mocked models
-public class TemporaryModel : BindableBase
-{
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public string Type { get; set; }
-    public string RoomName { get; set; }
-
-    private bool _isEnabled;
-    public bool IsEnabled
-    {
-        get => _isEnabled;
-        set => SetProperty(ref _isEnabled, value);
-    }
 }
 

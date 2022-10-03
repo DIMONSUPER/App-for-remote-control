@@ -2,6 +2,7 @@
 using CommunityToolkit.Maui;
 using SmartMirror.Platforms.Services;
 using SmartMirror.Services.Amazon;
+using SmartMirror.Services.Mock;
 using SmartMirror.Services.Rest;
 using SmartMirror.ViewModels;
 using SmartMirror.Views;
@@ -39,6 +40,7 @@ public static class MauiProgram
 
         containerRegistry.RegisterSingleton<IRestService, RestService>();
         containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
+        containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
     }
 
     private static void OnAppStart(INavigationService navigationService)

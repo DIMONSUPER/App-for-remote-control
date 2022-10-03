@@ -20,10 +20,10 @@
                     <Border Stroke="White"
                             StrokeThickness="1"
                             StrokeShape="RoundRectangle 9"
-                            BackgroundColor="#3A3A3C"
+                            BackgroundColor="{StaticResource cbg_i2}"
                             Padding="24">
 
-                        <Border BackgroundColor="#2A2A2A"
+                        <Border BackgroundColor="{StaticResource cbg_i1}"
                                 StrokeShape="RoundRectangle 12"
                                 StrokeThickness="0"
                                 WidthRequest="84"
@@ -80,7 +80,7 @@
 
                         <Label Grid.RowSpan="2"
                                Grid.Column="1"
-                               Text="{Binding Description}"
+                               Text="{Binding Power}"
                                HorizontalTextAlignment="End"
                                VerticalTextAlignment="End"
                                Style="{x:DynamicResource tstyle_i4}"/>
@@ -101,7 +101,7 @@
 
                             <Label.Triggers>
 
-                                <DataTrigger Binding="{Binding IsEnabled}" Value="false" TargetType="Label">
+                                <DataTrigger Binding="{Binding Source={x:Reference switch}, Path=IsToggled}" Value="false" TargetType="Label">
                                     <Setter Property="Text" Value="{extensions:Translate Closed}"/>
                                     <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
                                 </DataTrigger>
@@ -110,7 +110,8 @@
 
                         </Label>
 
-                        <Switch IsToggled="{Binding IsEnabled}"
+                        <Switch x:Name="switch"
+                                IsToggled="{Binding Status}"
                                 WidthRequest="42"
                                 HeightRequest="24"
                                 VerticalOptions="Start"
