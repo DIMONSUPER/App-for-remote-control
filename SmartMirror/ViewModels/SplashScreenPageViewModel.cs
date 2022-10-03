@@ -1,26 +1,27 @@
-﻿using System;
-using System.Diagnostics;
-using Prism.Navigation;
+﻿using System.Diagnostics;
 
 namespace SmartMirror.ViewModels
 {
-    public class SplashScreenPageViewModel : BaseViewModel
+    public class SplashScreenPageViewModel : INavigationAware
     {
-        public SplashScreenPageViewModel(
-            INavigationService navigationService)
-            : base(navigationService)
+        private readonly INavigationService _navigationService;
+
+        public SplashScreenPageViewModel(INavigationService navigationService)
+        {
+            _navigationService = navigationService;
+        }
+
+        #region -- INavigationAware implementaion --
+
+        public void OnNavigatedFrom(INavigationParameters parameters)
         {
         }
 
-        #region -- Overrides --
-
-        public async override void OnAppearing()
+        public async void OnNavigatedTo(INavigationParameters parameters)
         {
-            base.OnAppearing();
-
             await Task.Delay(2000);
 
-            NavigationService.CreateBuilder()
+            _navigationService.CreateBuilder()
                 .AddNavigationPage()
                 .AddSegment<MainTabbedPageViewModel>()
                 .Navigate(HandleErrors);
