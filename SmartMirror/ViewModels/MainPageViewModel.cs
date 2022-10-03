@@ -6,17 +6,18 @@ namespace SmartMirror.ViewModels;
 
 public class MainPageViewModel : BaseViewModel
 {
-    private IMockService _mockService;
+    private readonly ISmartHomeMockService _smartHomeMockService;
+
     public MainPageViewModel(
         INavigationService navigationService,
-        IMockService mockService)
+        ISmartHomeMockService smartHomeMockService)
         : base(navigationService)
     {
-        _mockService = mockService;
+        _smartHomeMockService = smartHomeMockService;
 
         Items = new()
         {
-            new RoomsViewModel(_mockService),
+            new RoomsViewModel(_smartHomeMockService),
             new NotificationsViewModel(),
             new CamerasViewModel(),
             new ScenariosViewModel(),

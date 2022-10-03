@@ -40,7 +40,7 @@ public static class MauiProgram
 
         containerRegistry.RegisterSingleton<IRestService, RestService>();
         containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
-        containerRegistry.RegisterSingleton<IMockService, MockService>();
+        containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
     }
 
     private static void OnAppStart(INavigationService navigationService)

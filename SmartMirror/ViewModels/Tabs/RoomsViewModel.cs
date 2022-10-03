@@ -7,12 +7,12 @@ namespace SmartMirror.ViewModels.Tabs;
 
 public class RoomsViewModel : BaseTabViewModel
 {
-    private readonly IMockService _mokcService;
+    private readonly ISmartHomeMockService _smartHomeMockService;
 
-    public RoomsViewModel(IMockService mockService)
+    public RoomsViewModel(ISmartHomeMockService smartHomeMockService)
     {
         Title = "Rooms";
-        _mokcService = mockService;
+        _smartHomeMockService = smartHomeMockService;
     }
 
     #region -- Public properties --
@@ -39,26 +39,10 @@ public class RoomsViewModel : BaseTabViewModel
     {
         base.Initialize(parameters);
 
-        FavoriteAccessories = new(_mokcService.GetDevices());
-        Rooms = new(_mokcService.GetRooms());
+        FavoriteAccessories = new(_smartHomeMockService.GetDevices());
+        Rooms = new(_smartHomeMockService.GetRooms());
     }
 
     #endregion
-}
-
-//TODO: replace this with mocked models
-public class TemporaryModel : BindableBase
-{
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public string Type { get; set; }
-    public string RoomName { get; set; }
-
-    private bool _isEnabled;
-    public bool IsEnabled
-    {
-        get => _isEnabled;
-        set => SetProperty(ref _isEnabled, value);
-    }
 }
 

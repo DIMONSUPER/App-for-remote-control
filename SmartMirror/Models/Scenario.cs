@@ -8,7 +8,7 @@ namespace SmartMirror.Models
         public bool IsActive { get; set; }
         public bool IsFavorite { get; set; }
         public DateTime ActivationTime { get; set; }
-        public List<ScenarioAction> ScenarioActions { get; set; }
+        public IEnumerable<ScenarioAction> ScenarioActions { get; set; }
     }
 }
 

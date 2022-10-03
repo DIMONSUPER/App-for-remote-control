@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using Android.App;
 using SmartMirror.Enums;
 using SmartMirror.Models;
 using Device = SmartMirror.Models.Device;
+using Notification = SmartMirror.Models.Notification;
 
 namespace SmartMirror.Services.Mock
 {
-    public class MockService :IMockService
+    public class SmartHomeMockService : ISmartHomeMockService
     {
-        public MockService()
+        public IEnumerable<Camera> GetCameras()
         {
-        }
-
-        public List<Camera> GetCameras()
-        {
-            return new()
+            List<Camera> cameras= new()
             {
                 new() { Name = "Front Door 1", IsConnected = true, CreateTime = DateTime.Now },
                 new() { Name = "Front Door 2", IsConnected = true, CreateTime = DateTime.Now },
@@ -22,33 +20,39 @@ namespace SmartMirror.Services.Mock
                 new() { Name = "Back Door 2", IsConnected = true, CreateTime = DateTime.Now },
                 new() { Name = "Garage", IsConnected = false },
             };
+
+            return cameras;
         }
 
-        public List<Notification> GetNotifications()
+        public IEnumerable<Notification> GetNotifications()
         {
-            return new()
+            List<Notification> notifications = new()
             {
                 new() { Name = "Balcony Door" },
                 new() { Name = "Upstairs Hallway Movement" },
                 new() { Name = "Balcony Door" },
                 new() { Name = "Balcony Door" },
             };
+
+            return notifications;
         }
 
-        public List<Room> GetRooms()
+        public IEnumerable<Room> GetRooms()
         {
-            return new()
+            List<Room> rooms = new()
             {
                 new() { Name = "Dining Room", Description = "5 Accessories" },
                 new() { Name = "Downstairs", Description = "4 Accessories" },
                 new() { Name = "Front Door", Description = "2 Accessories" },
                 new() { Name = "Garage", Description = "12 Accessories" },
             };
+
+            return rooms;
         }
 
-        public List<Scenario> GetScenarios()
+        public IEnumerable<Scenario> GetScenarios()
         {
-            return new()
+            List<Scenario> scenario = new()
             {
                 new() { Name = "Good Morning", IsActive = true, IsFavorite = true, ScenarioActions = GetScenariosActions(), ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
                 new() { Name = "Good Evening", IsActive = false, IsFavorite = true, ScenarioActions = GetScenariosActions(), ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 18, 0, 0) },
@@ -58,32 +62,33 @@ namespace SmartMirror.Services.Mock
                 new() { Name = "Good Morning", IsActive = true, ScenarioActions = GetScenariosActions(), ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
                 new() { Name = "Good Morning", IsActive = false, ScenarioActions = GetScenariosActions(), ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
             };
+
+            return scenario;
         }
 
-        public List<ScenarioAction> GetScenariosActions()
+        public IEnumerable<ScenarioAction> GetScenariosActions()
         {
-            return new()
+            List<ScenarioAction> scenarioAction = new()
             {
                 new() { Name = "Fan", Action = "Set temperature 16ºC", ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
                 new() { Name = "Shades", Action = "Turn OnC", ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
                 new() { Name = "Light", Action = "Turn Off", ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
                 new() { Name = "HomePod", Action = "Turn On", ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
             };
+
+            return scenarioAction;
         }
 
-        public List<Device> GetDevices()
+        public IEnumerable<Device> GetDevices()
         {
-            return new()
+            List<Device> devices = new()
             {
                 new() { Name = "Garage Door", Type = "GarageDoor", Status = EDeviceStatus.On },
                 new() { Name = "Front Door",  Type = "Front DoorStatus", Status = EDeviceStatus.On },
-                new() { Name = "Fan", Type = "Fan", Status = EDeviceStatus.On },
+                new FanDevice { Name = "Fan", Type = "Fan", Status = EDeviceStatus.On, Power = "68%" }
             };
-            //{
-            //    new() { Name = "Garage Door", Type = "GarageDoor", IsEnabled = true },
-            //    new() { Name = "Front Door", Type = "FrontDoor", IsEnabled = true },
-            //    new() { Name = "Fan", Type = "Fan", IsEnabled = true, RoomName = "Living Room", Description = "68%" },
-            //};
+
+            return devices;
         }
     }
 }
