@@ -1,12 +1,11 @@
 ﻿using System;
 namespace SmartMirror.ViewModels.Tabs
 {
-    public class CamerasViewModel : BaseTabViewModel
+    public class CamerasPageViewModel : BaseTabViewModel
     {
-        public CamerasViewModel()
+        public CamerasPageViewModel()
         {
             Title = "Cameras";
         }
     }
 }
-

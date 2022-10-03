@@ -5,11 +5,11 @@ using Device = SmartMirror.Models.Device;
 
 namespace SmartMirror.ViewModels.Tabs;
 
-public class RoomsViewModel : BaseTabViewModel
+public class RoomsPageViewModel : BaseTabViewModel
 {
     private readonly ISmartHomeMockService _smartHomeMockService;
 
-    public RoomsViewModel(ISmartHomeMockService smartHomeMockService)
+    public RoomsPageViewModel(ISmartHomeMockService smartHomeMockService)
     {
         Title = "Rooms";
         _smartHomeMockService = smartHomeMockService;

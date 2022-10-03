@@ -68,6 +68,8 @@
 		<None Remove="Resources\Strings\" />
 		<None Remove="Enums\" />
 		<None Remove="Services\Mock\" />
+		<None Remove="Platforms\Android\Renderers\" />
+		<None Remove="Platforms\Android\Resources\drawable\" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Prism.DryIoc.Maui" Version="8.1.273-pre" />
@@ -98,11 +100,10 @@
 		<Folder Include="Resources\Strings\" />
 		<Folder Include="Enums\" />
 		<Folder Include="Services\Mock\" />
+		<Folder Include="Platforms\Android\Renderers\" />
+		<Folder Include="Platforms\Android\Resources\drawable\" />
 	</ItemGroup>
 	<ItemGroup>
-		<MauiXaml Condition=" '$(EnableDefaultXamlItems)' == 'true' " Update="Views\MainPage.xaml">
-			<SubType>Designer</SubType>
-		</MauiXaml>
 		<MauiXaml Update="Platforms\Windows\App.xaml">
 			<SubType>
 			</SubType>
@@ -110,16 +111,25 @@
 		<MauiXaml Update="Controls\CustomTabView.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\Tabs\RoomsView.xaml">
+		<MauiXaml Update="Views\MainTabbedPage.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\Tabs\NotificationsView.xaml">
+		<MauiXaml Update="Views\Tabs\CamerasPage.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\Tabs\CamerasView.xaml">
+		<MauiXaml Update="Views\Tabs\NotificationsPage.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\Tabs\ScenariosView.xaml">
+		<MauiXaml Update="Views\Tabs\RoomsPage.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Tabs\ScenariosPage.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\FavoriteAccessories.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\RoomsTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 	</ItemGroup>
