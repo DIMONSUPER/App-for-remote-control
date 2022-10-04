@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Maui;
+﻿using System.Diagnostics;
+using Android.App;
+using CommunityToolkit.Maui;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
 using SmartMirror.Controls;
 using SmartMirror.Platforms.Android.Renderers;
