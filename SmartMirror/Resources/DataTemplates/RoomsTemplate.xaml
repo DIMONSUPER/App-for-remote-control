@@ -15,6 +15,13 @@
 
         </Grid.GestureRecognizers>
 
+        <Grid.GestureRecognizers>
+
+            <TapGestureRecognizer Command="{Binding TappedCommand}"
+                                  CommandParameter="{Binding .}"/>
+
+        </Grid.GestureRecognizers>
+
         <!-- BORDER AND ICON -->
         <Border Stroke="White"
                 StrokeThickness="1"
