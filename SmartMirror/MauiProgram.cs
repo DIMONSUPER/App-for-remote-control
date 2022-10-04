@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Android.App;
 using CommunityToolkit.Maui;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
 using SmartMirror.Controls;
@@ -8,7 +9,9 @@ using SmartMirror.Services.Amazon;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Rest;
 using SmartMirror.ViewModels;
+using SmartMirror.ViewModels.Dialogs;
 using SmartMirror.Views;
+using SmartMirror.Views.Dialogs;
 using SmartMirror.Views.Tabs;
 
 namespace SmartMirror;
@@ -41,6 +44,8 @@ public static class MauiProgram
 
     private static void RegisterTypes(IContainerRegistry containerRegistry)
     {
+        containerRegistry.RegisterDialog<ErrorDialog, ErrorDialogViewModel>();
+
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
         containerRegistry.RegisterForNavigation<MainTabbedPage>();
         containerRegistry.RegisterForNavigation<RoomsPage>();
