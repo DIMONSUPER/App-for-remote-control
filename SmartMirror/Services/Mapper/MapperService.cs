@@ -6,7 +6,7 @@ namespace SmartMirror.Services.Mapper
 {
     public class MapperService : IMapperService
     {
-        private Lazy<IMapper> _lazyMapper;
+        private readonly Lazy<IMapper> _lazyMapper;
 
         public MapperService()
         {

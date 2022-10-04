@@ -1,12 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SmartMirror.Views.RoomPage"
-             Title="RoomPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+<views:BaseContentPage xmlns:views="clr-namespace:SmartMirror.Views"
+                       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+                       xmlns:vm="clr-namespace:SmartMirror.ViewModels"
+                       xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+                       x:Class="SmartMirror.Views.RoomPage"
+                       x:DataType="{x:Type vm:RoomPageViewModel}">
+
+    <views:BaseContentPage.Resources>
+
+        <ResourceDictionary>
+
+            <templates:RoomsVerticalListTemplate x:Key="roomsVerticalListTemplate"/>
+
+        </ResourceDictionary>
+
+    </views:BaseContentPage.Resources>
+
+    <VerticalStackLayout Padding="42,28,0,0"
+                         Spacing="24">
+
+        <HorizontalStackLayout Spacing="17"
+                               HorizontalOptions="Start">
+
+            <HorizontalStackLayout.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding BackArrowTappedCommand}"/>
+            </HorizontalStackLayout.GestureRecognizers>
+
+            <Image Source="arrow_left_aqua"
+                   VerticalOptions="Center"/>
+
+            <Label Text="{extensions:Translate Back}"
+                   TextTransform="Uppercase"
+                   VerticalOptions="Center"
+                   Style="{x:DynamicResource tstyle_i12}"/>
+
+        </HorizontalStackLayout>
+
+        <Grid ColumnDefinitions="363, *"
+              ColumnSpacing="105">
+
+            <CollectionView ItemsSource="{Binding Rooms}"
+                            ItemSizingStrategy="MeasureFirstItem"
+                            SelectionMode="None"
+                            Grid.Column="0"
+                            ItemTemplate="{x:StaticResource roomsVerticalListTemplate}"/>
+
+        </Grid>
+
     </VerticalStackLayout>
-</ContentPage>
+</views:BaseContentPage>

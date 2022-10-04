@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DataTemplate xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:SmartMirror.Models"
+             x:Class="SmartMirror.Resources.DataTemplates.RoomsVerticalListTemplate"
+             x:DataType="{x:Type models:RoomBindableModel}">
+
+    <Frame Padding="18, 12"
+           IsClippedToBounds="True"
+           CornerRadius="9"
+           HasShadow="True"
+           BackgroundColor="Transparent">
+
+        <Frame.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding SelectedCommand}" CommandParameter="{Binding .}"/>
+        </Frame.GestureRecognizers>
+
+        <Frame.Triggers>
+            <DataTrigger TargetType="Frame" Binding="{Binding IsSelected}" Value="True">
+                <Setter Property="BackgroundColor" Value="{x:DynamicResource cbg_i8}"/>
+            </DataTrigger>
+        </Frame.Triggers>
+
+        <Grid ColumnDefinitions="*, Auto, Auto"
+              ColumnSpacing="8">
+
+            <Label Text="{Binding Name}"
+                   HorizontalOptions="Start"
+                   VerticalTextAlignment="Center"
+                   LineBreakMode="TailTruncation"
+                   Style="{x:DynamicResource tstyle_i11}">
+
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                        <Setter Property="TextColor" Value="{x:DynamicResource tcolor_i5}"/>
+                    </DataTrigger>
+                </Label.Triggers>
+
+            </Label>
+
+            <Label Grid.Column="1"
+                   Text="{Binding Devices.Count}"
+                   VerticalTextAlignment="Center"
+                   Style="{x:DynamicResource tstyle_i7}"/>
+
+            <Image Grid.Column="2"
+                   Source="devices"
+                   VerticalOptions="Center"/>
+
+        </Grid>
+
+    </Frame>
+
+</DataTemplate>
+

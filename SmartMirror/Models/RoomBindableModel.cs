@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace SmartMirror.Models
 {
@@ -45,6 +46,20 @@ namespace SmartMirror.Models
         {
             get => _isSelected;
             set => SetProperty(ref _isSelected, value);
+        }
+
+        private ICommand _tappedCommand;
+        public ICommand TappedCommand
+        {
+            get => _tappedCommand;
+            set => SetProperty(ref _tappedCommand, value);
+        }
+
+        private ICommand _selectedCommand;
+        public ICommand SelectedCommand
+        {
+            get => _selectedCommand;
+            set => SetProperty(ref _selectedCommand, value);
         }
     }
 }

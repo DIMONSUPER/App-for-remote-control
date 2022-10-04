@@ -1,12 +1,20 @@
 ﻿using SmartMirror.Enums;
+﻿using Prism.Navigation;
 
 namespace SmartMirror.ViewModels.Tabs;
 
 public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware
 {
-    public BaseTabViewModel()
+    public BaseTabViewModel(INavigationService navigationService)
     {
+        NavigationService = navigationService;
     }
+
+    #region -- Protected properties --
+
+    protected INavigationService NavigationService { get; }
+
+    #endregion
 
     #region -- Public properties --
 

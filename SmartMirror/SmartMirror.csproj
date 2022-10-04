@@ -147,6 +147,9 @@
 		<MauiXaml Update="Views\RoomPage.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\RoomsVerticalListTemplate.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0-android' ">
 		<ProjectReference Include="..\SmartMirror.Java.Binding\SmartMirror.Java.Binding.csproj" />

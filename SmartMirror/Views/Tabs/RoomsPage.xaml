@@ -7,7 +7,7 @@
                          xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
                          xmlns:controls="clr-namespace:SmartMirror.Controls"
                          x:Class="SmartMirror.Views.Tabs.RoomsPage"
-                         Title="Rooms"
+                         Title="{extensions:Translate Rooms}"
                          x:DataType="vm:RoomsPageViewModel">
 
     <tabs:BaseTabContentPage.Resources>
