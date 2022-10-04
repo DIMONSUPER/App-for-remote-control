@@ -3,20 +3,34 @@
                          xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                          xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
+                         xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+                         xmlns:controls="clr-namespace:SmartMirror.Controls"
                          x:Class="SmartMirror.Views.Tabs.ScenariosPage"
                          Title="Scenarios"
                          x:DataType="vm:ScenariosPageViewModel">
 
     <tabs:BaseTabContentPage.Content>
 
-        <Grid>
+        <controls:CustomStateView State="{Binding DataState}"
+                                  EmptyTitle="{extensions:Translate NoScenariosYet}"
+                                  LoadingTitle="{extensions:Translate Scenarios}"
+                                  EmptyStateImage="empty_scenarios">
 
-            <Label Text="{Binding Title}"
-                   VerticalOptions="Center"
-                   TextColor="White"
-                   FontSize="28"
-                   HorizontalOptions="Center" />
-        </Grid>
+            <controls:CustomStateView.CompleteContent>
+
+                <Grid>
+
+                    <Label Text="{Binding Title}"
+                           VerticalOptions="Center"
+                           TextColor="White"
+                           FontSize="28"
+                           HorizontalOptions="Center" />
+
+                </Grid>
+
+            </controls:CustomStateView.CompleteContent>
+
+        </controls:CustomStateView>
 
     </tabs:BaseTabContentPage.Content>
 

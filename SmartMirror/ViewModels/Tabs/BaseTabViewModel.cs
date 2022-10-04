@@ -1,4 +1,6 @@
-﻿namespace SmartMirror.ViewModels.Tabs;
+﻿using SmartMirror.Enums;
+
+namespace SmartMirror.ViewModels.Tabs;
 
 public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware
 {
@@ -20,6 +22,13 @@ public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware
     {
         get => _isSelected;
         set => SetProperty(ref _isSelected, value);
+    }
+
+    private EPageState _dataState;
+    public EPageState DataState
+    {
+        get => _dataState;
+        set => SetProperty(ref _dataState, value);
     }
 
     #endregion
