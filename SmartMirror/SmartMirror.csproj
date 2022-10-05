@@ -70,6 +70,7 @@
 		<None Remove="Services\Mock\" />
 		<None Remove="Platforms\Android\Renderers\" />
 		<None Remove="Platforms\Android\Resources\drawable\" />
+		<None Remove="Controls\StateContainer\" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Prism.DryIoc.Maui" Version="8.1.273-pre" />
@@ -102,6 +103,7 @@
 		<Folder Include="Services\Mock\" />
 		<Folder Include="Platforms\Android\Renderers\" />
 		<Folder Include="Platforms\Android\Resources\drawable\" />
+		<Folder Include="Controls\StateContainer\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Platforms\Windows\App.xaml">
@@ -133,6 +135,9 @@
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\RoomsTemplate.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Controls\CustomStateView.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 	</ItemGroup>

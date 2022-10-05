@@ -1,4 +1,6 @@
 ﻿using System;
+using SmartMirror.Enums;
+
 namespace SmartMirror.ViewModels.Tabs
 {
     public class CamerasPageViewModel : BaseTabViewModel
@@ -6,6 +8,7 @@ namespace SmartMirror.ViewModels.Tabs
         public CamerasPageViewModel()
         {
             Title = "Cameras";
+            DataState = EPageState.Complete;
         }
     }
 }
