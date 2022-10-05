@@ -39,6 +39,8 @@
 		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#989898"/>-->
 	</ItemGroup>
 	<ItemGroup>
+		<None Remove="Platforms\Android\Resources\drawable\scrollbar_thumb.xml" />
+		<None Remove="Platforms\Android\Resources\drawable\scrollbar_track.xml" />
 		<None Remove="Prism.DryIoc.Maui" />
 		<None Remove="Prism.Maui" />
 		<None Remove="Views\" />
@@ -101,7 +103,6 @@
 		<Folder Include="Enums\" />
 		<Folder Include="Services\Mock\" />
 		<Folder Include="Platforms\Android\Renderers\" />
-		<Folder Include="Platforms\Android\Resources\drawable\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Platforms\Windows\App.xaml">

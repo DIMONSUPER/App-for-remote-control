@@ -29,7 +29,6 @@
 
         <CollectionView
             VerticalScrollBarVisibility="Always"
-            HorizontalScrollBarVisibility="Always"
             WidthRequest="571"
             ItemsSource="{Binding Notifications}"
             ItemTemplate="{StaticResource notificationTemplate}"

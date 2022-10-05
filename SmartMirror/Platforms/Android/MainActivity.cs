@@ -10,7 +10,7 @@ using SmartMirror.Platforms.Services;
 namespace SmartMirror;
 
 [Activity(
-    Theme = "@style/Maui.SplashTheme",
+    Theme = "@style/MainThemeApp",
     MainLauncher = true,
     ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density,
     ScreenOrientation = ScreenOrientation.UserLandscape,

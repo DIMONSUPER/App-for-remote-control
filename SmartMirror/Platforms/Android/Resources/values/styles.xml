@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
 	
-	<style name="MainTheme" parent="MainTheme.Base">
+	<style name="MainThemeApp" parent="Maui.SplashTheme">
 		<item name="android:scrollbarThumbVertical">@drawable/scrollbar_thumb</item>
 		<item name="android:scrollbarTrackVertical">@drawable/scrollbar_track</item>
+		<item name="android:scrollbarThumbHorizontal">@drawable/scrollbar_thumb</item>
+		<item name="android:scrollbarTrackHorizontal">@drawable/scrollbar_track</item>
 		<item name="android:fadeScrollbars">false</item>
+		<item name="android:textColor">#00FF00</item>
+		<item name="android:background">@drawable/scrollbar_track</item>
+		<item name="android:scrollbarSize">10dp</item>
 	</style>
 	
 </resources>
