@@ -8,4 +8,13 @@ public partial class MainTabbedPage : CustomTabbedPage
 	{
 		InitializeComponent();
 	}
+
+    #region -- Overrides --
+
+    protected override bool OnBackButtonPressed()
+    {
+        return true;
+    }
+
+    #endregion
 }

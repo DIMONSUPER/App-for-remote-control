@@ -71,6 +71,8 @@
 		<None Remove="Platforms\Android\Renderers\" />
 		<None Remove="Platforms\Android\Resources\drawable\" />
 		<None Remove="Controls\StateContainer\" />
+		<None Remove="Services\Mapper\" />
+		<None Remove="AutoMapper" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Prism.DryIoc.Maui" Version="8.1.273-pre" />
@@ -79,6 +81,7 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Microsoft.Maui.Dependencies" Version="6.0.540" />
 		<PackageReference Include="Microsoft.Maui.Extensions" Version="6.0.540" />
+		<PackageReference Include="AutoMapper" Version="12.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Views\" />
@@ -104,6 +107,7 @@
 		<Folder Include="Platforms\Android\Renderers\" />
 		<Folder Include="Platforms\Android\Resources\drawable\" />
 		<Folder Include="Controls\StateContainer\" />
+		<Folder Include="Services\Mapper\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Platforms\Windows\App.xaml">
@@ -138,6 +142,15 @@
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Controls\CustomStateView.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\RoomPage.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\RoomsVerticalListTemplate.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\SelectedRoomDevicesTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 	</ItemGroup>

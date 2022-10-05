@@ -1,11 +1,19 @@
-﻿namespace SmartMirror.Views
+﻿namespace SmartMirror.Views;
+
+public class BaseContentPage : ContentPage
 {
-    public class BaseContentPage : ContentPage
+    public BaseContentPage()
     {
-        public BaseContentPage()
-        {
-            NavigationPage.SetHasNavigationBar(this, false);
-        }
+        NavigationPage.SetHasNavigationBar(this, false);
     }
+
+    #region -- Overrides --
+
+    protected override bool OnBackButtonPressed()
+    {
+        return true;
+    }
+
+    #endregion
 }
 
