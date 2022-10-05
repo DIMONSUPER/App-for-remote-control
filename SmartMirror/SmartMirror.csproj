@@ -113,6 +113,9 @@
 		<MauiXaml Update="Controls\CustomTabView.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\ErrorDialog.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
@@ -150,6 +153,9 @@
 	<ItemGroup>
 	  <Compile Update="Resources\Strings\Strings.Designer.cs">
 	    <DependentUpon>Strings.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Dialogs\ErrorDialog.xaml.cs">
+	    <DependentUpon>ErrorDialog.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">

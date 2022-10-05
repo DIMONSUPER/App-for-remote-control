@@ -2,6 +2,7 @@
 <?xaml-comp compile="true" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:maui="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
 
     <!-- CONVERTERS -->
@@ -96,12 +97,35 @@
     <Style x:Key="tstyle_i13" TargetType="Label" BasedOn="{StaticResource InterBold_Content_28px}"> <!-- Inter700/ 28px/ Dark Gray -->
         <Setter Property="TextColor"  Value="{x:DynamicResource tcolor_i5}"/>
     </Style>
-    
-
+ 
     <!-- ACTIVITYINDICATOR STYLE-->
     <Style TargetType="ActivityIndicator">
         <Setter Property="Color" Value="{StaticResource cbg_i3}" />
     </Style>
+
+    <!-- MASK STYLES -->
+    <Style x:Key="DialogMaskBoxViewStyle_i1" TargetType="BoxView">
+        <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i8}"/>
+    </Style>
+    
+    <!-- BUTTON STYLES -->
+    <Style x:Key="ButtonStyle_i1" TargetType="Button">
+        <Setter Property="Padding" Value="42, 12"/>
+        <Setter Property="CornerRadius" Value="26"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i3}"/>
+        <Setter Property="Shadow" Value="{DynamicResource Shadow_i1}"/>
+        <Setter Property="TextColor" Value="{DynamicResource tcolor_i2}"/>
+        <Setter Property="FontFamily" Value="InterBold"/>
+        <Setter Property="FontSize" Value="{DynamicResource tsize_i2}"/>
+    </Style>
+
+    <!-- SHADOWS --> 
+    <Shadow 
+        Offset="0, 12"
+        Opacity="0.24"
+        Radius="18"
+        Brush="{DynamicResource tcolor_i2}"
+        x:Key="Shadow_i1"/>
 
 </ResourceDictionary>
 
