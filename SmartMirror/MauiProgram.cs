@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using Android.App;
-using CommunityToolkit.Maui;
+﻿using CommunityToolkit.Maui;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
 using SmartMirror.Controls;
 using SmartMirror.Platforms.Android.Renderers;
@@ -13,6 +11,7 @@ using SmartMirror.ViewModels.Dialogs;
 using SmartMirror.Views;
 using SmartMirror.Views.Dialogs;
 using SmartMirror.Views.Tabs;
+using System.Diagnostics;
 
 namespace SmartMirror;
 

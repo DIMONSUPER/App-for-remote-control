@@ -12,8 +12,8 @@ namespace SmartMirror
 
         public static class DialogsParameterKeys
         {
-            public const string TITLE = "TITLE";
-            public const string DESCRIPTION = "DESCRIPTION";
+            public const string TITLE = nameof(TITLE);
+            public const string DESCRIPTION = nameof(DESCRIPTION);
         }
     }
 }

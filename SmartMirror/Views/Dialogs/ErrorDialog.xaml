@@ -28,15 +28,11 @@
             Spacing="6">
 
             <Label 
-                TextColor="{DynamicResource tcolor_i1}"
-                FontFamily="InterBold"
-                FontSize="{DynamicResource tsize_i2}"
+                Style="{DynamicResource tstyle_i11}"
                 Text="{Binding Title}" />
 
             <Label 
-                TextColor="{DynamicResource cbg_i7}"
-                FontFamily="InterMedium"
-                FontSize="{DynamicResource tsize_i3}"
+                Style="{DynamicResource tstyle_i5}"
                 Text="{Binding Description}" />
 
             <Button 

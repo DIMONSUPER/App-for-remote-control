@@ -1,35 +1,38 @@
-﻿namespace SmartMirror.ViewModels.Dialogs
+﻿using SmartMirror.Helpers;
+using System.Windows.Input;
+
+namespace SmartMirror.ViewModels.Dialogs
 {
     public class ErrorDialogViewModel : BindableBase, IDialogAware
     {
         public ErrorDialogViewModel()
         {
-            CloseCommand = new DelegateCommand(() => RequestClose.Invoke());
         }
 
         #region -- Public properties --
 
-        private string _title = "Title";
+        private string _title;
         public string Title
         {
             get => _title;
             set => SetProperty(ref _title, value);
         }
 
-        private string _description = "Description";
+        private string _description;
         public string Description
         {
             get => _description;
             set => SetProperty(ref _description, value);
         }
 
-        public DelegateCommand CloseCommand { get; }
-
-        public DialogCloseEvent RequestClose { get; set; }
+        private ICommand _closeCommand;
+        public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc(OnCloseCommandAsync);
 
         #endregion
 
         #region -- IDialogAware implementation --
+
+        public DialogCloseEvent RequestClose { get; set; }
 
         public bool CanCloseDialog() => true;
 
@@ -48,6 +51,17 @@
             {
                 Description = description;
             }
+        }
+
+        #endregion
+
+        #region -- Private helpers --
+
+        private Task OnCloseCommandAsync()
+        {
+            RequestClose.Invoke();
+
+            return Task.CompletedTask;
         }
 
         #endregion
