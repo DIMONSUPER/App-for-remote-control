@@ -1,5 +1,4 @@
-﻿using System;
-namespace SmartMirror
+﻿namespace SmartMirror
 {
     public static class Constants
     {
@@ -8,6 +7,11 @@ namespace SmartMirror
             public const string API_URL = "https://api.amazon.com";
             public const string PRODUCT_ID = "smart_mirror";
             public const string PRODUCT_DSN = "123456";
+        }
+
+        public static class Limits
+        {
+            public const int SERVER_RESPONSE_DELAY = 1000;
         }
     }
 }

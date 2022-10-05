@@ -1,7 +1,7 @@
 ﻿using System;
 namespace SmartMirror.Models
 {
-    public class Camera
+    public class CameraModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

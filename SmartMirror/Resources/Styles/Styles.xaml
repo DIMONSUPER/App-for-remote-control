@@ -2,6 +2,7 @@
 <?xaml-comp compile="true" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:converters="clr-namespace:SmartMirror.Converters"
                     xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
 
     <!-- CONVERTERS -->
@@ -96,12 +97,11 @@
     <Style x:Key="tstyle_i13" TargetType="Label" BasedOn="{StaticResource InterBold_Content_28px}"> <!-- Inter700/ 28px/ Dark Gray -->
         <Setter Property="TextColor"  Value="{x:DynamicResource tcolor_i5}"/>
     </Style>
-    
 
     <!-- ACTIVITYINDICATOR STYLE-->
     <Style TargetType="ActivityIndicator">
         <Setter Property="Color" Value="{StaticResource cbg_i3}" />
     </Style>
-
+    
 </ResourceDictionary>
 

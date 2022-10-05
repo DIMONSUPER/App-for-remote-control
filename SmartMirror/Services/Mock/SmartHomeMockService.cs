@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Android.App;
-using SmartMirror.Enums;
+﻿using SmartMirror.Enums;
 using SmartMirror.Models;
 using Device = SmartMirror.Models.Device;
 using Notification = SmartMirror.Models.Notification;
@@ -10,9 +7,9 @@ namespace SmartMirror.Services.Mock
 {
     public class SmartHomeMockService : ISmartHomeMockService
     {
-        public IEnumerable<Camera> GetCameras()
+        public IEnumerable<CameraModel> GetCameras()
         {
-            List<Camera> cameras= new()
+            List<CameraModel> cameras= new()
             {
                 new() { Name = "Front Door 1", IsConnected = true, CreateTime = DateTime.Now },
                 new() { Name = "Front Door 2", IsConnected = true, CreateTime = DateTime.Now },
