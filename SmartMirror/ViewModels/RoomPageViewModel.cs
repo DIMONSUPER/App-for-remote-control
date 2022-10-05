@@ -85,8 +85,15 @@ public class RoomPageViewModel : BaseViewModel
         {
             foreach (var room in Rooms)
             {
-                room.IsSelected = room == selectedRoom;
-                SelectedRoomDevices = room.Devices;
+                if (room == selectedRoom)
+                {
+                    room.IsSelected = true;
+                    SelectedRoomDevices = room.Devices;
+                }
+                else
+                {
+                    room.IsSelected = false;
+                }
             }
         }
     }

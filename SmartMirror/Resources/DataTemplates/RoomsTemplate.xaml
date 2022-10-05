@@ -5,8 +5,8 @@
               x:Class="SmartMirror.Resources.DataTemplates.RoomsTemplate"
               x:DataType="{x:Type models:RoomBindableModel}">
 
-    <Grid WidthRequest="307"
-          HeightRequest="172">
+    <Grid WidthRequest="280"
+          HeightRequest="157">
 
         <Grid.GestureRecognizers>
 

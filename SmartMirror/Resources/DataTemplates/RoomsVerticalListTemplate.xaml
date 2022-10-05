@@ -5,9 +5,9 @@
              x:Class="SmartMirror.Resources.DataTemplates.RoomsVerticalListTemplate"
              x:DataType="{x:Type models:RoomBindableModel}">
 
-    <Frame Padding="18, 12"
+    <Frame Padding="12, 8"
            IsClippedToBounds="True"
-           CornerRadius="9"
+           CornerRadius="6"
            HasShadow="True"
            BackgroundColor="Transparent">
 
@@ -22,7 +22,7 @@
         </Frame.Triggers>
 
         <Grid ColumnDefinitions="*, Auto, Auto"
-              ColumnSpacing="8">
+              ColumnSpacing="5">
 
             <Label Text="{Binding Name}"
                    HorizontalOptions="Start"

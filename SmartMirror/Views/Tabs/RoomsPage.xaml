@@ -31,10 +31,10 @@
             <!-- TODO: Add styles -->
             <ScrollView>
 
-                <!-- FAVORITE ACCESSORIES -->
-                <VerticalStackLayout Padding="0,28,0,0"
+                <VerticalStackLayout Padding="0,20,0,0"
                                      Spacing="0">
 
+                    <!-- FAVORITE ACCESSORIES -->
                     <HorizontalStackLayout HorizontalOptions="Start"
                                            Margin="60,0"
                                            Spacing="12">
@@ -61,7 +61,7 @@
                     </HorizontalStackLayout>
 
                     <!-- FAVORITE ACCESSORIES COLLECTION -->
-                    <ScrollView Margin="0,17,0,0"
+                    <ScrollView Margin="0,12,0,0"
                                 Orientation="Horizontal"
                                 HorizontalScrollBarVisibility="Never">
 
@@ -74,7 +74,7 @@
 
                     <!-- ROOMS -->
                     <HorizontalStackLayout HorizontalOptions="Start"
-                                           Margin="60,54,60,0"
+                                           Margin="60,20,60,0"
                                            Spacing="12">
 
                         <Label Text="{extensions:Translate Rooms}"
@@ -85,7 +85,7 @@
                         <Border Stroke="White"
                                 StrokeThickness="1"
                                 StrokeShape="RoundRectangle 8"
-                                BackgroundColor="{StaticResource cbg_i2}"
+                                BackgroundColor="#3A3A3C"
                                 WidthRequest="42"
                                 HeightRequest="42">
 
@@ -98,7 +98,8 @@
 
                     </HorizontalStackLayout>
 
-                    <ScrollView Margin="0,17,0,0"
+                    <!-- ROOMS COLLECTION -->
+                    <ScrollView Margin="0,12,0,0"
                                 Orientation="Horizontal"
                                 HorizontalScrollBarVisibility="Never">
 
