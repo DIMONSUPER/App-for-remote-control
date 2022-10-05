@@ -1,22 +1,47 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<tabs:BaseTabContentPage xmlns:tabs="clr-namespace:SmartMirror.Views.Tabs"
-                         xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                         xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
-                         x:Class="SmartMirror.Views.Tabs.NotificationsPage"
-                         Title="Notifications"
-                         x:DataType="vm:NotificationsPageViewModel">
+<tabs:BaseTabContentPage
+    xmlns:tabs="clr-namespace:SmartMirror.Views.Tabs"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
+    xmlns:models="clr-namespace:SmartMirror.Models"
+    xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+    x:Class="SmartMirror.Views.Tabs.NotificationsPage"
+    Title="Notifications"
+    x:DataType="vm:NotificationsPageViewModel">
 
-    <tabs:BaseTabContentPage.Content>
+    <tabs:BaseTabContentPage.Resources>
 
-        <Grid>
-            <Label Text="{Binding Title}"
-                   VerticalOptions="Center"
-                   TextColor="White"
-                   FontSize="28"
-                   HorizontalOptions="Center" />
-        </Grid>
+        <ResourceDictionary>
 
-    </tabs:BaseTabContentPage.Content>
+            <templates:NotificationTemplate x:Key="notificationTemplate"/>
+            <templates:NotificationHeaderTemplate x:Key="notificationHeaderTemplate"/>
+
+        </ResourceDictionary>
+
+    </tabs:BaseTabContentPage.Resources>
+
+    <RefreshView
+        Command="{Binding RefreshNotifications}"
+        IsRefreshing="{Binding IsRefreshingNotifications}"
+        Margin="0, 36, 0, 0"
+        HorizontalOptions="Center">
+
+        <CollectionView
+            VerticalScrollBarVisibility="Always"
+            HorizontalScrollBarVisibility="Always"
+            WidthRequest="571"
+            ItemsSource="{Binding Notifications}"
+            ItemTemplate="{StaticResource notificationTemplate}"
+            GroupHeaderTemplate="{StaticResource notificationHeaderTemplate}"
+            IsGrouped="True">
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="18"/>
+            </CollectionView.ItemsLayout>
+
+        </CollectionView>
+
+    </RefreshView>
 
 </tabs:BaseTabContentPage>

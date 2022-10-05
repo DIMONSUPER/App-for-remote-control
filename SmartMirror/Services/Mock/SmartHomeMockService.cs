@@ -4,7 +4,7 @@ using Android.App;
 using SmartMirror.Enums;
 using SmartMirror.Models;
 using Device = SmartMirror.Models.Device;
-using Notification = SmartMirror.Models.Notification;
+using NotificationModel = SmartMirror.Models.NotificationModel;
 
 namespace SmartMirror.Services.Mock
 {
@@ -24,14 +24,52 @@ namespace SmartMirror.Services.Mock
             return cameras;
         }
 
-        public IEnumerable<Notification> GetNotifications()
+        public IEnumerable<NotificationModel> GetNotifications()
         {
-            List<Notification> notifications = new()
+            List<NotificationModel> notifications = new()
             {
-                new() { Name = "Balcony Door" },
-                new() { Name = "Upstairs Hallway Movement" },
-                new() { Name = "Balcony Door" },
-                new() { Name = "Balcony Door" },
+                new()
+                {
+                    Name = "Garage Door",
+                    Type = "Garage",
+                    Status = "Opened",
+                    LastActivityTime = DateTime.Now,
+                },
+                new()
+                {
+                    Name = "Balcony Door",
+                    Type = "Door",
+                    Status = "Closed",
+                    LastActivityTime = DateTime.Now.AddMinutes(-5),
+                },
+                new()
+                {
+                    Name = "Upstairs Hallway Movement",
+                    Type = "NoMovement",
+                    Status = "No movement",
+                    LastActivityTime = DateTime.Now.AddMinutes(-15),
+                },
+                new()
+                {
+                    Name = "Balcony Door",
+                    Type = "Unknown",
+                    Status = "Unknown",
+                    LastActivityTime = DateTime.Now.AddMinutes(-30),
+                },
+                new()
+                {
+                    Name = "Balcony Door",
+                    Type = "Door",
+                    Status = "Closed",
+                    LastActivityTime = DateTime.Now.AddDays(-1),
+                },
+                new()
+                {
+                    Name = "Garage Door",
+                    Type = "Garage",
+                    Status = "Opened",
+                    LastActivityTime = DateTime.Now.AddDays(-2),
+                },
             };
 
             return notifications;

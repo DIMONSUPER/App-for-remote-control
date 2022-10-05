@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<DataTemplate
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:SmartMirror.Models"
+    x:DataType="models:NotificationModel"
+    x:Class="SmartMirror.Resources.DataTemplates.NotificationTemplate">
+
+    <Border
+        StrokeThickness="1"
+        StrokeShape="RoundRectangle 12"
+        Stroke="{DynamicResource tcolor_i1}"
+        Background="{DynamicResource cbg_i2}"
+        Padding="24">
+
+        <StackLayout Orientation="Horizontal">
+
+            <Border
+                HeightRequest="66"
+                WidthRequest="66"
+                Padding="12"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 12"
+                Stroke="{DynamicResource cbg_i1}"
+                VerticalOptions="Start"
+                BackgroundColor="{DynamicResource cbg_i1}">
+
+                <Image>
+
+                    <Image.Triggers>
+
+                        <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="Door">
+                            <Setter Property="Source" Value="front_door"/>
+                        </DataTrigger>
+
+                        <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="Garage">
+                            <Setter Property="Source" Value="garage_door"/>
+                        </DataTrigger>
+
+                        <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="NoMovement">
+                            <Setter Property="Source" Value="sleep"/>
+                        </DataTrigger>
+
+                        <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="Unknown">
+                            <Setter Property="Source" Value="grey_question_mark"/>
+                        </DataTrigger>
+
+                    </Image.Triggers>
+
+                </Image>
+
+            </Border>
+
+            <VerticalStackLayout
+                Margin="22, 0, 24, 0"
+                WidthRequest="267">
+
+                <Label
+                    Text="{Binding Name}"
+                    Style="{DynamicResource tstyle_i11}"/>
+
+                <Label
+                    Text="{Binding LastActivityTime, Converter={StaticResource timeToTimeAgoConverter}}"
+                    Style="{DynamicResource tstyle_i5}"
+                    Margin="0, 6, 0, 0"/>
+                
+            </VerticalStackLayout>
+
+            <Label
+                Text="{Binding Status}"
+                Style="{DynamicResource tstyle_i8}"
+                VerticalOptions="Start"
+                HorizontalOptions="EndAndExpand"
+                HorizontalTextAlignment="End"/>
+
+        </StackLayout>
+
+    </Border>
+
+</DataTemplate>

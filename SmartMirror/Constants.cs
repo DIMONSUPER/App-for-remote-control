@@ -9,5 +9,11 @@ namespace SmartMirror
             public const string PRODUCT_ID = "smart_mirror";
             public const string PRODUCT_DSN = "123456";
         }
+
+        public static class Formats
+        {
+            public const string DATE_FORMAT = "MM.dd.yyyy";
+            public const string TIME_FORMAT = "hh:mm";
+        }
     }
 }
