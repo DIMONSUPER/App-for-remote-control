@@ -85,7 +85,7 @@
                         <Border Stroke="White"
                                 StrokeThickness="1"
                                 StrokeShape="RoundRectangle 8"
-                                BackgroundColor="#3A3A3C"
+                                BackgroundColor="{StaticResource cbg_i2}"
                                 WidthRequest="42"
                                 HeightRequest="42">
 
