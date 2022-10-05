@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using SmartMirror.Enums;
 using SmartMirror.Models;
 using SmartMirror.Services.Mock;
 using Device = SmartMirror.Models.Device;
@@ -13,6 +14,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         Title = "Rooms";
         _smartHomeMockService = smartHomeMockService;
+        DataState = EPageState.Complete;
     }
 
     #region -- Public properties --
