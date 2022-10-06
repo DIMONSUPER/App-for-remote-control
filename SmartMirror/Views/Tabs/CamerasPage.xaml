@@ -48,6 +48,10 @@
                     TextColor="Red"
                     Text="{Binding SelectedCamera.Name}"/>
 
+                <controls:Video 
+                    Grid.Column="1"
+                    Source="https://archive.org/download/Sintel/sintel-2048-stereo_512kb.mp4"/>
+
             </Grid>
 
         </controls:CustomStateView.CompleteContent>

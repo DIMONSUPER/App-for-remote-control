@@ -170,6 +170,10 @@
 	    <DependentUpon>ErrorDialog.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
+	<ItemGroup Condition="$(TargetFramework.StartsWith('net6.0-android')) != true">
+		<Compile Remove="**\**\*.Android.cs" />
+		<None Include="**\**\*.Android.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+	</ItemGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
 		<AndroidKeyStore>True</AndroidKeyStore>
 		<AndroidSigningKeyStore>c:/Users/user/Projects/SmartMirror/smartmirror.keystore</AndroidSigningKeyStore>
