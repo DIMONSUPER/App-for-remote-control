@@ -71,6 +71,8 @@
 		<None Remove="Platforms\Android\Renderers\" />
 		<None Remove="Platforms\Android\Resources\drawable\" />
 		<None Remove="Controls\StateContainer\" />
+		<None Remove="Services\Mapper\" />
+		<None Remove="AutoMapper" />
 		<None Remove="Services\Settings\" />
 	</ItemGroup>
 	<ItemGroup>
@@ -105,6 +107,7 @@
 		<Folder Include="Platforms\Android\Renderers\" />
 		<Folder Include="Platforms\Android\Resources\drawable\" />
 		<Folder Include="Controls\StateContainer\" />
+		<Folder Include="Services\Mapper\" />
 		<Folder Include="Services\Settings\" />
 	</ItemGroup>
 	<ItemGroup>
