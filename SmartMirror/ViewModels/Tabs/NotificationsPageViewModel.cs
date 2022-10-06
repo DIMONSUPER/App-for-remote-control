@@ -1,7 +1,8 @@
-﻿using SmartMirror.Models;
+using SmartMirror.Models;
 using SmartMirror.Services.Notifications;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using SmartMirror.Enums;
 
 namespace SmartMirror.ViewModels.Tabs;
 
@@ -9,10 +10,15 @@ public class NotificationsPageViewModel : BaseTabViewModel
 {
     private readonly INotificationsService _notificationsService;
 
-    public NotificationsPageViewModel(INotificationsService notificationsService)
+    public NotificationsPageViewModel(
+        INotificationsService notificationsService,
+        INavigationService navigationService)
+        : base(navigationService)
     {
-        Title = "Notifications";
         _notificationsService = notificationsService;
+
+        Title = "Notifications";
+        DataState = EPageState.Complete;
     }
 
     #region -- Public properties --

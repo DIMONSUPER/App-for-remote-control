@@ -16,6 +16,8 @@
     <Color x:Key="cbg_i5">#801F1F1F</Color> <!-- #1F1F1F with 50 opacity-->
     <Color x:Key="cbg_i6">#7EE5EB</Color>
     <Color x:Key="cbg_i7">#D0D1D3</Color>
+    <Color x:Key="cbg_i8">#CC030303</Color> <!-- 030303 with 80 opacity -->
+    <Color x:Key="cbg_i9">#E5FFFFFF</Color> <!-- #FFFFFF with 90 opacity-->
 
     <!-- TEXT COLORS -->
     <Color x:Key="tcolor_i1">#FFFFFF</Color>    <!-- White -->

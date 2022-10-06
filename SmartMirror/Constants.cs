@@ -10,6 +10,12 @@ namespace SmartMirror
             public const string PRODUCT_DSN = "123456";
         }
 
+        public static class DialogsParameterKeys
+        {
+            public const string TITLE = nameof(TITLE);
+            public const string DESCRIPTION = nameof(DESCRIPTION);
+        }
+
         public static class Formats
         {
             public const string DATE_FORMAT = "MM.dd.yyyy";

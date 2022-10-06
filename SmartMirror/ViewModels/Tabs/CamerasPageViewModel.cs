@@ -1,11 +1,15 @@
 ﻿using System;
-namespace SmartMirror.ViewModels.Tabs
+using SmartMirror.Enums;
+
+namespace SmartMirror.ViewModels.Tabs;
+
+public class CamerasPageViewModel : BaseTabViewModel
 {
-    public class CamerasPageViewModel : BaseTabViewModel
+    public CamerasPageViewModel(
+        INavigationService navigationService)
+        : base(navigationService)
     {
-        public CamerasPageViewModel()
-        {
-            Title = "Cameras";
-        }
+        Title = "Cameras";
+        DataState = EPageState.Complete;
     }
 }

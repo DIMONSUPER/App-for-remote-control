@@ -4,11 +4,14 @@ using SmartMirror.Controls;
 using SmartMirror.Platforms.Android.Renderers;
 using SmartMirror.Platforms.Services;
 using SmartMirror.Services.Amazon;
+using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Notifications;
 using SmartMirror.Services.Rest;
 using SmartMirror.ViewModels;
+using SmartMirror.ViewModels.Dialogs;
 using SmartMirror.Views;
+using SmartMirror.Views.Dialogs;
 using SmartMirror.Views.Tabs;
 using System.Diagnostics;
 
@@ -42,13 +45,17 @@ public static class MauiProgram
 
     private static void RegisterTypes(IContainerRegistry containerRegistry)
     {
+        containerRegistry.RegisterDialog<ErrorDialog, ErrorDialogViewModel>();
+
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
         containerRegistry.RegisterForNavigation<MainTabbedPage>();
         containerRegistry.RegisterForNavigation<RoomsPage>();
         containerRegistry.RegisterForNavigation<NotificationsPage>();
         containerRegistry.RegisterForNavigation<CamerasPage>();
         containerRegistry.RegisterForNavigation<ScenariosPage>();
+        containerRegistry.RegisterForNavigation<RoomPage>();
 
+        containerRegistry.RegisterSingleton<IMapperService, MapperService>();
         containerRegistry.RegisterSingleton<IRestService, RestService>();
         containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Android.App;
-using SmartMirror.Enums;
+﻿using SmartMirror.Enums;
 using SmartMirror.Models;
 using Device = SmartMirror.Models.Device;
 using NotificationModel = SmartMirror.Models.NotificationModel;
@@ -72,10 +69,10 @@ namespace SmartMirror.Services.Mock
         {
             List<Room> rooms = new()
             {
-                new() { Name = "Dining Room", Description = "5 Accessories" },
-                new() { Name = "Downstairs", Description = "4 Accessories" },
-                new() { Name = "Front Door", Description = "2 Accessories" },
-                new() { Name = "Garage", Description = "12 Accessories" },
+                new() { Name = "Dining Room", Description = "1 Accessories", Devices = GetDevices().Take(1) },
+                new() { Name = "Downstairs", Description = "2 Accessories",Devices = GetDevices().Skip(1) },
+                new() { Name = "Front Door", Description = "2 Accessories", Devices = GetDevices().Take(2) },
+                new() { Name = "Garage", Description = "6 Accessories", Devices = GetDevices().Concat(GetDevices()) },
             };
 
             return rooms;
@@ -115,8 +112,8 @@ namespace SmartMirror.Services.Mock
             List<Device> devices = new()
             {
                 new() { Name = "Garage Door", Type = "GarageDoor", Status = EDeviceStatus.On },
-                new() { Name = "Front Door",  Type = "Front DoorStatus", Status = EDeviceStatus.On },
-                new FanDevice { Name = "Fan", Type = "Fan", Status = EDeviceStatus.On, Power = "68%" }
+                new() { Name = "Front Door",  Type = "FrontDoor", Status = EDeviceStatus.On },
+                new FanDevice { Name = "Fan", Type = "Fan", RoomName = "Living Room" , Status = EDeviceStatus.On, Power = "68%" }
             };
 
             return devices;
