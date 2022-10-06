@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<views:BaseContentPage xmlns:views="clr-namespace:SmartMirror.Views"
+                       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+                       xmlns:vm="clr-namespace:SmartMirror.ViewModels"
+                       xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+                       x:Class="SmartMirror.Views.RoomPage"
+                       x:DataType="{x:Type vm:RoomPageViewModel}">
+
+    <views:BaseContentPage.Resources>
+
+        <ResourceDictionary>
+
+            <templates:RoomsVerticalListTemplate x:Key="roomsVerticalListTemplate"/>
+
+            <templates:SelectedRoomDevicesTemplate x:Key="selectedRoomDevicesTemplate"/>
+
+        </ResourceDictionary>
+
+    </views:BaseContentPage.Resources>
+
+    <VerticalStackLayout Padding="28,20,0,0"
+                         Spacing="15">
+
+        <!-- BACK BUTTON -->
+        <HorizontalStackLayout Spacing="17"
+                               HorizontalOptions="Start">
+
+            <HorizontalStackLayout.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding BackArrowTappedCommand}"/>
+            </HorizontalStackLayout.GestureRecognizers>
+
+            <Image Source="arrow_left_aqua"
+                   VerticalOptions="Center"/>
+
+            <Label Text="{extensions:Translate Back}"
+                   TextTransform="Uppercase"
+                   VerticalOptions="Center"
+                   Style="{x:DynamicResource tstyle_i12}"/>
+
+        </HorizontalStackLayout>
+
+        <Grid ColumnDefinitions="0.25*, 0.75*"
+              ColumnSpacing="30"
+              Margin="0,0,30,0">
+
+            <!-- ROOMS COLLECTION -->
+            <CollectionView ItemsSource="{Binding Rooms}"
+                            SelectionMode="None"
+                            ItemTemplate="{x:StaticResource roomsVerticalListTemplate}">
+
+                <CollectionView.Footer>
+
+                    <BoxView Color="Transparent"
+                             HeightRequest="60"/>
+
+                </CollectionView.Footer>
+
+            </CollectionView>
+
+            <!-- DEVICES COLLECTION -->
+            <CollectionView Grid.Column="1"
+                            ItemsSource="{Binding SelectedRoomDevices}"
+                            ItemTemplate="{x:StaticResource selectedRoomDevicesTemplate}"
+                            SelectionMode="None">
+
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="3" HorizontalItemSpacing="0" VerticalItemSpacing="30"/>
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.Footer>
+
+                    <BoxView Color="Transparent"
+                             HeightRequest="60"/>
+
+                </CollectionView.Footer>
+
+            </CollectionView>
+
+        </Grid>
+
+    </VerticalStackLayout>
+</views:BaseContentPage>

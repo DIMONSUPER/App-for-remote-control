@@ -4,11 +4,11 @@
               xmlns:extensions="clr-namespace:SmartMirror.Extensions"
               x:Class="SmartMirror.Resources.DataTemplates.FavoriteAccessories">
 
-    <Grid WidthRequest="420"
-          HeightRequest="225">
+    <Grid WidthRequest="375"
+          HeightRequest="201">
 
         <!-- BORDER AND ICON -->
-        <Border Stroke="White"
+        <Border Stroke="{x:DynamicResource cbg_i4}"
                 StrokeThickness="1"
                 StrokeShape="RoundRectangle 9"
                 BackgroundColor="{StaticResource cbg_i2}"
@@ -48,7 +48,7 @@
         <!-- NAME AND DESCRIPTION -->
         <Grid RowSpacing="0"
               VerticalOptions="End"
-              Margin="24"
+              Margin="24,16"
               HorizontalOptions="Fill"
               RowDefinitions="Auto"
               ColumnDefinitions="Auto, *">
@@ -64,7 +64,7 @@
                 <Label Text="{Binding RoomName}"
                        Margin="0,6,0,0"
                        VerticalTextAlignment="End"
-                       IsVisible="{Binding RoomName, Converter={x:StaticResource notNullOrEmtpyConverter}}"
+                       IsVisible="{Binding RoomName, Converter={x:StaticResource notNullOrEmtpyConverter}, FallbackValue=False}"
                        Style="{x:DynamicResource tstyle_i5}"/>
 
             </VerticalStackLayout>
@@ -80,9 +80,9 @@
 
         <!-- SWITCH -->
         <HorizontalStackLayout Spacing="0"
-                                           Margin="24"
-                                           VerticalOptions="Start"
-                                           HorizontalOptions="End">
+                               Margin="24"
+                               VerticalOptions="Start"
+                               HorizontalOptions="End">
 
             <Label Text="{extensions:Translate Unlocked}"
                    Margin="0,0,12,0"

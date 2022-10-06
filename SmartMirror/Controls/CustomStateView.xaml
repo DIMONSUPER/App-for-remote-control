@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:stateContanier="clr-namespace:SmartMirror.Controls.StateContainer"
+             xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+             x:Class="SmartMirror.Controls.CustomStateView"
+             x:Name="stateContanier">
+
+    <stateContanier:StateContainer State="{Binding State, Source={x:Reference stateContanier}}">
+
+        <!-- COMPLETE STATE -->
+        <stateContanier:StateCondition State="Complete">
+
+            <ContentView Content="{Binding CompleteContent, Source={x:Reference stateContanier}}"/>
+
+        </stateContanier:StateCondition>
+
+        <!-- EMPTY STATE -->
+        <stateContanier:StateCondition State="Empty">
+
+            <VerticalStackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center">
+
+                <Frame HasShadow="False"
+                       HeightRequest="123"
+                       WidthRequest="123"
+                       CornerRadius="11"
+                       BackgroundColor="{StaticResource cbg_i2}">
+
+                    <Image Source="{Binding EmptyStateImage, Source={x:Reference stateContanier}}"/>
+
+                </Frame>
+
+                <Label Margin="0,37,0,0"
+                       Style="{DynamicResource tstyle_i4}"
+                       Text="{Binding EmptyTitle, Source={x:Reference stateContanier}}"/>
+
+            </VerticalStackLayout>
+                
+        </stateContanier:StateCondition>
+
+        <!-- LOADING STATE -->
+        <stateContanier:StateCondition State="Loading">
+
+            <VerticalStackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center">
+
+                <Frame HasShadow="False"
+                       Padding="30"
+                       HeightRequest="123"
+                       WidthRequest="123"
+                       CornerRadius="11"
+                       BackgroundColor="{StaticResource cbg_i2}">
+
+                    <ActivityIndicator IsRunning="True"/>
+
+                </Frame>
+
+                <Label Margin="0,37,0,0"
+                       Style="{DynamicResource tstyle_i4}"
+                       Text="{Binding LoadingTitle, Source={x:Reference stateContanier}}"/>
+
+            </VerticalStackLayout>
+                
+        </stateContanier:StateCondition>
+
+        <!-- NO INTERNET STATE -->
+        <stateContanier:StateCondition State="NoInternet">
+
+            <VerticalStackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center">
+
+                <Frame HasShadow="False"
+                       Padding="30"
+                       HeightRequest="123"
+                       WidthRequest="123"
+                       CornerRadius="11"
+                       BackgroundColor="{StaticResource cbg_i2}">
+
+                    <Image Source="wifi_off"/>
+
+                </Frame>
+
+                <Label Margin="0,37,0,0"
+                       Style="{DynamicResource tstyle_i4}"
+                       Text="{extensions:Translate NoInternetConnection}"
+                       HorizontalOptions="Center"/>
+
+                <Button Margin="0,37,0,0"
+                        Text="{extensions:Translate TryAgain}"
+                        TextColor="{StaticResource tcolor_i2}"
+                        BackgroundColor="{StaticResource cbg_i3}"
+                        WidthRequest="163"
+                        CornerRadius="16"/>
+
+            </VerticalStackLayout>
+                
+        </stateContanier:StateCondition>
+
+        <!-- NO INTERNET LOADER STATE -->
+        <stateContanier:StateCondition State="NoInternetLoader">
+
+            <VerticalStackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center">
+
+                <Frame HasShadow="False"
+                       Padding="30"
+                       HeightRequest="123"
+                       WidthRequest="123"
+                       CornerRadius="11"
+                       BackgroundColor="{StaticResource cbg_i2}">
+
+                   <ActivityIndicator IsRunning="True"/>
+
+                </Frame>
+
+                <Label Margin="0,37,0,0"
+                       Style="{DynamicResource tstyle_i4}"
+                       Text="{extensions:Translate PleaseWait}"
+                       HorizontalOptions="Center"/>
+
+                <Button Margin="0,37,0,0"
+                        Text="{extensions:Translate TryAgain}"
+                        TextColor="{StaticResource tcolor_i2}"
+                        BackgroundColor="{StaticResource cbg_i3}"
+                        WidthRequest="163"
+                        CornerRadius="16"/>
+
+            </VerticalStackLayout>
+                
+        </stateContanier:StateCondition>
+
+    </stateContanier:StateContainer>
+
+</ContentView>
+

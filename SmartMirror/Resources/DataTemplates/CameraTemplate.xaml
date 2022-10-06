@@ -35,7 +35,7 @@
             </DataTrigger>
 
             <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
-                <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i8}"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i10}"/>
                 <Setter Property="StrokeShape" Value="RoundRectangle 9"/>
                 <Setter TargetName="cameraNameLabel" Property="Label.TextColor" Value="Black"/>
                 <Setter TargetName="cameraStatusLabel" Property="Label.TextColor" Value="{DynamicResource tcolor_i7}"/>

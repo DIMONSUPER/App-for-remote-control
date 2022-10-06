@@ -13,5 +13,11 @@
         {
             public const int SERVER_RESPONSE_DELAY = 1000;
         }
+        
+        public static class DialogsParameterKeys
+        {
+            public const string TITLE = nameof(TITLE);
+            public const string DESCRIPTION = nameof(DESCRIPTION);
+        }
     }
 }
