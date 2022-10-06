@@ -7,6 +7,7 @@ using SmartMirror.Platforms.Services;
 using SmartMirror.Services.Amazon;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Rest;
+using SmartMirror.Services.Settings;
 using SmartMirror.ViewModels;
 using SmartMirror.Views;
 using SmartMirror.Views.Tabs;
@@ -48,6 +49,7 @@ public static class MauiProgram
         containerRegistry.RegisterForNavigation<CamerasPage>();
         containerRegistry.RegisterForNavigation<ScenariosPage>();
 
+        containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
         containerRegistry.RegisterSingleton<IRestService, RestService>();
         containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();

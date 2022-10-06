@@ -71,6 +71,7 @@
 		<None Remove="Platforms\Android\Renderers\" />
 		<None Remove="Platforms\Android\Resources\drawable\" />
 		<None Remove="Controls\StateContainer\" />
+		<None Remove="Services\Settings\" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Prism.DryIoc.Maui" Version="8.1.273-pre" />
@@ -104,6 +105,7 @@
 		<Folder Include="Platforms\Android\Renderers\" />
 		<Folder Include="Platforms\Android\Resources\drawable\" />
 		<Folder Include="Controls\StateContainer\" />
+		<Folder Include="Services\Settings\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Platforms\Windows\App.xaml">
