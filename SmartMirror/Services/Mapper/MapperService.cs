@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SmartMirror.Models;
+using SmartMirror.Models.BindableModels;
 using static Android.Icu.Text.CaseMap;
 
 namespace SmartMirror.Services.Mapper
@@ -66,6 +67,7 @@ namespace SmartMirror.Services.Mapper
             var mapperConfiguration = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Room, RoomBindableModel>().ReverseMap();
+                cfg.CreateMap<CameraModel, CameraBindableModel>().ReverseMap();
             });
 
             return mapperConfiguration.CreateMapper();

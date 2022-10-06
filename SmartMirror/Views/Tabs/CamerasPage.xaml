@@ -23,12 +23,12 @@
         State="{Binding DataState}"
         EmptyTitle="{extensions:Translate NoCamerasYet}"
         EmptyStateImage="video_off"
-        LoadingTitle="{extensions:Translate Cameras}">
+        LoadingTitle="Cameras">
 
         <controls:CustomStateView.CompleteContent>
 
             <Grid
-                ColumnDefinitions="auto, *"
+                ColumnDefinitions="400, *"
                 Margin="42, 72">
 
                 <RefreshView 
@@ -36,10 +36,10 @@
                     IsRefreshing="{Binding IsCamerasRefreshing}"
                     Command="{Binding RefreshCamerasCommand}">
 
-                    <StackLayout 
-                        WidthRequest="400"
-                        BindableLayout.ItemsSource="{Binding Cameras}"
-                        BindableLayout.ItemTemplate="{StaticResource cameraTemplate}"/>
+                    <CollectionView 
+                        ItemSizingStrategy="MeasureFirstItem"
+                        ItemsSource="{Binding Cameras}"
+                        ItemTemplate="{StaticResource cameraTemplate}"/>
 
                 </RefreshView>
 

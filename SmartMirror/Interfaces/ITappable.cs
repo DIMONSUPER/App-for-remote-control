@@ -4,6 +4,6 @@ namespace SmartMirror.Interfaces
 {
     public interface ITappable
     {
-        ICommand? TapCommand { get; set; }
+        ICommand TapCommand { get; set; }
     }
 }

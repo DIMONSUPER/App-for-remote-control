@@ -47,6 +47,15 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _isSelected, value);
         }
 
-        public ICommand TapCommand { get; set; } 
+        #region -- ITappable implementation
+
+        private ICommand _tapCommand;
+        public ICommand TapCommand
+        {
+            get => _tapCommand;
+            set => SetProperty(ref _tapCommand, value);
+        }
+
+        #endregion
     }
 }

@@ -1,8 +1,7 @@
-using System;
 using SmartMirror.Enums;
-using SmartMirror.Extensions;
 using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
+using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -12,16 +11,18 @@ namespace SmartMirror.ViewModels.Tabs;
 public class CamerasPageViewModel : BaseTabViewModel
 {
     private readonly ISmartHomeMockService _smartHomeMockService;
+    private readonly IMapperService _mapperService;
 
     public CamerasPageViewModel(
         INavigationService navigationService,
+        IMapperService mapperService,
         ISmartHomeMockService smartHomeMockService)
         : base(navigationService)
     {
+        _mapperService = mapperService;
         _smartHomeMockService = smartHomeMockService;
         
         DataState = EPageState.Complete;
-            
     }
 
     #region -- Public properties --
@@ -37,20 +38,7 @@ public class CamerasPageViewModel : BaseTabViewModel
     public CameraBindableModel SelectedCamera
     {
         get => _selectedCamera;
-        set 
-        {
-            if (_selectedCamera is not null && _selectedCamera != value)
-            {
-                _selectedCamera.IsSelected = false;
-            }
-
-            if (value is not null)
-            {
-                value.IsSelected = true;
-            }
-
-            SetProperty(ref _selectedCamera, value);
-        }
+        set => SetProperty(ref _selectedCamera, value);
     }
 
     private bool _isCamerasRefreshing;
@@ -83,7 +71,7 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private Task OnSelectCameraCommandAsync(CameraBindableModel selectedCamera)
     {
-        SelectedCamera = selectedCamera;
+        SelectCamera(selectedCamera);
 
         return Task.CompletedTask;
     }
@@ -92,20 +80,43 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private async Task RefreshCameras()
     {
-        var cameras = _smartHomeMockService.GetCameras();
-        cameras = cameras.Concat(cameras);
-        cameras = cameras.Concat(cameras);
-        cameras = cameras.Concat(cameras);
-        cameras = cameras.Concat(cameras);
-        var bindableCameras = cameras.Select(x => x.ToCameraBindableModel(SelectCameraCommand));
+        var cameras = await _mapperService.MapRangeAsync<CameraBindableModel>(
+            _smartHomeMockService.GetCameras(), (m, vm) =>
+            {
+                vm.TapCommand = SelectCameraCommand;
+            });
 
         await Task.Delay(Constants.Limits.SERVER_RESPONSE_DELAY);
 
         IsCamerasRefreshing = false;
 
-        Cameras = new(bindableCameras);
-        SelectedCamera = Cameras.FirstOrDefault();
-    } 
+        cameras = cameras.Concat(cameras);
+        cameras = cameras.Concat(cameras);
+        cameras = cameras.Concat(cameras);
+
+        Cameras = new(cameras);
+
+        SelectCamera(Cameras.FirstOrDefault());
+    }
+
+    private void SelectCamera(CameraBindableModel selectedCamera)
+    {
+        if (Cameras is not null && Cameras.Any())
+        {
+            foreach (var camera in Cameras)
+            {
+                if (camera == selectedCamera)
+                {
+                    camera.IsSelected = true;
+                    SelectedCamera = selectedCamera;
+                }
+                else
+                {
+                    camera.IsSelected = false;
+                }
+            }
+        }
+    }
 
     #endregion
 }
