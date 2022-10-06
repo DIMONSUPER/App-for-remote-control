@@ -193,4 +193,10 @@
     <data name="TurnOff" xml:space="preserve">
         <value>Turn Off</value>
     </data>
+	<data name="HoursAgo" xml:space="preserve">
+		<value>hours ago</value>
+	</data>
+	<data name="Now" xml:space="preserve">
+		<value>now</value>
+	</data>
 </root>

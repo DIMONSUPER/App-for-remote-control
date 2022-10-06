@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using SmartMirror.Helpers;
+using System.Globalization;
 
 namespace SmartMirror.Converters
 {
@@ -18,15 +19,15 @@ namespace SmartMirror.Converters
                 }
                 else if (differenceInTime.TotalHours >= 1)
                 {
-                    result = $"{(int)differenceInTime.TotalHours} hours ago";
+                    result = $"{(int)differenceInTime.TotalHours} {LocalizationResourceManager.Instance["HoursAgo"]}";
                 }
                 else if (differenceInTime.TotalMinutes >= 1)
                 {
-                    result = $"{(int)differenceInTime.TotalMinutes} minutes ago";
+                    result = $"{(int)differenceInTime.TotalMinutes} {LocalizationResourceManager.Instance["MinutesAgo"]}";
                 }
                 else
                 {
-                    result = "now";
+                    result = LocalizationResourceManager.Instance["Now"];
                 }
             }
 

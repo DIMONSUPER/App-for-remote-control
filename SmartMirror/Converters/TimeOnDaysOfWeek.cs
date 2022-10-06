@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using SmartMirror.Helpers;
+using System.Globalization;
 
 namespace SmartMirror.Converters
 {
@@ -15,8 +16,8 @@ namespace SmartMirror.Converters
 
                 string TitleSelector(string dateTime) => dateTime switch
                 {
-                    _ when dateTime == dateTimeNow => "Today",
-                    _ when dateTime == dateTimeYesterday => "Yesterday",
+                    _ when dateTime == dateTimeNow => (string)LocalizationResourceManager.Instance["Today"],
+                    _ when dateTime == dateTimeYesterday => (string)LocalizationResourceManager.Instance["Yesterday"],
                     _ => dateTime,
                 };
 
