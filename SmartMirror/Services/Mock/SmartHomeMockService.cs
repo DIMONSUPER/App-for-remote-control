@@ -37,13 +37,6 @@ namespace SmartMirror.Services.Mock
                 },
                 new()
                 {
-                    Name = "Balcony Door",
-                    Type = "Door",
-                    Status = "Closed",
-                    LastActivityTime = DateTime.Now.AddMinutes(-5),
-                },
-                new()
-                {
                     Name = "Upstairs Hallway Movement",
                     Type = "NoMovement",
                     Status = "No movement",
@@ -54,7 +47,7 @@ namespace SmartMirror.Services.Mock
                     Name = "Balcony Door",
                     Type = "Unknown",
                     Status = "Unknown",
-                    LastActivityTime = DateTime.Now.AddMinutes(-30),
+                    LastActivityTime = DateTime.Now.AddHours(-3),
                 },
                 new()
                 {

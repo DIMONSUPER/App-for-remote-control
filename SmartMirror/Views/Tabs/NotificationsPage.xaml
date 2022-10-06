@@ -21,26 +21,22 @@
 
     </tabs:BaseTabContentPage.Resources>
 
-    <RefreshView
-        Command="{Binding RefreshNotifications}"
+    <ListView
+        HandlerChanged="ListView_HandlerChanged"
+        ItemsSource="{Binding Notifications}"
+        IsPullToRefreshEnabled="True"
         IsRefreshing="{Binding IsRefreshingNotifications}"
-        Margin="0, 36, 0, 0"
-        HorizontalOptions="Center">
-
-        <CollectionView
-            VerticalScrollBarVisibility="Always"
-            WidthRequest="571"
-            ItemsSource="{Binding Notifications}"
-            ItemTemplate="{StaticResource notificationTemplate}"
-            GroupHeaderTemplate="{StaticResource notificationHeaderTemplate}"
-            IsGrouped="True">
-
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical" ItemSpacing="18"/>
-            </CollectionView.ItemsLayout>
-
-        </CollectionView>
-
-    </RefreshView>
+        RefreshCommand="{Binding RefreshNotifications}"
+        IsGroupingEnabled="True"
+        SelectionMode="None"
+        ItemTemplate="{StaticResource notificationTemplate}"
+        GroupHeaderTemplate="{StaticResource notificationHeaderTemplate}"
+        HasUnevenRows="true"
+        SeparatorVisibility="None"
+        VerticalScrollBarVisibility="Always"
+        HorizontalScrollBarVisibility="Never"
+        HorizontalOptions="Center"
+        WidthRequest="660"
+        Margin="50, 36, 0, 0"/>
 
 </tabs:BaseTabContentPage>

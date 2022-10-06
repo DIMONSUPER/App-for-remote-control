@@ -6,13 +6,17 @@
     x:DataType="models:NotificationsGroupedByDayModel"
     x:Class="SmartMirror.Resources.DataTemplates.NotificationHeaderTemplate">
 
-    <VerticalStackLayout Padding="0, 24, 0, 8">
-
-        <Label
-            Text="{Binding Name, Converter={StaticResource timeOnDaysOfWeek}}"
-            Style="{x:DynamicResource tstyle_i11}"
-            HorizontalTextAlignment="Center"/>
+    <ViewCell>
         
-    </VerticalStackLayout>
-    
+        <VerticalStackLayout Padding="0, 24, 50, 24">
+
+            <Label
+                Text="{Binding Name, Converter={StaticResource timeOnDaysOfWeek}}"
+                Style="{x:DynamicResource tstyle_i11}"
+                HorizontalTextAlignment="Center"/>
+
+        </VerticalStackLayout>
+        
+    </ViewCell>
+
 </DataTemplate>

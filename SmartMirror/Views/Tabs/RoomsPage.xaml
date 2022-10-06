@@ -22,9 +22,7 @@
     </tabs:BaseTabContentPage.Resources>
 
     <!-- TODO: Add styles -->
-    <ScrollView
-                        VerticalScrollBarVisibility="Always"
-                        HorizontalScrollBarVisibility="Always">
+    <ScrollView>
 
         <!-- FAVORITE ACCESSORIES -->
         <VerticalStackLayout Padding="0,28,0,0"
@@ -58,8 +56,7 @@
             <!-- FAVORITE ACCESSORIES COLLECTION -->
             <ScrollView Margin="0,17,0,0"
                         Orientation="Horizontal"
-                        VerticalScrollBarVisibility="Always"
-                        HorizontalScrollBarVisibility="Always">
+                        HorizontalScrollBarVisibility="Never">
 
                 <HorizontalStackLayout Spacing="30"
                                        Padding="60,0"
@@ -96,8 +93,7 @@
 
             <ScrollView Margin="0,17,0,0"
                         Orientation="Horizontal"
-                        VerticalScrollBarVisibility="Always"
-                        HorizontalScrollBarVisibility="Always">
+                        HorizontalScrollBarVisibility="Never">
 
                 <HorizontalStackLayout Spacing="30"
                                        Padding="60,0"

@@ -1,5 +1,4 @@
-﻿using Android.App;
-using SmartMirror.Models;
+﻿using SmartMirror.Models;
 using SmartMirror.Services.Notifications;
 using System.Collections.ObjectModel;
 using System.Windows.Input;

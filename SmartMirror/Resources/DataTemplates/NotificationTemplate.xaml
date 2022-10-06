@@ -6,75 +6,80 @@
     x:DataType="models:NotificationModel"
     x:Class="SmartMirror.Resources.DataTemplates.NotificationTemplate">
 
-    <Border
-        StrokeThickness="1"
-        StrokeShape="RoundRectangle 12"
-        Stroke="{DynamicResource tcolor_i1}"
-        Background="{DynamicResource cbg_i2}"
-        Padding="24">
+    <ViewCell>
 
-        <StackLayout Orientation="Horizontal">
+        <Border
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 12"
+            Stroke="{DynamicResource tcolor_i1}"
+            Background="{DynamicResource cbg_i2}"
+            Padding="22"
+            Margin="0, 0, 50, 18">
 
-            <Border
-                HeightRequest="66"
-                WidthRequest="66"
-                Padding="12"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 12"
-                Stroke="{DynamicResource cbg_i1}"
-                VerticalOptions="Start"
-                BackgroundColor="{DynamicResource cbg_i1}">
+            <StackLayout Orientation="Horizontal">
 
-                <Image>
+                <Border
+                    HeightRequest="65"
+                    WidthRequest="65"
+                    Padding="11"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="{DynamicResource cbg_i1}"
+                    VerticalOptions="Start"
+                    BackgroundColor="{DynamicResource cbg_i1}">
 
-                    <Image.Triggers>
+                    <Image>
 
-                        <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="Door">
-                            <Setter Property="Source" Value="front_door"/>
-                        </DataTrigger>
+                        <Image.Triggers>
 
-                        <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="Garage">
-                            <Setter Property="Source" Value="garage_door"/>
-                        </DataTrigger>
+                            <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="Door">
+                                <Setter Property="Source" Value="front_door"/>
+                            </DataTrigger>
 
-                        <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="NoMovement">
-                            <Setter Property="Source" Value="sleep"/>
-                        </DataTrigger>
+                            <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="Garage">
+                                <Setter Property="Source" Value="garage_door"/>
+                            </DataTrigger>
 
-                        <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="Unknown">
-                            <Setter Property="Source" Value="grey_question_mark"/>
-                        </DataTrigger>
+                            <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="NoMovement">
+                                <Setter Property="Source" Value="sleep"/>
+                            </DataTrigger>
 
-                    </Image.Triggers>
+                            <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="Unknown">
+                                <Setter Property="Source" Value="grey_question_mark"/>
+                            </DataTrigger>
 
-                </Image>
+                        </Image.Triggers>
 
-            </Border>
+                    </Image>
 
-            <VerticalStackLayout
-                Margin="22, 0, 24, 0"
-                WidthRequest="267">
+                </Border>
+
+                <VerticalStackLayout
+                    Margin="20, 0, 24, 0"
+                    WidthRequest="267">
+
+                    <Label
+                        Text="{Binding Name}"
+                        Style="{DynamicResource tstyle_i11}"/>
+
+                    <Label
+                        Text="{Binding LastActivityTime, Converter={StaticResource timeToTimeAgoConverter}}"
+                        Style="{DynamicResource tstyle_i5}"
+                        Margin="0, 6, 0, 0"/>
+
+                </VerticalStackLayout>
 
                 <Label
-                    Text="{Binding Name}"
-                    Style="{DynamicResource tstyle_i11}"/>
+                    Text="{Binding Status}"
+                    Style="{DynamicResource tstyle_i8}"
+                    VerticalOptions="Start"
+                    HorizontalOptions="EndAndExpand"
+                    HorizontalTextAlignment="End"/>
 
-                <Label
-                    Text="{Binding LastActivityTime, Converter={StaticResource timeToTimeAgoConverter}}"
-                    Style="{DynamicResource tstyle_i5}"
-                    Margin="0, 6, 0, 0"/>
-                
-            </VerticalStackLayout>
+            </StackLayout>
 
-            <Label
-                Text="{Binding Status}"
-                Style="{DynamicResource tstyle_i8}"
-                VerticalOptions="Start"
-                HorizontalOptions="EndAndExpand"
-                HorizontalTextAlignment="End"/>
+        </Border>
 
-        </StackLayout>
-
-    </Border>
+    </ViewCell>
 
 </DataTemplate>
