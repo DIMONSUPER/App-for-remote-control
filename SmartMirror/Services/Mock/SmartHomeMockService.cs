@@ -1,4 +1,5 @@
-﻿using SmartMirror.Enums;
+﻿using Android.Hardware.Display;
+using SmartMirror.Enums;
 using SmartMirror.Models;
 using Device = SmartMirror.Models.Device;
 using Notification = SmartMirror.Models.Notification;
@@ -11,11 +12,41 @@ namespace SmartMirror.Services.Mock
         {
             List<CameraModel> cameras= new()
             {
-                new() { Name = "Front Door 1", IsConnected = true, CreateTime = DateTime.Now },
-                new() { Name = "Front Door 2", IsConnected = true, CreateTime = DateTime.Now },
-                new() { Name = "Back Door 1", IsConnected = false },
-                new() { Name = "Back Door 2", IsConnected = true, CreateTime = DateTime.Now },
-                new() { Name = "Garage", IsConnected = false },
+                new() 
+                { 
+                    Name = "Front Door 1", 
+                    IsConnected = true,
+                    CreateTime = DateTime.Now,
+                    VideoUrl = "https://archive.org/download/ElephantsDream/ed_hd_512kb.mp4",
+                },
+                new() 
+                {
+                    Name = "Front Door 2",
+                    IsConnected = true, 
+                    CreateTime = DateTime.Now,
+                    VideoUrl = "https://archive.org/download/BigBuckBunny_328/BigBuckBunny_512kb.mp4",
+                },
+                new() 
+                { 
+                    Name = "Back Door 1", 
+                    IsConnected = false,
+                    CreateTime = DateTime.Now,
+                    VideoUrl = "https://archive.org/download/Sintel/sintel-2048-stereo_512kb.mp4",
+                },
+                new() 
+                {
+                    Name = "Back Door 2", 
+                    IsConnected = true, 
+                    CreateTime = DateTime.Now,
+                    VideoUrl = "https://archive.org/download/CatByExcessivelyLoudTvMjjxmykdfb3Mp4Cat/CatByExcessivelyLoudTvMjjxmykdfb3Mp4Cat.mp4",
+                },
+                new() 
+                {
+                    Name = "Garage",
+                    CreateTime = DateTime.Now,
+                    IsConnected = false,
+                    VideoUrl = "https://archive.org/download/CatReachingOutMmhubokeakyMp4Cat/CatReachingOutMmhubokeakyMp4Cat.mp4",
+                },
             };
 
             return cameras;
