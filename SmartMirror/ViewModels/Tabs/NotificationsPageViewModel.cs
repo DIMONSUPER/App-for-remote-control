@@ -4,7 +4,9 @@ namespace SmartMirror.ViewModels.Tabs;
 
 public class NotificationsPageViewModel : BaseTabViewModel
 {
-    public NotificationsPageViewModel()
+    public NotificationsPageViewModel(
+        INavigationService navigationService)
+        : base(navigationService)
     {
         Title = "Notifications";
         DataState = EPageState.Complete;

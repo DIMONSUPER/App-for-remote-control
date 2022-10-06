@@ -1,6 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using SmartMirror.Enums;
+using System.Windows.Input;
+using SmartMirror.Helpers;
 using SmartMirror.Models;
+using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using Device = SmartMirror.Models.Device;
 
@@ -9,15 +12,24 @@ namespace SmartMirror.ViewModels.Tabs;
 public class RoomsPageViewModel : BaseTabViewModel
 {
     private readonly ISmartHomeMockService _smartHomeMockService;
+    private readonly IMapperService _mapperService;
 
-    public RoomsPageViewModel(ISmartHomeMockService smartHomeMockService)
+    public RoomsPageViewModel(
+        ISmartHomeMockService smartHomeMockService,
+        INavigationService navigationService,
+        IMapperService mapperService)
+        : base(navigationService)
     {
         Title = "Rooms";
         _smartHomeMockService = smartHomeMockService;
+        _mapperService = mapperService;
         DataState = EPageState.Complete;
     }
 
     #region -- Public properties --
+
+    private ICommand _roomTappedCommand;
+    public ICommand RoomTappedCommand => _roomTappedCommand ??= SingleExecutionCommand.FromFunc<RoomBindableModel>(OnRoomTappedCommandAsync);
 
     private ObservableCollection<Device> _favoriteAccessories;
     public ObservableCollection<Device> FavoriteAccessories
@@ -26,8 +38,8 @@ public class RoomsPageViewModel : BaseTabViewModel
         set => SetProperty(ref _favoriteAccessories, value);
     }
 
-    private ObservableCollection<Room> _rooms;
-    public ObservableCollection<Room> Rooms
+    private ObservableCollection<RoomBindableModel> _rooms;
+    public ObservableCollection<RoomBindableModel> Rooms
     {
         get => _rooms;
         set => SetProperty(ref _rooms, value);
@@ -37,12 +49,31 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override void Initialize(INavigationParameters parameters)
+    public override async void Initialize(INavigationParameters parameters)
     {
         base.Initialize(parameters);
 
         FavoriteAccessories = new(_smartHomeMockService.GetDevices());
-        Rooms = new(_smartHomeMockService.GetRooms());
+
+        var rooms = await _mapperService.MapRangeAsync<RoomBindableModel>(_smartHomeMockService.GetRooms(), (m, vm) =>
+        {
+            vm.TappedCommand = RoomTappedCommand;
+        });
+
+        Rooms = new(rooms);
+    }
+
+    #endregion
+
+    #region -- Private helpers --
+
+    private Task OnRoomTappedCommandAsync(RoomBindableModel room)
+    {
+        return NavigationService.CreateBuilder()
+            .AddSegment<RoomPageViewModel>()
+            .AddParameter(nameof(Rooms), Rooms)
+            .AddParameter(nameof(RoomBindableModel), room)
+            .NavigateAsync();
     }
 
     #endregion

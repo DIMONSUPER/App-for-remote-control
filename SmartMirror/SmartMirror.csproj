@@ -82,6 +82,7 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Microsoft.Maui.Dependencies" Version="6.0.540" />
 		<PackageReference Include="Microsoft.Maui.Extensions" Version="6.0.540" />
+		<PackageReference Include="AutoMapper" Version="12.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Views\" />
@@ -118,6 +119,9 @@
 		<MauiXaml Update="Controls\CustomTabView.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\ErrorDialog.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
@@ -142,6 +146,15 @@
 		<MauiXaml Update="Controls\CustomStateView.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Views\RoomPage.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\RoomsVerticalListTemplate.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\SelectedRoomDevicesTemplate.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0-android' ">
 		<ProjectReference Include="..\SmartMirror.Java.Binding\SmartMirror.Java.Binding.csproj" />
@@ -155,6 +168,9 @@
 	<ItemGroup>
 	  <Compile Update="Resources\Strings\Strings.Designer.cs">
 	    <DependentUpon>Strings.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Dialogs\ErrorDialog.xaml.cs">
+	    <DependentUpon>ErrorDialog.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
