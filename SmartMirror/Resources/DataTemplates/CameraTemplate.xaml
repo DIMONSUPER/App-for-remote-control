@@ -31,7 +31,6 @@
             <DataTrigger TargetType="Border" Binding="{Binding IsConnected}" Value="True">
                 <Setter TargetName="cameraStatusLabel" Property="Label.Text" Value="On"/>
                 <Setter TargetName="cameraStatusLabel" Property="Label.TextColor" Value="{DynamicResource tcolor_i4}"/>
-                <Setter TargetName="cameraStatusImage" Property="Image.Source" Value="video_fill"/>
             </DataTrigger>
 
             <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
