@@ -1,8 +1,9 @@
+using SmartMirror.Enums;
+using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Services.Notifications;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using SmartMirror.Enums;
 
 namespace SmartMirror.ViewModels.Tabs;
 
@@ -37,7 +38,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
         set => SetProperty(ref _isRefreshingNotifications, value);
     }
 
-    public ICommand RefreshNotifications => new Command(OnRefreshNotificationsCommandAsync);
+    private ICommand _refreshNotificationsCommand;
+    public ICommand RefreshNotificationsCommand => _refreshNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnRefreshNotificationsCommandAsync);
 
     #endregion
 
@@ -54,7 +56,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     #region -- Private helpers --
 
-    private async void OnRefreshNotificationsCommandAsync()
+    private async Task OnRefreshNotificationsCommandAsync()
     {
         await LoadNotificationsAsync();
 

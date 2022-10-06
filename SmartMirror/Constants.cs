@@ -1,5 +1,4 @@
-﻿using System;
-namespace SmartMirror
+﻿namespace SmartMirror
 {
     public static class Constants
     {

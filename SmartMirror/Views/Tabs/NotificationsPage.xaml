@@ -36,7 +36,7 @@
                 ItemsSource="{Binding Notifications}"
                 IsPullToRefreshEnabled="True"
                 IsRefreshing="{Binding IsRefreshingNotifications}"
-                RefreshCommand="{Binding RefreshNotifications}"
+                RefreshCommand="{Binding RefreshNotificationsCommand}"
                 IsGroupingEnabled="True"
                 SelectionMode="None"
                 ItemTemplate="{StaticResource notificationTemplate}"
