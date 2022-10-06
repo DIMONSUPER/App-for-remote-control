@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui.Extensions;
+﻿using System.Runtime.CompilerServices;
 
 namespace SmartMirror.Controls;
 
@@ -9,23 +9,12 @@ public partial class CustomSwitch : ContentView
 		InitializeComponent();
     }
 
+    #region -- Public properties --
+
     public static readonly BindableProperty IsToggledProperty = BindableProperty.Create(
         propertyName: nameof(IsToggled),
         returnType: typeof(bool),
-        propertyChanged: IsToggledPropertyChanged,
         declaringType: typeof(CustomSwitch));
-    
-    private static void IsToggledPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-        if (bindable is CustomSwitch customSwitch && newValue is bool)
-        {
-            customSwitch.thumb.HorizontalOptions = (bool)newValue ? LayoutOptions.End : LayoutOptions.Start;
-            customSwitch.thumb.Fill = (bool)newValue ? customSwitch.OnThumbColor : customSwitch.OffThumbColor;
-            customSwitch.thumb.WidthRequest = (bool)newValue ? 24 : 21;
-            customSwitch.thumb.HeightRequest = (bool)newValue ? 24 : 21;
-            customSwitch.frame.BackgroundColor = (bool)newValue ? customSwitch.OnColor : customSwitch.OffColor;
-        }
-    }
 
     public bool IsToggled
     {
@@ -79,8 +68,32 @@ public partial class CustomSwitch : ContentView
         set => SetValue(OffThumbColorProperty, value);
     }
 
-    void CustomSwitchToggled(System.Object sender, System.EventArgs e)
+    #endregion
+
+    #region -- Overrides --
+
+    protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        base.OnPropertyChanged(propertyName);
+
+        if (propertyName is nameof(IsToggled))
+        {
+            thumb.HorizontalOptions = IsToggled ? LayoutOptions.End : LayoutOptions.Start;
+            thumb.Fill = IsToggled ? OnThumbColor : OffThumbColor;
+            thumb.WidthRequest = IsToggled ? 24 : 21;
+            thumb.HeightRequest = IsToggled ? 24 : 21;
+            frame.BackgroundColor = IsToggled ? OnColor : OffColor;
+        }
+    }
+
+    #endregion
+
+    #region -- Private helpers --
+
+    private void CustomSwitchToggled(System.Object sender, System.EventArgs e)
 	{
         IsToggled = !IsToggled;
     }
+
+    #endregion
 }
