@@ -35,7 +35,7 @@
                 HandlerChanged="OnListViewHandlerChanged"
                 ItemsSource="{Binding Notifications}"
                 IsPullToRefreshEnabled="True"
-                IsRefreshing="{Binding IsRefreshingNotifications}"
+                IsRefreshing="{Binding IsNotificationsRefreshing}"
                 RefreshCommand="{Binding RefreshNotificationsCommand}"
                 IsGroupingEnabled="True"
                 SelectionMode="None"
