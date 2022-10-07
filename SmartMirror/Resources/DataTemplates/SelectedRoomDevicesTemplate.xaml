@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:extensions="clr-namespace:SmartMirror.Extensions"
              xmlns:models="clr-namespace:SmartMirror.Models"
+             xmlns:controls="clr-namespace:SmartMirror.Controls"
              x:Class="SmartMirror.Resources.DataTemplates.SelectedRoomDevicesTemplate"
              x:DataType="models:FanDevice">
 
@@ -97,12 +98,10 @@
 
             </Label>
 
-            <Switch x:Name="switch"
-                    IsToggled="{Binding Status}"
-                    WidthRequest="42"
-                    HeightRequest="24"
-                    VerticalOptions="Start"
-                    HorizontalOptions="End"/>
+            <controls:CustomSwitch x:Name="switch"
+                                   IsToggled="{Binding Status}"
+                                   VerticalOptions="Start"
+                                   HorizontalOptions="End"/>
 
         </HorizontalStackLayout>
 
