@@ -7,7 +7,7 @@ namespace SmartMirror.Services.Mock
     public interface ISmartHomeMockService
     {
         IEnumerable<Room> GetRooms();
-        IEnumerable<Notification> GetNotifications();
+        IEnumerable<NotificationModel> GetNotifications();
         IEnumerable<Scenario> GetScenarios();
         IEnumerable<CameraModel> GetCameras();
         IEnumerable<Device> GetDevices();

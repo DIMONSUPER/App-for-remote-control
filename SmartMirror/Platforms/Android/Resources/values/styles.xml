@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+	
+	<style name="MainThemeApp" parent="MainTheme.Base">
+		
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+		<item name="windowActionModeOverlay">true</item>
+		<item name="android:actionModeBackground">?attr/colorPrimary</item>
+		<item name="android:actionModeStyle">@style/ActionMode</item>
+		
+		<!--<item name="maui_splash">true</item>-->
+		<item name="android:windowBackground">@drawable/maui_splash</item>
+		<!--
+			Android 12+ specific settings
+			See: https://developer.android.com/guide/topics/ui/splash-screen#set-theme
+		-->
+		<item name="android:windowSplashScreenBackground">@color/maui_splash_color</item>
+		<item name="android:windowSplashScreenAnimatedIcon">@drawable/maui_splash</item>
+
+		<item name="android:fadeScrollbars">false</item>
+		<item name="android:scrollbarThumbVertical">@drawable/scrollbar_thumb</item>
+		<item name="android:scrollbarTrackVertical">@drawable/scrollbar_track</item>
+		
+		<item name="colorPrimary">@color/colorPrimary</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+		<item name="colorAccent">@color/colorAccent</item>
+	</style>
+	
+</resources>

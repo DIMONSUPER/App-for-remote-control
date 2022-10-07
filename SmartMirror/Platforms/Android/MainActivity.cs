@@ -1,16 +1,14 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Content.PM;
-using Android.OS;
 using Com.Amazon.Identity.Auth.Device.Api.Authorization;
 using Com.Amazon.Identity.Auth.Device.Api.Workflow;
 using Org.Json;
-using SmartMirror.Platforms.Services;
 
 namespace SmartMirror;
 
 [Activity(
-    Theme = "@style/Maui.SplashTheme",
+    Theme = "@style/MainThemeApp",
     Icon = "@mipmap/appicon",
     RoundIcon = "@mipmap/appicon_round",
     MainLauncher = true,
