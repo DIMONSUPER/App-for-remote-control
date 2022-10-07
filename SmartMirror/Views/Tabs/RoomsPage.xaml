@@ -35,30 +35,11 @@
                                      Spacing="0">
 
                     <!-- FAVORITE ACCESSORIES -->
-                    <HorizontalStackLayout HorizontalOptions="Start"
-                                           Margin="60,0"
-                                           Spacing="12">
-
-                        <Label Text="{extensions:Translate FavoriteAccessories}"
-                               VerticalTextAlignment="Center"
-                               HorizontalTextAlignment="Start"
-                               Style="{x:DynamicResource tstyle_i11}"/>
-
-                        <Border Stroke="White"
-                                StrokeThickness="1"
-                                StrokeShape="RoundRectangle 9"
-                                BackgroundColor="{StaticResource cbg_i2}"
-                                WidthRequest="42"
-                                HeightRequest="42">
-
-                            <Label Text="{Binding FavoriteAccessories.Count}"
-                                   VerticalTextAlignment="Center"
-                                   HorizontalTextAlignment="Center"
-                                   Style="{x:DynamicResource tstyle_i3}"/>
-
-                        </Border>
-
-                    </HorizontalStackLayout>
+                    <controls:BadgeTitleView HorizontalOptions="Start"
+                                             Margin="60, 0"
+                                             Spacing="12"
+                                             Title="{extensions:Translate FavoriteAccessories}"
+                                             Number="{Binding FavoriteAccessories.Count}"/>
 
                     <!-- FAVORITE ACCESSORIES COLLECTION -->
                     <ScrollView Margin="0,16,0,0"
@@ -73,30 +54,11 @@
                     </ScrollView>
 
                     <!-- ROOMS -->
-                    <HorizontalStackLayout HorizontalOptions="Start"
-                                           Margin="60,54,60,0"
-                                           Spacing="12">
-
-                        <Label Text="{extensions:Translate Rooms}"
-                               VerticalTextAlignment="Center"
-                               HorizontalTextAlignment="Start"
-                               Style="{x:DynamicResource tstyle_i11}"/>
-
-                        <Border Stroke="White"
-                                StrokeThickness="1"
-                                StrokeShape="RoundRectangle 9"
-                                BackgroundColor="{StaticResource cbg_i2}"
-                                WidthRequest="42"
-                                HeightRequest="42">
-
-                            <Label Text="{Binding Rooms.Count}"
-                                   VerticalTextAlignment="Center"
-                                   HorizontalTextAlignment="Center"
-                                   Style="{x:DynamicResource tstyle_i3}"/>
-
-                        </Border>
-
-                    </HorizontalStackLayout>
+                    <controls:BadgeTitleView HorizontalOptions="Start"
+                                             Margin="60, 54, 60, 0"
+                                             Spacing="12"
+                                             Title="{extensions:Translate Rooms}"
+                                             Number="{Binding Rooms.Count}"/>
 
                     <!-- ROOMS COLLECTION -->
                     <ScrollView Margin="0,16,0,0"

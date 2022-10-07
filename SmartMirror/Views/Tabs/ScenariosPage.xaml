@@ -1,37 +1,99 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<tabs:BaseTabContentPage xmlns:tabs="clr-namespace:SmartMirror.Views.Tabs"
-                         xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                         xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
-                         xmlns:extensions="clr-namespace:SmartMirror.Extensions"
-                         xmlns:controls="clr-namespace:SmartMirror.Controls"
-                         x:Class="SmartMirror.Views.Tabs.ScenariosPage"
-                         Title="Scenarios"
-                         x:DataType="vm:ScenariosPageViewModel">
+<tabs:BaseTabContentPage
+    xmlns:tabs="clr-namespace:SmartMirror.Views.Tabs"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
+    x:Class="SmartMirror.Views.Tabs.ScenariosPage"
+    Title="Scenarios"
+    x:DataType="vm:ScenariosPageViewModel">
 
-    <tabs:BaseTabContentPage.Content>
+    <tabs:BaseTabContentPage.Resources>
 
-        <controls:CustomStateView State="{Binding DataState}"
-                                  EmptyTitle="{extensions:Translate NoScenariosYet}"
-                                  LoadingTitle="{extensions:Translate Scenarios}"
-                                  EmptyStateImage="empty_scenarios">
+        <ResourceDictionary>
 
-            <controls:CustomStateView.CompleteContent>
+            <templates:FavoriteScenariosTemplate x:Key="favoriteScenariosTemplate"/>
 
-                <Grid>
+            <templates:ScenariosTemplate x:Key="scenariosTemplate"/>
 
-                    <Label Text="{Binding Title}"
-                           VerticalOptions="Center"
-                           TextColor="White"
-                           FontSize="28"
-                           HorizontalOptions="Center" />
+        </ResourceDictionary>
 
-                </Grid>
+    </tabs:BaseTabContentPage.Resources>
 
-            </controls:CustomStateView.CompleteContent>
+    <controls:CustomStateView
+        State="{Binding DataState}"
+        EmptyTitle="{extensions:Translate NoScenariosYet}"
+        LoadingTitle="{extensions:Translate Scenarios}">
 
-        </controls:CustomStateView>
+        <controls:CustomStateView.CompleteContent>
 
-    </tabs:BaseTabContentPage.Content>
+            <ScrollView
+                VerticalScrollBarVisibility="Never"
+                HorizontalScrollBarVisibility="Never">
+
+                <VerticalStackLayout
+                    Padding="0, 42, 0, 0"
+                    Spacing="0">
+
+                    <!-- FAVORITE SCENARIOS -->
+                    <controls:BadgeTitleView
+                        HorizontalOptions="Start"
+                        Margin="60, 0"
+                        Spacing="12"
+                        Title="{extensions:Translate FavoriteScenarios}"
+                        Number="{Binding FavoriteScenarios.Count}"/>
+
+                    <!-- FAVORITE SCENARIOS COLLECTION -->
+                    <ScrollView
+                        Margin="0, 16, 0, 0"
+                        Orientation="Horizontal"
+                        HorizontalScrollBarVisibility="Never">
+
+                        <HorizontalStackLayout
+                            Spacing="30"
+                            Padding="60, 0"
+                            BindableLayout.ItemTemplate="{StaticResource favoriteScenariosTemplate}"
+                            BindableLayout.ItemsSource="{Binding FavoriteScenarios}"/>
+
+                    </ScrollView>
+
+                    <!-- SCENARIOS -->
+                    <controls:BadgeTitleView
+                        HorizontalOptions="Start"
+                        Margin="60, 54, 60, 0"
+                        Spacing="12"
+                        Title="{extensions:Translate Scenarios}"
+                        Number="{Binding Scenarios.Count}"/>
+
+                    <!-- SCENARIOS COLLECTION -->
+                    <CollectionView
+                        Margin="60, 16, 60, 0"
+                        ItemsSource="{Binding Scenarios}"
+                        ItemTemplate="{StaticResource scenariosTemplate}"
+                        VerticalScrollBarVisibility="Never"
+                        HorizontalScrollBarVisibility="Never">
+
+                        <CollectionView.ItemsLayout>
+
+                            <GridItemsLayout
+                                Orientation="Vertical"
+                                VerticalItemSpacing="30"
+                                HorizontalItemSpacing="30"
+                                Span="4"/>
+
+                        </CollectionView.ItemsLayout>
+                        
+                    </CollectionView>
+
+                </VerticalStackLayout>
+
+            </ScrollView>
+
+        </controls:CustomStateView.CompleteContent>
+
+    </controls:CustomStateView>
 
 </tabs:BaseTabContentPage>

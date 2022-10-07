@@ -28,7 +28,10 @@
                     VerticalOptions="Start"
                     BackgroundColor="{DynamicResource cbg_i1}">
 
-                    <Image Source="front_door">
+                    <Image
+                        Source="front_door"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center">
 
                         <Image.Triggers>
 

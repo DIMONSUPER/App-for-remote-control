@@ -31,6 +31,10 @@ namespace SmartMirror.Services.Notifications
                         .GroupBy(row => row.LastActivityTime.ToString(Constants.Formats.DATE_FORMAT))
                         .Select(group => new NotificationsGroupedByDayModel(group.Key, group.ToList()));
                 }
+                else
+                {
+                    onFailure("notifications is null");
+                }
 
                 return Task.FromResult(notificationsGroupedByDay);
             });

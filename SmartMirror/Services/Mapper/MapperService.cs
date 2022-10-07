@@ -66,6 +66,7 @@ namespace SmartMirror.Services.Mapper
             var mapperConfiguration = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Room, RoomBindableModel>().ReverseMap();
+                cfg.CreateMap<ScenarioModel, ScenarioBindableModel>().ReverseMap();
             });
 
             return mapperConfiguration.CreateMapper();

@@ -22,7 +22,7 @@
 
                     <Label Text="{Binding Title}"
                            VerticalOptions="Center"
-                           TextColor="White"
+                           TextColor="{DynamicResource tcolor_i1}"
                            FontSize="28"
                            HorizontalOptions="Center" />
 

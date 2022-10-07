@@ -93,13 +93,10 @@
 		<Folder Include="Helpers\" />
 		<Folder Include="Services\Amazon\" />
 		<Folder Include="Platforms\Android\Services\" />
-		<Folder Include="Models\" />
 		<Folder Include="Models\Amazon\" />
 		<Folder Include="Services\Rest\" />
 		<Folder Include="Resources\Strings\" />
-		<Folder Include="Controls\" />
 		<Folder Include="Views\Tabs\" />
-		<Folder Include="Resources\DataTemplates\" />
 		<Folder Include="Resources\DataTemplateSelectors\" />
 		<Folder Include="ViewModels\Tabs\" />
 		<Folder Include="Extensions\" />
@@ -112,6 +109,9 @@
 		<Folder Include="Services\Mapper\" />
 	</ItemGroup>
 	<ItemGroup>
+		<MauiXaml Update="Controls\BadgeTitleView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Platforms\Windows\App.xaml">
 			<SubType>
 			</SubType>
@@ -119,10 +119,16 @@
 		<MauiXaml Update="Controls\CustomTabView.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\FavoriteScenariosTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\NotificationHeaderTemplate.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\NotificationTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\ScenariosTemplate.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\ErrorDialog.xaml">

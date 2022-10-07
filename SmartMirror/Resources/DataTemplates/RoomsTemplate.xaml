@@ -16,10 +16,10 @@
         </Grid.GestureRecognizers>
 
         <!-- BORDER AND ICON -->
-        <Border Stroke="White"
+        <Border Stroke="{DynamicResource cbg_i4}"
                 StrokeThickness="1"
                 StrokeShape="RoundRectangle 9"
-                BackgroundColor="#3A3A3C"
+                BackgroundColor="{DynamicResource cbg_i2}"
                 Padding="24">
 
         </Border>
