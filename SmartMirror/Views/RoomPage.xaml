@@ -20,7 +20,7 @@
 
     </views:BaseContentPage.Resources>
 
-    <VerticalStackLayout Padding="42,42,0,0"
+    <VerticalStackLayout Padding="14,42,0,0"
                          Spacing="15">
 
         <!-- BACK BUTTON -->
@@ -42,9 +42,9 @@
 
         </HorizontalStackLayout>
 
-        <Grid ColumnDefinitions="0.25*, 0.75*"
+        <Grid ColumnDefinitions="0.22*, 0.78*"
               ColumnSpacing="30"
-              Margin="0,0,15,0">
+              Margin="0,0,0,0">
 
             <!-- ROOMS COLLECTION -->
             <CollectionView ItemsSource="{Binding Rooms}"
@@ -54,7 +54,7 @@
                 <CollectionView.Footer>
 
                     <BoxView Color="Transparent"
-                             HeightRequest="60"/>
+                             HeightRequest="20"/>
 
                 </CollectionView.Footer>
 
@@ -67,13 +67,13 @@
                             SelectionMode="None">
 
                 <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" Span="3" HorizontalItemSpacing="0" VerticalItemSpacing="30"/>
+                    <GridItemsLayout Orientation="Vertical" Span="3" HorizontalItemSpacing="0" VerticalItemSpacing="24"/>
                 </CollectionView.ItemsLayout>
 
                 <CollectionView.Footer>
 
                     <BoxView Color="Transparent"
-                             HeightRequest="60"/>
+                             HeightRequest="20"/>
 
                 </CollectionView.Footer>
 

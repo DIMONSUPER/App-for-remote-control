@@ -7,7 +7,7 @@
              x:Class="SmartMirror.Resources.DataTemplates.SelectedRoomDevicesTemplate"
              x:DataType="models:FanDevice">
 
-    <Grid Margin="0,0,30,0">
+    <Grid Margin="0,0,24,0">
 
         <!-- BORDER -->
         <Border Stroke="{x:DynamicResource cbg_i4}"
@@ -91,7 +91,7 @@
 
                 <Label.Triggers>
 
-                    <DataTrigger Binding="{Binding Source={x:Reference switch}, Path=IsToggled}" Value="false" TargetType="Label">
+                    <DataTrigger Binding="{Binding Source={x:Reference switch}, Path=IsToggled}" Value="False" TargetType="Label">
                         <Setter Property="Text" Value="{extensions:Translate Closed}"/>
                         <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
                     </DataTrigger>
