@@ -1,9 +1,9 @@
-﻿using SmartMirror.Enums;
-﻿using Prism.Navigation;
+using SmartMirror.Enums;
+using Prism.Navigation;
 
 namespace SmartMirror.ViewModels.Tabs;
 
-public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware
+public class BaseTabViewModel : BindableBase, IInitialize, IInitializeAsync, IPageLifecycleAware
 {
     public BaseTabViewModel(INavigationService navigationService)
     {
@@ -45,6 +45,15 @@ public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware
 
     public virtual void Initialize(INavigationParameters parameters)
     {
+    }
+
+    #endregion
+
+    #region -- IInitializeAsync implementation --
+
+    public virtual Task InitializeAsync(INavigationParameters parameters)
+    {
+        return Task.CompletedTask;
     }
 
     #endregion

@@ -1,5 +1,4 @@
-﻿using System;
-namespace SmartMirror
+﻿namespace SmartMirror
 {
     public static class Constants
     {
@@ -14,6 +13,12 @@ namespace SmartMirror
         {
             public const string TITLE = nameof(TITLE);
             public const string DESCRIPTION = nameof(DESCRIPTION);
+        }
+
+        public static class Formats
+        {
+            public const string DATE_FORMAT = "MM.dd.yyyy";
+            public const string TIME_FORMAT = "hh:mm";
         }
     }
 }

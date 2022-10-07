@@ -110,7 +110,7 @@
                        CornerRadius="11"
                        BackgroundColor="{StaticResource cbg_i2}">
 
-                   <ActivityIndicator IsRunning="True"/>
+                    <ActivityIndicator IsRunning="True"/>
 
                 </Frame>
 

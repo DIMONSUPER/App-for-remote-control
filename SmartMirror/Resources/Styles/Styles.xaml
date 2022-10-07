@@ -2,12 +2,15 @@
 <?xaml-comp compile="true" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:converters="clr-namespace:SmartMirror.Converters"
                     xmlns:maui="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                     xmlns:controls="clr-namespace:SmartMirror.Controls">
 
     <!-- CONVERTERS -->
     <xct:IsStringNotNullOrWhiteSpaceConverter x:Key="notNullOrEmtpyConverter"/>
+    <converters:TimeToTimeAgoConverter x:Key="timeToTimeAgoConverter" />
+    <converters:TimeToDaysOfWeekConverter x:Key="timeToDaysOfWeekConverter" />
 
     <!-- TEXT SIZE -->
     <x:Double x:Key="tsize_i1">36</x:Double> <!-- 48px -->

@@ -283,6 +283,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to hours ago.
+        /// </summary>
+        internal static string HoursAgo {
+            get {
+                return ResourceManager.GetString("HoursAgo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To continue using the app, please install our Configuration app on your smartphone..
         /// </summary>
         internal static string InstallConfigurationApp {
@@ -396,6 +405,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Notifications {
             get {
                 return ResourceManager.GetString("Notifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to now.
+        /// </summary>
+        internal static string Now {
+            get {
+                return ResourceManager.GetString("Now", resourceCulture);
             }
         }
         
