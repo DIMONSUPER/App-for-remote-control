@@ -9,6 +9,7 @@
     xmlns:sc="clr-namespace:SmartMirror.Controls.StateContainer"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:video="clr-namespace:SmartMirror.Controls.Video"
     Unloaded="OnCamerasPageUnloaded"
@@ -96,20 +97,30 @@
 
                     </Border>
 
-                    <Frame
+                    <Frame 
                         IsVisible="{Binding SelectedCamera.IsConnected}"
-                        BorderColor="White"
+                        BorderColor="{DynamicResource cbg_i7}"
                         CornerRadius="9"
                         IsClippedToBounds="True"
+                        HasShadow="False"
                         Padding="1">
-                        
-                        <video:Video 
-                            AreTransportControlsEnabled="False"
-                            Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"
-                            x:Name="videoPlayer"/>
+
+                        <Frame
+                            CornerRadius="9"
+                            IsClippedToBounds="True"
+                            HasShadow="False"
+                            
+                            Padding="0">
+
+                            <video:Video 
+                                AreTransportControlsEnabled="False"
+                                Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"
+                                x:Name="videoPlayer"/>
+
+                        </Frame>
                         
                     </Frame>
-                    
+
                 </Grid>
 
             </Grid>
