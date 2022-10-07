@@ -6,6 +6,7 @@
     xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"        
     xmlns:bindables="clr-namespace:SmartMirror.Models.BindableModels"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+    xmlns:sc="clr-namespace:SmartMirror.Controls.StateContainer"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
@@ -46,18 +47,63 @@
                         ItemTemplate="{DynamicResource cameraTemplate}"/>
 
                 </RefreshView>
-                
-                <video:Video 
-                    Grid.Column="1"
-                    AreTransportControlsEnabled="False"
-                    Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"
-                    x:Name="videoPlayer"/>
 
-                <Label 
-                    Grid.Column="1" 
-                    Margin="20"
-                    TextColor="White"
-                    Text="{Binding SelectedCamera.VideoUrl}"/>
+                <Grid Grid.Column="1">
+
+                    <Border
+                        StrokeThickness="0.75"
+                        StrokeShape="RoundRectangle 9"
+                        Stroke="White">
+                        <StackLayout VerticalOptions="CenterAndExpand">
+
+                            <Frame 
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center"
+                                CornerRadius="9"
+                                HeightRequest="90"
+                                WidthRequest="90"
+                                HasShadow="False"
+                                BackgroundColor="{DynamicResource cbg_i1}">
+                                                
+                                <Image 
+                                    HorizontalOptions="Center"
+                                    Source="video_off"/>
+                                                
+                            </Frame>
+
+                            <Label 
+                                Style="{DynamicResource tstyle_i4}"
+                                Margin="0, 30, 0, 6"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding SelectedCamera.Name}"/>
+
+                            <Label 
+                                Style="{DynamicResource tstyle_i6}"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"
+                                Text="{extensions:Translate CameraIsOff}"/>
+
+                        </StackLayout>
+                                      
+
+                    </Border>
+
+                    <Frame
+                        IsVisible="{Binding SelectedCamera.IsConnected}"
+                        BorderColor="White"
+                        CornerRadius="9"
+                        IsClippedToBounds="True"
+                        Padding="1">
+                        
+                        <video:Video 
+                            AreTransportControlsEnabled="False"
+                            Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"
+                            x:Name="videoPlayer"/>
+                        
+                    </Frame>
+                    
+                </Grid>
 
             </Grid>
 

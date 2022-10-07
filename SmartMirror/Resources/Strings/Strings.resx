@@ -1,202 +1,309 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-	<resheader name="resmimetype">
-		<value>text/microsoft-resx</value>
-	</resheader>
-	<resheader name="version">
-		<value>2.0</value>
-	</resheader>
-	<resheader name="reader">
-		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<resheader name="writer">
-		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
 
-	 <data name="WelcomeMirrorHome" xml:space="preserve">
-        <value>Welcome to the Mirror Home app!</value>
-    </data>
-	<data name="InstallConfigurationApp" xml:space="preserve">
-        <value>To continue using the app, please install our Configuration app on your smartphone.</value>
-    </data>
-	<data name="FollowAllInstructions" xml:space="preserve">
-        <value>Follow all instructions and complete your registration</value>
-    </data>
-	<data name="Loading" xml:space="preserve">
-        <value>Loading</value>
-    </data>
-	<data name="PleaseWaitFewSeconds" xml:space="preserve">
-        <value>Please, wait a few seconds</value>
-    </data>
-	<data name="NoInternetConnection" xml:space="preserve">
-        <value>No internet connection</value>
-    </data>
-	<data name="PleaseCheckInternet" xml:space="preserve">
-        <value>Please, check your internet connection and try again</value>
-    </data>
-	<data name="TryAgain" xml:space="preserve">
-        <value>Try Again</value>
-    </data>
-	<data name="Synchronization" xml:space="preserve">
-        <value>Synchronization</value>
-    </data>
-	<data name="StayInSameWiFi" xml:space="preserve">
-        <value>Please, stay in the same Wi-Fi network with your smartphone and mirror to finish synchronozation</value>
-    </data>
-	<data name="Rooms" xml:space="preserve">
-        <value>Rooms</value>
-    </data>
-	<data name="Notifications" xml:space="preserve">
-        <value>Notifications</value>
-    </data>
-	<data name="Cameras" xml:space="preserve">
-        <value>Cameras</value>
-    </data>
-    <data name="Scenarios" xml:space="preserve">
-        <value>Scenarios</value>
-    </data>
-    <data name="PleaseWait" xml:space="preserve">
-        <value>Please, wait</value>
-    </data>
-    <data name="SomethingWentWrong" xml:space="preserve">
-        <value>Something went wrong</value>
-    </data>
-    <data name="ErrorDescription" xml:space="preserve">
-        <value>Error description</value>
-    </data>
-    <data name="Close" xml:space="preserve">
-        <value>Close</value>
-    </data>
-    <data name="NoAccessoriesYet" xml:space="preserve">
-        <value>No accessories yet</value>
-    </data>
-    <data name="FavoriteAccessories" xml:space="preserve">
-        <value>Favorite Accessories</value>
-    </data>
-    <data name="Unlocked" xml:space="preserve">
-        <value>Unlocked</value>
-    </data>
-    <data name="On" xml:space="preserve">
-        <value>On</value>
-    </data>
-    <data name="GarageDoor" xml:space="preserve">
-        <value>Garage Door</value>
-    </data>
-    <data name="FrontDoor" xml:space="preserve">
-        <value>Front Door</value>
-    </data>
-    <data name="Fan" xml:space="preserve">
-        <value>Fan</value>
-    </data>
-    <data name="LivingRoom" xml:space="preserve">
-        <value>Living Room</value>
-    </data>
-    <data name="DiningRoom" xml:space="preserve">
-        <value>Dining Room</value>
-    </data>
-    <data name="Accessories" xml:space="preserve">
-        <value>Accessories</value>
-    </data>
-    <data name="Downstairs" xml:space="preserve">
-        <value>Downstairs</value>
-    </data>
-    <data name="Garage" xml:space="preserve">
-        <value>Garage</value>
-    </data>
-    <data name="Back" xml:space="preserve">
-        <value>Back</value>
-    </data>
-    <data name="Paused" xml:space="preserve">
-        <value>Paused</value>
-    </data>
-    <data name="HalfBath" xml:space="preserve">
-        <value>Half Bath</value>
-    </data>
-    <data name="Light" xml:space="preserve">
-        <value>Light</value>
-    </data>
-    <data name="HomePod" xml:space="preserve">
-        <value>HomePod</value>
-    </data>
-    <data name="Shades" xml:space="preserve">
-        <value>Shades</value>
-    </data>
-    <data name="Disconnected" xml:space="preserve">
-        <value>Disconnected</value>
-    </data>
-    <data name="Closed" xml:space="preserve">
-        <value>Closed</value>
-    </data>
-    <data name="NoNotificationsYet" xml:space="preserve">
-        <value>No notifications yet</value>
-    </data>
-    <data name="Today" xml:space="preserve">
-        <value>Today</value>
-    </data>
-    <data name="MinutesAgo" xml:space="preserve">
-        <value>minutes ago</value>
-    </data>
-    <data name="BalconyDoor" xml:space="preserve">
-        <value>Balcony Door</value>
-    </data>
-    <data name="UpstairsHallwayMovement" xml:space="preserve">
-        <value>Upstairs Hallway Movement</value>
-    </data>
-    <data name="NoMovement" xml:space="preserve">
-        <value>No movement</value>
-    </data>
-    <data name="Unknown" xml:space="preserve">
-        <value>Unknown</value>
-    </data>
-    <data name="Yesterday" xml:space="preserve">
-        <value>Yesterday</value>
-    </data>
-    <data name="NoCamerasYet" xml:space="preserve">
-        <value>No cameras yet</value>
-    </data>
-    <data name="Off" xml:space="preserve">
-        <value>Off</value>
-    </data>
-    <data name="BackDoor" xml:space="preserve">
-        <value>Back Door</value>
-    </data>
-    <data name="CameraIsOff" xml:space="preserve">
-        <value>Camera is off</value>
-    </data>
-    <data name="NoScenariosYet" xml:space="preserve">
-        <value>No scenarios yet</value>
-    </data>
-    <data name="FavoriteScenarios" xml:space="preserve">
-        <value>Favorite Scenarios</value>
-    </data>
-    <data name="Active" xml:space="preserve">
-        <value>Active</value>
-    </data>
-    <data name="NotActive" xml:space="preserve">
-        <value>Not Active</value>
-    </data>
-    <data name="GoodMorning" xml:space="preserve">
-        <value>Good Morning</value>
-    </data>
-    <data name="GoodEvening" xml:space="preserve">
-        <value>Good Evening</value>
-    </data>
-    <data name="FridayNight" xml:space="preserve">
-        <value>Friday Night</value>
-    </data>
-    <data name="SetTemperature" xml:space="preserve">
-        <value>Set temperature</value>
-    </data>
-    <data name="TurnOn" xml:space="preserve">
-        <value>Turn On</value>
-    </data>
-    <data name="TurnOff" xml:space="preserve">
-        <value>Turn Off</value>
-    </data>
-	<data name="HoursAgo" xml:space="preserve">
-		<value>hours ago</value>
-	</data>
-	<data name="Now" xml:space="preserve">
-		<value>now</value>
-	</data>
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeMirrorHome" xml:space="preserve">
+    <value>Welcome to the Mirror Home app!</value>
+  </data>
+  <data name="InstallConfigurationApp" xml:space="preserve">
+    <value>To continue using the app, please install our Configuration app on your smartphone.</value>
+  </data>
+  <data name="FollowAllInstructions" xml:space="preserve">
+    <value>Follow all instructions and complete your registration</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading</value>
+  </data>
+  <data name="PleaseWaitFewSeconds" xml:space="preserve">
+    <value>Please, wait a few seconds</value>
+  </data>
+  <data name="NoInternetConnection" xml:space="preserve">
+    <value>No internet connection</value>
+  </data>
+  <data name="PleaseCheckInternet" xml:space="preserve">
+    <value>Please, check your internet connection and try again</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Try Again</value>
+  </data>
+  <data name="Synchronization" xml:space="preserve">
+    <value>Synchronization</value>
+  </data>
+  <data name="StayInSameWiFi" xml:space="preserve">
+    <value>Please, stay in the same Wi-Fi network with your smartphone and mirror to finish synchronozation</value>
+  </data>
+  <data name="Rooms" xml:space="preserve">
+    <value>Rooms</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="Cameras" xml:space="preserve">
+    <value>Cameras</value>
+  </data>
+  <data name="Scenarios" xml:space="preserve">
+    <value>Scenarios</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Please, wait</value>
+  </data>
+  <data name="SomethingWentWrong" xml:space="preserve">
+    <value>Something went wrong</value>
+  </data>
+  <data name="ErrorDescription" xml:space="preserve">
+    <value>Error description</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="NoAccessoriesYet" xml:space="preserve">
+    <value>No accessories yet</value>
+  </data>
+  <data name="FavoriteAccessories" xml:space="preserve">
+    <value>Favorite Accessories</value>
+  </data>
+  <data name="Unlocked" xml:space="preserve">
+    <value>Unlocked</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="GarageDoor" xml:space="preserve">
+    <value>Garage Door</value>
+  </data>
+  <data name="FrontDoor" xml:space="preserve">
+    <value>Front Door</value>
+  </data>
+  <data name="Fan" xml:space="preserve">
+    <value>Fan</value>
+  </data>
+  <data name="LivingRoom" xml:space="preserve">
+    <value>Living Room</value>
+  </data>
+  <data name="DiningRoom" xml:space="preserve">
+    <value>Dining Room</value>
+  </data>
+  <data name="Accessories" xml:space="preserve">
+    <value>Accessories</value>
+  </data>
+  <data name="Downstairs" xml:space="preserve">
+    <value>Downstairs</value>
+  </data>
+  <data name="Garage" xml:space="preserve">
+    <value>Garage</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Paused" xml:space="preserve">
+    <value>Paused</value>
+  </data>
+  <data name="HalfBath" xml:space="preserve">
+    <value>Half Bath</value>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="HomePod" xml:space="preserve">
+    <value>HomePod</value>
+  </data>
+  <data name="Shades" xml:space="preserve">
+    <value>Shades</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Disconnected</value>
+  </data>
+  <data name="Closed" xml:space="preserve">
+    <value>Closed</value>
+  </data>
+  <data name="NoNotificationsYet" xml:space="preserve">
+    <value>No notifications yet</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="MinutesAgo" xml:space="preserve">
+    <value>minutes ago</value>
+  </data>
+  <data name="BalconyDoor" xml:space="preserve">
+    <value>Balcony Door</value>
+  </data>
+  <data name="UpstairsHallwayMovement" xml:space="preserve">
+    <value>Upstairs Hallway Movement</value>
+  </data>
+  <data name="NoMovement" xml:space="preserve">
+    <value>No movement</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
+  <data name="NoCamerasYet" xml:space="preserve">
+    <value>No cameras yet</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="BackDoor" xml:space="preserve">
+    <value>Back Door</value>
+  </data>
+  <data name="CameraIsOff" xml:space="preserve">
+    <value>Camera is off</value>
+  </data>
+  <data name="NoScenariosYet" xml:space="preserve">
+    <value>No scenarios yet</value>
+  </data>
+  <data name="FavoriteScenarios" xml:space="preserve">
+    <value>Favorite Scenarios</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="NotActive" xml:space="preserve">
+    <value>Not Active</value>
+  </data>
+  <data name="GoodMorning" xml:space="preserve">
+    <value>Good Morning</value>
+  </data>
+  <data name="GoodEvening" xml:space="preserve">
+    <value>Good Evening</value>
+  </data>
+  <data name="FridayNight" xml:space="preserve">
+    <value>Friday Night</value>
+  </data>
+  <data name="SetTemperature" xml:space="preserve">
+    <value>Set temperature</value>
+  </data>
+  <data name="TurnOn" xml:space="preserve">
+    <value>Turn On</value>
+  </data>
+  <data name="TurnOff" xml:space="preserve">
+    <value>Turn Off</value>
+  </data>
+  <data name="HoursAgo" xml:space="preserve">
+    <value>hours ago</value>
+  </data>
+  <data name="Now" xml:space="preserve">
+    <value>now</value>
+  </data>
+  <data name="CameraIsOn" xml:space="preserve">
+    <value>Camera is On</value>
+  </data>
 </root>
