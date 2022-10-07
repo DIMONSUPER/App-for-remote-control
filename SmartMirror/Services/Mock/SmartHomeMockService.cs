@@ -1,5 +1,4 @@
-﻿using Android.Hardware.Display;
-using SmartMirror.Enums;
+﻿using SmartMirror.Enums;
 using SmartMirror.Models;
 using Device = SmartMirror.Models.Device;
 using Notification = SmartMirror.Models.Notification;
@@ -14,38 +13,41 @@ namespace SmartMirror.Services.Mock
             {
                 new() 
                 { 
+                    Id = 1,
                     Name = "Front Door 1", 
                     IsConnected = true,
                     CreateTime = DateTime.Now,
-                    VideoUrl = "https://archive.org/download/ElephantsDream/ed_hd_512kb.mp4",
+                    VideoUrl = "https://s91.ipcamlive.com/streams/5bkh7sclt2rvg5cgl/stream.m3u8",
                 },
                 new() 
                 {
+                    Id = 2,
                     Name = "Front Door 2",
                     IsConnected = true, 
                     CreateTime = DateTime.Now,
-                    VideoUrl = "https://archive.org/download/BigBuckBunny_328/BigBuckBunny_512kb.mp4",
+                    VideoUrl = "https://videos-3.earthcam.com/fecnetwork/9299.flv/chunklist_w438799610.m3u8",
                 },
                 new() 
                 { 
-                    Name = "Back Door 1", 
+                    Id = 3,
+                    Name = "Back Door 1",
                     IsConnected = false,
                     CreateTime = DateTime.Now,
-                    VideoUrl = "https://archive.org/download/Sintel/sintel-2048-stereo_512kb.mp4",
                 },
                 new() 
                 {
-                    Name = "Back Door 2", 
+                    Id = 4,
+                    Name = "Back Door 2",
                     IsConnected = true, 
                     CreateTime = DateTime.Now,
-                    VideoUrl = "https://archive.org/download/CatByExcessivelyLoudTvMjjxmykdfb3Mp4Cat/CatByExcessivelyLoudTvMjjxmykdfb3Mp4Cat.mp4",
+                    VideoUrl = "https://videos-3.earthcam.com/fecnetwork/meprd_garch.flv/chunklist_w994994540.m3u8",
                 },
                 new() 
                 {
+                    Id = 5,
                     Name = "Garage",
                     CreateTime = DateTime.Now,
                     IsConnected = false,
-                    VideoUrl = "https://archive.org/download/CatReachingOutMmhubokeakyMp4Cat/CatReachingOutMmhubokeakyMp4Cat.mp4",
                 },
             };
 

@@ -1,19 +1,19 @@
-﻿#nullable enable
-using Microsoft.Maui.Handlers;
-using SmartMirror.Controls;
-using SmartMirror.Platforms.Android;
+﻿using Microsoft.Maui.Handlers;
+using SmartMirror.Controls.Video;
+using SmartMirror.Helpers;
+using SmartMirror.Platforms.Android.Controls;
 
 namespace SmartMirror.Handlers
 {
     public partial class VideoHandler : ViewHandler<Video, MauiVideoPlayer>
     {
+        #region -- Overrides --
+
         protected override MauiVideoPlayer CreatePlatformView() => new MauiVideoPlayer(Context, VirtualView);
 
         protected override void ConnectHandler(MauiVideoPlayer platformView)
         {
             base.ConnectHandler(platformView);
-
-            // Perform any control setup here
         }
 
         protected override void DisconnectHandler(MauiVideoPlayer platformView)
@@ -22,6 +22,10 @@ namespace SmartMirror.Handlers
             base.DisconnectHandler(platformView);
         }
 
+        #endregion
+
+        #region -- Public helpers --
+        
         public static void MapAreTransportControlsEnabled(VideoHandler handler, Video video)
         {
             handler.PlatformView?.UpdateTransportControlsEnabled();
@@ -44,29 +48,28 @@ namespace SmartMirror.Handlers
 
         public static void MapPlayRequested(VideoHandler handler, Video video, object? args)
         {
-            if (args is not VideoPositionEventArgs)
-                return;
-
-            TimeSpan position = ((VideoPositionEventArgs)args).Position;
-            handler.PlatformView?.PlayRequested(position);
+            if (args is VideoPositionEventArgs videoPositionEventArgs)
+            {
+                handler.PlatformView?.PlayRequested(videoPositionEventArgs.Position);
+            }
         }
 
         public static void MapPauseRequested(VideoHandler handler, Video video, object? args)
         {
-            if (args is not VideoPositionEventArgs)
-                return;
-
-            TimeSpan position = ((VideoPositionEventArgs)args).Position;
-            handler.PlatformView?.PauseRequested(position);
+            if (args is VideoPositionEventArgs videoPositionEventArgs)
+            {
+                handler.PlatformView?.PauseRequested(videoPositionEventArgs.Position);
+            }
         }
 
         public static void MapStopRequested(VideoHandler handler, Video video, object? args)
         {
-            if (args is not VideoPositionEventArgs)
-                return;
-
-            TimeSpan position = ((VideoPositionEventArgs)args).Position;
-            handler.PlatformView?.StopRequested(position);
+            if (args is VideoPositionEventArgs videoPositionEventArgs)
+            {
+                handler.PlatformView?.StopRequested(videoPositionEventArgs.Position);
+            }
         }
+
+        #endregion
     }
 }

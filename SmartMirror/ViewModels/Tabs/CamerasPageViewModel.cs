@@ -1,3 +1,4 @@
+using Android.Hardware.Camera2;
 using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
@@ -65,6 +66,24 @@ public class CamerasPageViewModel : BaseTabViewModel
         await RefreshCameras();
     }
 
+
+    public override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (Cameras.Any())
+        {
+            SelectCamera(Cameras.FirstOrDefault());
+        }
+    }
+
+    public override void OnDisappearing()
+    {
+        base.OnDisappearing();
+
+        SelectCamera(null);
+    }
+
     #endregion
 
     #region -- Private helpers --
@@ -90,13 +109,7 @@ public class CamerasPageViewModel : BaseTabViewModel
 
         IsCamerasRefreshing = false;
 
-        cameras = cameras.Concat(cameras);
-        cameras = cameras.Concat(cameras);
-        cameras = cameras.Concat(cameras);
-
         Cameras = new(cameras);
-
-        SelectCamera(Cameras.FirstOrDefault());
     }
 
     private void SelectCamera(CameraBindableModel selectedCamera)
@@ -107,8 +120,8 @@ public class CamerasPageViewModel : BaseTabViewModel
             {
                 if (camera == selectedCamera)
                 {
+                    SelectedCamera = camera;
                     camera.IsSelected = true;
-                    SelectedCamera = selectedCamera;
                 }
                 else
                 {

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
-using static Android.Icu.Text.CaseMap;
 
 namespace SmartMirror.Services.Mapper
 {

@@ -88,7 +88,6 @@
 		<Folder Include="ViewModels\" />
 		<Folder Include="Services\" />
 		<Folder Include="Platforms\Android\Assets\" />
-		<Folder Include="Helpers\" />
 		<Folder Include="Services\Amazon\" />
 		<Folder Include="Platforms\Android\Services\" />
 		<Folder Include="Models\Amazon\" />
@@ -98,7 +97,6 @@
 		<Folder Include="Resources\DataTemplateSelectors\" />
 		<Folder Include="ViewModels\Tabs\" />
 		<Folder Include="Resources\Strings\" />
-		<Folder Include="Enums\" />
 		<Folder Include="Services\Mock\" />
 		<Folder Include="Platforms\Android\Renderers\" />
 		<Folder Include="Platforms\Android\Resources\drawable\" />
@@ -170,10 +168,6 @@
 	    <DependentUpon>ErrorDialog.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
-	<ItemGroup Condition="$(TargetFramework.StartsWith('net6.0-android')) != true">
-		<Compile Remove="**\**\*.Android.cs" />
-		<None Include="**\**\*.Android.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
-	</ItemGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
 		<AndroidKeyStore>True</AndroidKeyStore>
 		<AndroidSigningKeyStore>c:/Users/user/Projects/SmartMirror/smartmirror.keystore</AndroidSigningKeyStore>
@@ -181,4 +175,8 @@
 		<AndroidSigningKeyPass>1Q2w3e4r5t</AndroidSigningKeyPass>
 		<AndroidSigningStorePass>1Q2w3e4r5t</AndroidSigningStorePass>
 	</PropertyGroup>
+	<ItemGroup Condition="$(TargetFramework.StartsWith('net6.0-android')) != true">
+		<Compile Remove="**\**\*.Android.cs" />
+		<None Include="**\**\*.Android.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+	</ItemGroup>
 </Project>

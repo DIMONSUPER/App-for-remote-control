@@ -9,6 +9,9 @@
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:video="clr-namespace:SmartMirror.Controls.Video"
+    Unloaded="OnCamerasPageUnloaded"
+    Disappearing="OnCamerasPageDisappearing"  
     Title="{extensions:Translate Cameras}"
     x:Class="SmartMirror.Views.Tabs.CamerasPage"
     x:DataType="vm:CamerasPageViewModel">
@@ -42,15 +45,18 @@
                         ItemTemplate="{StaticResource cameraTemplate}"/>
 
                 </RefreshView>
+                
+                <video:Video 
+                    Grid.Column="1"
+                    AreTransportControlsEnabled="False"
+                    Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"
+                    x:Name="videoPlayer"/>
 
                 <Label 
-                    Grid.Column="1"
-                    TextColor="Red"
-                    Text="{Binding SelectedCamera.Name}"/>
-
-                <controls:Video 
-                    Grid.Column="1"
-                    Source="https://archive.org/download/CatByExcessivelyLoudTvMjjxmykdfb3Mp4Cat/CatByExcessivelyLoudTvMjjxmykdfb3Mp4Cat.mp4"/>
+                    Grid.Column="1" 
+                    Margin="20"
+                    TextColor="White"
+                    Text="{Binding SelectedCamera.VideoUrl}"/>
 
             </Grid>
 

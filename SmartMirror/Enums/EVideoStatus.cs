@@ -1,6 +1,6 @@
-﻿namespace SmartMirror.Controls
+﻿namespace SmartMirror.Enums
 {
-    public enum VideoStatus
+    public enum EVideoStatus
     {
         NotReady,
         Playing,
