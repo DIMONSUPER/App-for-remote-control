@@ -47,7 +47,7 @@
                 HorizontalScrollBarVisibility="Never"
                 HorizontalOptions="Center"
                 WidthRequest="660"
-                Margin="50, 36, 0, 0"/>
+                Margin="50, 24, 0, 0"/>
 
         </controls:CustomStateView.CompleteContent>
 

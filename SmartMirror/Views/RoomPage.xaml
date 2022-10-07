@@ -20,11 +20,12 @@
 
     </views:BaseContentPage.Resources>
 
-    <VerticalStackLayout Padding="28,20,0,0"
+    <VerticalStackLayout Padding="42,42,0,0"
                          Spacing="15">
 
         <!-- BACK BUTTON -->
         <HorizontalStackLayout Spacing="17"
+                               Margin="22,0,0,0"
                                HorizontalOptions="Start">
 
             <HorizontalStackLayout.GestureRecognizers>
@@ -43,7 +44,7 @@
 
         <Grid ColumnDefinitions="0.25*, 0.75*"
               ColumnSpacing="30"
-              Margin="0,0,30,0">
+              Margin="0,0,15,0">
 
             <!-- ROOMS COLLECTION -->
             <CollectionView ItemsSource="{Binding Rooms}"

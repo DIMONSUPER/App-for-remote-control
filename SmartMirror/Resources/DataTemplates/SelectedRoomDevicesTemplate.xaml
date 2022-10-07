@@ -12,12 +12,14 @@
         <!-- BORDER -->
         <Border Stroke="{x:DynamicResource cbg_i4}"
                 StrokeThickness="1"
-                StrokeShape="RoundRectangle 12"
+                StrokeShape="RoundRectangle 9"
                 BackgroundColor="{StaticResource cbg_i2}"
-                Padding="16,12">
+                Margin="0,0,0,3"
+                Shadow="{x:StaticResource Shadow_i1}"
+                Padding="24,18">
 
-            <VerticalStackLayout Spacing="50"
-                                 Margin="0,0,0,18">
+            <VerticalStackLayout Spacing="52"
+                                 Margin="0,0,0,0">
 
                 <!-- ICON -->
                 <Frame BackgroundColor="{StaticResource cbg_i1}"
@@ -77,9 +79,9 @@
 
         <!-- SWITCH -->
         <HorizontalStackLayout Spacing="0"
-                               Margin="16"
                                VerticalOptions="Start"
-                               HorizontalOptions="End">
+                               HorizontalOptions="End"
+                               Padding="24,18">
 
             <Label Text="{extensions:Translate Unlocked}"
                    Margin="0,0,12,0"
@@ -100,7 +102,7 @@
 
             <controls:CustomSwitch x:Name="switch"
                                    IsToggled="{Binding Status}"
-                                   VerticalOptions="Start"
+                                   VerticalOptions="Center"
                                    HorizontalOptions="End"/>
 
         </HorizontalStackLayout>

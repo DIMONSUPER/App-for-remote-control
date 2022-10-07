@@ -35,7 +35,7 @@ public static class MauiProgram
                 fonts.AddFont("Inter-SemiBold-600.ttf", "InterSemiBold");
                 fonts.AddFont("Inter-Bold-700.ttf", "InterBold");
             });
-
+            
         return builder.Build();
     }
 

@@ -7,7 +7,7 @@
                             x:Class="SmartMirror.Views.MainTabbedPage"
                             NavigationPage.HasNavigationBar="False"
                             android:TabbedPage.IsSwipePagingEnabled="False"
-                            android:TabbedPage.IsSmoothScrollEnabled="False"
+                            android:TabbedPage.IsSmoothScrollEnabled="True"
                             Background="{x:DynamicResource GrayGradientBrush}"
                             Title="MainTabbedPage"
                             x:Name="tabbedPage">

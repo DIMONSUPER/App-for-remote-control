@@ -125,18 +125,25 @@
 
     <!-- SHADOWS --> 
     <Shadow 
-        Offset="0, 12"
-        Opacity="0.24"
-        Radius="18"
-        Brush="{DynamicResource tcolor_i2}"
+        Offset="0,2"
+        Opacity="0.4"
+        Radius="9"
+        Brush="{x:DynamicResource cbg_i10}"
         x:Key="Shadow_i1"/>
+
+    <Shadow 
+        Offset="0,16"
+        Opacity="0.15"
+        Radius="9"
+        Brush="{x:DynamicResource cbg_i10}"
+        x:Key="Shadow_i2"/>
 
     <!-- CUSTOM SWITCH -->
     <Style TargetType="controls:CustomSwitch">
-        <Setter Property="WidthRequest" Value="52"/>
-        <Setter Property="HeightRequest" Value="28"/>
-        <Setter Property="ThumbSize" Value="24" />
-        <Setter Property="CornerRadius" Value="100" />
+        <Setter Property="WidthRequest" Value="42"/>
+        <Setter Property="HeightRequest" Value="24"/>
+        <Setter Property="ThumbSize" Value="18" />
+        <Setter Property="CornerRadius" Value="75" />
         <Setter Property="OnColor" Value="{StaticResource cbg_i6}" />
         <Setter Property="OffColor" Value="{StaticResource cbg_i7}" />
         <Setter Property="OnThumbColor" Value="{StaticResource cbg_i1}" />                       

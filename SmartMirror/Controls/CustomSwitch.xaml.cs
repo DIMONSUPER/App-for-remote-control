@@ -102,8 +102,8 @@ public partial class CustomSwitch : ContentView
         {
             thumb.HorizontalOptions = IsToggled ? LayoutOptions.End : LayoutOptions.Start;
             thumb.Fill = IsToggled ? OnThumbColor : OffThumbColor;
-            thumb.WidthRequest = IsToggled ? ThumbSize : ThumbSize - 3;
-            thumb.HeightRequest = IsToggled ? ThumbSize : ThumbSize - 3;
+            thumb.WidthRequest = IsToggled ? ThumbSize : (ThumbSize * 5 / 6);
+            thumb.HeightRequest = IsToggled ? ThumbSize : (ThumbSize * 5 / 6);
             customSwitch.Padding = IsToggled ? 0 : new Thickness(3,1,3,1);
             frame.BackgroundColor = IsToggled ? OnColor : OffColor;
         }
