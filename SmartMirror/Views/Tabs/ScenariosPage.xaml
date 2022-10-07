@@ -32,7 +32,8 @@
 
             <ScrollView
                 VerticalScrollBarVisibility="Never"
-                HorizontalScrollBarVisibility="Never">
+                HorizontalScrollBarVisibility="Never"
+                Padding="0, 0, 0, 30">
 
                 <VerticalStackLayout
                     Padding="0, 42, 0, 0"
