@@ -5,6 +5,7 @@ using SmartMirror.Platforms.Android.Renderers;
 using SmartMirror.Platforms.Services;
 using SmartMirror.Services.Amazon;
 using SmartMirror.Services.Mapper;
+using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Rest;
 using SmartMirror.Services.Settings;
@@ -45,7 +46,8 @@ public static class MauiProgram
 
     private static void RegisterTypes(IContainerRegistry containerRegistry)
     {
-        containerRegistry.RegisterDialog<ErrorDialog, ErrorDialogViewModel>();
+        containerRegistry.RegisterDialog<ErrorDialog>();
+        containerRegistry.RegisterDialog<TemporaryDialog>();
 
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
         containerRegistry.RegisterForNavigation<MainTabbedPage>();
@@ -60,6 +62,7 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IRestService, RestService>();
         containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
+        containerRegistry.RegisterSingleton<IAqaraService, AqaraService>();
     }
 
     private static void OnAppStart(INavigationService navigationService)

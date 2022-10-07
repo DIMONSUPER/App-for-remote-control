@@ -28,16 +28,16 @@
 
         <controls:CustomStateView.CompleteContent>
 
-            <!-- TODO: Add styles -->
             <ScrollView>
 
                 <VerticalStackLayout Padding="0,20,0,0"
                                      Spacing="0">
 
                     <!-- FAVORITE ACCESSORIES -->
-                    <HorizontalStackLayout HorizontalOptions="Start"
-                                           Margin="60,0"
-                                           Spacing="12">
+                    <StackLayout Orientation="Horizontal"
+                                 HorizontalOptions="Fill"
+                                 Margin="60,0"
+                                 Spacing="0">
 
                         <Label Text="{extensions:Translate FavoriteAccessories}"
                                VerticalTextAlignment="Center"
@@ -45,6 +45,7 @@
                                Style="{x:DynamicResource tstyle_i11}"/>
 
                         <Border Stroke="White"
+                                Margin="12,0,0,0"
                                 StrokeThickness="1"
                                 StrokeShape="RoundRectangle 8"
                                 BackgroundColor="{StaticResource cbg_i2}"
@@ -58,7 +59,18 @@
 
                         </Border>
 
-                    </HorizontalStackLayout>
+                        <!-- TODO: remove when doesn't needed -->
+                        <Button Text="Login with Aqara"
+                                VerticalOptions="Center"
+                                HorizontalOptions="EndAndExpand"
+                                BackgroundColor="#E5FFFFFF"
+                                TextColor="Black"
+                                FontSize="{x:DynamicResource tsize_i2}"
+                                FontFamily="InterBold"
+                                IsVisible="{Binding IsAqaraLoginButtonVisible}"
+                                Command="{Binding AqaraLoginButtonTappedCommand}"/>
+
+                    </StackLayout>
 
                     <!-- FAVORITE ACCESSORIES COLLECTION -->
                     <ScrollView Margin="0,12,0,0"

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frame xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:prismmaui="clr-namespace:Prism.Services.Xaml;assembly=Prism.Maui"
+       xmlns:prism="http://prismlibrary.com"
+       xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
+       Padding="0"
+       HasShadow="False"
+       BackgroundColor="Transparent"
+       prismmaui:DialogLayout.UseMask="True"
+       prismmaui:DialogLayout.MaskStyle="{DynamicResource DialogMaskBoxViewStyle_i1}"
+       prismmaui:DialogLayout.CloseOnBackgroundTapped="False"
+       x:Class="SmartMirror.Views.Dialogs.TemporaryDialog"
+       x:DataType="{x:Type vm:TemporaryDialogViewModel}">
+
+    <StackLayout VerticalOptions="Center"
+                 HorizontalOptions="Center"
+                 BackgroundColor="Red">
+
+       <Entry Text="{Binding CodeText}"
+              Placeholder="Enter code here"
+              BackgroundColor="White"
+              FontSize="24"
+              TextColor="Black">
+
+            <Entry.Behaviors>
+                <prism:EventToCommandBehavior EventName="Completed" Command="{Binding CloseCommand}"/>
+            </Entry.Behaviors>
+
+        </Entry>
+
+    </StackLayout>
+
+</Frame>

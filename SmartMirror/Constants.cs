@@ -15,5 +15,13 @@ namespace SmartMirror
             public const string TITLE = nameof(TITLE);
             public const string DESCRIPTION = nameof(DESCRIPTION);
         }
+        
+        public static class Aqara
+        {
+            public const string API_URL = "https://open-usa.aqara.com/v3.0/open/api";
+            public const string APP_ID = "1019974506077405184fac3b";
+            public const string APP_KEY = "gvnepmdyciqbb4ob7rocp6nnxt9elxmf";
+            public const string KEY_ID = "K.1019974506438115328";
+        }
     }
 }
