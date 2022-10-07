@@ -54,9 +54,12 @@
                         StrokeThickness="0.75"
                         StrokeShape="RoundRectangle 9"
                         Stroke="White">
-                        <StackLayout VerticalOptions="CenterAndExpand">
+                        <Frame Padding="0"
+                               BackgroundColor="{DynamicResource cbg_i2}">
+                            <StackLayout
+                            VerticalOptions="CenterAndExpand">
 
-                            <Frame 
+                                <Frame 
                                 VerticalOptions="Center"
                                 HorizontalOptions="Center"
                                 CornerRadius="9"
@@ -64,28 +67,29 @@
                                 WidthRequest="90"
                                 HasShadow="False"
                                 BackgroundColor="{DynamicResource cbg_i1}">
-                                                
-                                <Image 
+
+                                    <Image 
                                     HorizontalOptions="Center"
                                     Source="video_off"/>
-                                                
-                            </Frame>
 
-                            <Label 
+                                </Frame>
+
+                                <Label 
                                 Style="{DynamicResource tstyle_i4}"
                                 Margin="0, 30, 0, 6"
                                 HorizontalOptions="Center"
                                 HorizontalTextAlignment="Center"
                                 Text="{Binding SelectedCamera.Name}"/>
 
-                            <Label 
+                                <Label 
                                 Style="{DynamicResource tstyle_i6}"
                                 HorizontalOptions="Center"
                                 HorizontalTextAlignment="Center"
                                 Text="{extensions:Translate CameraIsOff}"/>
 
-                        </StackLayout>
-                                      
+                            </StackLayout>
+                        </Frame>
+
 
                     </Border>
 
