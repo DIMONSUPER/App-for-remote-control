@@ -63,6 +63,8 @@ namespace SmartMirror.Platforms.Android.Controls
 
         public void UpdateSource()
         {
+            RefreshView();
+
             bool hasSetSource = false;
             string uri = _video.Source;
 
@@ -84,10 +86,6 @@ namespace SmartMirror.Platforms.Android.Controls
             {
                 _videoView.StopPlayback();
                 _videoView.Resume();
-
-                _videoView.Prepared -= OnVideoViewPrepared;
-
-                RefreshView();
             }
             else if (hasSetSource && _video.AutoPlay)
             {

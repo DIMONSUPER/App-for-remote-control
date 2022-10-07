@@ -101,15 +101,12 @@
                         IsVisible="{Binding SelectedCamera.IsConnected}"
                         BorderColor="{DynamicResource cbg_i7}"
                         CornerRadius="9"
-                        IsClippedToBounds="True"
                         HasShadow="False"
                         Padding="1">
 
                         <Frame
                             CornerRadius="9"
-                            IsClippedToBounds="True"
                             HasShadow="False"
-                            
                             Padding="0">
 
                             <video:Video 
