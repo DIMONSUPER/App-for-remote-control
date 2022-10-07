@@ -161,6 +161,9 @@
 		<MauiXaml Update="Resources\DataTemplates\SelectedRoomDevicesTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Controls\CustomSwitch.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0-android' ">
 		<ProjectReference Include="..\SmartMirror.Java.Binding\SmartMirror.Java.Binding.csproj" />
