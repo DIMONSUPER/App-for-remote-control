@@ -31,7 +31,7 @@
             <!-- TODO: Add styles -->
             <ScrollView>
 
-                <VerticalStackLayout Padding="0,20,0,0"
+                <VerticalStackLayout Padding="0,42,0,0"
                                      Spacing="0">
 
                     <!-- FAVORITE ACCESSORIES -->
@@ -46,7 +46,7 @@
 
                         <Border Stroke="White"
                                 StrokeThickness="1"
-                                StrokeShape="RoundRectangle 8"
+                                StrokeShape="RoundRectangle 9"
                                 BackgroundColor="{StaticResource cbg_i2}"
                                 WidthRequest="42"
                                 HeightRequest="42">
@@ -61,7 +61,7 @@
                     </HorizontalStackLayout>
 
                     <!-- FAVORITE ACCESSORIES COLLECTION -->
-                    <ScrollView Margin="0,12,0,0"
+                    <ScrollView Margin="0,16,0,0"
                                 Orientation="Horizontal"
                                 HorizontalScrollBarVisibility="Never">
 
@@ -74,7 +74,7 @@
 
                     <!-- ROOMS -->
                     <HorizontalStackLayout HorizontalOptions="Start"
-                                           Margin="60,20,60,0"
+                                           Margin="60,54,60,0"
                                            Spacing="12">
 
                         <Label Text="{extensions:Translate Rooms}"
@@ -84,7 +84,7 @@
 
                         <Border Stroke="White"
                                 StrokeThickness="1"
-                                StrokeShape="RoundRectangle 8"
+                                StrokeShape="RoundRectangle 9"
                                 BackgroundColor="{StaticResource cbg_i2}"
                                 WidthRequest="42"
                                 HeightRequest="42">
@@ -99,7 +99,7 @@
                     </HorizontalStackLayout>
 
                     <!-- ROOMS COLLECTION -->
-                    <ScrollView Margin="0,12,0,0"
+                    <ScrollView Margin="0,16,0,0"
                                 Orientation="Horizontal"
                                 HorizontalScrollBarVisibility="Never">
 
