@@ -110,6 +110,7 @@ public class CamerasPageViewModel : BaseTabViewModel
         IsCamerasRefreshing = false;
 
         Cameras = new(cameras);
+        SelectCamera(Cameras.FirstOrDefault());
     }
 
     private void SelectCamera(CameraBindableModel selectedCamera)
