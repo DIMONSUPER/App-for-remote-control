@@ -13,6 +13,7 @@
     xmlns:video="clr-namespace:SmartMirror.Controls.Video"
     Unloaded="OnCamerasPageUnloaded"
     Disappearing="OnCamerasPageDisappearing"  
+    Appearing="BaseTabContentPage_Appearing"
     Title="{extensions:Translate Cameras}"
     x:Class="SmartMirror.Views.Tabs.CamerasPage"
     x:DataType="vm:CamerasPageViewModel">

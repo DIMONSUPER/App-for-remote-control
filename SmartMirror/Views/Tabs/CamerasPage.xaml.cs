@@ -1,4 +1,6 @@
-﻿namespace SmartMirror.Views.Tabs;
+﻿using SmartMirror.Helpers;
+
+namespace SmartMirror.Views.Tabs;
 
 public partial class CamerasPage : BaseTabContentPage
 {
@@ -18,7 +20,12 @@ public partial class CamerasPage : BaseTabContentPage
 	private void OnCamerasPageDisappearing(object sender, EventArgs e)
 	{
 		videoPlayer.Stop();
-	} 
+	}
 
 	#endregion
+
+	private void BaseTabContentPage_Appearing(object sender, EventArgs e)
+	{
+		videoPlayer.Play();
+	}
 }
