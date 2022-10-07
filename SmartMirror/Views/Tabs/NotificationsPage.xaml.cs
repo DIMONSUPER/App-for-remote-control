@@ -11,11 +11,9 @@ public partial class NotificationsPage : BaseTabContentPage
 
     private void OnListViewHandlerChanged(object sender, EventArgs e)
 	{
-		if (sender is ListView listView)
+		if (sender is ListView listView && listView.Handler.PlatformView is Android.Widget.ListView nativeListView)
 		{
 #if ANDROID
-			var nativeListView = listView.Handler.PlatformView as Android.Widget.ListView;
-
 			nativeListView.SetSelector(Android.Resource.Color.Transparent);
 #endif
         }
