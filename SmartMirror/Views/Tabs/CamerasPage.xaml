@@ -31,8 +31,9 @@
         <controls:CustomStateView.CompleteContent>
 
             <Grid
-                ColumnDefinitions="400, *"
-                Margin="42, 72">
+                ColumnDefinitions="390, *"
+                ColumnSpacing="105"
+                Margin="42, 70, 60, 125">
 
                 <RefreshView 
                     Grid.Column="0"
@@ -42,7 +43,7 @@
                     <CollectionView 
                         ItemSizingStrategy="MeasureFirstItem"
                         ItemsSource="{Binding Cameras}"
-                        ItemTemplate="{StaticResource cameraTemplate}"/>
+                        ItemTemplate="{DynamicResource cameraTemplate}"/>
 
                 </RefreshView>
                 
