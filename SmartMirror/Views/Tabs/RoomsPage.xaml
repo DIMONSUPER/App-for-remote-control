@@ -28,10 +28,10 @@
 
         <controls:CustomStateView.CompleteContent>
 
-            <!-- TODO: Add styles -->
-            <ScrollView>
+            <Grid RowSpacing="0"
+                  RowDefinitions="0.5*, 0.5*">
 
-                <VerticalStackLayout Padding="0,42,0,0"
+                <VerticalStackLayout Margin="0,24,0,0"
                                      Spacing="0">
 
                     <!-- FAVORITE ACCESSORIES -->
@@ -72,9 +72,16 @@
 
                     </ScrollView>
 
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="1"
+                                     Spacing="0"
+                                     VerticalOptions="CenterAndExpand"
+                                     Margin="0,0,0,30">
+
                     <!-- ROOMS -->
                     <HorizontalStackLayout HorizontalOptions="Start"
-                                           Margin="60,54,60,0"
+                                           Margin="60,0"
                                            Spacing="12">
 
                         <Label Text="{extensions:Translate Rooms}"
@@ -112,7 +119,7 @@
 
                 </VerticalStackLayout>
 
-            </ScrollView>
+            </Grid>
 
         </controls:CustomStateView.CompleteContent>
 
