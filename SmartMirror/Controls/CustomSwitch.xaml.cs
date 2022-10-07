@@ -68,6 +68,28 @@ public partial class CustomSwitch : ContentView
         set => SetValue(OffThumbColorProperty, value);
     }
 
+    public static readonly BindableProperty CornerRadiusProperty = BindableProperty.Create(
+        propertyName: nameof(CornerRadius),
+        returnType: typeof(double),
+        declaringType: typeof(CustomSwitch));
+
+    public double CornerRadius
+    {
+        get => (double)GetValue(CornerRadiusProperty);
+        set => SetValue(CornerRadiusProperty, value);
+    }
+
+    public static readonly BindableProperty ThumbSizeProperty = BindableProperty.Create(
+        propertyName: nameof(ThumbSize),
+        returnType: typeof(double),
+        declaringType: typeof(CustomSwitch));
+
+    public double ThumbSize
+    {
+        get => (double)GetValue(ThumbSizeProperty);
+        set => SetValue(ThumbSizeProperty, value);
+    }
+    
     #endregion
 
     #region -- Overrides --
@@ -80,8 +102,9 @@ public partial class CustomSwitch : ContentView
         {
             thumb.HorizontalOptions = IsToggled ? LayoutOptions.End : LayoutOptions.Start;
             thumb.Fill = IsToggled ? OnThumbColor : OffThumbColor;
-            thumb.WidthRequest = IsToggled ? 24 : 21;
-            thumb.HeightRequest = IsToggled ? 24 : 21;
+            thumb.WidthRequest = IsToggled ? ThumbSize : ThumbSize - 3;
+            thumb.HeightRequest = IsToggled ? ThumbSize : ThumbSize - 3;
+            customSwitch.Padding = IsToggled ? 0 : new Thickness(3,1,3,1);
             frame.BackgroundColor = IsToggled ? OnColor : OffColor;
         }
     }

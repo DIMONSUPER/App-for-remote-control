@@ -104,10 +104,6 @@
 
             <controls:CustomSwitch x:Name="switch"
                                    IsToggled="{Binding Status}"
-                                   OnColor="{StaticResource cbg_i6}"
-                                   OffColor="{StaticResource cbg_i7}"
-                                   OnThumbColor="{StaticResource cbg_i1}"
-                                   OffThumbColor="{StaticResource cbg_i1}"
                                    VerticalOptions="Start"
                                    HorizontalOptions="End"/>
 
