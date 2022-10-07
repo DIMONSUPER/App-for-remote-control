@@ -13,7 +13,7 @@ public partial class NotificationsPage : BaseTabContentPage
 	{
 		if (sender is ListView listView && listView.Handler.PlatformView is Android.Widget.ListView nativeListView)
 		{
-			nativeListView.SetSelector(Android.Resource.Color.Transparent);
+            nativeListView.SetSelector(Android.Resource.Color.Transparent);
         }
 	}
 
