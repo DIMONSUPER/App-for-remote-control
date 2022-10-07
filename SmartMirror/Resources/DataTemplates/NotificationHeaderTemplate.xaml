@@ -11,7 +11,7 @@
         <VerticalStackLayout Padding="0, 24, 50, 24">
 
             <Label
-                Text="{Binding Name, Converter={StaticResource timeOnDaysOfWeek}}"
+                Text="{Binding Name, Converter={StaticResource timeToDaysOfWeekConverter}}"
                 Style="{x:DynamicResource tstyle_i11}"
                 HorizontalTextAlignment="Center"/>
 

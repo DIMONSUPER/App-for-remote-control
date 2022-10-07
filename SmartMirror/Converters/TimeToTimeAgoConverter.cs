@@ -5,6 +5,8 @@ namespace SmartMirror.Converters
 {
     public class TimeToTimeAgoConverter : IValueConverter
     {
+        #region -- IValueConverter implementation --
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var result = value;
@@ -38,5 +40,7 @@ namespace SmartMirror.Converters
         {
             return value;
         }
+
+        #endregion
     }
 }

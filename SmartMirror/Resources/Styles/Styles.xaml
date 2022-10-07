@@ -9,7 +9,7 @@
     <!-- CONVERTERS -->
     <xct:IsStringNotNullOrWhiteSpaceConverter x:Key="notNullOrEmtpyConverter"/>
     <converters:TimeToTimeAgoConverter x:Key="timeToTimeAgoConverter" />
-    <converters:TimeOnDaysOfWeek x:Key="timeOnDaysOfWeek" />
+    <converters:TimeToDaysOfWeekConverter x:Key="timeToDaysOfWeekConverter" />
 
     <!-- TEXT SIZE -->
     <x:Double x:Key="tsize_i1">36</x:Double> <!-- 48px -->

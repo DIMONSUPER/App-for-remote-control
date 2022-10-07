@@ -3,8 +3,10 @@ using System.Globalization;
 
 namespace SmartMirror.Converters
 {
-    public class TimeOnDaysOfWeek : IValueConverter
+    public class TimeToDaysOfWeekConverter : IValueConverter
     {
+        #region -- IValueConverter implementation --
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var result = value;
@@ -14,14 +16,12 @@ namespace SmartMirror.Converters
                 var dateTimeNow = DateTime.Now.ToString(Constants.Formats.DATE_FORMAT);
                 var dateTimeYesterday = DateTime.Now.AddDays(-1).ToString(Constants.Formats.DATE_FORMAT);
 
-                string TitleSelector(string dateTime) => dateTime switch
+                result = dateToCompare switch
                 {
-                    _ when dateTime == dateTimeNow => (string)LocalizationResourceManager.Instance["Today"],
-                    _ when dateTime == dateTimeYesterday => (string)LocalizationResourceManager.Instance["Yesterday"],
-                    _ => dateTime,
+                    _ when dateToCompare == dateTimeNow => (string)LocalizationResourceManager.Instance["Today"],
+                    _ when dateToCompare == dateTimeYesterday => (string)LocalizationResourceManager.Instance["Yesterday"],
+                    _ => dateToCompare,
                 };
-
-                result = TitleSelector(dateToCompare);
             }
 
             return result;
@@ -31,5 +31,7 @@ namespace SmartMirror.Converters
         {
             return value;
         }
+
+        #endregion
     }
 }

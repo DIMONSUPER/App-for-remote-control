@@ -1,10 +1,12 @@
-﻿namespace SmartMirror.Models
+﻿using System.Collections.ObjectModel;
+
+namespace SmartMirror.Models
 {
-    public class NotificationsGroupedByDayModel : List<NotificationModel>
+    public class NotificationsGroupedByDayModel : ObservableCollection<NotificationModel>
     {
         public NotificationsGroupedByDayModel(
             string name,
-            List<NotificationModel> notifications)
+            IEnumerable<NotificationModel> notifications)
             : base(notifications)
         {
             Name = name;

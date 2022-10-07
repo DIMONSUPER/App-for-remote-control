@@ -31,11 +31,11 @@ public class NotificationsPageViewModel : BaseTabViewModel
         set => SetProperty(ref _notifications, value);
     }
 
-    private bool _isRefreshingNotifications;
-    public bool IsRefreshingNotifications
+    private bool _isNotificationsRefreshing;
+    public bool IsNotificationsRefreshing
     {
-        get => _isRefreshingNotifications;
-        set => SetProperty(ref _isRefreshingNotifications, value);
+        get => _isNotificationsRefreshing;
+        set => SetProperty(ref _isNotificationsRefreshing, value);
     }
 
     private ICommand _refreshNotificationsCommand;
@@ -60,7 +60,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         await LoadNotificationsAsync();
 
-        IsRefreshingNotifications = false;
+        IsNotificationsRefreshing = false;
     }
 
     private async Task LoadNotificationsAsync()

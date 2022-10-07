@@ -7,7 +7,9 @@ public partial class NotificationsPage : BaseTabContentPage
 		InitializeComponent();
     }
 
-	private void ListView_HandlerChanged(object sender, EventArgs e)
+    #region -- Private helpers --
+
+    private void OnListViewHandlerChanged(object sender, EventArgs e)
 	{
 		if (sender is ListView listView)
 		{
@@ -18,4 +20,6 @@ public partial class NotificationsPage : BaseTabContentPage
 #endif
         }
 	}
+
+    #endregion
 }

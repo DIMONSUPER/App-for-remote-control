@@ -32,7 +32,7 @@
         <controls:CustomStateView.CompleteContent>
 
             <ListView
-                HandlerChanged="ListView_HandlerChanged"
+                HandlerChanged="OnListViewHandlerChanged"
                 ItemsSource="{Binding Notifications}"
                 IsPullToRefreshEnabled="True"
                 IsRefreshing="{Binding IsRefreshingNotifications}"
