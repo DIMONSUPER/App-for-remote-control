@@ -28,16 +28,16 @@ namespace SmartMirror.Controls
 
         public event EventHandler<VideoPositionEventArgs> StopRequested;
 
-        public static readonly BindableProperty IsTransportControlsEnabledProperty = BindableProperty.Create(
-            propertyName: nameof(IsTransportControlsEnabled),
+        public static readonly BindableProperty IsControlPanelEnabledProperty = BindableProperty.Create(
+            propertyName: nameof(IsControlPanelEnabled),
             returnType: typeof(bool),
             declaringType: typeof(Video),
             defaultBindingMode: BindingMode.OneWay);
 
-        public bool IsTransportControlsEnabled
+        public bool IsControlPanelEnabled
         {
-            get => (bool)GetValue(IsTransportControlsEnabledProperty);
-            set => SetValue(IsTransportControlsEnabledProperty, value);
+            get => (bool)GetValue(IsControlPanelEnabledProperty);
+            set => SetValue(IsControlPanelEnabledProperty, value);
         }
 
         public static readonly BindableProperty SourceProperty = BindableProperty.Create(

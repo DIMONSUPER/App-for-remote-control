@@ -26,14 +26,14 @@ namespace SmartMirror.Handlers
 
         #region -- Public helpers --
         
-        public static void MapIsTransportControlsEnabled(VideoHandler handler, Video video)
+        public static void MapIsControlPanelEnabled(VideoHandler handler, Video video)
         {
-            handler.PlatformView?.UpdateTransportControlsEnabled();
+            handler.PlatformView?.UpdateControlPanelEnabled();
         }
 
         public static void MapSource(VideoHandler handler, Video video)
         {
-            handler.PlatformView?.UpdateSource();
+            handler.PlatformView?.TryUpdateSource();
         }
 
         public static void MapPosition(VideoHandler handler, Video video)

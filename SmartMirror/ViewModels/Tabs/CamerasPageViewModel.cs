@@ -56,13 +56,13 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     #endregion
 
-    #region -- Overries --
+    #region -- Overrides --
 
     public override async void Initialize(INavigationParameters parameters)
     {
         base.Initialize(parameters);
 
-        await RefreshCameras();
+        await RefreshCamerasAsync();
     }
 
     #endregion
@@ -76,14 +76,17 @@ public class CamerasPageViewModel : BaseTabViewModel
         return Task.CompletedTask;
     }
 
-    private Task OnRefreshCamerasCommandAsync() => RefreshCameras();
+    private async Task OnRefreshCamerasCommandAsync() 
+    {
+        await RefreshCamerasAsync();
 
-    private async Task RefreshCameras()
+        IsCamerasRefreshing = false;
+    }
+
+    private async Task RefreshCamerasAsync()
     {
         var resultOfGettingCameras = await _camerasService.GetCamerasAsync();
-     
-        await Task.Delay(Constants.Limits.SERVER_RESPONSE_DELAY);
-        
+
         if (resultOfGettingCameras.IsSuccess)
         {
             var cameras = await _mapperService.MapRangeAsync<CameraBindableModel>(resultOfGettingCameras.Result, (m, vm) =>
@@ -95,8 +98,6 @@ public class CamerasPageViewModel : BaseTabViewModel
 
             SelectCamera(Cameras.FirstOrDefault());
         }
-        
-        IsCamerasRefreshing = false;
     }
 
     private void SelectCamera(CameraBindableModel selectedCamera)

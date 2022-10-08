@@ -44,11 +44,12 @@ namespace SmartMirror.Platforms.Android.Controls
 
         #region -- Public helpers --
 
-        public void UpdateTransportControlsEnabled()
+        public void UpdateControlPanelEnabled()
         {
-            if (_video.IsTransportControlsEnabled)
+            if (_video.IsControlPanelEnabled)
             {
                 _mediaController = new MediaController(_context);
+
                 _mediaController.SetMediaPlayer(_videoView);
                 _videoView?.SetMediaController(_mediaController);
             }
@@ -64,7 +65,7 @@ namespace SmartMirror.Platforms.Android.Controls
             }
         }
 
-        public void UpdateSource()
+        public void TryUpdateSource()
         {
             bool hasSetSource = _isPrepared = false;
             
@@ -79,7 +80,7 @@ namespace SmartMirror.Platforms.Android.Controls
                     hasSetSource = true;
                 }
             }
-            catch (Exception)
+            catch
             {
             }
 
@@ -180,10 +181,7 @@ namespace SmartMirror.Platforms.Android.Controls
             AddView(relativeLayout);
         }
 
-        private void OnVideoViewPrepared(object sender, EventArgs args)
-        {
-            _isPrepared = true;
-        } 
+        private void OnVideoViewPrepared(object sender, EventArgs args) => _isPrepared = true; 
 
         #endregion
     }

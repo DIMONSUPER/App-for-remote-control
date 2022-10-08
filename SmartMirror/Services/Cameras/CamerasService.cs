@@ -13,7 +13,7 @@ namespace SmartMirror.Services.Cameras
             _smartHomeMockService = smartHomeMockService;
         }
 
-        #region -- ICamerasService implementation
+        #region -- ICamerasService implementation --
 
         public Task<AOResult<IEnumerable<CameraModel>>> GetCamerasAsync()
         {
@@ -29,7 +29,7 @@ namespace SmartMirror.Services.Cameras
                 }
                 else
                 {
-                    onFailure("Camerass is null");
+                    onFailure("Cameras is null");
                 }
 
                 return Task.FromResult(cameras);

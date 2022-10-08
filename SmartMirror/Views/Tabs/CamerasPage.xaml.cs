@@ -19,7 +19,7 @@ public partial class CamerasPage : BaseTabContentPage
 		videoPlayer.Stop();
 	}
 
-	private void BaseTabContentPage_Appearing(object sender, EventArgs e)
+	private void OnCamerasPageAppearing(object sender, EventArgs e)
 	{
 		videoPlayer.Play();
 	}
