@@ -2,7 +2,6 @@
 {
     public class VideoPositionEventArgs : EventArgs
     {
-
         public VideoPositionEventArgs(TimeSpan timeSpan) => Position = timeSpan;
 
         #region -- Public properties --

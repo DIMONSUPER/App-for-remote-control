@@ -66,11 +66,9 @@ namespace SmartMirror.Platforms.Android.Controls
 
         public void UpdateSource()
         {
+            bool hasSetSource = _isPrepared = false;
+            
             RefreshView();
-
-            bool hasSetSource = false;
-
-            _isPrepared = false;
 
             try
             {
