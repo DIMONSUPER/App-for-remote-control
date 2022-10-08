@@ -11,7 +11,7 @@
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
-    xmlns:video="clr-namespace:SmartMirror.Controls.Video"
+    xmlns:video="clr-namespace:SmartMirror.Controls"
     Unloaded="OnCamerasPageUnloaded"
     Disappearing="OnCamerasPageDisappearing"  
     Appearing="BaseTabContentPage_Appearing"
@@ -50,7 +50,9 @@
 
                 </RefreshView>
 
-                <Grid Grid.Column="1">
+                <Grid
+                    Grid.Column="1"
+                    BackgroundColor="#242424">
 
                     <Border
                         StrokeThickness="0.75"
@@ -83,6 +85,8 @@
                                     Margin="0, 30, 0, 6"
                                     HorizontalOptions="Center"
                                     HorizontalTextAlignment="Center"
+                                    MaximumWidthRequest="600"
+                                    LineBreakMode="TailTruncation"
                                     Text="{Binding SelectedCamera.Name}"/>
 
                                 <Label 
@@ -110,7 +114,7 @@
                             Padding="0">
 
                             <video:Video 
-                                AreTransportControlsEnabled="False"
+                                IsTransportControlsEnabled="False"
                                 Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"
                                 x:Name="videoPlayer"/>
 

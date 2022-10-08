@@ -1,5 +1,5 @@
 ﻿using Microsoft.Maui.Handlers;
-using SmartMirror.Controls.Video;
+using SmartMirror.Controls;
 using SmartMirror.Helpers;
 using SmartMirror.Platforms.Android.Controls;
 
@@ -26,7 +26,7 @@ namespace SmartMirror.Handlers
 
         #region -- Public helpers --
         
-        public static void MapAreTransportControlsEnabled(VideoHandler handler, Video video)
+        public static void MapIsTransportControlsEnabled(VideoHandler handler, Video video)
         {
             handler.PlatformView?.UpdateTransportControlsEnabled();
         }

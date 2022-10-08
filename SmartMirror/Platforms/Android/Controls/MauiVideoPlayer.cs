@@ -2,7 +2,7 @@
 using Android.Views;
 using Android.Widget;
 using AndroidX.CoordinatorLayout.Widget;
-using SmartMirror.Controls.Video;
+using SmartMirror.Controls;
 using SmartMirror.Enums;
 using SmartMirror.Interfaces;
 using Color = Android.Graphics.Color;
@@ -17,14 +17,15 @@ namespace SmartMirror.Platforms.Android.Controls
         private Context _context;
         private Video _video;
         private bool _isPrepared;
+        private bool _isNeecessaryToPlay;
 
         public MauiVideoPlayer(Context context, Video video) : base(context)
         {
             _context = context;
             _video = video;
-
-            RefreshView();
         }
+
+        #region -- Overrides --
 
         protected override void Dispose(bool disposing)
         {
@@ -37,21 +38,23 @@ namespace SmartMirror.Platforms.Android.Controls
             }
 
             base.Dispose(disposing);
-        }
+        } 
 
-        #region -- Public helpres --
+        #endregion
+
+        #region -- Public helpers --
 
         public void UpdateTransportControlsEnabled()
         {
-            if (_video.AreTransportControlsEnabled)
+            if (_video.IsTransportControlsEnabled)
             {
                 _mediaController = new MediaController(_context);
                 _mediaController.SetMediaPlayer(_videoView);
-                _videoView.SetMediaController(_mediaController);
+                _videoView?.SetMediaController(_mediaController);
             }
             else
             {
-                _videoView.SetMediaController(null);
+                _videoView?.SetMediaController(null);
 
                 if (_mediaController != null)
                 {
@@ -66,15 +69,15 @@ namespace SmartMirror.Platforms.Android.Controls
             RefreshView();
 
             bool hasSetSource = false;
-            string uri = _video.Source;
 
             _isPrepared = false;
 
             try
             {
-                if (!string.IsNullOrWhiteSpace(uri))
+                if (!string.IsNullOrWhiteSpace(_video.Source))
                 {
-                    _videoView.SetVideoURI(Uri.Parse(uri));
+                    _videoView.SetVideoURI(Uri.Parse(_video.Source));
+
                     hasSetSource = true;
                 }
             }
@@ -82,14 +85,17 @@ namespace SmartMirror.Platforms.Android.Controls
             {
             }
 
-            if (!hasSetSource)
+            if (hasSetSource)
+            {
+                if (_isNeecessaryToPlay || _video.IsAutoPlay)
+                {
+                    _videoView.Start();
+                }
+            }
+            else
             {
                 _videoView.StopPlayback();
                 _videoView.Resume();
-            }
-            else if (hasSetSource && _video.AutoPlay)
-            {
-                _videoView.Start();
             }
         }
 
@@ -117,12 +123,24 @@ namespace SmartMirror.Platforms.Android.Controls
             _video.Position = TimeSpan.FromMilliseconds(_videoView.CurrentPosition);
         }
 
-        public void PlayRequested(TimeSpan position) => _videoView.Start();
+        public void PlayRequested(TimeSpan position)
+        {
+            _isNeecessaryToPlay = true;
 
-        public void PauseRequested(TimeSpan position) => _videoView.Pause();
+            _videoView.Start();
+        }
+
+        public void PauseRequested(TimeSpan position)
+        {
+            _isNeecessaryToPlay = false;
+
+            _videoView.Pause();
+        }
 
         public void StopRequested(TimeSpan position)
         {
+            _isNeecessaryToPlay = false;
+
             _videoView.StopPlayback();
 
             _videoView.Resume();

@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
 using SmartMirror.Controls;
-using SmartMirror.Controls.Video;
 using SmartMirror.Handlers;
 using SmartMirror.Platforms.Android.Renderers;
 using SmartMirror.Platforms.Services;

@@ -2,7 +2,7 @@
 using SmartMirror.Helpers;
 using SmartMirror.Interfaces;
 
-namespace SmartMirror.Controls.Video
+namespace SmartMirror.Controls
 {
     public class Video : View, IVideoController
     {
@@ -11,12 +11,12 @@ namespace SmartMirror.Controls.Video
         public Video()
         {
             _timer = Dispatcher.CreateTimer();
-            _timer.Interval = TimeSpan.FromMilliseconds(100);
-            _timer.Tick += OnTimerTick;
+            _timer.Interval = TimeSpan.FromMilliseconds(Constants.Limits.VIDEO_STATUS_UPDATE_INTERVAL);
+            _timer.Tick += OnUpdateVideoStatusTimerTick;
             _timer.Start();
         }
 
-        ~Video() => _timer.Tick -= OnTimerTick;
+        ~Video() => _timer.Tick -= OnUpdateVideoStatusTimerTick;
 
         #region -- Public properties --
 
@@ -28,22 +28,24 @@ namespace SmartMirror.Controls.Video
 
         public event EventHandler<VideoPositionEventArgs> StopRequested;
 
-        public static readonly BindableProperty AreTransportControlsEnabledProperty = BindableProperty.Create(
-            propertyName: nameof(AreTransportControlsEnabled),
+        public static readonly BindableProperty IsTransportControlsEnabledProperty = BindableProperty.Create(
+            propertyName: nameof(IsTransportControlsEnabled),
             returnType: typeof(bool),
             declaringType: typeof(Video),
-            defaultValue: true);
+            defaultValue: true,
+            defaultBindingMode: BindingMode.OneWay);
 
-        public bool AreTransportControlsEnabled
+        public bool IsTransportControlsEnabled
         {
-            get => (bool)GetValue(AreTransportControlsEnabledProperty);
-            set => SetValue(AreTransportControlsEnabledProperty, value);
+            get => (bool)GetValue(IsTransportControlsEnabledProperty);
+            set => SetValue(IsTransportControlsEnabledProperty, value);
         }
 
         public static readonly BindableProperty SourceProperty = BindableProperty.Create(
             propertyName: nameof(Source),
             returnType: typeof(string),
-            declaringType: typeof(Video));
+            declaringType: typeof(Video),
+            defaultBindingMode: BindingMode.OneWay);
 
         public string Source
         {
@@ -51,23 +53,24 @@ namespace SmartMirror.Controls.Video
             set => SetValue(SourceProperty, value);
         }
 
-        public static readonly BindableProperty AutoPlayProperty = BindableProperty.Create(
-            propertyName: nameof(AutoPlay),
+        public static readonly BindableProperty IsAutoPlayProperty = BindableProperty.Create(
+            propertyName: nameof(IsAutoPlay),
             returnType: typeof(bool),
             declaringType: typeof(Video),
-            defaultValue: true);
+            defaultBindingMode: BindingMode.OneWay);
 
-        public bool AutoPlay
+        public bool IsAutoPlay
         {
-            get { return (bool)GetValue(AutoPlayProperty); }
-            set { SetValue(AutoPlayProperty, value); }
+            get { return (bool)GetValue(IsAutoPlayProperty); }
+            set { SetValue(IsAutoPlayProperty, value); }
         }
 
         public static readonly BindableProperty PositionProperty = BindableProperty.Create(
             propertyName: nameof(Position),
             returnType: typeof(TimeSpan),
             declaringType: typeof(Video),
-            defaultValue: new TimeSpan());
+            defaultValue: new TimeSpan(),
+            defaultBindingMode: BindingMode.OneWay);
 
         public TimeSpan Position
         {
@@ -75,46 +78,42 @@ namespace SmartMirror.Controls.Video
             set { SetValue(PositionProperty, value); }
         }
 
-        #endregion
-
         private static readonly BindablePropertyKey StatusPropertyKey = BindableProperty.CreateReadOnly(
             propertyName: nameof(Status),
             returnType: typeof(EVideoStatus),
             declaringType: typeof(Video),
-            defaultValue: EVideoStatus.NotReady);
+            defaultValue: EVideoStatus.NotReady,
+            defaultBindingMode: BindingMode.OneWay);
 
         public static readonly BindableProperty StatusProperty = StatusPropertyKey.BindableProperty;
 
-        public EVideoStatus Status
-        {
-            get { return (EVideoStatus)GetValue(StatusProperty); }
-        }
+        public EVideoStatus Status => (EVideoStatus)GetValue(StatusProperty);
 
         private static readonly BindablePropertyKey DurationPropertyKey = BindableProperty.CreateReadOnly(
             propertyName: nameof(Duration),
             returnType: typeof(TimeSpan),
             declaringType: typeof(Video),
-            defaultValue: new TimeSpan());
+            defaultValue: new TimeSpan(),
+            defaultBindingMode: BindingMode.OneWay);
 
         public static readonly BindableProperty DurationProperty = DurationPropertyKey.BindableProperty;
 
-        public TimeSpan Duration
-        {
-            get { return (TimeSpan)GetValue(DurationProperty); }
-        }
+        public TimeSpan Duration => (TimeSpan)GetValue(DurationProperty);
+
+        #endregion
 
         #region -- IVideoController implementation --
 
         EVideoStatus IVideoController.Status
         {
-            get { return Status; }
-            set { SetValue(StatusPropertyKey, value); }
+            get => Status; 
+            set => SetValue(StatusPropertyKey, value);
         }
 
         TimeSpan IVideoController.Duration
         {
-            get { return Duration; }
-            set { SetValue(DurationPropertyKey, value); }
+            get => Duration;
+            set => SetValue(DurationPropertyKey, value);
         }
 
         #endregion
@@ -149,7 +148,7 @@ namespace SmartMirror.Controls.Video
 
         #region -- Private helpres --
 
-        private void OnTimerTick(object sender, EventArgs e)
+        private void OnUpdateVideoStatusTimerTick(object sender, EventArgs e)
         {
             UpdateStatus?.Invoke(this, EventArgs.Empty);
             Handler?.Invoke(nameof(UpdateStatus));

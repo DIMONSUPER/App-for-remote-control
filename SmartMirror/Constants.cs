@@ -12,6 +12,7 @@
         public static class Limits
         {
             public const int SERVER_RESPONSE_DELAY = 1000;
+            public const int VIDEO_STATUS_UPDATE_INTERVAL = 100;
         }
         
         public static class DialogsParameterKeys

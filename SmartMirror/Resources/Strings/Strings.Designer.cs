@@ -115,15 +115,6 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Camera is On.
-        /// </summary>
-        internal static string CameraIsOn {
-            get {
-                return ResourceManager.GetString("CameraIsOn", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cameras.
         /// </summary>
         internal static string Cameras {

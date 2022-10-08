@@ -17,7 +17,7 @@ namespace SmartMirror.Services.Mock
                     Name = "Front Door 1", 
                     IsConnected = true,
                     CreateTime = DateTime.Now,
-                    VideoUrl = "https://s91.ipcamlive.com/streams/5bkh7sclt2rvg5cgl/stream.m3u8",
+                    VideoUrl = "https://videos-3.earthcam.com/fecnetwork/hdtimes10.flv/chunklist_w53922196.m3u8",
                 },
                 new() 
                 {

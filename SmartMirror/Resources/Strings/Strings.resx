@@ -303,7 +303,4 @@
   <data name="Now" xml:space="preserve">
     <value>now</value>
   </data>
-  <data name="CameraIsOn" xml:space="preserve">
-    <value>Camera is On</value>
-  </data>
 </root>

@@ -1,4 +1,4 @@
-﻿using SmartMirror.Controls.Video;
+﻿using SmartMirror.Controls;
 
 namespace SmartMirror.Handlers
 {
@@ -12,7 +12,7 @@ namespace SmartMirror.Handlers
 
         public static IPropertyMapper<Video, VideoHandler> PropertyMapper = new PropertyMapper<Video, VideoHandler>(ViewMapper)
         {
-            [nameof(Video.AreTransportControlsEnabled)] = MapAreTransportControlsEnabled,
+            [nameof(Video.IsTransportControlsEnabled)] = MapIsTransportControlsEnabled,
             [nameof(Video.Source)] = MapSource,
             [nameof(Video.Position)] = MapPosition,
         };
