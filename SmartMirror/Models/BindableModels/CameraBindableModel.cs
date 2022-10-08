@@ -5,6 +5,8 @@ namespace SmartMirror.Models.BindableModels
 {
     public class CameraBindableModel : BindableBase, ITappable
     {
+        #region -- Public properties --
+
         private int _id;
         public int Id
         {
@@ -45,7 +47,9 @@ namespace SmartMirror.Models.BindableModels
         {
             get => _isSelected;
             set => SetProperty(ref _isSelected, value);
-        }
+        } 
+
+        #endregion
 
         #region -- ITappable implementation
 

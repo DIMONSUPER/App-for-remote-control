@@ -16,8 +16,8 @@
     Disappearing="OnCamerasPageDisappearing"  
     Appearing="BaseTabContentPage_Appearing"
     Title="{extensions:Translate Cameras}"
-    x:Class="SmartMirror.Views.Tabs.CamerasPage"
-    x:DataType="vm:CamerasPageViewModel">
+    x:DataType="vm:CamerasPageViewModel"
+    x:Class="SmartMirror.Views.Tabs.CamerasPage">
 
     <tabs:BaseTabContentPage.Resources>
 
@@ -29,7 +29,7 @@
         State="{Binding DataState}"
         EmptyTitle="{extensions:Translate NoCamerasYet}"
         EmptyStateImage="video_off"
-        LoadingTitle="Cameras">
+        LoadingTitle="{extensions:Translate Cameras}">
 
         <controls:CustomStateView.CompleteContent>
 
@@ -50,15 +50,15 @@
 
                 </RefreshView>
 
-                <Grid
-                    Grid.Column="1"
-                    BackgroundColor="#242424">
+                <Grid Grid.Column="1">
 
                     <Border
                         StrokeThickness="0.75"
                         StrokeShape="RoundRectangle 9"
-                        Stroke="White">
-                        
+                        Stroke="{DynamicResource cbg_i4}"
+                        Shadow="{DynamicResource Shadow_i1}"
+                        IsVisible="{Binding SelectedCamera.IsConnected, Converter={xct:InvertedBoolConverter}}">
+
                         <Frame
                             Padding="0"
                             BackgroundColor="{DynamicResource cbg_i2}">
@@ -68,9 +68,9 @@
                                 <Frame 
                                     VerticalOptions="Center"
                                     HorizontalOptions="Center"
-                                    CornerRadius="9"
                                     HeightRequest="90"
                                     WidthRequest="90"
+                                    CornerRadius="9"
                                     HasShadow="False"
                                     BackgroundColor="{DynamicResource cbg_i1}">
 
@@ -102,19 +102,18 @@
                     </Border>
 
                     <Frame 
-                        IsVisible="{Binding SelectedCamera.IsConnected}"
-                        BorderColor="{DynamicResource cbg_i7}"
-                        CornerRadius="9"
+                        Padding="1"
                         HasShadow="False"
-                        Padding="1">
+                        CornerRadius="9"
+                        BorderColor="{DynamicResource cbg_i7}"
+                        IsVisible="{Binding SelectedCamera.IsConnected}">
 
                         <Frame
-                            CornerRadius="9"
+                            Padding="0"
                             HasShadow="False"
-                            Padding="0">
+                            CornerRadius="9">
 
                             <video:Video 
-                                IsTransportControlsEnabled="False"
                                 Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"
                                 x:Name="videoPlayer"/>
 

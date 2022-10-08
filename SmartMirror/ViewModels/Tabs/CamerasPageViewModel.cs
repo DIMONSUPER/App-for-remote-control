@@ -1,4 +1,3 @@
-using Android.Hardware.Camera2;
 using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
@@ -11,8 +10,8 @@ namespace SmartMirror.ViewModels.Tabs;
 
 public class CamerasPageViewModel : BaseTabViewModel
 {
-    private readonly ISmartHomeMockService _smartHomeMockService;
     private readonly IMapperService _mapperService;
+    private readonly ISmartHomeMockService _smartHomeMockService;
 
     public CamerasPageViewModel(
         INavigationService navigationService,
@@ -66,12 +65,11 @@ public class CamerasPageViewModel : BaseTabViewModel
         await RefreshCameras();
     }
 
-
     public override void OnAppearing()
     {
         base.OnAppearing();
 
-        if (Cameras.Any())
+        if (Cameras is not null)
         {
             SelectCamera(Cameras.FirstOrDefault());
         }
@@ -99,37 +97,33 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private async Task RefreshCameras()
     {
-        var cameras = await _mapperService.MapRangeAsync<CameraBindableModel>(
-            _smartHomeMockService.GetCameras(), (m, vm) =>
-            {
-                vm.TapCommand = SelectCameraCommand;
-            });
+        var cameras = await _mapperService.MapRangeAsync<CameraBindableModel>(_smartHomeMockService.GetCameras(), (m, vm) =>
+        {
+            vm.TapCommand = SelectCameraCommand;
+        });
 
         await Task.Delay(Constants.Limits.SERVER_RESPONSE_DELAY);
 
         IsCamerasRefreshing = false;
 
         Cameras = new(cameras);
+
         SelectCamera(Cameras.FirstOrDefault());
     }
 
     private void SelectCamera(CameraBindableModel selectedCamera)
     {
-        if (Cameras is not null && Cameras.Any())
+        if (SelectedCamera is not null)
         {
-            foreach (var camera in Cameras)
-            {
-                if (camera == selectedCamera)
-                {
-                    SelectedCamera = camera;
-                    camera.IsSelected = true;
-                }
-                else
-                {
-                    camera.IsSelected = false;
-                }
-            }
+            SelectedCamera.IsSelected = false;
         }
+
+        if (selectedCamera is not null)
+        {
+            selectedCamera.IsSelected = true;
+        }
+
+        SelectedCamera = selectedCamera;
     }
 
     #endregion

@@ -32,7 +32,6 @@ namespace SmartMirror.Controls
             propertyName: nameof(IsTransportControlsEnabled),
             returnType: typeof(bool),
             declaringType: typeof(Video),
-            defaultValue: true,
             defaultBindingMode: BindingMode.OneWay);
 
         public bool IsTransportControlsEnabled
@@ -89,17 +88,6 @@ namespace SmartMirror.Controls
 
         public EVideoStatus Status => (EVideoStatus)GetValue(StatusProperty);
 
-        private static readonly BindablePropertyKey DurationPropertyKey = BindableProperty.CreateReadOnly(
-            propertyName: nameof(Duration),
-            returnType: typeof(TimeSpan),
-            declaringType: typeof(Video),
-            defaultValue: new TimeSpan(),
-            defaultBindingMode: BindingMode.OneWay);
-
-        public static readonly BindableProperty DurationProperty = DurationPropertyKey.BindableProperty;
-
-        public TimeSpan Duration => (TimeSpan)GetValue(DurationProperty);
-
         #endregion
 
         #region -- IVideoController implementation --
@@ -108,12 +96,6 @@ namespace SmartMirror.Controls
         {
             get => Status; 
             set => SetValue(StatusPropertyKey, value);
-        }
-
-        TimeSpan IVideoController.Duration
-        {
-            get => Duration;
-            set => SetValue(DurationPropertyKey, value);
         }
 
         #endregion

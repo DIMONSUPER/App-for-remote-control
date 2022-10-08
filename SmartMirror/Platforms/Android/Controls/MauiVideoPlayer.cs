@@ -185,7 +185,6 @@ namespace SmartMirror.Platforms.Android.Controls
         private void OnVideoViewPrepared(object sender, EventArgs args)
         {
             _isPrepared = true;
-            ((IVideoController)_video).Duration = TimeSpan.FromMilliseconds(_videoView.Duration);
         } 
 
         #endregion
