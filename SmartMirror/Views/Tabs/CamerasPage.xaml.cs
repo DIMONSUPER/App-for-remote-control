@@ -16,7 +16,7 @@ public partial class CamerasPage : BaseTabContentPage
 
 	private void OnCamerasPageDisappearing(object sender, EventArgs e)
 	{
-		videoPlayer.Stop();
+		videoPlayer.Pause();
 	}
 
 	private void OnCamerasPageAppearing(object sender, EventArgs e)

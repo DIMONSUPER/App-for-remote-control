@@ -25,7 +25,7 @@ namespace SmartMirror.Services.Mock
                     Name = "Front Door 2",
                     IsConnected = true, 
                     CreateTime = DateTime.Now,
-                    VideoUrl = "https://videos-3.earthcam.com/fecnetwork/9299.flv/chunklist_w438799610.m3u8",
+                    VideoUrl = "https://videos-3.earthcam.com/fecnetwork/15659.flv/chunklist_w999153032.m3u8",
                 },
                 new() 
                 { 
@@ -40,7 +40,7 @@ namespace SmartMirror.Services.Mock
                     Name = "Back Door 2",
                     IsConnected = true, 
                     CreateTime = DateTime.Now,
-                    VideoUrl = "https://videos-3.earthcam.com/fecnetwork/meprd_garch.flv/chunklist_w994994540.m3u8",
+                    VideoUrl = "https://videos-3.earthcam.com/fecnetwork/17568.flv/chunklist_w1596475220.m3u8",
                 },
                 new() 
                 {

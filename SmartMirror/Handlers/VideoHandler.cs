@@ -12,14 +12,11 @@ namespace SmartMirror.Handlers
 
         public static IPropertyMapper<Video, VideoHandler> PropertyMapper = new PropertyMapper<Video, VideoHandler>(ViewMapper)
         {
-            [nameof(Video.IsControlPanelEnabled)] = MapIsControlPanelEnabled,
             [nameof(Video.Source)] = MapSource,
-            [nameof(Video.Position)] = MapPosition,
         };
 
         public static CommandMapper<Video, VideoHandler> CommandMapper = new(ViewCommandMapper)
         {
-            [nameof(Video.UpdateStatus)] = MapUpdateStatus,
             [nameof(Video.PlayRequested)] = MapPlayRequested,
             [nameof(Video.PauseRequested)] = MapPauseRequested,
             [nameof(Video.StopRequested)] = MapStopRequested

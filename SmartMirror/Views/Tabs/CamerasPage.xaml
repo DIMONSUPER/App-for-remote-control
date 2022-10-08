@@ -120,6 +120,10 @@
                         
                     </Frame>
 
+                    <ActivityIndicator 
+                        WidthRequest="90"
+                        IsRunning="{Binding Status, Source={Reference videoPlayer}, Converter={xct:IsEqualConverter}, ConverterParameter={Static enums:EVideoLoadingStatus.Preparing}}"/>
+
                 </Grid>
 
             </Grid>

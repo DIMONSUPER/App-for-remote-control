@@ -105,7 +105,6 @@
 		<Folder Include="ViewModels\Tabs\" />
 		<Folder Include="Extensions\" />
 		<Folder Include="Resources\Strings\" />
-		<Folder Include="Enums\" />
 		<Folder Include="Services\Mock\" />
 		<Folder Include="Platforms\Android\Renderers\" />
 		<Folder Include="Platforms\Android\Resources\drawable\" />
@@ -188,7 +187,7 @@
 	</ItemGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
 		<AndroidKeyStore>True</AndroidKeyStore>
-		<AndroidSigningKeyStore>/Users/user/Projects/SmartMirror/smartmirror.keystore</AndroidSigningKeyStore>
+		<AndroidSigningKeyStore>c:/Users/user/Projects/SmartMirror/smartmirror.keystore</AndroidSigningKeyStore>
 		<AndroidSigningKeyAlias>key</AndroidSigningKeyAlias>
 		<AndroidSigningKeyPass>1Q2w3e4r5t</AndroidSigningKeyPass>
 		<AndroidSigningStorePass>1Q2w3e4r5t</AndroidSigningStorePass>

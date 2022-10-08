@@ -26,48 +26,24 @@ namespace SmartMirror.Handlers
 
         #region -- Public helpers --
         
-        public static void MapIsControlPanelEnabled(VideoHandler handler, Video video)
-        {
-            handler.PlatformView?.UpdateControlPanelEnabled();
-        }
-
         public static void MapSource(VideoHandler handler, Video video)
         {
             handler.PlatformView?.TryUpdateSource();
         }
 
-        public static void MapPosition(VideoHandler handler, Video video)
-        {
-            handler.PlatformView?.UpdatePosition();
-        }
-
-        public static void MapUpdateStatus(VideoHandler handler, Video video, object? args)
-        {
-            handler.PlatformView?.UpdateStatus();
-        }
-
         public static void MapPlayRequested(VideoHandler handler, Video video, object? args)
         {
-            if (args is VideoPositionEventArgs videoPositionEventArgs)
-            {
-                handler.PlatformView?.PlayRequested(videoPositionEventArgs.Position);
-            }
+            handler.PlatformView?.PlayRequested();
         }
 
         public static void MapPauseRequested(VideoHandler handler, Video video, object? args)
         {
-            if (args is VideoPositionEventArgs videoPositionEventArgs)
-            {
-                handler.PlatformView?.PauseRequested(videoPositionEventArgs.Position);
-            }
+            handler.PlatformView?.PauseRequested();
         }
 
         public static void MapStopRequested(VideoHandler handler, Video video, object? args)
         {
-            if (args is VideoPositionEventArgs videoPositionEventArgs)
-            {
-                handler.PlatformView?.StopRequested(videoPositionEventArgs.Position);
-            }
+            handler.PlatformView?.StopRequested();
         }
 
         #endregion
