@@ -5,6 +5,7 @@ using SmartMirror.Handlers;
 using SmartMirror.Platforms.Android.Renderers;
 using SmartMirror.Platforms.Services;
 using SmartMirror.Services.Amazon;
+using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Notifications;
@@ -65,6 +66,7 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
         containerRegistry.RegisterSingleton<INotificationsService, NotificationsService>();
+        containerRegistry.RegisterSingleton<ICamerasService, CamerasService>();
     }
 
     private static void OnAppStart(INavigationService navigationService)

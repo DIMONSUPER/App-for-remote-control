@@ -56,8 +56,7 @@
                         StrokeThickness="0.75"
                         StrokeShape="RoundRectangle 9"
                         Stroke="{DynamicResource cbg_i4}"
-                        Shadow="{DynamicResource Shadow_i1}"
-                        IsVisible="{Binding SelectedCamera.IsConnected, Converter={xct:InvertedBoolConverter}}">
+                        Shadow="{DynamicResource Shadow_i1}">
 
                         <Frame
                             Padding="0"

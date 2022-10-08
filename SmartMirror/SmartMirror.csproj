@@ -89,7 +89,6 @@
 		<Folder Include="Controls\" />
 		<Folder Include="Views\" />
 		<Folder Include="ViewModels\" />
-		<Folder Include="Services\" />
 		<Folder Include="Platforms\Android\Assets\" />
 		<Folder Include="Services\Amazon\" />
 		<Folder Include="Platforms\Android\Services\" />

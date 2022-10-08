@@ -1,8 +1,8 @@
 using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
+using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Mapper;
-using SmartMirror.Services.Mock;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -11,16 +11,16 @@ namespace SmartMirror.ViewModels.Tabs;
 public class CamerasPageViewModel : BaseTabViewModel
 {
     private readonly IMapperService _mapperService;
-    private readonly ISmartHomeMockService _smartHomeMockService;
+    private readonly ICamerasService _camerasService;
 
     public CamerasPageViewModel(
         INavigationService navigationService,
         IMapperService mapperService,
-        ISmartHomeMockService smartHomeMockService)
+        ICamerasService camerasService)
         : base(navigationService)
     {
         _mapperService = mapperService;
-        _smartHomeMockService = smartHomeMockService;
+        _camerasService = camerasService;
         
         DataState = EPageState.Complete;
     }
@@ -65,23 +65,6 @@ public class CamerasPageViewModel : BaseTabViewModel
         await RefreshCameras();
     }
 
-    public override void OnAppearing()
-    {
-        base.OnAppearing();
-
-        if (Cameras is not null)
-        {
-            SelectCamera(Cameras.FirstOrDefault());
-        }
-    }
-
-    public override void OnDisappearing()
-    {
-        base.OnDisappearing();
-
-        SelectCamera(null);
-    }
-
     #endregion
 
     #region -- Private helpers --
@@ -97,18 +80,23 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private async Task RefreshCameras()
     {
-        var cameras = await _mapperService.MapRangeAsync<CameraBindableModel>(_smartHomeMockService.GetCameras(), (m, vm) =>
-        {
-            vm.TapCommand = SelectCameraCommand;
-        });
-
+        var resultOfGettingCameras = await _camerasService.GetCamerasAsync();
+     
         await Task.Delay(Constants.Limits.SERVER_RESPONSE_DELAY);
+        
+        if (resultOfGettingCameras.IsSuccess)
+        {
+            var cameras = await _mapperService.MapRangeAsync<CameraBindableModel>(resultOfGettingCameras.Result, (m, vm) =>
+            {
+                vm.TapCommand = SelectCameraCommand;
+            });
 
+            Cameras = new(cameras);
+
+            SelectCamera(Cameras.FirstOrDefault());
+        }
+        
         IsCamerasRefreshing = false;
-
-        Cameras = new(cameras);
-
-        SelectCamera(Cameras.FirstOrDefault());
     }
 
     private void SelectCamera(CameraBindableModel selectedCamera)
