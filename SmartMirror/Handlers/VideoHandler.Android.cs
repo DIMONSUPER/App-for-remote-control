@@ -19,6 +19,7 @@ namespace SmartMirror.Handlers
         protected override void DisconnectHandler(MauiVideoPlayer platformView)
         {
             platformView.Dispose();
+
             base.DisconnectHandler(platformView);
         }
 

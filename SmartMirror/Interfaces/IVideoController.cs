@@ -4,6 +4,6 @@ namespace SmartMirror.Interfaces
 {
     public interface IVideoController
     {
-        EVideoLoadingStatus LoadingStatus { get; set; }
+        EVideoLoadingState LoadingState { get; set; }
     }
 }

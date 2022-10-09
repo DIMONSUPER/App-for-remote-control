@@ -12,9 +12,6 @@
     xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:video="clr-namespace:SmartMirror.Controls"
-    Unloaded="OnCamerasPageUnloaded"
-    Disappearing="OnCamerasPageDisappearing"  
-    Appearing="OnCamerasPageAppearing"
     Title="{extensions:Translate Cameras}"
     x:DataType="vm:CamerasPageViewModel"
     x:Class="SmartMirror.Views.Tabs.CamerasPage">
@@ -113,8 +110,9 @@
                             CornerRadius="9">
 
                             <video:Video 
-                                Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"
-                                x:Name="videoPlayer"/>
+                                LoadingState="{Binding VideoLoadingState}"
+                                Action="{Binding VideoAction}"
+                                Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"/>
 
                         </Frame>
                         
@@ -122,7 +120,7 @@
 
                     <ActivityIndicator 
                         WidthRequest="90"
-                        IsRunning="{Binding Status, Source={Reference videoPlayer}, Converter={xct:IsEqualConverter}, ConverterParameter={Static enums:EVideoLoadingStatus.Preparing}}"/>
+                        IsRunning="{Binding VideoLoadingState, Converter={xct:IsEqualConverter}, ConverterParameter={Static enums:EVideoLoadingState.Preparing}}"/>
 
                 </Grid>
 

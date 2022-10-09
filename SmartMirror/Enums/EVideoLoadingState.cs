@@ -1,6 +1,6 @@
 ﻿namespace SmartMirror.Enums
 {
-    public enum EVideoLoadingStatus
+    public enum EVideoLoadingState
     {
         Unprepared,
         Preparing,

@@ -6,23 +6,4 @@ public partial class CamerasPage : BaseTabContentPage
 	{
 		InitializeComponent();
 	}
-
-	#region -- Private helpers --
-
-	private void OnCamerasPageUnloaded(object sender, EventArgs e)
-	{
-		videoPlayer.Handler?.DisconnectHandler();
-	}
-
-	private void OnCamerasPageDisappearing(object sender, EventArgs e)
-	{
-		videoPlayer.Pause();
-	}
-
-	private void OnCamerasPageAppearing(object sender, EventArgs e)
-	{
-		videoPlayer.Play();
-	}
-
-	#endregion
 }

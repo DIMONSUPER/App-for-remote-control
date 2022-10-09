@@ -12,17 +12,16 @@ namespace SmartMirror.Platforms.Android.Controls
 {
     public class MauiVideoPlayer : CoordinatorLayout
     {
+        private readonly Context _context;
         private VideoView _videoView;
-        private Context _context;
         private Video _video;
         private IVideoController _videoController;
-        private bool _isNeecessaryToPlay;
 
         public MauiVideoPlayer(Context context, Video video) : base(context)
         {
             _context = context;
             _video = video;
-            _videoController = _video;
+            _videoController = video;
         }
 
         #region -- Overrides --
@@ -66,16 +65,16 @@ namespace SmartMirror.Platforms.Android.Controls
 
             if (hasSetSource)
             {
-                if (_isNeecessaryToPlay)
+                if (_video.Action == EVideoAction.Play)
                 {
-                    _videoController.LoadingStatus = EVideoLoadingStatus.Preparing;
+                    _videoController.LoadingState = EVideoLoadingState.Preparing;
                     
                     _videoView.Start();
                 }
             }
             else
             {
-                _videoController.LoadingStatus = EVideoLoadingStatus.Unprepared;
+                _videoController.LoadingState = EVideoLoadingState.Unprepared;
 
                 _videoView.StopPlayback();
                 _videoView.Resume();
@@ -84,22 +83,16 @@ namespace SmartMirror.Platforms.Android.Controls
 
         public void PlayRequested()
         {
-            _isNeecessaryToPlay = true;
-
             _videoView.Start();
         }
 
         public void PauseRequested()
         {
-            _isNeecessaryToPlay = false;
-
             _videoView.Pause();
         }
 
         public void StopRequested()
         {
-            _isNeecessaryToPlay = false;
-
             _videoView.StopPlayback();
 
             _videoView.Resume();
@@ -141,7 +134,7 @@ namespace SmartMirror.Platforms.Android.Controls
             AddView(relativeLayout);
         }
 
-        private void OnVideoViewPrepared(object sender, EventArgs args) => _videoController.LoadingStatus = EVideoLoadingStatus.Prepared; 
+        private void OnVideoViewPrepared(object sender, EventArgs args) => _videoController.LoadingState = EVideoLoadingState.Prepared; 
 
         #endregion
     }

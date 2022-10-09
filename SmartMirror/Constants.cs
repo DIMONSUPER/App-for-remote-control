@@ -9,11 +9,6 @@
             public const string PRODUCT_DSN = "123456";
         }
 
-        public static class Limits
-        {
-            public const int VIDEO_STATUS_UPDATE_INTERVAL = 100;
-        }
-        
         public static class DialogsParameterKeys
         {
             public const string TITLE = nameof(TITLE);

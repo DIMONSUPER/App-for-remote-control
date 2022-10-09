@@ -48,11 +48,25 @@ public class CamerasPageViewModel : BaseTabViewModel
         set => SetProperty(ref _isCamerasRefreshing, value);
     }
 
-    private ICommand? _selectCameraCommand;
+    private EVideoAction _videoAction;
+    public EVideoAction VideoAction
+    {
+        get => _videoAction;
+        set => SetProperty(ref _videoAction, value);
+    }
+
+    private EVideoLoadingState _videoLoadingState;
+    public EVideoLoadingState VideoLoadingState
+    {
+        get => _videoLoadingState;
+        set => SetProperty(ref _videoLoadingState, value);
+    }
+
+    private ICommand _selectCameraCommand;
     public ICommand SelectCameraCommand => _selectCameraCommand ??= SingleExecutionCommand.FromFunc<CameraBindableModel>(OnSelectCameraCommandAsync);
     
-    private ICommand? _refreshCamerasCommand;
-    public ICommand RefreshCamerasCommand => _refreshCamerasCommand ??= SingleExecutionCommand.FromFunc(OnRefreshCamerasCommandAsync);
+    private ICommand _refreshCamerasCommand;
+    public ICommand RefreshCamerasCommand => _refreshCamerasCommand ??= SingleExecutionCommand.FromFunc(OnRefreshCamerasCommandAsync);     
 
     #endregion
 
@@ -63,6 +77,20 @@ public class CamerasPageViewModel : BaseTabViewModel
         base.Initialize(parameters);
 
         await RefreshCamerasAsync();
+    }
+
+    public override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        VideoAction = EVideoAction.Play;
+    }
+
+    public override void OnDisappearing()
+    {
+        base.OnDisappearing();
+
+        VideoAction = EVideoAction.Pause;
     }
 
     #endregion
@@ -79,7 +107,6 @@ public class CamerasPageViewModel : BaseTabViewModel
     private async Task OnRefreshCamerasCommandAsync() 
     {
         await RefreshCamerasAsync();
-
         IsCamerasRefreshing = false;
     }
 
