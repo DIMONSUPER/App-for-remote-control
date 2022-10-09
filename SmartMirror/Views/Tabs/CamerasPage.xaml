@@ -52,48 +52,43 @@
                     <Border
                         StrokeThickness="0.75"
                         StrokeShape="RoundRectangle 9"
+                        BackgroundColor="{DynamicResource cbg_i2}"
                         Stroke="{DynamicResource cbg_i4}"
                         Shadow="{DynamicResource Shadow_i1}">
 
-                        <Frame
-                            Padding="0"
-                            BackgroundColor="{DynamicResource cbg_i2}">
-                            
-                            <StackLayout VerticalOptions="CenterAndExpand">
+                        <StackLayout VerticalOptions="CenterAndExpand">
 
-                                <Frame 
-                                    VerticalOptions="Center"
+                            <Frame 
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center"
+                                HeightRequest="90"
+                                WidthRequest="90"
+                                CornerRadius="9"
+                                HasShadow="False"
+                                BackgroundColor="{DynamicResource cbg_i1}">
+
+                                <Image 
                                     HorizontalOptions="Center"
-                                    HeightRequest="90"
-                                    WidthRequest="90"
-                                    CornerRadius="9"
-                                    HasShadow="False"
-                                    BackgroundColor="{DynamicResource cbg_i1}">
+                                    Source="video_off"/>
 
-                                    <Image 
-                                        HorizontalOptions="Center"
-                                        Source="video_off"/>
+                            </Frame>
 
-                                </Frame>
+                            <Label 
+                                Style="{DynamicResource tstyle_i4}"
+                                Margin="0, 30, 0, 6"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"
+                                MaximumWidthRequest="600"
+                                LineBreakMode="TailTruncation"
+                                Text="{Binding SelectedCamera.Name}"/>
 
-                                <Label 
-                                    Style="{DynamicResource tstyle_i4}"
-                                    Margin="0, 30, 0, 6"
-                                    HorizontalOptions="Center"
-                                    HorizontalTextAlignment="Center"
-                                    MaximumWidthRequest="600"
-                                    LineBreakMode="TailTruncation"
-                                    Text="{Binding SelectedCamera.Name}"/>
+                            <Label 
+                                Style="{DynamicResource tstyle_i6}"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"
+                                Text="{extensions:Translate CameraIsOff}"/>
 
-                                <Label 
-                                    Style="{DynamicResource tstyle_i6}"
-                                    HorizontalOptions="Center"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{extensions:Translate CameraIsOff}"/>
-
-                            </StackLayout>
-                            
-                        </Frame>
+                        </StackLayout>
 
                     </Border>
 
