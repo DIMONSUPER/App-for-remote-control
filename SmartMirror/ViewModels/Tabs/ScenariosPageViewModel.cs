@@ -2,7 +2,6 @@
 using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Services.Mapper;
-using SmartMirror.Services.Mock;
 using SmartMirror.Services.Scenarios;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -11,23 +10,20 @@ namespace SmartMirror.ViewModels.Tabs;
 
 public class ScenariosPageViewModel : BaseTabViewModel
 {
-    private readonly ISmartHomeMockService _smartHomeMockService;
     private readonly IMapperService _mapperService;
     private readonly IScenariosService _scenariosService;
 
     public ScenariosPageViewModel(
-        ISmartHomeMockService smartHomeMockService,
         IMapperService mapperService,
         IScenariosService scenariosService,
         INavigationService navigationService)
         : base(navigationService)
     {
-        _smartHomeMockService = smartHomeMockService;
         _mapperService = mapperService;
         _scenariosService = scenariosService;
         
         Title = "Scenarios";
-        DataState = EPageState.Complete;
+        DataState = EPageState.Loading;
     }
 
     #region -- Public properties --
@@ -57,7 +53,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
     {
         await base.InitializeAsync(parameters);
 
-        await LoadScenarios();
+        await LoadScenariosAsync();
     }
 
     #endregion
@@ -74,7 +70,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
         }
     }
 
-    private async Task LoadScenarios()
+    private async Task LoadScenariosAsync()
     {
         var resultOfGettingFavoriteScenarios = await _scenariosService.GetFavoriteScenariosAsync();
 
@@ -93,11 +89,13 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
             Scenarios = new(allScenarios);
         }
+
+        DataState = EPageState.Complete;
     }
 
-    private async Task<IEnumerable<ScenarioBindableModel>> GetBindableModelWithSetCommandsAsync(IEnumerable<ScenarioModel> scenarios)
+    private Task<IEnumerable<ScenarioBindableModel>> GetBindableModelWithSetCommandsAsync(IEnumerable<ScenarioModel> scenarios)
     {
-        return await _mapperService.MapRangeAsync<ScenarioBindableModel>(scenarios, (m, vm) =>
+        return _mapperService.MapRangeAsync<ScenarioBindableModel>(scenarios, (m, vm) =>
         {
             vm.ChangeActiveStatusCommand = ChangeActiveStatusCommand;
         });

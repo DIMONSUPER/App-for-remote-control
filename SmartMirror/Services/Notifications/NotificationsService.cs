@@ -1,8 +1,6 @@
-﻿using Com.Amazon.Identity.Auth.Device.Endpoint;
-using SmartMirror.Helpers;
+﻿using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Services.Mock;
-using System.Collections.Generic;
 
 namespace SmartMirror.Services.Notifications
 {
