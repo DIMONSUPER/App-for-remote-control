@@ -127,9 +127,9 @@ namespace SmartMirror.Services.Mock
             return scenario;
         }
 
-        public IEnumerable<ScenarioAction> GetScenariosActions()
+        public IEnumerable<ScenarioActionModel> GetScenariosActions()
         {
-            List<ScenarioAction> scenarioAction = new()
+            List<ScenarioActionModel> scenarioAction = new()
             {
                 new() { Name = "Fan", Action = "Set temperature 16ºC", ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
                 new() { Name = "Shades", Action = "Turn OnC", ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },

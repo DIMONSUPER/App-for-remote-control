@@ -87,14 +87,11 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Controls\" />
-		<Folder Include="Views\" />
-		<Folder Include="ViewModels\" />
 		<Folder Include="Services\" />
 		<Folder Include="Platforms\Android\Assets\" />
 		<Folder Include="Helpers\" />
 		<Folder Include="Services\Amazon\" />
 		<Folder Include="Platforms\Android\Services\" />
-		<Folder Include="Models\" />
 		<Folder Include="Models\Amazon\" />
 		<Folder Include="Services\Rest\" />
 		<Folder Include="Resources\Strings\" />
@@ -142,6 +139,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
 		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\ScenarioPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\CamerasPage.xaml">
 		  <SubType></SubType>
@@ -193,10 +193,13 @@
 	  <Compile Update="Views\Dialogs\ErrorDialog.xaml.cs">
 	    <DependentUpon>ErrorDialog.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\ScenarioPage.xaml.cs">
+	    <DependentUpon>ScenarioPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
 		<AndroidKeyStore>True</AndroidKeyStore>
-		<AndroidSigningKeyStore>/Users/user/Projects/SmartMirror/smartmirror.keystore</AndroidSigningKeyStore>
+		<AndroidSigningKeyStore>c:/Users/user/Projects/SmartMirror/smartmirror.keystore</AndroidSigningKeyStore>
 		<AndroidSigningKeyAlias>key</AndroidSigningKeyAlias>
 		<AndroidSigningKeyPass>1Q2w3e4r5t</AndroidSigningKeyPass>
 		<AndroidSigningStorePass>1Q2w3e4r5t</AndroidSigningStorePass>

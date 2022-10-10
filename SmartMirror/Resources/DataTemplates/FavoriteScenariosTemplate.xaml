@@ -5,9 +5,9 @@
     xmlns:app="clr-namespace:SmartMirror"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
-    xmlns:models="clr-namespace:SmartMirror.Models"
+    xmlns:bindablemodels="clr-namespace:SmartMirror.Models.BindableModels"
     x:Class="SmartMirror.Resources.DataTemplates.FavoriteScenariosTemplate"
-    x:DataType="{x:Type models:ScenarioBindableModel}">
+    x:DataType="{x:Type bindablemodels:ScenarioBindableModel}">
 
     <Border
         WidthRequest="368"
@@ -17,6 +17,10 @@
         StrokeShape="RoundRectangle 9"
         BackgroundColor="{DynamicResource cbg_i2}"
         Padding="29, 23, 29, 20">
+
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding TappedCommand}" CommandParameter="{Binding .}"/>
+        </Border.GestureRecognizers>
 
         <StackLayout>
 
