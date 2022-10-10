@@ -42,7 +42,9 @@ public static class MauiProgram
             {
                 handlers.AddHandler(typeof(Video), typeof(VideoHandler));
             });
-            
+
+        builder.Services.AddLocalization();
+
         return builder.Build();
     }
 
