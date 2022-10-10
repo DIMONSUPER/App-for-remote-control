@@ -15,6 +15,7 @@
         StrokeThickness="1"
         StrokeShape="RoundRectangle 9"
         BackgroundColor="{DynamicResource cbg_i2}"
+        Shadow="{DynamicResource Shadow_i1}"
         Padding="22, 17, 22, 15">
 
         <StackLayout>
