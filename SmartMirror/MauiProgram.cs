@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
 using SmartMirror.Controls;
+using SmartMirror.Handlers;
 using SmartMirror.Platforms.Android.Renderers;
 using SmartMirror.Platforms.Services;
 using SmartMirror.Services.Amazon;
+using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Notifications;
@@ -34,6 +36,10 @@ public static class MauiProgram
                 fonts.AddFont("Inter-Medium-500.ttf", "InterMedium");
                 fonts.AddFont("Inter-SemiBold-600.ttf", "InterSemiBold");
                 fonts.AddFont("Inter-Bold-700.ttf", "InterBold");
+            })
+            .ConfigureMauiHandlers(handlers =>
+            {
+                handlers.AddHandler(typeof(Video), typeof(VideoHandler));
             });
             
         return builder.Build();
@@ -60,6 +66,7 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
         containerRegistry.RegisterSingleton<INotificationsService, NotificationsService>();
+        containerRegistry.RegisterSingleton<ICamerasService, CamerasService>();
     }
 
     private static void OnAppStart(INavigationService navigationService)

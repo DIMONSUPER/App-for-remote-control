@@ -7,15 +7,48 @@ namespace SmartMirror.Services.Mock
 {
     public class SmartHomeMockService : ISmartHomeMockService
     {
-        public IEnumerable<Camera> GetCameras()
+        public IEnumerable<CameraModel> GetCameras()
         {
-            List<Camera> cameras= new()
+            List<CameraModel> cameras= new()
             {
-                new() { Name = "Front Door 1", IsConnected = true, CreateTime = DateTime.Now },
-                new() { Name = "Front Door 2", IsConnected = true, CreateTime = DateTime.Now },
-                new() { Name = "Back Door 1", IsConnected = false },
-                new() { Name = "Back Door 2", IsConnected = true, CreateTime = DateTime.Now },
-                new() { Name = "Garage", IsConnected = false },
+                new() 
+                { 
+                    Id = 1,
+                    Name = "Front Door 1", 
+                    IsConnected = true,
+                    CreateTime = DateTime.Now,
+                    VideoUrl = "https://videos-3.earthcam.com/fecnetwork/hdtimes10.flv/chunklist_w53922196.m3u8",
+                },
+                new() 
+                {
+                    Id = 2,
+                    Name = "Front Door 2",
+                    IsConnected = true, 
+                    CreateTime = DateTime.Now,
+                    VideoUrl = "https://videos-3.earthcam.com/fecnetwork/15659.flv/chunklist_w999153032.m3u8",
+                },
+                new() 
+                { 
+                    Id = 3,
+                    Name = "Back Door 1",
+                    IsConnected = false,
+                    CreateTime = DateTime.Now,
+                },
+                new() 
+                {
+                    Id = 4,
+                    Name = "Back Door 2",
+                    IsConnected = true, 
+                    CreateTime = DateTime.Now,
+                    VideoUrl = "https://videos-3.earthcam.com/fecnetwork/17568.flv/chunklist_w1596475220.m3u8",
+                },
+                new() 
+                {
+                    Id = 5,
+                    Name = "Garage",
+                    CreateTime = DateTime.Now,
+                    IsConnected = false,
+                },
             };
 
             return cameras;
