@@ -11,10 +11,10 @@
 
     <Border
         HeightRequest="157"
-        Stroke="{x:DynamicResource cbg_i4}"
+        Stroke="{DynamicResource cbg_i4}"
         StrokeThickness="1"
         StrokeShape="RoundRectangle 9"
-        BackgroundColor="{StaticResource cbg_i2}"
+        BackgroundColor="{DynamicResource cbg_i2}"
         Padding="22, 17, 22, 15">
 
         <StackLayout>
@@ -25,7 +25,7 @@
                 VerticalOptions="Start">
 
                 <Border
-                    BackgroundColor="{StaticResource cbg_i1}"
+                    BackgroundColor="{DynamicResource cbg_i1}"
                     StrokeShape="RoundRectangle 12"
                     StrokeThickness="0"
                     WidthRequest="51"
@@ -58,13 +58,13 @@
                     Text="{extensions:Translate NotActive}"
                     HorizontalOptions="EndAndExpand"
                     HorizontalTextAlignment="End"
-                    Style="{x:DynamicResource tstyle_i10}">
+                    Style="{DynamicResource tstyle_i10}">
 
                     <Label.Triggers>
 
                         <DataTrigger Binding="{Binding IsActive}" Value="True" TargetType="Label">
                             <Setter Property="Text" Value="{extensions:Translate Active}"/>
-                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i12}"/>
+                            <Setter Property="Style" Value="{DynamicResource tstyle_i12}"/>
                         </DataTrigger>
 
                     </Label.Triggers>
@@ -76,12 +76,12 @@
             <Label
                 Text="{Binding Name}"
                 VerticalOptions="EndAndExpand"
-                Style="{x:DynamicResource tstyle_i11}"/>
+                Style="{DynamicResource tstyle_i11}"/>
 
             <Label
-                Text="{Binding ActivationTime, StringFormat={x:Static app:Constants+Formats.TIME_FORMAT2}}"
+                Text="{Binding ActivationTime, StringFormat={x:Static app:Constants+Formats.TIME_FORMAT_2}}"
                 VerticalOptions="End"
-                Style="{x:DynamicResource tstyle_i5}"/>
+                Style="{DynamicResource tstyle_i5}"/>
 
         </StackLayout>
 

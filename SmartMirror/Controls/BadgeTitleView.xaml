@@ -9,13 +9,13 @@
         Text="{Binding Title, Source={x:Reference badgeTitleView}}"
         VerticalTextAlignment="Center"
         HorizontalTextAlignment="Start"
-        Style="{x:DynamicResource tstyle_i11}"/>
+        Style="{DynamicResource tstyle_i11}"/>
 
     <Border
         Stroke="{DynamicResource cbg_i4}"
         StrokeThickness="1"
         StrokeShape="RoundRectangle 9"
-        BackgroundColor="{StaticResource cbg_i2}"
+        BackgroundColor="{DynamicResource cbg_i2}"
         WidthRequest="42"
         HeightRequest="42">
 
@@ -23,7 +23,7 @@
             Text="{Binding Number, Source={x:Reference badgeTitleView}}"
             VerticalTextAlignment="Center"
             HorizontalTextAlignment="Center"
-            Style="{x:DynamicResource tstyle_i3}"/>
+            Style="{DynamicResource tstyle_i3}"/>
 
     </Border>
 
