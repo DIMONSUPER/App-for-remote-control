@@ -16,6 +16,7 @@
         StrokeThickness="1"
         StrokeShape="RoundRectangle 9"
         BackgroundColor="{DynamicResource cbg_i2}"
+        Shadow="{DynamicResource Shadow_i1}"
         Padding="29, 23, 29, 20">
 
         <Border.GestureRecognizers>
