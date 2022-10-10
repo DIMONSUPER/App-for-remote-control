@@ -115,29 +115,190 @@ namespace SmartMirror.Services.Mock
         {
             List<ScenarioModel> scenario = new()
             {
-                new() { Name = "Good Morning", IsActive = true, IsFavorite = true, ScenarioActions = GetScenariosActions(), ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
-                new() { Name = "Good Evening", IsActive = false, IsFavorite = true, ScenarioActions = GetScenariosActions(), ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 18, 0, 0) },
-                new() { Name = "Friday Night", IsActive = false, IsFavorite = true, ScenarioActions = GetScenariosActions(), ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 21, 0, 0) },
-                new() { Name = "Good Morning", IsActive = true, ScenarioActions = GetScenariosActions(), ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
-                new() { Name = "Good Morning", IsActive = false, ScenarioActions = GetScenariosActions(), ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
-                new() { Name = "Good Morning", IsActive = true, ScenarioActions = GetScenariosActions(), ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
-                new() { Name = "Good Morning", IsActive = false, ScenarioActions = GetScenariosActions(), ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
+                new() 
+                {
+                    Name = "Good Morning",
+                    IsActive = true,
+                    IsFavorite = true, 
+                    ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 7, 0, 0),
+                    ScenarioActions = new List<ScenarioActionModel>()
+                    {
+                        new()
+                        {
+                            Name = "Fan",
+                            Action = "Set temperature 18ºC",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 7, 0, 0),
+                            Type = "Fan"
+                        },
+                        new()
+                        {
+                            Name = "Shades",
+                            Action = "Turn On",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 7, 0, 10),
+                            Type = "Shades"
+                        },
+                        new()
+                        {
+                            Name = "HomePod",
+                            Action = "Turn On",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 7, 0, 15),
+                            Type = "Podcast"
+                        },
+                    }
+                },
+                new() 
+                {
+                    Name = "Good Evening", 
+                    IsActive = false, 
+                    IsFavorite = true, 
+                    ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 18, 0, 0),
+                    ScenarioActions = new List<ScenarioActionModel>()
+                    {
+                        new()
+                        {
+                            Name = "Fan",
+                            Action = "Set temperature 20ºC",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 18, 0, 0),
+                            Type = "Fan"
+                        },
+                        new()
+                        {
+                            Name = "Light",
+                            Action = "Turn On",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 18, 0, 0),
+                            Type = "Light"
+                        },
+                        new()
+                        {
+                            Name = "Shades",
+                            Action = "Turn On",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 18, 45, 0),
+                            Type = "Shades"
+                        },
+                        new()
+                        {
+                            Name = "HomePod",
+                            Action = "Turn Off",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19, 0, 5),
+                            Type = "Podcast"
+                        },
+                    }
+                },
+                new() 
+                {
+                    Name = "Friday Night",
+                    IsActive = false,
+                    IsFavorite = true,
+                    ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 21, 0, 0),
+                    ScenarioActions = new List<ScenarioActionModel>()
+                    {
+                        new()
+                        {
+                            Name = "Light",
+                            Action = "Turn On",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 21, 0, 0),
+                            Type = "Light"
+                        },
+                        new()
+                        {
+                            Name = "Fan",
+                            Action = "Set temperature 19ºC",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 21, 0, 0),
+                            Type = "Fan"
+                        },
+                        new()
+                        {
+                            Name = "Shades",
+                            Action = "Turn Off",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 21, 0, 0),
+                            Type = "Shades"
+                        },
+                        new()
+                        {
+                            Name = "Unknown",
+                            Action = "Turn Off",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 21, 0, 0),
+                            Type = "Unknown"
+                        },
+                        new()
+                        {
+                            Name = "HomePod",
+                            Action = "Turn Off",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 21, 0, 5),
+                            Type = "Podcast"
+                        },
+                    }
+                },
+                new() 
+                {
+                    Name = "Welcome",
+                    IsActive = true,
+                    ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19, 0, 0),
+                    ScenarioActions = new List<ScenarioActionModel>()
+                    {
+                        new()
+                        {
+                            Name = "Light",
+                            Action = "Turn On",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19, 0, 0),
+                            Type = "Light"
+                        },
+                        new()
+                        {
+                            Name = "Fan",
+                            Action = "Set temperature 21ºC",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19, 0, 0),
+                            Type = "Fan"
+                        },
+                        new()
+                        {
+                            Name = "Shades",
+                            Action = "Turn On",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19, 30, 0),
+                            Type = "Shades"
+                        },
+                    }
+                },
+                new() 
+                {
+                    Name = "No one's home",
+                    IsActive = true,
+                    ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0),
+                    ScenarioActions = new List<ScenarioActionModel>()
+                    {
+                        new()
+                        {
+                            Name = "Light",
+                            Action = "Turn Off",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0),
+                            Type = "Light"
+                        },
+                        new()
+                        {
+                            Name = "Fan",
+                            Action = "Set temperature 15ºC",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0),
+                            Type = "Fan"
+                        },
+                        new()
+                        {
+                            Name = "Shades",
+                            Action = "Turn Off",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 30, 0),
+                            Type = "Shades"
+                        },
+                        new()
+                        {
+                            Name = "HomePod",
+                            Action = "Turn Off",
+                            ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 5),
+                            Type = "Podcast"
+                        },
+                    }
+                },
             };
 
             return scenario;
-        }
-
-        public IEnumerable<ScenarioAction> GetScenariosActions()
-        {
-            List<ScenarioAction> scenarioAction = new()
-            {
-                new() { Name = "Fan", Action = "Set temperature 16ºC", ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
-                new() { Name = "Shades", Action = "Turn OnC", ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
-                new() { Name = "Light", Action = "Turn Off", ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
-                new() { Name = "HomePod", Action = "Turn On", ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
-            };
-
-            return scenarioAction;
         }
 
         public IEnumerable<Device> GetDevices()

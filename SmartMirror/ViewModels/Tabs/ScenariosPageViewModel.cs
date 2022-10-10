@@ -1,6 +1,7 @@
 ﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models;
+using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
 using System.Collections.ObjectModel;
@@ -45,6 +46,9 @@ public class ScenariosPageViewModel : BaseTabViewModel
     private ICommand _changeActiveStatusCommand;
     public ICommand ChangeActiveStatusCommand => _changeActiveStatusCommand ??= SingleExecutionCommand.FromFunc<ScenarioBindableModel>(OnChangeActiveStatusCommandAsync);
 
+    private ICommand _goToScenarioDetailsCommand;
+    public ICommand GoToScenarioDetailsCommand => _goToScenarioDetailsCommand ??= SingleExecutionCommand.FromFunc<ScenarioBindableModel>(OnGoToScenarioDetailsCommandAsync);
+
     #endregion
 
     #region -- Overrides --
@@ -68,6 +72,15 @@ public class ScenariosPageViewModel : BaseTabViewModel
         {
             scenario.IsActive = !scenario.IsActive;
         }
+    }
+
+    private Task OnGoToScenarioDetailsCommandAsync(ScenarioBindableModel scenario)
+    {
+        return NavigationService.CreateBuilder()
+            .AddSegment<ScenarioPageViewModel>()
+            .AddParameter(KnownNavigationParameters.Animated, true)
+            .AddParameter(nameof(ScenarioBindableModel), scenario)
+            .NavigateAsync();
     }
 
     private async Task LoadScenariosAsync()
@@ -98,9 +111,9 @@ public class ScenariosPageViewModel : BaseTabViewModel
         return _mapperService.MapRangeAsync<ScenarioBindableModel>(scenarios, (m, vm) =>
         {
             vm.ChangeActiveStatusCommand = ChangeActiveStatusCommand;
+            vm.TappedCommand = GoToScenarioDetailsCommand;
         });
     }
 
     #endregion
 }
-

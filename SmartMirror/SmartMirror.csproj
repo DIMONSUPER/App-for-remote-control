@@ -102,7 +102,7 @@
 		<Folder Include="Resources\DataTemplateSelectors\" />
 		<Folder Include="ViewModels\Tabs\" />
 		<Folder Include="Resources\DataTemplates\" />
-		<Folder Include="Extensions\" />
+		<Folder Include="Extensions\" />		
 		<Folder Include="Resources\Strings\" />
 		<Folder Include="Services\Mock\" />
 		<Folder Include="Platforms\Android\Renderers\" />
@@ -136,11 +136,17 @@
 		<MauiXaml Update="Resources\DataTemplates\ScenariosTemplate.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\ScenarioTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\ErrorDialog.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
 		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\ScenarioPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\CamerasPage.xaml">
 		  <SubType></SubType>
@@ -188,6 +194,9 @@
 	  </Compile>
 	  <Compile Update="Views\Dialogs\ErrorDialog.xaml.cs">
 	    <DependentUpon>ErrorDialog.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ScenarioPage.xaml.cs">
+	    <DependentUpon>ScenarioPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">

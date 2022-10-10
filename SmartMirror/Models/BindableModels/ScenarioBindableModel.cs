@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace SmartMirror.Models
+namespace SmartMirror.Models.BindableModels
 {
     public class ScenarioBindableModel : BindableBase
     {
@@ -40,8 +40,8 @@ namespace SmartMirror.Models
             set => SetProperty(ref _activationTime, value);
         }
 
-        private ObservableCollection<ScenarioAction> _scenarioActions;
-        public ObservableCollection<ScenarioAction> ScenarioActions
+        private ObservableCollection<ScenarioActionBindableModel> _scenarioActions;
+        public ObservableCollection<ScenarioActionBindableModel> ScenarioActions
         {
             get => _scenarioActions;
             set => SetProperty(ref _scenarioActions, value);
