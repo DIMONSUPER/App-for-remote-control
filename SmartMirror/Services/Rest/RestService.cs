@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Com.Amazon.Identity.Auth.Device.Endpoint;
 using Newtonsoft.Json;
 
 namespace SmartMirror.Services.Rest

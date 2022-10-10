@@ -1,4 +1,6 @@
-﻿using System;
+﻿//TODO: Remove when companion app is ready
+
+/*using System;
 using Com.Amazon.Identity.Auth.Device.Api.Authorization;
 using SmartMirror.Helpers;
 using SmartMirror.Models.Amazon;
@@ -12,5 +14,5 @@ public interface IAmazonService
     Task<AOResult> StartAuthorizationAsync();
 
     Task<AOResult<AuthResponse>> AuthorizeAsync(AuthorizeResult authorizeResult);
-}
+}*/
 
