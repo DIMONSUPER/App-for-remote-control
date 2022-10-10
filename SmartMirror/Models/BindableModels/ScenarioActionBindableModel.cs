@@ -9,8 +9,8 @@
             set => SetProperty(ref _id, value);
         }
 
-        private Type _type;
-        public Type Type
+        private string _type;
+        public string Type
         {
             get => _type;
             set => SetProperty(ref _type, value);

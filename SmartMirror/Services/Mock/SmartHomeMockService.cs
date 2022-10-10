@@ -131,10 +131,49 @@ namespace SmartMirror.Services.Mock
         {
             List<ScenarioActionModel> scenarioAction = new()
             {
-                new() { Name = "Fan", Action = "Set temperature 16ºC", ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
-                new() { Name = "Shades", Action = "Turn OnC", ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
-                new() { Name = "Light", Action = "Turn Off", ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
-                new() { Name = "HomePod", Action = "Turn On", ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
+                new() 
+                { 
+                    Name = "Fan",
+                    Action = "Set temperature 16ºC", 
+                    ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0), 
+                    Type = "Fan"
+                },
+                new() 
+                { 
+                    Name = "Shades", 
+                    Action = "Turn On",
+                    ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0),
+                    Type = "Shades"
+                },
+                                new()
+                {
+                    Name = "Unknown",
+                    Action = "Turn Off",
+                    ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0),
+                    Type = "Unknown"
+                },
+                new() 
+                { 
+                    Name = "Light", 
+                    Action = "Turn Off", 
+                    ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0),
+                    Type = "Light"
+                },
+                new() 
+                { 
+                    Name = "HomePod",
+                    Action = "Turn On",
+                    ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 5),
+                    Type = "Podcast"
+                },
+                new() 
+                {
+                    Name = "Shades",
+                    Action = "Turn Off",
+                    ActionTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 11, 0, 20),
+                    Type = "Light"
+                },
+
             };
 
             return scenarioAction;

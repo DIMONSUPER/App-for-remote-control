@@ -41,15 +41,14 @@ namespace SmartMirror.ViewModels
 
         #region -- Overrides --
 
-        public override void OnNavigatedTo(INavigationParameters parameters)
+        public override void Initialize(INavigationParameters parameters)
         {
-            base.OnNavigatedTo(parameters);
+            base.Initialize(parameters);
 
             if (parameters.TryGetValue(nameof(ScenarioBindableModel), out ScenarioBindableModel scenario))
             {
                 ScenarioName = scenario.Name;
-
-                ScenarioActions = new (scenario.ScenarioActions);
+                ScenarioActions = new(scenario.ScenarioActions);
             }
         }
 
