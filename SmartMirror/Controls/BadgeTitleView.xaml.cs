@@ -2,10 +2,10 @@ namespace SmartMirror.Controls;
 
 public partial class BadgeTitleView : HorizontalStackLayout
 {
-	public BadgeTitleView()
-	{
-		InitializeComponent();
-	}
+    public BadgeTitleView()
+    {
+        InitializeComponent();
+    }
 
     #region -- Public properties --
 
