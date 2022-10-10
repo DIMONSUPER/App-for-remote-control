@@ -18,8 +18,6 @@ namespace SmartMirror.Platforms.Android.Renderers;
 public class CustomTabbedPageRenderer : TabbedPageRenderer
 {
     private global::Android.Views.View _tabBarView;
-    private Page _previousPage;
-    private bool _isDisposed;
 
     public CustomTabbedPageRenderer(Context context) : base(context)
     {
@@ -40,13 +38,6 @@ public class CustomTabbedPageRenderer : TabbedPageRenderer
     #endregion
 
     #region -- Overrides --
-
-    protected override void Dispose(bool disposing)
-    {
-        _isDisposed = true;
-
-        base.Dispose(disposing);
-    }
 
     protected override void OnElementChanged(ElementChangedEventArgs<TabbedPage> e)
     {
