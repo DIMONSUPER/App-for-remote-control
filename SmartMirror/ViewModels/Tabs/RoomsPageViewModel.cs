@@ -20,10 +20,13 @@ public class RoomsPageViewModel : BaseTabViewModel
         IMapperService mapperService)
         : base(navigationService)
     {
-        Title = "Rooms";
         _smartHomeMockService = smartHomeMockService;
         _mapperService = mapperService;
+
+        Title = "Rooms";
         DataState = EPageState.Loading;
+
+        ConnectivityChanged += OnConnectivityChanged;
     }
 
     #region -- Public properties --
@@ -49,10 +52,31 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override async void Initialize(INavigationParameters parameters)
+    public override async Task InitializeAsync(INavigationParameters parameters)
     {
-        base.Initialize(parameters);
+        await base.InitializeAsync(parameters);
 
+        await LoadRoomsAsync();
+    }
+
+    #endregion
+
+    #region -- Private helpers --
+
+    private async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    {
+        if (e.NetworkAccess == NetworkAccess.Internet)
+        {
+            await LoadRoomsAsync();
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
+    }
+
+    private async Task LoadRoomsAsync()
+    {
         FavoriteAccessories = new(_smartHomeMockService.GetDevices());
 
         var rooms = await _mapperService.MapRangeAsync<RoomBindableModel>(_smartHomeMockService.GetRooms(), (m, vm) =>
@@ -61,20 +85,9 @@ public class RoomsPageViewModel : BaseTabViewModel
         });
 
         Rooms = new(rooms);
-    }
-
-    public override async void OnAppearing()
-    {
-        base.OnAppearing();
-
-        await Task.Delay(1000);
 
         DataState = EPageState.Complete;
     }
-
-    #endregion
-
-    #region -- Private helpers --
 
     private Task OnRoomTappedCommandAsync(RoomBindableModel room)
     {

@@ -24,6 +24,8 @@ public class ScenariosPageViewModel : BaseTabViewModel
         
         Title = "Scenarios";
         DataState = EPageState.Loading;
+
+        ConnectivityChanged += OnConnectivityChanged;
     }
 
     #region -- Public properties --
@@ -59,6 +61,18 @@ public class ScenariosPageViewModel : BaseTabViewModel
     #endregion
 
     #region -- Private helpers --
+
+    private async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    {
+        if (e.NetworkAccess == NetworkAccess.Internet)
+        {
+            await LoadScenariosAsync();
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
+    }
 
     private async Task OnChangeActiveStatusCommandAsync(ScenarioBindableModel scenario)
     {

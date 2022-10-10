@@ -19,7 +19,9 @@ public class NotificationsPageViewModel : BaseTabViewModel
         _notificationsService = notificationsService;
 
         Title = "Notifications";
-        DataState = EPageState.Complete;
+        DataState = EPageState.Loading;
+
+        ConnectivityChanged += OnConnectivityChanged;
     }
 
     #region -- Public properties --
@@ -56,6 +58,18 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     #region -- Private helpers --
 
+    private async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    {
+        if (e.NetworkAccess == NetworkAccess.Internet)
+        {
+            await LoadNotificationsAsync();
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
+    }
+
     private async Task OnRefreshNotificationsCommandAsync()
     {
         await LoadNotificationsAsync();
@@ -70,6 +84,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
         if (resultOfGettingNotifications.IsSuccess)
         {
             Notifications = new(resultOfGettingNotifications.Result);
+
+            DataState = EPageState.Complete;
         }
     }
 

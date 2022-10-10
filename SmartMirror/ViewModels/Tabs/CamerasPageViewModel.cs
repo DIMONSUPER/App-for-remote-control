@@ -21,8 +21,11 @@ public class CamerasPageViewModel : BaseTabViewModel
     {
         _mapperService = mapperService;
         _camerasService = camerasService;
-        
-        DataState = EPageState.Complete;
+
+        Title = "Cameras";
+        DataState = EPageState.Loading;
+
+        ConnectivityChanged += OnConnectivityChanged;
     }
 
     #region -- Public properties --
@@ -97,6 +100,18 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     #region -- Private helpers --
 
+    private async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    {
+        if (e.NetworkAccess == NetworkAccess.Internet)
+        {
+            await RefreshCamerasAsync();
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
+    }
+
     private Task OnSelectCameraCommandAsync(CameraBindableModel selectedCamera)
     {
         SelectCamera(selectedCamera);
@@ -107,6 +122,7 @@ public class CamerasPageViewModel : BaseTabViewModel
     private async Task OnRefreshCamerasCommandAsync() 
     {
         await RefreshCamerasAsync();
+
         IsCamerasRefreshing = false;
     }
 
@@ -128,6 +144,8 @@ public class CamerasPageViewModel : BaseTabViewModel
                 : Cameras.FirstOrDefault(x => x.Id == SelectedCamera.Id) ?? Cameras.FirstOrDefault();
 
             SelectCamera(camera);
+
+            DataState = EPageState.Complete;
         }
     }
 

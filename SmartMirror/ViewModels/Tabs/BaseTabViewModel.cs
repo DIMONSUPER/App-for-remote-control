@@ -1,5 +1,4 @@
 using SmartMirror.Enums;
-using Prism.Navigation;
 
 namespace SmartMirror.ViewModels.Tabs;
 
@@ -8,11 +7,17 @@ public class BaseTabViewModel : BindableBase, IInitialize, IInitializeAsync, IPa
     public BaseTabViewModel(INavigationService navigationService)
     {
         NavigationService = navigationService;
+
+        Connectivity.ConnectivityChanged += OnConnectivityChanged;
     }
+
+    ~BaseTabViewModel() => Connectivity.ConnectivityChanged -= OnConnectivityChanged;
 
     #region -- Protected properties --
 
     protected INavigationService NavigationService { get; }
+
+    protected bool IsInternetConnected => Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
 
     #endregion
 
@@ -38,6 +43,8 @@ public class BaseTabViewModel : BindableBase, IInitialize, IInitializeAsync, IPa
         get => _dataState;
         set => SetProperty(ref _dataState, value);
     }
+
+    public event EventHandler<ConnectivityChangedEventArgs> ConnectivityChanged;
 
     #endregion
 
@@ -66,6 +73,15 @@ public class BaseTabViewModel : BindableBase, IInitialize, IInitializeAsync, IPa
 
     public virtual void OnDisappearing()
     {
+    }
+
+    #endregion
+
+    #region -- Private helpers --
+
+    private void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    {
+        ConnectivityChanged?.Invoke(sender, e);
     }
 
     #endregion
