@@ -111,9 +111,9 @@ namespace SmartMirror.Services.Mock
             return rooms;
         }
 
-        public IEnumerable<Scenario> GetScenarios()
+        public IEnumerable<ScenarioModel> GetScenarios()
         {
-            List<Scenario> scenario = new()
+            List<ScenarioModel> scenario = new()
             {
                 new() { Name = "Good Morning", IsActive = true, IsFavorite = true, ScenarioActions = GetScenariosActions(), ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0) },
                 new() { Name = "Good Evening", IsActive = false, IsFavorite = true, ScenarioActions = GetScenariosActions(), ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 18, 0, 0) },

@@ -100,9 +100,9 @@
 		<Folder Include="Resources\Strings\" />
 		<Folder Include="Controls\" />
 		<Folder Include="Views\Tabs\" />
-		<Folder Include="Resources\DataTemplates\" />
 		<Folder Include="Resources\DataTemplateSelectors\" />
 		<Folder Include="ViewModels\Tabs\" />
+		<Folder Include="Resources\DataTemplates\" />
 		<Folder Include="Extensions\" />
 		<Folder Include="Resources\Strings\" />
 		<Folder Include="Services\Mock\" />
@@ -112,6 +112,9 @@
 		<Folder Include="Services\Mapper\" />
 	</ItemGroup>
 	<ItemGroup>
+		<MauiXaml Update="Controls\BadgeTitleView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Platforms\Windows\App.xaml">
 			<SubType>
 			</SubType>
@@ -119,6 +122,9 @@
 		<MauiXaml Update="Controls\CustomTabView.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\FavoriteScenariosTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+	    </MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\CameraTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
@@ -126,6 +132,9 @@
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\NotificationTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\ScenariosTemplate.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\ErrorDialog.xaml">

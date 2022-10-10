@@ -8,7 +8,7 @@ namespace SmartMirror.Services.Mock
     {
         IEnumerable<Room> GetRooms();
         IEnumerable<NotificationModel> GetNotifications();
-        IEnumerable<Scenario> GetScenarios();
+        IEnumerable<ScenarioModel> GetScenarios();
         IEnumerable<CameraModel> GetCameras();
         IEnumerable<Device> GetDevices();
     }
