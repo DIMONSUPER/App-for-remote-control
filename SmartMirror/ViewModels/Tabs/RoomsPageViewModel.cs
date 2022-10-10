@@ -1,10 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using SmartMirror.Enums;
-using System.Windows.Input;
+﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 using Device = SmartMirror.Models.Device;
 
 namespace SmartMirror.ViewModels.Tabs;
@@ -20,9 +20,10 @@ public class RoomsPageViewModel : BaseTabViewModel
         IMapperService mapperService)
         : base(navigationService)
     {
-        Title = "Rooms";
         _smartHomeMockService = smartHomeMockService;
         _mapperService = mapperService;
+
+        Title = "Rooms";
         DataState = EPageState.Loading;
     }
 
