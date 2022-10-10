@@ -34,7 +34,7 @@ public class CamerasPageViewModel : BaseTabViewModel
         set => SetProperty(ref _cameras, value);
     }
 
-    private CameraBindableModel? _selectedCamera;
+    private CameraBindableModel _selectedCamera;
     public CameraBindableModel SelectedCamera
     {
         get => _selectedCamera;
@@ -123,7 +123,11 @@ public class CamerasPageViewModel : BaseTabViewModel
 
             Cameras = new(cameras);
 
-            SelectCamera(Cameras.FirstOrDefault());
+            var camera = SelectedCamera is null
+                ? Cameras.FirstOrDefault()
+                : Cameras.FirstOrDefault(x => x.Id == SelectedCamera.Id);
+
+            SelectCamera(camera);
         }
     }
 

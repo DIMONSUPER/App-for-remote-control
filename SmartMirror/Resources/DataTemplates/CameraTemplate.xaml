@@ -33,7 +33,6 @@
                     <Setter Property="Shadow" Value="{StaticResource Shadow_i2}"/>
                     <Setter TargetName="cameraNameLabel" Property="Label.TextColor" Value="{DynamicResource cbg_i12}"/>
                     <Setter TargetName="cameraStatusLabel" Property="Label.TextColor" Value="{DynamicResource tcolor_i7}"/>
-                    <Setter TargetName="cameraStatusImage" Property="Image.Source" Value="{Binding IsConnected, Converter={xct:BoolToObjectConverter TrueObject='video_fill_dark', FalseObject='video_off_fill'}}"/>
                 </DataTrigger>
 
             </Border.Triggers>
@@ -58,8 +57,16 @@
                     Margin="6, 0, 0, 0"
                     WidthRequest="24"
                     HeightRequest="24"
-                    Source="{Binding IsConnected, Converter={xct:BoolToObjectConverter TrueObject='video_fill', FalseObject='video_off_fill_light'}}"
-                    x:Name="cameraStatusImage"/>
+                    Source="{Binding IsConnected, Converter={xct:BoolToObjectConverter TrueObject='video_fill', FalseObject='video_off_fill_light'}}">
+
+                    <Image.Triggers>
+                        <DataTrigger TargetType="Image" Binding="{Binding IsSelected}" Value="True">
+                            <Setter Property="Source" Value="{Binding IsConnected,
+                                Converter={xct:BoolToObjectConverter TrueObject='video_fill_dark', FalseObject='video_off_fill'}}"/>
+                        </DataTrigger>
+                    </Image.Triggers>
+
+                </Image>
 
             </StackLayout>
 
