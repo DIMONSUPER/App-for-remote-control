@@ -2,8 +2,8 @@
 <DataTemplate
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:bindablemodels="clr-namespace:SmartMirror.Models.BindableModels"
     xmlns:app="clr-namespace:SmartMirror"
+    xmlns:bindablemodels="clr-namespace:SmartMirror.Models.BindableModels"
     x:DataType="bindablemodels:ScenarioActionBindableModel"
     x:Class="SmartMirror.Resources.DataTemplates.ScenarioTemplate">
     
@@ -17,8 +17,7 @@
             Shadow="{DynamicResource Shadow_i1}"
             BackgroundColor="{DynamicResource cbg_i2}">
 
-            <StackLayout
-                Orientation="Horizontal">
+            <StackLayout Orientation="Horizontal">
 
                 <!-- ICON -->
                 <Border
@@ -78,7 +77,7 @@
                 <Label
                     Style="{DynamicResource tstyle_i8}"
                     HorizontalOptions="EndAndExpand"
-                    MaximumWidthRequest="220"
+                    MaximumWidthRequest="225"
                     MaxLines="2"
                     LineHeight="1.3"
                     HorizontalTextAlignment="End"
