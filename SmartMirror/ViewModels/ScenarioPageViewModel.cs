@@ -8,14 +8,9 @@ namespace SmartMirror.ViewModels
 {
     public class ScenarioPageViewModel : BaseViewModel
     {
-        private readonly IMapperService _mapperService;
-
-        public ScenarioPageViewModel(
-            INavigationService navigationService,
-            IMapperService mapperService) 
+        public ScenarioPageViewModel(INavigationService navigationService) 
             : base(navigationService)
         {
-            _mapperService = mapperService;
         }
 
         #region -- Public properties --
