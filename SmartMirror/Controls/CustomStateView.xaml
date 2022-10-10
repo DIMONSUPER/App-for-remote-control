@@ -93,6 +93,7 @@
                         Text="{extensions:Translate TryAgain}"
                         TextColor="{StaticResource tcolor_i2}"
                         BackgroundColor="{StaticResource cbg_i3}"
+                        Command="{Binding TryAgainCommand, Source={x:Reference stateContanier}}"
                         WidthRequest="163"
                         CornerRadius="16"/>
 

@@ -31,9 +31,6 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Public properties --
 
-    private ICommand _roomTappedCommand;
-    public ICommand RoomTappedCommand => _roomTappedCommand ??= SingleExecutionCommand.FromFunc<RoomBindableModel>(OnRoomTappedCommandAsync);
-
     private ObservableCollection<Device> _favoriteAccessories;
     public ObservableCollection<Device> FavoriteAccessories
     {
@@ -47,6 +44,12 @@ public class RoomsPageViewModel : BaseTabViewModel
         get => _rooms;
         set => SetProperty(ref _rooms, value);
     }
+
+    private ICommand _roomTappedCommand;
+    public ICommand RoomTappedCommand => _roomTappedCommand ??= SingleExecutionCommand.FromFunc<RoomBindableModel>(OnRoomTappedCommandAsync);
+
+    private ICommand _tryAgainCommand;
+    public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
 
     #endregion
 
@@ -75,18 +78,34 @@ public class RoomsPageViewModel : BaseTabViewModel
         }
     }
 
+    private async Task OnTryAgainCommandAsync()
+    {
+        DataState = EPageState.NoInternetLoader;
+
+        await Task.Delay(1000);
+
+        await LoadRoomsAsync();
+    }
+
     private async Task LoadRoomsAsync()
     {
-        FavoriteAccessories = new(_smartHomeMockService.GetDevices());
-
-        var rooms = await _mapperService.MapRangeAsync<RoomBindableModel>(_smartHomeMockService.GetRooms(), (m, vm) =>
+        if (IsInternetConnected)
         {
-            vm.TappedCommand = RoomTappedCommand;
-        });
+            FavoriteAccessories = new(_smartHomeMockService.GetDevices());
 
-        Rooms = new(rooms);
+            var rooms = await _mapperService.MapRangeAsync<RoomBindableModel>(_smartHomeMockService.GetRooms(), (m, vm) =>
+            {
+                vm.TappedCommand = RoomTappedCommand;
+            });
 
-        DataState = EPageState.Complete;
+            Rooms = new(rooms);
+
+            DataState = EPageState.Complete;
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
     }
 
     private Task OnRoomTappedCommandAsync(RoomBindableModel room)

@@ -2,6 +2,7 @@ using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Services.Notifications;
+using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -10,18 +11,19 @@ namespace SmartMirror.ViewModels.Tabs;
 public class NotificationsPageViewModel : BaseTabViewModel
 {
     private readonly INotificationsService _notificationsService;
+    private readonly IDialogService _dialogService;
 
     public NotificationsPageViewModel(
         INotificationsService notificationsService,
+        IDialogService dialogService,
         INavigationService navigationService)
         : base(navigationService)
     {
         _notificationsService = notificationsService;
+        _dialogService = dialogService;
 
         Title = "Notifications";
         DataState = EPageState.Loading;
-
-        ConnectivityChanged += OnConnectivityChanged;
     }
 
     #region -- Public properties --
@@ -43,6 +45,9 @@ public class NotificationsPageViewModel : BaseTabViewModel
     private ICommand _refreshNotificationsCommand;
     public ICommand RefreshNotificationsCommand => _refreshNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnRefreshNotificationsCommandAsync);
 
+    private ICommand _tryAgainCommand;
+    public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
+
     #endregion
 
     #region -- Overrides --
@@ -51,41 +56,58 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         await base.InitializeAsync(parameters);
 
-        await LoadNotificationsAsync();
+        await LoadNotificationsAsync(() => DataState = EPageState.NoInternet);
     }
 
     #endregion
 
     #region -- Private helpers --
 
-    private async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    private async Task OnTryAgainCommandAsync()
     {
-        if (e.NetworkAccess == NetworkAccess.Internet)
-        {
-            await LoadNotificationsAsync();
-        }
-        else
-        {
-            DataState = EPageState.NoInternet;
-        }
+        DataState = EPageState.NoInternetLoader;
+
+        await Task.Delay(1000);
+
+        await LoadNotificationsAsync(() => DataState = EPageState.NoInternet);
     }
 
     private async Task OnRefreshNotificationsCommandAsync()
     {
-        await LoadNotificationsAsync();
+        await LoadNotificationsAsync(async () =>
+        {
+            var dialogParameters = new DialogParameters()
+            {
+                { Constants.DialogsParameterKeys.TITLE, LocalizationResourceManager.Instance["SomethingWentWrong"] },
+                { Constants.DialogsParameterKeys.DESCRIPTION, LocalizationResourceManager.Instance["NoInternetConnection"] },
+            };
+
+            await _dialogService.ShowDialogAsync(nameof(ErrorDialog), dialogParameters);
+        });
 
         IsNotificationsRefreshing = false;
     }
 
-    private async Task LoadNotificationsAsync()
+    private async Task LoadNotificationsAsync(Action onFailure)
     {
-        var resultOfGettingNotifications = await _notificationsService.GetNotificationsGroupedByDayAsync();
-
-        if (resultOfGettingNotifications.IsSuccess)
+        if (IsInternetConnected)
         {
-            Notifications = new(resultOfGettingNotifications.Result);
+            var resultOfGettingNotifications = await _notificationsService.GetNotificationsGroupedByDayAsync();
 
-            DataState = EPageState.Complete;
+            if (resultOfGettingNotifications.IsSuccess)
+            {
+                Notifications = new(resultOfGettingNotifications.Result);
+
+                DataState = EPageState.Complete;
+            }
+            else if (!IsInternetConnected)
+            {
+                onFailure();
+            }
+        }
+        else
+        {
+            onFailure();
         }
     }
 
