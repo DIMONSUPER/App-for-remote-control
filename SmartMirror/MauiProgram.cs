@@ -3,8 +3,8 @@ using Microsoft.Maui.Controls.Compatibility.Hosting;
 using SmartMirror.Controls;
 using SmartMirror.Handlers;
 using SmartMirror.Platforms.Android.Renderers;
-using SmartMirror.Platforms.Services;
-using SmartMirror.Services.Amazon;
+//using SmartMirror.Platforms.Services;
+//using SmartMirror.Services.Amazon;
 using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
@@ -65,7 +65,8 @@ public static class MauiProgram
 
         containerRegistry.RegisterSingleton<IMapperService, MapperService>();
         containerRegistry.RegisterSingleton<IRestService, RestService>();
-        containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
+        //TODO: Remove when companion app is ready
+        //containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
         containerRegistry.RegisterSingleton<INotificationsService, NotificationsService>();
         containerRegistry.RegisterSingleton<ICamerasService, CamerasService>();

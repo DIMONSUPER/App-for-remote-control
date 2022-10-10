@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿//TODO: Remove when companion app is ready
+
+/*using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using Com.Amazon.Identity.Auth.Device;
@@ -131,5 +133,5 @@ namespace SmartMirror.Platforms.Services
 
         #endregion
     }
-}
+}*/
 
