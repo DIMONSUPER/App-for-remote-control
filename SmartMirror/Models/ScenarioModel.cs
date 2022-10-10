@@ -12,6 +12,6 @@
 
         public DateTime ActivationTime { get; set; }
 
-        public IEnumerable<ScenarioAction> ScenarioActions { get; set; }
+        public IEnumerable<ScenarioActionModel> ScenarioActions { get; set; }
     }
 }

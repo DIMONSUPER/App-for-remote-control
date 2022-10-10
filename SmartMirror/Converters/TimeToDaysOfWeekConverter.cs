@@ -1,4 +1,5 @@
 ﻿using SmartMirror.Helpers;
+using SmartMirror.Resources.Strings;
 using System.Globalization;
 
 namespace SmartMirror.Converters
@@ -18,8 +19,8 @@ namespace SmartMirror.Converters
 
                 result = dateToCompare switch
                 {
-                    _ when dateToCompare == dateTimeNow => (string)LocalizationResourceManager.Instance["Today"],
-                    _ when dateToCompare == dateTimeYesterday => (string)LocalizationResourceManager.Instance["Yesterday"],
+                    _ when dateToCompare == dateTimeNow => Strings.Today,
+                    _ when dateToCompare == dateTimeYesterday => Strings.Yesterday,
                     _ => dateToCompare,
                 };
             }

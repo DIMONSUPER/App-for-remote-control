@@ -123,20 +123,30 @@
         <Setter Property="FontSize" Value="{DynamicResource tsize_i2}"/>
     </Style>
 
-    <!-- SHADOWS --> 
-    <Shadow 
+    <!-- SHADOWS -->
+    <!--box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);-->
+    <Shadow
         Offset="0,2"
         Opacity="0.4"
         Radius="9"
         Brush="{x:DynamicResource cbg_i10}"
         x:Key="Shadow_i1"/>
 
-    <Shadow 
+    <!---box-shadow: 0px 20px 25px rgba(0, 0, 0, 0.25);-->
+    <Shadow
         Offset="0,16"
         Opacity="0.15"
         Radius="9"
         Brush="{x:DynamicResource cbg_i10}"
         x:Key="Shadow_i2"/>
+
+    <!--box-shadow: 0px 22px 34px rgba(0, 0, 0, 0.5);-->
+    <Shadow
+        Offset="0,16"
+        Opacity="0.4"
+        Radius="9"
+        Brush="{x:DynamicResource cbg_i10}"
+        x:Key="Shadow_i3"/>
 
     <!-- CUSTOM SWITCH -->
     <Style TargetType="controls:CustomSwitch">

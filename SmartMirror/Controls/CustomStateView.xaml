@@ -27,6 +27,7 @@
                        HeightRequest="123"
                        WidthRequest="123"
                        CornerRadius="11"
+                       Shadow="{DynamicResource Shadow_i1}"
                        BackgroundColor="{StaticResource cbg_i2}">
 
                     <Image Source="{Binding EmptyStateImage, Source={x:Reference stateContanier}}"/>
@@ -52,6 +53,7 @@
                        HeightRequest="123"
                        WidthRequest="123"
                        CornerRadius="11"
+                       Shadow="{DynamicResource Shadow_i1}"
                        BackgroundColor="{StaticResource cbg_i2}">
 
                     <ActivityIndicator IsRunning="True"/>
@@ -78,6 +80,7 @@
                        HeightRequest="123"
                        WidthRequest="123"
                        CornerRadius="11"
+                       Shadow="{DynamicResource Shadow_i1}"
                        BackgroundColor="{StaticResource cbg_i2}">
 
                     <Image Source="wifi_off"/>
@@ -93,6 +96,7 @@
                         Text="{extensions:Translate TryAgain}"
                         TextColor="{StaticResource tcolor_i2}"
                         BackgroundColor="{StaticResource cbg_i3}"
+                        Shadow="{DynamicResource Shadow_i3}"
                         Command="{Binding TryAgainCommand, Source={x:Reference stateContanier}}"
                         WidthRequest="163"
                         CornerRadius="16"/>
@@ -112,6 +116,7 @@
                        HeightRequest="123"
                        WidthRequest="123"
                        CornerRadius="11"
+                       Shadow="{DynamicResource Shadow_i1}"
                        BackgroundColor="{StaticResource cbg_i2}">
 
                     <ActivityIndicator IsRunning="True"/>
@@ -127,6 +132,7 @@
                         Text="{extensions:Translate TryAgain}"
                         TextColor="{StaticResource tcolor_i2}"
                         BackgroundColor="{StaticResource cbg_i3}"
+                        Shadow="{DynamicResource Shadow_i3}"
                         WidthRequest="163"
                         CornerRadius="16"/>
 

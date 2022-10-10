@@ -1,10 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using SmartMirror.Enums;
-using System.Windows.Input;
+﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 using Device = SmartMirror.Models.Device;
 
 namespace SmartMirror.ViewModels.Tabs;
