@@ -99,7 +99,6 @@
 		<Folder Include="Views\Tabs\" />
 		<Folder Include="Resources\DataTemplateSelectors\" />
 		<Folder Include="ViewModels\Tabs\" />
-		<Folder Include="Resources\DataTemplates\" />
 		<Folder Include="Extensions\" />
 		<Folder Include="Resources\Strings\" />
 		<Folder Include="Services\Mock\" />
@@ -132,6 +131,9 @@
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\ScenariosTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\ScenarioTemplate.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\ErrorDialog.xaml">
