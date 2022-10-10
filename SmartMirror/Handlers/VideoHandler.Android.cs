@@ -1,6 +1,5 @@
 ﻿using Microsoft.Maui.Handlers;
 using SmartMirror.Controls;
-using SmartMirror.Helpers;
 using SmartMirror.Platforms.Android.Controls;
 
 namespace SmartMirror.Handlers
@@ -18,7 +17,7 @@ namespace SmartMirror.Handlers
 
         protected override void DisconnectHandler(MauiVideoPlayer platformView)
         {
-            platformView.Dispose();
+            platformView?.Dispose();
 
             base.DisconnectHandler(platformView);
         }
@@ -32,17 +31,17 @@ namespace SmartMirror.Handlers
             handler.PlatformView?.TryUpdateSource();
         }
 
-        public static void MapPlayRequested(VideoHandler handler, Video video, object? args)
+        public static void MapPlayRequested(VideoHandler handler, Video video, object args)
         {
             handler.PlatformView?.PlayRequested();
         }
 
-        public static void MapPauseRequested(VideoHandler handler, Video video, object? args)
+        public static void MapPauseRequested(VideoHandler handler, Video video, object args)
         {
             handler.PlatformView?.PauseRequested();
         }
 
-        public static void MapStopRequested(VideoHandler handler, Video video, object? args)
+        public static void MapStopRequested(VideoHandler handler, Video video, object args)
         {
             handler.PlatformView?.StopRequested();
         }

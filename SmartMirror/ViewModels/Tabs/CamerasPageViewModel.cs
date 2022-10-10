@@ -125,7 +125,7 @@ public class CamerasPageViewModel : BaseTabViewModel
 
             var camera = SelectedCamera is null
                 ? Cameras.FirstOrDefault()
-                : Cameras.FirstOrDefault(x => x.Id == SelectedCamera.Id);
+                : Cameras.FirstOrDefault(x => x.Id == SelectedCamera.Id) ?? Cameras.FirstOrDefault();
 
             SelectCamera(camera);
         }

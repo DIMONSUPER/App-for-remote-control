@@ -30,9 +30,13 @@ namespace SmartMirror.Platforms.Android.Controls
         {
             if (disposing)
             {
-                _videoView.Prepared -= OnVideoViewPrepared;
-                _videoView.Dispose();
-                _videoView = null;
+                if (_videoView is not null)
+                {
+                    _videoView.Prepared -= OnVideoViewPrepared;
+                    _videoView.Dispose();
+                }
+                
+                _videoView = null; 
                 _video = null;
             }
 
@@ -53,8 +57,7 @@ namespace SmartMirror.Platforms.Android.Controls
             {
                 if (!string.IsNullOrWhiteSpace(_video.Source))
                 {
-
-                    _videoView.SetVideoURI(Uri.Parse(_video.Source));
+                    _videoView?.SetVideoURI(Uri.Parse(_video.Source));
 
                     hasSetSource = true;
                 }
@@ -69,33 +72,33 @@ namespace SmartMirror.Platforms.Android.Controls
                 {
                     _videoController.LoadingState = EVideoLoadingState.Preparing;
                     
-                    _videoView.Start();
+                    _videoView?.Start();
                 }
             }
             else
             {
                 _videoController.LoadingState = EVideoLoadingState.Unprepared;
 
-                _videoView.StopPlayback();
-                _videoView.Resume();
+                _videoView?.StopPlayback();
+                _videoView?.Resume();
             }
         }
 
         public void PlayRequested()
         {
-            _videoView.Start();
+            _videoView?.Start();
         }
 
         public void PauseRequested()
         {
-            _videoView.Pause();
+            _videoView?.Pause();
         }
 
         public void StopRequested()
         {
-            _videoView.StopPlayback();
+            _videoView?.StopPlayback();
 
-            _videoView.Resume();
+            _videoView?.Resume();
         }
 
         #endregion
@@ -106,7 +109,7 @@ namespace SmartMirror.Platforms.Android.Controls
         {
             RemoveViews(0, ChildCount);
 
-            if (_videoView != null)
+            if (_videoView is not null)
             {
                 _videoView.Prepared -= OnVideoViewPrepared;
                 _videoView.Dispose();

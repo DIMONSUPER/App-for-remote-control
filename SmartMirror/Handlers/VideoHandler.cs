@@ -10,12 +10,12 @@ namespace SmartMirror.Handlers
 
         #region -- Public properties --
 
-        public static IPropertyMapper<Video, VideoHandler> PropertyMapper = new PropertyMapper<Video, VideoHandler>(ViewMapper)
+        public static IPropertyMapper<Video, VideoHandler> PropertyMapper { get; set; } = new PropertyMapper<Video, VideoHandler>(ViewMapper)
         {
             [nameof(Video.Source)] = MapSource,
         };
 
-        public static CommandMapper<Video, VideoHandler> CommandMapper = new(ViewCommandMapper)
+        public static CommandMapper<Video, VideoHandler> CommandMapper { get; set; } = new(ViewCommandMapper)
         {
             [nameof(Video.PlayRequested)] = MapPlayRequested,
             [nameof(Video.PauseRequested)] = MapPauseRequested,
