@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<DataTemplate
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:bindables="clr-namespace:SmartMirror.Models.BindableModels"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    x:DataType="bindables:CameraBindableModel"
+    x:Class="SmartMirror.Resources.DataTemplates.CameraTemplate">
+    
+    <Grid>
+
+        <Grid.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="{Binding .}"/>
+        </Grid.GestureRecognizers>
+
+        <Border
+            Margin="0, 0, 0, 15"
+            Padding="18, 12"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 9"
+            BackgroundColor="Transparent">
+
+            <Border.Triggers>
+
+                <DataTrigger TargetType="Border" Binding="{Binding IsConnected}" Value="True">
+                    <Setter TargetName="cameraStatusLabel" Property="Label.Text" Value="{extensions:Translate On}"/>
+                    <Setter TargetName="cameraStatusLabel" Property="Label.TextColor" Value="{DynamicResource tcolor_i4}"/>
+                </DataTrigger>
+
+                <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                    <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i11}"/>
+                    <Setter Property="Shadow" Value="{StaticResource Shadow_i2}"/>
+                    <Setter TargetName="cameraNameLabel" Property="Label.TextColor" Value="{DynamicResource cbg_i12}"/>
+                    <Setter TargetName="cameraStatusLabel" Property="Label.TextColor" Value="{DynamicResource tcolor_i7}"/>
+                </DataTrigger>
+
+            </Border.Triggers>
+
+            <StackLayout Orientation="Horizontal">
+
+                <Label 
+                    Style="{DynamicResource tstyle_i11}"
+                    MaxLines="1"
+                    MaximumWidthRequest="265"
+                    LineBreakMode="TailTruncation"
+                    Text="{Binding Name}"    
+                    x:Name="cameraNameLabel"/>
+
+                <Label 
+                    Style="{DynamicResource tstyle_i6}"
+                    HorizontalOptions="EndAndExpand"
+                    Text="{extensions:Translate Off}"
+                    x:Name="cameraStatusLabel"/>
+
+                <Image 
+                    Margin="6, 0, 0, 0"
+                    WidthRequest="24"
+                    HeightRequest="24"
+                    Source="{Binding IsConnected, Converter={xct:BoolToObjectConverter TrueObject='video_fill', FalseObject='video_off_fill_light'}}">
+
+                    <Image.Triggers>
+                        <DataTrigger TargetType="Image" Binding="{Binding IsSelected}" Value="True">
+                            <Setter Property="Source" Value="{Binding IsConnected,
+                                Converter={xct:BoolToObjectConverter TrueObject='video_fill_dark', FalseObject='video_off_fill'}}"/>
+                        </DataTrigger>
+                    </Image.Triggers>
+
+                </Image>
+
+            </StackLayout>
+
+        </Border>
+                                
+    </Grid>
+    
+</DataTemplate>
