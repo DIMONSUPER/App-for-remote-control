@@ -39,6 +39,8 @@
 		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#989898"/>-->
 	</ItemGroup>
 	<ItemGroup>
+		<None Remove="Platforms\Android\Resources\drawable\scrollbar_thumb.xml" />
+		<None Remove="Platforms\Android\Resources\drawable\scrollbar_track.xml" />
 		<None Remove="Prism.DryIoc.Maui" />
 		<None Remove="Prism.Maui" />
 		<None Remove="Views\" />
@@ -123,6 +125,12 @@
 		<MauiXaml Update="Controls\CustomTabView.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\NotificationHeaderTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\NotificationTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\ErrorDialog.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
@@ -160,6 +168,9 @@
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\TemporaryDialog.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Controls\CustomSwitch.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 	</ItemGroup>

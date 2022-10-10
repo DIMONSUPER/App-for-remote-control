@@ -19,7 +19,7 @@ public class CustomTabbedPage : TabbedPage
         propertyName: nameof(TabBarHeight),
         returnType: typeof(double),
         declaringType: typeof(CustomTabbedPage),
-        defaultValue: 113d);
+        defaultValue: 93d);
 
     public double TabBarHeight
     {
@@ -137,7 +137,7 @@ public class CustomTabbedPage : TabbedPage
         var border = new Border
         {
             HorizontalOptions = LayoutOptions.Center,
-            Margin = new(0, 36, 0, 0),
+            Margin = new(0, 16, 0, 0),
             StrokeThickness = BorderWidth,
             StrokeShape = new RoundRectangle() { CornerRadius = BorderRadius },
             Stroke = BorderColor,

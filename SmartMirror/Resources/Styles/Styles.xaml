@@ -2,11 +2,15 @@
 <?xaml-comp compile="true" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:converters="clr-namespace:SmartMirror.Converters"
                     xmlns:maui="http://schemas.microsoft.com/dotnet/2021/maui"
-                    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+                    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                    xmlns:controls="clr-namespace:SmartMirror.Controls">
 
     <!-- CONVERTERS -->
     <xct:IsStringNotNullOrWhiteSpaceConverter x:Key="notNullOrEmtpyConverter"/>
+    <converters:TimeToTimeAgoConverter x:Key="timeToTimeAgoConverter" />
+    <converters:TimeToDaysOfWeekConverter x:Key="timeToDaysOfWeekConverter" />
 
     <!-- TEXT SIZE -->
     <x:Double x:Key="tsize_i1">36</x:Double> <!-- 48px -->
@@ -121,11 +125,30 @@
 
     <!-- SHADOWS --> 
     <Shadow 
-        Offset="0, 12"
-        Opacity="0.24"
-        Radius="18"
-        Brush="{DynamicResource tcolor_i2}"
+        Offset="0,2"
+        Opacity="0.4"
+        Radius="9"
+        Brush="{x:DynamicResource cbg_i10}"
         x:Key="Shadow_i1"/>
+
+    <Shadow 
+        Offset="0,16"
+        Opacity="0.15"
+        Radius="9"
+        Brush="{x:DynamicResource cbg_i10}"
+        x:Key="Shadow_i2"/>
+
+    <!-- CUSTOM SWITCH -->
+    <Style TargetType="controls:CustomSwitch">
+        <Setter Property="WidthRequest" Value="42"/>
+        <Setter Property="HeightRequest" Value="24"/>
+        <Setter Property="ThumbSize" Value="18" />
+        <Setter Property="CornerRadius" Value="75" />
+        <Setter Property="OnColor" Value="{StaticResource cbg_i6}" />
+        <Setter Property="OffColor" Value="{StaticResource cbg_i7}" />
+        <Setter Property="OnThumbColor" Value="{StaticResource cbg_i1}" />                       
+        <Setter Property="OffThumbColor" Value="{StaticResource cbg_i1}" />                           
+    </Style>
 
 </ResourceDictionary>
 

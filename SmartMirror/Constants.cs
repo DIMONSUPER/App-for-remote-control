@@ -1,5 +1,4 @@
-﻿using System;
-namespace SmartMirror
+﻿namespace SmartMirror
 {
     public static class Constants
     {
@@ -22,6 +21,12 @@ namespace SmartMirror
             public const string APP_ID = "1019974506077405184fac3b";
             public const string APP_KEY = "gvnepmdyciqbb4ob7rocp6nnxt9elxmf";
             public const string KEY_ID = "K.1019974506438115328";
+        }
+
+        public static class Formats
+        {
+            public const string DATE_FORMAT = "MM.dd.yyyy";
+            public const string TIME_FORMAT = "hh:mm";
         }
     }
 }

@@ -3,20 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:extensions="clr-namespace:SmartMirror.Extensions"
              xmlns:models="clr-namespace:SmartMirror.Models"
+             xmlns:controls="clr-namespace:SmartMirror.Controls"
              x:Class="SmartMirror.Resources.DataTemplates.SelectedRoomDevicesTemplate"
              x:DataType="models:FanDevice">
 
-    <Grid Margin="0,0,30,0">
+    <Grid Margin="0,0,24,0">
 
         <!-- BORDER -->
         <Border Stroke="{x:DynamicResource cbg_i4}"
                 StrokeThickness="1"
-                StrokeShape="RoundRectangle 12"
+                StrokeShape="RoundRectangle 9"
                 BackgroundColor="{StaticResource cbg_i2}"
-                Padding="16,12">
+                Margin="0,0,0,3"
+                Shadow="{x:StaticResource Shadow_i1}"
+                Padding="24,18">
 
-            <VerticalStackLayout Spacing="50"
-                                 Margin="0,0,0,18">
+            <VerticalStackLayout Spacing="52"
+                                 Margin="0,0,0,0">
 
                 <!-- ICON -->
                 <Frame BackgroundColor="{StaticResource cbg_i1}"
@@ -76,9 +79,9 @@
 
         <!-- SWITCH -->
         <HorizontalStackLayout Spacing="0"
-                               Margin="16"
                                VerticalOptions="Start"
-                               HorizontalOptions="End">
+                               HorizontalOptions="End"
+                               Padding="24,18">
 
             <Label Text="{extensions:Translate Unlocked}"
                    Margin="0,0,12,0"
@@ -88,7 +91,7 @@
 
                 <Label.Triggers>
 
-                    <DataTrigger Binding="{Binding Source={x:Reference switch}, Path=IsToggled}" Value="false" TargetType="Label">
+                    <DataTrigger Binding="{Binding Source={x:Reference switch}, Path=IsToggled}" Value="False" TargetType="Label">
                         <Setter Property="Text" Value="{extensions:Translate Closed}"/>
                         <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
                     </DataTrigger>
@@ -97,12 +100,10 @@
 
             </Label>
 
-            <Switch x:Name="switch"
-                    IsToggled="{Binding Status}"
-                    WidthRequest="42"
-                    HeightRequest="24"
-                    VerticalOptions="Start"
-                    HorizontalOptions="End"/>
+            <controls:CustomSwitch x:Name="switch"
+                                   IsToggled="{Binding Status}"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="End"/>
 
         </HorizontalStackLayout>
 

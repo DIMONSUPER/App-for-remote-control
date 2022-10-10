@@ -7,6 +7,7 @@ using SmartMirror.Services.Amazon;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Mock;
+using SmartMirror.Services.Notifications;
 using SmartMirror.Services.Rest;
 using SmartMirror.Services.Settings;
 using SmartMirror.ViewModels;
@@ -36,7 +37,7 @@ public static class MauiProgram
                 fonts.AddFont("Inter-SemiBold-600.ttf", "InterSemiBold");
                 fonts.AddFont("Inter-Bold-700.ttf", "InterBold");
             });
-
+            
         return builder.Build();
     }
 
@@ -63,6 +64,7 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
         containerRegistry.RegisterSingleton<IAqaraService, AqaraService>();
+        containerRegistry.RegisterSingleton<INotificationsService, NotificationsService>();
     }
 
     private static void OnAppStart(INavigationService navigationService)

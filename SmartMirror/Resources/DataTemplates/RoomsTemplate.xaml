@@ -6,7 +6,7 @@
               x:DataType="{x:Type models:RoomBindableModel}">
 
     <Grid WidthRequest="280"
-          HeightRequest="157">
+          MaximumHeightRequest="157">
 
         <Grid.GestureRecognizers>
 
@@ -16,37 +16,38 @@
         </Grid.GestureRecognizers>
 
         <!-- BORDER AND ICON -->
-        <Border Stroke="White"
+        <Border Stroke="{x:DynamicResource cbg_i4}"
                 StrokeThickness="1"
                 StrokeShape="RoundRectangle 9"
-                BackgroundColor="#3A3A3C"
-                Padding="24">
+                BackgroundColor="{x:DynamicResource cbg_i2}"
+                Shadow="{x:StaticResource Shadow_i1}"
+                Margin="0,0,0,3"
+                Padding="30, 24">
+
+            <!-- NAME AND DESCRIPTION -->
+            <Grid RowSpacing="0"
+                  VerticalOptions="End"
+                  HorizontalOptions="Fill"
+                  RowDefinitions="Auto">
+
+                <VerticalStackLayout HorizontalOptions="Start"
+                                     VerticalOptions="End"
+                                     Spacing="0">
+
+                    <Label Text="{Binding Name}"
+                           VerticalTextAlignment="End"
+                           Style="{x:DynamicResource tstyle_i11}"/>
+
+                    <Label Text="{Binding Description}"
+                           Margin="0,6,0,0"
+                           VerticalTextAlignment="End"
+                           Style="{x:DynamicResource tstyle_i5}"/>
+
+                </VerticalStackLayout>
+
+            </Grid>
 
         </Border>
-
-        <!-- NAME AND DESCRIPTION -->
-        <Grid RowSpacing="0"
-              VerticalOptions="End"
-              Margin="24"
-              HorizontalOptions="Fill"
-              RowDefinitions="Auto">
-
-            <VerticalStackLayout HorizontalOptions="Start"
-                                 VerticalOptions="End"
-                                 Spacing="0">
-
-                <Label Text="{Binding Name}"
-                       VerticalTextAlignment="End"
-                       Style="{x:DynamicResource tstyle_i11}"/>
-
-                <Label Text="{Binding Description}"
-                       Margin="0,6,0,0"
-                       VerticalTextAlignment="End"
-                       Style="{x:DynamicResource tstyle_i5}"/>
-
-            </VerticalStackLayout>
-
-        </Grid>
 
     </Grid>
 

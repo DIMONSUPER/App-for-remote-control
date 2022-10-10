@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartMirror.Controls.CustomSwitch"
+             x:Name="customSwitch">
+
+    <Frame x:Name="frame"
+           HasShadow="False"
+           CornerRadius="{Binding CornerRadius, Source={x:Reference customSwitch}}"
+           Padding="3,0">
+
+        <Ellipse x:Name="thumb"
+                 WidthRequest="{Binding ThumbSize, Source={x:Reference customSwitch}}"
+                 HeightRequest="{Binding ThumbSize, Source={x:Reference customSwitch}}"/>
+
+        <Frame.GestureRecognizers>
+            <TapGestureRecognizer Tapped="CustomSwitchToggled"/>
+        </Frame.GestureRecognizers>
+
+    </Frame>
+
+</ContentView>
+

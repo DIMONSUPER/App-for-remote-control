@@ -28,9 +28,10 @@
 
         <controls:CustomStateView.CompleteContent>
 
-            <ScrollView>
+            <Grid RowSpacing="0"
+                  RowDefinitions="0.5*, 0.5*">
 
-                <VerticalStackLayout Padding="0,20,0,0"
+                <VerticalStackLayout Margin="0,24,0,0"
                                      Spacing="0">
 
                     <!-- FAVORITE ACCESSORIES -->
@@ -47,7 +48,7 @@
                         <Border Stroke="White"
                                 Margin="12,0,0,0"
                                 StrokeThickness="1"
-                                StrokeShape="RoundRectangle 8"
+                                StrokeShape="RoundRectangle 9"
                                 BackgroundColor="{StaticResource cbg_i2}"
                                 WidthRequest="42"
                                 HeightRequest="42">
@@ -73,7 +74,7 @@
                     </StackLayout>
 
                     <!-- FAVORITE ACCESSORIES COLLECTION -->
-                    <ScrollView Margin="0,12,0,0"
+                    <ScrollView Margin="0,16,0,0"
                                 Orientation="Horizontal"
                                 HorizontalScrollBarVisibility="Never">
 
@@ -84,9 +85,16 @@
 
                     </ScrollView>
 
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="1"
+                                     Spacing="0"
+                                     VerticalOptions="CenterAndExpand"
+                                     Margin="0,0,0,30">
+
                     <!-- ROOMS -->
                     <HorizontalStackLayout HorizontalOptions="Start"
-                                           Margin="60,20,60,0"
+                                           Margin="60,0"
                                            Spacing="12">
 
                         <Label Text="{extensions:Translate Rooms}"
@@ -96,7 +104,7 @@
 
                         <Border Stroke="White"
                                 StrokeThickness="1"
-                                StrokeShape="RoundRectangle 8"
+                                StrokeShape="RoundRectangle 9"
                                 BackgroundColor="{StaticResource cbg_i2}"
                                 WidthRequest="42"
                                 HeightRequest="42">
@@ -111,7 +119,7 @@
                     </HorizontalStackLayout>
 
                     <!-- ROOMS COLLECTION -->
-                    <ScrollView Margin="0,12,0,0"
+                    <ScrollView Margin="0,16,0,0"
                                 Orientation="Horizontal"
                                 HorizontalScrollBarVisibility="Never">
 
@@ -124,7 +132,7 @@
 
                 </VerticalStackLayout>
 
-            </ScrollView>
+            </Grid>
 
         </controls:CustomStateView.CompleteContent>
 

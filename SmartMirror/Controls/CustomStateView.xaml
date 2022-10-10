@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:stateContanier="clr-namespace:SmartMirror.Controls.StateContainer"
              xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+             Background="{x:DynamicResource GrayGradientBrush}"
              x:Class="SmartMirror.Controls.CustomStateView"
              x:Name="stateContanier">
 
@@ -11,7 +12,8 @@
         <!-- COMPLETE STATE -->
         <stateContanier:StateCondition State="Complete">
 
-            <ContentView Content="{Binding CompleteContent, Source={x:Reference stateContanier}}"/>
+            <ContentView Background="{x:DynamicResource GrayGradientBrush}"
+                         Content="{Binding CompleteContent, Source={x:Reference stateContanier}}"/>
 
         </stateContanier:StateCondition>
 
@@ -57,6 +59,7 @@
                 </Frame>
 
                 <Label Margin="0,37,0,0"
+                       HorizontalTextAlignment="Center"
                        Style="{DynamicResource tstyle_i4}"
                        Text="{Binding LoadingTitle, Source={x:Reference stateContanier}}"/>
 
@@ -110,7 +113,7 @@
                        CornerRadius="11"
                        BackgroundColor="{StaticResource cbg_i2}">
 
-                   <ActivityIndicator IsRunning="True"/>
+                    <ActivityIndicator IsRunning="True"/>
 
                 </Frame>
 

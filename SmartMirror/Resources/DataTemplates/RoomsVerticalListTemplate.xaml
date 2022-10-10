@@ -5,51 +5,56 @@
              x:Class="SmartMirror.Resources.DataTemplates.RoomsVerticalListTemplate"
              x:DataType="{x:Type models:RoomBindableModel}">
 
-    <Frame Padding="12, 8"
-           IsClippedToBounds="True"
-           CornerRadius="6"
-           HasShadow="True"
-           BackgroundColor="Transparent">
+    <Grid>
 
-        <Frame.GestureRecognizers>
+        <Grid.GestureRecognizers>
             <TapGestureRecognizer Command="{Binding SelectedCommand}" CommandParameter="{Binding .}"/>
-        </Frame.GestureRecognizers>
+        </Grid.GestureRecognizers>
 
-        <Frame.Triggers>
-            <DataTrigger TargetType="Frame" Binding="{Binding IsSelected}" Value="True">
-                <Setter Property="BackgroundColor" Value="{x:DynamicResource cbg_i9}"/>
-            </DataTrigger>
-        </Frame.Triggers>
+        <Border Padding="18, 12"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 9"
+                Margin="0,0,0,17"
+                BackgroundColor="Transparent">
 
-        <Grid ColumnDefinitions="*, Auto, Auto"
-              ColumnSpacing="5">
+            <Border.Triggers>
+                <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                    <Setter Property="BackgroundColor" Value="{x:DynamicResource cbg_i9}"/>
+                    <Setter Property="Shadow" Value="{x:StaticResource Shadow_i2}"/>
+                </DataTrigger>
+            </Border.Triggers>
 
-            <Label Text="{Binding Name}"
-                   HorizontalOptions="Start"
-                   VerticalTextAlignment="Center"
-                   LineBreakMode="TailTruncation"
-                   Style="{x:DynamicResource tstyle_i11}">
+            <Grid ColumnDefinitions="*, Auto, Auto"
+                  ColumnSpacing="7">
 
-                <Label.Triggers>
-                    <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
-                        <Setter Property="TextColor" Value="{x:DynamicResource tcolor_i5}"/>
-                    </DataTrigger>
-                </Label.Triggers>
+                <Label Text="{Binding Name}"
+                       HorizontalOptions="Start"
+                       VerticalTextAlignment="Center"
+                       LineBreakMode="TailTruncation"
+                       Style="{x:DynamicResource tstyle_i11}">
 
-            </Label>
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                            <Setter Property="TextColor" Value="{x:DynamicResource tcolor_i5}"/>
+                        </DataTrigger>
+                    </Label.Triggers>
 
-            <Label Grid.Column="1"
-                   Text="{Binding Devices.Count}"
-                   VerticalTextAlignment="Center"
-                   Style="{x:DynamicResource tstyle_i7}"/>
+                </Label>
 
-            <Image Grid.Column="2"
-                   Source="devices"
-                   VerticalOptions="Center"/>
+                <Label Grid.Column="1"
+                       Text="{Binding Devices.Count}"
+                       VerticalTextAlignment="Center"
+                       Style="{x:DynamicResource tstyle_i7}"/>
 
-        </Grid>
+                <Image Grid.Column="2"
+                       Source="devices"
+                       VerticalOptions="Center"/>
 
-    </Frame>
+            </Grid>
+
+        </Border>
+
+    </Grid>
 
 </DataTemplate>
 

@@ -34,9 +34,9 @@ public class RoomsPageViewModel : BaseTabViewModel
         _mapperService = mapperService;
         _aqaraService = aqaraService;
         _dialogService = dialogService;
-        DataState = EPageState.Complete;
 
         IsAqaraLoginButtonVisible = !_aqaraService.IsAuthorized;
+        DataState = EPageState.Loading;
     }
 
     #region -- Public properties --
@@ -84,6 +84,15 @@ public class RoomsPageViewModel : BaseTabViewModel
         });
 
         Rooms = new(rooms);
+    }
+
+    public override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        await Task.Delay(1000);
+
+        DataState = EPageState.Complete;
     }
 
     #endregion
@@ -142,7 +151,8 @@ public class RoomsPageViewModel : BaseTabViewModel
     private Task OnRoomTappedCommandAsync(RoomBindableModel room)
     {
         return NavigationService.CreateBuilder()
-            .AddSegment<RoomPageViewModel>()
+            .AddSegment<RoomPageViewModel>(false)
+            .AddParameter(KnownNavigationParameters.Animated, true)
             .AddParameter(nameof(Rooms), Rooms)
             .AddParameter(nameof(RoomBindableModel), room)
             .NavigateAsync();

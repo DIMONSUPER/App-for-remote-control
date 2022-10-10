@@ -1,37 +1,56 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<tabs:BaseTabContentPage xmlns:tabs="clr-namespace:SmartMirror.Views.Tabs"
-                         xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                         xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
-                         xmlns:extensions="clr-namespace:SmartMirror.Extensions"
-                         xmlns:controls="clr-namespace:SmartMirror.Controls"
-                         x:Class="SmartMirror.Views.Tabs.NotificationsPage"
-                         Title="Notifications"
-                         x:DataType="vm:NotificationsPageViewModel">
+<tabs:BaseTabContentPage
+    xmlns:tabs="clr-namespace:SmartMirror.Views.Tabs"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:models="clr-namespace:SmartMirror.Models"
+    xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+    x:Class="SmartMirror.Views.Tabs.NotificationsPage"
+    Title="Notifications"
+    x:DataType="vm:NotificationsPageViewModel">
 
-    <tabs:BaseTabContentPage.Content>
+    <tabs:BaseTabContentPage.Resources>
 
-        <controls:CustomStateView State="{Binding DataState}"
-                                  EmptyTitle="{extensions:Translate NoNotificationsYet}"
-                                  EmptyStateImage="notifications_off"
-                                  LoadingTitle="{extensions:Translate Notifications}">
+        <ResourceDictionary>
 
-            <controls:CustomStateView.CompleteContent>
+            <templates:NotificationTemplate x:Key="notificationTemplate"/>
+            <templates:NotificationHeaderTemplate x:Key="notificationHeaderTemplate"/>
 
-                <Grid>
+        </ResourceDictionary>
 
-                    <Label Text="{Binding Title}"
-                           VerticalOptions="Center"
-                           TextColor="White"
-                           FontSize="28"
-                           HorizontalOptions="Center" />
+    </tabs:BaseTabContentPage.Resources>
 
-                </Grid>
+    <controls:CustomStateView
+        State="{Binding DataState}"
+        EmptyTitle="{extensions:Translate NoNotificationsYet}"
+        EmptyStateImage="notifications_off"
+        LoadingTitle="{extensions:Translate Notifications}">
 
-            </controls:CustomStateView.CompleteContent>
+        <controls:CustomStateView.CompleteContent>
 
-        </controls:CustomStateView>
+            <ListView
+                HandlerChanged="OnListViewHandlerChanged"
+                ItemsSource="{Binding Notifications}"
+                IsPullToRefreshEnabled="True"
+                IsRefreshing="{Binding IsNotificationsRefreshing}"
+                RefreshCommand="{Binding RefreshNotificationsCommand}"
+                IsGroupingEnabled="True"
+                SelectionMode="None"
+                ItemTemplate="{StaticResource notificationTemplate}"
+                GroupHeaderTemplate="{StaticResource notificationHeaderTemplate}"
+                HasUnevenRows="true"
+                SeparatorVisibility="None"
+                VerticalScrollBarVisibility="Always"
+                HorizontalScrollBarVisibility="Never"
+                HorizontalOptions="Center"
+                WidthRequest="660"
+                Margin="50, 24, 0, 0"/>
 
-    </tabs:BaseTabContentPage.Content>
+        </controls:CustomStateView.CompleteContent>
+
+    </controls:CustomStateView>
 
 </tabs:BaseTabContentPage>
