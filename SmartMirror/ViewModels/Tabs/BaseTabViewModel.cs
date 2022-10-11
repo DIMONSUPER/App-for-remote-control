@@ -70,14 +70,5 @@ public class BaseTabViewModel : BindableBase, IInitialize, IInitializeAsync, IPa
     }
 
     #endregion
-
-    #region -- Public helpers --
-
-    public async virtual void OnBackButtonPressed()
-    {
-        await Toast.Make("Needs two taps to exit the app.").Show();
-    }
-
-    #endregion
 }
 

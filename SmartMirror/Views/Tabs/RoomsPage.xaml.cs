@@ -6,10 +6,4 @@ public partial class RoomsPage : BaseTabContentPage
 	{
 		InitializeComponent();
 	}
-
-    protected override bool OnBackButtonPressed()
-    {
-        return true;
-        //return base.OnBackButtonPressed();
-    }
 }

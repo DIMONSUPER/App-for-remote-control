@@ -59,9 +59,11 @@
 
         #region -- Public helpers --
 
-        public virtual Task OnBackButtonPressed()
+        public virtual bool OnBackButtonPressed()
         {
-            return NavigationService.GoBackAsync();
+            NavigationService.GoBackAsync();
+
+            return true;
         }
 
         #endregion

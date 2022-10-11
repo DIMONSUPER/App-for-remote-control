@@ -9,21 +9,5 @@ public class BaseTabContentPage : ContentPage
     {
         NavigationPage.SetHasNavigationBar(this, false);
     }
-
-    #region -- Overrides --
-
-    protected override bool OnBackButtonPressed()
-    {
-        bool result = true;
-
-        if (BindingContext is BaseTabViewModel viewModel)
-        {
-            //viewModel.OnBackButtonPressed();
-        }
-
-        return result;
-    }
-
-    #endregion
 }
 
