@@ -120,9 +120,9 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
             var tasksResult = await Task.WhenAll(tasks);
 
-            var isSuccessLoadScenarios = !tasksResult.Any(row => row == false);
+            var isScenariosLoaded = tasksResult.All(row => row == true);
 
-            if (isSuccessLoadScenarios)
+            if (isScenariosLoaded)
             {
                 DataState = EPageState.Complete;
             }
