@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frame xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:prismmaui="clr-namespace:Prism.Services.Xaml;assembly=Prism.Maui"
+       xmlns:prism="http://prismlibrary.com"
+       xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
+       Padding="0"
+       HasShadow="False"
+       BackgroundColor="Transparent"
+       prismmaui:DialogLayout.UseMask="True"
+       prismmaui:DialogLayout.MaskStyle="{DynamicResource DialogMaskBoxViewStyle_i1}"
+       prismmaui:DialogLayout.CloseOnBackgroundTapped="False"
+       x:Class="SmartMirror.Views.Dialogs.TemporaryDialog"
+       x:DataType="{x:Type vm:TemporaryDialogViewModel}">
+
+    <Border HorizontalOptions="Center"
+            VerticalOptions="Center"
+            StrokeThickness="0.75"
+            StrokeShape="RoundRectangle 9"
+            Stroke="{DynamicResource tcolor_i1}"
+            BackgroundColor="{StaticResource cbg_i2}">
+
+        <VerticalStackLayout Padding="30, 24"
+                             Spacing="6">
+
+            <Label Text="Enter the code which was sent to botheadworks@gmail.com"
+                   Style="{DynamicResource tstyle_i11}"/>
+
+            <Entry Text="{Binding CodeText}"
+                   Placeholder="Code"
+                   BackgroundColor="White"
+                   FontSize="24"
+                   TextColor="Black">
+
+                <Entry.Behaviors>
+                    <prism:EventToCommandBehavior EventName="Completed" Command="{Binding CloseCommand}"/>
+                </Entry.Behaviors>
+
+            </Entry>
+
+        </VerticalStackLayout>
+
+    </Border>
+
+</Frame>
