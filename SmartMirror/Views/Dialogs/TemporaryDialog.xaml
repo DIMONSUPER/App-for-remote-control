@@ -13,22 +13,33 @@
        x:Class="SmartMirror.Views.Dialogs.TemporaryDialog"
        x:DataType="{x:Type vm:TemporaryDialogViewModel}">
 
-    <StackLayout VerticalOptions="Center"
-                 HorizontalOptions="Center"
-                 BackgroundColor="Red">
+    <Border HorizontalOptions="Center"
+            VerticalOptions="Center"
+            StrokeThickness="0.75"
+            StrokeShape="RoundRectangle 9"
+            Stroke="{DynamicResource tcolor_i1}"
+            BackgroundColor="{StaticResource cbg_i2}">
 
-       <Entry Text="{Binding CodeText}"
-              Placeholder="Enter code here"
-              BackgroundColor="White"
-              FontSize="24"
-              TextColor="Black">
+        <VerticalStackLayout Padding="30, 24"
+                             Spacing="6">
 
-            <Entry.Behaviors>
-                <prism:EventToCommandBehavior EventName="Completed" Command="{Binding CloseCommand}"/>
-            </Entry.Behaviors>
+            <Label Text="Enter the code which was sent to botheadworks@gmail.com"
+                   Style="{DynamicResource tstyle_i11}"/>
 
-        </Entry>
+            <Entry Text="{Binding CodeText}"
+                   Placeholder="Code"
+                   BackgroundColor="White"
+                   FontSize="24"
+                   TextColor="Black">
 
-    </StackLayout>
+                <Entry.Behaviors>
+                    <prism:EventToCommandBehavior EventName="Completed" Command="{Binding CloseCommand}"/>
+                </Entry.Behaviors>
+
+            </Entry>
+
+        </VerticalStackLayout>
+
+    </Border>
 
 </Frame>

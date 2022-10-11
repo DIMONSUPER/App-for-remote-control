@@ -76,6 +76,27 @@ public class AqaraService : IAqaraService
         });
     }
 
+    public Task<AOResult<BaseAqaraResponse>> GetAllDevicesAsync()
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var data = new
+            {
+                pageNum = 1,
+                pageSize = 100,
+            };
+
+            var response = await MakeRequestAsync<BaseAqaraResponse<object>>("query.device.info", data);
+
+            if (response?.Result is null)
+            {
+                onFailure("response or result is null");
+            }
+
+            return response as BaseAqaraResponse;
+        });
+    }
+
     #endregion
 
     #region -- Private helpers --
@@ -93,6 +114,11 @@ public class AqaraService : IAqaraService
             { "Sign", GetSign(time) },
         };
 
+        if (!string.IsNullOrWhiteSpace(_settingsManager.AqaraAccessSettings.AccessToken))
+        {
+            headers.Add("Accesstoken", _settingsManager.AqaraAccessSettings.AccessToken);
+        }
+
         return _restService.PostAsync<T>(Constants.Aqara.API_URL, new
         {
             intent = intent,
@@ -100,13 +126,13 @@ public class AqaraService : IAqaraService
         }, headers);
     }
 
-    private string GetSign(string time, string accessToken = "")
+    private string GetSign(string time)
     {
         var builder = new StringBuilder();
 
-        if (!string.IsNullOrWhiteSpace(accessToken))
+        if (!string.IsNullOrWhiteSpace(_settingsManager.AqaraAccessSettings.AccessToken))
         {
-            builder.Append($"Accesstoken={accessToken}&");
+            builder.Append($"Accesstoken={_settingsManager.AqaraAccessSettings.AccessToken}&");
         }
 
         builder.Append($"Appid={Constants.Aqara.APP_ID}");

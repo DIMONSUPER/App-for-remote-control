@@ -73,11 +73,9 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override async void Initialize(INavigationParameters parameters)
+    public override async void OnAppearing()
     {
-        base.Initialize(parameters);
-
-        FavoriteAccessories = new(_smartHomeMockService.GetDevices());
+        base.OnAppearing();
 
         var rooms = await _mapperService.MapRangeAsync<RoomBindableModel>(_smartHomeMockService.GetRooms(), (m, vm) =>
         {
@@ -85,15 +83,8 @@ public class RoomsPageViewModel : BaseTabViewModel
         });
 
         Rooms = new(rooms);
-    }
 
-    public override async void OnAppearing()
-    {
-        base.OnAppearing();
-
-        await Task.Delay(1000);
-
-        DataState = EPageState.Complete;
+        await UpdateFavoriteAccessoriesAsync();
     }
 
     #endregion
@@ -137,6 +128,10 @@ public class RoomsPageViewModel : BaseTabViewModel
                 {
                     { Constants.DialogsParameterKeys.TITLE, "Success!" }
                 });
+
+                DataState = EPageState.Loading;
+
+                await UpdateFavoriteAccessoriesAsync();
             }
             else
             {
@@ -146,6 +141,34 @@ public class RoomsPageViewModel : BaseTabViewModel
                     { Constants.DialogsParameterKeys.DESCRIPTION, loginWithCodeResponse.Message }
                 });
             }
+        }
+    }
+
+    private async Task UpdateFavoriteAccessoriesAsync()
+    {
+        if (_aqaraService.IsAuthorized)
+        {
+            //TODO: replace mock device models with real models
+            var devices = await _aqaraService.GetAllDevicesAsync();
+
+            if (devices.IsSuccess)
+            {
+                //FavoriteAccessories = new(devices.Result);
+            }
+        }
+        else
+        {
+            FavoriteAccessories = new(_smartHomeMockService.GetDevices());
+        }
+
+        //TODO: Add internet check
+        if (FavoriteAccessories is not null && FavoriteAccessories.Any())
+        {
+            DataState = EPageState.Complete;
+        }
+        else
+        {
+            DataState = EPageState.Empty;
         }
     }
 
