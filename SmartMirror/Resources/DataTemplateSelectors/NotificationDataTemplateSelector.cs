@@ -7,8 +7,8 @@ namespace SmartMirror.Resources.DataTemplateSelectors
     {
         private readonly Dictionary<string, DataTemplate> _dataTemplatesDictionary = new()
         {
-            { typeof(NotificationGroupItem).ToString(), new NotificationTemplate() },
-            { typeof(NotificationGroupTitle).ToString(), new NotificationHeaderTemplate() },
+            { typeof(NotificationGroupItemBindableModel).ToString(), new NotificationTemplate() },
+            { typeof(NotificationGroupTitleBindableModel).ToString(), new NotificationHeaderTemplate() },
         };
 
         #region -- Overrides --

@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:bindableModels="clr-namespace:SmartMirror.Models.BindableModels"
-    x:DataType="bindableModels:NotificationGroupItem"
+    x:DataType="bindableModels:NotificationGroupItemBindableModel"
     x:Class="SmartMirror.Resources.DataTemplates.NotificationTemplate">
 
     <Border

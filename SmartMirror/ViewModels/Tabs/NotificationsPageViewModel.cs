@@ -113,15 +113,15 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
                     if (lastTitleGroup != titleGroup)
                     {
-                        notificationGroped.Add(new NotificationGroupTitle()
+                        notificationGroped.Add(new NotificationGroupTitleBindableModel()
                         {
-                            Name = titleGroup,
+                            Title = titleGroup,
                         });
 
                         lastTitleGroup = titleGroup;
                     }
 
-                    notificationGroped.Add(await _mapperService.MapAsync<NotificationGroupItem>(notificafication));
+                    notificationGroped.Add(await _mapperService.MapAsync<NotificationGroupItemBindableModel>(notificafication));
                 }
 
                 Notifications = new(notificationGroped);

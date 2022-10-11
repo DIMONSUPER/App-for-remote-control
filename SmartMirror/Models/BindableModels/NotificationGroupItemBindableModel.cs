@@ -2,7 +2,7 @@
 
 namespace SmartMirror.Models.BindableModels
 {
-    public class NotificationGroupItem : INotificationGroupItemModel
+    public class NotificationGroupItemBindableModel : INotificationGroupItemModel
     {
         public int Id { get; set; }
 
