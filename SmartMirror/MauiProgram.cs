@@ -7,9 +7,11 @@ using SmartMirror.Platforms.Android.Renderers;
 //using SmartMirror.Services.Amazon;
 using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Mapper;
+using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Notifications;
 using SmartMirror.Services.Rest;
+using SmartMirror.Services.Settings;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.ViewModels;
 using SmartMirror.ViewModels.Dialogs;
@@ -54,7 +56,8 @@ public static class MauiProgram
 
     private static void RegisterTypes(IContainerRegistry containerRegistry)
     {
-        containerRegistry.RegisterDialog<ErrorDialog, ErrorDialogViewModel>();
+        containerRegistry.RegisterDialog<ErrorDialog>();
+        containerRegistry.RegisterDialog<TemporaryDialog>();
 
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
         containerRegistry.RegisterForNavigation<MainTabbedPage>();
@@ -66,10 +69,12 @@ public static class MauiProgram
         containerRegistry.RegisterForNavigation<ScenarioPage>();
 
         containerRegistry.RegisterSingleton<IMapperService, MapperService>();
+        containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
         containerRegistry.RegisterSingleton<IRestService, RestService>();
         //TODO: Remove when companion app is ready
         //containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
+        containerRegistry.RegisterSingleton<IAqaraService, AqaraService>();
         containerRegistry.RegisterSingleton<INotificationsService, NotificationsService>();
         containerRegistry.RegisterSingleton<ICamerasService, CamerasService>();
         containerRegistry.RegisterSingleton<IScenariosService, ScenariosService>();

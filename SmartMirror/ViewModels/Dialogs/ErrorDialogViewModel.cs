@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
-    public class ErrorDialogViewModel : BindableBase, IDialogAware
+    public class ErrorDialogViewModel : BaseDialogViewModel
     {
         public ErrorDialogViewModel()
         {
@@ -30,17 +30,9 @@ namespace SmartMirror.ViewModels.Dialogs
 
         #endregion
 
-        #region -- IDialogAware implementation --
+        #region -- Overrides --
 
-        public DialogCloseEvent RequestClose { get; set; }
-
-        public bool CanCloseDialog() => true;
-
-        public void OnDialogClosed()
-        {
-        }
-
-        public void OnDialogOpened(IDialogParameters parameters)
+        public override void OnDialogOpened(IDialogParameters parameters)
         {
             if (parameters.TryGetValue(Constants.DialogsParameterKeys.TITLE, out string title))
             {

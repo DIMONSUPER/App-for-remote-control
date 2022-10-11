@@ -76,6 +76,9 @@
 		<None Remove="Controls\StateContainer\" />
 		<None Remove="Services\Mapper\" />
 		<None Remove="AutoMapper" />
+		<None Remove="Services\Settings\" />
+		<None Remove="Services\Aqara\" />
+		<None Remove="Models\Aqara\" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Prism.DryIoc.Maui" Version="8.1.273-pre" />
@@ -110,6 +113,9 @@
 		<Folder Include="Platforms\Android\Resources\drawable\" />
 		<Folder Include="Controls\StateContainer\" />
 		<Folder Include="Services\Mapper\" />
+		<Folder Include="Services\Settings\" />
+		<Folder Include="Services\Aqara\" />
+		<Folder Include="Models\Aqara\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Controls\BadgeTitleView.xaml">
@@ -177,6 +183,9 @@
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\SelectedRoomDevicesTemplate.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\TemporaryDialog.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Controls\CustomSwitch.xaml">

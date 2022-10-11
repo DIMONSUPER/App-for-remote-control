@@ -35,12 +35,28 @@
                 <VerticalStackLayout Margin="0,24,0,0"
                                      Spacing="0">
 
-                    <!-- FAVORITE ACCESSORIES -->
-                    <controls:BadgeTitleView HorizontalOptions="Start"
-                                             Margin="60, 0"
-                                             Spacing="12"
-                                             Title="{extensions:Translate FavoriteAccessories}"
-                                             Number="{Binding FavoriteAccessories.Count}"/>
+                    <StackLayout Orientation="Horizontal">
+
+                        <!-- FAVORITE ACCESSORIES -->
+                        <controls:BadgeTitleView HorizontalOptions="Start"
+                                                 Margin="60, 0"
+                                                 Spacing="12"
+                                                 Title="{extensions:Translate FavoriteAccessories}"
+                                                 Number="{Binding FavoriteAccessories.Count}"/>
+
+                        <!-- TODO: remove when doesn't needed -->
+                        <Button Text="Login with Aqara"
+                                VerticalOptions="Center"
+                                HorizontalOptions="EndAndExpand"
+                                BackgroundColor="#E5FFFFFF"
+                                TextColor="Black"
+                                FontSize="{x:DynamicResource tsize_i2}"
+                                FontFamily="InterBold"
+                                Margin="40,0"
+                                IsVisible="{Binding IsAqaraLoginButtonVisible}"
+                                Command="{Binding AqaraLoginButtonTappedCommand}"/>
+
+                    </StackLayout>
 
                     <!-- FAVORITE ACCESSORIES COLLECTION -->
                     <ScrollView Margin="0,16,0,0"
