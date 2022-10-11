@@ -21,8 +21,9 @@ public class CamerasPageViewModel : BaseTabViewModel
     {
         _mapperService = mapperService;
         _camerasService = camerasService;
-        
-        DataState = EPageState.Complete;
+
+        Title = "Cameras";
+        DataState = EPageState.Loading;
     }
 
     #region -- Public properties --
@@ -66,7 +67,10 @@ public class CamerasPageViewModel : BaseTabViewModel
     public ICommand SelectCameraCommand => _selectCameraCommand ??= SingleExecutionCommand.FromFunc<CameraBindableModel>(OnSelectCameraCommandAsync);
     
     private ICommand _refreshCamerasCommand;
-    public ICommand RefreshCamerasCommand => _refreshCamerasCommand ??= SingleExecutionCommand.FromFunc(OnRefreshCamerasCommandAsync);     
+    public ICommand RefreshCamerasCommand => _refreshCamerasCommand ??= SingleExecutionCommand.FromFunc(OnRefreshCamerasCommandAsync);
+
+    private ICommand _tryAgainCommand;
+    public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
 
     #endregion
 
@@ -93,9 +97,40 @@ public class CamerasPageViewModel : BaseTabViewModel
         VideoAction = EVideoAction.Pause;
     }
 
+    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    {
+        if (e.NetworkAccess == NetworkAccess.Internet)
+        {
+            await RefreshCamerasAsync();
+
+            if (IsSelected)
+            {
+                VideoAction = EVideoAction.Play;
+            }
+        }
+        else
+        {
+            if (IsSelected)
+            {
+                VideoAction = EVideoAction.Pause;
+            }
+
+            DataState = EPageState.NoInternet;
+        }
+    }
+
     #endregion
 
     #region -- Private helpers --
+
+    private async Task OnTryAgainCommandAsync()
+    {
+        DataState = EPageState.NoInternetLoader;
+
+        await Task.Delay(1000);
+
+        await RefreshCamerasAsync();
+    }
 
     private Task OnSelectCameraCommandAsync(CameraBindableModel selectedCamera)
     {
@@ -107,27 +142,41 @@ public class CamerasPageViewModel : BaseTabViewModel
     private async Task OnRefreshCamerasCommandAsync() 
     {
         await RefreshCamerasAsync();
+
         IsCamerasRefreshing = false;
     }
 
     private async Task RefreshCamerasAsync()
     {
-        var resultOfGettingCameras = await _camerasService.GetCamerasAsync();
-
-        if (resultOfGettingCameras.IsSuccess)
+        if (IsInternetConnected)
         {
-            var cameras = await _mapperService.MapRangeAsync<CameraBindableModel>(resultOfGettingCameras.Result, (m, vm) =>
+            var resultOfGettingCameras = await _camerasService.GetCamerasAsync();
+
+            if (resultOfGettingCameras.IsSuccess)
             {
-                vm.TapCommand = SelectCameraCommand;
-            });
+                var cameras = await _mapperService.MapRangeAsync<CameraBindableModel>(resultOfGettingCameras.Result, (m, vm) =>
+                {
+                    vm.TapCommand = SelectCameraCommand;
+                });
 
-            Cameras = new(cameras);
+                Cameras = new(cameras);
 
-            var camera = SelectedCamera is null
-                ? Cameras.FirstOrDefault()
-                : Cameras.FirstOrDefault(x => x.Id == SelectedCamera.Id) ?? Cameras.FirstOrDefault();
+                var camera = SelectedCamera is null
+                    ? Cameras.FirstOrDefault()
+                    : Cameras.FirstOrDefault(x => x.Id == SelectedCamera.Id) ?? Cameras.FirstOrDefault();
 
-            SelectCamera(camera);
+                SelectCamera(camera);
+
+                DataState = EPageState.Complete;
+            }
+            else if(!IsInternetConnected)
+            {
+                DataState = EPageState.NoInternet;
+            }
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
         }
     }
 

@@ -25,6 +25,7 @@
 
     <controls:CustomStateView
         State="{Binding DataState}"
+        TryAgainCommand="{Binding TryAgainCommand}"
         EmptyTitle="{extensions:Translate NoNotificationsYet}"
         EmptyStateImage="notifications_off"
         LoadingTitle="{extensions:Translate Notifications}">

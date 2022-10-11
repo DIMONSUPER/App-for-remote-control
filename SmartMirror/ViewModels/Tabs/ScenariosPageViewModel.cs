@@ -49,6 +49,9 @@ public class ScenariosPageViewModel : BaseTabViewModel
     private ICommand _goToScenarioDetailsCommand;
     public ICommand GoToScenarioDetailsCommand => _goToScenarioDetailsCommand ??= SingleExecutionCommand.FromFunc<ScenarioBindableModel>(OnGoToScenarioDetailsCommandAsync);
 
+    private ICommand _tryAgainCommand;
+    public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
+
     #endregion
 
     #region -- Overrides --
@@ -60,9 +63,30 @@ public class ScenariosPageViewModel : BaseTabViewModel
         await LoadScenariosAsync();
     }
 
+    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    {
+        if (e.NetworkAccess == NetworkAccess.Internet)
+        {
+            await LoadScenariosAsync();
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
+    }
+
     #endregion
 
     #region -- Private helpers --
+
+    private async Task OnTryAgainCommandAsync()
+    {
+        DataState = EPageState.NoInternetLoader;
+
+        await Task.Delay(1000);
+
+        await LoadScenariosAsync();
+    }
 
     private async Task OnChangeActiveStatusCommandAsync(ScenarioBindableModel scenario)
     {
@@ -85,6 +109,34 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     private async Task LoadScenariosAsync()
     {
+        if (IsInternetConnected)
+        {
+            List<Task<bool>> tasks = new();
+
+            tasks.Add(Task.Run(() => LoadFavoritesScenariosAsync()));
+            tasks.Add(Task.Run(() => LoadAllScenariosAsync()));
+
+            var tasksResult = await Task.WhenAll(tasks);
+
+            var isScenariosLoaded = tasksResult.All(row => row == true);
+
+            if (isScenariosLoaded)
+            {
+                DataState = EPageState.Complete;
+            }
+            else if(!IsInternetConnected)
+            {
+                DataState = EPageState.NoInternet;
+            }
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
+    }
+
+    private async Task<bool> LoadFavoritesScenariosAsync()
+    {
         var resultOfGettingFavoriteScenarios = await _scenariosService.GetFavoriteScenariosAsync();
 
         if (resultOfGettingFavoriteScenarios.IsSuccess)
@@ -94,6 +146,11 @@ public class ScenariosPageViewModel : BaseTabViewModel
             FavoriteScenarios = new(favoriteScenarios);
         }
 
+        return resultOfGettingFavoriteScenarios.IsSuccess;
+    }
+
+    private async Task<bool> LoadAllScenariosAsync()
+    {
         var resultOfGettingAllScenarios = await _scenariosService.GetAllScenariosAsync();
 
         if (resultOfGettingAllScenarios.IsSuccess)
@@ -103,7 +160,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
             Scenarios = new(allScenarios);
         }
 
-        DataState = EPageState.Complete;
+        return resultOfGettingAllScenarios.IsSuccess;
     }
 
     private Task<IEnumerable<ScenarioBindableModel>> GetBindableModelWithSetCommandsAsync(IEnumerable<ScenarioModel> scenarios)
