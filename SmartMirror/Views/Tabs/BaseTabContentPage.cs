@@ -1,4 +1,7 @@
-﻿namespace SmartMirror.Views.Tabs;
+﻿using CommunityToolkit.Maui.Alerts;
+using SmartMirror.ViewModels.Tabs;
+
+namespace SmartMirror.Views.Tabs;
 
 public class BaseTabContentPage : ContentPage
 {
@@ -11,7 +14,14 @@ public class BaseTabContentPage : ContentPage
 
     protected override bool OnBackButtonPressed()
     {
-        return true;
+        bool result = true;
+
+        if (BindingContext is BaseTabViewModel viewModel)
+        {
+            //viewModel.OnBackButtonPressed();
+        }
+
+        return result;
     }
 
     #endregion

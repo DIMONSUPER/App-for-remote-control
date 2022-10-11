@@ -13,6 +13,8 @@ public partial class MainTabbedPage : CustomTabbedPage
 
     protected override bool OnBackButtonPressed()
     {
+        var c = CurrentPage as NavigationPage;
+        c.CurrentPage.SendBackButtonPressed();
         return true;
     }
 

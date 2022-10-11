@@ -1,4 +1,6 @@
-﻿namespace SmartMirror.Views;
+﻿using SmartMirror.ViewModels;
+
+namespace SmartMirror.Views;
 
 public class BaseContentPage : ContentPage
 {
@@ -11,7 +13,19 @@ public class BaseContentPage : ContentPage
 
     protected override bool OnBackButtonPressed()
     {
-        return true;
+        bool result;
+
+        if (BindingContext is BaseViewModel viewModel)
+        {
+            result = true;
+            viewModel.OnBackButtonPressed();
+        }
+        else
+        {
+            result = base.OnBackButtonPressed();
+        }
+
+        return result;
     }
 
     #endregion
