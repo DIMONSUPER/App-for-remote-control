@@ -1,17 +1,40 @@
-﻿using SmartMirror.Interfaces;
-
-namespace SmartMirror.Models.BindableModels
+﻿namespace SmartMirror.Models.BindableModels
 {
-    public class NotificationGroupItemBindableModel : INotificationGroupItemModel
+    public class NotificationGroupItemBindableModel : BindableBase
     {
-        public int Id { get; set; }
+        private int _id;
+        public int Id
+        {
+            get => _id;
+            set => SetProperty(ref _id, value);
+        }
 
-        public string Name { get; set; }
+        private string _name;
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
 
-        public string Type { get; set; }
+        private string _type;
+        public string Type
+        {
+            get => _type;
+            set => SetProperty(ref _type, value);
+        }
 
-        public string Status { get; set; }
+        private string _status;
+        public string Status
+        {
+            get => _status;
+            set => SetProperty(ref _status, value);
+        }
 
-        public DateTime LastActivityTime { get; set; }
+        private DateTime _lastActivityTime;
+        public DateTime LastActivityTime
+        {
+            get => _lastActivityTime;
+            set => SetProperty(ref _lastActivityTime, value);
+        }
     }
 }

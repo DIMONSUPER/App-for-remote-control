@@ -34,8 +34,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     #region -- Public properties --
 
-    private ObservableCollection<INotificationGroupItemModel> _notifications;
-    public ObservableCollection<INotificationGroupItemModel> Notifications
+    private ObservableCollection<object> _notifications;
+    public ObservableCollection<object> Notifications
     {
         get => _notifications;
         set => SetProperty(ref _notifications, value);
@@ -105,7 +105,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
                 var allNotifications = resultOfGettingNotifications.Result.OrderByDescending(row => row.LastActivityTime);
 
                 var lastTitleGroup = string.Empty;
-                var notificationGroped = new ObservableCollection<INotificationGroupItemModel>();
+                var notificationGrouped = new ObservableCollection<object>();
 
                 foreach (var notificafication in allNotifications)
                 {
@@ -113,7 +113,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
                     if (lastTitleGroup != titleGroup)
                     {
-                        notificationGroped.Add(new NotificationGroupTitleBindableModel()
+                        notificationGrouped.Add(new NotificationGroupTitleBindableModel()
                         {
                             Title = titleGroup,
                         });
@@ -121,10 +121,10 @@ public class NotificationsPageViewModel : BaseTabViewModel
                         lastTitleGroup = titleGroup;
                     }
 
-                    notificationGroped.Add(await _mapperService.MapAsync<NotificationGroupItemBindableModel>(notificafication));
+                    notificationGrouped.Add(await _mapperService.MapAsync<NotificationGroupItemBindableModel>(notificafication));
                 }
 
-                Notifications = new(notificationGroped);
+                Notifications = new(notificationGrouped);
 
                 DataState = EPageState.Complete;
             }
@@ -141,4 +141,3 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     #endregion
 }
-

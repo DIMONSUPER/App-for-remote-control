@@ -11,6 +11,7 @@
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:video="clr-namespace:SmartMirror.Controls"
     Title="{extensions:Translate Cameras}"
     x:DataType="vm:CamerasPageViewModel"
@@ -19,8 +20,18 @@
     <tabs:BaseTabContentPage.Resources>
 
         <templates:CameraTemplate x:Key="cameraTemplate"/>
-        
+
     </tabs:BaseTabContentPage.Resources>
+
+    <tabs:BaseTabContentPage.Triggers>
+
+        <EventTrigger Event="Appearing">
+
+            <triggerActions:ScrollCollectionViewEventAction CollectionView="{x:Reference collectionViewCameras}"/>
+
+        </EventTrigger>
+
+    </tabs:BaseTabContentPage.Triggers>
 
     <controls:CustomStateView 
         State="{Binding DataState}"

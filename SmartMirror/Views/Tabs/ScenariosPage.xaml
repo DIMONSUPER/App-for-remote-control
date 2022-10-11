@@ -7,6 +7,7 @@
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     x:Class="SmartMirror.Views.Tabs.ScenariosPage"
     Title="Scenarios"
     x:DataType="vm:ScenariosPageViewModel">
@@ -22,6 +23,17 @@
         </ResourceDictionary>
 
     </tabs:BaseTabContentPage.Resources>
+
+    <tabs:BaseTabContentPage.Triggers>
+
+        <EventTrigger Event="Appearing">
+
+            <triggerActions:ScrollScrollViewEventAction ScrollView="{x:Reference scrollViewCompleteState}"/>
+            <triggerActions:ScrollScrollViewEventAction ScrollView="{x:Reference scrollViewFavoriteScenarios}"/>
+
+        </EventTrigger>
+
+    </tabs:BaseTabContentPage.Triggers>
 
     <controls:CustomStateView
         State="{Binding DataState}"

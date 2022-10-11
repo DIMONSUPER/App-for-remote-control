@@ -6,6 +6,7 @@
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:models="clr-namespace:SmartMirror.Models"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:templatesSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
@@ -20,6 +21,16 @@
         </ResourceDictionary>
 
     </tabs:BaseTabContentPage.Resources>
+
+    <tabs:BaseTabContentPage.Triggers>
+
+        <EventTrigger Event="Appearing">
+
+            <triggerActions:ScrollScrollViewEventAction ScrollView="{x:Reference scrollViewNotifications}"/>
+
+        </EventTrigger>
+
+    </tabs:BaseTabContentPage.Triggers>
 
     <controls:CustomStateView
         State="{Binding DataState}"
@@ -46,9 +57,7 @@
 
                     <VerticalStackLayout
                         BindableLayout.ItemsSource="{Binding Notifications}"
-                        BindableLayout.ItemTemplateSelector="{StaticResource notificationTemplateSelector}">
-
-                    </VerticalStackLayout>
+                        BindableLayout.ItemTemplateSelector="{StaticResource notificationTemplateSelector}"/>
 
                 </ScrollView>
 

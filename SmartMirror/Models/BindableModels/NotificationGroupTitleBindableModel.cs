@@ -1,9 +1,12 @@
-﻿using SmartMirror.Interfaces;
-
-namespace SmartMirror.Models.BindableModels
+﻿namespace SmartMirror.Models.BindableModels
 {
-    public class NotificationGroupTitleBindableModel : INotificationGroupItemModel
+    public class NotificationGroupTitleBindableModel : BindableBase
     {
-        public string Title { get; set; }
+        private string _title;
+        public string Title
+        {
+            get => _title;
+            set => SetProperty(ref _title, value);
+        }
     }
 }

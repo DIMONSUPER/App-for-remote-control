@@ -6,6 +6,7 @@
                          xmlns:extensions="clr-namespace:SmartMirror.Extensions"
                          xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
                          xmlns:controls="clr-namespace:SmartMirror.Controls"
+                         xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
                          x:Class="SmartMirror.Views.Tabs.RoomsPage"
                          Title="{extensions:Translate Rooms}"
                          x:DataType="vm:RoomsPageViewModel">
@@ -21,6 +22,17 @@
         </ResourceDictionary>
 
     </tabs:BaseTabContentPage.Resources>
+
+    <tabs:BaseTabContentPage.Triggers>
+
+        <EventTrigger Event="Appearing">
+
+            <triggerActions:ScrollScrollViewEventAction ScrollView="{x:Reference scrollViewFavoriteAccessories}"/>
+            <triggerActions:ScrollScrollViewEventAction ScrollView="{x:Reference scrollViewRooms}"/>
+
+        </EventTrigger>
+
+    </tabs:BaseTabContentPage.Triggers>
 
     <controls:CustomStateView State="{Binding DataState}"
                               TryAgainCommand="{Binding TryAgainCommand}"
