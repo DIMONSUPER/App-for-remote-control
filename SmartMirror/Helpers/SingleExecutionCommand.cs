@@ -56,7 +56,7 @@ public class SingleExecutionCommand : ICommand
 
     internal static ICommand FromFunc(ICommand goBackCommand)
     {
-        throw new NotImplementedException();
+        return goBackCommand;
     }
 
     #region -- ICommand implementation --

@@ -27,6 +27,7 @@
         {
             public const string DATE_FORMAT = "MM.dd.yyyy";
             public const string TIME_FORMAT = "hh:mm";
+            public const string TIME_FORMAT_2 = "{}{0:HH:mm}";
         }
     }
 }

@@ -39,7 +39,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
     }
 
     private ICommand _refreshNotificationsCommand;
-    public ICommand RefreshNotificationsCommand => _refreshNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnRefreshNotificationsCommandAsync);
+    public ICommand RefreshNotificationsCommand => _refreshNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnRefreshNotificationsCommandAsync, delayMillisec: 0);
 
     #endregion
 
@@ -69,7 +69,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
         if (resultOfGettingNotifications.IsSuccess)
         {
-            Notifications = new(resultOfGettingNotifications.Result);
+            Notifications ??= new(resultOfGettingNotifications.Result);
         }
     }
 

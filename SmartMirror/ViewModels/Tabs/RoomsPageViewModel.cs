@@ -1,10 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using SmartMirror.Enums;
-using System.Windows.Input;
+﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 using Device = SmartMirror.Models.Device;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Views.Dialogs;
@@ -29,13 +29,14 @@ public class RoomsPageViewModel : BaseTabViewModel
         IDialogService dialogService)
         : base(navigationService)
     {
-        Title = "Rooms";
         _smartHomeMockService = smartHomeMockService;
         _mapperService = mapperService;
         _aqaraService = aqaraService;
         _dialogService = dialogService;
 
         IsAqaraLoginButtonVisible = !_aqaraService.IsAuthorized;
+
+        Title = "Rooms";
         DataState = EPageState.Loading;
     }
 

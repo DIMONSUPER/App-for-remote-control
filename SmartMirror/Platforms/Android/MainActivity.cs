@@ -1,8 +1,8 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Content.PM;
-using Com.Amazon.Identity.Auth.Device.Api.Authorization;
-using Com.Amazon.Identity.Auth.Device.Api.Workflow;
+//using Com.Amazon.Identity.Auth.Device.Api.Authorization;
+//using Com.Amazon.Identity.Auth.Device.Api.Workflow;
 using Org.Json;
 
 namespace SmartMirror;
@@ -20,7 +20,8 @@ namespace SmartMirror;
     Categories = new string[] { Intent.CategoryLauncher })]
 public class MainActivity : MauiAppCompatActivity
 {
-    private RequestContext _currentRequestContext;
+    //TODO: Remove when companion app is ready
+    /*private RequestContext _currentRequestContext;
 
     #region -- Overrides --
 
@@ -58,6 +59,6 @@ public class MainActivity : MauiAppCompatActivity
             .Build());
     }
 
-    #endregion
+    #endregion*/
 }
 

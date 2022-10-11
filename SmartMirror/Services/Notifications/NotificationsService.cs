@@ -1,8 +1,6 @@
-﻿using Com.Amazon.Identity.Auth.Device.Endpoint;
-using SmartMirror.Helpers;
+﻿using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Services.Mock;
-using System.Collections.Generic;
 
 namespace SmartMirror.Services.Notifications
 {
@@ -30,6 +28,10 @@ namespace SmartMirror.Services.Notifications
                     notificationsGroupedByDay = notifications
                         .GroupBy(row => row.LastActivityTime.ToString(Constants.Formats.DATE_FORMAT))
                         .Select(group => new NotificationsGroupedByDayModel(group.Key, group.ToList()));
+                }
+                else
+                {
+                    onFailure("notifications is null");
                 }
 
                 return Task.FromResult(notificationsGroupedByDay);
