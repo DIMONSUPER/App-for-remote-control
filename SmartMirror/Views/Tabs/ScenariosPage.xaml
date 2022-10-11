@@ -34,7 +34,8 @@
             <ScrollView
                 VerticalScrollBarVisibility="Never"
                 HorizontalScrollBarVisibility="Never"
-                Padding="0, 0, 0, 30">
+                Padding="0, 0, 0, 30"
+                x:Name="scrollViewCompleteState">
 
                 <VerticalStackLayout
                     Padding="0, 42, 0, 0"
@@ -52,7 +53,8 @@
                     <ScrollView
                         Margin="0, 16, 0, 0"
                         Orientation="Horizontal"
-                        HorizontalScrollBarVisibility="Never">
+                        HorizontalScrollBarVisibility="Never"
+                        x:Name="scrollViewFavoriteScenarios">
 
                         <HorizontalStackLayout
                             Spacing="30"

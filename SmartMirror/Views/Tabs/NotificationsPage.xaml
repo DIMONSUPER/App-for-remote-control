@@ -40,9 +40,9 @@
                 <ScrollView
                     Padding="50, 0, 0, 0"
                     WidthRequest="660"
-                    HeightRequest="{Binding Height, Source={x:Reference refreshView}}"
                     VerticalScrollBarVisibility="Always"
-                    HorizontalScrollBarVisibility="Always">
+                    HorizontalScrollBarVisibility="Always"
+                    x:Name="scrollViewNotifications">
 
                     <VerticalStackLayout
                         BindableLayout.ItemsSource="{Binding Notifications}"

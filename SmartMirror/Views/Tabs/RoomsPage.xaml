@@ -45,7 +45,8 @@
                     <!-- FAVORITE ACCESSORIES COLLECTION -->
                     <ScrollView Margin="0,16,0,0"
                                 Orientation="Horizontal"
-                                HorizontalScrollBarVisibility="Never">
+                                HorizontalScrollBarVisibility="Never"
+                                x:Name="scrollViewFavoriteAccessories">
 
                         <HorizontalStackLayout Spacing="30"
                                                Padding="60,0"
@@ -71,7 +72,8 @@
                     <!-- ROOMS COLLECTION -->
                     <ScrollView Margin="0,16,0,0"
                                 Orientation="Horizontal"
-                                HorizontalScrollBarVisibility="Never">
+                                HorizontalScrollBarVisibility="Never"
+                                x:Name="scrollViewRooms">
 
                         <HorizontalStackLayout Spacing="30"
                                                Padding="60,0"

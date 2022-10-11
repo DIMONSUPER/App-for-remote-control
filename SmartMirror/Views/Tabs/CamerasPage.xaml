@@ -44,7 +44,8 @@
                     <CollectionView 
                         ItemSizingStrategy="MeasureFirstItem"
                         ItemsSource="{Binding Cameras}"
-                        ItemTemplate="{DynamicResource cameraTemplate}"/>
+                        ItemTemplate="{DynamicResource cameraTemplate}"
+                        x:Name="collectionViewCameras"/>
 
                 </RefreshView>
 
