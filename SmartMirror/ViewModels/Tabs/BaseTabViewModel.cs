@@ -2,7 +2,7 @@ using SmartMirror.Enums;
 
 namespace SmartMirror.ViewModels.Tabs;
 
-public class BaseTabViewModel : BindableBase, IInitialize, IInitializeAsync, IPageLifecycleAware
+public class BaseTabViewModel : BindableBase, IInitialize, IInitializeAsync, IPageLifecycleAware, IDestructible
 {
     public BaseTabViewModel(INavigationService navigationService)
     {
@@ -10,8 +10,6 @@ public class BaseTabViewModel : BindableBase, IInitialize, IInitializeAsync, IPa
 
         Connectivity.ConnectivityChanged += OnConnectivityChanged;
     }
-
-    ~BaseTabViewModel() => Connectivity.ConnectivityChanged -= OnConnectivityChanged;
 
     #region -- Protected properties --
 
@@ -44,8 +42,6 @@ public class BaseTabViewModel : BindableBase, IInitialize, IInitializeAsync, IPa
         set => SetProperty(ref _dataState, value);
     }
 
-    public event EventHandler<ConnectivityChangedEventArgs> ConnectivityChanged;
-
     #endregion
 
     #region -- IInitialize implementation --
@@ -77,11 +73,19 @@ public class BaseTabViewModel : BindableBase, IInitialize, IInitializeAsync, IPa
 
     #endregion
 
-    #region -- Private helpers --
+    #region -- IDestructible implementation --
 
-    private void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    public virtual void Destroy()
     {
-        ConnectivityChanged?.Invoke(sender, e);
+        Connectivity.ConnectivityChanged -= OnConnectivityChanged;
+    }
+
+    #endregion
+
+    #region -- Protected helpers --
+
+    protected virtual void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    {
     }
 
     #endregion

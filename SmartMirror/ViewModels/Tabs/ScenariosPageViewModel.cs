@@ -25,8 +25,6 @@ public class ScenariosPageViewModel : BaseTabViewModel
         
         Title = "Scenarios";
         DataState = EPageState.Loading;
-
-        ConnectivityChanged += OnConnectivityChanged;
     }
 
     #region -- Public properties --
@@ -65,11 +63,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
         await LoadScenariosAsync();
     }
 
-    #endregion
-
-    #region -- Private helpers --
-
-    private async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
@@ -80,6 +74,10 @@ public class ScenariosPageViewModel : BaseTabViewModel
             DataState = EPageState.NoInternet;
         }
     }
+
+    #endregion
+
+    #region -- Private helpers --
 
     private async Task OnTryAgainCommandAsync()
     {

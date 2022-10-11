@@ -25,8 +25,6 @@ public class RoomsPageViewModel : BaseTabViewModel
 
         Title = "Rooms";
         DataState = EPageState.Loading;
-
-        ConnectivityChanged += OnConnectivityChanged;
     }
 
     #region -- Public properties --
@@ -62,11 +60,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         await LoadRoomsAsync();
     }
 
-    #endregion
-
-    #region -- Private helpers --
-
-    private async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
@@ -77,6 +71,10 @@ public class RoomsPageViewModel : BaseTabViewModel
             DataState = EPageState.NoInternet;
         }
     }
+
+    #endregion
+
+    #region -- Private helpers --
 
     private async Task OnTryAgainCommandAsync()
     {

@@ -24,8 +24,6 @@ public class CamerasPageViewModel : BaseTabViewModel
 
         Title = "Cameras";
         DataState = EPageState.Loading;
-
-        ConnectivityChanged += OnConnectivityChanged;
     }
 
     #region -- Public properties --
@@ -99,11 +97,7 @@ public class CamerasPageViewModel : BaseTabViewModel
         VideoAction = EVideoAction.Pause;
     }
 
-    #endregion
-
-    #region -- Private helpers --
-
-    private async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
@@ -124,6 +118,10 @@ public class CamerasPageViewModel : BaseTabViewModel
             DataState = EPageState.NoInternet;
         }
     }
+
+    #endregion
+
+    #region -- Private helpers --
 
     private async Task OnTryAgainCommandAsync()
     {
