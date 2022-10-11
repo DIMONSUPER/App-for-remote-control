@@ -48,6 +48,9 @@ public class RoomsPageViewModel : BaseTabViewModel
     private ICommand _aqaraLoginButtonTappedCommand;
     public ICommand AqaraLoginButtonTappedCommand => _aqaraLoginButtonTappedCommand ??= SingleExecutionCommand.FromFunc(OnAqaraLoginButtonTappedAsync);
 
+    private ICommand _tryAgainCommand;
+    public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
+
     private bool _isAqaraLoginButtonVisible;
     public bool IsAqaraLoginButtonVisible
     {
@@ -73,18 +76,23 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override async void OnAppearing()
+    public override async Task InitializeAsync(INavigationParameters parameters)
     {
-        base.OnAppearing();
+        await base.InitializeAsync(parameters);
 
-        var rooms = await _mapperService.MapRangeAsync<RoomBindableModel>(_smartHomeMockService.GetRooms(), (m, vm) =>
+        await LoadRoomsAsync();
+    }
+
+    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    {
+        if (e.NetworkAccess == NetworkAccess.Internet)
         {
-            vm.TappedCommand = RoomTappedCommand;
-        });
-
-        Rooms = new(rooms);
-
-        await UpdateFavoriteAccessoriesAsync();
+            await LoadRoomsAsync();
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
     }
 
     #endregion
@@ -131,7 +139,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
                 DataState = EPageState.Loading;
 
-                await UpdateFavoriteAccessoriesAsync();
+                await LoadRoomsAsync();
             }
             else
             {
@@ -144,31 +152,33 @@ public class RoomsPageViewModel : BaseTabViewModel
         }
     }
 
-    private async Task UpdateFavoriteAccessoriesAsync()
+    private async Task OnTryAgainCommandAsync()
     {
-        if (_aqaraService.IsAuthorized)
-        {
-            //TODO: replace mock device models with real models
-            var devices = await _aqaraService.GetAllDevicesAsync();
+        DataState = EPageState.NoInternetLoader;
 
-            if (devices.IsSuccess)
-            {
-                //FavoriteAccessories = new(devices.Result);
-            }
-        }
-        else
+        await Task.Delay(1000);
+
+        await LoadRoomsAsync();
+    }
+
+    private async Task LoadRoomsAsync()
+    {
+        if (IsInternetConnected)
         {
             FavoriteAccessories = new(_smartHomeMockService.GetDevices());
-        }
 
-        //TODO: Add internet check
-        if (FavoriteAccessories is not null && FavoriteAccessories.Any())
-        {
+            var rooms = await _mapperService.MapRangeAsync<RoomBindableModel>(_smartHomeMockService.GetRooms(), (m, vm) =>
+            {
+                vm.TappedCommand = RoomTappedCommand;
+            });
+
+            Rooms = new(rooms);
+
             DataState = EPageState.Complete;
         }
         else
         {
-            DataState = EPageState.Empty;
+            DataState = EPageState.NoInternet;
         }
     }
 

@@ -23,6 +23,7 @@
     </tabs:BaseTabContentPage.Resources>
 
     <controls:CustomStateView State="{Binding DataState}"
+                              TryAgainCommand="{Binding TryAgainCommand}"
                               EmptyTitle="{extensions:Translate NoAccessoriesYet}"
                               LoadingTitle="{extensions:Translate Rooms}">
 

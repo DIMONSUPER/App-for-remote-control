@@ -24,6 +24,7 @@
 
     <controls:CustomStateView 
         State="{Binding DataState}"
+        TryAgainCommand="{Binding TryAgainCommand}"
         EmptyTitle="{extensions:Translate NoCamerasYet}"
         EmptyStateImage="video_off"
         LoadingTitle="{extensions:Translate Cameras}">

@@ -1,4 +1,5 @@
 ﻿using SmartMirror.Views.Tabs;
+using System.Windows.Input;
 
 namespace SmartMirror.Controls;
 
@@ -64,6 +65,17 @@ public partial class CustomStateView : ContentView
     {
         get => (string)GetValue(EmptyStateImageProperty);
         set => SetValue(EmptyStateImageProperty, value);
+    }
+
+    public static readonly BindableProperty TryAgainCommandProperty = BindableProperty.Create(
+        propertyName: nameof(TryAgainCommand),
+        returnType: typeof(ICommand),
+        declaringType: typeof(CustomStateView));
+
+    public ICommand TryAgainCommand
+    {
+        get => (ICommand)GetValue(TryAgainCommandProperty);
+        set => SetValue(TryAgainCommandProperty, value);
     }
 
     #endregion

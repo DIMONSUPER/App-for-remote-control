@@ -1,18 +1,21 @@
 using SmartMirror.Enums;
-using Prism.Navigation;
 
 namespace SmartMirror.ViewModels.Tabs;
 
-public class BaseTabViewModel : BindableBase, IInitialize, IInitializeAsync, IPageLifecycleAware
+public class BaseTabViewModel : BindableBase, IInitialize, IInitializeAsync, IPageLifecycleAware, IDestructible
 {
     public BaseTabViewModel(INavigationService navigationService)
     {
         NavigationService = navigationService;
+
+        Connectivity.ConnectivityChanged += OnConnectivityChanged;
     }
 
     #region -- Protected properties --
 
     protected INavigationService NavigationService { get; }
+
+    protected bool IsInternetConnected => Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
 
     #endregion
 
@@ -65,6 +68,23 @@ public class BaseTabViewModel : BindableBase, IInitialize, IInitializeAsync, IPa
     }
 
     public virtual void OnDisappearing()
+    {
+    }
+
+    #endregion
+
+    #region -- IDestructible implementation --
+
+    public virtual void Destroy()
+    {
+        Connectivity.ConnectivityChanged -= OnConnectivityChanged;
+    }
+
+    #endregion
+
+    #region -- Protected helpers --
+
+    protected virtual void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
     }
 
