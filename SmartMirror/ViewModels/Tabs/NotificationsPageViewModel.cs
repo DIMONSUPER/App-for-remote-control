@@ -14,7 +14,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
 {
     private readonly INotificationsService _notificationsService;
     private readonly IDialogService _dialogService;
-    private readonly IStringLocalizer<Strings> _localizer;
 
     public NotificationsPageViewModel(
         INotificationsService notificationsService,
@@ -24,8 +23,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         _notificationsService = notificationsService;
         _dialogService = dialogService;
-
-        _localizer = MauiApplication.Current.Services.GetService<IStringLocalizer<Strings>>();
 
         Title = "Notifications";
         DataState = EPageState.Loading;
@@ -83,8 +80,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
         {
             var dialogParameters = new DialogParameters()
             {
-                { Constants.DialogsParameterKeys.TITLE, (string)_localizer["SomethingWentWrong"] },
-                { Constants.DialogsParameterKeys.DESCRIPTION, (string)_localizer["NoInternetConnection"] },
+                { Constants.DialogsParameterKeys.TITLE, Strings.SomethingWentWrong },
+                { Constants.DialogsParameterKeys.DESCRIPTION, Strings.NoInternetConnection },
             };
 
             await _dialogService.ShowDialogAsync(nameof(ErrorDialog), dialogParameters);
