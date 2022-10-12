@@ -1,6 +1,8 @@
-﻿namespace SmartMirror.Models.BindableModels
+﻿using SmartMirror.Interfaces;
+
+namespace SmartMirror.Models.BindableModels
 {
-    public class NotificationGroupItemBindableModel : BindableBase
+    public class NotificationGroupItemBindableModel : BindableBase, INotificationGroupItemModel
     {
         private int _id;
         public int Id

@@ -27,7 +27,7 @@
 
         <EventTrigger Event="Appearing">
 
-            <triggerActions:ScrollCollectionViewEventAction CollectionView="{x:Reference collectionViewCameras}"/>
+            <triggerActions:ScrollToStartEventAction View="{x:Reference collectionViewCameras}"/>
 
         </EventTrigger>
 

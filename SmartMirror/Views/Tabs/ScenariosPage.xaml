@@ -28,8 +28,8 @@
 
         <EventTrigger Event="Appearing">
 
-            <triggerActions:ScrollScrollViewEventAction ScrollView="{x:Reference scrollViewCompleteState}"/>
-            <triggerActions:ScrollScrollViewEventAction ScrollView="{x:Reference scrollViewFavoriteScenarios}"/>
+            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewCompleteState}"/>
+            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewFavoriteScenarios}"/>
 
         </EventTrigger>
 

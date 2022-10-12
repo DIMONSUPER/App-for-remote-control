@@ -27,8 +27,8 @@
 
         <EventTrigger Event="Appearing">
 
-            <triggerActions:ScrollScrollViewEventAction ScrollView="{x:Reference scrollViewFavoriteAccessories}"/>
-            <triggerActions:ScrollScrollViewEventAction ScrollView="{x:Reference scrollViewRooms}"/>
+            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewFavoriteAccessories}"/>
+            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewRooms}"/>
 
         </EventTrigger>
 

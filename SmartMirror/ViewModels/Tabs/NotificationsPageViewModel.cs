@@ -34,8 +34,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     #region -- Public properties --
 
-    private ObservableCollection<object> _notifications;
-    public ObservableCollection<object> Notifications
+    private ObservableCollection<INotificationGroupItemModel> _notifications;
+    public ObservableCollection<INotificationGroupItemModel> Notifications
     {
         get => _notifications;
         set => SetProperty(ref _notifications, value);
@@ -105,7 +105,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
                 var allNotifications = resultOfGettingNotifications.Result.OrderByDescending(row => row.LastActivityTime);
 
                 var lastTitleGroup = string.Empty;
-                var notificationGrouped = new ObservableCollection<object>();
+                var notificationGrouped = new ObservableCollection<INotificationGroupItemModel>();
 
                 foreach (var notificafication in allNotifications)
                 {
