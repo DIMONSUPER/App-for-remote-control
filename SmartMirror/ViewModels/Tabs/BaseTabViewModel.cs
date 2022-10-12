@@ -1,6 +1,4 @@
 using SmartMirror.Enums;
-using Prism.Navigation;
-using CommunityToolkit.Maui.Alerts;
 
 namespace SmartMirror.ViewModels.Tabs;
 

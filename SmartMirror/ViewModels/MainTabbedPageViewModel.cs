@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Maui.Alerts;
-using Microsoft.Extensions.Localization;
+using Microsoft.Maui.Dispatching;
 using SmartMirror.Resources.Strings;
 
 namespace SmartMirror.ViewModels;
@@ -20,8 +20,8 @@ public class MainTabbedPageViewModel : BaseViewModel
     {
         if (_buttonCount < 1)
         {
-            TimeSpan timer = new TimeSpan(0, 0, 0, 0, 500);
-            Device.StartTimer(timer, GetCountBackButtonPresses);
+            var interval = TimeSpan.FromMilliseconds(500);
+            Application.Current.Dispatcher.StartTimer(interval, GetCountBackButtonPresses);
         }
 
         _buttonCount++;

@@ -16,20 +16,17 @@ public partial class MainTabbedPage : CustomTabbedPage
 
     protected override bool OnBackButtonPressed()
     {
-        var c = CurrentPage as NavigationPage;
+        var currentNavigationPage = CurrentPage as NavigationPage;
 
         var result = false;
 
-        if (c.CurrentPage == c.RootPage)
+        if (currentNavigationPage.CurrentPage == currentNavigationPage.RootPage && BindingContext is MainTabbedPageViewModel mainTabbedVm)
         {
-            if (BindingContext is MainTabbedPageViewModel vm)
-            {
-                result = vm.OnBackButtonPressed();
-            }
+            result = mainTabbedVm.OnBackButtonPressed();
         }
-        else if(c.CurrentPage.BindingContext is BaseViewModel vm)
+        else if (currentNavigationPage.CurrentPage.BindingContext is BaseViewModel baseVm)
         {
-            result = vm.OnBackButtonPressed();
+            result = baseVm.OnBackButtonPressed();
         }
         else
         {
