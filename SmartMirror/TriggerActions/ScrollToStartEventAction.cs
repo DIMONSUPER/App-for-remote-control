@@ -25,13 +25,13 @@ public class ScrollToStartEventAction : TriggerAction<VisualElement>
 
     private bool OnTimerCallback()
     {
-        if (View is CollectionView colllectionVIew)
-        {
-            colllectionVIew.ScrollTo(0, -1, ScrollToPosition.Start, IsAnimated);
-        }
-        else if (View is ScrollView scrollView)
+        if (View is ScrollView scrollView)
         {
             scrollView.ScrollToAsync(0, 0, IsAnimated);
+        }
+        else if (View is CollectionView colllectionVIew)
+        {
+            colllectionVIew.ScrollTo(0, -1, ScrollToPosition.Start, IsAnimated);
         }
 
         return false;
