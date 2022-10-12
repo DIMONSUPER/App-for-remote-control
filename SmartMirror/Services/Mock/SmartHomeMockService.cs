@@ -305,9 +305,9 @@ namespace SmartMirror.Services.Mock
         {
             List<Device> devices = new()
             {
-                new() { Name = "Garage Door", Type = "GarageDoor", Status = EDeviceStatus.On },
-                new() { Name = "Front Door",  Type = "FrontDoor", Status = EDeviceStatus.On },
-                new FanDevice { Name = "Fan", Type = "Fan", RoomName = "Living Room" , Status = EDeviceStatus.On, Power = "68%" }
+                new() { Name = "Garage Door", Type = "GarageDoor", Status = EDeviceStatus.On, DeviceType = EDeviceType.Locker },
+                new() { Name = "Front Door",  Type = "FrontDoor", Status = EDeviceStatus.On, DeviceType = EDeviceType.Locker },
+                new FanDevice { Name = "Fan", Type = "Fan", RoomName = "Living Room" , Status = EDeviceStatus.On, AdditionalInfo = "68%", DeviceType = EDeviceType.Switcher }
             };
 
             return devices;

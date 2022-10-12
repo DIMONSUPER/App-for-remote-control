@@ -3,24 +3,19 @@ using SmartMirror.Helpers;
 using SmartMirror.Models.Aqara;
 using SmartMirror.Services.Rest;
 using SmartMirror.Services.Settings;
-using SmartMirror.ViewModels.Dialogs;
-using SmartMirror.Views.Dialogs;
 
 namespace SmartMirror.Services.Aqara;
 
 public class AqaraService : IAqaraService
 {
     private readonly IRestService _restService;
-    private readonly IDialogService _dialogService;
     private readonly ISettingsManager _settingsManager;
 
     public AqaraService(
         IRestService restService,
-        IDialogService dialogService,
         ISettingsManager settingsManager)
     {
         _restService = restService;
-        _dialogService = dialogService;
         _settingsManager = settingsManager;
     }
 
@@ -76,7 +71,7 @@ public class AqaraService : IAqaraService
         });
     }
 
-    public Task<AOResult<BaseAqaraResponse>> GetAllDevicesAsync()
+    public Task<AOResult<DevicesResponse>> GetAllDevicesAsync()
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {
@@ -86,14 +81,72 @@ public class AqaraService : IAqaraService
                 pageSize = 100,
             };
 
-            var response = await MakeRequestAsync<BaseAqaraResponse<object>>("query.device.info", data);
+            var response = await MakeRequestAsync<BaseAqaraResponse<DevicesResponse>>("query.device.info", data);
 
             if (response?.Result is null)
             {
                 onFailure("response or result is null");
             }
 
-            return response as BaseAqaraResponse;
+            return response.Result;
+        });
+    }
+
+    public Task<AOResult<BaseAqaraResponse>> ToggleTheLightsAsync(string deviceId)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var data = new[]
+            {
+                new
+                {
+                    subjectId = deviceId,
+                    resources = new[]
+                    {
+                        new
+                        {
+                            resourceId = "4.1.85",
+                            value = "2",
+                        }
+                    }
+                }
+            };
+
+            var response = await MakeRequestAsync<BaseAqaraResponse>("write.resource.device", data);
+
+            if (response is null)
+            {
+                onFailure("response is null");
+            }
+
+            return response;
+        });
+    }
+
+    public Task<AOResult<IEnumerable<ResourceResponse>>> GetDeviceAttributeValueAsync(string deviceId, params string[] resourceIds)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var data = new
+            {
+                resources = new[]
+                {
+                    new
+                    {
+                        subjectId = deviceId,
+                        resourceIds = resourceIds,
+                    }
+                }
+            };
+
+            var response = await MakeRequestAsync<BaseAqaraResponse<IEnumerable<ResourceResponse>>>("query.resource.value", data);
+
+            if (response.Result is null)
+            {
+                onFailure("response or result is null");
+            }
+
+            return response.Result;
         });
     }
 
@@ -103,7 +156,7 @@ public class AqaraService : IAqaraService
 
     private Task<T> MakeRequestAsync<T>(string intent, object data)
     {
-        var time = ((long)DateTime.UtcNow.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds).ToString();
+        var time = DateTimeHelper.ConvertToMilliseconds(DateTime.UtcNow).ToString();
 
         var headers = new Dictionary<string, string>
         {
@@ -145,7 +198,6 @@ public class AqaraService : IAqaraService
 
         try
         {
-            System.Diagnostics.Debug.WriteLine(result);
             return GetMD5FromString(result).ToLower();
         }
         catch (Exception ex)

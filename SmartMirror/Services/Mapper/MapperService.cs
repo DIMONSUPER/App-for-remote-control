@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using SmartMirror.Helpers;
 using SmartMirror.Models;
+using SmartMirror.Models.Aqara;
 using SmartMirror.Models.BindableModels;
 
 namespace SmartMirror.Services.Mapper
@@ -69,9 +71,27 @@ namespace SmartMirror.Services.Mapper
                 cfg.CreateMap<CameraModel, CameraBindableModel>().ReverseMap();
                 cfg.CreateMap<ScenarioModel, ScenarioBindableModel>().ReverseMap();
                 cfg.CreateMap<ScenarioActionModel, ScenarioActionBindableModel>().ReverseMap();
+                cfg.CreateMap<Models.Device, DeviceBindableModel>().ReverseMap();
+                cfg.CreateMap<FanDevice, DeviceBindableModel>().ReverseMap();
+                ConfigureDeviceMapping(cfg);
             });
 
             return mapperConfiguration.CreateMapper();
+        }
+
+        private void ConfigureDeviceMapping(IMapperConfigurationExpression cfg)
+        {
+            cfg.CreateMap<DeviceResponse, DeviceBindableModel>()
+                .ForMember(nameof(DeviceBindableModel.CreateTime), opt => opt.MapFrom(src => DateTimeHelper.ConvertFromMilliseconds(src.CreateTime)))
+                .ForMember(nameof(DeviceBindableModel.UpdateTime), opt => opt.MapFrom(src => DateTimeHelper.ConvertFromMilliseconds(src.UpdateTime)))
+                .ForMember(nameof(DeviceBindableModel.DeviceId), opt => opt.MapFrom(src => src.Did))
+                .ForMember(nameof(DeviceBindableModel.Name), opt => opt.MapFrom(src => src.DeviceName));
+
+            cfg.CreateMap<DeviceBindableModel, DeviceResponse>()
+                .ForMember(nameof(DeviceResponse.CreateTime), opt => opt.MapFrom(src => DateTimeHelper.ConvertToMilliseconds(src.CreateTime)))
+                .ForMember(nameof(DeviceResponse.UpdateTime), opt => opt.MapFrom(src => DateTimeHelper.ConvertToMilliseconds(src.UpdateTime)))
+                .ForMember(nameof(DeviceResponse.Did), opt => opt.MapFrom(src => src.DeviceId))
+                .ForMember(nameof(DeviceResponse.DeviceName), opt => opt.MapFrom(src => src.Name));
         }
 
         #endregion

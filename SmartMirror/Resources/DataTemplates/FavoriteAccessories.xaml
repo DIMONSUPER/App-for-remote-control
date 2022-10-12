@@ -3,10 +3,19 @@
               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
               xmlns:extensions="clr-namespace:SmartMirror.Extensions"
               xmlns:controls="clr-namespace:SmartMirror.Controls"
-              x:Class="SmartMirror.Resources.DataTemplates.FavoriteAccessories">
+              xmlns:models="clr-namespace:SmartMirror.Models.BindableModels"
+              x:Class="SmartMirror.Resources.DataTemplates.FavoriteAccessories"
+              x:DataType="{x:Type models:DeviceBindableModel}">
 
     <Grid WidthRequest="375"
           MaximumHeightRequest="201">
+
+        <Grid.GestureRecognizers>
+
+            <TapGestureRecognizer Command="{Binding TappedCommand}"
+                                  CommandParameter="{Binding .}"/>
+
+        </Grid.GestureRecognizers>
 
         <!-- BORDER AND ICON -->
         <Border Stroke="{x:DynamicResource cbg_i4}"
@@ -47,6 +56,22 @@
                                 <Setter Property="Source" Value="fan"/>
                             </DataTrigger>
 
+                            <DataTrigger Binding="{Binding Type}" Value="Lights" TargetType="Image">
+                                <Setter Property="Source" Value="lamp"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding Type}" Value="Pressure" TargetType="Image">
+                                <Setter Property="Source" Value="pic_pressure"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding Type}" Value="Humidity" TargetType="Image">
+                                <Setter Property="Source" Value="pic_humidity"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding Type}" Value="Temperature" TargetType="Image">
+                                <Setter Property="Source" Value="pic_temperature"/>
+                            </DataTrigger>
+
                         </Image.Triggers>
 
                     </Image>
@@ -60,7 +85,7 @@
                       VerticalOptions="End"
                       HorizontalOptions="Fill"
                       RowDefinitions="Auto"
-                      ColumnDefinitions="Auto, *">
+                      ColumnDefinitions="*, Auto">
 
                     <VerticalStackLayout HorizontalOptions="Start"
                                          VerticalOptions="End"
@@ -68,6 +93,7 @@
 
                         <Label Text="{Binding Name}"
                                VerticalTextAlignment="End"
+                               LineBreakMode="TailTruncation"
                                Style="{x:DynamicResource tstyle_i11}"/>
 
                         <Label Text="{Binding RoomName}"
@@ -80,10 +106,39 @@
 
                     <Label Grid.RowSpan="2"
                            Grid.Column="1"
-                           Text="{Binding Power}"
+                           Text="{Binding AdditionalInfo}"
                            HorizontalTextAlignment="End"
                            VerticalTextAlignment="End"
-                           Style="{x:DynamicResource tstyle_i4}"/>
+                           Style="{x:DynamicResource tstyle_i4}">
+
+                        <Label.Triggers>
+
+                            <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="Disconnected">
+                                <Setter Property="IsVisible" Value="False"/>
+                            </DataTrigger>
+
+                        </Label.Triggers>
+
+                    </Label>
+
+                    <Image Grid.RowSpan="2"
+                           Grid.Column="1"
+                           IsVisible="False"
+                           HorizontalOptions="End"
+                           VerticalOptions="End"
+                           WidthRequest="37"
+                           HeightRequest="32"
+                           Source="orange_triangle">
+
+                        <Image.Triggers>
+
+                            <DataTrigger TargetType="Image" Binding="{Binding Status}" Value="Disconnected">
+                                <Setter Property="IsVisible" Value="True"/>
+                            </DataTrigger>
+
+                        </Image.Triggers>
+
+                    </Image>
 
                 </Grid>
 
@@ -101,19 +156,56 @@
 
                         <Label.Triggers>
 
-                            <DataTrigger Binding="{Binding Source={x:Reference switch}, Path=IsToggled}" Value="false" TargetType="Label">
+                            <DataTrigger Binding="{Binding Status}" TargetType="Label" Value="On">
+                                <Setter Property="Text" Value="{extensions:Translate Unlocked}"/>
+                                <Setter Property="Style" Value="{x:DynamicResource tstyle_i12}"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding Status}" TargetType="Label" Value="Off">
                                 <Setter Property="Text" Value="{extensions:Translate Closed}"/>
                                 <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding Status}" TargetType="Label" Value="Disconnected">
+                                <Setter Property="Text" Value="{extensions:Translate Disconnected}"/>
+                                <Setter Property="Style" Value="{x:DynamicResource tstyle_i14}"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding Status}" TargetType="Label" Value="Connected">
+                                <Setter Property="IsVisible" Value="False"/>
                             </DataTrigger>
 
                         </Label.Triggers>
 
                     </Label>
 
-                    <controls:CustomSwitch x:Name="switch"
-                                           IsToggled="{Binding Status}"
+                    <controls:CustomSwitch InputTransparent="True"
                                            VerticalOptions="Center"
-                                           Margin="0,0,3,0"/>
+                                           Margin="0,0,3,0">
+
+                        <controls:CustomSwitch.Triggers>
+
+                            <DataTrigger Binding="{Binding Status}" TargetType="controls:CustomSwitch" Value="On">
+                                <Setter Property="IsToggled" Value="True"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding Status}" TargetType="controls:CustomSwitch" Value="Off">
+                                <Setter Property="IsToggled" Value="False"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding Status}" TargetType="controls:CustomSwitch" Value="Disconnected">
+                                <Setter Property="IsVisible" Value="False"/>
+                                <Setter Property="IsToggled" Value="False"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding Status}" TargetType="controls:CustomSwitch" Value="Connected">
+                                <Setter Property="IsVisible" Value="False"/>
+                                <Setter Property="IsToggled" Value="True"/>
+                            </DataTrigger>
+
+                        </controls:CustomSwitch.Triggers>
+
+                    </controls:CustomSwitch>
 
                 </HorizontalStackLayout>
 

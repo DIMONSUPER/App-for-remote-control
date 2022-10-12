@@ -30,6 +30,7 @@
     <Color x:Key="tcolor_i5">#252525</Color>    <!--Dark Gray-->
     <Color x:Key="tcolor_i6">#969697</Color>    <!-- Light Gray -->
     <Color x:Key="tcolor_i7">#525252</Color>    <!--  -->
+    <Color x:Key="tcolor_i8">#EBA17E</Color>    <!-- Orange -->
 
     <!-- BRUSHES -->
     <LinearGradientBrush x:Key="GrayGradientBrush">

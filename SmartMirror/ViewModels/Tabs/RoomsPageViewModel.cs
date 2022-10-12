@@ -5,12 +5,10 @@ using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Device = SmartMirror.Models.Device;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Views.Dialogs;
-using SmartMirror.Resources.Strings;
 using SmartMirror.ViewModels.Dialogs;
-using Prism.Services;
+using SmartMirror.Models.BindableModels;
 
 namespace SmartMirror.ViewModels.Tabs;
 
@@ -45,6 +43,9 @@ public class RoomsPageViewModel : BaseTabViewModel
     private ICommand _roomTappedCommand;
     public ICommand RoomTappedCommand => _roomTappedCommand ??= SingleExecutionCommand.FromFunc<RoomBindableModel>(OnRoomTappedCommandAsync);
 
+    private ICommand _accessorieTappedCommand;
+    public ICommand AccessorieTappedCommand => _accessorieTappedCommand ??= SingleExecutionCommand.FromFunc<DeviceBindableModel>(OnAccessorieTappedCommandAsync);
+
     private ICommand _aqaraLoginButtonTappedCommand;
     public ICommand AqaraLoginButtonTappedCommand => _aqaraLoginButtonTappedCommand ??= SingleExecutionCommand.FromFunc(OnAqaraLoginButtonTappedAsync);
 
@@ -58,8 +59,8 @@ public class RoomsPageViewModel : BaseTabViewModel
         set => SetProperty(ref _isAqaraLoginButtonVisible, value);
     }
 
-    private ObservableCollection<Device> _favoriteAccessories;
-    public ObservableCollection<Device> FavoriteAccessories
+    private ObservableCollection<DeviceBindableModel> _favoriteAccessories;
+    public ObservableCollection<DeviceBindableModel> FavoriteAccessories
     {
         get => _favoriteAccessories;
         set => SetProperty(ref _favoriteAccessories, value);
@@ -80,14 +81,14 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         await base.InitializeAsync(parameters);
 
-        await LoadRoomsAsync();
+        await LoadRoomsAndDevicesAsync();
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
-            await LoadRoomsAsync();
+            await LoadRoomsAndDevicesAsync();
         }
         else
         {
@@ -98,6 +99,26 @@ public class RoomsPageViewModel : BaseTabViewModel
     #endregion
 
     #region -- Private helpers --
+
+    private async Task OnAccessorieTappedCommandAsync(DeviceBindableModel device)
+    {
+        if (device.DeviceType == EDeviceType.Switcher)
+        {
+            var resp = await _aqaraService.ToggleTheLightsAsync(device.DeviceId);
+
+            await Task.Delay(800);
+
+            if (resp.IsSuccess)
+            {
+                var resp2 = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId);
+
+                if (resp2.IsSuccess)
+                {
+                    device.Status = resp2.Result?.FirstOrDefault()?.Value == "0" ? EDeviceStatus.Off : EDeviceStatus.On;
+                }
+            }
+        }
+    }
 
     private async Task OnAqaraLoginButtonTappedAsync()
     {
@@ -139,7 +160,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
                 DataState = EPageState.Loading;
 
-                await LoadRoomsAsync();
+                await LoadRoomsAndDevicesAsync();
             }
             else
             {
@@ -158,14 +179,21 @@ public class RoomsPageViewModel : BaseTabViewModel
 
         await Task.Delay(1000);
 
-        await LoadRoomsAsync();
+        await LoadRoomsAndDevicesAsync();
     }
 
-    private async Task LoadRoomsAsync()
+    private async Task LoadRoomsAndDevicesAsync()
     {
         if (IsInternetConnected)
         {
-            FavoriteAccessories = new(_smartHomeMockService.GetDevices());
+            var devices = await _mapperService.MapRangeAsync<DeviceBindableModel>(_smartHomeMockService.GetDevices(), (m, vm) =>
+            {
+                vm.TappedCommand = AccessorieTappedCommand;
+            });
+
+            FavoriteAccessories = new(devices);
+
+            await AddAqaraDevicesIfAuthorizedAsync();
 
             var rooms = await _mapperService.MapRangeAsync<RoomBindableModel>(_smartHomeMockService.GetRooms(), (m, vm) =>
             {
@@ -179,6 +207,101 @@ public class RoomsPageViewModel : BaseTabViewModel
         else
         {
             DataState = EPageState.NoInternet;
+        }
+    }
+
+    private async Task AddAqaraDevicesIfAuthorizedAsync()
+    {
+        if (_aqaraService.IsAuthorized)
+        {
+            var aqaraDevicesResponse = await _aqaraService.GetAllDevicesAsync();
+
+            if (aqaraDevicesResponse.IsSuccess)
+            {
+                var devices = await _mapperService.MapRangeAsync<DeviceBindableModel>(aqaraDevicesResponse.Result.Devices, (m, vm) =>
+                {
+                    vm.TappedCommand = AccessorieTappedCommand;
+                });
+
+                foreach (var d in devices)
+                {
+                    if (d.Model.Contains("switch"))
+                    {
+                        d.DeviceType = EDeviceType.Switcher;
+                        d.Type = "Lights";
+
+                        if (d.State > 0)
+                        {
+                            var deviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(d.DeviceId, "4.1.85");
+
+                            if (deviceAttributeResponse.IsSuccess)
+                            {
+                                d.Status = deviceAttributeResponse.Result?.FirstOrDefault()?.Value == "0" ? EDeviceStatus.Off : EDeviceStatus.On;
+                            }
+                        }
+
+                        FavoriteAccessories.Insert(0, d);
+                    }
+                    else if (d.Model.Contains("weather"))
+                    {
+                        d.DeviceType = EDeviceType.Sensor;
+                        d.Type = "Humidity";
+
+                        if (d.State > 0)
+                        {
+                            var deviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(d.DeviceId, "0.2.85", "0.1.85", "0.3.85");
+
+                            if (deviceAttributeResponse.IsSuccess)
+                            {
+                                d.Status = EDeviceStatus.Connected;
+
+                                var humididty = double.Parse(deviceAttributeResponse.Result.FirstOrDefault(x => x.ResourceId == "0.2.85").Value) / 100 + "%";
+                                var temperature = double.Parse(deviceAttributeResponse.Result.FirstOrDefault(x => x.ResourceId == "0.1.85").Value) / 100 + "℃";
+                                var pressure = double.Parse(deviceAttributeResponse.Result.FirstOrDefault(x => x.ResourceId == "0.1.85").Value) / 1000 + "kPa";
+
+                                var humidityDevice = new DeviceBindableModel()
+                                {
+                                    AdditionalInfo = humididty,
+                                    Status = EDeviceStatus.Connected,
+                                    DeviceType = EDeviceType.Sensor,
+                                    Name = "Humidity",
+                                    Type = "Humidity",
+                                };
+
+                                FavoriteAccessories.Insert(0, humidityDevice);
+
+                                var temperatureDevice = new DeviceBindableModel()
+                                {
+                                    AdditionalInfo = temperature,
+                                    Status = EDeviceStatus.Connected,
+                                    DeviceType = EDeviceType.Sensor,
+                                    Name = "Temperature",
+                                    Type = "Temperature",
+                                };
+
+                                FavoriteAccessories.Insert(0, temperatureDevice);
+
+                                var pressureDevice = new DeviceBindableModel()
+                                {
+                                    AdditionalInfo = pressure,
+                                    Status = EDeviceStatus.Connected,
+                                    DeviceType = EDeviceType.Sensor,
+                                    Name = "Pressure",
+                                    Type = "Pressure",
+                                };
+
+                                FavoriteAccessories.Insert(0, pressureDevice);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        FavoriteAccessories.Insert(0, d);
+                    }
+
+                    System.Diagnostics.Debug.WriteLine($"{d.DeviceId}: {d.Model}, {d.ModelType}, {d.State}, {d.Name}, {d.Type}");
+                }
+            }
         }
     }
 

@@ -7,7 +7,9 @@ public interface IAqaraService
 {
     Task<AOResult<BaseAqaraResponse>> SendLoginCodeAsync(string email);
     Task<AOResult<BaseAqaraResponse>> LoginWithCodeAsync(string email, string code);
-    Task<AOResult<BaseAqaraResponse>> GetAllDevicesAsync();
+    Task<AOResult<DevicesResponse>> GetAllDevicesAsync();
+    Task<AOResult<BaseAqaraResponse>> ToggleTheLightsAsync(string deviceId);
+    Task<AOResult<IEnumerable<ResourceResponse>>> GetDeviceAttributeValueAsync(string deviceId, params string[] resourceIds);
     bool IsAuthorized { get; }
 }
 

@@ -1,9 +1,12 @@
-﻿using System;
-namespace SmartMirror.Models
+﻿namespace SmartMirror.Models;
+
+public class FanDevice : Device
 {
-    public class FanDevice : Device
+    public FanDevice() : base()
     {
-        public string Power { get; set; }
+        DeviceType = Enums.EDeviceType.Switcher;
     }
+
+    public string AdditionalInfo { get; set; }
 }
 
