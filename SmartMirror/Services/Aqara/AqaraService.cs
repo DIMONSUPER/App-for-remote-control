@@ -97,6 +97,49 @@ public class AqaraService : IAqaraService
         });
     }
 
+    public Task<AOResult<BaseAqaraResponse<DataAqaraResponse<PositionAqaraModel>>>> GetAllHousesAsync()
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var requestData = new
+            {
+                pageNum = 1,
+                pageSize = 5,
+            };
+
+            var response = await MakeRequestAsync<BaseAqaraResponse<DataAqaraResponse<PositionAqaraModel>>>("query.position.info", requestData);
+
+            if (response?.Message != "Success")
+            {
+                onFailure("Request failed");
+            }
+
+            return response;
+        });
+    }
+
+    public Task<AOResult<BaseAqaraResponse<DataAqaraResponse<PositionAqaraModel>>>> GetAllRoomsAsync(string positionId, int pageNum, int pageSize)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var requestData = new
+            {
+                parentPositionId = positionId,
+                pageNum = pageNum,
+                pageSize = pageSize,
+            };
+
+            var response = await MakeRequestAsync<BaseAqaraResponse<DataAqaraResponse<PositionAqaraModel>>>("query.position.info", requestData);
+
+            if (response?.Message != "Success")
+            {
+                onFailure("Request failed");
+            }
+
+            return response;
+        });
+    }
+
     #endregion
 
     #region -- Private helpers --

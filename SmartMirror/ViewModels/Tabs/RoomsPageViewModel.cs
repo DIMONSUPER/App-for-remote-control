@@ -11,6 +11,7 @@ using SmartMirror.Views.Dialogs;
 using SmartMirror.Resources.Strings;
 using SmartMirror.ViewModels.Dialogs;
 using Prism.Services;
+using SmartMirror.Models.Aqara;
 
 namespace SmartMirror.ViewModels.Tabs;
 
@@ -173,6 +174,40 @@ public class RoomsPageViewModel : BaseTabViewModel
             });
 
             Rooms = new(rooms);
+
+            if (_aqaraService.IsAuthorized)
+            {
+                var resultOfGettingHouses = await _aqaraService.GetAllHousesAsync();
+
+                if (resultOfGettingHouses.IsSuccess)
+                {
+                    if (resultOfGettingHouses.Result.Result.TotalCount > 0)
+                    {
+                        var house = resultOfGettingHouses.Result.Result.Data.FirstOrDefault();
+
+                        var resultOfGettingHouseRooms = await _aqaraService.GetAllRoomsAsync(house.PositionId, 1, 100);
+
+                        if (resultOfGettingHouseRooms.IsSuccess)
+                        {
+                            var id = 100;
+
+                            var houseRooms = resultOfGettingHouseRooms.Result.Result.Data.Select(row => new RoomBindableModel()
+                            {
+                                Id = id++,
+                                Name = row.PositionName,
+                                CreateTime = DateTime.FromBinary(row.CreateTime),
+                                Description = string.IsNullOrEmpty(row.Description)
+                                    ? "0 Accessories"
+                                    : row.Description,
+                                Devices = new(),
+                                TappedCommand = RoomTappedCommand,
+                            });
+
+                            Rooms = new(houseRooms.Concat(Rooms));
+                        }
+                    }
+                }
+            }
 
             DataState = EPageState.Complete;
         }
