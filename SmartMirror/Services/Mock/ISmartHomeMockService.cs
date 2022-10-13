@@ -1,6 +1,4 @@
-﻿using System;
-using SmartMirror.Models;
-using DeviceModel = SmartMirror.Models.DeviceModel;
+﻿using SmartMirror.Models;
 
 namespace SmartMirror.Services.Mock
 {

@@ -1,7 +1,5 @@
 ﻿using SmartMirror.Enums;
 using SmartMirror.Models;
-using DeviceModel = SmartMirror.Models.DeviceModel;
-using NotificationModel = SmartMirror.Models.NotificationModel;
 
 namespace SmartMirror.Services.Mock
 {

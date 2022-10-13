@@ -27,19 +27,19 @@ namespace SmartMirror.Services.RoomsService
             {
                 var rooms = Enumerable.Empty<RoomModel>();
 
-                var resultOfGettingRooms = _smartHomeMockService.GetRooms();
+                var resultOfGettingMockRooms = _smartHomeMockService.GetRooms();
 
-                if (resultOfGettingRooms is not null)
+                if (resultOfGettingMockRooms is not null)
                 {
                     var resultOfGettingRoomsAqara = await GetAllRoomsOfHousesAsync();
 
                     if (resultOfGettingRoomsAqara.IsSuccess)
                     {
-                        rooms = resultOfGettingRoomsAqara.Result.Concat(resultOfGettingRooms);
+                        rooms = resultOfGettingRoomsAqara.Result.Concat(resultOfGettingMockRooms);
                     }
                     else
                     {
-                        rooms = resultOfGettingRooms; 
+                        rooms = resultOfGettingMockRooms; 
                     }
                 }
                 else
@@ -77,7 +77,7 @@ namespace SmartMirror.Services.RoomsService
 
                                 if (resultOfGettingRoomsHouse.IsSuccess)
                                 {
-                                    rooms = resultOfGettingRoomsHouse.Result.Concat(rooms);
+                                    rooms = rooms.Concat(resultOfGettingRoomsHouse.Result);
                                 }
                                 else
                                 {
@@ -106,11 +106,13 @@ namespace SmartMirror.Services.RoomsService
             {
                 var rooms = new List<RoomModel>();
 
-                var resultOfGettingHouseRooms = await _aqaraService.GetPositionsAsync(positionId, pageNum, pageSize);
+                var resultOfGettingRoomsHouse = await _aqaraService.GetPositionsAsync(positionId, pageNum, pageSize);
 
-                if (resultOfGettingHouseRooms.IsSuccess)
+                if (resultOfGettingRoomsHouse.IsSuccess)
                 {
-                    foreach(var room in resultOfGettingHouseRooms.Result.Data)
+                    var roomsWithoutDevices = resultOfGettingRoomsHouse.Result.Data;
+
+                    foreach (var room in roomsWithoutDevices)
                     {
                         var resultOfGettingDevices = await _aqaraService.GetDevicesPositionsync(room.PositionId, 1, 100);
 
