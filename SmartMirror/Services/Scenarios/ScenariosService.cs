@@ -114,29 +114,48 @@ namespace SmartMirror.Services.Scenarios
 
         public Task<AOResult> RunScenarioAsync(string id)
         {
-            return AOResult.ExecuteTaskAsync(onFailure =>
+            return AOResult.ExecuteTaskAsync(async onFailure =>
             {
                 if (_aqaraService.IsAuthorized)
                 {
-                    var resultOfGettingScenarios = _smartHomeMockService.GetScenarios();
+                    var scenariosFromMock = _smartHomeMockService.GetScenarios();
 
-                    if (resultOfGettingScenarios is not null)
+                    if (scenariosFromMock is not null)
                     {
-                        var scenario = resultOfGettingScenarios.FirstOrDefault(row => row.Id == id);
+                        var scenario = scenariosFromMock.FirstOrDefault(row => row.Id == id);
 
-                        scenario.IsActive = true;
+                        if (scenario is not null)
+                        {
+                            scenario.IsActive = true;
+                        }
+                        else
+                        {
+                            var resultOfRunScenarioFromAqara = await RunScenarioFromAqara(id);
+
+                            if (!resultOfRunScenarioFromAqara.IsSuccess)
+                            {
+                                onFailure(resultOfRunScenarioFromAqara.Message);
+                            }
+                        }
                     }
-                    else
-                    {
-                        onFailure("scenarios is null");
-                    } 
                 }
                 else
                 {
                     onFailure("Unauthorized");
                 }
+            });
+        }
 
-                return Task.CompletedTask;
+        public Task<AOResult> RunScenarioFromAqara(string sceneId)
+        {
+            return AOResult.ExecuteTaskAsync(async onFailure =>
+            {
+                var result = _aqaraService.RunScenarioByIdAsync(sceneId);
+
+                if (result.IsFaulted)
+                {
+                    onFailure(result.Exception?.Message);
+                }
             });
         }
 

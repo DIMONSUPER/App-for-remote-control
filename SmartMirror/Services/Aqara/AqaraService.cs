@@ -141,7 +141,7 @@ public class AqaraService : IAqaraService
 
             var responce = await MakeRequestAsync<BaseAqaraResponse>("config.scene.run", data);
 
-            if (responce?.Message is not "Success")
+            if (responce is null || responce.Message is not "Success")
             {
                 onFailure("Request failed");
             }
