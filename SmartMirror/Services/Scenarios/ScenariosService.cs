@@ -127,10 +127,12 @@ namespace SmartMirror.Services.Scenarios
                         if (scenario is not null)
                         {
                             scenario.IsActive = true;
+
+                            await Task.Delay(250);
                         }
                         else
                         {
-                            var resultOfRunScenarioFromAqara = await RunScenarioFromAqara(id);
+                            var resultOfRunScenarioFromAqara = await _aqaraService.RunScenarioByIdAsync(id);
 
                             if (!resultOfRunScenarioFromAqara.IsSuccess)
                             {
@@ -142,19 +144,6 @@ namespace SmartMirror.Services.Scenarios
                 else
                 {
                     onFailure("Unauthorized");
-                }
-            });
-        }
-
-        public Task<AOResult> RunScenarioFromAqara(string sceneId)
-        {
-            return AOResult.ExecuteTaskAsync(async onFailure =>
-            {
-                var result = _aqaraService.RunScenarioByIdAsync(sceneId);
-
-                if (result.IsFaulted)
-                {
-                    onFailure(result.Exception?.Message);
                 }
             });
         }
