@@ -132,8 +132,8 @@ public class ScenariosPageViewModel : BaseTabViewModel
         {
             List<Task<bool>> tasks = new();
 
-            tasks.Add(Task.Run(() => LoadFavoritesScenariosAsync()));
-            tasks.Add(Task.Run(() => LoadAllScenariosAsync()));
+            await LoadFavoritesScenariosAsync();
+            await LoadAllScenariosAsync();
 
             var tasksResult = await Task.WhenAll(tasks);
 

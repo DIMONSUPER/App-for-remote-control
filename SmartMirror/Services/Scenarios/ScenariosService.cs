@@ -26,33 +26,25 @@ namespace SmartMirror.Services.Scenarios
             {
                 var scenarios = Enumerable.Empty<ScenarioModel>();
 
-                var resultOfGetttingAllScenaries = await _aqaraService.GetAllScenariesAsync();
-
-                if (resultOfGetttingAllScenaries is not null)
+                if (_aqaraService.IsAuthorized)
                 {
-                    if (resultOfGetttingAllScenaries.IsSuccess)
+                    var resultOfGettingScenaries = await GetAllScenariosFromAqaraAsync();
+
+                    if (resultOfGettingScenaries.IsSuccess)
                     {
-                        scenarios = resultOfGetttingAllScenaries.Result?.Data?
-                            .Select(x => new ScenarioModel
-                            {
-                                Name = x.Name,
-                            });
+                        scenarios = resultOfGettingScenaries.Result;
                     }
-                    else
+
+                    var mockScenarios = _smartHomeMockService.GetScenarios();
+
+                    if (mockScenarios is not null)
                     {
-                        onFailure($"Error: {resultOfGetttingAllScenaries.Message}");
-                    }
+                        scenarios = scenarios.Concat(mockScenarios);
+                    } 
                 }
                 else
                 {
-                    onFailure("scenarios is null");
-                }
-
-                var mockScenarios = _smartHomeMockService.GetScenarios();
-
-                if (mockScenarios is not null)
-                {
-                    scenarios = scenarios.Concat(mockScenarios);
+                    onFailure("Unauthorized");
                 }
 
                 return scenarios;
@@ -61,22 +53,29 @@ namespace SmartMirror.Services.Scenarios
 
         public Task<AOResult<IEnumerable<ScenarioModel>>> GetFavoriteScenariosAsync()
         {
-            return AOResult.ExecuteTaskAsync(onFailure =>
+            return AOResult.ExecuteTaskAsync(async onFailure =>
             {
                 var scenarios = Enumerable.Empty<ScenarioModel>();
-
-                var resultOfGettingScenarios = _smartHomeMockService.GetScenarios();
-
-                if (resultOfGettingScenarios is not null)
+                
+                if (_aqaraService.IsAuthorized)
                 {
-                    scenarios = resultOfGettingScenarios.Where(row => row.IsFavorite);
+                    var resultOfGettingScenaries = await GetAllScenariosFromAqaraAsync();
+
+                    if (resultOfGettingScenaries.IsSuccess)
+                    {
+                        scenarios = resultOfGettingScenaries.Result;
+                    }
+                    else
+                    {
+                        onFailure(resultOfGettingScenaries.Message);
+                    } 
                 }
                 else
                 {
-                    onFailure("scenarios is null");
+                    onFailure("Unauthorized");
                 }
 
-                return Task.FromResult(scenarios);
+                return scenarios;
             });
         }
 
@@ -117,22 +116,66 @@ namespace SmartMirror.Services.Scenarios
         {
             return AOResult.ExecuteTaskAsync(onFailure =>
             {
-                var resultOfGettingScenarios = _smartHomeMockService.GetScenarios();
-
-                if (resultOfGettingScenarios is not null)
+                if (_aqaraService.IsAuthorized)
                 {
-                    var scenario = resultOfGettingScenarios.FirstOrDefault(row => row.Id == id);
+                    var resultOfGettingScenarios = _smartHomeMockService.GetScenarios();
 
-                    scenario.IsActive = true;
+                    if (resultOfGettingScenarios is not null)
+                    {
+                        var scenario = resultOfGettingScenarios.FirstOrDefault(row => row.Id == id);
+
+                        scenario.IsActive = true;
+                    }
+                    else
+                    {
+                        onFailure("scenarios is null");
+                    } 
+                }
+                else
+                {
+                    onFailure("Unauthorized");
+                }
+
+                return Task.CompletedTask;
+            });
+        }
+
+        #endregion
+
+        #region -- Private helpers --
+
+        private Task<AOResult<IEnumerable<ScenarioModel>>> GetAllScenariosFromAqaraAsync()
+        {
+            return AOResult.ExecuteTaskAsync(async onFailure =>
+            {
+                var scenarios = Enumerable.Empty<ScenarioModel>();
+
+                var resultOfGetttingAllScenaries = await _aqaraService.GetAllScenariesAsync();
+
+                if (resultOfGetttingAllScenaries is not null)
+                {
+                    if (resultOfGetttingAllScenaries.IsSuccess)
+                    {
+                        scenarios = resultOfGetttingAllScenaries.Result?.Data?
+                            .Select(x => new ScenarioModel
+                            {
+                                Id = x.SceneId,
+                                Name = x.Name,
+                            });
+                    }
+                    else
+                    {
+                        onFailure($"Error: {resultOfGetttingAllScenaries.Message}");
+                    }
                 }
                 else
                 {
                     onFailure("scenarios is null");
                 }
 
-                return Task.CompletedTask;
+                return scenarios;
             });
-        }
+        } 
 
         #endregion
     }
