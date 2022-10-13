@@ -7,6 +7,8 @@ namespace SmartMirror.Services.Scenarios
     {
         Task<AOResult<IEnumerable<ScenarioModel>>> GetAllScenariosAsync();
 
+        Task<AOResult<ScenarioModel>> GetScenarioByIdAsync(string id);
+
         Task<AOResult<IEnumerable<ScenarioModel>>> GetFavoriteScenariosAsync();
 
         Task<AOResult> UpdateActiveStatusScenarioAsync(int id, bool active);

@@ -5,9 +5,15 @@ namespace SmartMirror.Services.Aqara;
 
 public interface IAqaraService
 {
-    Task<AOResult<BaseAqaraResponse>> SendLoginCodeAsync(string email);
-    Task<AOResult<BaseAqaraResponse>> LoginWithCodeAsync(string email, string code);
-    Task<AOResult<BaseAqaraResponse>> GetAllDevicesAsync();
     bool IsAuthorized { get; }
+    
+    Task<AOResult<BaseAqaraResponse>> SendLoginCodeAsync(string email);
+    
+    Task<AOResult<BaseAqaraResponse>> LoginWithCodeAsync(string email, string code);
+    
+    Task<AOResult<BaseAqaraResponse>> GetAllDevicesAsync();
+    
+    Task<AOResult<DataAqaraResponce<SimpleSceneAqaraModel>>> GetAllScenariesAsync(int pageNumber = 1, int pageSize = 100, string positionId = null);
+    
+    Task<AOResult<DetailSceneAqaraModel>> GetScenarioByIdAsync(string sceneId);
 }
-

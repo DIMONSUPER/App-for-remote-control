@@ -91,7 +91,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
     private async Task OnChangeActiveStatusCommandAsync(ScenarioBindableModel scenario)
     {
         var resultOfUpdattingScenario = await _scenariosService.UpdateActiveStatusScenarioAsync(scenario.Id, !scenario.IsActive);
-
+                           
         if (resultOfUpdattingScenario.IsSuccess)
         {
             scenario.IsActive = !scenario.IsActive;

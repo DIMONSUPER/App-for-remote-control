@@ -1,11 +1,8 @@
-﻿using System.Text;
-using SmartMirror.Helpers;
+﻿using SmartMirror.Helpers;
 using SmartMirror.Models.Aqara;
 using SmartMirror.Services.Rest;
 using SmartMirror.Services.Settings;
-using SmartMirror.ViewModels.Dialogs;
-using SmartMirror.Views.Dialogs;
-
+using System.Text;
 namespace SmartMirror.Services.Aqara;
 
 public class AqaraService : IAqaraService
@@ -97,6 +94,41 @@ public class AqaraService : IAqaraService
         });
     }
 
+    public Task<AOResult<DataAqaraResponce<SimpleSceneAqaraModel>>> GetAllScenariesAsync(int pageNumber = 1, int pageSize = 100, string positionId = null)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var data = new
+            {
+                positionId = positionId,
+                pageNum = pageNumber,
+                pageSize = pageSize,
+            };
+
+            var responce = await MakeRequestAsync<BaseAqaraResponse<DataAqaraResponce<SimpleSceneAqaraModel>>>("query.scene.listByPositionId", data);
+
+            SetFailure(onFailure, responce);
+
+            return responce?.Result;
+        });
+    }
+    public Task<AOResult<DetailSceneAqaraModel>> GetScenarioByIdAsync(string id)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var data = new
+            {
+                sceneId = id,
+            };
+
+            var responce = await MakeRequestAsync<BaseAqaraResponse<DetailSceneAqaraModel>>("query.scene.detail", data);
+
+            SetFailure(onFailure, responce);
+
+            return responce?.Result;
+        });
+    }
+
     #endregion
 
     #region -- Private helpers --
@@ -163,6 +195,18 @@ public class AqaraService : IAqaraService
         var hashBytes = md5.ComputeHash(inputBytes);
 
         return Convert.ToHexString(hashBytes);
+    }
+
+    private void SetFailure<T>(Action<string> onFailure, BaseAqaraResponse<T> responce)
+    {
+        if (responce is null)
+        {
+            onFailure("Response is null");
+        }
+        else if (responce.Message != "Success")
+        {
+            onFailure("Request failed");
+        }
     }
 
     #endregion
