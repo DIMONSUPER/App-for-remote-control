@@ -11,7 +11,7 @@ public interface IAqaraService
 
     Task<AOResult<BaseAqaraResponse>> LoginWithCodeAsync(string email, string code);
 
-    Task<AOResult<DataAqaraResponse<DeviceAqaraModel>>> GetDevicesPositionsync(string positionId, int pageNum, int pageSize);
+    Task<AOResult<DataAqaraResponse<DeviceAqaraModel>>> GetDevicesByPositionAsync(string positionId, int pageNum, int pageSize);
 
     Task<AOResult<DataAqaraResponse<PositionAqaraModel>>> GetPositionsAsync(string positionId, int pageNum, int pageSize);
 }

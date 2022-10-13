@@ -29,22 +29,15 @@ namespace SmartMirror.Services.RoomsService
 
                 var resultOfGettingMockRooms = _smartHomeMockService.GetRooms();
 
-                if (resultOfGettingMockRooms is not null)
-                {
-                    var resultOfGettingRoomsAqara = await GetAllRoomsOfHousesAsync();
+                var resultOfGettingRoomsAqara = await GetAllRoomsOfHousesAsync();
 
-                    if (resultOfGettingRoomsAqara.IsSuccess)
-                    {
-                        rooms = resultOfGettingRoomsAqara.Result.Concat(resultOfGettingMockRooms);
-                    }
-                    else
-                    {
-                        rooms = resultOfGettingMockRooms; 
-                    }
+                if (resultOfGettingRoomsAqara.IsSuccess)
+                {
+                    rooms = resultOfGettingRoomsAqara.Result.Concat(resultOfGettingMockRooms);
                 }
                 else
                 {
-                    onFailure("rooms is null");
+                    rooms = resultOfGettingMockRooms;
                 }
 
                 return rooms;
@@ -110,11 +103,11 @@ namespace SmartMirror.Services.RoomsService
 
                 if (resultOfGettingRoomsHouse.IsSuccess)
                 {
-                    var roomsWithoutDevices = resultOfGettingRoomsHouse.Result.Data;
+                    var simpleRooms = resultOfGettingRoomsHouse.Result.Data;
 
-                    foreach (var room in roomsWithoutDevices)
+                    foreach (var room in simpleRooms)
                     {
-                        var resultOfGettingDevices = await _aqaraService.GetDevicesPositionsync(room.PositionId, 1, 100);
+                        var resultOfGettingDevices = await _aqaraService.GetDevicesByPositionAsync(room.PositionId, 1, 100);
 
                         if (!resultOfGettingDevices.IsSuccess)
                         {
