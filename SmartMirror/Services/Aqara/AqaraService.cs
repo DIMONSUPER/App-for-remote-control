@@ -1,10 +1,8 @@
-﻿using System.Text;
-using SmartMirror.Helpers;
+﻿using SmartMirror.Helpers;
 using SmartMirror.Models.Aqara;
 using SmartMirror.Services.Rest;
 using SmartMirror.Services.Settings;
-using SmartMirror.ViewModels.Dialogs;
-using SmartMirror.Views.Dialogs;
+using System.Text;
 
 namespace SmartMirror.Services.Aqara;
 
@@ -76,49 +74,29 @@ public class AqaraService : IAqaraService
         });
     }
 
-    public Task<AOResult<BaseAqaraResponse>> GetAllDevicesAsync()
+    public Task<AOResult<DataAqaraResponse<DeviceAqaraModel>>> GetDevicesPositionsync(string positionId, int pageNum, int pageSize)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {
             var data = new
             {
-                pageNum = 1,
-                pageSize = 100,
+                positionId = positionId,
+                pageNum = pageNum,
+                pageSize = pageSize,
             };
 
-            var response = await MakeRequestAsync<BaseAqaraResponse<object>>("query.device.info", data);
-
-            if (response?.Result is null)
-            {
-                onFailure("response or result is null");
-            }
-
-            return response as BaseAqaraResponse;
-        });
-    }
-
-    public Task<AOResult<BaseAqaraResponse<DataAqaraResponse<PositionAqaraModel>>>> GetAllHousesAsync()
-    {
-        return AOResult.ExecuteTaskAsync(async onFailure =>
-        {
-            var requestData = new
-            {
-                pageNum = 1,
-                pageSize = 5,
-            };
-
-            var response = await MakeRequestAsync<BaseAqaraResponse<DataAqaraResponse<PositionAqaraModel>>>("query.position.info", requestData);
+            var response = await MakeRequestAsync<BaseAqaraResponse<DataAqaraResponse<DeviceAqaraModel>>> ("query.device.info", data);
 
             if (response?.Message != "Success")
             {
                 onFailure("Request failed");
             }
 
-            return response;
+            return response.Result;
         });
     }
 
-    public Task<AOResult<BaseAqaraResponse<DataAqaraResponse<PositionAqaraModel>>>> GetAllRoomsAsync(string positionId, int pageNum, int pageSize)
+    public Task<AOResult<DataAqaraResponse<PositionAqaraModel>>> GetPositionsAsync(string positionId, int pageNum, int pageSize)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {
@@ -136,7 +114,7 @@ public class AqaraService : IAqaraService
                 onFailure("Request failed");
             }
 
-            return response;
+            return response.Result;
         });
     }
 

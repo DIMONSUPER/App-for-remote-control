@@ -5,13 +5,14 @@ using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Device = SmartMirror.Models.Device;
+using DeviceModel = SmartMirror.Models.DeviceModel;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Views.Dialogs;
 using SmartMirror.Resources.Strings;
 using SmartMirror.ViewModels.Dialogs;
 using Prism.Services;
 using SmartMirror.Models.Aqara;
+using SmartMirror.Services.RoomsService;
 
 namespace SmartMirror.ViewModels.Tabs;
 
@@ -21,12 +22,14 @@ public class RoomsPageViewModel : BaseTabViewModel
     private readonly IMapperService _mapperService;
     private readonly IAqaraService _aqaraService;
     private readonly IDialogService _dialogService;
+    private readonly IRoomsService _roomsService;
 
     public RoomsPageViewModel(
         ISmartHomeMockService smartHomeMockService,
         INavigationService navigationService,
         IMapperService mapperService,
         IAqaraService aqaraService,
+        IRoomsService roomsService,
         IDialogService dialogService)
         : base(navigationService)
     {
@@ -34,6 +37,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         _mapperService = mapperService;
         _aqaraService = aqaraService;
         _dialogService = dialogService;
+        _roomsService = roomsService;
 
         IsAqaraLoginButtonVisible = !_aqaraService.IsAuthorized;
 
@@ -59,8 +63,8 @@ public class RoomsPageViewModel : BaseTabViewModel
         set => SetProperty(ref _isAqaraLoginButtonVisible, value);
     }
 
-    private ObservableCollection<Device> _favoriteAccessories;
-    public ObservableCollection<Device> FavoriteAccessories
+    private ObservableCollection<DeviceModel> _favoriteAccessories;
+    public ObservableCollection<DeviceModel> FavoriteAccessories
     {
         get => _favoriteAccessories;
         set => SetProperty(ref _favoriteAccessories, value);
@@ -76,6 +80,13 @@ public class RoomsPageViewModel : BaseTabViewModel
     #endregion
 
     #region -- Overrides --
+
+    public override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        await LoadRoomsAsync();
+    }
 
     public override async Task InitializeAsync(INavigationParameters parameters)
     {
@@ -168,48 +179,23 @@ public class RoomsPageViewModel : BaseTabViewModel
         {
             FavoriteAccessories = new(_smartHomeMockService.GetDevices());
 
-            var rooms = await _mapperService.MapRangeAsync<RoomBindableModel>(_smartHomeMockService.GetRooms(), (m, vm) =>
+            var resultOfGettingRooms = await _roomsService.GetAllRoomsAsync();
+
+            if (resultOfGettingRooms.IsSuccess)
             {
-                vm.TappedCommand = RoomTappedCommand;
-            });
-
-            Rooms = new(rooms);
-
-            if (_aqaraService.IsAuthorized)
-            {
-                var resultOfGettingHouses = await _aqaraService.GetAllHousesAsync();
-
-                if (resultOfGettingHouses.IsSuccess)
+                var rooms = await _mapperService.MapRangeAsync<RoomBindableModel>(resultOfGettingRooms.Result, (m, vm) =>
                 {
-                    if (resultOfGettingHouses.Result.Result.TotalCount > 0)
-                    {
-                        var house = resultOfGettingHouses.Result.Result.Data.FirstOrDefault();
+                    vm.TappedCommand = RoomTappedCommand;
+                });
 
-                        var resultOfGettingHouseRooms = await _aqaraService.GetAllRoomsAsync(house.PositionId, 1, 100);
+                Rooms = new(rooms);
 
-                        if (resultOfGettingHouseRooms.IsSuccess)
-                        {
-                            var id = 100;
-
-                            var houseRooms = resultOfGettingHouseRooms.Result.Result.Data.Select(row => new RoomBindableModel()
-                            {
-                                Id = id++,
-                                Name = row.PositionName,
-                                CreateTime = DateTime.FromBinary(row.CreateTime),
-                                Description = string.IsNullOrEmpty(row.Description)
-                                    ? "0 Accessories"
-                                    : row.Description,
-                                Devices = new(),
-                                TappedCommand = RoomTappedCommand,
-                            });
-
-                            Rooms = new(houseRooms.Concat(Rooms));
-                        }
-                    }
-                }
+                DataState = EPageState.Complete;
             }
-
-            DataState = EPageState.Complete;
+            else if (!IsInternetConnected)
+            {
+                DataState = EPageState.NoInternet;
+            }
         }
         else
         {
