@@ -22,7 +22,7 @@ namespace SmartMirror.ViewModels
             await Task.Delay(2000);
 
             _navigationService.CreateBuilder()
-                .AddNavigationPage()
+                .UseAbsoluteNavigation()
                 .AddSegment<MainTabbedPageViewModel>()
                 .Navigate(HandleErrors);
         }

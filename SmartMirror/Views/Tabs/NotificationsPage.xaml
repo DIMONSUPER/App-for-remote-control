@@ -6,8 +6,10 @@
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:models="clr-namespace:SmartMirror.Models"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+    xmlns:templatesSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
     x:Class="SmartMirror.Views.Tabs.NotificationsPage"
     Title="Notifications"
     x:DataType="vm:NotificationsPageViewModel">
@@ -15,13 +17,20 @@
     <tabs:BaseTabContentPage.Resources>
 
         <ResourceDictionary>
-
-            <templates:NotificationTemplate x:Key="notificationTemplate"/>
-            <templates:NotificationHeaderTemplate x:Key="notificationHeaderTemplate"/>
-
+            <templatesSelectors:NotificationDataTemplateSelector x:Key="notificationTemplateSelector"/>
         </ResourceDictionary>
 
     </tabs:BaseTabContentPage.Resources>
+
+    <tabs:BaseTabContentPage.Triggers>
+
+        <EventTrigger Event="Appearing">
+
+            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewNotifications}"/>
+
+        </EventTrigger>
+
+    </tabs:BaseTabContentPage.Triggers>
 
     <controls:CustomStateView
         State="{Binding DataState}"
@@ -32,23 +41,27 @@
 
         <controls:CustomStateView.CompleteContent>
 
-            <ListView
-                HandlerChanged="OnListViewHandlerChanged"
-                ItemsSource="{Binding Notifications}"
-                IsPullToRefreshEnabled="True"
-                IsRefreshing="{Binding IsNotificationsRefreshing}"
-                RefreshCommand="{Binding RefreshNotificationsCommand}"
-                IsGroupingEnabled="True"
-                SelectionMode="None"
-                ItemTemplate="{StaticResource notificationTemplate}"
-                GroupHeaderTemplate="{StaticResource notificationHeaderTemplate}"
-                HasUnevenRows="true"
-                SeparatorVisibility="None"
-                VerticalScrollBarVisibility="Always"
-                HorizontalScrollBarVisibility="Never"
+            <RefreshView
+                Margin="0, 24, 0, 0"
                 HorizontalOptions="Center"
-                WidthRequest="660"
-                Margin="50, 24, 0, 0"/>
+                IsRefreshing="{Binding IsNotificationsRefreshing}"
+                Command="{Binding RefreshNotificationsCommand}"
+                x:Name="refreshView">
+
+                <ScrollView
+                    Padding="50, 0, 0, 0"
+                    WidthRequest="660"
+                    VerticalScrollBarVisibility="Always"
+                    HorizontalScrollBarVisibility="Always"
+                    x:Name="scrollViewNotifications">
+
+                    <VerticalStackLayout
+                        BindableLayout.ItemsSource="{Binding Notifications}"
+                        BindableLayout.ItemTemplateSelector="{StaticResource notificationTemplateSelector}"/>
+
+                </ScrollView>
+
+            </RefreshView>
 
         </controls:CustomStateView.CompleteContent>
 

@@ -5,5 +5,5 @@ public partial class CamerasPage : BaseTabContentPage
 	public CamerasPage()
 	{
 		InitializeComponent();
-	}
+    }
 }

@@ -337,6 +337,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Needs two taps to exit the app..
+        /// </summary>
+        internal static string NeedsTwoTaps {
+            get {
+                return ResourceManager.GetString("NeedsTwoTaps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No accessories yet.
         /// </summary>
         internal static string NoAccessoriesYet {
