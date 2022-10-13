@@ -63,7 +63,7 @@ namespace SmartMirror.Services.RoomsService
 
                 if (_aqaraService.IsAuthorized)
                 {
-                    var resultOfGettingHouses = await _aqaraService.GetPositionsAsync(String.Empty, 1, 100);
+                    var resultOfGettingHouses = await _aqaraService.GetPositionsAsync(string.Empty, 1, 100);
 
                     if (resultOfGettingHouses.IsSuccess)
                     {
