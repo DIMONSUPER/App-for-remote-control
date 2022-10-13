@@ -2,8 +2,10 @@
 using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
+using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
+using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -13,16 +15,19 @@ public class ScenariosPageViewModel : BaseTabViewModel
 {
     private readonly IMapperService _mapperService;
     private readonly IScenariosService _scenariosService;
+    private readonly IDialogService _dialogService;
 
     public ScenariosPageViewModel(
+        INavigationService navigationService,
+        IDialogService dialogService,
         IMapperService mapperService,
-        IScenariosService scenariosService,
-        INavigationService navigationService)
+        IScenariosService scenariosService)
         : base(navigationService)
     {
+        _dialogService = dialogService;
         _mapperService = mapperService;
         _scenariosService = scenariosService;
-        
+
         Title = "Scenarios";
         DataState = EPageState.Loading;
     }
@@ -90,12 +95,26 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     private async Task OnChangeActiveStatusCommandAsync(ScenarioBindableModel scenario)
     {
-        var resultOfUpdattingScenario = await _scenariosService.UpdateActiveStatusScenarioAsync(scenario.Id, !scenario.IsActive);
-                           
+        scenario.IsUpdating = true;
+
+        var resultOfUpdattingScenario = await _scenariosService.RunScenarioAsync(scenario.Id);
+
         if (resultOfUpdattingScenario.IsSuccess)
         {
-            scenario.IsActive = !scenario.IsActive;
+            scenario.IsActive = true;
         }
+        else
+        {
+            var errorDialogParameters = new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.TITLE, "Error" },
+                { Constants.DialogsParameterKeys.DESCRIPTION, resultOfUpdattingScenario.Message },
+            };
+
+            await _dialogService.ShowDialogAsync(nameof(ErrorDialog), errorDialogParameters);
+        }
+
+        scenario.IsUpdating = false;
     }
 
     private Task OnGoToScenarioDetailsCommandAsync(ScenarioBindableModel scenario)

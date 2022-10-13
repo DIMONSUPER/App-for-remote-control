@@ -59,6 +59,27 @@ namespace SmartMirror.Services.Scenarios
             });
         }
 
+        public Task<AOResult<IEnumerable<ScenarioModel>>> GetFavoriteScenariosAsync()
+        {
+            return AOResult.ExecuteTaskAsync(onFailure =>
+            {
+                var scenarios = Enumerable.Empty<ScenarioModel>();
+
+                var resultOfGettingScenarios = _smartHomeMockService.GetScenarios();
+
+                if (resultOfGettingScenarios is not null)
+                {
+                    scenarios = resultOfGettingScenarios.Where(row => row.IsFavorite);
+                }
+                else
+                {
+                    onFailure("scenarios is null");
+                }
+
+                return Task.FromResult(scenarios);
+            });
+        }
+
         public Task<AOResult<ScenarioModel>> GetScenarioByIdAsync(string sceneId)
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
@@ -92,28 +113,7 @@ namespace SmartMirror.Services.Scenarios
             });
         }
 
-        public Task<AOResult<IEnumerable<ScenarioModel>>> GetFavoriteScenariosAsync()
-        {
-            return AOResult.ExecuteTaskAsync(onFailure =>
-            {
-                var scenarios = Enumerable.Empty<ScenarioModel>();
-
-                var resultOfGettingScenarios = _smartHomeMockService.GetScenarios();
-
-                if (resultOfGettingScenarios is not null)
-                {
-                    scenarios = resultOfGettingScenarios.Where(row => row.IsFavorite);
-                }
-                else
-                {
-                    onFailure("scenarios is null");
-                }
-
-                return Task.FromResult(scenarios);
-            });
-        }
-
-        public Task<AOResult> UpdateActiveStatusScenarioAsync(int id, bool active)
+        public Task<AOResult> RunScenarioAsync(string id)
         {
             return AOResult.ExecuteTaskAsync(onFailure =>
             {
@@ -123,7 +123,7 @@ namespace SmartMirror.Services.Scenarios
                 {
                     var scenario = resultOfGettingScenarios.FirstOrDefault(row => row.Id == id);
 
-                    scenario.IsActive = active;
+                    scenario.IsActive = true;
                 }
                 else
                 {

@@ -112,6 +112,7 @@ public class AqaraService : IAqaraService
             return responce?.Result;
         });
     }
+  
     public Task<AOResult<DetailSceneAqaraModel>> GetScenarioByIdAsync(string id)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
@@ -126,6 +127,24 @@ public class AqaraService : IAqaraService
             SetFailure(onFailure, responce);
 
             return responce?.Result;
+        });
+    }
+
+    public Task<AOResult> RunScenarioByIdAsync(string id)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var data = new
+            {
+                sceneId = id,
+            };
+
+            var responce = await MakeRequestAsync<BaseAqaraResponse>("config.scene.run", data);
+
+            if (responce?.Message is not "Success")
+            {
+                onFailure("Request failed");
+            }
         });
     }
 
@@ -197,7 +216,7 @@ public class AqaraService : IAqaraService
         return Convert.ToHexString(hashBytes);
     }
 
-    private void SetFailure<T>(Action<string> onFailure, BaseAqaraResponse<T> responce)
+    private void SetFailure(Action<string> onFailure, BaseAqaraResponse responce)
     {
         if (responce is null)
         {
@@ -211,4 +230,3 @@ public class AqaraService : IAqaraService
 
     #endregion
 }
-
