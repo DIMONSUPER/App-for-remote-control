@@ -40,11 +40,11 @@ public class DeviceBindableModel : BindableBase
         set => SetProperty(ref _deviceType, value);
     }
 
-    private string _type;
-    public string Type
+    private string _iconSource = "grey_question_mark";
+    public string IconSource
     {
-        get => _type;
-        set => SetProperty(ref _type, value);
+        get => _iconSource;
+        set => SetProperty(ref _iconSource, value);
     }
 
     private string _roomName;
@@ -108,6 +108,20 @@ public class DeviceBindableModel : BindableBase
     {
         get => _state;
         set => SetProperty(ref _state, value);
+    }
+
+    private bool _isExecuting;
+    public bool IsExecuting
+    {
+        get => _isExecuting;
+        set => SetProperty(ref _isExecuting, value);
+    }
+
+    private string _editableResource;
+    public string EditableResource
+    {
+        get => _editableResource;
+        set => SetProperty(ref _editableResource, value);
     }
 
     private ICommand _tappedCommand;

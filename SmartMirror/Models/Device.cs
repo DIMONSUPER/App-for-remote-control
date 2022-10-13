@@ -9,7 +9,7 @@ namespace SmartMirror.Models
         public string Name { get; set; }
         public EDeviceStatus Status { get; set; }
         public EDeviceType DeviceType { get; set; }
-        public string Type { get; set; }
+        public string IconSource { get; set; }
         public string RoomName { get; set; }
     }
 }

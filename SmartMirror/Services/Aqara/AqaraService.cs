@@ -92,23 +92,18 @@ public class AqaraService : IAqaraService
         });
     }
 
-    public Task<AOResult<BaseAqaraResponse>> ToggleTheLightsAsync(string deviceId)
+    public Task<AOResult<BaseAqaraResponse>> UpdateAttributeValueAsync(string deviceId, params (string resourceId, string value)[] resources)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {
+            var array = resources.Select(x => new { resourceId = x.resourceId, value = x.value }).ToArray();
+
             var data = new[]
             {
                 new
                 {
                     subjectId = deviceId,
-                    resources = new[]
-                    {
-                        new
-                        {
-                            resourceId = "4.1.85",
-                            value = "2",
-                        }
-                    }
+                    resources = array,
                 }
             };
 

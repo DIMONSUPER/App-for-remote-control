@@ -41,40 +41,10 @@
                         VerticalOptions="Start"
                         HorizontalOptions="Start">
 
-                    <Image Source="garage_door"
+                    <Image Source="{Binding IconSource}"
                            VerticalOptions="Center"
                            HorizontalOptions="Center"
-                           Scale="0.75">
-
-                        <Image.Triggers>
-
-                            <DataTrigger Binding="{Binding Type}" Value="FrontDoor" TargetType="Image">
-                                <Setter Property="Source" Value="front_door"/>
-                            </DataTrigger>
-
-                            <DataTrigger Binding="{Binding Type}" Value="Fan" TargetType="Image">
-                                <Setter Property="Source" Value="fan"/>
-                            </DataTrigger>
-
-                            <DataTrigger Binding="{Binding Type}" Value="Lights" TargetType="Image">
-                                <Setter Property="Source" Value="lamp"/>
-                            </DataTrigger>
-
-                            <DataTrigger Binding="{Binding Type}" Value="Pressure" TargetType="Image">
-                                <Setter Property="Source" Value="pic_pressure"/>
-                            </DataTrigger>
-
-                            <DataTrigger Binding="{Binding Type}" Value="Humidity" TargetType="Image">
-                                <Setter Property="Source" Value="pic_humidity"/>
-                            </DataTrigger>
-
-                            <DataTrigger Binding="{Binding Type}" Value="Temperature" TargetType="Image">
-                                <Setter Property="Source" Value="pic_temperature"/>
-                            </DataTrigger>
-
-                        </Image.Triggers>
-
-                    </Image>
+                           Scale="0.75"/>
 
                 </Border>
 
@@ -139,6 +109,15 @@
                         </Image.Triggers>
 
                     </Image>
+
+                    <ActivityIndicator Grid.RowSpan="2"
+                                       Grid.Column="1"
+                                       IsVisible="{Binding IsExecuting}"
+                                       IsRunning="{Binding IsExecuting}"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="End"
+                                       WidthRequest="35"
+                                       HeightRequest="35"/>
 
                 </Grid>
 
