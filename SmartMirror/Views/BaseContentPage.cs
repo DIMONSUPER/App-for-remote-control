@@ -6,14 +6,5 @@ public class BaseContentPage : ContentPage
     {
         NavigationPage.SetHasNavigationBar(this, false);
     }
-
-    #region -- Overrides --
-
-    protected override bool OnBackButtonPressed()
-    {
-        return true;
-    }
-
-    #endregion
 }
 
