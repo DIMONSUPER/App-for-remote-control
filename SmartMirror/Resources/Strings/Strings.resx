@@ -199,4 +199,7 @@
 	<data name="Now" xml:space="preserve">
 		<value>now</value>
 	</data>
+    <data name="Playing" xml:space="preserve">
+		<value>Playing</value>
+	</data>
 </root>

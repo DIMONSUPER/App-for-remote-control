@@ -135,21 +135,73 @@
 
                         <Label.Triggers>
 
-                            <DataTrigger Binding="{Binding Status}" TargetType="Label" Value="On">
+                            <!-- UNLOCKED -->
+                            <MultiTrigger TargetType="Label">
+                                <MultiTrigger.Conditions>
+                                    <BindingCondition Binding="{Binding Status}" Value="On" />
+                                    <BindingCondition Binding="{Binding DeviceType}" Value="Locker" />
+                                </MultiTrigger.Conditions>
                                 <Setter Property="Text" Value="{extensions:Translate Unlocked}"/>
                                 <Setter Property="Style" Value="{x:DynamicResource tstyle_i12}"/>
-                            </DataTrigger>
+                            </MultiTrigger>
 
-                            <DataTrigger Binding="{Binding Status}" TargetType="Label" Value="Off">
+                            <!-- CLOSED -->
+                            <MultiTrigger TargetType="Label">
+                                <MultiTrigger.Conditions>
+                                    <BindingCondition Binding="{Binding Status}" Value="Off" />
+                                    <BindingCondition Binding="{Binding DeviceType}" Value="Locker" />
+                                </MultiTrigger.Conditions>
                                 <Setter Property="Text" Value="{extensions:Translate Closed}"/>
                                 <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
-                            </DataTrigger>
+                            </MultiTrigger>
 
+                            <!-- ON -->
+                            <MultiTrigger TargetType="Label">
+                                <MultiTrigger.Conditions>
+                                    <BindingCondition Binding="{Binding Status}" Value="On" />
+                                    <BindingCondition Binding="{Binding DeviceType}" Value="Switcher" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Text" Value="{extensions:Translate On}"/>
+                                <Setter Property="Style" Value="{x:DynamicResource tstyle_i12}"/>
+                            </MultiTrigger>
+
+                             <!-- OFF -->
+                            <MultiTrigger TargetType="Label">
+                                <MultiTrigger.Conditions>
+                                    <BindingCondition Binding="{Binding Status}" Value="Off" />
+                                    <BindingCondition Binding="{Binding DeviceType}" Value="Switcher" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Text" Value="{extensions:Translate Off}"/>
+                                <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
+                            </MultiTrigger>
+
+                            <!-- Playing -->
+                            <MultiTrigger TargetType="Label">
+                                <MultiTrigger.Conditions>
+                                    <BindingCondition Binding="{Binding Status}" Value="On" />
+                                    <BindingCondition Binding="{Binding DeviceType}" Value="Player" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Text" Value="{extensions:Translate Playing}"/>
+                                <Setter Property="Style" Value="{x:DynamicResource tstyle_i12}"/>
+                            </MultiTrigger>
+
+                             <!-- Paused -->
+                            <MultiTrigger TargetType="Label">
+                                <MultiTrigger.Conditions>
+                                    <BindingCondition Binding="{Binding Status}" Value="Off" />
+                                    <BindingCondition Binding="{Binding DeviceType}" Value="Player" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Text" Value="{extensions:Translate Paused}"/>
+                                <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
+                            </MultiTrigger>
+
+                            <!-- DISCONNECTED -->
                             <DataTrigger Binding="{Binding Status}" TargetType="Label" Value="Disconnected">
                                 <Setter Property="Text" Value="{extensions:Translate Disconnected}"/>
                                 <Setter Property="Style" Value="{x:DynamicResource tstyle_i14}"/>
                             </DataTrigger>
 
+                            <!-- CONNECTED -->
                             <DataTrigger Binding="{Binding Status}" TargetType="Label" Value="Connected">
                                 <Setter Property="IsVisible" Value="False"/>
                             </DataTrigger>

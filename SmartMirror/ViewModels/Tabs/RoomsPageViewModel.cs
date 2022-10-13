@@ -102,8 +102,20 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private async void OnAccessorieTappedCommandAsync(DeviceBindableModel device)
     {
-        if (device.DeviceType == EDeviceType.Switcher && device.Status != EDeviceStatus.Disconnected && !device.IsExecuting)
+        if (string.IsNullOrWhiteSpace(device.DeviceId) && device.Status != EDeviceStatus.Disconnected && !device.IsExecuting)
         {
+            //Mocked device
+            device.IsExecuting = true;
+
+            await Task.Delay(500);
+
+            device.Status = device.Status == EDeviceStatus.On ? EDeviceStatus.Off : EDeviceStatus.On;
+
+            device.IsExecuting = false;
+        }
+        else if (device.DeviceType == EDeviceType.Switcher && device.Status != EDeviceStatus.Disconnected && !device.IsExecuting)
+        {
+            //Real device
             device.IsExecuting = true;
 
             var value = device.Status == EDeviceStatus.On ? "0" : "1";

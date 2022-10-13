@@ -445,6 +445,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Playing.
+        /// </summary>
+        internal static string Playing {
+            get {
+                return ResourceManager.GetString("Playing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please, check your internet connection and try again.
         /// </summary>
         internal static string PleaseCheckInternet {
