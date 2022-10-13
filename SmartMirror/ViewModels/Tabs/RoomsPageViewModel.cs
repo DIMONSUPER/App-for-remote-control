@@ -176,7 +176,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             if (resultOfGettingRooms.IsSuccess)
             {
-                var rooms = await _mapperService.MapRange<RoomBindableModel>(resultOfGettingRooms.Result, (m, vm) =>
+                var rooms = _mapperService.MapRange<RoomBindableModel>(resultOfGettingRooms.Result, (m, vm) =>
                 {
                     vm.TappedCommand = RoomTappedCommand;
                 });
