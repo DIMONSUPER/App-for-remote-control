@@ -199,4 +199,7 @@
 	<data name="Now" xml:space="preserve">
 		<value>now</value>
 	</data>
+    <data name="NeedsTwoTaps" xml:space="preserve">
+		<value>Needs two taps to exit the app.</value>
+	</data>
 </root>

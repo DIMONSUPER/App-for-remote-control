@@ -2,21 +2,17 @@
 <DataTemplate
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:models="clr-namespace:SmartMirror.Models"
-    x:DataType="models:NotificationsGroupedByDayModel"
+    xmlns:bindableModels="clr-namespace:SmartMirror.Models.BindableModels"
+    x:DataType="bindableModels:NotificationGroupTitleBindableModel"
     x:Class="SmartMirror.Resources.DataTemplates.NotificationHeaderTemplate">
 
-    <ViewCell>
-        
-        <VerticalStackLayout Padding="0, 24, 50, 24">
+    <VerticalStackLayout Padding="0, 24, 50, 24">
 
-            <Label
-                Text="{Binding Name, Converter={StaticResource timeToDaysOfWeekConverter}}"
-                Style="{x:DynamicResource tstyle_i11}"
-                HorizontalTextAlignment="Center"/>
+        <Label
+            Text="{Binding Title, Converter={StaticResource timeToDaysOfWeekConverter}}"
+            Style="{x:DynamicResource tstyle_i11}"
+            HorizontalTextAlignment="Center"/>
 
-        </VerticalStackLayout>
-        
-    </ViewCell>
+    </VerticalStackLayout>
 
 </DataTemplate>

@@ -6,6 +6,7 @@
                          xmlns:extensions="clr-namespace:SmartMirror.Extensions"
                          xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
                          xmlns:controls="clr-namespace:SmartMirror.Controls"
+                         xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
                          x:Class="SmartMirror.Views.Tabs.RoomsPage"
                          Title="{extensions:Translate Rooms}"
                          x:DataType="vm:RoomsPageViewModel">
@@ -21,6 +22,17 @@
         </ResourceDictionary>
 
     </tabs:BaseTabContentPage.Resources>
+
+    <tabs:BaseTabContentPage.Triggers>
+
+        <EventTrigger Event="Appearing">
+
+            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewFavoriteAccessories}"/>
+            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewRooms}"/>
+
+        </EventTrigger>
+
+    </tabs:BaseTabContentPage.Triggers>
 
     <controls:CustomStateView State="{Binding DataState}"
                               TryAgainCommand="{Binding TryAgainCommand}"
@@ -61,7 +73,8 @@
                     <!-- FAVORITE ACCESSORIES COLLECTION -->
                     <ScrollView Margin="0,16,0,0"
                                 Orientation="Horizontal"
-                                HorizontalScrollBarVisibility="Never">
+                                HorizontalScrollBarVisibility="Never"
+                                x:Name="scrollViewFavoriteAccessories">
 
                         <HorizontalStackLayout Spacing="30"
                                                Padding="60,0"
@@ -87,7 +100,8 @@
                     <!-- ROOMS COLLECTION -->
                     <ScrollView Margin="0,16,0,0"
                                 Orientation="Horizontal"
-                                HorizontalScrollBarVisibility="Never">
+                                HorizontalScrollBarVisibility="Never"
+                                x:Name="scrollViewRooms">
 
                         <HorizontalStackLayout Spacing="30"
                                                Padding="60,0"

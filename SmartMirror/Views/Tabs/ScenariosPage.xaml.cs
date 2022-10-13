@@ -5,5 +5,5 @@ public partial class ScenariosPage : BaseTabContentPage
 	public ScenariosPage()
 	{
 		InitializeComponent();
-	}
+    }
 }

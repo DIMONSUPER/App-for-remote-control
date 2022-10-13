@@ -5,6 +5,6 @@ namespace SmartMirror.Services.Notifications
 {
     public interface INotificationsService
     {
-        Task<AOResult<IEnumerable<NotificationsGroupedByDayModel>>> GetNotificationsGroupedByDayAsync();
+        Task<AOResult<IEnumerable<NotificationModel>>> GetNotificationsAsync();
     }
 }

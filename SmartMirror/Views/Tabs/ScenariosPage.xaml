@@ -7,6 +7,7 @@
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     x:Class="SmartMirror.Views.Tabs.ScenariosPage"
     Title="Scenarios"
     x:DataType="vm:ScenariosPageViewModel">
@@ -23,6 +24,17 @@
 
     </tabs:BaseTabContentPage.Resources>
 
+    <tabs:BaseTabContentPage.Triggers>
+
+        <EventTrigger Event="Appearing">
+
+            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewCompleteState}"/>
+            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewFavoriteScenarios}"/>
+
+        </EventTrigger>
+
+    </tabs:BaseTabContentPage.Triggers>
+
     <controls:CustomStateView
         State="{Binding DataState}"
         TryAgainCommand="{Binding TryAgainCommand}"
@@ -34,7 +46,8 @@
             <ScrollView
                 VerticalScrollBarVisibility="Never"
                 HorizontalScrollBarVisibility="Never"
-                Padding="0, 0, 0, 30">
+                Padding="0, 0, 0, 30"
+                x:Name="scrollViewCompleteState">
 
                 <VerticalStackLayout
                     Padding="0, 42, 0, 0"
@@ -52,7 +65,8 @@
                     <ScrollView
                         Margin="0, 16, 0, 0"
                         Orientation="Horizontal"
-                        HorizontalScrollBarVisibility="Never">
+                        HorizontalScrollBarVisibility="Never"
+                        x:Name="scrollViewFavoriteScenarios">
 
                         <HorizontalStackLayout
                             Spacing="30"

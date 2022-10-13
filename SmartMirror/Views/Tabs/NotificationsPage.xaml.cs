@@ -1,21 +1,27 @@
-﻿namespace SmartMirror.Views.Tabs;
+﻿using System.ComponentModel;
+
+namespace SmartMirror.Views.Tabs;
 
 public partial class NotificationsPage : BaseTabContentPage
 {
 	public NotificationsPage()
 	{
 		InitializeComponent();
+
+        refreshView.PropertyChanged += OnRefreshViewPropertyChanged;
     }
 
     #region -- Private helpers --
 
-    private void OnListViewHandlerChanged(object sender, EventArgs e)
-	{
-		if (sender is ListView listView && listView.Handler.PlatformView is Android.Widget.ListView nativeListView)
-		{
-            nativeListView.SetSelector(Android.Resource.Color.Transparent);
+    private void OnRefreshViewPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(refreshView.Height))
+        {
+            scrollViewNotifications.HeightRequest = refreshView.Height;
+
+            scrollViewNotifications.LayoutTo(new Rect(0, 0, (int)refreshView.Width, (int)refreshView.Height), 100);
         }
-	}
+    }
 
     #endregion
 }

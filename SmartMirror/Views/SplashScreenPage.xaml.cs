@@ -6,13 +6,4 @@ public partial class SplashScreenPage : BaseContentPage
 	{
 		InitializeComponent();
 	}
-
-    #region -- Overrides --
-
-    protected override bool OnBackButtonPressed()
-    {
-        return true;
-    }
-
-    #endregion
 }
