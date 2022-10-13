@@ -154,7 +154,7 @@ public class CamerasPageViewModel : BaseTabViewModel
 
             if (resultOfGettingCameras.IsSuccess)
             {
-                var cameras = await _mapperService.MapRangeAsync<CameraBindableModel>(resultOfGettingCameras.Result, (m, vm) =>
+                var cameras = _mapperService.MapRange<CameraBindableModel>(resultOfGettingCameras.Result, (m, vm) =>
                 {
                     vm.TapCommand = SelectCameraCommand;
                 });

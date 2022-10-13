@@ -81,16 +81,9 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override async void OnAppearing()
+    public override async void Initialize(INavigationParameters parameters)
     {
-        base.OnAppearing();
-
-        await LoadRoomsAsync();
-    }
-
-    public override async Task InitializeAsync(INavigationParameters parameters)
-    {
-        await base.InitializeAsync(parameters);
+        base.Initialize(parameters);
 
         await LoadRoomsAsync();
     }
@@ -183,7 +176,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             if (resultOfGettingRooms.IsSuccess)
             {
-                var rooms = await _mapperService.MapRangeAsync<RoomBindableModel>(resultOfGettingRooms.Result, (m, vm) =>
+                var rooms = await _mapperService.MapRange<RoomBindableModel>(resultOfGettingRooms.Result, (m, vm) =>
                 {
                     vm.TappedCommand = RoomTappedCommand;
                 });
