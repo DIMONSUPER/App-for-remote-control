@@ -15,26 +15,24 @@ namespace SmartMirror.Services.Notifications
 
         #region -- INotificationsService implementation --
 
-        public Task<AOResult<IEnumerable<NotificationsGroupedByDayModel>>> GetNotificationsGroupedByDayAsync()
+        public Task<AOResult<IEnumerable<NotificationModel>>> GetNotificationsAsync()
         {
             return AOResult.ExecuteTaskAsync(onFailure =>
             {
-                var notificationsGroupedByDay = Enumerable.Empty<NotificationsGroupedByDayModel>();
+                var notifications = Enumerable.Empty<NotificationModel>();
 
-                var notifications = _smartHomeMockService.GetNotifications();
+                var resultOfGettingNotifications = _smartHomeMockService.GetNotifications();
 
-                if (notifications is not null)
+                if (resultOfGettingNotifications is not null)
                 {
-                    notificationsGroupedByDay = notifications
-                        .GroupBy(row => row.LastActivityTime.ToString(Constants.Formats.DATE_FORMAT))
-                        .Select(group => new NotificationsGroupedByDayModel(group.Key, group.ToList()));
+                    notifications = resultOfGettingNotifications;
                 }
                 else
                 {
                     onFailure("notifications is null");
                 }
 
-                return Task.FromResult(notificationsGroupedByDay);
+                return Task.FromResult(notifications);
             });
         }
 

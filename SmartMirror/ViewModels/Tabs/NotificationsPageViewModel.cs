@@ -1,8 +1,9 @@
-using Microsoft.Extensions.Localization;
 using SmartMirror.Enums;
 using SmartMirror.Helpers;
-using SmartMirror.Models;
+using SmartMirror.Interfaces;
+using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
+using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Notifications;
 using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
@@ -14,15 +15,18 @@ public class NotificationsPageViewModel : BaseTabViewModel
 {
     private readonly INotificationsService _notificationsService;
     private readonly IDialogService _dialogService;
+    private readonly IMapperService _mapperService;
 
     public NotificationsPageViewModel(
         INotificationsService notificationsService,
         IDialogService dialogService,
+        IMapperService mapperService,
         INavigationService navigationService)
         : base(navigationService)
     {
         _notificationsService = notificationsService;
         _dialogService = dialogService;
+        _mapperService = mapperService;
 
         Title = "Notifications";
         DataState = EPageState.Loading;
@@ -30,8 +34,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     #region -- Public properties --
 
-    private ObservableCollection<NotificationsGroupedByDayModel> _notifications;
-    public ObservableCollection<NotificationsGroupedByDayModel> Notifications
+    private ObservableCollection<INotificationGroupItemModel> _notifications;
+    public ObservableCollection<INotificationGroupItemModel> Notifications
     {
         get => _notifications;
         set => SetProperty(ref _notifications, value);
@@ -94,11 +98,33 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         if (IsInternetConnected)
         {
-            var resultOfGettingNotifications = await _notificationsService.GetNotificationsGroupedByDayAsync();
+            var resultOfGettingNotifications = await _notificationsService.GetNotificationsAsync();
 
             if (resultOfGettingNotifications.IsSuccess)
             {
-                Notifications ??= new(resultOfGettingNotifications.Result);
+                var allNotifications = resultOfGettingNotifications.Result.OrderByDescending(row => row.LastActivityTime);
+
+                var lastTitleGroup = string.Empty;
+                var notificationGrouped = new ObservableCollection<INotificationGroupItemModel>();
+
+                foreach (var notificafication in allNotifications)
+                {
+                    var titleGroup = notificafication.LastActivityTime.ToString(Constants.Formats.DATE_FORMAT);
+
+                    if (lastTitleGroup != titleGroup)
+                    {
+                        notificationGrouped.Add(new NotificationGroupTitleBindableModel()
+                        {
+                            Title = titleGroup,
+                        });
+
+                        lastTitleGroup = titleGroup;
+                    }
+
+                    notificationGrouped.Add(await _mapperService.MapAsync<NotificationGroupItemBindableModel>(notificafication));
+                }
+
+                Notifications = new(notificationGrouped);
 
                 DataState = EPageState.Complete;
             }
@@ -115,4 +141,3 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     #endregion
 }
-
