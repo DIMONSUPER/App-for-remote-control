@@ -2,6 +2,7 @@
 <tabs:BaseTabContentPage xmlns:tabs="clr-namespace:SmartMirror.Views.Tabs"
                          xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                         xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                          xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
                          xmlns:extensions="clr-namespace:SmartMirror.Extensions"
                          xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
@@ -37,6 +38,7 @@
     <controls:CustomStateView State="{Binding DataState}"
                               TryAgainCommand="{Binding TryAgainCommand}"
                               EmptyTitle="{extensions:Translate NoAccessoriesYet}"
+                              EmptyStateImage="no_accessories_yet"
                               LoadingTitle="{extensions:Translate Rooms}">
 
         <controls:CustomStateView.CompleteContent>
@@ -44,7 +46,14 @@
             <Grid RowSpacing="0"
                   RowDefinitions="0.55*, 0.45*">
 
-                <VerticalStackLayout Margin="0,24,0,0"
+                <Grid.Triggers>
+                    <DataTrigger TargetType="Grid" Binding="{Binding FavoriteAccessories.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}" Value="False">
+                        <Setter Property="RowDefinitions" Value="auto"/>
+                    </DataTrigger>
+                </Grid.Triggers>
+
+                <VerticalStackLayout IsVisible="{Binding FavoriteAccessories.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
+                                     Margin="0,24,0,0"
                                      Spacing="0">
 
                     <StackLayout Orientation="Horizontal">

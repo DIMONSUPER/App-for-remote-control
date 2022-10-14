@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <DataTemplate xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:models="clr-namespace:SmartMirror.Models"
+             xmlns:bindableModels="clr-namespace:SmartMirror.Models.BindableModels"
              x:Class="SmartMirror.Resources.DataTemplates.RoomsVerticalListTemplate"
-             x:DataType="{x:Type models:RoomBindableModel}">
+             x:DataType="{x:Type bindableModels:RoomBindableModel}">
 
     <Grid>
 
@@ -42,7 +42,7 @@
                 </Label>
 
                 <Label Grid.Column="1"
-                       Text="{Binding Devices.Count}"
+                       Text="{Binding DevicesCount}"
                        VerticalTextAlignment="Center"
                        Style="{x:DynamicResource tstyle_i7}"/>
 

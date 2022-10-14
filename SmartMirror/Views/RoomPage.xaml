@@ -4,6 +4,7 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                        xmlns:extensions="clr-namespace:SmartMirror.Extensions"
                        xmlns:vm="clr-namespace:SmartMirror.ViewModels"
+                       xmlns:controls="clr-namespace:SmartMirror.Controls"
                        xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
                        x:Class="SmartMirror.Views.RoomPage"
                        x:DataType="{x:Type vm:RoomPageViewModel}">
@@ -63,24 +64,34 @@
 
             </CollectionView>
 
-            <!-- DEVICES COLLECTION -->
-            <CollectionView Grid.Column="1"
-                            ItemsSource="{Binding SelectedRoomDevices}"
-                            ItemTemplate="{x:StaticResource selectedRoomDevicesTemplate}"
-                            SelectionMode="None">
+            <controls:CustomStateView Grid.Column="1"
+                                      State="{Binding DataState}"
+                                      EmptyStateImage="no_accessories_yet"
+                                      EmptyTitle="{extensions:Translate NoAccessoriesYet}"
+                                      LoadingTitle="{extensions:Translate Accessories}">
 
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" Span="3" HorizontalItemSpacing="0" VerticalItemSpacing="24"/>
-                </CollectionView.ItemsLayout>
+                <controls:CustomStateView.CompleteContent>
 
-                <CollectionView.Footer>
+                    <!-- DEVICES COLLECTION -->
+                    <CollectionView ItemsSource="{Binding SelectedRoomDevices}"
+                                    ItemTemplate="{x:StaticResource selectedRoomDevicesTemplate}"
+                                    SelectionMode="None">
 
-                    <BoxView Color="Transparent"
-                             HeightRequest="20"/>
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical" Span="3" HorizontalItemSpacing="0" VerticalItemSpacing="24"/>
+                        </CollectionView.ItemsLayout>
 
-                </CollectionView.Footer>
+                        <CollectionView.Footer>
 
-            </CollectionView>
+                            <BoxView Color="Transparent"
+                                     HeightRequest="20"/>
+
+                        </CollectionView.Footer>
+
+                    </CollectionView>
+                    
+                </controls:CustomStateView.CompleteContent>
+            </controls:CustomStateView>
 
         </Grid>
 

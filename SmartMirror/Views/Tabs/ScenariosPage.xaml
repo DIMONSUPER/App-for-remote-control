@@ -3,6 +3,7 @@
     xmlns:tabs="clr-namespace:SmartMirror.Views.Tabs"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
@@ -39,6 +40,7 @@
         State="{Binding DataState}"
         TryAgainCommand="{Binding TryAgainCommand}"
         EmptyTitle="{extensions:Translate NoScenariosYet}"
+        EmptyStateImage="empty_scenarios"
         LoadingTitle="{extensions:Translate Scenarios}">
 
         <controls:CustomStateView.CompleteContent>
@@ -58,6 +60,7 @@
                         HorizontalOptions="Start"
                         Margin="60, 0"
                         Spacing="12"
+                        IsVisible="{Binding FavoriteScenarios.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
                         Title="{extensions:Translate FavoriteScenarios}"
                         Number="{Binding FavoriteScenarios.Count}"/>
 
@@ -66,6 +69,7 @@
                         Margin="0, 16, 0, 0"
                         Orientation="Horizontal"
                         HorizontalScrollBarVisibility="Never"
+                        IsVisible="{Binding FavoriteScenarios.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
                         x:Name="scrollViewFavoriteScenarios">
 
                         <HorizontalStackLayout
@@ -82,7 +86,20 @@
                         Margin="60, 54, 60, 0"
                         Spacing="12"
                         Title="{extensions:Translate Scenarios}"
-                        Number="{Binding Scenarios.Count}"/>
+                        Number="{Binding Scenarios.Count}">
+
+                        <controls:BadgeTitleView.Triggers>
+                            <DataTrigger
+                                TargetType="controls:BadgeTitleView"
+                                Binding="{Binding FavoriteScenarios.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
+                                Value="False">
+                                
+                                <Setter Property="Margin" Value="60, 0"/>
+                                
+                            </DataTrigger>
+                        </controls:BadgeTitleView.Triggers>
+
+                    </controls:BadgeTitleView>
 
                     <!-- SCENARIOS COLLECTION -->
                     <CollectionView

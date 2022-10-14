@@ -2,21 +2,25 @@
 using SmartMirror.Models;
 using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Aqara;
+using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mock;
 
-namespace SmartMirror.Services.RoomsService
+namespace SmartMirror.Services.Rooms
 {
     public class RoomsService : IRoomsService
     {
         private readonly ISmartHomeMockService _smartHomeMockService;
         private readonly IAqaraService _aqaraService;
+        private readonly IDevicesService _devicesService;
 
         public RoomsService(
-            IAqaraService aqaraService, 
+            IAqaraService aqaraService,
+            IDevicesService devicesService,
             ISmartHomeMockService smartHomeMockService)
         {
             _smartHomeMockService = smartHomeMockService;
             _aqaraService = aqaraService;
+            _devicesService = devicesService;
         }
 
         #region -- IRoomsService implementation --
@@ -56,7 +60,7 @@ namespace SmartMirror.Services.RoomsService
 
                 if (_aqaraService.IsAuthorized)
                 {
-                    var resultOfGettingHouses = await _aqaraService.GetPositionsAsync(string.Empty, 1, 100);
+                    var resultOfGettingHouses = await _aqaraService.GetPositionsAsync(string.Empty);
 
                     if (resultOfGettingHouses.IsSuccess)
                     {
@@ -66,7 +70,7 @@ namespace SmartMirror.Services.RoomsService
 
                             foreach (var house in houses)
                             {
-                                var resultOfGettingRoomsHouse = await GetRoomsHouseAsync(house.PositionId, 1, 100);
+                                var resultOfGettingRoomsHouse = await GetRoomsHouseAsync(house.PositionId);
 
                                 if (resultOfGettingRoomsHouse.IsSuccess)
                                 {
@@ -93,13 +97,13 @@ namespace SmartMirror.Services.RoomsService
             });
         }
 
-        private Task<AOResult<IEnumerable<RoomModel>>> GetRoomsHouseAsync(string positionId, int pageNum, int pageSize)
+        private Task<AOResult<IEnumerable<RoomModel>>> GetRoomsHouseAsync(string positionId, int pageNum = 1, int pageSize = 100)
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
                 var rooms = new List<RoomModel>();
 
-                var resultOfGettingRoomsHouse = await _aqaraService.GetPositionsAsync(positionId, pageNum, pageSize);
+                var resultOfGettingRoomsHouse = await _aqaraService.GetPositionsAsync(positionId);
 
                 if (resultOfGettingRoomsHouse.IsSuccess)
                 {
@@ -107,28 +111,22 @@ namespace SmartMirror.Services.RoomsService
 
                     foreach (var room in simpleRooms)
                     {
-                        var resultOfGettingDevices = await _aqaraService.GetDevicesByPositionAsync(room.PositionId, 1, 100);
+                        var resultOfGettingDevices = await _devicesService.GetDevicesByPositionAsync(room.PositionId);
 
                         if (!resultOfGettingDevices.IsSuccess)
                         {
                             onFailure("devices: Request failed");
                         }
 
+                        var devicesCount = Enumerable.Count(resultOfGettingDevices.Result);
+
                         rooms.Add(new RoomModel()
                         {
                             Id = room.PositionId,
                             Name = room.PositionName,
                             CreateTime = DateTime.FromBinary(room.CreateTime),
-                            Description = $"{resultOfGettingDevices.Result.TotalCount} {Strings.Accessories}",
-                            Devices = resultOfGettingDevices.Result.Data.Select(device => new DeviceModel()
-                            {
-                                Id = device.Did,
-                                Name = device.DeviceName,
-                                Status = (Enums.EDeviceStatus)device.State,
-                                Type = device.ModelType.ToString(),
-                                RoomName = room.PositionName,
-                            }),
-                            DevicesCount = resultOfGettingDevices.Result.TotalCount,
+                            Description = $"{devicesCount} {Strings.Accessories}",
+                            DevicesCount = devicesCount,
                         });
                     }
                 }

@@ -1,4 +1,6 @@
-﻿namespace SmartMirror.ViewModels
+﻿using SmartMirror.Enums;
+
+namespace SmartMirror.ViewModels
 {
     public class BaseViewModel : BindableBase, IPageLifecycleAware, INavigationAware, IInitialize, IApplicationLifecycleAware
     {
@@ -10,6 +12,17 @@
         #region -- Protected properties --
 
         protected INavigationService NavigationService { get; }
+
+        #endregion
+        
+        #region -- Public properties --
+
+        private EPageState _dataState;
+        public EPageState DataState
+        {
+            get => _dataState;
+            set => SetProperty(ref _dataState, value);
+        }
 
         #endregion
 

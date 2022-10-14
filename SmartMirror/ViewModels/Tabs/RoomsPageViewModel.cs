@@ -1,18 +1,14 @@
 ﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
-using SmartMirror.Models;
+using SmartMirror.Models.BindableModels;
+using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
+using SmartMirror.Services.Rooms;
+using SmartMirror.ViewModels.Dialogs;
+using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using DeviceModel = SmartMirror.Models.DeviceModel;
-using SmartMirror.Services.Aqara;
-using SmartMirror.Views.Dialogs;
-using SmartMirror.ViewModels.Dialogs;
-using SmartMirror.Models.BindableModels;
-using Prism.Services;
-using SmartMirror.Models.Aqara;
-using SmartMirror.Services.RoomsService;
 
 namespace SmartMirror.ViewModels.Tabs;
 

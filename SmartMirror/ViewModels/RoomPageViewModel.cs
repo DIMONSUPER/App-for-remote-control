@@ -1,27 +1,30 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
+﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models;
+using SmartMirror.Models.BindableModels;
+using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
-using SmartMirror.Services.Mock;
 using SmartMirror.ViewModels.Tabs;
-using DeviceModel = SmartMirror.Models.DeviceModel;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace SmartMirror.ViewModels;
 
 public class RoomPageViewModel : BaseViewModel
 {
     private readonly IMapperService _mapperService;
-    private readonly ISmartHomeMockService _smartHomeMockService;
+    private readonly IDevicesService _devicesService;
+
+    private RoomBindableModel _selectedRoom = new();
 
     public RoomPageViewModel(
         INavigationService navigationService,
         IMapperService mapperService,
-        ISmartHomeMockService smartHomeMockService)
+        IDevicesService devicesService)
         : base(navigationService)
     {
         _mapperService = mapperService;
-        _smartHomeMockService = smartHomeMockService;
+        _devicesService = devicesService;
     }
 
     #region -- Public properties --
@@ -79,27 +82,38 @@ public class RoomPageViewModel : BaseViewModel
         return NavigationService.GoBackAsync();
     }
 
-    private void SelectRoom(RoomBindableModel selectedRoom)
+    private async void SelectRoom(RoomBindableModel selectedRoom)
     {
-        if (Rooms is not null && Rooms.Any())
+        if (Rooms?.Count > 0)
         {
-            foreach (var room in Rooms)
+            DataState = EPageState.Loading;
+
+            _selectedRoom.IsSelected = false;
+            selectedRoom.IsSelected = true;
+
+            var resultOfGettingDevices = await _devicesService.GetDevicesByPositionAsync(selectedRoom.Id);
+
+            if (resultOfGettingDevices.IsSuccess)
             {
-                if (room == selectedRoom)
-                {
-                    room.IsSelected = true;
-                    SelectedRoomDevices = room.Devices;
-                }
-                else
-                {
-                    room.IsSelected = false;
-                }
+                SelectedRoomDevices = new(resultOfGettingDevices.Result);
             }
+            else
+            {
+                SelectedRoomDevices = new();
+            }
+
+            DataState = SelectedRoomDevices.Count == 0
+                ? EPageState.Empty
+                : EPageState.Complete;
+
+            _selectedRoom = selectedRoom;
         }
     }
 
     private Task OnRoomSelectedCommandAsync(RoomBindableModel room)
     {
+        DataState = EPageState.Loading;
+
         SelectRoom(room);
 
         return Task.CompletedTask;

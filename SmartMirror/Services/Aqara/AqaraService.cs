@@ -40,7 +40,7 @@ public class AqaraService : IAqaraService
         });
     }
 
-    public Task<AOResult<DataAqaraResponse<PositionAqaraModel>>> GetPositionsAsync(string positionId, int pageNum, int pageSize)
+    public Task<AOResult<DataAqaraResponse<PositionAqaraModel>>> GetPositionsAsync(string positionId, int pageNum = 1, int pageSize = 100)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {
@@ -57,7 +57,7 @@ public class AqaraService : IAqaraService
         });
     }
 
-    public Task<AOResult<DataAqaraResponse<DeviceAqaraModel>>> GetDevicesByPositionAsync(string positionId, int pageNum, int pageSize)
+    public Task<AOResult<DataAqaraResponse<DeviceAqaraModel>>> GetDevicesByPositionAsync(string positionId, int pageNum = 1, int pageSize = 100)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {

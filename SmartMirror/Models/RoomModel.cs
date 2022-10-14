@@ -10,8 +10,6 @@
 
         public string Description { get; set; }
 
-        public IEnumerable<DeviceModel> Devices { get; set; }
-
         public int DevicesCount { get; set; }
     }
 }
