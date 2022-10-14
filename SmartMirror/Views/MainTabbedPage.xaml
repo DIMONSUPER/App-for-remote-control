@@ -6,7 +6,7 @@
                             xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
                             x:Class="SmartMirror.Views.MainTabbedPage"
                             NavigationPage.HasNavigationBar="False"
-                            android:TabbedPage.IsSwipePagingEnabled="False"
+                            android:TabbedPage.IsSwipePagingEnabled="True"
                             android:TabbedPage.IsSmoothScrollEnabled="True"
                             Background="{x:DynamicResource GrayGradientBrush}"
                             Title="MainTabbedPage"
