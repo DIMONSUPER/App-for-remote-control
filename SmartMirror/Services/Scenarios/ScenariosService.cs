@@ -169,6 +169,7 @@ namespace SmartMirror.Services.Scenarios
                             {
                                 Id = x.SceneId,
                                 Name = x.Name,
+                                IsFavorite = true,
                             });
                     }
                     else

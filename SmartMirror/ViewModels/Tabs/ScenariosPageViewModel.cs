@@ -48,8 +48,8 @@ public class ScenariosPageViewModel : BaseTabViewModel
         set => SetProperty(ref _scenarios, value);
     }
 
-    private ICommand _changeActiveStatusCommand;
-    public ICommand ChangeActiveStatusCommand => _changeActiveStatusCommand ??= SingleExecutionCommand.FromFunc<ScenarioBindableModel>(OnChangeActiveStatusCommandAsync);
+    private ICommand _runScenarioCommand;
+    public ICommand RunScenarioCommand => _runScenarioCommand ??= SingleExecutionCommand.FromFunc<ScenarioBindableModel>(OnRunScenarioCommandAsync);
 
     private ICommand _goToScenarioDetailsCommand;
     public ICommand GoToScenarioDetailsCommand => _goToScenarioDetailsCommand ??= SingleExecutionCommand.FromFunc<ScenarioBindableModel>(OnGoToScenarioDetailsCommandAsync);
@@ -93,15 +93,16 @@ public class ScenariosPageViewModel : BaseTabViewModel
         await LoadScenariosAsync();
     }
 
-    private async Task OnChangeActiveStatusCommandAsync(ScenarioBindableModel scenario)
+    private async Task OnRunScenarioCommandAsync(ScenarioBindableModel selectedScenario)
     {
-        scenario.IsUpdating = true;
+        selectedScenario.IsUpdating = true;
 
-        var resultOfUpdattingScenario = await _scenariosService.RunScenarioAsync(scenario.Id);
+        var resultOfUpdattingScenario = await _scenariosService.RunScenarioAsync(selectedScenario.Id);
 
         if (resultOfUpdattingScenario.IsSuccess)
         {
-            scenario.IsActive = true;
+            UpdateRunningScenario(FavoriteScenarios, selectedScenario.Id);
+            UpdateRunningScenario(Scenarios, selectedScenario.Id);
         }
         else
         {
@@ -114,7 +115,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
             await _dialogService.ShowDialogAsync(nameof(ErrorDialog), errorDialogParameters);
         }
 
-        scenario.IsUpdating = false;
+        selectedScenario.IsUpdating = false;
     }
 
     private Task OnGoToScenarioDetailsCommandAsync(ScenarioBindableModel scenario)
@@ -186,9 +187,22 @@ public class ScenariosPageViewModel : BaseTabViewModel
     {
         return _mapperService.MapRange<ScenarioBindableModel>(scenarios, (m, vm) =>
         {
-            vm.ChangeActiveStatusCommand = ChangeActiveStatusCommand;
+            vm.ChangeActiveStatusCommand = RunScenarioCommand;
             vm.TappedCommand = GoToScenarioDetailsCommand;
         });
+    }
+
+    private void UpdateRunningScenario(IEnumerable<ScenarioBindableModel> scenarios, string scenarioId)
+    {
+        if (scenarios is not null)
+        {
+            var scenario = scenarios.FirstOrDefault(x => x.Id == scenarioId);
+
+            if (scenario is not null)
+            {
+                scenario.IsActive = true;
+            }
+        }
     }
 
     #endregion
