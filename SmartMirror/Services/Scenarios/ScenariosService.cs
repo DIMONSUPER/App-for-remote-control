@@ -20,31 +20,24 @@ namespace SmartMirror.Services.Scenarios
 
         #region -- IScenariosService implementation --
 
-        public Task<AOResult<IEnumerable<ScenarioModel>>> GetAllScenariosAsync()
+        public Task<AOResult<IEnumerable<ScenarioModel>>> GetScenariosAsync()
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
                 var scenarios = Enumerable.Empty<ScenarioModel>();
 
-                if (_aqaraService.IsAuthorized)
+                var resultOfGettingScenaries = await GetScenariosFromAqaraAsync();
+
+                if (resultOfGettingScenaries.IsSuccess)
                 {
-                    var resultOfGettingScenaries = await GetAllScenariosFromAqaraAsync();
-
-                    if (resultOfGettingScenaries.IsSuccess)
-                    { 
-                        scenarios = resultOfGettingScenaries.Result;
-                    }
-
-                    var mockScenarios = _smartHomeMockService.GetScenarios();
-
-                    if (mockScenarios is not null)
-                    {
-                        scenarios = scenarios.Concat(mockScenarios);
-                    } 
+                    scenarios = resultOfGettingScenaries.Result;
                 }
-                else
+
+                var mockScenarios = _smartHomeMockService.GetScenarios();
+
+                if (mockScenarios is not null)
                 {
-                    onFailure("Unauthorized");
+                    scenarios = scenarios.Concat(mockScenarios);
                 }
 
                 return scenarios;
@@ -56,23 +49,16 @@ namespace SmartMirror.Services.Scenarios
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
                 var scenarios = Enumerable.Empty<ScenarioModel>();
-                
-                if (_aqaraService.IsAuthorized)
-                {
-                    var resultOfGettingScenaries = await GetAllScenariosFromAqaraAsync();
 
-                    if (resultOfGettingScenaries.IsSuccess)
-                    {
-                        scenarios = resultOfGettingScenaries.Result;
-                    }
-                    else
-                    {
-                        onFailure(resultOfGettingScenaries.Message);
-                    } 
+                var resultOfGettingScenaries = await GetScenariosFromAqaraAsync();
+
+                if (resultOfGettingScenaries.IsSuccess)
+                {
+                    scenarios = resultOfGettingScenaries.Result;
                 }
                 else
                 {
-                    onFailure("Unauthorized");
+                    onFailure(resultOfGettingScenaries.Message);
                 }
 
                 return scenarios;
@@ -85,35 +71,28 @@ namespace SmartMirror.Services.Scenarios
             {
                 var scenario = new ScenarioModel();
 
-                if (_aqaraService.IsAuthorized)
+                var resultOfGetttingSceneById = await _aqaraService.GetSceneByIdAsync(sceneId);
+
+                if (resultOfGetttingSceneById is not null)
                 {
-                    var resultOfGetttingSceneById = await _aqaraService.GetSceneByIdAsync(sceneId);
-
-                    if (resultOfGetttingSceneById is not null)
+                    if (resultOfGetttingSceneById.IsSuccess && resultOfGetttingSceneById.Result is not null)
                     {
-                        if (resultOfGetttingSceneById.IsSuccess && resultOfGetttingSceneById.Result is not null)
-                        {
-                            var scene = resultOfGetttingSceneById?.Result;
+                        var scene = resultOfGetttingSceneById?.Result;
 
-                            scenario = new ScenarioModel
-                            {
-                                Id = scene.SceneId,
-                                Name = scene.Name,
-                            };
-                        }
-                        else
+                        scenario = new ScenarioModel
                         {
-                            onFailure($"Error: {resultOfGetttingSceneById.Message}");
-                        }
+                            Id = scene.SceneId,
+                            Name = scene.Name,
+                        };
                     }
                     else
                     {
-                        onFailure("result is null");
-                    } 
+                        onFailure(resultOfGetttingSceneById.Message);
+                    }
                 }
                 else
                 {
-                    onFailure("Unauthorized");
+                    onFailure("result is null");
                 }
 
                 return scenario;
@@ -124,34 +103,27 @@ namespace SmartMirror.Services.Scenarios
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
-                if (_aqaraService.IsAuthorized)
+                var scenariosFromMock = _smartHomeMockService.GetScenarios();
+
+                if (scenariosFromMock is not null)
                 {
-                    var scenariosFromMock = _smartHomeMockService.GetScenarios();
+                    var scenario = scenariosFromMock.FirstOrDefault(row => row.Id == id);
 
-                    if (scenariosFromMock is not null)
+                    if (scenario is not null)
                     {
-                        var scenario = scenariosFromMock.FirstOrDefault(row => row.Id == id);
+                        scenario.IsActive = true;
 
-                        if (scenario is not null)
+                        await Task.Delay(250);
+                    }
+                    else
+                    {
+                        var resultOfRunningScene = await _aqaraService.RunSceneByIdAsync(id);
+
+                        if (!resultOfRunningScene.IsSuccess)
                         {
-                            scenario.IsActive = true;
-
-                            await Task.Delay(250);
-                        }
-                        else
-                        {
-                            var resultOfRunningScene = await _aqaraService.RunSceneByIdAsync(id);
-
-                            if (!resultOfRunningScene.IsSuccess)
-                            {
-                                onFailure(resultOfRunningScene.Message);
-                            }
+                            onFailure(resultOfRunningScene.Message);
                         }
                     }
-                }
-                else
-                {
-                    onFailure("Unauthorized");
                 }
             });
         }
@@ -160,13 +132,13 @@ namespace SmartMirror.Services.Scenarios
 
         #region -- Private helpers --
 
-        private Task<AOResult<IEnumerable<ScenarioModel>>> GetAllScenariosFromAqaraAsync()
+        private Task<AOResult<IEnumerable<ScenarioModel>>> GetScenariosFromAqaraAsync()
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
                 var scenarios = Enumerable.Empty<ScenarioModel>();
 
-                var resultOfGettingAllScenaries = await _aqaraService.GetAllScenesAsync();
+                var resultOfGettingAllScenaries = await _aqaraService.GetScenesAsync();
 
                 if (resultOfGettingAllScenaries is not null)
                 {
@@ -182,7 +154,7 @@ namespace SmartMirror.Services.Scenarios
                     }
                     else
                     {
-                        onFailure($"Error: {resultOfGettingAllScenaries.Message}");
+                        onFailure(resultOfGettingAllScenaries.Message);
                     }
                 }
                 else

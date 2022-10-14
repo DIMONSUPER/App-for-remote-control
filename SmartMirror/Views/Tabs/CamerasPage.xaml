@@ -45,7 +45,7 @@
             <Grid
                 ColumnDefinitions="390, *"
                 ColumnSpacing="105"
-                Margin="42, 70, 60, 125">
+                Margin="42, 70, 60, 0">
 
                 <RefreshView 
                     Grid.Column="0"
@@ -60,7 +60,9 @@
 
                 </RefreshView>
 
-                <Grid Grid.Column="1">
+                <Grid 
+                    Grid.Column="1"
+                    Margin="0, 0, 0, 120">
 
                     <Border
                         StrokeThickness="0.75"

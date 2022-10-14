@@ -117,7 +117,7 @@ public class AqaraService : IAqaraService
         });
     }
 
-    public Task<AOResult<DataAqaraResponse<SimpleSceneAqaraModel>>> GetAllScenesAsync(int pageNumber = 1, int pageSize = 100, string positionId = null)
+    public Task<AOResult<DataAqaraResponse<SimpleSceneAqaraModel>>> GetScenesAsync(int pageNumber = 1, int pageSize = 100, string positionId = null)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {
@@ -130,7 +130,7 @@ public class AqaraService : IAqaraService
 
             var responce = await MakeRequestAsync<BaseAqaraResponse<DataAqaraResponse<SimpleSceneAqaraModel>>>("query.scene.listByPositionId", data);
 
-            SetFailure(onFailure, responce);
+            SetFailureIfNeed(onFailure, responce);
 
             return responce?.Result;
         });
@@ -147,7 +147,7 @@ public class AqaraService : IAqaraService
 
             var responce = await MakeRequestAsync<BaseAqaraResponse<DetailSceneAqaraModel>>("query.scene.detail", data);
 
-            SetFailure(onFailure, responce);
+            SetFailureIfNeed(onFailure, responce);
 
             return responce?.Result;
         });
@@ -164,7 +164,7 @@ public class AqaraService : IAqaraService
 
             var responce = await MakeRequestAsync<BaseAqaraResponse>("config.scene.run", data);
 
-            SetFailure(onFailure, responce);
+            SetFailureIfNeed(onFailure, responce);
         });
     }
 
@@ -236,7 +236,7 @@ public class AqaraService : IAqaraService
         return Convert.ToHexString(hashBytes);
     }
 
-    private void SetFailure(Action<string> onFailure, BaseAqaraResponse responce)
+    private void SetFailureIfNeed(Action<string> onFailure, BaseAqaraResponse responce)
     {
         if (responce is null)
         {

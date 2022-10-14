@@ -4,16 +4,12 @@ namespace SmartMirror.Models.Aqara
 {
     public class ActionParameterAqaraModel
     {
-        [JsonProperty("paramType")]
-        public string ParamType { get; set; }
-
-        [JsonProperty("paramUnit")]
-        public string ParamUnit { get; set; }
-
-        [JsonProperty("paramId")]
         public string ParamId { get; set; }
 
-        [JsonProperty("value")]
+        public string ParamType { get; set; }
+
+        public string ParamUnit { get; set; }
+
         public string Value { get; set; }
     }
 }

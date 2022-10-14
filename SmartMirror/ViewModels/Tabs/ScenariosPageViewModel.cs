@@ -134,7 +134,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
             var isFavoriteScenariosLoaded = await LoadFavoritesScenariosAsync();
             var isScenariosLoaded = await LoadAllScenariosAsync();
 
-            if (isFavoriteScenariosLoaded && isScenariosLoaded)
+            if (isFavoriteScenariosLoaded || isScenariosLoaded)
             {
                 DataState = EPageState.Complete;
             }
@@ -165,7 +165,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     private async Task<bool> LoadAllScenariosAsync()
     {
-        var resultOfGettingAllScenarios = await _scenariosService.GetAllScenariosAsync();
+        var resultOfGettingAllScenarios = await _scenariosService.GetScenariosAsync();
 
         if (resultOfGettingAllScenarios.IsSuccess)
         {
@@ -188,14 +188,11 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     private void UpdateStatusRunningScenario(IEnumerable<ScenarioBindableModel> scenarios, string scenarioId)
     {
-        if (scenarios is not null)
-        {
-            var scenario = scenarios.FirstOrDefault(x => x.Id == scenarioId);
+        var scenario = scenarios?.FirstOrDefault(x => x.Id == scenarioId);
 
-            if (scenario is not null)
-            {
-                scenario.IsActive = true;
-            }
+        if (scenario is not null)
+        {
+            scenario.IsActive = true;
         }
     }
 

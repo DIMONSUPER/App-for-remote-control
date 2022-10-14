@@ -5,7 +5,7 @@ namespace SmartMirror.Services.Scenarios
 {
     public interface IScenariosService
     {
-        Task<AOResult<IEnumerable<ScenarioModel>>> GetAllScenariosAsync();
+        Task<AOResult<IEnumerable<ScenarioModel>>> GetScenariosAsync();
 
         Task<AOResult<IEnumerable<ScenarioModel>>> GetFavoriteScenariosAsync();
 

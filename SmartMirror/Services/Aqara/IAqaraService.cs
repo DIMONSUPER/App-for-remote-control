@@ -15,7 +15,7 @@ public interface IAqaraService
 
     Task<AOResult<DataAqaraResponse<PositionAqaraModel>>> GetPositionsAsync(string positionId, int pageNum, int pageSize);
         
-    Task<AOResult<DataAqaraResponse<SimpleSceneAqaraModel>>> GetAllScenesAsync(int pageNumber = 1, int pageSize = 100, string positionId = null);
+    Task<AOResult<DataAqaraResponse<SimpleSceneAqaraModel>>> GetScenesAsync(int pageNumber = 1, int pageSize = 100, string positionId = null);
     
     Task<AOResult<DetailSceneAqaraModel>> GetSceneByIdAsync(string sceneId);
 
