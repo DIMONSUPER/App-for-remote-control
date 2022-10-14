@@ -51,7 +51,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     public ICommand RoomTappedCommand => _roomTappedCommand ??= SingleExecutionCommand.FromFunc<RoomBindableModel>(OnRoomTappedCommandAsync);
 
     private ICommand _accessorieTappedCommand;
-    public ICommand AccessorieTappedCommand => _accessorieTappedCommand ??= new DelegateCommand<DeviceBindableModel>(OnAccessorieTappedCommandAsync);
+    public ICommand AccessorieTappedCommand => _accessorieTappedCommand ??= new DelegateCommand<DeviceBindableModel>(async d => await OnAccessorieTappedCommandAsync(d));
 
     private ICommand _aqaraLoginButtonTappedCommand;
     public ICommand AqaraLoginButtonTappedCommand => _aqaraLoginButtonTappedCommand ??= SingleExecutionCommand.FromFunc(OnAqaraLoginButtonTappedAsync);
@@ -84,18 +84,30 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override async void Initialize(INavigationParameters parameters)
+    public override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (DataState != EPageState.Loading)
+        {
+            DataState = EPageState.Loading;
+
+            Task.Run(LoadRoomsAndDevicesAsync);
+        }
+    }
+
+    public override void Initialize(INavigationParameters parameters)
     {
         base.Initialize(parameters);
 
-        await LoadRoomsAndDevicesAsync();
+        Task.Run(LoadRoomsAndDevicesAsync);
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
-            await LoadRoomsAndDevicesAsync();
+            await LoadRoomsAndDevicesAsync().ConfigureAwait(false);
         }
         else
         {
@@ -107,7 +119,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Private helpers --
 
-    private async void OnAccessorieTappedCommandAsync(DeviceBindableModel device)
+    private async Task OnAccessorieTappedCommandAsync(DeviceBindableModel device)
     {
         if (string.IsNullOrWhiteSpace(device.DeviceId) && device.Status != EDeviceStatus.Disconnected && !device.IsExecuting)
         {
@@ -127,11 +139,19 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             var value = device.Status == EDeviceStatus.On ? "0" : "1";
 
-            var updateResponse = await _aqaraService.UpdateAttributeValueAsync(device.DeviceId, (device.EditableResource, value));
+            var updateResponse = await _aqaraService.UpdateAttributeValueAsync(device.DeviceId, (device.EditableResource, value)).ConfigureAwait(false);
 
             if (updateResponse.IsSuccess)
             {
                 device.Status = device.Status == EDeviceStatus.On ? EDeviceStatus.Off : EDeviceStatus.On;
+            }
+            else
+            {
+                await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
+                {
+                    { Constants.DialogsParameterKeys.TITLE, updateResponse.Result?.Message },
+                    { Constants.DialogsParameterKeys.DESCRIPTION, updateResponse.Result?.MsgDetails },
+                });
             }
 
             device.IsExecuting = false;
@@ -140,33 +160,42 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private async Task OnAqaraLoginButtonTappedAsync()
     {
-        var testEmail = "botheadworks@gmail.com";
-        var sendLoginResponse = await _aqaraService.SendLoginCodeAsync(testEmail);
-
-        IDialogResult dialogResult;
-
-        if (sendLoginResponse.IsSuccess)
+        if (IsInternetConnected)
         {
-            dialogResult = await _dialogService.ShowDialogAsync(nameof(TemporaryDialog));
+            var testEmail = "botheadworks@gmail.com";
+            var sendLoginResponse = await _aqaraService.SendLoginCodeAsync(testEmail).ConfigureAwait(true);
+
+            IDialogResult dialogResult;
+
+            if (sendLoginResponse.IsSuccess)
+            {
+                dialogResult = await _dialogService.ShowDialogAsync(nameof(TemporaryDialog));
+            }
+            else
+            {
+                dialogResult = await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
+                {
+                    { Constants.DialogsParameterKeys.TITLE, "FAIL" },
+                    { Constants.DialogsParameterKeys.DESCRIPTION, sendLoginResponse.Result?.MsgDetails ?? sendLoginResponse.Message },
+                });
+            }
+
+            await ProcessDialogResultAsync(dialogResult, testEmail);
+
+            IsAqaraLoginButtonVisible = !_aqaraService.IsAuthorized;
         }
         else
         {
-            dialogResult = await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
-            {
-                { Constants.DialogsParameterKeys.TITLE, sendLoginResponse.Result?.Message },
-                { Constants.DialogsParameterKeys.DESCRIPTION, sendLoginResponse.Result?.MsgDetails },
-            });
+            //TODO: notify
         }
-
-        await ProcessDialogResultAsync(dialogResult, testEmail);
-
-        IsAqaraLoginButtonVisible = !_aqaraService.IsAuthorized;
     }
 
     private async Task ProcessDialogResultAsync(IDialogResult dialogResult, string email)
     {
         if (dialogResult.Parameters.TryGetValue(nameof(TemporaryDialogViewModel.CodeText), out string code))
         {
+            DataState = EPageState.Loading;
+
             var loginWithCodeResponse = await _aqaraService.LoginWithCodeAsync(email, code);
 
             if (loginWithCodeResponse.IsSuccess)
@@ -176,9 +205,7 @@ public class RoomsPageViewModel : BaseTabViewModel
                     { Constants.DialogsParameterKeys.TITLE, "Success!" }
                 });
 
-                DataState = EPageState.Loading;
-
-                await LoadRoomsAndDevicesAsync();
+                await LoadRoomsAndDevicesAsync().ConfigureAwait(false);
             }
             else
             {
@@ -187,6 +214,8 @@ public class RoomsPageViewModel : BaseTabViewModel
                     { Constants.DialogsParameterKeys.TITLE, "Fail!" },
                     { Constants.DialogsParameterKeys.DESCRIPTION, loginWithCodeResponse.Message }
                 });
+
+                DataState = EPageState.Complete;
             }
         }
     }
@@ -195,7 +224,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         DataState = EPageState.NoInternetLoader;
 
-        await LoadRoomsAndDevicesAsync();
+        await LoadRoomsAndDevicesAsync().ConfigureAwait(false);
     }
 
     private async Task LoadRoomsAndDevicesAsync()
@@ -243,88 +272,68 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             if (aqaraDevicesResponse.IsSuccess)
             {
-                var devices = _mapperService.MapRange<DeviceBindableModel>(aqaraDevicesResponse.Result.Devices, (m, vm) =>
+                var devices = _mapperService.MapRange<DeviceBindableModel>(aqaraDevicesResponse.Result.Data, (m, vm) =>
                 {
                     vm.TappedCommand = AccessorieTappedCommand;
                 });
 
-                foreach (var device in devices)
-                {
-                    if (device.Model.Contains("switch.l"))
-                    {
-                        await AddLampAsync(device);
-                    }
-                    else if (device.Model.Contains("switch.b"))
-                    {
-                        await AddDoubleLampAsync(device);
-                    }
-                    else if (device.Model.Contains("weather"))
-                    {
-                        await AddWeatherAccessoriesAsync(device);
-                    }
-                    else if (device.Model.Contains("gateway") || device.Model.Contains("sensor_motion"))
-                    {
-                        //Ignore
-                    }
-                    else
-                    {
-                        FavoriteAccessories.Insert(0, device);
-                    }
+                var tasks = devices.Select(x => GetTaskForDevice(x));
 
-                    System.Diagnostics.Debug.WriteLine($"{device.DeviceId}: {device.Model}, {device.ModelType}, {device.State}, {device.Name}");
-                }
+                await Task.WhenAll(tasks).ConfigureAwait(false);
             }
         }
+    }
+
+    private Task GetTaskForDevice(DeviceBindableModel device)
+    {
+        return device switch
+        {
+            _ when device.Model.Contains("switch.l") => AddLampAsync(device),
+            _ when device.Model.Contains("switch.b") => AddDoubleLampAsync(device),
+            _ when device.Model.Contains("weather") => AddWeatherAccessoriesAsync(device),
+            _ when device.Model.Contains("gateway") || device.Model.Contains("sensor_motion") => Task.CompletedTask,
+            _ => InsertInTheBeginningDeviceAsync(device),
+        };
+    }
+
+    private Task InsertInTheBeginningDeviceAsync(DeviceBindableModel device)
+    {
+        FavoriteAccessories.Insert(0, device);
+
+        return Task.CompletedTask;
     }
 
     private async Task AddWeatherAccessoriesAsync(DeviceBindableModel device)
     {
         if (device.State > 0)
         {
-            var deviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "0.2.85", "0.1.85", "0.3.85");
+            var deviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "0.2.85", "0.1.85", "0.3.85").ConfigureAwait(false);
 
             if (deviceAttributeResponse.IsSuccess)
             {
                 device.Status = EDeviceStatus.Connected;
 
-                var humididty = double.Parse(deviceAttributeResponse.Result.FirstOrDefault(x => x.ResourceId == "0.2.85").Value) / 100 + "%";
                 var temperature = double.Parse(deviceAttributeResponse.Result.FirstOrDefault(x => x.ResourceId == "0.1.85").Value) / 100 + "℃";
-                var pressure = double.Parse(deviceAttributeResponse.Result.FirstOrDefault(x => x.ResourceId == "0.1.85").Value) / 1000 + "kPa";
+                var humididty = double.Parse(deviceAttributeResponse.Result.FirstOrDefault(x => x.ResourceId == "0.2.85").Value) / 100 + "%";
+                var pressure = double.Parse(deviceAttributeResponse.Result.FirstOrDefault(x => x.ResourceId == "0.3.85").Value) / 1000 + "kPa";
 
-                var humidityDevice = new DeviceBindableModel()
-                {
-                    AdditionalInfo = humididty,
-                    Status = EDeviceStatus.Connected,
-                    DeviceType = EDeviceType.Sensor,
-                    Name = "Humidity",
-                    IconSource = "pic_humidity",
-                };
-
-                FavoriteAccessories.Insert(0, humidityDevice);
-
-                var temperatureDevice = new DeviceBindableModel()
-                {
-                    AdditionalInfo = temperature,
-                    Status = EDeviceStatus.Connected,
-                    DeviceType = EDeviceType.Sensor,
-                    Name = "Temperature",
-                    IconSource = "pic_temperature",
-                };
-
-                FavoriteAccessories.Insert(0, temperatureDevice);
-
-                var pressureDevice = new DeviceBindableModel()
-                {
-                    AdditionalInfo = pressure,
-                    Status = EDeviceStatus.Connected,
-                    DeviceType = EDeviceType.Sensor,
-                    Name = "Pressure",
-                    IconSource = "pic_pressure",
-                };
-
-                FavoriteAccessories.Insert(0, pressureDevice);
+                AddWeatherDevice(humididty, "Humidity", "pic_humidity");
+                AddWeatherDevice(temperature, "Temperature", "pic_temperature");
+                AddWeatherDevice(pressure, "Pressure", "pic_pressure");
             }
         }
+    }
+
+    private void AddWeatherDevice(string additionalInfo, string name, string iconSource)
+    {
+        FavoriteAccessories.Insert(0, new DeviceBindableModel()
+        {
+            AdditionalInfo = additionalInfo,
+            Status = EDeviceStatus.Connected,
+            DeviceType = EDeviceType.Sensor,
+            Name = name,
+            IconSource = iconSource,
+        });
     }
 
     private async Task AddLampAsync(DeviceBindableModel device)
@@ -335,7 +344,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
         if (device.State > 0)
         {
-            var deviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.1.85");
+            var deviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.1.85").ConfigureAwait(false);
 
             if (deviceAttributeResponse.IsSuccess)
             {
@@ -350,11 +359,14 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (device.State > 0)
         {
-            var leftDeviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.1.85");
+            var leftDeviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.1.85").ConfigureAwait(false);
+
+            DeviceBindableModel leftDevice = null;
+            DeviceBindableModel rightDevice = null;
 
             if (leftDeviceAttributeResponse.IsSuccess)
             {
-                var leftDevice = new DeviceBindableModel()
+                leftDevice = new DeviceBindableModel()
                 {
                     DeviceId = device.DeviceId,
                     Status = leftDeviceAttributeResponse.Result?.FirstOrDefault()?.Value == "0" ? EDeviceStatus.Off : EDeviceStatus.On,
@@ -365,14 +377,13 @@ public class RoomsPageViewModel : BaseTabViewModel
                     EditableResource = "4.1.85",
                 };
 
-                FavoriteAccessories.Insert(0, leftDevice);
             }
 
-            var rightDeviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.2.85");
+            var rightDeviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.2.85").ConfigureAwait(false);
 
             if (rightDeviceAttributeResponse.IsSuccess)
             {
-                var rightDevice = new DeviceBindableModel()
+                rightDevice = new DeviceBindableModel()
                 {
                     DeviceId = device.DeviceId,
                     Status = rightDeviceAttributeResponse.Result?.FirstOrDefault()?.Value == "0" ? EDeviceStatus.Off : EDeviceStatus.On,
@@ -382,7 +393,15 @@ public class RoomsPageViewModel : BaseTabViewModel
                     TappedCommand = AccessorieTappedCommand,
                     EditableResource = "4.2.85",
                 };
+            }
 
+            if (leftDevice is not null)
+            {
+                FavoriteAccessories.Insert(0, leftDevice);
+            }
+
+            if (rightDevice is not null)
+            {
                 FavoriteAccessories.Insert(0, rightDevice);
             }
         }

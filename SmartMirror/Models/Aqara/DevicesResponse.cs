@@ -2,15 +2,6 @@
 
 namespace SmartMirror.Models.Aqara;
 
-public class DevicesResponse
-{
-    [JsonProperty("data")]
-    public IEnumerable<DeviceResponse> Devices { get; set; }
-
-    [JsonProperty("totalCount")]
-    public int TotalCount { get; set; }
-}
-
 public class DeviceResponse
 {
     [JsonProperty("parentDid")]

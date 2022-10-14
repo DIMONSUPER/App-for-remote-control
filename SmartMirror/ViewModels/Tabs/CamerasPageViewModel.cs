@@ -76,11 +76,11 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override async void Initialize(INavigationParameters parameters)
+    public override void Initialize(INavigationParameters parameters)
     {
         base.Initialize(parameters);
 
-        await RefreshCamerasAsync();
+        Task.Run(RefreshCamerasAsync);
     }
 
     public override void OnAppearing()

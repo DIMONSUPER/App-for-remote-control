@@ -34,12 +34,7 @@ public class AqaraService : IAqaraService
                 accessTokenValidity = "1d",
             };
 
-            var response = await MakeRequestAsync<BaseAqaraResponse>("config.auth.getAuthCode", data);
-
-            if (response is null)
-            {
-                onFailure("response is null");
-            }
+            var response = await MakeRequestAsync("config.auth.getAuthCode", data, onFailure);
 
             return response;
         });
@@ -56,12 +51,7 @@ public class AqaraService : IAqaraService
                 pageSize = pageSize,
             };
 
-            var response = await MakeRequestAsync<BaseAqaraResponse<DataAqaraResponse<PositionAqaraModel>>>("query.position.info", requestData);
-
-            if (response.Message != "Success")
-            {
-                onFailure("Request failed");
-            }
+            var response = await MakeRequestAsync<DataAqaraResponse<PositionAqaraModel>>("query.position.info", requestData, onFailure);
 
             return response.Result;
         });
@@ -78,7 +68,7 @@ public class AqaraService : IAqaraService
                 pageSize = pageSize,
             };
 
-            var response = await MakeRequestAsync<BaseAqaraResponse<DataAqaraResponse<DeviceAqaraModel>>>("query.device.info", data);
+            var response = await MakeRequestAsync<DataAqaraResponse<DeviceAqaraModel>>("query.device.info", data, onFailure);
 
             return response.Result;
         });
@@ -95,7 +85,7 @@ public class AqaraService : IAqaraService
                 authCode = code,
             };
 
-            var response = await MakeRequestAsync<BaseAqaraResponse<AccessResponse>>("config.auth.getToken", data);
+            var response = await MakeRequestAsync<AccessResponse>("config.auth.getToken", data, onFailure);
 
             if (response?.Result is null)
             {
@@ -110,7 +100,7 @@ public class AqaraService : IAqaraService
         });
     }
 
-    public Task<AOResult<DevicesResponse>> GetAllDevicesAsync()
+    public Task<AOResult<DataAqaraResponse<DeviceResponse>>> GetAllDevicesAsync()
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {
@@ -120,12 +110,7 @@ public class AqaraService : IAqaraService
                 pageSize = 100,
             };
 
-            var response = await MakeRequestAsync<BaseAqaraResponse<DevicesResponse>>("query.device.info", data);
-
-            if (response?.Result is null)
-            {
-                onFailure("response or result is null");
-            }
+            var response = await MakeRequestAsync<DataAqaraResponse<DeviceResponse>>("query.device.info", data, onFailure);
 
             return response.Result;
         });
@@ -146,7 +131,7 @@ public class AqaraService : IAqaraService
                 }
             };
 
-            var response = await MakeRequestAsync<BaseAqaraResponse>("write.resource.device", data);
+            var response = await MakeRequestAsync("write.resource.device", data, onFailure);
 
             if (response is null)
             {
@@ -173,12 +158,7 @@ public class AqaraService : IAqaraService
                 }
             };
 
-            var response = await MakeRequestAsync<BaseAqaraResponse<IEnumerable<ResourceResponse>>>("query.resource.value", data);
-
-            if (response.Result is null)
-            {
-                onFailure("response or result is null");
-            }
+            var response = await MakeRequestAsync<IEnumerable<ResourceResponse>>("query.resource.value", data, onFailure);
 
             return response.Result;
         });
@@ -188,7 +168,47 @@ public class AqaraService : IAqaraService
 
     #region -- Private helpers --
 
-    private Task<T> MakeRequestAsync<T>(string intent, object data)
+    private async Task<BaseAqaraResponse<T>> MakeRequestAsync<T>(string intent, object data, Action<string> onFailure)
+    {
+        var result = await _restService.PostAsync<BaseAqaraResponse<T>>(Constants.Aqara.API_URL, new
+        {
+            intent = intent,
+            data = data,
+        }, GetHeaders());
+
+        if (result is null)
+        {
+            onFailure("result is null");
+        }
+        else if (result.Code != 0)
+        {
+            onFailure($"{result.Code}: {result.Message}, {result.MsgDetails}");
+        }
+
+        return result;
+    }
+
+    private async Task<BaseAqaraResponse> MakeRequestAsync(string intent, object data, Action<string> onFailure)
+    {
+        var result = await _restService.PostAsync<BaseAqaraResponse>(Constants.Aqara.API_URL, new
+        {
+            intent = intent,
+            data = data,
+        }, GetHeaders());
+
+        if (result is null)
+        {
+            onFailure("result is null");
+        }
+        else if (result.Code != 0)
+        {
+            onFailure($"{result.Code}: {result.Message}, {result.MsgDetails}");
+        }
+
+        return result;
+    }
+
+    private Dictionary<string, string> GetHeaders()
     {
         var time = DateTimeHelper.ConvertToMilliseconds(DateTime.UtcNow).ToString();
 
@@ -206,11 +226,7 @@ public class AqaraService : IAqaraService
             headers.Add("Accesstoken", _settingsManager.AqaraAccessSettings.AccessToken);
         }
 
-        return _restService.PostAsync<T>(Constants.Aqara.API_URL, new
-        {
-            intent = intent,
-            data = data,
-        }, headers);
+        return headers;
     }
 
     private string GetSign(string time)

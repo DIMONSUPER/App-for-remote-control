@@ -29,7 +29,7 @@
             <Grid RowDefinitions="Auto, *"
                   RowSpacing="0"
                   ColumnSpacing="0"
-                  ColumnDefinitions="*, Auto">
+                  ColumnDefinitions="Auto, *">
 
                 <Border Grid.Row="0"
                         Grid.Column="0"
@@ -74,8 +74,7 @@
 
                     </VerticalStackLayout>
 
-                    <Label Grid.RowSpan="2"
-                           Grid.Column="1"
+                    <Label Grid.Column="1"
                            Text="{Binding AdditionalInfo}"
                            HorizontalTextAlignment="End"
                            VerticalTextAlignment="End"
@@ -83,7 +82,25 @@
 
                         <Label.Triggers>
 
-                            <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="Disconnected">
+                            <!-- OFF -->
+                            <MultiTrigger TargetType="Label">
+                                <MultiTrigger.Conditions>
+                                    <BindingCondition Binding="{Binding Status}" Value="Off" />
+                                    <BindingCondition Binding="{Binding IsExecuting}" Value="False" />
+                                </MultiTrigger.Conditions>
+                                 <Setter Property="IsVisible" Value="False"/>
+                            </MultiTrigger>
+
+                            <!-- DISCONNECTED -->
+                            <MultiTrigger TargetType="Label">
+                                <MultiTrigger.Conditions>
+                                    <BindingCondition Binding="{Binding Status}" Value="Disconnected" />
+                                    <BindingCondition Binding="{Binding IsExecuting}" Value="False" />
+                                </MultiTrigger.Conditions>
+                                 <Setter Property="IsVisible" Value="False"/>
+                            </MultiTrigger>
+
+                            <DataTrigger TargetType="Label" Binding="{Binding IsExecuting}" Value="True">
                                 <Setter Property="IsVisible" Value="False"/>
                             </DataTrigger>
 
@@ -91,8 +108,7 @@
 
                     </Label>
 
-                    <Image Grid.RowSpan="2"
-                           Grid.Column="1"
+                    <Image Grid.Column="1"
                            IsVisible="False"
                            HorizontalOptions="End"
                            VerticalOptions="End"
@@ -110,9 +126,7 @@
 
                     </Image>
 
-                    <ActivityIndicator Grid.RowSpan="2"
-                                       Grid.Column="1"
-                                       IsVisible="{Binding IsExecuting}"
+                    <ActivityIndicator Grid.Column="1"
                                        IsRunning="{Binding IsExecuting}"
                                        HorizontalOptions="End"
                                        VerticalOptions="End"
@@ -122,15 +136,17 @@
                 </Grid>
 
                 <!-- SWITCH -->
-                <HorizontalStackLayout Grid.Row="0"
-                                       Grid.Column="1"
-                                       Spacing="0"
-                                       VerticalOptions="Start"
-                                       HorizontalOptions="Start">
+                <StackLayout Grid.Row="0"
+                             Orientation="Horizontal"
+                             Grid.Column="1"
+                             VerticalOptions="Start"
+                             HorizontalOptions="End">
 
                     <Label Text="{extensions:Translate Unlocked}"
+                           VerticalTextAlignment="Start"
+                           HorizontalOptions="FillAndExpand"
+                           HorizontalTextAlignment="End"
                            Margin="0,0,12,0"
-                           VerticalTextAlignment="Center"
                            Style="{x:DynamicResource tstyle_i12}">
 
                         <Label.Triggers>
@@ -211,8 +227,9 @@
                     </Label>
 
                     <controls:CustomSwitch InputTransparent="True"
-                                           VerticalOptions="Center"
-                                           Margin="0,0,3,0">
+                                           VerticalOptions="Start"
+                                           HorizontalOptions="End"
+                                           Margin="0,6,3,0">
 
                         <controls:CustomSwitch.Triggers>
 
@@ -238,7 +255,7 @@
 
                     </controls:CustomSwitch>
 
-                </HorizontalStackLayout>
+                </StackLayout>
 
             </Grid>
 
