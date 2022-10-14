@@ -115,9 +115,9 @@ namespace SmartMirror.Services.Mock
             {
                 new() 
                 {
+                    Id = "1",
                     Name = "Good Morning",
                     IsActive = true,
-                    IsFavorite = true, 
                     ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 7, 0, 0),
                     ScenarioActions = new List<ScenarioActionModel>()
                     {
@@ -146,9 +146,9 @@ namespace SmartMirror.Services.Mock
                 },
                 new() 
                 {
+                    Id = "2",
                     Name = "Good Evening", 
-                    IsActive = false, 
-                    IsFavorite = true, 
+                    IsActive = false,
                     ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 18, 0, 0),
                     ScenarioActions = new List<ScenarioActionModel>()
                     {
@@ -184,9 +184,9 @@ namespace SmartMirror.Services.Mock
                 },
                 new() 
                 {
+                    Id = "3",
                     Name = "Friday Night",
                     IsActive = false,
-                    IsFavorite = true,
                     ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 21, 0, 0),
                     ScenarioActions = new List<ScenarioActionModel>()
                     {
@@ -229,6 +229,7 @@ namespace SmartMirror.Services.Mock
                 },
                 new() 
                 {
+                    Id = "4",
                     Name = "Welcome",
                     IsActive = true,
                     ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19, 0, 0),
@@ -259,6 +260,7 @@ namespace SmartMirror.Services.Mock
                 },
                 new() 
                 {
+                    Id = "5",
                     Name = "No one's home",
                     IsActive = true,
                     ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 0, 0),

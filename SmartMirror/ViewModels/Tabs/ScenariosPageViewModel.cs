@@ -2,8 +2,10 @@
 using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
+using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
+using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -13,16 +15,19 @@ public class ScenariosPageViewModel : BaseTabViewModel
 {
     private readonly IMapperService _mapperService;
     private readonly IScenariosService _scenariosService;
+    private readonly IDialogService _dialogService;
 
     public ScenariosPageViewModel(
+        INavigationService navigationService,
+        IDialogService dialogService,
         IMapperService mapperService,
-        IScenariosService scenariosService,
-        INavigationService navigationService)
+        IScenariosService scenariosService)
         : base(navigationService)
     {
+        _dialogService = dialogService;
         _mapperService = mapperService;
         _scenariosService = scenariosService;
-        
+
         Title = "Scenarios";
         DataState = EPageState.Loading;
     }
@@ -43,8 +48,8 @@ public class ScenariosPageViewModel : BaseTabViewModel
         set => SetProperty(ref _scenarios, value);
     }
 
-    private ICommand _changeActiveStatusCommand;
-    public ICommand ChangeActiveStatusCommand => _changeActiveStatusCommand ??= SingleExecutionCommand.FromFunc<ScenarioBindableModel>(OnChangeActiveStatusCommandAsync);
+    private ICommand _runScenarioCommand;
+    public ICommand RunScenarioCommand => _runScenarioCommand ??= SingleExecutionCommand.FromFunc<ScenarioBindableModel>(OnRunScenarioCommandAsync);
 
     private ICommand _goToScenarioDetailsCommand;
     public ICommand GoToScenarioDetailsCommand => _goToScenarioDetailsCommand ??= SingleExecutionCommand.FromFunc<ScenarioBindableModel>(OnGoToScenarioDetailsCommandAsync);
@@ -88,14 +93,29 @@ public class ScenariosPageViewModel : BaseTabViewModel
         await LoadScenariosAsync();
     }
 
-    private async Task OnChangeActiveStatusCommandAsync(ScenarioBindableModel scenario)
+    private async Task OnRunScenarioCommandAsync(ScenarioBindableModel selectedScenario)
     {
-        var resultOfUpdattingScenario = await _scenariosService.UpdateActiveStatusScenarioAsync(scenario.Id, !scenario.IsActive);
+        selectedScenario.IsUpdating = true;
+
+        var resultOfUpdattingScenario = await _scenariosService.RunScenarioAsync(selectedScenario.Id);
 
         if (resultOfUpdattingScenario.IsSuccess)
         {
-            scenario.IsActive = !scenario.IsActive;
+            UpdateStatusRunningScenario(FavoriteScenarios, selectedScenario.Id);
+            UpdateStatusRunningScenario(Scenarios, selectedScenario.Id);
         }
+        else
+        {
+            var errorDialogParameters = new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.TITLE, "Error" },
+                { Constants.DialogsParameterKeys.DESCRIPTION, resultOfUpdattingScenario.Message },
+            };
+
+            await _dialogService.ShowDialogAsync(nameof(ErrorDialog), errorDialogParameters);
+        }
+
+        selectedScenario.IsUpdating = false;
     }
 
     private Task OnGoToScenarioDetailsCommandAsync(ScenarioBindableModel scenario)
@@ -111,22 +131,16 @@ public class ScenariosPageViewModel : BaseTabViewModel
     {
         if (IsInternetConnected)
         {
-            List<Task<bool>> tasks = new();
+            var isFavoriteScenariosLoaded = await LoadFavoritesScenariosAsync();
+            var isScenariosLoaded = await LoadAllScenariosAsync();
 
-            tasks.Add(Task.Run(() => LoadFavoritesScenariosAsync()));
-            tasks.Add(Task.Run(() => LoadAllScenariosAsync()));
-
-            var tasksResult = await Task.WhenAll(tasks);
-
-            var isScenariosLoaded = tasksResult.All(row => row == true);
-
-            if (isScenariosLoaded)
+            if (isFavoriteScenariosLoaded || isScenariosLoaded)
             {
                 DataState = EPageState.Complete;
             }
-            else if(!IsInternetConnected)
+            else
             {
-                DataState = EPageState.NoInternet;
+                DataState = EPageState.Empty;
             }
         }
         else
@@ -151,7 +165,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     private async Task<bool> LoadAllScenariosAsync()
     {
-        var resultOfGettingAllScenarios = await _scenariosService.GetAllScenariosAsync();
+        var resultOfGettingAllScenarios = await _scenariosService.GetScenariosAsync();
 
         if (resultOfGettingAllScenarios.IsSuccess)
         {
@@ -167,9 +181,19 @@ public class ScenariosPageViewModel : BaseTabViewModel
     {
         return _mapperService.MapRange<ScenarioBindableModel>(scenarios, (m, vm) =>
         {
-            vm.ChangeActiveStatusCommand = ChangeActiveStatusCommand;
+            vm.ChangeActiveStatusCommand = RunScenarioCommand;
             vm.TappedCommand = GoToScenarioDetailsCommand;
         });
+    }
+
+    private void UpdateStatusRunningScenario(IEnumerable<ScenarioBindableModel> scenarios, string scenarioId)
+    {
+        var scenario = scenarios?.FirstOrDefault(x => x.Id == scenarioId);
+
+        if (scenario is not null)
+        {
+            scenario.IsActive = true;
+        }
     }
 
     #endregion

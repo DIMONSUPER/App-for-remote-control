@@ -8,9 +8,12 @@
 		<item name="windowActionModeOverlay">true</item>
 		<item name="android:actionModeBackground">?attr/colorPrimary</item>
 		<item name="android:actionModeStyle">@style/ActionMode</item>
+
+		<!--FULLSCREEN FOR APPLICATION-->
+		<item name="android:windowFullscreen">true</item>
 		
 		<!--<item name="maui_splash">true</item>-->
-		<item name="android:windowBackground">@drawable/maui_splash</item>
+		<item name="android:windowBackground">@drawable/splash_screen</item>
 		<!--
 			Android 12+ specific settings
 			See: https://developer.android.com/guide/topics/ui/splash-screen#set-theme

@@ -5,8 +5,8 @@ namespace SmartMirror.Models.BindableModels
 {
     public class ScenarioBindableModel : BindableBase
     {
-        private int _id;
-        public int Id
+        private string _id;
+        public string Id
         {
             get => _id;
             set => SetProperty(ref _id, value);
@@ -45,6 +45,13 @@ namespace SmartMirror.Models.BindableModels
         {
             get => _scenarioActions;
             set => SetProperty(ref _scenarioActions, value);
+        }
+
+        private bool _isUpdating;
+        public bool IsUpdating
+        {
+            get => _isUpdating;
+            set => SetProperty(ref _isUpdating, value);
         }
 
         private ICommand _tappedCommand;

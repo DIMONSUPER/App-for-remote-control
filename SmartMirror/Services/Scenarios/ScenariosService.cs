@@ -1,5 +1,6 @@
 ﻿using SmartMirror.Helpers;
 using SmartMirror.Models;
+using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Mock;
 
 namespace SmartMirror.Services.Scenarios
@@ -7,76 +8,163 @@ namespace SmartMirror.Services.Scenarios
     public class ScenariosService : IScenariosService
     {
         private readonly ISmartHomeMockService _smartHomeMockService;
+        private readonly IAqaraService _aqaraService;
 
-        public ScenariosService(ISmartHomeMockService smartHomeMockService)
+        public ScenariosService(
+            ISmartHomeMockService smartHomeMockService,
+            IAqaraService aqaraService)
         {
             _smartHomeMockService = smartHomeMockService;
+            _aqaraService = aqaraService;
         }
 
         #region -- IScenariosService implementation --
 
-        public Task<AOResult<IEnumerable<ScenarioModel>>> GetAllScenariosAsync()
+        public Task<AOResult<IEnumerable<ScenarioModel>>> GetScenariosAsync()
         {
-            return AOResult.ExecuteTaskAsync(onFailure =>
+            return AOResult.ExecuteTaskAsync(async onFailure =>
             {
                 var scenarios = Enumerable.Empty<ScenarioModel>();
 
-                var resultOfGettingScenarios = _smartHomeMockService.GetScenarios();
+                var resultOfGettingScenaries = await GetScenariosFromAqaraAsync();
 
-                if (resultOfGettingScenarios is not null)
+                if (resultOfGettingScenaries.IsSuccess)
                 {
-                    scenarios = resultOfGettingScenarios;
-                }
-                else
-                {
-                    onFailure("scenarios is null");
+                    scenarios = resultOfGettingScenaries.Result;
                 }
 
-                return Task.FromResult(scenarios);
+                var mockScenarios = _smartHomeMockService.GetScenarios();
+
+                if (mockScenarios is not null)
+                {
+                    scenarios = scenarios.Concat(mockScenarios);
+                }
+
+                return scenarios;
             });
         }
 
         public Task<AOResult<IEnumerable<ScenarioModel>>> GetFavoriteScenariosAsync()
         {
-            return AOResult.ExecuteTaskAsync(onFailure =>
+            return AOResult.ExecuteTaskAsync(async onFailure =>
             {
                 var scenarios = Enumerable.Empty<ScenarioModel>();
 
-                var resultOfGettingScenarios = _smartHomeMockService.GetScenarios();
+                var resultOfGettingScenaries = await GetScenariosFromAqaraAsync();
 
-                if (resultOfGettingScenarios is not null)
+                if (resultOfGettingScenaries.IsSuccess)
                 {
-                    scenarios = resultOfGettingScenarios.Where(row => row.IsFavorite);
+                    scenarios = resultOfGettingScenaries.Result;
                 }
                 else
                 {
-                    onFailure("scenarios is null");
+                    onFailure(resultOfGettingScenaries.Message);
                 }
 
-                return Task.FromResult(scenarios);
+                return scenarios;
             });
         }
 
-        public Task<AOResult> UpdateActiveStatusScenarioAsync(int id, bool active)
+        public Task<AOResult<ScenarioModel>> GetScenarioByIdAsync(string sceneId)
         {
-            return AOResult.ExecuteTaskAsync(onFailure =>
+            return AOResult.ExecuteTaskAsync(async onFailure =>
             {
-                var resultOfGettingScenarios = _smartHomeMockService.GetScenarios();
+                var scenario = new ScenarioModel();
 
-                if (resultOfGettingScenarios is not null)
+                var resultOfGetttingSceneById = await _aqaraService.GetSceneByIdAsync(sceneId);
+
+                if (resultOfGetttingSceneById is not null)
                 {
-                    var scenario = resultOfGettingScenarios.FirstOrDefault(row => row.Id == id);
+                    if (resultOfGetttingSceneById.IsSuccess && resultOfGetttingSceneById.Result is not null)
+                    {
+                        var scene = resultOfGetttingSceneById?.Result;
 
-                    scenario.IsActive = active;
+                        scenario = new ScenarioModel
+                        {
+                            Id = scene.SceneId,
+                            Name = scene.Name,
+                        };
+                    }
+                    else
+                    {
+                        onFailure(resultOfGetttingSceneById.Message);
+                    }
                 }
                 else
                 {
-                    onFailure("scenarios is null");
+                    onFailure("result is null");
                 }
 
-                return Task.CompletedTask;
+                return scenario;
             });
         }
+
+        public Task<AOResult> RunScenarioAsync(string id)
+        {
+            return AOResult.ExecuteTaskAsync(async onFailure =>
+            {
+                var scenariosFromMock = _smartHomeMockService.GetScenarios();
+
+                if (scenariosFromMock is not null)
+                {
+                    var scenario = scenariosFromMock.FirstOrDefault(row => row.Id == id);
+
+                    if (scenario is not null)
+                    {
+                        scenario.IsActive = true;
+
+                        await Task.Delay(250);
+                    }
+                    else
+                    {
+                        var resultOfRunningScene = await _aqaraService.RunSceneByIdAsync(id);
+
+                        if (!resultOfRunningScene.IsSuccess)
+                        {
+                            onFailure(resultOfRunningScene.Message);
+                        }
+                    }
+                }
+            });
+        }
+
+        #endregion
+
+        #region -- Private helpers --
+
+        private Task<AOResult<IEnumerable<ScenarioModel>>> GetScenariosFromAqaraAsync()
+        {
+            return AOResult.ExecuteTaskAsync(async onFailure =>
+            {
+                var scenarios = Enumerable.Empty<ScenarioModel>();
+
+                var resultOfGettingAllScenaries = await _aqaraService.GetScenesAsync();
+
+                if (resultOfGettingAllScenaries is not null)
+                {
+                    if (resultOfGettingAllScenaries.IsSuccess)
+                    {
+                        scenarios = resultOfGettingAllScenaries.Result?.Data?
+                            .Select(x => new ScenarioModel
+                            {
+                                Id = x.SceneId,
+                                Name = x.Name,
+                                IsFavorite = true,
+                            });
+                    }
+                    else
+                    {
+                        onFailure(resultOfGettingAllScenaries.Message);
+                    }
+                }
+                else
+                {
+                    onFailure("result is null");
+                }
+
+                return scenarios;
+            });
+        } 
 
         #endregion
     }

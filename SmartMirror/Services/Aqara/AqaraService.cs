@@ -3,7 +3,6 @@ using SmartMirror.Helpers;
 using SmartMirror.Models.Aqara;
 using SmartMirror.Services.Rest;
 using SmartMirror.Services.Settings;
-
 namespace SmartMirror.Services.Aqara;
 
 public class AqaraService : IAqaraService
@@ -164,6 +163,51 @@ public class AqaraService : IAqaraService
         });
     }
 
+    public Task<AOResult<DataAqaraResponse<SimpleSceneAqaraModel>>> GetScenesAsync(int pageNumber = 1, int pageSize = 100, string positionId = null)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var data = new
+            {
+                positionId = positionId,
+                pageNum = pageNumber,
+                pageSize = pageSize,
+            };
+
+            var response = await MakeRequestAsync<DataAqaraResponse<SimpleSceneAqaraModel>>("query.scene.listByPositionId", data, onFailure);
+
+            return response?.Result;
+        });
+    }
+  
+    public Task<AOResult<DetailSceneAqaraModel>> GetSceneByIdAsync(string sceneId)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var data = new
+            {
+                sceneId = sceneId,
+            };
+
+            var response = await MakeRequestAsync<DetailSceneAqaraModel>("query.scene.detail", data, onFailure);
+
+            return response?.Result;
+        });
+    }
+
+    public Task<AOResult> RunSceneByIdAsync(string sceneId)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var data = new
+            {
+                sceneId = sceneId,
+            };
+
+            var response = await MakeRequestAsync<BaseAqaraResponse>("config.scene.run", data, onFailure);
+        });
+    }
+
     #endregion
 
     #region -- Private helpers --
@@ -269,4 +313,3 @@ public class AqaraService : IAqaraService
 
     #endregion
 }
-
