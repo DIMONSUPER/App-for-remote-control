@@ -84,18 +84,6 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override void OnAppearing()
-    {
-        base.OnAppearing();
-
-        if (DataState != EPageState.Loading)
-        {
-            DataState = EPageState.Loading;
-
-            Task.Run(LoadRoomsAndDevicesAsync);
-        }
-    }
-
     public override void Initialize(INavigationParameters parameters)
     {
         base.Initialize(parameters);
@@ -107,7 +95,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
-            await LoadRoomsAndDevicesAsync().ConfigureAwait(false);
+            await LoadRoomsAndDevicesAsync();
         }
         else
         {
@@ -139,7 +127,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             var value = device.Status == EDeviceStatus.On ? "0" : "1";
 
-            var updateResponse = await _aqaraService.UpdateAttributeValueAsync(device.DeviceId, (device.EditableResource, value)).ConfigureAwait(false);
+            var updateResponse = await _aqaraService.UpdateAttributeValueAsync(device.DeviceId, (device.EditableResource, value));
 
             if (updateResponse.IsSuccess)
             {
@@ -163,7 +151,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         if (IsInternetConnected)
         {
             var testEmail = "botheadworks@gmail.com";
-            var sendLoginResponse = await _aqaraService.SendLoginCodeAsync(testEmail).ConfigureAwait(true);
+            var sendLoginResponse = await _aqaraService.SendLoginCodeAsync(testEmail);
 
             IDialogResult dialogResult;
 
@@ -205,7 +193,7 @@ public class RoomsPageViewModel : BaseTabViewModel
                     { Constants.DialogsParameterKeys.TITLE, "Success!" }
                 });
 
-                await LoadRoomsAndDevicesAsync().ConfigureAwait(false);
+                await LoadRoomsAndDevicesAsync();
             }
             else
             {
@@ -224,7 +212,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         DataState = EPageState.NoInternetLoader;
 
-        await LoadRoomsAndDevicesAsync().ConfigureAwait(false);
+        await LoadRoomsAndDevicesAsync();
     }
 
     private async Task LoadRoomsAndDevicesAsync()
@@ -279,7 +267,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
                 var tasks = devices.Select(x => GetTaskForDevice(x));
 
-                await Task.WhenAll(tasks).ConfigureAwait(false);
+                await Task.WhenAll(tasks);
             }
         }
     }
@@ -307,7 +295,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (device.State > 0)
         {
-            var deviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "0.2.85", "0.1.85", "0.3.85").ConfigureAwait(false);
+            var deviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "0.2.85", "0.1.85", "0.3.85");
 
             if (deviceAttributeResponse.IsSuccess)
             {
@@ -344,7 +332,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
         if (device.State > 0)
         {
-            var deviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.1.85").ConfigureAwait(false);
+            var deviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.1.85");
 
             if (deviceAttributeResponse.IsSuccess)
             {
@@ -359,7 +347,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (device.State > 0)
         {
-            var leftDeviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.1.85").ConfigureAwait(false);
+            var leftDeviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.1.85");
 
             DeviceBindableModel leftDevice = null;
             DeviceBindableModel rightDevice = null;
@@ -379,7 +367,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             }
 
-            var rightDeviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.2.85").ConfigureAwait(false);
+            var rightDeviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.2.85");
 
             if (rightDeviceAttributeResponse.IsSuccess)
             {
