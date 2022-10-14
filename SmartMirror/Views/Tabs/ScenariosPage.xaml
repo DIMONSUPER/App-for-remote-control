@@ -29,8 +29,8 @@
 
         <EventTrigger Event="Appearing">
 
-            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewCompleteState}"/>
-            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewFavoriteScenarios}"/>
+            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewCompleteState}" IntervalMilliseconds="250"/>
+            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewFavoriteScenarios}" IntervalMilliseconds="250"/>
 
         </EventTrigger>
 
