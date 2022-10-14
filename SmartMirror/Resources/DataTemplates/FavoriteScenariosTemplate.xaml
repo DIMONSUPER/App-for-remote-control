@@ -9,88 +9,90 @@
     x:Class="SmartMirror.Resources.DataTemplates.FavoriteScenariosTemplate"
     x:DataType="{x:Type bindablemodels:ScenarioBindableModel}">
 
-    <Border
-        WidthRequest="368"
-        HeightRequest="201"
-        Stroke="{DynamicResource cbg_i4}"
-        StrokeThickness="1"
-        StrokeShape="RoundRectangle 9"
-        BackgroundColor="{DynamicResource cbg_i2}"
-        Shadow="{DynamicResource Shadow_i1}"
-        Padding="29, 23, 29, 20">
+    <Grid>
+        
+        <Border
+            WidthRequest="368"
+            HeightRequest="201"
+            Stroke="{DynamicResource cbg_i4}"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 9"
+            BackgroundColor="{DynamicResource cbg_i2}"
+            Shadow="{DynamicResource Shadow_i1}"
+            Padding="29, 23, 29, 20">
 
-        <Border.GestureRecognizers>
-            <TapGestureRecognizer Command="{Binding TappedCommand}" CommandParameter="{Binding .}"/>
-        </Border.GestureRecognizers>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding TappedCommand}" CommandParameter="{Binding .}"/>
+            </Border.GestureRecognizers>
 
-        <StackLayout>
+            <StackLayout>
 
-            <StackLayout
-                Spacing="0"
-                Orientation="Horizontal"
-                VerticalOptions="Start">
+                <StackLayout
+                    Spacing="0"
+                    Orientation="Horizontal"
+                    VerticalOptions="Start">
 
-                <Border
-                    BackgroundColor="{DynamicResource cbg_i1}"
-                    StrokeShape="RoundRectangle 12"
-                    StrokeThickness="0"
-                    WidthRequest="80"
-                    HeightRequest="80"
-                    HorizontalOptions="Start">
+                    <Border
+                        BackgroundColor="{DynamicResource cbg_i1}"
+                        StrokeShape="RoundRectangle 12"
+                        StrokeThickness="0"
+                        WidthRequest="80"
+                        HeightRequest="80"
+                        HorizontalOptions="Start">
 
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ChangeActiveStatusCommand}" CommandParameter="{Binding .}"/>
-                    </Border.GestureRecognizers>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChangeActiveStatusCommand}" CommandParameter="{Binding .}"/>
+                        </Border.GestureRecognizers>
 
-                    <Image
-                        Source="play_gray"
-                        Scale="0.75"
-                        VerticalOptions="Center"
-                        HorizontalOptions="Center">
+                        <Image
+                            Source="play_gray"
+                            Scale="0.75"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"/>
 
-                        <Image.Triggers>
+                    </Border>
 
-                            <DataTrigger Binding="{Binding IsActive}" Value="True" TargetType="Image">
-                                <Setter Property="Source" Value="pause_aqua"/>
+                    <Label
+                        Text="{extensions:Translate NotActive}"
+                        HorizontalOptions="EndAndExpand"
+                        HorizontalTextAlignment="End"
+                        Style="{DynamicResource tstyle_i10}">
+
+                        <Label.Triggers>
+
+                            <DataTrigger Binding="{Binding IsActive}" Value="True" TargetType="Label">
+                                <Setter Property="Text" Value="{extensions:Translate Active}"/>
+                                <Setter Property="Style" Value="{DynamicResource tstyle_i12}"/>
                             </DataTrigger>
 
-                        </Image.Triggers>
+                        </Label.Triggers>
 
-                    </Image>
+                    </Label>
 
-                </Border>
+                </StackLayout>
 
                 <Label
-                    Text="{extensions:Translate NotActive}"
-                    HorizontalOptions="EndAndExpand"
-                    HorizontalTextAlignment="End"
-                    Style="{DynamicResource tstyle_i10}">
+                    Text="{Binding Name}"
+                    VerticalOptions="EndAndExpand"
+                    Style="{DynamicResource tstyle_i11}"/>
 
-                    <Label.Triggers>
-
-                        <DataTrigger Binding="{Binding IsActive}" Value="True" TargetType="Label">
-                            <Setter Property="Text" Value="{extensions:Translate Active}"/>
-                            <Setter Property="Style" Value="{DynamicResource tstyle_i12}"/>
-                        </DataTrigger>
-
-                    </Label.Triggers>
-
-                </Label>
+                <Label
+                    Text="{Binding ActivationTime, StringFormat={x:Static app:Constants+Formats.TIME_FORMAT_2}}"
+                    VerticalOptions="End"
+                    Style="{DynamicResource tstyle_i5}"/>
 
             </StackLayout>
 
-            <Label
-                Text="{Binding Name}"
-                VerticalOptions="EndAndExpand"
-                Style="{DynamicResource tstyle_i11}"/>
-            
-            <Label
-                Text="{Binding ActivationTime, StringFormat={x:Static app:Constants+Formats.TIME_FORMAT_2}}"
-                VerticalOptions="End"
-                Style="{DynamicResource tstyle_i5}"/>
+        </Border>
 
-        </StackLayout>
+        <ActivityIndicator 
+            Margin="29, 23, 29, 20"
+            VerticalOptions="End"
+            HorizontalOptions="End"
+            WidthRequest="32"
+            HeightRequest="32"
+            IsRunning="{Binding IsUpdating}"/>
 
-    </Border>
+    </Grid>
 
 </DataTemplate>
