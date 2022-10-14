@@ -19,6 +19,7 @@ using SmartMirror.Views;
 using SmartMirror.Views.Dialogs;
 using SmartMirror.Views.Tabs;
 using System.Diagnostics;
+using SmartMirror.Services.RoomsService;
 
 namespace SmartMirror;
 
@@ -78,12 +79,13 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<INotificationsService, NotificationsService>();
         containerRegistry.RegisterSingleton<ICamerasService, CamerasService>();
         containerRegistry.RegisterSingleton<IScenariosService, ScenariosService>();
+        containerRegistry.RegisterSingleton<IRoomsService, RoomsService>();
     }
 
     private static void OnAppStart(INavigationService navigationService)
     {
         navigationService.CreateBuilder()
-            .AddSegment<SplashScreenPageViewModel>()
+            .AddSegment<MainTabbedPageViewModel>()
             .Navigate(HandleErrors);
     }
 

@@ -1,7 +1,5 @@
 ﻿using SmartMirror.Enums;
 using SmartMirror.Models;
-using Device = SmartMirror.Models.Device;
-using NotificationModel = SmartMirror.Models.NotificationModel;
 
 namespace SmartMirror.Services.Mock
 {
@@ -98,9 +96,9 @@ namespace SmartMirror.Services.Mock
             return notifications;
         }
 
-        public IEnumerable<Room> GetRooms()
+        public IEnumerable<RoomModel> GetRooms()
         {
-            List<Room> rooms = new()
+            List<RoomModel> rooms = new()
             {
                 new() { Name = "Dining Room", Description = "1 Accessories", Devices = GetDevices().Take(1) },
                 new() { Name = "Downstairs", Description = "2 Accessories",Devices = GetDevices().Skip(1) },
@@ -306,9 +304,9 @@ namespace SmartMirror.Services.Mock
             return scenario;
         }
 
-        public IEnumerable<Device> GetDevices()
+        public IEnumerable<DeviceModel> GetDevices()
         {
-            List<Device> devices = new()
+            List<DeviceModel> devices = new()
             {
                 new() { Name = "Garage Door", Type = "GarageDoor", Status = EDeviceStatus.On },
                 new() { Name = "Front Door",  Type = "FrontDoor", Status = EDeviceStatus.On },

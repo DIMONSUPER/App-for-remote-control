@@ -211,7 +211,7 @@
 	</ItemGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
 		<AndroidKeyStore>True</AndroidKeyStore>
-		<AndroidSigningKeyStore>c:/Users/user/Projects/SmartMirror/smartmirror.keystore</AndroidSigningKeyStore>
+		<AndroidSigningKeyStore>Platforms\Android\Keys\smartmirror.keystore</AndroidSigningKeyStore>
 		<AndroidSigningKeyAlias>key</AndroidSigningKeyAlias>
 		<AndroidSigningKeyPass>1Q2w3e4r5t</AndroidSigningKeyPass>
 		<AndroidSigningStorePass>1Q2w3e4r5t</AndroidSigningStorePass>

@@ -6,12 +6,12 @@ namespace SmartMirror.Extensions;
 [ContentProperty(nameof(Name))]
 public class TranslateExtension : IMarkupExtension
 {
-    private readonly IStringLocalizer<Strings> _localizer;
-
     public TranslateExtension()
     {
-        _localizer = MauiApplication.Current.Services.GetService<IStringLocalizer<Strings>>();
     }
+
+    private IStringLocalizer<Strings> _localizer;
+    private IStringLocalizer<Strings> Localizer => _localizer ??= MauiApplication.Current?.Services?.GetService<IStringLocalizer<Strings>>();
 
     #region -- Public properties --
 
@@ -29,7 +29,7 @@ public class TranslateExtension : IMarkupExtension
 
     public object ProvideValue(IServiceProvider serviceProvider)
     {
-        return _localizer[Name];
+        return Localizer is null ? Name : Localizer[Name];
     }
 
     #endregion

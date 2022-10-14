@@ -14,6 +14,7 @@ namespace SmartMirror;
     MainLauncher = true,
     ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density,
     ScreenOrientation = ScreenOrientation.UserLandscape,
+    LaunchMode = LaunchMode.SingleTop,
     Exported = true)]
 [IntentFilter(
     new[] { Intent.ActionMain },

@@ -5,7 +5,7 @@ using SmartMirror.Models;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using SmartMirror.ViewModels.Tabs;
-using Device = SmartMirror.Models.Device;
+using DeviceModel = SmartMirror.Models.DeviceModel;
 
 namespace SmartMirror.ViewModels;
 
@@ -39,8 +39,8 @@ public class RoomPageViewModel : BaseViewModel
         set => SetProperty(ref _rooms, value);
     }
 
-    private ObservableCollection<Device> _selectedRoomDevices;
-    public ObservableCollection<Device> SelectedRoomDevices
+    private ObservableCollection<DeviceModel> _selectedRoomDevices;
+    public ObservableCollection<DeviceModel> SelectedRoomDevices
     {
         get => _selectedRoomDevices;
         set => SetProperty(ref _selectedRoomDevices, value);

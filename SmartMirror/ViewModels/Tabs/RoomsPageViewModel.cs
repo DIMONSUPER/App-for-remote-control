@@ -5,12 +5,14 @@ using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Device = SmartMirror.Models.Device;
+using DeviceModel = SmartMirror.Models.DeviceModel;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Views.Dialogs;
 using SmartMirror.Resources.Strings;
 using SmartMirror.ViewModels.Dialogs;
 using Prism.Services;
+using SmartMirror.Models.Aqara;
+using SmartMirror.Services.RoomsService;
 
 namespace SmartMirror.ViewModels.Tabs;
 
@@ -20,12 +22,14 @@ public class RoomsPageViewModel : BaseTabViewModel
     private readonly IMapperService _mapperService;
     private readonly IAqaraService _aqaraService;
     private readonly IDialogService _dialogService;
+    private readonly IRoomsService _roomsService;
 
     public RoomsPageViewModel(
         ISmartHomeMockService smartHomeMockService,
         INavigationService navigationService,
         IMapperService mapperService,
         IAqaraService aqaraService,
+        IRoomsService roomsService,
         IDialogService dialogService)
         : base(navigationService)
     {
@@ -33,6 +37,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         _mapperService = mapperService;
         _aqaraService = aqaraService;
         _dialogService = dialogService;
+        _roomsService = roomsService;
 
         IsAqaraLoginButtonVisible = !_aqaraService.IsAuthorized;
 
@@ -58,8 +63,8 @@ public class RoomsPageViewModel : BaseTabViewModel
         set => SetProperty(ref _isAqaraLoginButtonVisible, value);
     }
 
-    private ObservableCollection<Device> _favoriteAccessories;
-    public ObservableCollection<Device> FavoriteAccessories
+    private ObservableCollection<DeviceModel> _favoriteAccessories;
+    public ObservableCollection<DeviceModel> FavoriteAccessories
     {
         get => _favoriteAccessories;
         set => SetProperty(ref _favoriteAccessories, value);
@@ -76,9 +81,9 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override async Task InitializeAsync(INavigationParameters parameters)
+    public override async void Initialize(INavigationParameters parameters)
     {
-        await base.InitializeAsync(parameters);
+        base.Initialize(parameters);
 
         await LoadRoomsAsync();
     }
@@ -167,14 +172,23 @@ public class RoomsPageViewModel : BaseTabViewModel
         {
             FavoriteAccessories = new(_smartHomeMockService.GetDevices());
 
-            var rooms = await _mapperService.MapRangeAsync<RoomBindableModel>(_smartHomeMockService.GetRooms(), (m, vm) =>
+            var resultOfGettingRooms = await _roomsService.GetAllRoomsAsync();
+
+            if (resultOfGettingRooms.IsSuccess)
             {
-                vm.TappedCommand = RoomTappedCommand;
-            });
+                var rooms = _mapperService.MapRange<RoomBindableModel>(resultOfGettingRooms.Result, (m, vm) =>
+                {
+                    vm.TappedCommand = RoomTappedCommand;
+                });
 
-            Rooms = new(rooms);
+                Rooms = new(rooms);
 
-            DataState = EPageState.Complete;
+                DataState = EPageState.Complete;
+            }
+            else if (!IsInternetConnected)
+            {
+                DataState = EPageState.NoInternet;
+            }
         }
         else
         {

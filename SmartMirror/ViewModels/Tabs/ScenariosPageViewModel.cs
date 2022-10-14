@@ -61,9 +61,9 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override async Task InitializeAsync(INavigationParameters parameters)
+    public override async void Initialize(INavigationParameters parameters)
     {
-        await base.InitializeAsync(parameters);
+        base.Initialize(parameters);
 
         await LoadScenariosAsync();
     }
@@ -160,7 +160,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
         if (resultOfGettingFavoriteScenarios.IsSuccess)
         {
-            var favoriteScenarios = await GetBindableModelWithSetCommandsAsync(resultOfGettingFavoriteScenarios.Result);
+            var favoriteScenarios = GetBindableModelWithSetCommands(resultOfGettingFavoriteScenarios.Result);
 
             FavoriteScenarios = new(favoriteScenarios);
         }
@@ -174,7 +174,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
         if (resultOfGettingAllScenarios.IsSuccess)
         {
-            var allScenarios = await GetBindableModelWithSetCommandsAsync(resultOfGettingAllScenarios.Result);
+            var allScenarios = GetBindableModelWithSetCommands(resultOfGettingAllScenarios.Result);
 
             Scenarios = new(allScenarios);
         }
@@ -182,9 +182,9 @@ public class ScenariosPageViewModel : BaseTabViewModel
         return resultOfGettingAllScenarios.IsSuccess;
     }
 
-    private Task<IEnumerable<ScenarioBindableModel>> GetBindableModelWithSetCommandsAsync(IEnumerable<ScenarioModel> scenarios)
+    private IEnumerable<ScenarioBindableModel> GetBindableModelWithSetCommands(IEnumerable<ScenarioModel> scenarios)
     {
-        return _mapperService.MapRangeAsync<ScenarioBindableModel>(scenarios, (m, vm) =>
+        return _mapperService.MapRange<ScenarioBindableModel>(scenarios, (m, vm) =>
         {
             vm.ChangeActiveStatusCommand = ChangeActiveStatusCommand;
             vm.TappedCommand = GoToScenarioDetailsCommand;

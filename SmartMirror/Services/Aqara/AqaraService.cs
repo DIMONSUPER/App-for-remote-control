@@ -73,24 +73,47 @@ public class AqaraService : IAqaraService
         });
     }
 
-    public Task<AOResult<BaseAqaraResponse>> GetAllDevicesAsync()
+    public Task<AOResult<DataAqaraResponse<DeviceAqaraModel>>> GetDevicesByPositionAsync(string positionId, int pageNum, int pageSize)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {
             var data = new
             {
-                pageNum = 1,
-                pageSize = 100,
+                positionId = positionId,
+                pageNum = pageNum,
+                pageSize = pageSize,
             };
 
-            var response = await MakeRequestAsync<BaseAqaraResponse<object>>("query.device.info", data);
+            var response = await MakeRequestAsync<BaseAqaraResponse<DataAqaraResponse<DeviceAqaraModel>>> ("query.device.info", data);
 
-            if (response?.Result is null)
+            if (response.Message != "Success")
             {
-                onFailure("response or result is null");
+                onFailure("Request failed");
             }
 
-            return response as BaseAqaraResponse;
+            return response.Result;
+        });
+    }
+
+    public Task<AOResult<DataAqaraResponse<PositionAqaraModel>>> GetPositionsAsync(string positionId, int pageNum, int pageSize)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var requestData = new
+            {
+                parentPositionId = positionId,
+                pageNum = pageNum,
+                pageSize = pageSize,
+            };
+
+            var response = await MakeRequestAsync<BaseAqaraResponse<DataAqaraResponse<PositionAqaraModel>>>("query.position.info", requestData);
+
+            if (response.Message != "Success")
+            {
+                onFailure("Request failed");
+            }
+
+            return response.Result;
         });
     }
 

@@ -15,46 +15,46 @@ namespace SmartMirror.Services.Mapper
 
         #region -- IMapperService Implementation --
 
-        public Task<IMapper> GetMapperAsync() => Task.Run(() => _lazyMapper.Value);
+        public IMapper GetMapper() => _lazyMapper.Value;
 
-        public Task<OutT> MapAsync<InT, OutT>(InT source)
+        public OutT Map<InT, OutT>(InT source)
         {
-            return Task.Run(() => _lazyMapper.Value.Map<InT, OutT>(source));
+            return _lazyMapper.Value.Map<InT, OutT>(source);
         }
 
-        public Task<OutT> MapAsync<InT, OutT>(InT source, Action<InT, OutT> afterMap)
+        public OutT Map<InT, OutT>(InT source, Action<InT, OutT> afterMap)
         {
-            return Task.Run(() => _lazyMapper.Value.Map<InT, OutT>(source, opt => opt.AfterMap(afterMap)));
+            return _lazyMapper.Value.Map<InT, OutT>(source, opt => opt.AfterMap(afterMap));
         }
 
-        public Task<IEnumerable<OutT>> MapRangeAsync<InT, OutT>(IEnumerable<InT> items)
+        public IEnumerable<OutT> MapRange<InT, OutT>(IEnumerable<InT> items)
         {
-            return Task.Run(() => items.Select(x => _lazyMapper.Value.Map<InT, OutT>(x)));
+            return items.Select(x => _lazyMapper.Value.Map<InT, OutT>(x));
         }
 
-        public Task<IEnumerable<OutT>> MapRangeAsync<InT, OutT>(IEnumerable<InT> items, Action<InT, OutT> afterMap)
+        public IEnumerable<OutT> MapRange<InT, OutT>(IEnumerable<InT> items, Action<InT, OutT> afterMap)
         {
-            return Task.Run(() => items.Select(x => _lazyMapper.Value.Map<InT, OutT>(x, opt => opt.AfterMap(afterMap))));
+            return items.Select(x => _lazyMapper.Value.Map<InT, OutT>(x, opt => opt.AfterMap(afterMap)));
         }
 
-        public Task<T> MapAsync<T>(object source)
+        public T Map<T>(object source)
         {
-            return Task.Run(() => _lazyMapper.Value.Map<T>(source));
+            return _lazyMapper.Value.Map<T>(source);
         }
 
-        public Task<T> MapAsync<T>(object source, Action<object, T> afterMap)
+        public T Map<T>(object source, Action<object, T> afterMap)
         {
-            return Task.Run(() => _lazyMapper.Value.Map<T>(source, opt => opt.AfterMap(afterMap)));
+            return _lazyMapper.Value.Map<T>(source, opt => opt.AfterMap(afterMap));
         }
 
-        public Task<IEnumerable<T>> MapRangeAsync<T>(IEnumerable<object> items)
+        public IEnumerable<T> MapRange<T>(IEnumerable<object> items)
         {
-            return Task.Run(() => items.Select(x => _lazyMapper.Value.Map<T>(x)));
+            return items.Select(x => _lazyMapper.Value.Map<T>(x));
         }
 
-        public Task<IEnumerable<T>> MapRangeAsync<T>(IEnumerable<object> items, Action<object, T> afterMap)
+        public IEnumerable<T> MapRange<T>(IEnumerable<object> items, Action<object, T> afterMap)
         {
-            return Task.Run(() => items.Select(x => _lazyMapper.Value.Map<T>(x, opt => opt.AfterMap(afterMap))));
+            return items.Select(x => _lazyMapper.Value.Map<T>(x, opt => opt.AfterMap(afterMap)));
         }
 
         #endregion
@@ -65,7 +65,7 @@ namespace SmartMirror.Services.Mapper
         {
             var mapperConfiguration = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<Room, RoomBindableModel>().ReverseMap();
+                cfg.CreateMap<RoomModel, RoomBindableModel>().ReverseMap();
                 cfg.CreateMap<CameraModel, CameraBindableModel>().ReverseMap();
                 cfg.CreateMap<ScenarioModel, ScenarioBindableModel>().ReverseMap();
                 cfg.CreateMap<ScenarioActionModel, ScenarioActionBindableModel>().ReverseMap();
