@@ -79,7 +79,12 @@
                                     SelectionMode="None">
 
                         <CollectionView.ItemsLayout>
-                            <GridItemsLayout Orientation="Vertical" Span="3" HorizontalItemSpacing="0" VerticalItemSpacing="24"/>
+                            
+                            <GridItemsLayout Orientation="Vertical"
+                                             Span="3"
+                                             HorizontalItemSpacing="0"
+                                             VerticalItemSpacing="24"/>
+                            
                         </CollectionView.ItemsLayout>
 
                         <CollectionView.Footer>

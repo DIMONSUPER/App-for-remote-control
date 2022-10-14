@@ -56,7 +56,7 @@ public class AqaraService : IAqaraService
         });
     }
 
-    public Task<AOResult<DataAqaraResponse<DeviceAqaraModel>>> GetDevicesByPositionAsync(string positionId, int pageNum = 1, int pageSize = 100)
+    public Task<AOResult<DataAqaraResponse<DeviceAqaraModel>>> GetDevicesByPositionAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {
@@ -96,22 +96,6 @@ public class AqaraService : IAqaraService
             }
 
             return response as BaseAqaraResponse;
-        });
-    }
-
-    public Task<AOResult<DataAqaraResponse<DeviceResponse>>> GetAllDevicesAsync()
-    {
-        return AOResult.ExecuteTaskAsync(async onFailure =>
-        {
-            var data = new
-            {
-                pageNum = 1,
-                pageSize = 100,
-            };
-
-            var response = await MakeRequestAsync<DataAqaraResponse<DeviceResponse>>("query.device.info", data, onFailure);
-
-            return response.Result;
         });
     }
 

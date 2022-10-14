@@ -97,7 +97,6 @@
 		<Folder Include="Helpers\" />
 		<Folder Include="Services\Amazon\" />
 		<Folder Include="Platforms\Android\Services\" />
-		<Folder Include="Models\" />
 		<Folder Include="Models\Amazon\" />
 		<Folder Include="Services\Rest\" />
 		<Folder Include="Resources\Strings\" />
@@ -115,7 +114,6 @@
 		<Folder Include="Services\Mapper\" />
 		<Folder Include="Services\Settings\" />
 		<Folder Include="Services\Aqara\" />
-		<Folder Include="Models\Aqara\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Controls\BadgeTitleView.xaml">
