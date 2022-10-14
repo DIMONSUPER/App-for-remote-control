@@ -7,14 +7,18 @@ namespace SmartMirror.ViewModels
         public BaseViewModel(INavigationService navigationService)
         {
             NavigationService = navigationService;
+
+            Connectivity.ConnectivityChanged += OnConnectivityChanged;
         }
 
         #region -- Protected properties --
 
         protected INavigationService NavigationService { get; }
 
+        protected bool IsInternetConnected => Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
+
         #endregion
-        
+
         #region -- Public properties --
 
         private EPageState _dataState;
@@ -65,6 +69,14 @@ namespace SmartMirror.ViewModels
         }
 
         public virtual void OnSleep()
+        {
+        }
+
+        #endregion
+
+        #region -- Protected helpers --
+
+        protected virtual void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
         }
 

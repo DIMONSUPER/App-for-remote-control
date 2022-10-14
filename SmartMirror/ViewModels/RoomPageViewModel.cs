@@ -7,6 +7,7 @@ using SmartMirror.Services.Mapper;
 using SmartMirror.ViewModels.Tabs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using static Android.Provider.DocumentsContract;
 
 namespace SmartMirror.ViewModels;
 
@@ -15,7 +16,7 @@ public class RoomPageViewModel : BaseViewModel
     private readonly IMapperService _mapperService;
     private readonly IDevicesService _devicesService;
 
-    private RoomBindableModel _selectedRoom = new();
+    private RoomBindableModel _selectedRoom;
 
     public RoomPageViewModel(
         INavigationService navigationService,
@@ -34,6 +35,9 @@ public class RoomPageViewModel : BaseViewModel
 
     private ICommand _roomSelectedCommand;
     public ICommand RoomSelectedCommand => _roomSelectedCommand ??= SingleExecutionCommand.FromFunc<RoomBindableModel>(OnRoomSelectedCommandAsync, delayMillisec: 0);
+
+    private ICommand _tryAgainCommand;
+    public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
 
     private ObservableCollection<RoomBindableModel> _rooms;
     public ObservableCollection<RoomBindableModel> Rooms
@@ -73,6 +77,18 @@ public class RoomPageViewModel : BaseViewModel
         }
     }
 
+    protected override void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    {
+        if (e.NetworkAccess == NetworkAccess.Internet)
+        {
+            SelectRoom(_selectedRoom);
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
+    }
+
     #endregion
 
     #region -- Private helpers --
@@ -86,10 +102,14 @@ public class RoomPageViewModel : BaseViewModel
     {
         if (Rooms?.Count > 0)
         {
-            DataState = EPageState.Loading;
+            _selectedRoom = selectedRoom;
 
-            _selectedRoom.IsSelected = false;
-            selectedRoom.IsSelected = true;
+            foreach (var room in Rooms)
+            {
+                room.IsSelected = room.Id == selectedRoom.Id;
+            }
+
+            DataState = EPageState.Loading;
 
             var resultOfGettingDevices = await _devicesService.GetDevicesByPositionAsync(selectedRoom.Id);
 
@@ -102,19 +122,26 @@ public class RoomPageViewModel : BaseViewModel
                 SelectedRoomDevices = new();
             }
 
-            DataState = SelectedRoomDevices.Count == 0
-                ? EPageState.Empty
-                : EPageState.Complete;
-
-            _selectedRoom = selectedRoom;
+            DataState = IsInternetConnected
+                ? SelectedRoomDevices.Count == 0
+                    ? EPageState.Empty
+                    : EPageState.Complete
+                : EPageState.NoInternet;
         }
     }
 
     private Task OnRoomSelectedCommandAsync(RoomBindableModel room)
     {
-        DataState = EPageState.Loading;
-
         SelectRoom(room);
+
+        return Task.CompletedTask;
+    }
+
+    private Task OnTryAgainCommandAsync()
+    {
+        DataState = EPageState.NoInternetLoader;
+
+        SelectRoom(_selectedRoom);
 
         return Task.CompletedTask;
     }

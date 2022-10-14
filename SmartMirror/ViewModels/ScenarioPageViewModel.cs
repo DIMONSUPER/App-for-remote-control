@@ -1,6 +1,5 @@
 ﻿using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
-using SmartMirror.Services.Mapper;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 

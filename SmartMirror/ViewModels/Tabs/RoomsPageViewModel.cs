@@ -62,14 +62,14 @@ public class RoomsPageViewModel : BaseTabViewModel
         set => SetProperty(ref _isAqaraLoginButtonVisible, value);
     }
 
-    private ObservableCollection<DeviceBindableModel> _favoriteAccessories;
+    private ObservableCollection<DeviceBindableModel> _favoriteAccessories = new();
     public ObservableCollection<DeviceBindableModel> FavoriteAccessories
     {
         get => _favoriteAccessories;
         set => SetProperty(ref _favoriteAccessories, value);
     }
 
-    private ObservableCollection<RoomBindableModel> _rooms;
+    private ObservableCollection<RoomBindableModel> _rooms = new();
     public ObservableCollection<RoomBindableModel> Rooms
     {
         get => _rooms;
