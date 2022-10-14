@@ -5,8 +5,8 @@ namespace SmartMirror.Models
 {
     public class RoomBindableModel : BindableBase
     {
-        private int _id;
-        public int Id
+        private string _id;
+        public string Id
         {
             get => _id;
             set => SetProperty(ref _id, value);
@@ -33,8 +33,15 @@ namespace SmartMirror.Models
             set => SetProperty(ref _description, value);
         }
 
-        private ObservableCollection<Device> _devices;
-        public ObservableCollection<Device> Devices
+        private int _devicesCount;
+        public int DevicesCount
+        {
+            get => _devicesCount;
+            set => SetProperty(ref _devicesCount, value);
+        }
+
+        private ObservableCollection<DeviceModel> _devices;
+        public ObservableCollection<DeviceModel> Devices
         {
             get => _devices;
             set => SetProperty(ref _devices, value);

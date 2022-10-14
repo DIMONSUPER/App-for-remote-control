@@ -20,11 +20,13 @@
 
     </views:BaseContentPage.Resources>
 
-    <VerticalStackLayout Padding="14,42,0,0"
-                         Spacing="15">
+    <Grid RowDefinitions="auto, *"
+          RowSpacing="15"
+          Padding="14,42,0,0">
 
         <!-- BACK BUTTON -->
-        <HorizontalStackLayout Spacing="17"
+        <HorizontalStackLayout Grid.Row="0"
+                               Spacing="17"
                                Margin="22,0,0,0"
                                HorizontalOptions="Start">
 
@@ -42,7 +44,8 @@
 
         </HorizontalStackLayout>
 
-        <Grid ColumnDefinitions="0.22*, 0.78*"
+        <Grid Grid.Row="1"
+              ColumnDefinitions="0.22*, 0.78*"
               ColumnSpacing="30"
               Margin="0,0,0,0">
 
@@ -81,5 +84,6 @@
 
         </Grid>
 
-    </VerticalStackLayout>
+    </Grid>
+    
 </views:BaseContentPage>

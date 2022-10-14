@@ -1,16 +1,14 @@
-﻿using System;
-using SmartMirror.Models;
-using Device = SmartMirror.Models.Device;
+﻿using SmartMirror.Models;
 
 namespace SmartMirror.Services.Mock
 {
     public interface ISmartHomeMockService
     {
-        IEnumerable<Room> GetRooms();
+        IEnumerable<RoomModel> GetRooms();
         IEnumerable<NotificationModel> GetNotifications();
         IEnumerable<ScenarioModel> GetScenarios();
         IEnumerable<CameraModel> GetCameras();
-        IEnumerable<Device> GetDevices();
+        IEnumerable<DeviceModel> GetDevices();
     }
 }
 

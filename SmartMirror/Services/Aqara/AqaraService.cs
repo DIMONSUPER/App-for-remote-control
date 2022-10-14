@@ -45,6 +45,45 @@ public class AqaraService : IAqaraService
         });
     }
 
+    public Task<AOResult<DataAqaraResponse<PositionAqaraModel>>> GetPositionsAsync(string positionId, int pageNum, int pageSize)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var requestData = new
+            {
+                parentPositionId = positionId,
+                pageNum = pageNum,
+                pageSize = pageSize,
+            };
+
+            var response = await MakeRequestAsync<BaseAqaraResponse<DataAqaraResponse<PositionAqaraModel>>>("query.position.info", requestData);
+
+            if (response.Message != "Success")
+            {
+                onFailure("Request failed");
+            }
+
+            return response.Result;
+        });
+    }
+
+    public Task<AOResult<DataAqaraResponse<DeviceAqaraModel>>> GetDevicesByPositionAsync(string positionId, int pageNum, int pageSize)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var data = new
+            {
+                positionId = positionId,
+                pageNum = pageNum,
+                pageSize = pageSize,
+            };
+
+            var response = await MakeRequestAsync<BaseAqaraResponse<DataAqaraResponse<DeviceAqaraModel>>>("query.device.info", data);
+
+            return response.Result;
+        });
+    }
+
     public Task<AOResult<BaseAqaraResponse>> LoginWithCodeAsync(string email, string code)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>

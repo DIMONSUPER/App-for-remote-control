@@ -5,10 +5,14 @@ using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using DeviceModel = SmartMirror.Models.DeviceModel;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Views.Dialogs;
 using SmartMirror.ViewModels.Dialogs;
 using SmartMirror.Models.BindableModels;
+using Prism.Services;
+using SmartMirror.Models.Aqara;
+using SmartMirror.Services.RoomsService;
 
 namespace SmartMirror.ViewModels.Tabs;
 
@@ -18,12 +22,14 @@ public class RoomsPageViewModel : BaseTabViewModel
     private readonly IMapperService _mapperService;
     private readonly IAqaraService _aqaraService;
     private readonly IDialogService _dialogService;
+    private readonly IRoomsService _roomsService;
 
     public RoomsPageViewModel(
         ISmartHomeMockService smartHomeMockService,
         INavigationService navigationService,
         IMapperService mapperService,
         IAqaraService aqaraService,
+        IRoomsService roomsService,
         IDialogService dialogService)
         : base(navigationService)
     {
@@ -31,6 +37,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         _mapperService = mapperService;
         _aqaraService = aqaraService;
         _dialogService = dialogService;
+        _roomsService = roomsService;
 
         IsAqaraLoginButtonVisible = !_aqaraService.IsAuthorized;
 
@@ -195,7 +202,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (IsInternetConnected)
         {
-            var devices = await _mapperService.MapRangeAsync<DeviceBindableModel>(_smartHomeMockService.GetDevices(), (m, vm) =>
+            var devices = _mapperService.MapRange<DeviceBindableModel>(_smartHomeMockService.GetDevices(), (m, vm) =>
             {
                 vm.TappedCommand = AccessorieTappedCommand;
             });
@@ -204,14 +211,23 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             await AddAqaraDevicesIfAuthorizedAsync();
 
-            var rooms = _mapperService.MapRange<RoomBindableModel>(_smartHomeMockService.GetRooms(), (m, vm) =>
+            var resultOfGettingRooms = await _roomsService.GetAllRoomsAsync();
+
+            if (resultOfGettingRooms.IsSuccess)
             {
-                vm.TappedCommand = RoomTappedCommand;
-            });
+                var rooms = _mapperService.MapRange<RoomBindableModel>(resultOfGettingRooms.Result, (m, vm) =>
+                {
+                    vm.TappedCommand = RoomTappedCommand;
+                });
 
-            Rooms = new(rooms);
+                Rooms = new(rooms);
 
-            DataState = EPageState.Complete;
+                DataState = EPageState.Complete;
+            }
+            else if (!IsInternetConnected)
+            {
+                DataState = EPageState.NoInternet;
+            }
         }
         else
         {
@@ -227,7 +243,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             if (aqaraDevicesResponse.IsSuccess)
             {
-                var devices = await _mapperService.MapRangeAsync<DeviceBindableModel>(aqaraDevicesResponse.Result.Devices, (m, vm) =>
+                var devices = _mapperService.MapRange<DeviceBindableModel>(aqaraDevicesResponse.Result.Devices, (m, vm) =>
                 {
                     vm.TappedCommand = AccessorieTappedCommand;
                 });

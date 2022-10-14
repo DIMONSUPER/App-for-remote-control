@@ -1,12 +1,6 @@
 ﻿namespace SmartMirror.Models;
 
-public class FanDevice : Device
+public class FanDevice : DeviceModel
 {
-    public FanDevice() : base()
-    {
-        DeviceType = Enums.EDeviceType.Switcher;
-    }
-
     public string AdditionalInfo { get; set; }
 }
-
