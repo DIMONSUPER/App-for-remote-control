@@ -174,9 +174,9 @@ public class AqaraService : IAqaraService
                 pageSize = pageSize,
             };
 
-            var responce = await MakeRequestAsync<DataAqaraResponse<SimpleSceneAqaraModel>>("query.scene.listByPositionId", data, onFailure);
+            var response = await MakeRequestAsync<DataAqaraResponse<SimpleSceneAqaraModel>>("query.scene.listByPositionId", data, onFailure);
 
-            return responce?.Result;
+            return response?.Result;
         });
     }
   
@@ -189,9 +189,9 @@ public class AqaraService : IAqaraService
                 sceneId = sceneId,
             };
 
-            var responce = await MakeRequestAsync<DetailSceneAqaraModel>("query.scene.detail", data, onFailure);
+            var response = await MakeRequestAsync<DetailSceneAqaraModel>("query.scene.detail", data, onFailure);
 
-            return responce?.Result;
+            return response?.Result;
         });
     }
 
@@ -204,7 +204,7 @@ public class AqaraService : IAqaraService
                 sceneId = sceneId,
             };
 
-            var responce = await MakeRequestAsync<BaseAqaraResponse>("config.scene.run", data, onFailure);
+            var response = await MakeRequestAsync<BaseAqaraResponse>("config.scene.run", data, onFailure);
         });
     }
 
