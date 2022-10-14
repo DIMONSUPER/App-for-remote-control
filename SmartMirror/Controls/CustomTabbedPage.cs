@@ -19,7 +19,7 @@ public class CustomTabbedPage : TabbedPage
         propertyName: nameof(TabBarHeight),
         returnType: typeof(double),
         declaringType: typeof(CustomTabbedPage),
-        defaultValue: 131d);
+        defaultValue: 123d);
 
     public double TabBarHeight
     {
@@ -121,7 +121,7 @@ public class CustomTabbedPage : TabbedPage
             RowSpacing = 0,
         };
 
-        var stackTimeAndTabs = new StackLayout();
+        var stackTimeAndTabs = new StackLayout() { Spacing = 0 };
 
         stackTimeAndTabs.Add(CreateTimeLabel());
 
@@ -140,7 +140,7 @@ public class CustomTabbedPage : TabbedPage
         {
             VerticalOptions = LayoutOptions.Start,
             HorizontalOptions = LayoutOptions.Start,
-            Margin = new(80, 12, 0, 12),
+            Margin = new(60, 9, 0, 9),
             TextColor = Color.FromArgb("#FFFFFF"),
             FontFamily = "InterSemiBold",
         };
