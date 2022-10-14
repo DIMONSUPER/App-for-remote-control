@@ -199,6 +199,9 @@
 	<data name="Now" xml:space="preserve">
 		<value>now</value>
 	</data>
+    <data name="Playing" xml:space="preserve">
+		<value>Playing</value>
+    </data>
     <data name="NeedsTwoTaps" xml:space="preserve">
 		<value>Needs two taps to exit the app.</value>
 	</data>

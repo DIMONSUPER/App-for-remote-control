@@ -8,9 +8,15 @@ public interface IAqaraService
     bool IsAuthorized { get; }
 
     Task<AOResult<BaseAqaraResponse>> SendLoginCodeAsync(string email);
-
+    
     Task<AOResult<BaseAqaraResponse>> LoginWithCodeAsync(string email, string code);
-
+    
+    Task<AOResult<DataAqaraResponse<DeviceResponse>>> GetAllDevicesAsync();
+    
+    Task<AOResult<BaseAqaraResponse>> UpdateAttributeValueAsync(string deviceId, params (string resourceId, string value)[] resources);
+    
+    Task<AOResult<IEnumerable<ResourceResponse>>> GetDeviceAttributeValueAsync(string deviceId, params string[] resourceIds);
+    
     Task<AOResult<DataAqaraResponse<DeviceAqaraModel>>> GetDevicesByPositionAsync(string positionId, int pageNum, int pageSize);
 
     Task<AOResult<DataAqaraResponse<PositionAqaraModel>>> GetPositionsAsync(string positionId, int pageNum, int pageSize);
@@ -18,6 +24,6 @@ public interface IAqaraService
     Task<AOResult<DataAqaraResponse<SimpleSceneAqaraModel>>> GetScenesAsync(int pageNumber = 1, int pageSize = 100, string positionId = null);
     
     Task<AOResult<DetailSceneAqaraModel>> GetSceneByIdAsync(string sceneId);
-
+    
     Task<AOResult> RunSceneByIdAsync(string sceneId);
 }

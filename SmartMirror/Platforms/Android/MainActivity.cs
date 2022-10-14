@@ -16,9 +16,6 @@ namespace SmartMirror;
     ScreenOrientation = ScreenOrientation.UserLandscape,
     LaunchMode = LaunchMode.SingleTop,
     Exported = true)]
-[IntentFilter(
-    new[] { Intent.ActionMain },
-    Categories = new string[] { Intent.CategoryLauncher })]
 public class MainActivity : MauiAppCompatActivity
 {
     //TODO: Remove when companion app is ready

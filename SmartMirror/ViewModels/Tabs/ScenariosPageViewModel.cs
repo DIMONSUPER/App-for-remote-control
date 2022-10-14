@@ -61,11 +61,11 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override async void Initialize(INavigationParameters parameters)
+    public override void Initialize(INavigationParameters parameters)
     {
         base.Initialize(parameters);
 
-        await LoadScenariosAsync();
+        Task.Run(LoadScenariosAsync);
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)

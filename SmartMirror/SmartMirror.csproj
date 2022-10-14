@@ -235,6 +235,8 @@
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 	  <DebugSymbols>true</DebugSymbols>
 	  <Optimize>true</Optimize>
+	  <AotAssemblies>true</AotAssemblies>
+	  <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
 	  <WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<ItemGroup Condition="$(TargetFramework.StartsWith('net6.0-android')) != true">
