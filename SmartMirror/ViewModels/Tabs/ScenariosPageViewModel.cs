@@ -101,8 +101,8 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
         if (resultOfUpdattingScenario.IsSuccess)
         {
-            UpdateRunningScenario(FavoriteScenarios, selectedScenario.Id);
-            UpdateRunningScenario(Scenarios, selectedScenario.Id);
+            UpdateStatusRunningScenario(FavoriteScenarios, selectedScenario.Id);
+            UpdateStatusRunningScenario(Scenarios, selectedScenario.Id);
         }
         else
         {
@@ -131,22 +131,16 @@ public class ScenariosPageViewModel : BaseTabViewModel
     {
         if (IsInternetConnected)
         {
-            List<Task<bool>> tasks = new();
+            var isFavoriteScenariosLoaded = await LoadFavoritesScenariosAsync();
+            var isScenariosLoaded = await LoadAllScenariosAsync();
 
-            await LoadFavoritesScenariosAsync();
-            await LoadAllScenariosAsync();
-
-            var tasksResult = await Task.WhenAll(tasks);
-
-            var isScenariosLoaded = tasksResult.All(row => row == true);
-
-            if (isScenariosLoaded)
+            if (isFavoriteScenariosLoaded && isScenariosLoaded)
             {
                 DataState = EPageState.Complete;
             }
-            else if(!IsInternetConnected)
+            else
             {
-                DataState = EPageState.NoInternet;
+                DataState = EPageState.Empty;
             }
         }
         else
@@ -192,7 +186,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
         });
     }
 
-    private void UpdateRunningScenario(IEnumerable<ScenarioBindableModel> scenarios, string scenarioId)
+    private void UpdateStatusRunningScenario(IEnumerable<ScenarioBindableModel> scenarios, string scenarioId)
     {
         if (scenarios is not null)
         {

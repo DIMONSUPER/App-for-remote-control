@@ -14,7 +14,6 @@ namespace SmartMirror.Models.Aqara
         public string Name { get; set; }
 
         [JsonProperty("action")]
-
-        public IEnumerable<ActionAqaraModel> Actions;
+        public IEnumerable<ActionAqaraModel> Actions { get; set; }
     }
 }

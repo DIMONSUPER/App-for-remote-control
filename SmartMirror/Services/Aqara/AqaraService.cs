@@ -117,7 +117,7 @@ public class AqaraService : IAqaraService
         });
     }
 
-    public Task<AOResult<DataAqaraResponce<SimpleSceneAqaraModel>>> GetAllScenariesAsync(int pageNumber = 1, int pageSize = 100, string positionId = null)
+    public Task<AOResult<DataAqaraResponse<SimpleSceneAqaraModel>>> GetAllScenesAsync(int pageNumber = 1, int pageSize = 100, string positionId = null)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {
@@ -128,7 +128,7 @@ public class AqaraService : IAqaraService
                 pageSize = pageSize,
             };
 
-            var responce = await MakeRequestAsync<BaseAqaraResponse<DataAqaraResponce<SimpleSceneAqaraModel>>>("query.scene.listByPositionId", data);
+            var responce = await MakeRequestAsync<BaseAqaraResponse<DataAqaraResponse<SimpleSceneAqaraModel>>>("query.scene.listByPositionId", data);
 
             SetFailure(onFailure, responce);
 
@@ -136,13 +136,13 @@ public class AqaraService : IAqaraService
         });
     }
   
-    public Task<AOResult<DetailSceneAqaraModel>> GetScenarioByIdAsync(string id)
+    public Task<AOResult<DetailSceneAqaraModel>> GetSceneByIdAsync(string sceneId)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {
             var data = new
             {
-                sceneId = id,
+                sceneId = sceneId,
             };
 
             var responce = await MakeRequestAsync<BaseAqaraResponse<DetailSceneAqaraModel>>("query.scene.detail", data);
@@ -153,21 +153,18 @@ public class AqaraService : IAqaraService
         });
     }
 
-    public Task<AOResult> RunScenarioByIdAsync(string id)
+    public Task<AOResult> RunSceneByIdAsync(string sceneId)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {
             var data = new
             {
-                sceneId = id,
+                sceneId = sceneId,
             };
 
             var responce = await MakeRequestAsync<BaseAqaraResponse>("config.scene.run", data);
 
-            if (responce is null || responce.Message is not "Success")
-            {
-                onFailure("Request failed");
-            }
+            SetFailure(onFailure, responce);
         });
     }
 

@@ -31,7 +31,7 @@ namespace SmartMirror.Services.Scenarios
                     var resultOfGettingScenaries = await GetAllScenariosFromAqaraAsync();
 
                     if (resultOfGettingScenaries.IsSuccess)
-                    {
+                    { 
                         scenarios = resultOfGettingScenaries.Result;
                     }
 
@@ -85,27 +85,35 @@ namespace SmartMirror.Services.Scenarios
             {
                 var scenario = new ScenarioModel();
 
-                var resultOfGetttingSceneById = await _aqaraService.GetScenarioByIdAsync(sceneId);
-
-                if (resultOfGetttingSceneById is not null)
+                if (_aqaraService.IsAuthorized)
                 {
-                    if (resultOfGetttingSceneById.IsSuccess && resultOfGetttingSceneById.Result is not null)
-                    {
-                        var scene = resultOfGetttingSceneById?.Result;
+                    var resultOfGetttingSceneById = await _aqaraService.GetSceneByIdAsync(sceneId);
 
-                        scenario = new ScenarioModel
+                    if (resultOfGetttingSceneById is not null)
+                    {
+                        if (resultOfGetttingSceneById.IsSuccess && resultOfGetttingSceneById.Result is not null)
                         {
-                            Name = scene.Name,
-                        };
+                            var scene = resultOfGetttingSceneById?.Result;
+
+                            scenario = new ScenarioModel
+                            {
+                                Id = scene.SceneId,
+                                Name = scene.Name,
+                            };
+                        }
+                        else
+                        {
+                            onFailure($"Error: {resultOfGetttingSceneById.Message}");
+                        }
                     }
                     else
                     {
-                        onFailure($"Error: {resultOfGetttingSceneById.Message}");
-                    }
+                        onFailure("result is null");
+                    } 
                 }
                 else
                 {
-                    onFailure("scenarios is null");
+                    onFailure("Unauthorized");
                 }
 
                 return scenario;
@@ -132,11 +140,11 @@ namespace SmartMirror.Services.Scenarios
                         }
                         else
                         {
-                            var resultOfRunScenarioFromAqara = await _aqaraService.RunScenarioByIdAsync(id);
+                            var resultOfRunningScene = await _aqaraService.RunSceneByIdAsync(id);
 
-                            if (!resultOfRunScenarioFromAqara.IsSuccess)
+                            if (!resultOfRunningScene.IsSuccess)
                             {
-                                onFailure(resultOfRunScenarioFromAqara.Message);
+                                onFailure(resultOfRunningScene.Message);
                             }
                         }
                     }
@@ -158,13 +166,13 @@ namespace SmartMirror.Services.Scenarios
             {
                 var scenarios = Enumerable.Empty<ScenarioModel>();
 
-                var resultOfGetttingAllScenaries = await _aqaraService.GetAllScenariesAsync();
+                var resultOfGettingAllScenaries = await _aqaraService.GetAllScenesAsync();
 
-                if (resultOfGetttingAllScenaries is not null)
+                if (resultOfGettingAllScenaries is not null)
                 {
-                    if (resultOfGetttingAllScenaries.IsSuccess)
+                    if (resultOfGettingAllScenaries.IsSuccess)
                     {
-                        scenarios = resultOfGetttingAllScenaries.Result?.Data?
+                        scenarios = resultOfGettingAllScenaries.Result?.Data?
                             .Select(x => new ScenarioModel
                             {
                                 Id = x.SceneId,
@@ -174,12 +182,12 @@ namespace SmartMirror.Services.Scenarios
                     }
                     else
                     {
-                        onFailure($"Error: {resultOfGetttingAllScenaries.Message}");
+                        onFailure($"Error: {resultOfGettingAllScenaries.Message}");
                     }
                 }
                 else
                 {
-                    onFailure("scenarios is null");
+                    onFailure("result is null");
                 }
 
                 return scenarios;
