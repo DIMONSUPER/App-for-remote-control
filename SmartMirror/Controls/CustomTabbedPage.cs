@@ -19,7 +19,7 @@ public class CustomTabbedPage : TabbedPage
         propertyName: nameof(TabBarHeight),
         returnType: typeof(double),
         declaringType: typeof(CustomTabbedPage),
-        defaultValue: 93d);
+        defaultValue: 131d);
 
     public double TabBarHeight
     {
@@ -121,15 +121,31 @@ public class CustomTabbedPage : TabbedPage
             RowSpacing = 0,
         };
 
-        var gridTabs = new Grid() { HorizontalOptions = LayoutOptions.Center };
+        var stackTimeAndTabs = new StackLayout();
 
-        gridTabs.Add(CreateBorder());
+        stackTimeAndTabs.Add(CreateTimeLabel());
 
-        tabBarView.Add(gridTabs);
+        stackTimeAndTabs.Add(CreateBorder());
+
+        tabBarView.Add(stackTimeAndTabs);
 
         OnCurrentPageChanged();
 
         return tabBarView;
+    }
+
+    private CurrentTimeControl CreateTimeLabel()
+    {
+        var currentTime = new CurrentTimeControl
+        {
+            VerticalOptions = LayoutOptions.Start,
+            HorizontalOptions = LayoutOptions.Start,
+            Margin = new(80, 12, 0, 12),
+            TextColor = Color.FromArgb("#FFFFFF"),
+            FontFamily = "InterSemiBold",
+        };
+
+        return currentTime;
     }
 
     private Border CreateBorder()
@@ -137,7 +153,6 @@ public class CustomTabbedPage : TabbedPage
         var border = new Border
         {
             HorizontalOptions = LayoutOptions.Center,
-            Margin = new(0, 16, 0, 0),
             StrokeThickness = BorderWidth,
             StrokeShape = new RoundRectangle() { CornerRadius = BorderRadius },
             Stroke = BorderColor,
