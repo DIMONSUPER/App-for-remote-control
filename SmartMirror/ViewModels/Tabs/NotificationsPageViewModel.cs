@@ -58,9 +58,9 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public async override Task InitializeAsync(INavigationParameters parameters)
+    public override async void Initialize(INavigationParameters parameters)
     {
-        await base.InitializeAsync(parameters);
+        base.Initialize(parameters);
 
         await LoadNotificationsAsync(() => DataState = EPageState.NoInternet);
     }
@@ -121,7 +121,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
                         lastTitleGroup = titleGroup;
                     }
 
-                    notificationGrouped.Add(await _mapperService.MapAsync<NotificationGroupItemBindableModel>(notificafication));
+                    notificationGrouped.Add(_mapperService.Map<NotificationGroupItemBindableModel>(notificafication));
                 }
 
                 Notifications = new(notificationGrouped);

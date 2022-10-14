@@ -77,9 +77,9 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override async Task InitializeAsync(INavigationParameters parameters)
+    public override async void Initialize(INavigationParameters parameters)
     {
-        await base.InitializeAsync(parameters);
+        base.Initialize(parameters);
 
         await LoadRoomsAndDevicesAsync();
     }
@@ -204,7 +204,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             await AddAqaraDevicesIfAuthorizedAsync();
 
-            var rooms = await _mapperService.MapRangeAsync<RoomBindableModel>(_smartHomeMockService.GetRooms(), (m, vm) =>
+            var rooms = _mapperService.MapRange<RoomBindableModel>(_smartHomeMockService.GetRooms(), (m, vm) =>
             {
                 vm.TappedCommand = RoomTappedCommand;
             });
