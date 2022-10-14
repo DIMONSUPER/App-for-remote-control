@@ -14,13 +14,13 @@ namespace SmartMirror.Services.Devices
             _aqaraService = aqaraService;
         }
 
-        public Task<AOResult<IEnumerable<DeviceModel>>> GetDevicesByPositionAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
+        public Task<AOResult<IEnumerable<DeviceModel>>> GetDevicesAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
                 var devices = Enumerable.Empty<DeviceModel>();
 
-                var resultOfGettingDevices = await _aqaraService.GetDevicesByPositionAsync(positionId, pageNum, pageSize);
+                var resultOfGettingDevices = await _aqaraService.GetDevicesAsync(positionId, pageNum, pageSize);
 
                 if (resultOfGettingDevices.IsSuccess)
                 {

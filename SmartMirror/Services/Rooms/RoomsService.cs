@@ -111,7 +111,7 @@ namespace SmartMirror.Services.Rooms
 
                     foreach (var room in simpleRooms)
                     {
-                        var resultOfGettingDevices = await _devicesService.GetDevicesByPositionAsync(room.PositionId);
+                        var resultOfGettingDevices = await _devicesService.GetDevicesAsync(room.PositionId);
 
                         if (!resultOfGettingDevices.IsSuccess)
                         {

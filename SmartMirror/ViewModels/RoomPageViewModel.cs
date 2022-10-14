@@ -111,7 +111,7 @@ public class RoomPageViewModel : BaseViewModel
 
             DataState = EPageState.Loading;
 
-            var resultOfGettingDevices = await _devicesService.GetDevicesByPositionAsync(selectedRoom.Id);
+            var resultOfGettingDevices = await _devicesService.GetDevicesAsync(selectedRoom.Id);
 
             if (resultOfGettingDevices.IsSuccess)
             {

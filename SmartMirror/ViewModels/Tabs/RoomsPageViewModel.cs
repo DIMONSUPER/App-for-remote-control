@@ -252,7 +252,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (_aqaraService.IsAuthorized)
         {
-            var aqaraDevicesResponse = await _aqaraService.GetDevicesByPositionAsync();
+            var aqaraDevicesResponse = await _aqaraService.GetDevicesAsync();
 
             if (aqaraDevicesResponse.IsSuccess)
             {

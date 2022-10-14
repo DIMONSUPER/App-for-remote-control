@@ -5,6 +5,6 @@ namespace SmartMirror.Services.Devices
 {
     public interface IDevicesService
     {
-        Task<AOResult<IEnumerable<DeviceModel>>> GetDevicesByPositionAsync(string positionId = null, int pageNum = 1, int pageSize = 100);
+        Task<AOResult<IEnumerable<DeviceModel>>> GetDevicesAsync(string positionId = null, int pageNum = 1, int pageSize = 100);
     }
 }
