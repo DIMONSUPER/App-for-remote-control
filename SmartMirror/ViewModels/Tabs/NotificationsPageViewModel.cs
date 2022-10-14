@@ -58,11 +58,12 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override async void Initialize(INavigationParameters parameters)
+
+    public override void Initialize(INavigationParameters parameters)
     {
         base.Initialize(parameters);
 
-        await LoadNotificationsAsync(() => DataState = EPageState.NoInternet);
+        Task.Run(() => LoadNotificationsAsync(() => DataState = EPageState.NoInternet));
     }
 
     #endregion

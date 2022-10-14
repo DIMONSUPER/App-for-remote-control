@@ -84,7 +84,7 @@ public static class MauiProgram
 
     private static void OnAppStart(INavigationService navigationService)
     {
-        navigationService.CreateBuilder()
+        navigationService.CreateBuilder()   
             .AddSegment<MainTabbedPageViewModel>()
             .Navigate(HandleErrors);
     }

@@ -13,7 +13,7 @@
     <converters:TimeToDaysOfWeekConverter x:Key="timeToDaysOfWeekConverter" />
 
     <!-- TEXT SIZE -->
-    <x:Double x:Key="tsize_i1">36</x:Double> <!-- 48px -->
+    <x:Double x:Key="tsize_i1">32</x:Double> <!-- 48px -->
     <x:Double x:Key="tsize_i2">21</x:Double> <!-- 28px -->
     <x:Double x:Key="tsize_i3">18</x:Double> <!-- 24px -->
 
@@ -100,6 +100,9 @@
     </Style>
     <Style x:Key="tstyle_i13" TargetType="Label" BasedOn="{StaticResource InterBold_Content_28px}"> <!-- Inter700/ 28px/ Dark Gray -->
         <Setter Property="TextColor"  Value="{x:DynamicResource tcolor_i5}"/>
+    </Style>
+    <Style x:Key="tstyle_i14" TargetType="Label" BasedOn="{StaticResource InterBold_Content_28px}"> <!-- Inter700/ 28px/ Orange -->
+        <Setter Property="TextColor"  Value="{x:DynamicResource tcolor_i8}"/>
     </Style>
  
     <!-- ACTIVITYINDICATOR STYLE-->
