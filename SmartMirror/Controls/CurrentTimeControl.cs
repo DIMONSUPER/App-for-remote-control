@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+
 namespace SmartMirror.Controls
 {
     public class CurrentTimeControl : Label
@@ -7,7 +9,7 @@ namespace SmartMirror.Controls
         {
             Application.Current.Dispatcher.StartTimer(TimeSpan.FromSeconds(1), () =>
             {
-                Text = DateTime.Now.ToShortTimeString();
+                Text = DateTime.Now.ToString("HH:mm");
                 return true;
             });
         }
