@@ -29,7 +29,6 @@ public class ScenariosPageViewModel : BaseTabViewModel
         _scenariosService = scenariosService;
 
         Title = "Scenarios";
-        DataState = EPageState.Loading;
     }
 
     #region -- Public properties --
@@ -61,17 +60,21 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override void Initialize(INavigationParameters parameters)
+    public override async void OnAppearing()
     {
-        base.Initialize(parameters);
+        base.OnAppearing();
 
-        Task.Run(LoadScenariosAsync);
+        DataState = EPageState.Loading;
+
+        await LoadScenariosAsync();
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
+            DataState = EPageState.Loading;
+
             await LoadScenariosAsync();
         }
         else

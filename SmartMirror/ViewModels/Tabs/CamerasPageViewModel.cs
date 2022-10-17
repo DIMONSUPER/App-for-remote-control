@@ -23,7 +23,6 @@ public class CamerasPageViewModel : BaseTabViewModel
         _camerasService = camerasService;
 
         Title = "Cameras";
-        DataState = EPageState.Loading;
     }
 
     #region -- Public properties --
@@ -76,16 +75,13 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override void Initialize(INavigationParameters parameters)
-    {
-        base.Initialize(parameters);
-
-        Task.Run(RefreshCamerasAsync);
-    }
-
-    public override void OnAppearing()
+    public override async void OnAppearing()
     {
         base.OnAppearing();
+
+        DataState = EPageState.Loading;
+
+        await RefreshCamerasAsync();
 
         VideoAction = EVideoAction.Play;
     }
@@ -101,6 +97,8 @@ public class CamerasPageViewModel : BaseTabViewModel
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
+            DataState = EPageState.Loading;
+
             await RefreshCamerasAsync();
 
             if (IsSelected)
@@ -127,8 +125,6 @@ public class CamerasPageViewModel : BaseTabViewModel
     {
         DataState = EPageState.NoInternetLoader;
 
-        await Task.Delay(1000);
-
         await RefreshCamerasAsync();
     }
 
@@ -148,6 +144,8 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private async Task RefreshCamerasAsync()
     {
+        await Task.Delay(2000);
+
         if (IsInternetConnected)
         {
             var resultOfGettingCameras = await _camerasService.GetCamerasAsync();
