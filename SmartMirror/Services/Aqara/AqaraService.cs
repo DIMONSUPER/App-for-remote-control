@@ -1,8 +1,9 @@
-﻿using System.Text;
-using SmartMirror.Helpers;
+﻿using SmartMirror.Helpers;
 using SmartMirror.Models.Aqara;
 using SmartMirror.Services.Rest;
 using SmartMirror.Services.Settings;
+using System.Text;
+
 namespace SmartMirror.Services.Aqara;
 
 public class AqaraService : IAqaraService
@@ -39,7 +40,7 @@ public class AqaraService : IAqaraService
         });
     }
 
-    public Task<AOResult<DataAqaraResponse<PositionAqaraModel>>> GetPositionsAsync(string positionId, int pageNum, int pageSize)
+    public Task<AOResult<DataAqaraResponse<PositionAqaraModel>>> GetPositionsAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {
@@ -56,7 +57,7 @@ public class AqaraService : IAqaraService
         });
     }
 
-    public Task<AOResult<DataAqaraResponse<DeviceAqaraModel>>> GetDevicesByPositionAsync(string positionId, int pageNum, int pageSize)
+    public Task<AOResult<DataAqaraResponse<DeviceAqaraModel>>> GetDevicesAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {
@@ -96,22 +97,6 @@ public class AqaraService : IAqaraService
             }
 
             return response as BaseAqaraResponse;
-        });
-    }
-
-    public Task<AOResult<DataAqaraResponse<DeviceResponse>>> GetAllDevicesAsync()
-    {
-        return AOResult.ExecuteTaskAsync(async onFailure =>
-        {
-            var data = new
-            {
-                pageNum = 1,
-                pageSize = 100,
-            };
-
-            var response = await MakeRequestAsync<DataAqaraResponse<DeviceResponse>>("query.device.info", data, onFailure);
-
-            return response.Result;
         });
     }
 

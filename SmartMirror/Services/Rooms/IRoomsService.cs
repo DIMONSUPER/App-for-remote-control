@@ -1,7 +1,7 @@
 ﻿using SmartMirror.Helpers;
 using SmartMirror.Models;
 
-namespace SmartMirror.Services.RoomsService
+namespace SmartMirror.Services.Rooms
 {
     public interface IRoomsService
     {

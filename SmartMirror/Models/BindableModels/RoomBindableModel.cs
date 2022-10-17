@@ -1,7 +1,6 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
-namespace SmartMirror.Models
+namespace SmartMirror.Models.BindableModels
 {
     public class RoomBindableModel : BindableBase
     {
@@ -38,13 +37,6 @@ namespace SmartMirror.Models
         {
             get => _devicesCount;
             set => SetProperty(ref _devicesCount, value);
-        }
-
-        private ObservableCollection<DeviceModel> _devices;
-        public ObservableCollection<DeviceModel> Devices
-        {
-            get => _devices;
-            set => SetProperty(ref _devices, value);
         }
 
         private bool _isSelected;

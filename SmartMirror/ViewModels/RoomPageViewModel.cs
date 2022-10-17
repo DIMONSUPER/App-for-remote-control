@@ -1,27 +1,31 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
+﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models;
+using SmartMirror.Models.BindableModels;
+using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
-using SmartMirror.Services.Mock;
 using SmartMirror.ViewModels.Tabs;
-using DeviceModel = SmartMirror.Models.DeviceModel;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using static Android.Provider.DocumentsContract;
 
 namespace SmartMirror.ViewModels;
 
 public class RoomPageViewModel : BaseViewModel
 {
     private readonly IMapperService _mapperService;
-    private readonly ISmartHomeMockService _smartHomeMockService;
+    private readonly IDevicesService _devicesService;
+
+    private RoomBindableModel _selectedRoom;
 
     public RoomPageViewModel(
         INavigationService navigationService,
         IMapperService mapperService,
-        ISmartHomeMockService smartHomeMockService)
+        IDevicesService devicesService)
         : base(navigationService)
     {
         _mapperService = mapperService;
-        _smartHomeMockService = smartHomeMockService;
+        _devicesService = devicesService;
     }
 
     #region -- Public properties --
@@ -31,6 +35,9 @@ public class RoomPageViewModel : BaseViewModel
 
     private ICommand _roomSelectedCommand;
     public ICommand RoomSelectedCommand => _roomSelectedCommand ??= SingleExecutionCommand.FromFunc<RoomBindableModel>(OnRoomSelectedCommandAsync, delayMillisec: 0);
+
+    private ICommand _tryAgainCommand;
+    public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
 
     private ObservableCollection<RoomBindableModel> _rooms;
     public ObservableCollection<RoomBindableModel> Rooms
@@ -70,6 +77,18 @@ public class RoomPageViewModel : BaseViewModel
         }
     }
 
+    protected override void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    {
+        if (e.NetworkAccess == NetworkAccess.Internet)
+        {
+            SelectRoom(_selectedRoom);
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
+    }
+
     #endregion
 
     #region -- Private helpers --
@@ -79,28 +98,50 @@ public class RoomPageViewModel : BaseViewModel
         return NavigationService.GoBackAsync();
     }
 
-    private void SelectRoom(RoomBindableModel selectedRoom)
+    private async void SelectRoom(RoomBindableModel selectedRoom)
     {
-        if (Rooms is not null && Rooms.Any())
+        if (Rooms?.Count > 0)
         {
+            _selectedRoom = selectedRoom;
+
             foreach (var room in Rooms)
             {
-                if (room == selectedRoom)
-                {
-                    room.IsSelected = true;
-                    SelectedRoomDevices = room.Devices;
-                }
-                else
-                {
-                    room.IsSelected = false;
-                }
+                room.IsSelected = room.Id == selectedRoom.Id;
             }
+
+            DataState = EPageState.Loading;
+
+            var resultOfGettingDevices = await _devicesService.GetDevicesAsync(selectedRoom.Id);
+
+            if (resultOfGettingDevices.IsSuccess)
+            {
+                SelectedRoomDevices = new(resultOfGettingDevices.Result.Data);
+            }
+            else
+            {
+                SelectedRoomDevices = new();
+            }
+
+            DataState = IsInternetConnected
+                ? SelectedRoomDevices.Count == 0
+                    ? EPageState.Empty
+                    : EPageState.Complete
+                : EPageState.NoInternet;
         }
     }
 
     private Task OnRoomSelectedCommandAsync(RoomBindableModel room)
     {
         SelectRoom(room);
+
+        return Task.CompletedTask;
+    }
+
+    private Task OnTryAgainCommandAsync()
+    {
+        DataState = EPageState.NoInternetLoader;
+
+        SelectRoom(_selectedRoom);
 
         return Task.CompletedTask;
     }

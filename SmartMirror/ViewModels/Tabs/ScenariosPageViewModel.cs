@@ -34,14 +34,14 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     #region -- Public properties --
 
-    private ObservableCollection<ScenarioBindableModel> _favoriteScenarios;
+    private ObservableCollection<ScenarioBindableModel> _favoriteScenarios = new();
     public ObservableCollection<ScenarioBindableModel> FavoriteScenarios
     {
         get => _favoriteScenarios;
         set => SetProperty(ref _favoriteScenarios, value);
     }
 
-    private ObservableCollection<ScenarioBindableModel> _scenarios;
+    private ObservableCollection<ScenarioBindableModel> _scenarios = new();
     public ObservableCollection<ScenarioBindableModel> Scenarios
     {
         get => _scenarios;

@@ -1,18 +1,14 @@
 ﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
-using SmartMirror.Models;
+using SmartMirror.Models.BindableModels;
+using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
+using SmartMirror.Services.Rooms;
+using SmartMirror.ViewModels.Dialogs;
+using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using DeviceModel = SmartMirror.Models.DeviceModel;
-using SmartMirror.Services.Aqara;
-using SmartMirror.Views.Dialogs;
-using SmartMirror.ViewModels.Dialogs;
-using SmartMirror.Models.BindableModels;
-using Prism.Services;
-using SmartMirror.Models.Aqara;
-using SmartMirror.Services.RoomsService;
 
 namespace SmartMirror.ViewModels.Tabs;
 
@@ -66,14 +62,14 @@ public class RoomsPageViewModel : BaseTabViewModel
         set => SetProperty(ref _isAqaraLoginButtonVisible, value);
     }
 
-    private ObservableCollection<DeviceBindableModel> _favoriteAccessories;
+    private ObservableCollection<DeviceBindableModel> _favoriteAccessories = new();
     public ObservableCollection<DeviceBindableModel> FavoriteAccessories
     {
         get => _favoriteAccessories;
         set => SetProperty(ref _favoriteAccessories, value);
     }
 
-    private ObservableCollection<RoomBindableModel> _rooms;
+    private ObservableCollection<RoomBindableModel> _rooms = new();
     public ObservableCollection<RoomBindableModel> Rooms
     {
         get => _rooms;
@@ -256,7 +252,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (_aqaraService.IsAuthorized)
         {
-            var aqaraDevicesResponse = await _aqaraService.GetAllDevicesAsync();
+            var aqaraDevicesResponse = await _aqaraService.GetDevicesAsync();
 
             if (aqaraDevicesResponse.IsSuccess)
             {

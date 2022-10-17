@@ -1,15 +1,32 @@
-﻿namespace SmartMirror.ViewModels
+﻿using SmartMirror.Enums;
+
+namespace SmartMirror.ViewModels
 {
     public class BaseViewModel : BindableBase, IPageLifecycleAware, INavigationAware, IInitialize, IApplicationLifecycleAware
     {
         public BaseViewModel(INavigationService navigationService)
         {
             NavigationService = navigationService;
+
+            Connectivity.ConnectivityChanged += OnConnectivityChanged;
         }
 
         #region -- Protected properties --
 
         protected INavigationService NavigationService { get; }
+
+        protected bool IsInternetConnected => Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
+
+        #endregion
+
+        #region -- Public properties --
+
+        private EPageState _dataState;
+        public EPageState DataState
+        {
+            get => _dataState;
+            set => SetProperty(ref _dataState, value);
+        }
 
         #endregion
 
@@ -52,6 +69,14 @@
         }
 
         public virtual void OnSleep()
+        {
+        }
+
+        #endregion
+
+        #region -- Protected helpers --
+
+        protected virtual void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
         }
 
