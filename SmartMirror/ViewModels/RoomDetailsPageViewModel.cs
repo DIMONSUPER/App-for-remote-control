@@ -72,6 +72,8 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
         if (parameters.TryGetValue(nameof(RoomBindableModel), out RoomBindableModel selectedRoom))
         {
+            DataState = EPageState.Loading;
+
             SelectRoom(selectedRoom);
         }
     }
@@ -80,6 +82,8 @@ public class RoomDetailsPageViewModel : BaseViewModel
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
+            DataState = EPageState.Loading;
+
             SelectRoom(_selectedRoom);
         }
         else
@@ -108,8 +112,6 @@ public class RoomDetailsPageViewModel : BaseViewModel
                 room.IsSelected = room.Id == selectedRoom.Id;
             }
 
-            DataState = EPageState.Loading;
-
             var resultOfGettingDevices = await _devicesService.GetDevicesAsync(selectedRoom.Id);
 
             if (resultOfGettingDevices.IsSuccess)
@@ -131,6 +133,8 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
     private Task OnRoomSelectedCommandAsync(RoomBindableModel room)
     {
+        DataState = EPageState.Loading;
+
         SelectRoom(room);
 
         return Task.CompletedTask;

@@ -296,6 +296,13 @@ namespace SmartMirror.Services.Mock
                         },
                     }
                 },
+                new()
+                {
+                    Id = "6",
+                    Name = "Empty scenario",
+                    IsActive = false,
+                    ActivationTime = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 8, 0, 0),
+                },
             };
 
             return scenario;

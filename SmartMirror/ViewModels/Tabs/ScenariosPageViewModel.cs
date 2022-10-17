@@ -17,6 +17,8 @@ public class ScenariosPageViewModel : BaseTabViewModel
     private readonly IScenariosService _scenariosService;
     private readonly IDialogService _dialogService;
 
+    private bool _isNeedReloadData = true;
+
     public ScenariosPageViewModel(
         INavigationService navigationService,
         IDialogService dialogService,
@@ -64,9 +66,19 @@ public class ScenariosPageViewModel : BaseTabViewModel
     {
         base.OnAppearing();
 
-        DataState = EPageState.Loading;
+        if (_isNeedReloadData)
+        {
+            DataState = EPageState.Loading;
 
-        await LoadScenariosAsync();
+            await LoadScenariosAsync(); 
+        }
+    }
+
+    public override void OnNavigatedTo(INavigationParameters parameters)
+    {
+        base.OnNavigatedTo(parameters);
+
+        _isNeedReloadData = true;
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
@@ -123,6 +135,8 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     private Task OnGoToScenarioDetailsCommandAsync(ScenarioBindableModel scenario)
     {
+        _isNeedReloadData = false;
+
         return NavigationService.CreateBuilder()
             .AddSegment<ScenarioDetailsPageViewModel>()
             .AddParameter(KnownNavigationParameters.Animated, true)

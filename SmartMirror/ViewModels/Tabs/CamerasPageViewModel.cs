@@ -101,17 +101,11 @@ public class CamerasPageViewModel : BaseTabViewModel
 
             await RefreshCamerasAsync();
 
-            if (IsSelected)
-            {
-                VideoAction = EVideoAction.Play;
-            }
+            VideoAction = EVideoAction.Play;
         }
         else
         {
-            if (IsSelected)
-            {
-                VideoAction = EVideoAction.Pause;
-            }
+            VideoAction = EVideoAction.Pause;
 
             DataState = EPageState.NoInternet;
         }
