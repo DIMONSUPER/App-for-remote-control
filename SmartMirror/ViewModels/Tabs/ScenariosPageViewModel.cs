@@ -121,7 +121,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
     private Task OnGoToScenarioDetailsCommandAsync(ScenarioBindableModel scenario)
     {
         return NavigationService.CreateBuilder()
-            .AddSegment<ScenarioPageViewModel>()
+            .AddSegment<ScenarioDetailsPageViewModel>()
             .AddParameter(KnownNavigationParameters.Animated, true)
             .AddParameter(nameof(ScenarioBindableModel), scenario)
             .NavigateAsync();

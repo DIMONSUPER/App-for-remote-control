@@ -6,8 +6,8 @@
     xmlns:extentions="clr-namespace:SmartMirror.Extensions"
     xmlns:views="clr-namespace:SmartMirror.Views"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
-    x:Class="SmartMirror.Views.ScenarioPage"
-    x:DataType="{x:Type vm:ScenarioPageViewModel}">
+    x:Class="SmartMirror.Views.ScenarioDetailsPage"
+    x:DataType="{x:Type vm:ScenarioDetailsPageViewModel}">
 
     <views:BaseContentPage.Resources>
         

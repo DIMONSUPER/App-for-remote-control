@@ -7,18 +7,17 @@ using SmartMirror.Services.Mapper;
 using SmartMirror.ViewModels.Tabs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using static Android.Provider.DocumentsContract;
 
 namespace SmartMirror.ViewModels;
 
-public class RoomPageViewModel : BaseViewModel
+public class RoomDetailsPageViewModel : BaseViewModel
 {
     private readonly IMapperService _mapperService;
     private readonly IDevicesService _devicesService;
 
     private RoomBindableModel _selectedRoom;
 
-    public RoomPageViewModel(
+    public RoomDetailsPageViewModel(
         INavigationService navigationService,
         IMapperService mapperService,
         IDevicesService devicesService)

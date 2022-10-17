@@ -394,7 +394,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     private Task OnRoomTappedCommandAsync(RoomBindableModel room)
     {
         return NavigationService.CreateBuilder()
-            .AddSegment<RoomPageViewModel>(false)
+            .AddSegment<RoomDetailsPageViewModel>(false)
             .AddParameter(KnownNavigationParameters.Animated, true)
             .AddParameter(nameof(Rooms), Rooms)
             .AddParameter(nameof(RoomBindableModel), room)

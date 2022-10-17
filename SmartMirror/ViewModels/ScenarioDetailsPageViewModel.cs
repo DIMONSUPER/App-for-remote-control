@@ -5,9 +5,9 @@ using System.Windows.Input;
 
 namespace SmartMirror.ViewModels
 {
-    public class ScenarioPageViewModel : BaseViewModel
+    public class ScenarioDetailsPageViewModel : BaseViewModel
     {
-        public ScenarioPageViewModel(INavigationService navigationService) 
+        public ScenarioDetailsPageViewModel(INavigationService navigationService) 
             : base(navigationService)
         {
         }
