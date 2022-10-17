@@ -118,7 +118,7 @@ namespace SmartMirror.Services.Rooms
                             onFailure("devices: Request failed");
                         }
 
-                        var devicesCount = Enumerable.Count(resultOfGettingDevices.Result);
+                        var devicesCount = resultOfGettingDevices.Result.TotalCount;
 
                         rooms.Add(new RoomModel()
                         {

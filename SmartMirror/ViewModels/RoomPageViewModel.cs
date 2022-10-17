@@ -115,7 +115,7 @@ public class RoomPageViewModel : BaseViewModel
 
             if (resultOfGettingDevices.IsSuccess)
             {
-                SelectedRoomDevices = new(resultOfGettingDevices.Result);
+                SelectedRoomDevices = new(resultOfGettingDevices.Result.Data);
             }
             else
             {

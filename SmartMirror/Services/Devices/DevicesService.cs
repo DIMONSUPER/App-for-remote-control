@@ -1,6 +1,7 @@
 ﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models;
+using SmartMirror.Models.Aqara;
 using SmartMirror.Services.Aqara;
 
 namespace SmartMirror.Services.Devices
@@ -14,30 +15,32 @@ namespace SmartMirror.Services.Devices
             _aqaraService = aqaraService;
         }
 
-        public Task<AOResult<IEnumerable<DeviceModel>>> GetDevicesAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
+        public Task<AOResult<DataAqaraResponse<DeviceModel>>> GetDevicesAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
-                var devices = Enumerable.Empty<DeviceModel>();
+                var response = new DataAqaraResponse<DeviceModel>();
 
                 var resultOfGettingDevices = await _aqaraService.GetDevicesAsync(positionId, pageNum, pageSize);
 
                 if (resultOfGettingDevices.IsSuccess)
                 {
-                    devices = resultOfGettingDevices.Result.Data.Select(device => new DeviceModel()
+                    response.Data = resultOfGettingDevices.Result.Data.Select(device => new DeviceModel()
                     {
                         Id = device.Did,
                         Name = device.DeviceName,
                         Status = (EDeviceStatus)device.State,
                         Type = device.ModelType.ToString(),
                     });
+
+                    response.TotalCount = resultOfGettingDevices.Result.TotalCount;
                 }
                 else
                 {
                     onFailure("Request failed");
                 }
 
-                return devices;
+                return response;
             });
         }
     }
