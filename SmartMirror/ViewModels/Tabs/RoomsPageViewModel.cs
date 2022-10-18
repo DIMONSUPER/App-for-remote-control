@@ -87,7 +87,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
         DataState = EPageState.Loading;
 
-        await LoadRoomsAndDevicesAndChangeStateAsync();
+        await LoadRoomsAndDevicesIfInternetConnectedAsync();
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
@@ -96,7 +96,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         {
             if (e.NetworkAccess == NetworkAccess.Internet)
             {
-                await LoadRoomsAndDevicesAndChangeStateAsync();
+                await LoadRoomsAndDevicesIfInternetConnectedAsync();
             }
             else
             {
@@ -195,7 +195,7 @@ public class RoomsPageViewModel : BaseTabViewModel
                     { Constants.DialogsParameterKeys.TITLE, "Success!" }
                 });
 
-                await LoadRoomsAndDevicesAndChangeStateAsync();
+                await LoadRoomsAndDevicesIfInternetConnectedAsync();
             }
             else
             {
@@ -212,8 +212,6 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private async Task OnTryAgainCommandAsync()
     {
-        Debug.WriteLine($"Start try again at: {DateTime.Now}");
-
         isDataBeingUpdatedManually = true;
         DataState = EPageState.NoInternetLoader;
 
@@ -222,11 +220,14 @@ public class RoomsPageViewModel : BaseTabViewModel
 
         do
         {
-            isDataLoaded = await LoadRoomsAndDevicesIfInternetConnectedAsync();
+            if (IsInternetConnected)
+            {
+                isDataLoaded = await LoadRoomsAndDevicesAsync();
+            }
 
             await Task.Delay(Constants.Limits.REFRESH_RATE_IN_MILISECONDS);
-
-        } while (!isDataLoaded && DateTime.Now < timeToStopUpdating);
+        }
+        while (!isDataLoaded && DateTime.Now < timeToStopUpdating);
 
         DataState = isDataLoaded
             ? EPageState.Complete
@@ -235,11 +236,11 @@ public class RoomsPageViewModel : BaseTabViewModel
         isDataBeingUpdatedManually = false;
     }
 
-    private async Task LoadRoomsAndDevicesAndChangeStateAsync()
+    private async Task LoadRoomsAndDevicesIfInternetConnectedAsync()
     {
         if (IsInternetConnected)
         {
-            var isDataLoaded = await LoadRoomsAndDevicesIfInternetConnectedAsync();
+            var isDataLoaded = await LoadRoomsAndDevicesAsync();
 
             if (isDataLoaded)
             {
@@ -256,34 +257,31 @@ public class RoomsPageViewModel : BaseTabViewModel
         }
     }
 
-    private async Task<bool> LoadRoomsAndDevicesIfInternetConnectedAsync()
+    private async Task<bool> LoadRoomsAndDevicesAsync()
     {
         var isDataLoaded = false;
 
-        if (IsInternetConnected)
+        var devices = _mapperService.MapRange<DeviceBindableModel>(_smartHomeMockService.GetDevices(), (m, vm) =>
         {
-            var devices = _mapperService.MapRange<DeviceBindableModel>(_smartHomeMockService.GetDevices(), (m, vm) =>
+            vm.TappedCommand = AccessorieTappedCommand;
+        });
+
+        FavoriteAccessories = new(devices);
+
+        await AddAqaraDevicesIfAuthorizedAsync();
+
+        var resultOfGettingRooms = await _roomsService.GetAllRoomsAsync();
+
+        if (resultOfGettingRooms.IsSuccess)
+        {
+            var rooms = _mapperService.MapRange<RoomBindableModel>(resultOfGettingRooms.Result, (m, vm) =>
             {
-                vm.TappedCommand = AccessorieTappedCommand;
+                vm.TappedCommand = RoomTappedCommand;
             });
 
-            FavoriteAccessories = new(devices);
+            Rooms = new(rooms);
 
-            await AddAqaraDevicesIfAuthorizedAsync();
-
-            var resultOfGettingRooms = await _roomsService.GetAllRoomsAsync();
-
-            if (resultOfGettingRooms.IsSuccess)
-            {
-                var rooms = _mapperService.MapRange<RoomBindableModel>(resultOfGettingRooms.Result, (m, vm) =>
-                {
-                    vm.TappedCommand = RoomTappedCommand;
-                });
-
-                Rooms = new(rooms);
-
-                isDataLoaded = true;
-            }
+            isDataLoaded = true;
         }
 
         return isDataLoaded;
