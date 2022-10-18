@@ -2,7 +2,7 @@ using SmartMirror.Enums;
 
 namespace SmartMirror.ViewModels.Tabs;
 
-public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware, IDestructible
+public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware, INavigationAware, IDestructible
 {
     public BaseTabViewModel(INavigationService navigationService)
     {
@@ -59,6 +59,18 @@ public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware, 
     }
 
     public virtual void OnDisappearing()
+    {
+    }
+
+    #endregion
+
+    #region -- INavigationAware implementation --
+
+    public virtual void OnNavigatedFrom(INavigationParameters parameters)
+    {
+    }
+
+    public virtual void OnNavigatedTo(INavigationParameters parameters)
     {
     }
 

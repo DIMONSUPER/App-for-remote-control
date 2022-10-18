@@ -7,18 +7,17 @@ using SmartMirror.Services.Mapper;
 using SmartMirror.ViewModels.Tabs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using static Android.Provider.DocumentsContract;
 
 namespace SmartMirror.ViewModels;
 
-public class RoomPageViewModel : BaseViewModel
+public class RoomDetailsPageViewModel : BaseViewModel
 {
     private readonly IMapperService _mapperService;
     private readonly IDevicesService _devicesService;
 
     private RoomBindableModel _selectedRoom;
 
-    public RoomPageViewModel(
+    public RoomDetailsPageViewModel(
         INavigationService navigationService,
         IMapperService mapperService,
         IDevicesService devicesService)
@@ -73,6 +72,8 @@ public class RoomPageViewModel : BaseViewModel
 
         if (parameters.TryGetValue(nameof(RoomBindableModel), out RoomBindableModel selectedRoom))
         {
+            DataState = EPageState.Loading;
+
             SelectRoom(selectedRoom);
         }
     }
@@ -81,6 +82,8 @@ public class RoomPageViewModel : BaseViewModel
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
+            DataState = EPageState.Loading;
+
             SelectRoom(_selectedRoom);
         }
         else
@@ -109,8 +112,6 @@ public class RoomPageViewModel : BaseViewModel
                 room.IsSelected = room.Id == selectedRoom.Id;
             }
 
-            DataState = EPageState.Loading;
-
             var resultOfGettingDevices = await _devicesService.GetDevicesAsync(selectedRoom.Id);
 
             if (resultOfGettingDevices.IsSuccess)
@@ -132,6 +133,8 @@ public class RoomPageViewModel : BaseViewModel
 
     private Task OnRoomSelectedCommandAsync(RoomBindableModel room)
     {
+        DataState = EPageState.Loading;
+
         SelectRoom(room);
 
         return Task.CompletedTask;

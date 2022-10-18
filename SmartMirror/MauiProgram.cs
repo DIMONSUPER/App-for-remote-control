@@ -66,8 +66,8 @@ public static class MauiProgram
         containerRegistry.RegisterForNavigation<NotificationsPage>();
         containerRegistry.RegisterForNavigation<CamerasPage>();
         containerRegistry.RegisterForNavigation<ScenariosPage>();
-        containerRegistry.RegisterForNavigation<RoomPage>();
-        containerRegistry.RegisterForNavigation<ScenarioPage>();
+        containerRegistry.RegisterForNavigation<RoomDetailsPage>();
+        containerRegistry.RegisterForNavigation<ScenarioDetailsPage>();
 
         containerRegistry.RegisterSingleton<IMapperService, MapperService>();
         containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
