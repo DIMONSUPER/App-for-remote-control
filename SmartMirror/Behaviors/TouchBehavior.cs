@@ -1,28 +1,29 @@
-﻿using System.Windows.Input;
+﻿using CommunityToolkit.Maui.Extensions;
+using System.Windows.Input;
 
 namespace SmartMirror.Behaviors
 {
-    public class TouchEffectBehavior : Behavior<VisualElement>
+    public class TouchBehavior : Behavior<VisualElement>
     {
         #region -- Public Properties --
 
         public static BindableProperty CommandProperty = BindableProperty.CreateAttached(
             propertyName: nameof(Command),
             returnType: typeof(ICommand),
-            declaringType: typeof(TouchEffectBehavior),
+            declaringType: typeof(TouchBehavior),
             defaultValue: default(ICommand),
             propertyChanged: OnCommandPropertyChanged);
 
         public static BindableProperty CommandParameterProperty = BindableProperty.CreateAttached(
             propertyName: "CommandParameter",
             returnType: typeof(object),
-            declaringType: typeof(TouchEffectBehavior),
+            declaringType: typeof(TouchBehavior),
             defaultValue: default(object));
 
         public static BindableProperty IsAnimationProperty = BindableProperty.CreateAttached(
             propertyName: "IsAnimation",
             returnType: typeof(bool),
-            declaringType: typeof(TouchEffectBehavior),
+            declaringType: typeof(TouchBehavior),
             defaultValue: default(bool));
 
         #endregion
@@ -39,7 +40,7 @@ namespace SmartMirror.Behaviors
             return view.GetValue(CommandParameterProperty);
         }
 
-        public static bool GetISAnimation(BindableObject view)
+        public static bool GetIsAnimation(BindableObject view)
         {
             return (bool)view.GetValue(IsAnimationProperty);
         }
@@ -62,7 +63,21 @@ namespace SmartMirror.Behaviors
         private static void OnTappedEventHandler(object sender, EventArgs e)
         {
             var command = GetCommand((BindableObject)sender);
+            var isAnimation = GetIsAnimation((BindableObject)sender);
             var commandParameter = GetCommandParameter((BindableObject)sender);
+
+            if (isAnimation
+                && sender is View view
+                && view.BackgroundColor is not null)
+            {
+                var backgroundColor = view.BackgroundColor;
+                var backgroundColorTo = new Color(backgroundColor.Red, backgroundColor.Green, backgroundColor.Blue, 0.5f);
+
+                view.BackgroundColorTo(backgroundColorTo, 16, 150, Easing.SpringOut).ContinueWith((x) =>
+                {
+                    view.BackgroundColorTo(backgroundColor, 16, 150, Easing.SpringIn);
+                });
+            }
 
             if (command is not null && command.CanExecute(commandParameter))
             {

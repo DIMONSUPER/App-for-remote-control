@@ -7,16 +7,7 @@
               x:DataType="{x:Type bindableModels:RoomBindableModel}">
 
     <Grid WidthRequest="280"
-          MaximumHeightRequest="157"
-          behaviors:TouchEffectBehavior.Command="{Binding TappedCommand}"
-          behaviors:TouchEffectBehavior.CommandParameter="{Binding .}">
-
-        <!--<Grid.GestureRecognizers>
-
-            <TapGestureRecognizer Command="{Binding TappedCommand}"
-                                  CommandParameter="{Binding .}"/>
-
-        </Grid.GestureRecognizers>-->
+          MaximumHeightRequest="157">
 
         <!-- BORDER AND ICON -->
         <Border Stroke="{x:DynamicResource cbg_i4}"
@@ -25,7 +16,10 @@
                 BackgroundColor="{x:DynamicResource cbg_i2}"
                 Shadow="{x:StaticResource Shadow_i1}"
                 Margin="0,0,0,3"
-                Padding="30, 24">
+                Padding="30, 24"
+                behaviors:TouchBehavior.Command="{Binding TappedCommand}"
+                behaviors:TouchBehavior.CommandParameter="{Binding .}"
+                behaviors:TouchBehavior.IsAnimation="True">
 
             <!-- NAME AND DESCRIPTION -->
             <Grid RowSpacing="0"
