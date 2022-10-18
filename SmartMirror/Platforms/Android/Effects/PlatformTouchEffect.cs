@@ -1,32 +1,28 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using Android.Content;
+﻿using Android.Content;
 using Android.Content.Res;
 using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Views;
 using Android.Views.Accessibility;
 using Android.Widget;
-using Xamarin.CommunityToolkit.Android.Effects;
-using Xamarin.CommunityToolkit.Effects;
-using Xamarin.CommunityToolkit.Extensions;
-using Xamarin.CommunityToolkit.Helpers;
-using AView = Android.Views.View;
-using Microsoft.Maui;
+using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Microsoft.Maui.Controls.Platform;
+using Microsoft.Maui.Platform;
 using SmartMirror.Effects.Touch;
 using SmartMirror.Effects.Touch.Enums;
+using System.ComponentModel;
 using System.Drawing;
+using AView = Android.Views.View;
+using Color = Android.Graphics.Color;
 using Point = System.Drawing.Point;
-using Microsoft.Maui.Controls.Compatibility.Platform.Android;
-using Color = Microsoft.Maui.Graphics.Color;
+using XColor = Microsoft.Maui.Graphics.Color;
+using XView = Microsoft.Maui.Controls.View;
 
-namespace SmartMirror.Platforms.Android
+namespace SmartMirror.Platforms.Android.Effects
 {
     public class PlatformTouchEffect : PlatformEffect
     {
-        static readonly Color defaultNativeAnimationColor = Color.FromRgba(128, 128, 128, 64);
+        static readonly XColor defaultNativeAnimationColor = XColor.FromRgba(128, 128, 128, 64);
 
         AccessibilityManager? accessibilityManager;
         AccessibilityListener? accessibilityListener;
@@ -36,12 +32,12 @@ namespace SmartMirror.Platforms.Android
         AView? rippleView;
         float startX;
         float startY;
-        Color rippleColor;
+        XColor rippleColor;
         int rippleRadius = -1;
 
         AView View => Control ?? Container;
 
-        ViewGroup? Group => Container ?? Control as ViewGroup;
+        ViewGroup? Group => (ViewGroup)(Container ?? Control);
 
         internal bool IsCanceled { get; set; }
 
@@ -51,10 +47,10 @@ namespace SmartMirror.Platforms.Android
 
         bool IsForegroundRippleWithTapGestureRecognizer
             => ripple != null &&
-                ripple.IsAlive() &&
+                ripple.IsAlive() &&  
                 View.IsAlive() &&
-                (XCT.SdkInt >= (int)BuildVersionCodes.M ? View.Foreground : View.Background) == ripple &&
-                Element is View view &&
+                ((int)Build.VERSION.SdkInt >= (int)BuildVersionCodes.M ? View.Foreground : View.Background) == ripple &&
+                Element is XView view &&
                 view.GestureRecognizers.Any(gesture => gesture is TapGestureRecognizer);
 
         protected override void OnAttached()
@@ -79,7 +75,7 @@ namespace SmartMirror.Platforms.Android
                 accessibilityManager.AddTouchExplorationStateChangeListener(accessibilityListener);
             }
 
-            if (XCT.SdkInt < (int)BuildVersionCodes.Lollipop || !effect.NativeAnimation)
+            if ((int)Build.VERSION.SdkInt < (int)BuildVersionCodes.Lollipop || !effect.NativeAnimation)
                 return;
 
             View.Clickable = true;
@@ -308,7 +304,7 @@ namespace SmartMirror.Platforms.Android
 
             if (effect.CanExecute)
             {
-                UpdateRipple(effect.NativeAnimationColor);
+                UpdateRipple(effect.NativeAnimationColor.ToColor());
                 if (rippleView != null)
                 {
                     rippleView.Enabled = true;
@@ -324,7 +320,7 @@ namespace SmartMirror.Platforms.Android
             }
             else if (rippleView == null)
             {
-                UpdateRipple(Color.Transparent);
+                UpdateRipple(XColor.Parse("Transparent"));
             }
         }
 
@@ -354,7 +350,7 @@ namespace SmartMirror.Platforms.Android
         {
             RemoveRipple();
 
-            var drawable = XCT.SdkInt >= (int)BuildVersionCodes.M && Group == null
+            var drawable = (int)Build.VERSION.SdkInt >= (int)BuildVersionCodes.M && Group == null
                 ? View?.Foreground
                 : View?.Background;
 
@@ -369,10 +365,10 @@ namespace SmartMirror.Platforms.Android
                 var content = isEmptyDrawable || isBorderLess ? null : drawable;
                 var mask = isEmptyDrawable && !isBorderLess ? new ColorDrawable(Color.White) : null;
 
-                ripple = new RippleDrawable(GetColorStateList(color), content, mask);
+                ripple = new RippleDrawable(GetColorStateList(color.ToColor()), content, mask);
             }
 
-            UpdateRipple(color);
+            UpdateRipple(color.ToColor());
         }
 
         void RemoveRipple()
@@ -382,7 +378,7 @@ namespace SmartMirror.Platforms.Android
 
             if (View != null)
             {
-                if (XCT.SdkInt >= (int)BuildVersionCodes.M && View.Foreground == ripple)
+                if ((int)Build.VERSION.SdkInt >= (int)BuildVersionCodes.M && View.Foreground == ripple)
                     View.Foreground = null;
                 else if (View.Background == ripple)
                     View.Background = null;
@@ -398,7 +394,7 @@ namespace SmartMirror.Platforms.Android
             ripple = null;
         }
 
-        void UpdateRipple(Color color)
+        void UpdateRipple(XColor color)
         {
             if (effect?.IsDisabled ?? true)
                 return;
@@ -409,7 +405,7 @@ namespace SmartMirror.Platforms.Android
             rippleColor = color;
             rippleRadius = effect.NativeAnimationRadius;
             ripple?.SetColor(GetColorStateList(color));
-            if (XCT.SdkInt >= (int)BuildVersionCodes.M && ripple != null)
+            if ((int)Build.VERSION.SdkInt >= (int)BuildVersionCodes.M && ripple != null)
                 ripple.Radius = (int)(View.Context?.Resources?.DisplayMetrics?.Density * effect?.NativeAnimationRadius ?? throw new NullReferenceException());
         }
 
@@ -422,7 +418,7 @@ namespace SmartMirror.Platforms.Android
 
             if (Group == null)
             {
-                if (XCT.SdkInt >= (int)BuildVersionCodes.M)
+                if ((int)Build.VERSION.SdkInt >= (int)BuildVersionCodes.M)
                     View.Foreground = ripple;
                 else
                     View.Background = ripple;
@@ -458,10 +454,10 @@ namespace SmartMirror.Platforms.Android
             }
         }
 
-        ColorStateList GetColorStateList(Color color)
+        ColorStateList GetColorStateList(XColor color)
         {
             var animationColor = color;
-            if (animationColor == default(Color))
+            if (animationColor == default(XColor))
                 animationColor = defaultNativeAnimationColor;
 
             return new ColorStateList(

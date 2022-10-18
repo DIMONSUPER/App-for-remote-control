@@ -266,11 +266,12 @@ namespace SmartMirror.Effects.Touch
             animationTokenSource?.Cancel();
             animationTokenSource?.Dispose();
             animationTokenSource = null;
+
             var element = sender.Element;
             if (element == null)
                 return;
 
-            element.AbortAnimation();
+            element.AbortAnimation(sender.Element.Handler.ToString());
         }
 
         void UpdateStatusAndState(TouchEffect sender, TouchStatus status, TouchState state)

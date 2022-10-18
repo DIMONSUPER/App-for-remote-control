@@ -489,19 +489,7 @@ namespace SmartMirror.Effects.Touch
             #region Required work-around to prevent linker from removing the platform-specific implementation
 #if __ANDROID__
             if (System.DateTime.Now.Ticks < 0)
-                _ = new Xamarin.CommunityToolkit.Android.Effects.PlatformTouchEffect();
-#elif __IOS__
-			if (System.DateTime.Now.Ticks < 0)
-				_ = new Xamarin.CommunityToolkit.iOS.Effects.PlatformTouchEffect();
-#elif __MACOS__
-			if (System.DateTime.Now.Ticks < 0)
-				_ = new Xamarin.CommunityToolkit.macOS.Effects.PlatformTouchEffect();
-#elif TIZEN
-			if (System.DateTime.Now.Ticks < 0)
-				_ = new Xamarin.CommunityToolkit.Tizen.Effects.PlatformTouchEffect();
-#elif UWP
-			if (System.DateTime.Now.Ticks < 0)
-				_ = new Xamarin.CommunityToolkit.UWP.Effects.PlatformTouchEffect();
+                _ = new SmartMirror.Platforms.Android.Effects.PlatformTouchEffect();
 #endif
             #endregion
         }
@@ -839,8 +827,8 @@ namespace SmartMirror.Effects.Touch
         public static void SetNativeAnimation(BindableObject? bindable, bool value)
             => bindable?.SetValue(NativeAnimationProperty, value);
 
-        public static Color GetNativeAnimationColor(BindableObject? bindable)
-            => (Color)(bindable?.GetValue(NativeAnimationColorProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+        public static global::Android.Graphics.Color GetNativeAnimationColor(BindableObject? bindable)
+            => (global::Android.Graphics.Color)(bindable?.GetValue(NativeAnimationColorProperty) ?? throw new ArgumentNullException(nameof(bindable)));
 
         public static void SetNativeAnimationColor(BindableObject? bindable, Color value)
             => bindable?.SetValue(NativeAnimationColorProperty, value);
@@ -1006,7 +994,7 @@ namespace SmartMirror.Effects.Touch
 
         public bool NativeAnimation => GetNativeAnimation(Element);
 
-        public Color NativeAnimationColor => GetNativeAnimationColor(Element);
+        public global::Android.Graphics.Color NativeAnimationColor => GetNativeAnimationColor(Element);
 
         public int NativeAnimationRadius => GetNativeAnimationRadius(Element);
 
@@ -1229,7 +1217,7 @@ namespace SmartMirror.Effects.Touch
 
             layout.InputTransparent = false;
             foreach (var view in layout.Children)
-                OnLayoutChildAdded(layout, new ElementEventArgs(view));
+                OnLayoutChildAdded(layout, new ElementEventArgs((Element)view));
 
             layout.ChildAdded += OnLayoutChildAdded;
         }

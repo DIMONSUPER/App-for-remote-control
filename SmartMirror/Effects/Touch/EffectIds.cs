@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SmartMirror.Effects.Touch
+﻿namespace SmartMirror.Effects.Touch
 {
     sealed class EffectIds
     {
@@ -14,57 +8,13 @@ namespace SmartMirror.Effects.Touch
         static string effectResolutionGroupName = $"{nameof(Xamarin)}.{nameof(CommunityToolkit)}.{nameof(Effects)}";
 
         /// <summary>
-        /// Effect Id for <see cref="RemoveBorderEffect"/>
-        /// </summary>
-        public static string RemoveBorder => $"{effectResolutionGroupName}.{nameof(RemoveBorderEffect)}";
-
-        /// <summary>
-        /// Effect Id for <see cref="SelectAllTextEffect"/>
-        /// </summary>
-        public static string SelectAllText => $"{effectResolutionGroupName}.{nameof(SelectAllTextEffect)}";
-
-        /// <summary>
-        /// Effect Id for <see cref="SafeAreaEffect"/>
-        /// </summary>
-        public static string SafeArea => $"{effectResolutionGroupName}.{nameof(SafeAreaEffectRouter)}";
-
-        /// <summary>
-        /// Effect Id for <see cref="IconTintColorEffect"/>
-        /// </summary>
-        public static string IconTintColor => $"{effectResolutionGroupName}.{nameof(IconTintColorEffectRouter)}";
-
-        /// <summary>
-        /// Effect Id for <see cref="VisualFeedbackEffect"/>
-        /// </summary>
-        public static string VisualFeedback => $"{effectResolutionGroupName}.{nameof(VisualFeedbackEffect)}";
-
-        /// <summary>
         /// Effect Id for <see cref="TouchEffect"/>
         /// </summary>
         public static string TouchEffect => $"{effectResolutionGroupName}.{nameof(TouchEffect)}";
 
         /// <summary>
-        /// Effect Id for <see cref="LifeCycleEffect"/>
-        /// </summary>
-        public static string LifeCycleEffect => $"{effectResolutionGroupName}.{nameof(LifecycleEffect)}";
-
-        /// <summary>
         /// Effect Id for <see cref="ShadowEffect"/>
         /// </summary>
         public static string ShadowEffect => $"{effectResolutionGroupName}.{nameof(ShadowEffect)}";
-
-        /// <summary>
-        /// Effect Id for <see cref="SemanticEffect"/>
-        /// </summary>
-        public static string Semantic => $"{effectResolutionGroupName}.{nameof(SemanticEffectRouter)}";
-
-        /// Effect Id for <see cref="StatusBarEffect"/>
-        /// </summary>
-        public static string StatusBar => $"{effectResolutionGroupName}.{nameof(StatusBarEffect)}";
-
-        /// <summary>
-        /// Effect Id for <see cref="NavigationBarEffect"/>
-        /// </summary>
-        public static string NavigationBar => $"{effectResolutionGroupName}.{nameof(NavigationBarEffect)}";
     }
 }
