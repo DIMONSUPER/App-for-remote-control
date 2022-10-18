@@ -19,7 +19,9 @@
                 Padding="30, 24"
                 behaviors:TouchBehavior.Command="{Binding TappedCommand}"
                 behaviors:TouchBehavior.CommandParameter="{Binding .}"
-                behaviors:TouchBehavior.IsAnimation="True">
+                behaviors:TouchBehavior.IsAnimation="True"
+                behaviors:TouchBehavior.NormalBackgroundColor="{x:DynamicResource cbg_i2}"
+                behaviors:TouchBehavior.PressedBackgroundColor="{x:DynamicResource cbg_i13}">
 
             <!-- NAME AND DESCRIPTION -->
             <Grid RowSpacing="0"

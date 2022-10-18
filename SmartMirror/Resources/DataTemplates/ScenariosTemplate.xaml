@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:app="clr-namespace:SmartMirror"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:bindablemodels="clr-namespace:SmartMirror.Models.BindableModels"
@@ -16,11 +17,12 @@
         StrokeShape="RoundRectangle 9"
         BackgroundColor="{DynamicResource cbg_i2}"
         Shadow="{DynamicResource Shadow_i1}"
-        Padding="22, 17, 22, 15">
-
-        <Border.GestureRecognizers>
-            <TapGestureRecognizer Command="{Binding TappedCommand}" CommandParameter="{Binding .}"/>
-        </Border.GestureRecognizers>
+        Padding="22, 17, 22, 15"
+        behaviors:TouchBehavior.Command="{Binding TappedCommand}"
+        behaviors:TouchBehavior.CommandParameter="{Binding .}"
+        behaviors:TouchBehavior.IsAnimation="True"
+        behaviors:TouchBehavior.NormalBackgroundColor="{x:DynamicResource cbg_i2}"
+        behaviors:TouchBehavior.PressedBackgroundColor="{x:DynamicResource cbg_i13}">
 
         <Grid>
             <StackLayout>
@@ -36,11 +38,9 @@
                         StrokeThickness="0"
                         WidthRequest="51"
                         HeightRequest="51"
-                        HorizontalOptions="Start">
-
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding ChangeActiveStatusCommand}" CommandParameter="{Binding .}"/>
-                        </Border.GestureRecognizers>
+                        HorizontalOptions="Start"
+                        behaviors:TouchBehavior.Command="{Binding ChangeActiveStatusCommand}"
+                        behaviors:TouchBehavior.CommandParameter="{Binding .}">
 
                         <Image
                             Source="play_gray"

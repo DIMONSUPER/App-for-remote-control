@@ -5,14 +5,14 @@ namespace SmartMirror.Behaviors
 {
     public class TouchBehavior : Behavior<VisualElement>
     {
-        #region -- Public Properties --
+        #region -- Public properties --
 
         public static BindableProperty CommandProperty = BindableProperty.CreateAttached(
             propertyName: nameof(Command),
             returnType: typeof(ICommand),
             declaringType: typeof(TouchBehavior),
             defaultValue: default(ICommand),
-            propertyChanged: OnCommandPropertyChanged);
+            propertyChanged: OnPropertyChanged);
 
         public static BindableProperty CommandParameterProperty = BindableProperty.CreateAttached(
             propertyName: "CommandParameter",
@@ -24,11 +24,24 @@ namespace SmartMirror.Behaviors
             propertyName: "IsAnimation",
             returnType: typeof(bool),
             declaringType: typeof(TouchBehavior),
-            defaultValue: default(bool));
+            defaultValue: default(bool),
+            propertyChanged: OnPropertyChanged);
+
+        public static BindableProperty NormalBackgroundColorProperty = BindableProperty.CreateAttached(
+            propertyName: "NormalBackgroundColor",
+            returnType: typeof(Color),
+            declaringType: typeof(TouchBehavior),
+            defaultValue: default(Color));
+
+        public static BindableProperty PressedBackgroundColorProperty = BindableProperty.CreateAttached(
+            propertyName: "PressedBackgroundColor",
+            returnType: typeof(Color),
+            declaringType: typeof(TouchBehavior),
+            defaultValue: default(Color));
 
         #endregion
 
-        #region -- Public Helpers --
+        #region -- Public helpers --
 
         public static ICommand GetCommand(BindableObject view)
         {
@@ -45,11 +58,21 @@ namespace SmartMirror.Behaviors
             return (bool)view.GetValue(IsAnimationProperty);
         }
 
+        public static Color GetNormalBackgroundColor(BindableObject view)
+        {
+            return (Color)view.GetValue(NormalBackgroundColorProperty);
+        }
+
+        public static Color GetPressedBackgroundColor(BindableObject view)
+        {
+            return (Color)view.GetValue(PressedBackgroundColorProperty);
+        }
+
         #endregion
 
-        #region -- Private Helpers --
+        #region -- Private helpers --
 
-        private static void OnCommandPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void OnPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is View view && view.GestureRecognizers.FirstOrDefault(gesture => gesture is TapGestureRecognizer) is null)
             {
@@ -62,22 +85,29 @@ namespace SmartMirror.Behaviors
 
         private static void OnTappedEventHandler(object sender, EventArgs e)
         {
-            var command = GetCommand((BindableObject)sender);
-            var isAnimation = GetIsAnimation((BindableObject)sender);
-            var commandParameter = GetCommandParameter((BindableObject)sender);
+            var bindable = sender as BindableObject;
 
-            if (isAnimation
-                && sender is View view
-                && view.BackgroundColor is not null)
+            var isAnimation = GetIsAnimation(bindable);
+
+            if (isAnimation && sender is View view)
             {
-                var backgroundColor = view.BackgroundColor;
-                var backgroundColorTo = new Color(backgroundColor.Red, backgroundColor.Green, backgroundColor.Blue, 0.5f);
+                var normalBackgroundColor = GetNormalBackgroundColor(bindable);
+                var pressedBackgroundColor = GetPressedBackgroundColor(bindable);
 
-                view.BackgroundColorTo(backgroundColorTo, 16, 150, Easing.SpringOut).ContinueWith((x) =>
+                if (normalBackgroundColor is not null && pressedBackgroundColor is not null)
                 {
-                    view.BackgroundColorTo(backgroundColor, 16, 150, Easing.SpringIn);
-                });
+                    bindable.Dispatcher.Dispatch(() =>
+                    {
+                        view.BackgroundColorTo(pressedBackgroundColor, 16, 60, Easing.SpringOut).ContinueWith((x) =>
+                        {
+                            view.BackgroundColorTo(normalBackgroundColor, 16, 60, Easing.SpringIn);
+                        });
+                    });
+                }
             }
+
+            var command = GetCommand(bindable);
+            var commandParameter = GetCommandParameter(bindable);
 
             if (command is not null && command.CanExecute(commandParameter))
             {

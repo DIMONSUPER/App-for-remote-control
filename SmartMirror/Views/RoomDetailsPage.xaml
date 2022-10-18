@@ -2,6 +2,7 @@
 <views:BaseContentPage xmlns:views="clr-namespace:SmartMirror.Views"
                        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
                        xmlns:extensions="clr-namespace:SmartMirror.Extensions"
                        xmlns:vm="clr-namespace:SmartMirror.ViewModels"
                        xmlns:controls="clr-namespace:SmartMirror.Controls"
@@ -29,11 +30,8 @@
         <HorizontalStackLayout Grid.Row="0"
                                Spacing="17"
                                Margin="22,0,0,0"
-                               HorizontalOptions="Start">
-
-            <HorizontalStackLayout.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding BackArrowTappedCommand}"/>
-            </HorizontalStackLayout.GestureRecognizers>
+                               HorizontalOptions="Start"
+                               behaviors:TouchBehavior.Command="{Binding BackArrowTappedCommand}">
 
             <Image Source="arrow_left_aqua"
                    VerticalOptions="Center"/>
