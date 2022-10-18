@@ -1,13 +1,12 @@
-﻿using SmartMirror.Enums;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
+using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.ViewModels.Tabs;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
-using static Android.Provider.DocumentsContract;
 
 namespace SmartMirror.ViewModels;
 
@@ -46,8 +45,8 @@ public class RoomPageViewModel : BaseViewModel
         set => SetProperty(ref _rooms, value);
     }
 
-    private ObservableCollection<DeviceModel> _selectedRoomDevices;
-    public ObservableCollection<DeviceModel> SelectedRoomDevices
+    private ObservableCollection<DeviceBindableModel> _selectedRoomDevices;
+    public ObservableCollection<DeviceBindableModel> SelectedRoomDevices
     {
         get => _selectedRoomDevices;
         set => SetProperty(ref _selectedRoomDevices, value);
@@ -77,11 +76,20 @@ public class RoomPageViewModel : BaseViewModel
         }
     }
 
-    protected override void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
-            SelectRoom(_selectedRoom);
+            var devicesResponse = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
+
+            if (devicesResponse.IsSuccess)
+            {
+                SelectRoom(_selectedRoom);
+            }
+            else
+            {
+                //TODO: devices are not updated
+            }
         }
         else
         {
@@ -98,7 +106,7 @@ public class RoomPageViewModel : BaseViewModel
         return NavigationService.GoBackAsync();
     }
 
-    private async void SelectRoom(RoomBindableModel selectedRoom)
+    private void SelectRoom(RoomBindableModel selectedRoom)
     {
         if (Rooms?.Count > 0)
         {
@@ -111,16 +119,9 @@ public class RoomPageViewModel : BaseViewModel
 
             DataState = EPageState.Loading;
 
-            var resultOfGettingDevices = await _devicesService.GetDevicesAsync(selectedRoom.Id);
+            var resultOfGettingDevices = _mapperService.MapRange<DeviceBindableModel>(_devicesService.AllDevicesList.Where(x => x.PositionId == selectedRoom.Id));
 
-            if (resultOfGettingDevices.IsSuccess)
-            {
-                SelectedRoomDevices = new(resultOfGettingDevices.Result.Data);
-            }
-            else
-            {
-                SelectedRoomDevices = new();
-            }
+            SelectedRoomDevices = new(resultOfGettingDevices);
 
             DataState = IsInternetConnected
                 ? SelectedRoomDevices.Count == 0

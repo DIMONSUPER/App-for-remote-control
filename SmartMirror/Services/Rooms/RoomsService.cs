@@ -29,19 +29,16 @@ namespace SmartMirror.Services.Rooms
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
-                var rooms = Enumerable.Empty<RoomModel>();
+                IEnumerable<RoomModel> rooms = _smartHomeMockService.GetRooms();
 
-                var resultOfGettingMockRooms = _smartHomeMockService.GetRooms();
-
-                var resultOfGettingRoomsAqara = await GetAllRoomsOfHousesAsync();
-
-                if (resultOfGettingRoomsAqara.IsSuccess)
+                if (_aqaraService.IsAuthorized)
                 {
-                    rooms = resultOfGettingRoomsAqara.Result.Concat(resultOfGettingMockRooms);
-                }
-                else
-                {
-                    rooms = resultOfGettingMockRooms;
+                    var resultOfGettingRoomsAqara = await GetAllRoomsOfHousesAsync();
+
+                    if (resultOfGettingRoomsAqara.IsSuccess)
+                    {
+                        rooms = resultOfGettingRoomsAqara.Result.Concat(rooms);
+                    }
                 }
 
                 return rooms;
@@ -58,39 +55,29 @@ namespace SmartMirror.Services.Rooms
             {
                 var rooms = Enumerable.Empty<RoomModel>();
 
-                if (_aqaraService.IsAuthorized)
+                var resultOfGettingHouses = await _aqaraService.GetPositionsAsync(string.Empty);
+
+                if (resultOfGettingHouses.IsSuccess && resultOfGettingHouses.Result.TotalCount > 0)
                 {
-                    var resultOfGettingHouses = await _aqaraService.GetPositionsAsync(string.Empty);
+                    var houses = resultOfGettingHouses.Result.Data;
 
-                    if (resultOfGettingHouses.IsSuccess)
+                    foreach (var house in houses)
                     {
-                        if (resultOfGettingHouses.Result.TotalCount > 0)
+                        var resultOfGettingRoomsHouse = await GetRoomsHouseAsync(house.PositionId);
+
+                        if (resultOfGettingRoomsHouse.IsSuccess)
                         {
-                            var houses = resultOfGettingHouses.Result.Data;
-
-                            foreach (var house in houses)
-                            {
-                                var resultOfGettingRoomsHouse = await GetRoomsHouseAsync(house.PositionId);
-
-                                if (resultOfGettingRoomsHouse.IsSuccess)
-                                {
-                                    rooms = rooms.Concat(resultOfGettingRoomsHouse.Result);
-                                }
-                                else
-                                {
-                                    onFailure("rooms: Request failed");
-                                }
-                            }
+                            rooms = rooms.Concat(resultOfGettingRoomsHouse.Result);
                         }
-                    }
-                    else
-                    {
-                        onFailure("houses: Request failed");
+                        else
+                        {
+                            onFailure("rooms: Request failed");
+                        }
                     }
                 }
                 else
                 {
-                    onFailure("unauthorized");
+                    onFailure("houses: Request failed");
                 }
 
                 return rooms;
@@ -111,14 +98,7 @@ namespace SmartMirror.Services.Rooms
 
                     foreach (var room in simpleRooms)
                     {
-                        var resultOfGettingDevices = await _devicesService.GetDevicesAsync(room.PositionId);
-
-                        if (!resultOfGettingDevices.IsSuccess)
-                        {
-                            onFailure("devices: Request failed");
-                        }
-
-                        var devicesCount = resultOfGettingDevices.Result.TotalCount;
+                        var devicesCount = _devicesService.AllDevicesList.Where(x => x.PositionId == positionId).Count();
 
                         rooms.Add(new RoomModel()
                         {

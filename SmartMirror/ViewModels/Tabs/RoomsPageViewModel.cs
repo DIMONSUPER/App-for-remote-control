@@ -2,6 +2,7 @@
 using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Aqara;
+using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Rooms;
@@ -19,6 +20,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     private readonly IAqaraService _aqaraService;
     private readonly IDialogService _dialogService;
     private readonly IRoomsService _roomsService;
+    private readonly IDevicesService _devicesService;
 
     public RoomsPageViewModel(
         ISmartHomeMockService smartHomeMockService,
@@ -26,7 +28,8 @@ public class RoomsPageViewModel : BaseTabViewModel
         IMapperService mapperService,
         IAqaraService aqaraService,
         IRoomsService roomsService,
-        IDialogService dialogService)
+        IDialogService dialogService,
+        IDevicesService devicesService)
         : base(navigationService)
     {
         _smartHomeMockService = smartHomeMockService;
@@ -34,6 +37,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         _aqaraService = aqaraService;
         _dialogService = dialogService;
         _roomsService = roomsService;
+        _devicesService = devicesService;
 
         IsAqaraLoginButtonVisible = !_aqaraService.IsAuthorized;
 
@@ -123,7 +127,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             var value = device.Status == EDeviceStatus.On ? "0" : "1";
 
-            var updateResponse = await _aqaraService.UpdateAttributeValueAsync(device.DeviceId, (device.EditableResource, value));
+            var updateResponse = await _devicesService.UpdateAttributeValueAsync(device.DeviceId, (device.EditableResource, value));
 
             if (updateResponse.IsSuccess)
             {
@@ -252,141 +256,16 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (_aqaraService.IsAuthorized)
         {
-            var aqaraDevicesResponse = await _aqaraService.GetDevicesAsync();
+            var aqaraDevicesResponse = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
 
             if (aqaraDevicesResponse.IsSuccess)
             {
-                var devices = _mapperService.MapRange<DeviceBindableModel>(aqaraDevicesResponse.Result.Data, (m, vm) =>
+                var devices = _mapperService.MapRange<DeviceBindableModel>(_devicesService.AllDevicesList, (m, vm) =>
                 {
                     vm.TappedCommand = AccessorieTappedCommand;
                 });
 
-                var tasks = devices.Select(x => GetTaskForDevice(x));
-
-                await Task.WhenAll(tasks);
-            }
-        }
-    }
-
-    private Task GetTaskForDevice(DeviceBindableModel device)
-    {
-        return device switch
-        {
-            _ when device.Model.Contains("switch.l") => AddLampAsync(device),
-            _ when device.Model.Contains("switch.b") => AddDoubleLampAsync(device),
-            _ when device.Model.Contains("weather") => AddWeatherAccessoriesAsync(device),
-            _ when device.Model.Contains("gateway") || device.Model.Contains("sensor_motion") => Task.CompletedTask,
-            _ => InsertInTheBeginningDeviceAsync(device),
-        };
-    }
-
-    private Task InsertInTheBeginningDeviceAsync(DeviceBindableModel device)
-    {
-        FavoriteAccessories.Insert(0, device);
-
-        return Task.CompletedTask;
-    }
-
-    private async Task AddWeatherAccessoriesAsync(DeviceBindableModel device)
-    {
-        if (device.State > 0)
-        {
-            var deviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "0.2.85", "0.1.85", "0.3.85");
-
-            if (deviceAttributeResponse.IsSuccess)
-            {
-                device.Status = EDeviceStatus.Connected;
-
-                var temperature = double.Parse(deviceAttributeResponse.Result.FirstOrDefault(x => x.ResourceId == "0.1.85").Value) / 100 + "℃";
-                var humididty = double.Parse(deviceAttributeResponse.Result.FirstOrDefault(x => x.ResourceId == "0.2.85").Value) / 100 + "%";
-                var pressure = double.Parse(deviceAttributeResponse.Result.FirstOrDefault(x => x.ResourceId == "0.3.85").Value) / 1000 + "kPa";
-
-                AddWeatherDevice(humididty, "Humidity", "pic_humidity");
-                AddWeatherDevice(temperature, "Temperature", "pic_temperature");
-                AddWeatherDevice(pressure, "Pressure", "pic_pressure");
-            }
-        }
-    }
-
-    private void AddWeatherDevice(string additionalInfo, string name, string iconSource)
-    {
-        FavoriteAccessories.Insert(0, new DeviceBindableModel()
-        {
-            AdditionalInfo = additionalInfo,
-            Status = EDeviceStatus.Connected,
-            DeviceType = EDeviceType.Sensor,
-            Name = name,
-            IconSource = iconSource,
-        });
-    }
-
-    private async Task AddLampAsync(DeviceBindableModel device)
-    {
-        device.DeviceType = EDeviceType.Switcher;
-        device.IconSource = "lamp";
-        device.EditableResource = "4.1.85";
-
-        if (device.State > 0)
-        {
-            var deviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.1.85");
-
-            if (deviceAttributeResponse.IsSuccess)
-            {
-                device.Status = deviceAttributeResponse.Result?.FirstOrDefault()?.Value == "0" ? EDeviceStatus.Off : EDeviceStatus.On;
-            }
-
-            FavoriteAccessories.Insert(0, device);
-        }
-    }
-
-    private async Task AddDoubleLampAsync(DeviceBindableModel device)
-    {
-        if (device.State > 0)
-        {
-            var leftDeviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.1.85");
-
-            DeviceBindableModel leftDevice = null;
-            DeviceBindableModel rightDevice = null;
-
-            if (leftDeviceAttributeResponse.IsSuccess)
-            {
-                leftDevice = new DeviceBindableModel()
-                {
-                    DeviceId = device.DeviceId,
-                    Status = leftDeviceAttributeResponse.Result?.FirstOrDefault()?.Value == "0" ? EDeviceStatus.Off : EDeviceStatus.On,
-                    DeviceType = EDeviceType.Switcher,
-                    Name = "Left Lamp",
-                    IconSource = "lamp",
-                    TappedCommand = AccessorieTappedCommand,
-                    EditableResource = "4.1.85",
-                };
-
-            }
-
-            var rightDeviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.2.85");
-
-            if (rightDeviceAttributeResponse.IsSuccess)
-            {
-                rightDevice = new DeviceBindableModel()
-                {
-                    DeviceId = device.DeviceId,
-                    Status = rightDeviceAttributeResponse.Result?.FirstOrDefault()?.Value == "0" ? EDeviceStatus.Off : EDeviceStatus.On,
-                    DeviceType = EDeviceType.Switcher,
-                    Name = "Right Lamp",
-                    IconSource = "lamp",
-                    TappedCommand = AccessorieTappedCommand,
-                    EditableResource = "4.2.85",
-                };
-            }
-
-            if (leftDevice is not null)
-            {
-                FavoriteAccessories.Insert(0, leftDevice);
-            }
-
-            if (rightDevice is not null)
-            {
-                FavoriteAccessories.Insert(0, rightDevice);
+                FavoriteAccessories = new(FavoriteAccessories.Concat(devices));
             }
         }
     }

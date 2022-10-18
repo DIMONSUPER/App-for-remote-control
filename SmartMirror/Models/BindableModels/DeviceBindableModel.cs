@@ -19,6 +19,13 @@ public class DeviceBindableModel : BindableBase
         set => SetProperty(ref _deviceId, value);
     }
 
+    private string _positionId;
+    public string PositionId
+    {
+        get => _positionId;
+        set => SetProperty(ref _positionId, value);
+    }
+
     private string _name;
     public string Name
     {
