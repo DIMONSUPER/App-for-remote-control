@@ -7,7 +7,6 @@ using SmartMirror.Services.Mapper;
 using SmartMirror.ViewModels.Tabs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using static Android.Provider.DocumentsContract;
 
 namespace SmartMirror.ViewModels;
 
