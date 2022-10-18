@@ -1,4 +1,5 @@
-﻿using SmartMirror.Enums;
+﻿using Microsoft.VisualBasic;
+using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Aqara;
@@ -209,13 +210,20 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private async Task OnTryAgainCommandAsync()
     {
-        DataState = EPageState.NoInternetLoader;
+        var endTime = DateTime.Now.AddSeconds(15);
 
-        await LoadRoomsAndDevicesAsync();
+        while (DateTime.Now < endTime && DataState != EPageState.Complete)
+        {
+            DataState = EPageState.NoInternetLoader;
+
+            await LoadRoomsAndDevicesAsync(); 
+        }
     }
 
     private async Task LoadRoomsAndDevicesAsync()
     {
+        await Task.Delay(1000);
+
         if (IsInternetConnected)
         {
             var devices = _mapperService.MapRange<DeviceBindableModel>(_smartHomeMockService.GetDevices(), (m, vm) =>
