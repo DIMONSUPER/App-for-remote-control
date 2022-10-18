@@ -125,7 +125,7 @@ public class DeviceBindableModel : BindableBase
     }
 
     private string _editableResource;
-    public string EditableResource
+    public string EditableResourceId
     {
         get => _editableResource;
         set => SetProperty(ref _editableResource, value);

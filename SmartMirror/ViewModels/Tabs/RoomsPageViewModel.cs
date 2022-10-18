@@ -127,7 +127,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             var value = device.Status == EDeviceStatus.On ? "0" : "1";
 
-            var updateResponse = await _devicesService.UpdateAttributeValueAsync(device.DeviceId, (device.EditableResource, value));
+            var updateResponse = await _devicesService.UpdateAttributeValueAsync(device.DeviceId, (device.EditableResourceId, value));
 
             if (updateResponse.IsSuccess)
             {
@@ -258,9 +258,9 @@ public class RoomsPageViewModel : BaseTabViewModel
         {
             var aqaraDevicesResponse = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
 
-            if (aqaraDevicesResponse.IsSuccess)
+            if (aqaraDevicesResponse.IsSuccess && _devicesService.AllObservableDevicesCollection.Any())
             {
-                var devices = _mapperService.MapRange<DeviceBindableModel>(_devicesService.AllDevicesList, (m, vm) =>
+                var devices = _mapperService.MapRange<DeviceBindableModel>(_devicesService.AllObservableDevicesCollection, (m, vm) =>
                 {
                     vm.TappedCommand = AccessorieTappedCommand;
                 });

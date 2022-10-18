@@ -119,7 +119,7 @@ public class RoomPageViewModel : BaseViewModel
 
             DataState = EPageState.Loading;
 
-            var resultOfGettingDevices = _mapperService.MapRange<DeviceBindableModel>(_devicesService.AllDevicesList.Where(x => x.PositionId == selectedRoom.Id));
+            var resultOfGettingDevices = _mapperService.MapRange<DeviceBindableModel>(_devicesService.AllObservableDevicesCollection.Where(x => x.PositionId == selectedRoom.Id));
 
             SelectedRoomDevices = new(resultOfGettingDevices);
 
