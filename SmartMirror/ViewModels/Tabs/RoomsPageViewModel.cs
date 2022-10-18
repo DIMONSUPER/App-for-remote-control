@@ -38,7 +38,6 @@ public class RoomsPageViewModel : BaseTabViewModel
         IsAqaraLoginButtonVisible = !_aqaraService.IsAuthorized;
 
         Title = "Rooms";
-        DataState = EPageState.Loading;
     }
 
     #region -- Public properties --
@@ -80,17 +79,21 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override void Initialize(INavigationParameters parameters)
+    public override async void OnAppearing()
     {
-        base.Initialize(parameters);
+        base.OnAppearing();
 
-        Task.Run(LoadRoomsAndDevicesAsync);
+        DataState = EPageState.Loading;
+
+        await LoadRoomsAndDevicesAsync();
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
+            DataState = EPageState.Loading;
+
             await LoadRoomsAndDevicesAsync();
         }
         else
@@ -360,7 +363,6 @@ public class RoomsPageViewModel : BaseTabViewModel
                     TappedCommand = AccessorieTappedCommand,
                     EditableResource = "4.1.85",
                 };
-
             }
 
             var rightDeviceAttributeResponse = await _aqaraService.GetDeviceAttributeValueAsync(device.DeviceId, "4.2.85");
@@ -394,7 +396,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     private Task OnRoomTappedCommandAsync(RoomBindableModel room)
     {
         return NavigationService.CreateBuilder()
-            .AddSegment<RoomPageViewModel>(false)
+            .AddSegment<RoomDetailsPageViewModel>(false)
             .AddParameter(KnownNavigationParameters.Animated, true)
             .AddParameter(nameof(Rooms), Rooms)
             .AddParameter(nameof(RoomBindableModel), room)

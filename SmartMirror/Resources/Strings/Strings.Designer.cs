@@ -391,6 +391,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No scenario actions yet.
+        /// </summary>
+        internal static string NoScenarioActionsYet {
+            get {
+                return ResourceManager.GetString("NoScenarioActionsYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No scenarios yet.
         /// </summary>
         internal static string NoScenariosYet {
@@ -495,6 +504,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Rooms {
             get {
                 return ResourceManager.GetString("Rooms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scenario actions.
+        /// </summary>
+        internal static string ScenarioActions {
+            get {
+                return ResourceManager.GetString("ScenarioActions", resourceCulture);
             }
         }
         
