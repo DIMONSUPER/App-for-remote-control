@@ -95,6 +95,7 @@
                 <Button Margin="0,37,0,0"
                         Text="{extensions:Translate TryAgain}"
                         TextColor="{StaticResource tcolor_i2}"
+                        FontFamily="InterBold"
                         BackgroundColor="{StaticResource cbg_i3}"
                         Shadow="{DynamicResource Shadow_i3}"
                         Command="{Binding TryAgainCommand, Source={x:Reference stateContanier}}"
@@ -127,14 +128,6 @@
                        Style="{DynamicResource tstyle_i4}"
                        Text="{extensions:Translate PleaseWait}"
                        HorizontalOptions="Center"/>
-
-                <Button Margin="0,37,0,0"
-                        Text="{extensions:Translate TryAgain}"
-                        TextColor="{StaticResource tcolor_i2}"
-                        BackgroundColor="{StaticResource cbg_i3}"
-                        Shadow="{DynamicResource Shadow_i3}"
-                        WidthRequest="163"
-                        CornerRadius="16"/>
 
             </VerticalStackLayout>
                 
