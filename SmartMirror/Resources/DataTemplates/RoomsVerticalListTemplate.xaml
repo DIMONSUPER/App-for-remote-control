@@ -1,15 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <DataTemplate xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:bindableModels="clr-namespace:SmartMirror.Models.BindableModels"
-             x:Class="SmartMirror.Resources.DataTemplates.RoomsVerticalListTemplate"
-             x:DataType="{x:Type bindableModels:RoomBindableModel}">
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+              xmlns:bindableModels="clr-namespace:SmartMirror.Models.BindableModels"
+              x:Class="SmartMirror.Resources.DataTemplates.RoomsVerticalListTemplate"
+              x:DataType="{x:Type bindableModels:RoomBindableModel}">
 
-    <Grid>
-
-        <Grid.GestureRecognizers>
-            <TapGestureRecognizer Command="{Binding SelectedCommand}" CommandParameter="{Binding .}"/>
-        </Grid.GestureRecognizers>
+    <Grid behaviors:TouchBehavior.Command="{Binding SelectedCommand}"
+          behaviors:TouchBehavior.CommandParameter="{Binding .}">
 
         <Border Padding="18, 12"
                 StrokeThickness="1"

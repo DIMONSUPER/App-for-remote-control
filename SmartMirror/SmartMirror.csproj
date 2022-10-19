@@ -106,8 +106,7 @@
 		<Folder Include="Resources\DataTemplateSelectors\" />
 		<Folder Include="ViewModels\Tabs\" />
 		<Folder Include="Resources\DataTemplates\" />
-		<Folder Include="Extensions\" />		
-		<Folder Include="Resources\Strings\" />
+		<Folder Include="Extensions\" />
 		<Folder Include="Services\Mock\" />
 		<Folder Include="Platforms\Android\Renderers\" />
 		<Folder Include="Platforms\Android\Resources\drawable\" />
@@ -200,6 +199,8 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="Resources\Strings\Strings.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
 	    <DependentUpon>Strings.resx</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Dialogs\ErrorDialog.xaml.cs">
