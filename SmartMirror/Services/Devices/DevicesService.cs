@@ -21,7 +21,6 @@ namespace SmartMirror.Services.Devices
 
         private readonly ConcurrentDictionary<string, IEnumerable<AttributeAqaraResponse>> _devicesAttributes = new();
         private readonly ConcurrentDictionary<string, DeviceBindableModel> _cachedDevices = new();
-        private readonly JsonSerializer _serializer = new();
         private readonly DeviceMessanger _deviceMessanger = new();
 
         private readonly IMapperService _mapperService;
