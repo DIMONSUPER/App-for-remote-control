@@ -97,7 +97,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
-            if (!IsDataLoading)
+            if (!IsDataLoading && DataState != EPageState.Complete)
             {
                 DataState = EPageState.Loading;
 
@@ -220,12 +220,8 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private async Task OnTryAgainCommandAsync()
     {
-        Console.WriteLine("TryAgain");
-
         if (!IsDataLoading)
         {
-            Console.WriteLine("Load from TryAgain");
-            
             DataState = EPageState.NoInternetLoader;
 
             var timeToStopUpdating = DateTime.Now.AddSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);

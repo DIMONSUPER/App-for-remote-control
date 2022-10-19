@@ -75,15 +75,16 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override async void OnAppearing()
+    public override void OnAppearing()
     {
         base.OnAppearing();
+        
+        if (!IsDataLoading)
+        {
+            DataState = EPageState.Loading;
 
-        DataState = EPageState.Loading;
-
-        await RefreshCamerasAsync();
-
-        VideoAction = EVideoAction.Play;
+            Task.Run(() => RefreshCamerasAndChangeStateAsync());
+        }
     }
 
     public override void OnDisappearing()
@@ -93,20 +94,21 @@ public class CamerasPageViewModel : BaseTabViewModel
         VideoAction = EVideoAction.Pause;
     }
 
-    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    protected override void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
-            DataState = EPageState.Loading;
-
-            await RefreshCamerasAsync();
-
-            VideoAction = EVideoAction.Play;
+            if (!IsDataLoading && DataState != EPageState.Complete)
+            {
+                DataState = EPageState.Loading;
+                
+                Task.Run(() => RefreshCamerasAndChangeStateAsync());
+            }
         }
         else
         {
+            IsCamerasRefreshing = false;
             VideoAction = EVideoAction.Pause;
-
             DataState = EPageState.NoInternet;
         }
     }
@@ -117,9 +119,25 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private async Task OnTryAgainCommandAsync()
     {
-        DataState = EPageState.NoInternetLoader;
+        if (!IsDataLoading)
+        {
+            DataState = EPageState.NoInternetLoader;
 
-        await RefreshCamerasAsync();
+            var timeToStopUpdating = DateTime.Now.AddSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
+
+            var isDataLoaded = await TaskRepeater.Repeate(RefreshCamerasAsync, canExecute: () => DateTime.Now < timeToStopUpdating);
+
+            if (IsInternetConnected)
+            {
+                (DataState, VideoAction) = isDataLoaded
+                    ? (EPageState.Complete, EVideoAction.Play)
+                    : (EPageState.Empty, EVideoAction.Pause);
+            }
+            else
+            {
+                DataState = EPageState.NoInternet;
+            }
+        }
     }
 
     private Task OnSelectCameraCommandAsync(CameraBindableModel selectedCamera)
@@ -131,17 +149,47 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private async Task OnRefreshCamerasCommandAsync() 
     {
-        await RefreshCamerasAsync();
+        if (!IsDataLoading)
+        {
+            await RefreshCamerasAndChangeStateAsync();
 
-        IsCamerasRefreshing = false;
+            IsCamerasRefreshing = false; 
+        }
     }
 
-    private async Task RefreshCamerasAsync()
+    private async Task RefreshCamerasAndChangeStateAsync()
     {
-        await Task.Delay(2000);
+        if (IsInternetConnected)
+        {
+            var isDataLoaded = await RefreshCamerasAsync();
+
+            if (IsInternetConnected)
+            {
+                (DataState, VideoAction) = isDataLoaded
+                    ? (EPageState.Complete, EVideoAction.Play)
+                    : (EPageState.Empty, EVideoAction.Pause);
+            }
+            else
+            {
+                DataState = EPageState.NoInternet;
+            }
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
+    }
+
+    private async Task<bool> RefreshCamerasAsync()
+    {
+        bool isLoaded = false;
+
+        IsDataLoading = true;
 
         if (IsInternetConnected)
         {
+            await Task.Delay(1000);
+
             var resultOfGettingCameras = await _camerasService.GetCamerasAsync();
 
             if (resultOfGettingCameras.IsSuccess)
@@ -159,17 +207,13 @@ public class CamerasPageViewModel : BaseTabViewModel
 
                 SelectCamera(camera);
 
-                DataState = EPageState.Complete;
-            }
-            else if(!IsInternetConnected)
-            {
-                DataState = EPageState.NoInternet;
-            }
+                isLoaded = true;
+            } 
         }
-        else
-        {
-            DataState = EPageState.NoInternet;
-        }
+
+        IsDataLoading = false;
+
+        return isLoaded;
     }
 
     private void SelectCamera(CameraBindableModel selectedCamera)

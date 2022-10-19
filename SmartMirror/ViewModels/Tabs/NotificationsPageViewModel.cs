@@ -72,7 +72,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
-            if (!IsDataLoading)
+            if (!IsDataLoading && DataState != EPageState.Complete)
             {
                 DataState = EPageState.Loading;
 
@@ -155,7 +155,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
         if (IsInternetConnected)
         {
-            await Task.Delay(3000);
+            await Task.Delay(1000);
 
             var resultOfGettingNotifications = await _notificationsService.GetNotificationsAsync();
 
