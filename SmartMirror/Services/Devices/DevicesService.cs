@@ -20,6 +20,9 @@ namespace SmartMirror.Services.Devices
         private const int UDP_PORT = 7834;
 
         private readonly ConcurrentDictionary<string, IEnumerable<AttributeAqaraResponse>> _devicesAttributes = new();
+        private readonly ConcurrentDictionary<string, DeviceBindableModel> _cachedDevices = new();
+        private readonly JsonSerializer _serializer = new();
+        private readonly DeviceMessanger _deviceMessanger = new();
 
         private readonly IMapperService _mapperService;
 
@@ -30,37 +33,18 @@ namespace SmartMirror.Services.Devices
             : base(restService, settingsManager)
         {
             _mapperService = mapperService;
-            Task.Run(ReceiveMessageAsync);
-        }
 
-        private async Task ReceiveMessageAsync()
-        {
-            var broadcastIPAddress = IPAddress.Broadcast.ToString();
-            var receiver = new UdpClient(UDP_PORT); // UdpClient для получения данных
-
-            try
-            {
-                while (true)
-                {
-                    var data = await receiver.ReceiveAsync(); // получаем данные
-                    var message = Encoding.UTF8.GetString(data.Buffer);
-                    Console.WriteLine("Собеседник: {0}", message);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                receiver.Close();
-            }
+            _deviceMessanger.StartListening();
+            _deviceMessanger.MessageChangeReceived += OnMessageChangeReceived;
+            _deviceMessanger.MessageDicsonnectReceived += OnMessageDicsonnectReceived;
+            _deviceMessanger.MessageEventReceived += OnMessageEventReceived;
+            _deviceMessanger.StoppedListenning += OnStoppedListenning;
         }
 
         #region -- IDevicesService implementation --
 
         //Can contain repeatable device ids
-        public List<DeviceBindableModel> AllObservableDevicesCollection { get; private set; } = new();
+        public List<DeviceBindableModel> AllSupportedDevices { get; private set; } = new();
 
         public Task<AOResult> DownloadAllDevicesWithSubInfoAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
         {
@@ -78,12 +62,14 @@ namespace SmartMirror.Services.Devices
 
                     foreach (var device in bindableModels)
                     {
+                        _cachedDevices[device.DeviceId] = device;
+
                         var devices = await GetTaskForDevice(device);
 
                         result = result.Concat(devices);
                     }
 
-                    AllObservableDevicesCollection = new(result);
+                    AllSupportedDevices = new(result);
                 }
                 else
                 {
@@ -398,7 +384,7 @@ namespace SmartMirror.Services.Devices
 
                     foreach (var id in resouceIds)
                     {
-                        result.Add(CreateNewDevice(device, attributes[id].ResourceId, names[id].Name, GetDeviceStatus(device, attributes[id].Value), attributes[id].Value));
+                        result.Add(CreateNewDevice(device, attributes[id].ResourceId, names[id].Name, attributes[id].Value));
                     }
                 }
                 else
@@ -407,7 +393,7 @@ namespace SmartMirror.Services.Devices
 
                     foreach (var id in resouceIds)
                     {
-                        result.Add(CreateNewDevice(device, id, names[id].Name, GetDeviceStatus(device), "Fail"));
+                        result.Add(CreateNewDevice(device, id, names[id].Name, "Fail"));
                     }
                 }
             }
@@ -419,19 +405,7 @@ namespace SmartMirror.Services.Devices
             return result;
         }
 
-        private EDeviceStatus GetDeviceStatus(DeviceBindableModel device, string attributeValue = null)
-        {
-            EDeviceStatus status = device.State == 0 ? EDeviceStatus.Disconnected : EDeviceStatus.Connected;
-
-            if (status is EDeviceStatus.Connected && device.DeviceType is EDeviceType.Switcher)
-            {
-                status = attributeValue == "1" ? EDeviceStatus.On : EDeviceStatus.Off;
-            }
-
-            return status;
-        }
-
-        private DeviceBindableModel CreateNewDevice(DeviceBindableModel device, string resourceId, string name, EDeviceStatus status = EDeviceStatus.Connected, string info = null)
+        private DeviceBindableModel CreateNewDevice(DeviceBindableModel device, string resourceId, string name, string info = null)
         {
             var newDevice = new DeviceBindableModel()
             {
@@ -444,7 +418,6 @@ namespace SmartMirror.Services.Devices
                 ModelType = device.ModelType,
                 Id = device.Id,
                 IconSource = device.IconSource,
-                Status = status,
                 Name = name,
                 EditableResourceId = resourceId,
                 AdditionalInfo = info,
@@ -453,6 +426,51 @@ namespace SmartMirror.Services.Devices
             newDevice.IconSource = GetIconSourceForDevice(newDevice);
 
             return newDevice;
+        }
+
+        private void OnStoppedListenning(object sender, EventArgs e)
+        {
+        }
+
+        private void OnMessageEventReceived(object sender, MessageEventResponse messageEventResponse)
+        {
+            foreach (var messageEvent in messageEventResponse.Data)
+            {
+                System.Diagnostics.Debug.WriteLine("SubjectId: {0}, ResourceId: {1}, Value: {2}", messageEvent.SubjectId, messageEvent.ResourceId, messageEvent.Value);
+
+                var devicesWithId = AllSupportedDevices.Where(x => x.DeviceId == messageEvent.SubjectId);
+
+                foreach (var device in devicesWithId)
+                {
+                    if (device.EditableResourceId == messageEvent.ResourceId)
+                    {
+                        device.AdditionalInfo = messageEvent.Value;
+                    }
+                }
+
+                System.Diagnostics.Debug.WriteLine($"Found: {devicesWithId.Count()}");
+            }
+        }
+
+        private void OnMessageDicsonnectReceived(object sender, MessageDicsonnectReponse e)
+        {
+        }
+
+        private void OnMessageChangeReceived(object sender, MessageChangeResponse messageChangeResponse)
+        {
+            var devicesWithId = AllSupportedDevices.Where(x => x.DeviceId == messageChangeResponse.Data.Did);
+
+            foreach (var changeValue in messageChangeResponse.Data.ChangeValues)
+            {
+                var device = devicesWithId.FirstOrDefault(x => x.EditableResourceId == changeValue.ResourceId);
+
+                if (device is not null)
+                {
+                    device.Name = changeValue.Name;
+                }
+
+                System.Diagnostics.Debug.WriteLine("Name: {0}, ResourceId: {1}", changeValue.Name, changeValue.ResourceId);
+            }
         }
 
         #endregion

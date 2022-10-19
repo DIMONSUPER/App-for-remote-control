@@ -157,15 +157,42 @@ public class DeviceBindableModel : BindableBase
     {
         base.OnPropertyChanged(args);
 
-        if (args.PropertyName is nameof(AdditionalInfo) or nameof(IconSource))
+        if (args.PropertyName is nameof(AdditionalInfo) or nameof(IconSource) or nameof(State))
         {
-            AdditionalInfoFormatted = GetAdditionalInfoFormatted();
+            OnAdditionalInfoChanged();
         }
     }
 
     #endregion
 
     #region -- Private helpers --
+
+    private void OnAdditionalInfoChanged()
+    {
+        AdditionalInfoFormatted = GetAdditionalInfoFormatted();
+        Status = GetDeviceStatus();
+    }
+
+    private EDeviceStatus GetDeviceStatus()
+    {
+        var result = State == 0 ? EDeviceStatus.Disconnected : EDeviceStatus.Connected;
+
+        if (result is EDeviceStatus.Connected)
+        {
+            result = IconSource switch
+            {
+                IconsNames.pic_wall_switch_double_left => AdditionalInfo == "1" ? EDeviceStatus.On : EDeviceStatus.Off,
+                IconsNames.pic_wall_switch_double_right => AdditionalInfo == "1" ? EDeviceStatus.On : EDeviceStatus.Off,
+                IconsNames.pic_wall_switch_single => AdditionalInfo == "1" ? EDeviceStatus.On : EDeviceStatus.Off,
+                IconsNames.pic_wall_switch_three_center => AdditionalInfo == "1" ? EDeviceStatus.On : EDeviceStatus.Off,
+                IconsNames.pic_wall_switch_three_left => AdditionalInfo == "1" ? EDeviceStatus.On : EDeviceStatus.Off,
+                IconsNames.pic_wall_switch_three_right => AdditionalInfo == "1" ? EDeviceStatus.On : EDeviceStatus.Off,
+                _ => result,
+            };
+        }
+
+        return result;
+    }
 
     private string GetAdditionalInfoFormatted()
     {

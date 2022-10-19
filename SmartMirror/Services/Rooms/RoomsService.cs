@@ -98,7 +98,7 @@ namespace SmartMirror.Services.Rooms
 
                     foreach (var room in simpleRooms)
                     {
-                        var devicesCount = _devicesService.AllObservableDevicesCollection.Count(x => x.PositionId == room.PositionId);
+                        var devicesCount = _devicesService.AllSupportedDevices.Count(x => x.PositionId == room.PositionId);
 
                         rooms.Add(new RoomModel()
                         {

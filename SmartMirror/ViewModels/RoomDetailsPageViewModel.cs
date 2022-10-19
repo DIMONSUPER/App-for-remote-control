@@ -125,9 +125,9 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
             DataState = EPageState.Loading;
 
-            var resultOfGettingDevices = _mapperService.MapRange<DeviceBindableModel>(_devicesService.AllObservableDevicesCollection.Where(x => x.PositionId == selectedRoom.Id));
+            var roomDevices = _devicesService.AllSupportedDevices.Where(x => x.PositionId == selectedRoom.Id);
 
-            SelectedRoomDevices = new(resultOfGettingDevices);
+            SelectedRoomDevices = new(roomDevices);
 
             DataState = IsInternetConnected
                 ? SelectedRoomDevices.Count == 0
