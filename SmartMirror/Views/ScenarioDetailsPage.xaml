@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:views="clr-namespace:SmartMirror.Views"
@@ -24,11 +25,8 @@
         <HorizontalStackLayout 
             Grid.Row="0"
             Padding="18, 12"
-            Spacing="12">
-
-            <HorizontalStackLayout.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
-            </HorizontalStackLayout.GestureRecognizers>
+            Spacing="12"
+            behaviors:TouchBehavior.Command="{Binding GoBackCommand}">
 
             <Image 
                 VerticalOptions="Center"
