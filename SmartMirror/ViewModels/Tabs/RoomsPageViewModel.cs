@@ -9,7 +9,6 @@ using SmartMirror.ViewModels.Dialogs;
 using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Xamarin.Google.Crypto.Tink.Proto;
 
 namespace SmartMirror.ViewModels.Tabs;
 
@@ -85,12 +84,9 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         base.OnAppearing();
 
-        Console.WriteLine("Appearing");
 
         if (!IsDataLoading)
         {
-            Console.WriteLine("Load from appearing");
-
             DataState = EPageState.Loading;
 
             await LoadRoomsAndDevicesAndChangeStateAsync(); 
@@ -99,16 +95,10 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
-        Console.WriteLine("OnConnectivityChanged");
-
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
-            Console.WriteLine("OnConnectivityChanged connect");
-
             if (!IsDataLoading)
             {
-                Console.WriteLine("Load from OnConnectivityChanged");
-
                 DataState = EPageState.Loading;
 
                 await LoadRoomsAndDevicesAndChangeStateAsync(); 
@@ -116,8 +106,6 @@ public class RoomsPageViewModel : BaseTabViewModel
         }
         else
         {
-            Console.WriteLine("OnConnectivityChanged disconnect");
-
             DataState = EPageState.NoInternet;
         } 
     }

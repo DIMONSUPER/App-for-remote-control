@@ -1,11 +1,10 @@
 using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Interfaces;
+using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
-using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Notifications;
-using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -61,9 +60,31 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         base.OnAppearing();
 
-        DataState = EPageState.Loading;
+        if (!IsDataLoading)
+        {
+            DataState = EPageState.Loading;
 
-        Task.Run(() => LoadNotificationsAsync(() => DataState = EPageState.NoInternet));
+            Task.Run(() => LoadNotificationsAndChangeStateAsync());
+        }
+    }
+
+    protected override void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    {
+        if (e.NetworkAccess == NetworkAccess.Internet)
+        {
+            if (!IsDataLoading)
+            {
+                DataState = EPageState.Loading;
+
+                Task.Run(() => LoadNotificationsAndChangeStateAsync());
+            }
+        }
+        else
+        {
+            IsNotificationsRefreshing = false;
+
+            DataState = EPageState.NoInternet;
+        }
     }
 
     #endregion
@@ -72,72 +93,113 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private async Task OnTryAgainCommandAsync()
     {
-        DataState = EPageState.NoInternetLoader;
+        if (!IsDataLoading)
+        {
+            DataState = EPageState.NoInternetLoader;
 
-        await LoadNotificationsAsync(() => DataState = EPageState.NoInternet);
+            var timeToStopUpdating = DateTime.Now.AddSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
+
+            var isDataLoaded = await TaskRepeater.Repeate(LoadNotificationsAsync, canExecute: () => DateTime.Now < timeToStopUpdating);
+
+            if (IsInternetConnected)
+            {
+                DataState = isDataLoaded
+                    ? EPageState.Complete
+                    : EPageState.Empty;
+            }
+            else
+            {
+                DataState = EPageState.NoInternet;
+            }
+        }
     }
 
     private async Task OnRefreshNotificationsCommandAsync()
     {
-        await LoadNotificationsAsync(async () =>
+        if (!IsDataLoading)
         {
-            var dialogParameters = new DialogParameters()
-            {
-                { Constants.DialogsParameterKeys.TITLE, Strings.SomethingWentWrong },
-                { Constants.DialogsParameterKeys.DESCRIPTION, Strings.NoInternetConnection },
-            };
+            await LoadNotificationsAndChangeStateAsync();
 
-            await _dialogService.ShowDialogAsync(nameof(ErrorDialog), dialogParameters);
-        });
-
-        IsNotificationsRefreshing = false;
+            IsNotificationsRefreshing = false; 
+        }
     }
 
-    private async Task LoadNotificationsAsync(Action onFailure)
+    private async Task LoadNotificationsAndChangeStateAsync()
     {
-        await Task.Delay(2000);
+        if (IsInternetConnected)
+        {
+            var isDataLoaded = await LoadNotificationsAsync();
+
+            if (IsInternetConnected)
+            {
+                DataState = isDataLoaded
+                    ? EPageState.Complete
+                    : EPageState.Empty;
+            }
+            else
+            {
+                DataState = EPageState.NoInternet;
+            }
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
+    }
+
+    private async Task<bool> LoadNotificationsAsync()
+    {
+        bool isLoaded = false;
+        
+        IsDataLoading = true;
 
         if (IsInternetConnected)
         {
+            await Task.Delay(3000);
+
             var resultOfGettingNotifications = await _notificationsService.GetNotificationsAsync();
 
             if (resultOfGettingNotifications.IsSuccess)
             {
                 var allNotifications = resultOfGettingNotifications.Result.OrderByDescending(row => row.LastActivityTime);
 
-                var lastTitleGroup = string.Empty;
-                var notificationGrouped = new ObservableCollection<INotificationGroupItemModel>();
+                var notificationGroups = GetNotificationGroups(allNotifications);
 
-                foreach (var notificafication in allNotifications)
-                {
-                    var titleGroup = notificafication.LastActivityTime.ToString(Constants.Formats.DATE_FORMAT);
+                Notifications = new(notificationGroups);
 
-                    if (lastTitleGroup != titleGroup)
-                    {
-                        notificationGrouped.Add(new NotificationGroupTitleBindableModel()
-                        {
-                            Title = titleGroup,
-                        });
-
-                        lastTitleGroup = titleGroup;
-                    }
-
-                    notificationGrouped.Add(_mapperService.Map<NotificationGroupItemBindableModel>(notificafication));
-                }
-
-                Notifications = new(notificationGrouped);
-
-                DataState = EPageState.Complete;
-            }
-            else if (!IsInternetConnected)
-            {
-                onFailure();
+                isLoaded = true;
             }
         }
-        else
+
+        IsDataLoading = false;
+
+        return isLoaded;
+    }
+
+    private ObservableCollection<INotificationGroupItemModel> GetNotificationGroups(IOrderedEnumerable<NotificationModel> notifications)
+    {
+        var lastTitleGroup = string.Empty;
+
+        var notificationGrouped = new ObservableCollection<INotificationGroupItemModel>();
+
+        foreach (var notificafication in notifications)
         {
-            onFailure();
+            var titleGroup = notificafication.LastActivityTime.ToString(Constants.Formats.DATE_FORMAT);
+
+            if (lastTitleGroup != titleGroup)
+            {
+                notificationGrouped.Add(new NotificationGroupTitleBindableModel()
+                {
+                    Title = titleGroup,
+                });
+
+                lastTitleGroup = titleGroup;
+            }
+
+            notificationGrouped.Add(_mapperService.Map<NotificationGroupItemBindableModel>(notificafication));
         }
+
+        return notificationGrouped;
     }
 
     #endregion

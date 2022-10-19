@@ -17,7 +17,7 @@
             } while (!isSuccess && (canExecute is null || canExecute()));
 
             return isSuccess;
-        } 
+        }
 
         #endregion
     }
