@@ -28,6 +28,7 @@ namespace SmartMirror.Services.Devices
                     response.Data = resultOfGettingDevices.Result.Data.Select(device => new DeviceModel()
                     {
                         Id = device.Did,
+                        DeviceId = device.Did,
                         Name = device.DeviceName,
                         Status = (EDeviceStatus)device.State,
                         Type = device.ModelType.ToString(),
