@@ -219,14 +219,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (IsInternetConnected)
         {
-            var devices = _mapperService.MapRange<DeviceBindableModel>(_smartHomeMockService.GetDevices(), (m, vm) =>
-            {
-                vm.TappedCommand = AccessorieTappedCommand;
-            });
-
-            FavoriteAccessories = new(devices);
-
-            await AddAqaraDevicesIfAuthorizedAsync();
+            await LoadDevicesAsync();
 
             var resultOfGettingRooms = await _roomsService.GetAllRoomsAsync();
 
@@ -252,22 +245,34 @@ public class RoomsPageViewModel : BaseTabViewModel
         }
     }
 
-    private async Task AddAqaraDevicesIfAuthorizedAsync()
+    private async Task LoadDevicesAsync()
     {
+        var devices = Enumerable.Empty<DeviceBindableModel>();
+
         if (_aqaraService.IsAuthorized)
         {
             var aqaraDevicesResponse = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
 
-            if (aqaraDevicesResponse.IsSuccess && _devicesService.AllObservableDevicesCollection.Any())
+            if (aqaraDevicesResponse.IsSuccess)
             {
-                var devices = _mapperService.MapRange<DeviceBindableModel>(_devicesService.AllObservableDevicesCollection, (m, vm) =>
-                {
-                    vm.TappedCommand = AccessorieTappedCommand;
-                });
-
-                FavoriteAccessories = new(FavoriteAccessories.Concat(devices));
+                devices = _devicesService.AllObservableDevicesCollection;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Can't download devices: {aqaraDevicesResponse.Message}");
             }
         }
+        else
+        {
+            devices = _mapperService.MapRange<DeviceBindableModel>(_smartHomeMockService.GetDevices());
+        }
+
+        foreach(var device in devices)
+        {
+            device.TappedCommand = AccessorieTappedCommand;
+        }
+
+        FavoriteAccessories = new(devices);
     }
 
     private Task OnRoomTappedCommandAsync(RoomBindableModel room)

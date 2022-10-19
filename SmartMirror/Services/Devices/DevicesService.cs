@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -6,6 +7,7 @@ using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models.Aqara;
 using SmartMirror.Models.BindableModels;
+using SmartMirror.Resources;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Rest;
@@ -15,12 +17,9 @@ namespace SmartMirror.Services.Devices
 {
     public class DevicesService : BaseAqaraService, IDevicesService
     {
-        private const string DEFAULT_IMAGE = "grey_question_mark";
         private const int UDP_PORT = 7834;
 
         private readonly ConcurrentDictionary<string, IEnumerable<AttributeAqaraResponse>> _devicesAttributes = new();
-        //Contains only unique device ids
-        private readonly ConcurrentDictionary<string, DeviceBindableModel> _allDevices = new();
 
         private readonly IMapperService _mapperService;
 
@@ -73,20 +72,22 @@ namespace SmartMirror.Services.Devices
                 {
                     var bindableModels = _mapperService.MapRange<DeviceBindableModel>(resultOfGettingDevices.Result.Data);
 
-                    foreach (var bindableDevice in bindableModels)
-                    {
-                        _allDevices[bindableDevice.DeviceId] = bindableDevice;
+                    await SetAttributesForDevicesAsync(bindableModels);
 
-                        if (bindableDevice.Model.Contains("switch"))
-                        {
-                            await GetSubdevicesForDeviceAsync(bindableDevice.DeviceId);
-                        }
+                    var result = Enumerable.Empty<DeviceBindableModel>();
+
+                    foreach (var device in bindableModels)
+                    {
+                        var devices = await GetTaskForDevice(device);
+
+                        result = result.Concat(devices);
                     }
 
-                    await SetAttributesForDevicesAsync(bindableModels);
+                    AllObservableDevicesCollection = new(result);
                 }
                 else
                 {
+
                     onFailure("Request failed");
                 }
             });
@@ -106,7 +107,7 @@ namespace SmartMirror.Services.Devices
 
                 var response = await MakeRequestAsync<DataAqaraResponse<DeviceAqaraModel>>("query.device.info", data, onFailure);
 
-                return response.Result;
+                return response?.Result;
             });
         }
 
@@ -154,7 +155,7 @@ namespace SmartMirror.Services.Devices
 
                 var response = await MakeRequestAsync<IEnumerable<ResourceResponse>>("query.resource.value", data, onFailure);
 
-                return response.Result;
+                return response?.Result;
             });
         }
 
@@ -187,6 +188,21 @@ namespace SmartMirror.Services.Devices
 
                 var response = await MakeRequestAsync<IEnumerable<AttributeAqaraResponse>>("query.resource.info", data, onFailure);
 
+                return response?.Result;
+            });
+        }
+
+        public Task<AOResult<IEnumerable<AttributeNameAqaraResponse>>> GetAttributeNamesForDevices(params string[] devicesId)
+        {
+            return AOResult.ExecuteTaskAsync(async onFailure =>
+            {
+                var data = new
+                {
+                    subjectIds = devicesId,
+                };
+
+                var response = await MakeRequestAsync<IEnumerable<AttributeNameAqaraResponse>>("query.resource.name", data, onFailure);
+
                 return response.Result;
             });
         }
@@ -195,49 +211,72 @@ namespace SmartMirror.Services.Devices
 
         #region -- Private helpers --
 
+        private bool HasDeviceNSwitches(DeviceBindableModel device, int n)
+        {
+            var attributes = _devicesAttributes[device.Model];
+
+            var result = attributes.Count(x => x.ResourceId == Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS);
+            result += attributes.Count(x => x.ResourceId == Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS);
+            result += attributes.Count(x => x.ResourceId == Constants.Aqara.AttibutesId.SWITCH_CHANNEL_2_STATUS);
+
+            return result == n;
+        }
+
+        private bool IsDeviceSwitch(DeviceBindableModel device)
+        {
+            return _devicesAttributes[device.Model].Any(x =>
+            x.ResourceId == Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS ||
+            x.ResourceId == Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS ||
+            x.ResourceId == Constants.Aqara.AttibutesId.SWITCH_CHANNEL_2_STATUS);
+        }
+
+        private bool IsDeviceWeather(DeviceBindableModel device)
+        {
+            return _devicesAttributes[device.Model].Any(x => x.ResourceId == Constants.Aqara.AttibutesId.AIR_PRESSURE_STATUS)
+                && _devicesAttributes[device.Model].Any(x => x.ResourceId == Constants.Aqara.AttibutesId.HUMIDITY_STATUS)
+                && _devicesAttributes[device.Model].Any(x => x.ResourceId == Constants.Aqara.AttibutesId.TEMPERATURE_STATUS);
+        }
+
         private string GetIconSourceForDevice(DeviceBindableModel device)
         {
-            var attributesId = _devicesAttributes[device.DeviceId].Select(x => x.ResourceId);
+            var attributesId = _devicesAttributes[device.Model].Select(x => x.ResourceId);
 
             return device switch
             {
-                _ when device.Model.Contains("switch") => GetImageSourceForSwitch(device),
-                _ when device.Model.Contains("weather") => GetImageSourceForSwitch(device),
-                _ => DEFAULT_IMAGE,
+                _ when IsDeviceSwitch(device) => GetImageSourceForSwitch(device),
+                _ when IsDeviceWeather(device) => GetImageSourceForWeather(device),
+                _ => IconsNames.grey_question_mark,
             };
         }
 
         private string GetImageSourceForSwitch(DeviceBindableModel device)
         {
-            string result = DEFAULT_IMAGE;
+            string result = IconsNames.grey_question_mark;
 
-            var attributesId = _devicesAttributes[device.DeviceId].Select(x => x.ResourceId);
+            var attributesId = _devicesAttributes[device.Model].Select(x => x.ResourceId);
 
-            if (attributesId.Contains(Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS)
-                && attributesId.Contains(Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS)
-                && attributesId.Contains(Constants.Aqara.AttibutesId.SWITCH_CHANNEL_2_STATUS))
+            if (HasDeviceNSwitches(device, 3))
             {
                 result = device.EditableResourceId switch
                 {
-                    Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS => "pic_wall_switch_three_left",
-                    Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS => "pic_wall_switch_three_center",
-                    Constants.Aqara.AttibutesId.SWITCH_CHANNEL_2_STATUS => "pic_wall_switch_three_right",
-                    _ => DEFAULT_IMAGE,
+                    Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS => IconsNames.pic_wall_switch_three_left,
+                    Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS => IconsNames.pic_wall_switch_three_center,
+                    Constants.Aqara.AttibutesId.SWITCH_CHANNEL_2_STATUS => IconsNames.pic_wall_switch_three_right,
+                    _ => IconsNames.grey_question_mark,
                 };
             }
-            else if (attributesId.Contains(Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS)
-                && attributesId.Contains(Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS))
+            else if (HasDeviceNSwitches(device, 2))
             {
                 result = device.EditableResourceId switch
                 {
-                    Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS => "pic_wall_switch_double_left",
-                    Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS => "pic_wall_switch_double_right",
-                    _ => DEFAULT_IMAGE,
+                    Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS => IconsNames.pic_wall_switch_double_left,
+                    Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS => IconsNames.pic_wall_switch_double_right,
+                    _ => IconsNames.grey_question_mark,
                 };
             }
-            else if (attributesId.Contains(Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS))
+            else if (HasDeviceNSwitches(device, 1))
             {
-                result = "pic_wall_switch_single";
+                result = IconsNames.pic_wall_switch_single;
             }
 
             return result;
@@ -245,14 +284,12 @@ namespace SmartMirror.Services.Devices
 
         private string GetImageSourceForWeather(DeviceBindableModel device)
         {
-            string result = DEFAULT_IMAGE;
-
-            result = device.EditableResourceId switch
+            var result = device.EditableResourceId switch
             {
-                Constants.Aqara.AttibutesId.HUMIDITY_STATUS => "pic_humidity",
-                Constants.Aqara.AttibutesId.TEMPERATURE_STATUS => "pic_pressure",
-                Constants.Aqara.AttibutesId.AIR_PRESSURE_STATUS => "pic_temperature",
-                _ => DEFAULT_IMAGE,
+                Constants.Aqara.AttibutesId.HUMIDITY_STATUS => IconsNames.pic_humidity,
+                Constants.Aqara.AttibutesId.TEMPERATURE_STATUS => IconsNames.pic_temperature,
+                Constants.Aqara.AttibutesId.AIR_PRESSURE_STATUS => IconsNames.pic_pressure,
+                _ => IconsNames.grey_question_mark,
             };
 
             return result;
@@ -283,154 +320,139 @@ namespace SmartMirror.Services.Devices
         }
 
         //TODO: add support for all devices
-        private Task GetTaskForDevice(DeviceBindableModel device)
+        private Task<IEnumerable<DeviceBindableModel>> GetTaskForDevice(DeviceBindableModel device)
         {
-            var availableAttributes = _devicesAttributes[device.DeviceId];
+            var availableAttributes = _devicesAttributes[device.Model];
 
-            return device switch
+            if (IsDeviceSwitch(device))
             {
-                _ when availableAttributes.Any(x => x.ResourceId == Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS) => AddSwitchAsync(device),
-                _ when device.Model.Contains("switch.b") => AddDoubleLampAsync(device),
-                _ when device.Model.Contains("weather") => AddWeatherAccessoriesAsync(device),
-                _ when device.Model.Contains("gateway") || device.Model.Contains("sensor_motion") => Task.CompletedTask,
-            };
+                return GetSwitchesAsync(device);
+            }
+            else if (IsDeviceWeather(device))
+            {
+                return GetWeatherAccessoriesAsync(device);
+            }
+            else
+            {
+                return Task.FromResult(Enumerable.Empty<DeviceBindableModel>());
+            }
         }
 
-        private async Task AddWeatherAccessoriesAsync(DeviceBindableModel device)
+        private Task<IEnumerable<DeviceBindableModel>> GetWeatherAccessoriesAsync(DeviceBindableModel device)
         {
-            if (device.State > 0)
+            System.Diagnostics.Debug.WriteLine($"GetWeatherAccessoriesAsync for {device.Model}, {device.State}");
+
+            device.DeviceType = EDeviceType.Sensor;
+
+            return GetDevicesForAttributesAsync(device,
+                Constants.Aqara.AttibutesId.HUMIDITY_STATUS,
+                Constants.Aqara.AttibutesId.TEMPERATURE_STATUS,
+                Constants.Aqara.AttibutesId.AIR_PRESSURE_STATUS);
+        }
+
+        private async Task<IEnumerable<DeviceBindableModel>> GetSwitchesAsync(DeviceBindableModel device)
+        {
+            System.Diagnostics.Debug.WriteLine($"GetSwitchesAsync for {device.Model}");
+
+            var result = Enumerable.Empty<DeviceBindableModel>();
+
+            device.DeviceType = EDeviceType.Switcher;
+
+            var attributesId = _devicesAttributes[device.Model].Select(x => x.ResourceId);
+
+            if (HasDeviceNSwitches(device, 3))
             {
-                var deviceAttributeResponse = await GetDeviceAttributeValueAsync(device.DeviceId, "0.2.85", "0.1.85", "0.3.85");
+                result = await GetDevicesForAttributesAsync(device,
+                    Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS,
+                    Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS,
+                    Constants.Aqara.AttibutesId.SWITCH_CHANNEL_2_STATUS);
+            }
+            else if (HasDeviceNSwitches(device, 2))
+            {
+                result = await GetDevicesForAttributesAsync(device,
+                    Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS,
+                    Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS);
+            }
+            else if (HasDeviceNSwitches(device, 1))
+            {
+                result = await GetDevicesForAttributesAsync(device, Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS);
+            }
+
+            return result;
+        }
+
+        private async Task<IEnumerable<DeviceBindableModel>> GetDevicesForAttributesAsync(DeviceBindableModel device, params string[] resouceIds)
+        {
+            var result = new List<DeviceBindableModel>();
+
+            var namesResponse = await GetAttributeNamesForDevices(device.DeviceId);
+
+            if (namesResponse.IsSuccess)
+            {
+                var names = namesResponse.Result.ToDictionary(x => x.ResourceId);
+                var deviceAttributeResponse = await GetDeviceAttributeValueAsync(device.DeviceId, resouceIds);
 
                 if (deviceAttributeResponse.IsSuccess)
                 {
-                    device.Status = EDeviceStatus.Connected;
+                    var attributes = deviceAttributeResponse.Result.ToDictionary(x => x.ResourceId);
 
-                    var temperature = double.Parse(deviceAttributeResponse.Result.FirstOrDefault(x => x.ResourceId == "0.1.85").Value) / 100 + "℃";
-                    var humididty = double.Parse(deviceAttributeResponse.Result.FirstOrDefault(x => x.ResourceId == "0.2.85").Value) / 100 + "%";
-                    var pressure = double.Parse(deviceAttributeResponse.Result.FirstOrDefault(x => x.ResourceId == "0.3.85").Value) / 1000 + "kPa";
+                    foreach (var id in resouceIds)
+                    {
+                        result.Add(CreateNewDevice(device, attributes[id].ResourceId, names[id].Name, GetDeviceStatus(device, attributes[id].Value), attributes[id].Value));
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"Can't get attributes for {device.Model}, {device.DeviceId}");
 
-                    AddWeatherDevice(device.DeviceId, humididty, "Humidity", "pic_humidity");
-                    AddWeatherDevice(device.DeviceId, temperature, "Temperature", "pic_temperature");
-                    AddWeatherDevice(device.DeviceId, pressure, "Pressure", "pic_pressure");
+                    foreach (var id in resouceIds)
+                    {
+                        result.Add(CreateNewDevice(device, id, names[id].Name, GetDeviceStatus(device), "Fail"));
+                    }
                 }
             }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Can't get names for {device.DeviceId}");
+            }
+
+            return result;
         }
 
-        private void AddWeatherDevice(string did, string additionalInfo, string name, string iconSource)
+        private EDeviceStatus GetDeviceStatus(DeviceBindableModel device, string attributeValue = null)
         {
-            _allDevices[did] = new DeviceBindableModel()
+            EDeviceStatus status = device.State == 0 ? EDeviceStatus.Disconnected : EDeviceStatus.Connected;
+
+            if (status is EDeviceStatus.Connected && device.DeviceType is EDeviceType.Switcher)
             {
-                AdditionalInfo = additionalInfo,
-                Status = EDeviceStatus.Connected,
-                DeviceType = EDeviceType.Sensor,
+                status = attributeValue == "1" ? EDeviceStatus.On : EDeviceStatus.Off;
+            }
+
+            return status;
+        }
+
+        private DeviceBindableModel CreateNewDevice(DeviceBindableModel device, string resourceId, string name, EDeviceStatus status = EDeviceStatus.Connected, string info = null)
+        {
+            var newDevice = new DeviceBindableModel()
+            {
+                DeviceId = device.DeviceId,
+                DeviceType = device.DeviceType,
+                PositionId = device.PositionId,
+                TappedCommand = device.TappedCommand,
+                State = device.State,
+                Model = device.Model,
+                ModelType = device.ModelType,
+                Id = device.Id,
+                IconSource = device.IconSource,
+                Status = status,
                 Name = name,
-                IconSource = iconSource,
+                EditableResourceId = resourceId,
+                AdditionalInfo = info,
             };
-        }
 
-        private async Task AddSwitchAsync(DeviceBindableModel device)
-        {
-            device.DeviceType = EDeviceType.Switcher;
+            newDevice.IconSource = GetIconSourceForDevice(newDevice);
 
-            var attributesId = _devicesAttributes[device.DeviceId].Select(x => x.ResourceId);
-
-            if (device.State > 0)
-            {
-                if (attributesId.Contains(Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS)
-                    && attributesId.Contains(Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS)
-                    && attributesId.Contains(Constants.Aqara.AttibutesId.SWITCH_CHANNEL_2_STATUS))
-                {
-                    var deviceAttributeResponse = await GetDeviceAttributeValueAsync(device.DeviceId,
-                        Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS,
-                        Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS,
-                        Constants.Aqara.AttibutesId.SWITCH_CHANNEL_2_STATUS);
-
-                    if (deviceAttributeResponse.IsSuccess)
-                    {
-                        var d1 = _mapperService.Map<DeviceBindableModel>(device);
-                        d1.EditableResourceId = Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS;
-                        d1.Status = deviceAttributeResponse.Result?.FirstOrDefault(x => x.ResourceId == Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS)?.Value == "0" ? EDeviceStatus.Off : EDeviceStatus.On;
-                        d1.IconSource = GetIconSourceForDevice(device);
-                    }
-                }
-                else if (attributesId.Contains(Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS)
-                    && attributesId.Contains(Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS))
-                {
-                    var deviceAttributeResponse = await GetDeviceAttributeValueAsync(device.DeviceId,
-                        Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS,
-                        Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS);
-
-                    if (deviceAttributeResponse.IsSuccess)
-                    {
-                        device.Status = deviceAttributeResponse.Result?.FirstOrDefault()?.Value == "0" ? EDeviceStatus.Off : EDeviceStatus.On;
-                    }
-                }
-                else if (attributesId.Contains(Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS))
-                {
-                    var deviceAttributeResponse = await GetDeviceAttributeValueAsync(device.DeviceId, Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS);
-
-                    if (deviceAttributeResponse.IsSuccess)
-                    {
-                        device.Status = deviceAttributeResponse.Result?.FirstOrDefault()?.Value == "0" ? EDeviceStatus.Off : EDeviceStatus.On;
-                    }
-                }
-            }
-        }
-
-        private void AddSwitchToCollection(DeviceBindableModel device, string resourceId)
-        {
-
-        }
-
-        private async Task AddDoubleLampAsync(DeviceBindableModel device)
-        {
-            if (device.State > 0)
-            {
-                var leftDeviceAttributeResponse = await GetDeviceAttributeValueAsync(device.DeviceId, "4.1.85");
-
-                DeviceBindableModel leftDevice = null;
-                DeviceBindableModel rightDevice = null;
-
-                if (leftDeviceAttributeResponse.IsSuccess)
-                {
-                    leftDevice = new DeviceBindableModel()
-                    {
-                        DeviceId = device.DeviceId,
-                        Status = leftDeviceAttributeResponse.Result?.FirstOrDefault()?.Value == "0" ? EDeviceStatus.Off : EDeviceStatus.On,
-                        DeviceType = EDeviceType.Switcher,
-                        Name = "Left Lamp",
-                        IconSource = "lamp",
-                        EditableResourceId = "4.1.85",
-                    };
-
-                }
-
-                var rightDeviceAttributeResponse = await GetDeviceAttributeValueAsync(device.DeviceId, "4.2.85");
-
-                if (rightDeviceAttributeResponse.IsSuccess)
-                {
-                    rightDevice = new DeviceBindableModel()
-                    {
-                        DeviceId = device.DeviceId,
-                        Status = rightDeviceAttributeResponse.Result?.FirstOrDefault()?.Value == "0" ? EDeviceStatus.Off : EDeviceStatus.On,
-                        DeviceType = EDeviceType.Switcher,
-                        Name = "Right Lamp",
-                        IconSource = "lamp",
-                        EditableResourceId = "4.2.85",
-                    };
-                }
-
-                if (leftDevice is not null)
-                {
-                    _allDevices[leftDevice.DeviceId] = leftDevice;
-                }
-
-                if (rightDevice is not null)
-                {
-                    _allDevices[rightDevice.DeviceId] = rightDevice;
-                }
-            }
+            return newDevice;
         }
 
         #endregion

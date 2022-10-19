@@ -1,10 +1,14 @@
-﻿using System.Windows.Input;
+﻿using System.ComponentModel;
+using System.Windows.Input;
 using SmartMirror.Enums;
+using SmartMirror.Resources;
 
 namespace SmartMirror.Models.BindableModels;
 
 public class DeviceBindableModel : BindableBase
 {
+    #region -- Public properties --
+
     private int _id;
     public int Id
     {
@@ -66,6 +70,13 @@ public class DeviceBindableModel : BindableBase
     {
         get => _additionalInfo;
         set => SetProperty(ref _additionalInfo, value);
+    }
+
+    private string _additionalInfoFormatted;
+    public string AdditionalInfoFormatted
+    {
+        get => GetAdditionalInfoFormatted();
+        private set => SetProperty(ref _additionalInfoFormatted, value);
     }
 
     private string _parentDid;
@@ -137,5 +148,49 @@ public class DeviceBindableModel : BindableBase
         get => _tappedCommand;
         set => SetProperty(ref _tappedCommand, value);
     }
+
+    #endregion
+
+    #region -- Overrides --
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs args)
+    {
+        base.OnPropertyChanged(args);
+
+        if (args.PropertyName is nameof(AdditionalInfo) or nameof(IconSource))
+        {
+            AdditionalInfoFormatted = GetAdditionalInfoFormatted();
+        }
+    }
+
+    #endregion
+
+    #region -- Private helpers --
+
+    private string GetAdditionalInfoFormatted()
+    {
+        string result = null;
+
+        if (!string.IsNullOrWhiteSpace(AdditionalInfo))
+        {
+            result = IconSource switch
+            {
+                IconsNames.pic_humidity => double.Parse(AdditionalInfo) / 100 + "%",
+                IconsNames.pic_pressure => double.Parse(AdditionalInfo) / 1000 + "kPa",
+                IconsNames.pic_temperature => double.Parse(AdditionalInfo) / 100 + "℃",
+                IconsNames.pic_wall_switch_double_left => "",
+                IconsNames.pic_wall_switch_double_right => "",
+                IconsNames.pic_wall_switch_single => "",
+                IconsNames.pic_wall_switch_three_center => "",
+                IconsNames.pic_wall_switch_three_left => "",
+                IconsNames.pic_wall_switch_three_right => "",
+                _ => AdditionalInfo,
+            };
+        }
+
+        return result;
+    }
+
+    #endregion
 }
 

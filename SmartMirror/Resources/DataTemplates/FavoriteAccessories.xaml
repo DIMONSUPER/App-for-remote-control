@@ -75,7 +75,7 @@
                     </VerticalStackLayout>
 
                     <Label Grid.Column="1"
-                           Text="{Binding AdditionalInfo}"
+                           Text="{Binding AdditionalInfoFormatted}"
                            HorizontalTextAlignment="End"
                            VerticalTextAlignment="End"
                            Style="{x:DynamicResource tstyle_i4}">

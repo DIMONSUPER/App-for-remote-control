@@ -11,7 +11,7 @@ public class AttributeAqaraResponse
     public string ResourceId { get; set; }
 
     [JsonProperty("minValue")]
-    public int? MinValue { get; set; }
+    public long? MinValue { get; set; }
 
     [JsonProperty("unit")]
     public int? Unit { get; set; }
@@ -20,7 +20,7 @@ public class AttributeAqaraResponse
     public int? Access { get; set; }
 
     [JsonProperty("maxValue")]
-    public int? MaxValue { get; set; }
+    public long? MaxValue { get; set; }
 
     [JsonProperty("defaultValue")]
     public string DefaultValue { get; set; }

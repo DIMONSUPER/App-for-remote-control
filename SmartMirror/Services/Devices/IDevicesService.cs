@@ -20,5 +20,7 @@ public interface IDevicesService
 
     Task<AOResult<IEnumerable<AttributeAqaraResponse>>> GetAttributesForDeviceModel(string model, string resourceId = null);
 
+    Task<AOResult<IEnumerable<AttributeNameAqaraResponse>>> GetAttributeNamesForDevices(params string[] devicesId);
+
     List<DeviceBindableModel> AllObservableDevicesCollection { get; }
 }
