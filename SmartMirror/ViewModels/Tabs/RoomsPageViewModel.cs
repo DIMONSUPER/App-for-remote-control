@@ -8,8 +8,8 @@ using SmartMirror.Services.Rooms;
 using SmartMirror.ViewModels.Dialogs;
 using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Windows.Input;
+using Xamarin.Google.Crypto.Tink.Proto;
 
 namespace SmartMirror.ViewModels.Tabs;
 
@@ -20,7 +20,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     private readonly IAqaraService _aqaraService;
     private readonly IDialogService _dialogService;
     private readonly IRoomsService _roomsService;
-    private bool isDataBeingUpdatedManually;
+
 
     public RoomsPageViewModel(
         ISmartHomeMockService smartHomeMockService,
@@ -85,24 +85,41 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         base.OnAppearing();
 
-        DataState = EPageState.Loading;
+        Console.WriteLine("Appearing");
 
-        await LoadRoomsAndDevicesIfInternetConnectedAsync();
+        if (!IsDataLoading)
+        {
+            Console.WriteLine("Load from appearing");
+
+            DataState = EPageState.Loading;
+
+            await LoadRoomsAndDevicesAndChangeStateAsync(); 
+        }
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
-        if (!isDataBeingUpdatedManually)
+        Console.WriteLine("OnConnectivityChanged");
+
+        if (e.NetworkAccess == NetworkAccess.Internet)
         {
-            if (e.NetworkAccess == NetworkAccess.Internet)
+            Console.WriteLine("OnConnectivityChanged connect");
+
+            if (!IsDataLoading)
             {
-                await LoadRoomsAndDevicesIfInternetConnectedAsync();
+                Console.WriteLine("Load from OnConnectivityChanged");
+
+                DataState = EPageState.Loading;
+
+                await LoadRoomsAndDevicesAndChangeStateAsync(); 
             }
-            else
-            {
-                DataState = EPageState.NoInternet;
-            } 
         }
+        else
+        {
+            Console.WriteLine("OnConnectivityChanged disconnect");
+
+            DataState = EPageState.NoInternet;
+        } 
     }
 
     #endregion
@@ -195,7 +212,10 @@ public class RoomsPageViewModel : BaseTabViewModel
                     { Constants.DialogsParameterKeys.TITLE, "Success!" }
                 });
 
-                await LoadRoomsAndDevicesIfInternetConnectedAsync();
+                if (!IsDataLoading)
+                {
+                    await LoadRoomsAndDevicesAndChangeStateAsync();
+                }            
             }
             else
             {
@@ -212,44 +232,33 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private async Task OnTryAgainCommandAsync()
     {
-        isDataBeingUpdatedManually = true;
-        DataState = EPageState.NoInternetLoader;
+        Console.WriteLine("TryAgain");
 
-        var isDataLoaded = false;
-        var timeToStopUpdating = DateTime.Now.AddSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
-
-        do
+        if (!IsDataLoading)
         {
-            if (IsInternetConnected)
-            {
-                isDataLoaded = await LoadRoomsAndDevicesAsync();
-            }
+            Console.WriteLine("Load from TryAgain");
+            
+            DataState = EPageState.NoInternetLoader;
 
-            await Task.Delay(Constants.Limits.REFRESH_RATE_IN_MILISECONDS);
+            var timeToStopUpdating = DateTime.Now.AddSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
+
+            var isDataLoaded = await TaskRepeater.Repeate(LoadRoomsAndDevicesAsync, canExecute: () => DateTime.Now < timeToStopUpdating);
+
+            DataState = isDataLoaded
+                ? EPageState.Complete
+                : EPageState.Empty; 
         }
-        while (!isDataLoaded && DateTime.Now < timeToStopUpdating);
-
-        DataState = isDataLoaded
-            ? EPageState.Complete
-            : EPageState.NoInternet;
-
-        isDataBeingUpdatedManually = false;
     }
 
-    private async Task LoadRoomsAndDevicesIfInternetConnectedAsync()
+    private async Task LoadRoomsAndDevicesAndChangeStateAsync()
     {
         if (IsInternetConnected)
         {
             var isDataLoaded = await LoadRoomsAndDevicesAsync();
 
-            if (isDataLoaded)
-            {
-                DataState = EPageState.Complete;
-            }
-            else if (!IsInternetConnected)
-            {
-                DataState = EPageState.NoInternet;
-            }
+            DataState = isDataLoaded
+                ? EPageState.Complete
+                : EPageState.Empty;
         }
         else
         {
@@ -259,32 +268,39 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private async Task<bool> LoadRoomsAndDevicesAsync()
     {
-        var isDataLoaded = false;
+        bool isLoaded = false;
+        
+        IsDataLoading = true;
 
-        var devices = _mapperService.MapRange<DeviceBindableModel>(_smartHomeMockService.GetDevices(), (m, vm) =>
+        if (IsInternetConnected)
         {
-            vm.TappedCommand = AccessorieTappedCommand;
-        });
-
-        FavoriteAccessories = new(devices);
-
-        await AddAqaraDevicesIfAuthorizedAsync();
-
-        var resultOfGettingRooms = await _roomsService.GetAllRoomsAsync();
-
-        if (resultOfGettingRooms.IsSuccess)
-        {
-            var rooms = _mapperService.MapRange<RoomBindableModel>(resultOfGettingRooms.Result, (m, vm) =>
+            var devices = _mapperService.MapRange<DeviceBindableModel>(_smartHomeMockService.GetDevices(), (m, vm) =>
             {
-                vm.TappedCommand = RoomTappedCommand;
+                vm.TappedCommand = AccessorieTappedCommand;
             });
 
-            Rooms = new(rooms);
+            FavoriteAccessories = new(devices);
 
-            isDataLoaded = true;
+            await AddAqaraDevicesIfAuthorizedAsync();
+
+            var resultOfGettingRooms = await _roomsService.GetAllRoomsAsync();
+
+            if (resultOfGettingRooms.IsSuccess)
+            {
+                var rooms = _mapperService.MapRange<RoomBindableModel>(resultOfGettingRooms.Result, (m, vm) =>
+                {
+                    vm.TappedCommand = RoomTappedCommand;
+                });
+
+                Rooms = new(rooms);
+
+                isLoaded = true;
+            } 
         }
 
-        return isDataLoaded;
+        IsDataLoading = false;
+
+        return isLoaded;
     }
 
     private async Task AddAqaraDevicesIfAuthorizedAsync()
