@@ -6,8 +6,8 @@
                        xmlns:vm="clr-namespace:SmartMirror.ViewModels"
                        xmlns:controls="clr-namespace:SmartMirror.Controls"
                        xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
-                       x:Class="SmartMirror.Views.RoomPage"
-                       x:DataType="{x:Type vm:RoomPageViewModel}">
+                       x:Class="SmartMirror.Views.RoomDetailsPage"
+                       x:DataType="{x:Type vm:RoomDetailsPageViewModel}">
 
     <views:BaseContentPage.Resources>
 

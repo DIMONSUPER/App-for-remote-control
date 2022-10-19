@@ -17,6 +17,8 @@ public class ScenariosPageViewModel : BaseTabViewModel
     private readonly IScenariosService _scenariosService;
     private readonly IDialogService _dialogService;
 
+    private bool _isNeedReloadData = true;
+
     public ScenariosPageViewModel(
         INavigationService navigationService,
         IDialogService dialogService,
@@ -29,7 +31,6 @@ public class ScenariosPageViewModel : BaseTabViewModel
         _scenariosService = scenariosService;
 
         Title = "Scenarios";
-        DataState = EPageState.Loading;
     }
 
     #region -- Public properties --
@@ -61,17 +62,31 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override void Initialize(INavigationParameters parameters)
+    public override async void OnAppearing()
     {
-        base.Initialize(parameters);
+        base.OnAppearing();
 
-        Task.Run(LoadScenariosAsync);
+        if (_isNeedReloadData)
+        {
+            DataState = EPageState.Loading;
+
+            await LoadScenariosAsync(); 
+        }
+    }
+
+    public override void OnNavigatedTo(INavigationParameters parameters)
+    {
+        base.OnNavigatedTo(parameters);
+
+        _isNeedReloadData = true;
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
+            DataState = EPageState.Loading;
+
             await LoadScenariosAsync();
         }
         else
@@ -120,8 +135,10 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     private Task OnGoToScenarioDetailsCommandAsync(ScenarioBindableModel scenario)
     {
+        _isNeedReloadData = false;
+
         return NavigationService.CreateBuilder()
-            .AddSegment<ScenarioPageViewModel>()
+            .AddSegment<ScenarioDetailsPageViewModel>()
             .AddParameter(KnownNavigationParameters.Animated, true)
             .AddParameter(nameof(ScenarioBindableModel), scenario)
             .NavigateAsync();

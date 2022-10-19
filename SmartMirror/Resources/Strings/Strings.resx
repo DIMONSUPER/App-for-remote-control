@@ -205,4 +205,10 @@
     <data name="NeedsTwoTaps" xml:space="preserve">
 		<value>Needs two taps to exit the app.</value>
 	</data>
+	<data name="NoScenarioActionsYet" xml:space="preserve">
+		<value>No scenario actions yet</value>
+	</data>
+	<data name="ScenarioActions" xml:space="preserve">
+		<value>Scenario actions</value>
+	</data>
 </root>

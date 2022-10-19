@@ -29,7 +29,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
         _mapperService = mapperService;
 
         Title = "Notifications";
-        DataState = EPageState.Loading;
     }
 
     #region -- Public properties --
@@ -58,10 +57,11 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-
-    public override void Initialize(INavigationParameters parameters)
+    public override void OnAppearing()
     {
-        base.Initialize(parameters);
+        base.OnAppearing();
+
+        DataState = EPageState.Loading;
 
         Task.Run(() => LoadNotificationsAsync(() => DataState = EPageState.NoInternet));
     }
@@ -73,8 +73,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
     private async Task OnTryAgainCommandAsync()
     {
         DataState = EPageState.NoInternetLoader;
-
-        await Task.Delay(1000);
 
         await LoadNotificationsAsync(() => DataState = EPageState.NoInternet);
     }
@@ -97,6 +95,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private async Task LoadNotificationsAsync(Action onFailure)
     {
+        await Task.Delay(2000);
+
         if (IsInternetConnected)
         {
             var resultOfGettingNotifications = await _notificationsService.GetNotificationsAsync();

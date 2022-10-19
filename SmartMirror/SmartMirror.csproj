@@ -151,7 +151,7 @@
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\ScenarioPage.xaml">
+		<MauiXaml Update="Views\ScenarioDetailsPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\CamerasPage.xaml">
@@ -175,7 +175,7 @@
 		<MauiXaml Update="Controls\CustomStateView.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\RoomPage.xaml">
+		<MauiXaml Update="Views\RoomDetailsPage.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\RoomsVerticalListTemplate.xaml">
@@ -206,8 +206,11 @@
 	  <Compile Update="Views\Dialogs\ErrorDialog.xaml.cs">
 	    <DependentUpon>ErrorDialog.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\ScenarioPage.xaml.cs">
-	    <DependentUpon>ScenarioPage.xaml</DependentUpon>
+	  <Compile Update="Views\RoomDetailsPage.xaml.cs">
+	    <DependentUpon>RoomDetailsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ScenarioDetailsPage.xaml.cs">
+	    <DependentUpon>ScenarioDetailsPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
