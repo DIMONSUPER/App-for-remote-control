@@ -244,9 +244,16 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             var isDataLoaded = await TaskRepeater.Repeate(LoadRoomsAndDevicesAsync, canExecute: () => DateTime.Now < timeToStopUpdating);
 
-            DataState = isDataLoaded
-                ? EPageState.Complete
-                : EPageState.Empty; 
+            if (IsInternetConnected)
+            {
+                DataState = isDataLoaded
+                    ? EPageState.Complete
+                    : EPageState.Empty;
+            }
+            else
+            {
+                DataState = EPageState.NoInternet;
+            }
         }
     }
 
@@ -256,9 +263,16 @@ public class RoomsPageViewModel : BaseTabViewModel
         {
             var isDataLoaded = await LoadRoomsAndDevicesAsync();
 
-            DataState = isDataLoaded
-                ? EPageState.Complete
-                : EPageState.Empty;
+            if (IsInternetConnected)
+            {
+                DataState = isDataLoaded
+                    ? EPageState.Complete
+                    : EPageState.Empty;
+            }
+            else
+            {
+                DataState = EPageState.NoInternet;
+            }
         }
         else
         {
