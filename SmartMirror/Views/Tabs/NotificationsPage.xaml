@@ -48,7 +48,7 @@
                 Command="{Binding RefreshNotificationsCommand}"
                 x:Name="refreshView">
 
-                <ScrollView
+                <controls:CustomScrollView
                     Padding="50, 0, 0, 0"
                     WidthRequest="660"
                     VerticalScrollBarVisibility="Always"
@@ -59,7 +59,7 @@
                         BindableLayout.ItemsSource="{Binding Notifications}"
                         BindableLayout.ItemTemplateSelector="{StaticResource notificationTemplateSelector}"/>
 
-                </ScrollView>
+                </controls:CustomScrollView>
 
             </RefreshView>
 

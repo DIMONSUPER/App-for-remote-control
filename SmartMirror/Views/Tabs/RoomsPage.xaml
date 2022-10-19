@@ -81,17 +81,17 @@
                     </StackLayout>
 
                     <!-- FAVORITE ACCESSORIES COLLECTION -->
-                    <ScrollView Margin="0,16,0,0"
-                                Orientation="Horizontal"
-                                HorizontalScrollBarVisibility="Never"
-                                x:Name="scrollViewFavoriteAccessories">
+                    <controls:CustomScrollView Margin="0,16,0,0"
+                                               Orientation="Horizontal"
+                                               HorizontalScrollBarVisibility="Never"
+                                               x:Name="scrollViewFavoriteAccessories">
 
                         <HorizontalStackLayout Spacing="30"
                                                Padding="60,0"
                                                BindableLayout.ItemTemplate="{StaticResource favoriteAccessoriesTemplate}"
                                                BindableLayout.ItemsSource="{Binding FavoriteAccessories}"/>
 
-                    </ScrollView>
+                    </controls:CustomScrollView>
 
                 </VerticalStackLayout>
 
@@ -108,17 +108,17 @@
                                              Number="{Binding Rooms.Count}"/>
 
                     <!-- ROOMS COLLECTION -->
-                    <ScrollView Margin="0,16,0,0"
-                                Orientation="Horizontal"
-                                HorizontalScrollBarVisibility="Never"
-                                x:Name="scrollViewRooms">
+                    <controls:CustomScrollView Margin="0,16,0,0"
+                                               Orientation="Horizontal"
+                                               HorizontalScrollBarVisibility="Never"
+                                               x:Name="scrollViewRooms">
 
                         <HorizontalStackLayout Spacing="30"
                                                Padding="60,0"
                                                BindableLayout.ItemTemplate="{StaticResource roomsTemplate}"
                                                BindableLayout.ItemsSource="{Binding Rooms}"/>
 
-                    </ScrollView>
+                    </controls:CustomScrollView>
 
                 </VerticalStackLayout>
 
