@@ -1,37 +1,32 @@
-﻿using Microsoft.Extensions.Localization;
-using SmartMirror.Resources.Strings;
+﻿using SmartMirror.Helpers;
 
-namespace SmartMirror.Extensions;
-
-[ContentProperty(nameof(Name))]
-public class TranslateExtension : IMarkupExtension
+namespace SmartMirror.Extensions
 {
-    public TranslateExtension()
+    [ContentProperty(nameof(Name))]
+    public class TranslateExtension : IMarkupExtension
     {
+        #region -- Public properties --
+
+        public string? Name { get; set; }
+
+        #endregion
+
+        #region -- IMarkupExtension implementation --
+
+        object IMarkupExtension.ProvideValue(IServiceProvider serviceProvider)
+        {
+            return ProvideValue(serviceProvider);
+        }
+
+        #endregion
+
+        #region -- Public methods --
+
+        public object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return LocalizationResourceManager.Instance[Name];
+        }
+
+        #endregion
     }
-
-    private IStringLocalizer<Strings> _localizer;
-    private IStringLocalizer<Strings> Localizer => _localizer ??= MauiApplication.Current?.Services?.GetService<IStringLocalizer<Strings>>();
-
-    #region -- Public properties --
-
-    public string Name { get; set; }
-
-    #endregion
-
-    #region -- IMarkupExtension implementation --
-
-    object IMarkupExtension.ProvideValue(IServiceProvider serviceProvider) => ProvideValue(serviceProvider);
-
-    #endregion
-
-    #region -- Public methods --
-
-    public object ProvideValue(IServiceProvider serviceProvider)
-    {
-        return Localizer is null ? Name : Localizer[Name];
-    }
-
-    #endregion
 }
-

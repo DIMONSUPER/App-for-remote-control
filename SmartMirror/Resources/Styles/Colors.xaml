@@ -21,6 +21,7 @@
     <Color x:Key="cbg_i10">#000000</Color>  <!-- Black -->
     <Color x:Key="cbg_i11">#EAEAEA</Color>
     <Color x:Key="cbg_i12">#252525</Color>  <!--Dark Gray-->
+    <Color x:Key="cbg_i13">#505053</Color>
 
     <!-- TEXT COLORS -->
     <Color x:Key="tcolor_i1">#FFFFFF</Color>    <!-- White -->
