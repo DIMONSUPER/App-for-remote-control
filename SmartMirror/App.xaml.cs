@@ -11,7 +11,7 @@ public partial class App
         InitializeComponent();
     }
 
-    #region - Overrides --
+    #region -- Overrides --
 
     protected override void OnStart()
     {
