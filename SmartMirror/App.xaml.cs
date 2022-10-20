@@ -6,23 +6,22 @@ namespace SmartMirror;
 
 public partial class App
 {
-	public App()
-	{
-		InitializeComponent();
-	}
+    public App()
+    {
+        InitializeComponent();
+    }
 
-	protected override void OnStart()
-	{
-		base.OnStart();
+    protected override void OnStart()
+    {
+        base.OnStart();
 
 #if !DEBUG
         AppCenter.Start(
-			$"android={Constants.Analytics.AndroidKey};",
-			typeof(Analytics),
-			typeof(Crashes));
+            $"android={Constants.Analytics.AndroidKey};",
+            typeof(Analytics),
+            typeof(Crashes));
 
         Analytics.SetEnabledAsync(true);
 #endif
     }
 }
-
