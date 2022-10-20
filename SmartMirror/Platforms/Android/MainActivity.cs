@@ -9,8 +9,8 @@ namespace SmartMirror;
 
 [Activity(
     Theme = "@style/MainThemeApp",
-    Icon = "@mipmap/appicon",
-    RoundIcon = "@mipmap/appicon_round",
+    Icon = "@mipmap/ic_launcher",
+    RoundIcon = "@mipmap/ic_launcher_round",
     MainLauncher = true,
     ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density,
     ScreenOrientation = ScreenOrientation.UserLandscape,
