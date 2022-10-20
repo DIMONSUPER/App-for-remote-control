@@ -11,5 +11,7 @@ public static class IconsNames
     public const string pic_wall_switch_double_left = nameof(pic_wall_switch_double_left);
     public const string pic_wall_switch_double_right = nameof(pic_wall_switch_double_right);
     public const string pic_wall_switch_single = nameof(pic_wall_switch_single);
+    public const string pic_motion = nameof(pic_motion);
+    public const string pic_dimmer = nameof(pic_dimmer);
     public const string grey_question_mark = nameof(grey_question_mark);
 }

@@ -17,8 +17,6 @@ namespace SmartMirror.Services.Devices
 {
     public class DevicesService : BaseAqaraService, IDevicesService
     {
-        private const int UDP_PORT = 7834;
-
         private readonly ConcurrentDictionary<string, IEnumerable<AttributeAqaraResponse>> _devicesAttributes = new();
         private readonly ConcurrentDictionary<string, DeviceBindableModel> _cachedDevices = new();
         private readonly DeviceMessanger _deviceMessanger = new();
@@ -222,6 +220,11 @@ namespace SmartMirror.Services.Devices
                 && _devicesAttributes[device.Model].Any(x => x.ResourceId == Constants.Aqara.AttibutesId.TEMPERATURE_STATUS);
         }
 
+        private bool IsDeviceMotionSensor(DeviceBindableModel device)
+        {
+            return _devicesAttributes[device.Model].Any(x => x.ResourceId == Constants.Aqara.AttibutesId.MOTION_STATUS);
+        }
+
         private string GetIconSourceForDevice(DeviceBindableModel device)
         {
             var attributesId = _devicesAttributes[device.Model].Select(x => x.ResourceId);
@@ -230,6 +233,7 @@ namespace SmartMirror.Services.Devices
             {
                 _ when IsDeviceSwitch(device) => GetImageSourceForSwitch(device),
                 _ when IsDeviceWeather(device) => GetImageSourceForWeather(device),
+                _ when IsDeviceMotionSensor(device) => GetImageSourceForMotionSensor(device),
                 _ => IconsNames.grey_question_mark,
             };
         }
@@ -280,6 +284,18 @@ namespace SmartMirror.Services.Devices
             return result;
         }
 
+        private string GetImageSourceForMotionSensor(DeviceBindableModel device)
+        {
+            var result = device.EditableResourceId switch
+            {
+                Constants.Aqara.AttibutesId.MOTION_STATUS => IconsNames.pic_motion,
+                Constants.Aqara.AttibutesId.LUX_STATUS => IconsNames.pic_dimmer,
+                _ => IconsNames.grey_question_mark,
+            };
+
+            return result;
+        }
+
         private async Task SetAttributesForDevicesAsync(IEnumerable<DeviceBindableModel> devices)
         {
             foreach (var bindableModel in devices)
@@ -307,8 +323,6 @@ namespace SmartMirror.Services.Devices
         //TODO: add support for all devices
         private Task<IEnumerable<DeviceBindableModel>> GetTaskForDevice(DeviceBindableModel device)
         {
-            var availableAttributes = _devicesAttributes[device.Model];
-
             if (IsDeviceSwitch(device))
             {
                 return GetSwitchesAsync(device);
@@ -316,6 +330,10 @@ namespace SmartMirror.Services.Devices
             else if (IsDeviceWeather(device))
             {
                 return GetWeatherAccessoriesAsync(device);
+            }
+            else if (IsDeviceMotionSensor(device))
+            {
+                return GetMotionSensorsAsync(device);
             }
             else
             {
@@ -333,6 +351,17 @@ namespace SmartMirror.Services.Devices
                 Constants.Aqara.AttibutesId.HUMIDITY_STATUS,
                 Constants.Aqara.AttibutesId.TEMPERATURE_STATUS,
                 Constants.Aqara.AttibutesId.AIR_PRESSURE_STATUS);
+        }
+
+        private Task<IEnumerable<DeviceBindableModel>> GetMotionSensorsAsync(DeviceBindableModel device)
+        {
+            System.Diagnostics.Debug.WriteLine($"GetMotionSensorsAsync for {device.Model}, {device.State}");
+
+            device.DeviceType = EDeviceType.Sensor;
+
+            return GetDevicesForAttributesAsync(device,
+                Constants.Aqara.AttibutesId.MOTION_STATUS,
+                Constants.Aqara.AttibutesId.LUX_STATUS);
         }
 
         private async Task<IEnumerable<DeviceBindableModel>> GetSwitchesAsync(DeviceBindableModel device)
