@@ -1,8 +1,9 @@
 using SmartMirror.Enums;
+using SmartMirror.Interfaces;
 
 namespace SmartMirror.ViewModels.Tabs;
 
-public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware, INavigationAware, IDestructible
+public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware, INavigationAware, IDestructible, ISelectable
 {
     public BaseTabViewModel(INavigationService navigationService)
     {
@@ -26,13 +27,6 @@ public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware, 
     {
         get => _title;
         set => SetProperty(ref _title, value);
-    }
-
-    private bool _isSelected;
-    public bool IsSelected
-    {
-        get => _isSelected;
-        set => SetProperty(ref _isSelected, value);
     }
 
     private EPageState _dataState;
@@ -81,6 +75,17 @@ public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware, 
     public virtual void Destroy()
     {
         Connectivity.ConnectivityChanged -= OnConnectivityChanged;
+    }
+
+    #endregion
+
+    #region -- ISelectable implementaion --
+
+    private bool _isSelected;
+    public bool IsSelected
+    {
+        get => _isSelected;
+        set => SetProperty(ref _isSelected, value);
     }
 
     #endregion

@@ -57,7 +57,7 @@
             TryAgainCommand="{Binding TryAgainCommand}"
             EmptyTitle="{extensions:Translate NoScenarioActionsYet}"
             EmptyStateImage="empty_scenarios"
-            LoadingTitle="{extensions:Translate ScenariosActions}">
+            LoadingTitle="{extensions:Translate ScenarioActions}">
 
             <controls:CustomStateView.CompleteContent>
 
