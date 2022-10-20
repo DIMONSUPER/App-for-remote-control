@@ -16,7 +16,11 @@
 
         <ResourceDictionary>
 
-            <templates:FavoriteAccessories x:Key="favoriteAccessoriesTemplate"/>
+            <DataTemplate x:Key="deviceTemplate">
+                <templates:DeviceTemplate DescriptionLabelStyle="{x:DynamicResource tstyle_i4}"
+                                          WidthRequest="375"
+                                          MaximumHeightRequest="201"/>
+            </DataTemplate>
 
             <templates:RoomsTemplate x:Key="roomsTemplate"/>
 
@@ -88,7 +92,7 @@
 
                         <HorizontalStackLayout Spacing="30"
                                                Padding="60,0"
-                                               BindableLayout.ItemTemplate="{StaticResource favoriteAccessoriesTemplate}"
+                                               BindableLayout.ItemTemplate="{StaticResource deviceTemplate}"
                                                BindableLayout.ItemsSource="{Binding FavoriteAccessories}"/>
 
                     </controls:CustomScrollView>

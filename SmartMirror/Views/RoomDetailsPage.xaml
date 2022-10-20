@@ -16,7 +16,15 @@
 
             <templates:RoomsVerticalListTemplate x:Key="roomsVerticalListTemplate"/>
 
-            <templates:SelectedRoomDevicesTemplate x:Key="selectedRoomDevicesTemplate"/>
+            <DataTemplate x:Key="deviceTemplate">
+                <templates:DeviceTemplate DescriptionLabelStyle="{x:DynamicResource tstyle_i11}"
+                                          Margin="0,0,24,0"
+                                          HeightRequest="171"
+                                          InnerPadding="18"
+                                          IconSize="54"
+                                          ActivityIndicatorSize="30"
+                                          IsRoomNameVisible="False"/>
+            </DataTemplate>
 
         </ResourceDictionary>
 
@@ -73,7 +81,7 @@
 
                     <!-- DEVICES COLLECTION -->
                     <CollectionView ItemsSource="{Binding SelectedRoomDevices}"
-                                    ItemTemplate="{x:StaticResource selectedRoomDevicesTemplate}"
+                                    ItemTemplate="{x:StaticResource deviceTemplate}"
                                     SelectionMode="None">
 
                         <CollectionView.ItemsLayout>
