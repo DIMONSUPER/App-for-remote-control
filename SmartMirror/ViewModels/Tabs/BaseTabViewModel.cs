@@ -17,6 +17,8 @@ public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware, 
 
     protected bool IsInternetConnected => Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
 
+    protected bool IsDataLoading => DataState is EPageState.Loading or EPageState.NoInternetLoader;
+
     #endregion
 
     #region -- Public properties --

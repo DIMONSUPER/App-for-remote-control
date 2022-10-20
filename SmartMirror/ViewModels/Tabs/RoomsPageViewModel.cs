@@ -40,7 +40,6 @@ public class RoomsPageViewModel : BaseTabViewModel
         _devicesService = devicesService;
 
         IsAqaraLoginButtonVisible = !_aqaraService.IsAuthorized;
-
         Title = "Rooms";
     }
 
@@ -57,7 +56,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private ICommand _tryAgainCommand;
     public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
-
+    
     private bool _isAqaraLoginButtonVisible;
     public bool IsAqaraLoginButtonVisible
     {
@@ -87,23 +86,29 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         base.OnAppearing();
 
-        DataState = EPageState.Loading;
+        if (!IsDataLoading)
+        {
+            DataState = EPageState.Loading;
 
-        await LoadRoomsAndDevicesAsync();
+            await LoadRoomsAndDevicesAndChangeStateAsync();
+        }
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
-            DataState = EPageState.Loading;
+            if (!IsDataLoading && DataState != EPageState.Complete)
+            {
+                DataState = EPageState.Loading;
 
-            await LoadRoomsAndDevicesAsync();
+                await LoadRoomsAndDevicesAndChangeStateAsync();
+            }
         }
         else
         {
             DataState = EPageState.NoInternet;
-        }
+        } 
     }
 
     #endregion
@@ -196,7 +201,10 @@ public class RoomsPageViewModel : BaseTabViewModel
                     { Constants.DialogsParameterKeys.TITLE, "Success!" }
                 });
 
-                await LoadRoomsAndDevicesAsync();
+                if (!IsDataLoading)
+                {                 
+                    await LoadRoomsAndDevicesAndChangeStateAsync();
+                }
             }
             else
             {
@@ -213,15 +221,65 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private async Task OnTryAgainCommandAsync()
     {
-        DataState = EPageState.NoInternetLoader;
+        if (!IsDataLoading)
+        {
+            DataState = EPageState.NoInternetLoader;
 
-        await LoadRoomsAndDevicesAsync();
+            var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
+
+            var isDataLoaded = await TaskRepeater.RepeatAsync(LoadRoomsAndDevicesAsync, executionTime);
+            
+            if (IsInternetConnected)
+            {
+                DataState = isDataLoaded
+                    ? EPageState.Complete
+                    : EPageState.Empty;
+            }
+            else
+            {
+                DataState = EPageState.NoInternet;
+            }
+        }
     }
 
-    private async Task LoadRoomsAndDevicesAsync()
+    private async Task LoadRoomsAndDevicesAndChangeStateAsync()
     {
         if (IsInternetConnected)
         {
+            var isDataLoaded = await LoadRoomsAndDevicesAsync();
+
+            if (IsInternetConnected)
+            {
+                DataState = isDataLoaded
+                    ? EPageState.Complete
+                    : EPageState.Empty;
+            }
+            else
+            {
+                DataState = EPageState.NoInternet;
+            }
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
+    }
+
+    private async Task<bool> LoadRoomsAndDevicesAsync()
+    {
+        bool isLoaded = false;
+        
+        if (IsInternetConnected)
+        {
+            await Task.Delay(4000);
+
+            var devices = _mapperService.MapRange<DeviceBindableModel>(_smartHomeMockService.GetDevices(), (m, vm) =>
+            {
+                vm.TappedCommand = AccessorieTappedCommand;
+            });
+
+            FavoriteAccessories = new(devices);
+
             await LoadDevicesAsync();
 
             var resultOfGettingRooms = await _roomsService.GetAllRoomsAsync();
@@ -235,17 +293,11 @@ public class RoomsPageViewModel : BaseTabViewModel
 
                 Rooms = new(rooms);
 
-                DataState = EPageState.Complete;
-            }
-            else if (!IsInternetConnected)
-            {
-                DataState = EPageState.NoInternet;
-            }
+                isLoaded = true;
+            } 
         }
-        else
-        {
-            DataState = EPageState.NoInternet;
-        }
+
+        return isLoaded;
     }
 
     private async Task LoadDevicesAsync()
