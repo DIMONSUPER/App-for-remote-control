@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.Maui.Controls.Shapes;
+﻿using Microsoft.Maui.Controls.Shapes;
+using SmartMirror.Interfaces;
 
 namespace SmartMirror.Controls;
 
@@ -106,6 +106,11 @@ public class CustomTabbedPage : TabbedPage
             _tabsStackLayout[i] = i == currentIndex
                 ? _selectedTabCells[i]
                 : _tabCells[i];
+
+            if (Children[i] is NavigationPage navigationPage && navigationPage.CurrentPage.BindingContext is ISelectable viewModel)
+            {
+                viewModel.IsSelected = i == currentIndex;
+            }
         }
     }
 
