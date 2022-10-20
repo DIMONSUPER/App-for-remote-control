@@ -62,12 +62,9 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
         if (!IsDataLoading)
         {
-            IsDataLoading = true;
             DataState = EPageState.Loading;
 
             await LoadNotificationsAndChangeStateAsync();
-
-            IsDataLoading = false;
         }
     }
 
@@ -77,12 +74,9 @@ public class NotificationsPageViewModel : BaseTabViewModel
         {
             if (!IsDataLoading && DataState != EPageState.Complete)
             {
-                IsDataLoading = true;
                 DataState = EPageState.Loading;
 
                 await LoadNotificationsAndChangeStateAsync();
-
-                IsDataLoading = false;
             }
         }
         else
@@ -101,12 +95,11 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         if (!IsDataLoading)
         {
-            IsDataLoading = true;
             DataState = EPageState.NoInternetLoader;
 
-            var timeToStopUpdating = DateTime.Now.AddSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
+            var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
 
-            var isDataLoaded = await TaskRepeater.Repeate(LoadNotificationsAsync, canExecute: () => DateTime.Now < timeToStopUpdating);
+            var isDataLoaded = await TaskRepeater.RepeatAsync(LoadNotificationsAsync, executionTime);
 
             if (IsInternetConnected)
             {
@@ -118,8 +111,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
             {
                 DataState = EPageState.NoInternet;
             }
-
-            IsDataLoading = false;
         }
     }
 
@@ -127,12 +118,9 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         if (!IsDataLoading)
         {
-            IsDataLoading = true;
-
             await LoadNotificationsAndChangeStateAsync();
 
             IsNotificationsRefreshing = false;
-            IsDataLoading = false;
         }
     }
 

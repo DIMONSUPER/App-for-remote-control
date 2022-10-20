@@ -1,8 +1,8 @@
-﻿using System;
-namespace SmartMirror.Enums
+﻿namespace SmartMirror.Enums
 {
     public enum EPageState
     {
+        None,
         Loading,
         Empty,
         Complete,

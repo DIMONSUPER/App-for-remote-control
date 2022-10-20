@@ -1,20 +1,20 @@
 ﻿namespace SmartMirror.Helpers
 {
-    public class TaskRepeater
+    public static class TaskRepeater
     {
         #region -- Public helpers --
 
-        public static async Task<bool> Repeate(Func<Task<bool>> task, Func<bool> canExecute = null, int delayInMiliseconds = 100)
+        public static async Task<bool> RepeatAsync(Func<Task<bool>> task, TimeSpan executionTime, int delayInMiliseconds = 100, CancellationToken token = default)
         {
             bool isSuccess = false;
+            var timeToStopExection = DateTime.UtcNow + executionTime;
 
-            do
+            while (!isSuccess && DateTime.UtcNow < timeToStopExection && !token.IsCancellationRequested)
             {
                 isSuccess = await task();
 
-                await Task.Delay(delayInMiliseconds);
-
-            } while (!isSuccess && (canExecute is null || canExecute()));
+                await Task.Delay(delayInMiliseconds, token);
+            }
 
             return isSuccess;
         }

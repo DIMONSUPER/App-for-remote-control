@@ -22,7 +22,6 @@ public class RoomsPageViewModel : BaseTabViewModel
     private readonly IRoomsService _roomsService;
     private readonly IDevicesService _devicesService;
 
-
     public RoomsPageViewModel(
         ISmartHomeMockService smartHomeMockService,
         INavigationService navigationService,
@@ -41,7 +40,6 @@ public class RoomsPageViewModel : BaseTabViewModel
         _devicesService = devicesService;
 
         IsAqaraLoginButtonVisible = !_aqaraService.IsAuthorized;
-
         Title = "Rooms";
     }
 
@@ -58,7 +56,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private ICommand _tryAgainCommand;
     public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
-
+    
     private bool _isAqaraLoginButtonVisible;
     public bool IsAqaraLoginButtonVisible
     {
@@ -92,7 +90,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         {
             DataState = EPageState.Loading;
 
-            await LoadRoomsAndDevicesAndChangeStateAsync(); 
+            await LoadRoomsAndDevicesAndChangeStateAsync();
         }
     }
 
@@ -102,12 +100,9 @@ public class RoomsPageViewModel : BaseTabViewModel
         {
             if (!IsDataLoading && DataState != EPageState.Complete)
             {
-                IsDataLoading = true;
                 DataState = EPageState.Loading;
 
                 await LoadRoomsAndDevicesAndChangeStateAsync();
-
-                IsDataLoading = false;
             }
         }
         else
@@ -208,11 +203,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
                 if (!IsDataLoading)
                 {                 
-                    IsDataLoading = true;
-                 
                     await LoadRoomsAndDevicesAndChangeStateAsync();
-
-                    IsDataLoading = false;
                 }
             }
             else
@@ -232,13 +223,12 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (!IsDataLoading)
         {
-            IsDataLoading = true;
             DataState = EPageState.NoInternetLoader;
 
-            var timeToStopUpdating = DateTime.Now.AddSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
+            var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
 
-            var isDataLoaded = await TaskRepeater.Repeate(LoadRoomsAndDevicesAsync, canExecute: () => DateTime.Now < timeToStopUpdating);
-
+            var isDataLoaded = await TaskRepeater.RepeatAsync(LoadRoomsAndDevicesAsync, executionTime);
+            
             if (IsInternetConnected)
             {
                 DataState = isDataLoaded
@@ -250,8 +240,6 @@ public class RoomsPageViewModel : BaseTabViewModel
                 DataState = EPageState.NoInternet;
             }
         }
-
-        IsDataLoading = false;
     }
 
     private async Task LoadRoomsAndDevicesAndChangeStateAsync()
