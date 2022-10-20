@@ -2,7 +2,6 @@
 using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
-using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Views.Dialogs;
@@ -66,11 +65,14 @@ public class ScenariosPageViewModel : BaseTabViewModel
     {
         base.OnAppearing();
 
-        if (_isNeedReloadData)
+        if (_isNeedReloadData && !IsDataLoading)
         {
+            IsDataLoading = true;
             DataState = EPageState.Loading;
 
-            await LoadScenariosAsync(); 
+            await LoadScenariosAsyncAndChangeState();
+
+            IsDataLoading = false;
         }
     }
 
@@ -85,9 +87,15 @@ public class ScenariosPageViewModel : BaseTabViewModel
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
-            DataState = EPageState.Loading;
+            if (!IsDataLoading && DataState != EPageState.Complete)
+            {
+                IsDataLoading = true;
+                DataState = EPageState.Loading;
 
-            await LoadScenariosAsync();
+                await LoadScenariosAsyncAndChangeState();
+
+                IsDataLoading = false;
+            }
         }
         else
         {
@@ -101,11 +109,28 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     private async Task OnTryAgainCommandAsync()
     {
-        DataState = EPageState.NoInternetLoader;
+        if (!IsDataLoading)
+        {
+            IsDataLoading = true;
+            DataState = EPageState.NoInternetLoader;
 
-        await Task.Delay(1000);
+            var timeToStopUpdating = DateTime.Now.AddSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
 
-        await LoadScenariosAsync();
+            var isDataLoaded = await TaskRepeater.Repeate(LoadScenariosAsync, canExecute: () => DateTime.Now < timeToStopUpdating);
+
+            if (IsInternetConnected)
+            {
+                DataState = isDataLoaded
+                    ? EPageState.Complete
+                    : EPageState.Empty;
+            }
+            else
+            {
+                DataState = EPageState.NoInternet;
+            }
+
+            IsDataLoading = false;
+        }
     }
 
     private async Task OnRunScenarioCommandAsync(ScenarioBindableModel selectedScenario)
@@ -144,26 +169,43 @@ public class ScenariosPageViewModel : BaseTabViewModel
             .NavigateAsync();
     }
 
-    private async Task LoadScenariosAsync()
+    private async Task LoadScenariosAsyncAndChangeState()
     {
         if (IsInternetConnected)
         {
-            var isFavoriteScenariosLoaded = await LoadFavoritesScenariosAsync();
-            var isScenariosLoaded = await LoadAllScenariosAsync();
+            var isDataLoaded = await LoadScenariosAsync();
 
-            if (isFavoriteScenariosLoaded || isScenariosLoaded)
+            if (IsInternetConnected)
             {
-                DataState = EPageState.Complete;
+                DataState = isDataLoaded
+                    ? EPageState.Complete
+                    : EPageState.Empty;
             }
             else
             {
-                DataState = EPageState.Empty;
+                DataState = EPageState.NoInternet;
             }
         }
         else
-        {
+        {     
             DataState = EPageState.NoInternet;
         }
+    }
+
+    private async Task<bool> LoadScenariosAsync()
+    {
+        bool isLoaded = false;
+
+        if (IsInternetConnected)
+        {
+            var loadingScenariosResults = await Task.WhenAll(
+                LoadFavoritesScenariosAsync(),
+                LoadAllScenariosAsync());
+
+            isLoaded = loadingScenariosResults.Any(x => x);
+        }
+
+        return isLoaded;
     }
 
     private async Task<bool> LoadFavoritesScenariosAsync()

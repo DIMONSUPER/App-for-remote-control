@@ -56,27 +56,33 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override void OnAppearing()
+    public override async void OnAppearing()
     {
         base.OnAppearing();
 
         if (!IsDataLoading)
         {
+            IsDataLoading = true;
             DataState = EPageState.Loading;
 
-            Task.Run(() => LoadNotificationsAndChangeStateAsync());
+            await LoadNotificationsAndChangeStateAsync();
+
+            IsDataLoading = false;
         }
     }
 
-    protected override void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
             if (!IsDataLoading && DataState != EPageState.Complete)
             {
+                IsDataLoading = true;
                 DataState = EPageState.Loading;
 
-                Task.Run(() => LoadNotificationsAndChangeStateAsync());
+                await LoadNotificationsAndChangeStateAsync();
+
+                IsDataLoading = false;
             }
         }
         else
@@ -95,6 +101,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         if (!IsDataLoading)
         {
+            IsDataLoading = true;
             DataState = EPageState.NoInternetLoader;
 
             var timeToStopUpdating = DateTime.Now.AddSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
@@ -111,6 +118,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
             {
                 DataState = EPageState.NoInternet;
             }
+
+            IsDataLoading = false;
         }
     }
 
@@ -118,9 +127,12 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         if (!IsDataLoading)
         {
+            IsDataLoading = true;
+
             await LoadNotificationsAndChangeStateAsync();
 
-            IsNotificationsRefreshing = false; 
+            IsNotificationsRefreshing = false;
+            IsDataLoading = false;
         }
     }
 
@@ -150,8 +162,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
     private async Task<bool> LoadNotificationsAsync()
     {
         bool isLoaded = false;
-        
-        IsDataLoading = true;
 
         if (IsInternetConnected)
         {
@@ -170,8 +180,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
                 isLoaded = true;
             }
         }
-
-        IsDataLoading = false;
 
         return isLoaded;
     }

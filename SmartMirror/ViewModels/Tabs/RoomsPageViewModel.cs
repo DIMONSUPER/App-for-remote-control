@@ -84,7 +84,6 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         base.OnAppearing();
 
-
         if (!IsDataLoading)
         {
             DataState = EPageState.Loading;
@@ -99,9 +98,12 @@ public class RoomsPageViewModel : BaseTabViewModel
         {
             if (!IsDataLoading && DataState != EPageState.Complete)
             {
+                IsDataLoading = true;
                 DataState = EPageState.Loading;
 
-                await LoadRoomsAndDevicesAndChangeStateAsync(); 
+                await LoadRoomsAndDevicesAndChangeStateAsync();
+
+                IsDataLoading = false;
             }
         }
         else
@@ -201,9 +203,13 @@ public class RoomsPageViewModel : BaseTabViewModel
                 });
 
                 if (!IsDataLoading)
-                {
+                {                 
+                    IsDataLoading = true;
+                 
                     await LoadRoomsAndDevicesAndChangeStateAsync();
-                }            
+
+                    IsDataLoading = false;
+                }
             }
             else
             {
@@ -222,6 +228,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (!IsDataLoading)
         {
+            IsDataLoading = true;
             DataState = EPageState.NoInternetLoader;
 
             var timeToStopUpdating = DateTime.Now.AddSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
@@ -239,6 +246,8 @@ public class RoomsPageViewModel : BaseTabViewModel
                 DataState = EPageState.NoInternet;
             }
         }
+
+        IsDataLoading = false;
     }
 
     private async Task LoadRoomsAndDevicesAndChangeStateAsync()
@@ -268,10 +277,10 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         bool isLoaded = false;
         
-        IsDataLoading = true;
-
         if (IsInternetConnected)
         {
+            await Task.Delay(4000);
+
             var devices = _mapperService.MapRange<DeviceBindableModel>(_smartHomeMockService.GetDevices(), (m, vm) =>
             {
                 vm.TappedCommand = AccessorieTappedCommand;
@@ -295,8 +304,6 @@ public class RoomsPageViewModel : BaseTabViewModel
                 isLoaded = true;
             } 
         }
-
-        IsDataLoading = false;
 
         return isLoaded;
     }

@@ -75,15 +75,18 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override void OnAppearing()
+    public override async void OnAppearing()
     {
         base.OnAppearing();
         
         if (!IsDataLoading)
         {
+            IsDataLoading = true;
             DataState = EPageState.Loading;
 
-            Task.Run(() => RefreshCamerasAndChangeStateAsync());
+            await LoadCamerasAndChangeStateAsync();
+
+            IsDataLoading = false;
         }
     }
 
@@ -94,15 +97,18 @@ public class CamerasPageViewModel : BaseTabViewModel
         VideoAction = EVideoAction.Pause;
     }
 
-    protected override void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
             if (!IsDataLoading && DataState != EPageState.Complete)
             {
+                IsDataLoading = true;
                 DataState = EPageState.Loading;
                 
-                Task.Run(() => RefreshCamerasAndChangeStateAsync());
+                await LoadCamerasAndChangeStateAsync();
+
+                IsDataLoading = false;
             }
         }
         else
@@ -121,11 +127,12 @@ public class CamerasPageViewModel : BaseTabViewModel
     {
         if (!IsDataLoading)
         {
+            IsDataLoading = true;
             DataState = EPageState.NoInternetLoader;
 
             var timeToStopUpdating = DateTime.Now.AddSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
 
-            var isDataLoaded = await TaskRepeater.Repeate(RefreshCamerasAsync, canExecute: () => DateTime.Now < timeToStopUpdating);
+            var isDataLoaded = await TaskRepeater.Repeate(LoadCamerasAsync, canExecute: () => DateTime.Now < timeToStopUpdating);
 
             if (IsInternetConnected)
             {
@@ -137,6 +144,8 @@ public class CamerasPageViewModel : BaseTabViewModel
             {
                 DataState = EPageState.NoInternet;
             }
+
+            IsDataLoading = false;
         }
     }
 
@@ -151,17 +160,20 @@ public class CamerasPageViewModel : BaseTabViewModel
     {
         if (!IsDataLoading)
         {
-            await RefreshCamerasAndChangeStateAsync();
+            IsDataLoading = true;
 
-            IsCamerasRefreshing = false; 
+            await LoadCamerasAndChangeStateAsync();
+
+            IsCamerasRefreshing = false;
+            IsDataLoading = false;
         }
     }
 
-    private async Task RefreshCamerasAndChangeStateAsync()
+    private async Task LoadCamerasAndChangeStateAsync()
     {
         if (IsInternetConnected)
         {
-            var isDataLoaded = await RefreshCamerasAsync();
+            var isDataLoaded = await LoadCamerasAsync();
 
             if (IsInternetConnected)
             {
@@ -180,11 +192,9 @@ public class CamerasPageViewModel : BaseTabViewModel
         }
     }
 
-    private async Task<bool> RefreshCamerasAsync()
+    private async Task<bool> LoadCamerasAsync()
     {
         bool isLoaded = false;
-
-        IsDataLoading = true;
 
         if (IsInternetConnected)
         {
@@ -210,8 +220,6 @@ public class CamerasPageViewModel : BaseTabViewModel
                 isLoaded = true;
             } 
         }
-
-        IsDataLoading = false;
 
         return isLoaded;
     }
