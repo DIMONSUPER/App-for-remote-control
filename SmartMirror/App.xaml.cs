@@ -11,6 +11,8 @@ public partial class App
         InitializeComponent();
     }
 
+    #region - Overrides --
+
     protected override void OnStart()
     {
         base.OnStart();
@@ -24,4 +26,6 @@ public partial class App
         Analytics.SetEnabledAsync(true);
 #endif
     }
+
+    #endregion
 }
