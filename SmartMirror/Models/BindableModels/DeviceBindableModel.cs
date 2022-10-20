@@ -211,6 +211,8 @@ public class DeviceBindableModel : BindableBase
                 IconsNames.pic_wall_switch_three_center => "",
                 IconsNames.pic_wall_switch_three_left => "",
                 IconsNames.pic_wall_switch_three_right => "",
+                IconsNames.pic_motion => "",
+                IconsNames.pic_dimmer => AdditionalInfo + " lux",
                 _ => AdditionalInfo,
             };
         }

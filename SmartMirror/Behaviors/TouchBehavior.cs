@@ -83,7 +83,7 @@ namespace SmartMirror.Behaviors
             }
         }
 
-        private static void OnTappedEventHandler(object sender, EventArgs e)
+        private static async void OnTappedEventHandler(object sender, EventArgs e)
         {
             var bindable = sender as BindableObject;
 
@@ -96,12 +96,10 @@ namespace SmartMirror.Behaviors
 
                 if (normalBackgroundColor is not null && pressedBackgroundColor is not null)
                 {
-                    bindable.Dispatcher.Dispatch(() =>
+                    await bindable.Dispatcher.DispatchAsync(async () =>
                     {
-                        view.BackgroundColorTo(pressedBackgroundColor, 16, 60, Easing.SpringOut).ContinueWith((x) =>
-                        {
-                            view.BackgroundColorTo(normalBackgroundColor, 16, 60, Easing.SpringIn);
-                        });
+                        await view.BackgroundColorTo(pressedBackgroundColor, 16, 60, Easing.SpringOut)
+                        .ContinueWith(x => view.BackgroundColorTo(normalBackgroundColor, 16, 60, Easing.SpringIn));
                     });
                 }
             }

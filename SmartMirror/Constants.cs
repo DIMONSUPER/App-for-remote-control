@@ -30,6 +30,9 @@
                 public const string HUMIDITY_STATUS = "0.2.85";
                 public const string TEMPERATURE_STATUS = "0.1.85";
                 public const string AIR_PRESSURE_STATUS = "0.3.85";
+                public const string MOTION_STATUS = "3.1.85";
+                public const string LUX_STATUS = "0.3.85";
+                public const string ILLUMINATION_STATUS = "0.4.85";
             }
         }
 
