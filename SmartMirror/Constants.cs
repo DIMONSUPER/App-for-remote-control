@@ -43,7 +43,6 @@
         public static class Limits
         {
             public const int TIME_TO_ATTEMPT_UPDATE_IN_SECONDS = 15;
-            public const int REFRESH_RATE_IN_MILISECONDS = 100;
         }
     }
 }
