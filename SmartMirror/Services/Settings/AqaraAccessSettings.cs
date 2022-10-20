@@ -28,8 +28,8 @@ public class AqaraAccessSettings
 
     public DateTime ExpiresAt
     {
-        get => DateTimeHelper.ConvertFromMilliseconds(Preferences.Default.Get<long>(nameof(ExpiresAt), 0, nameof(AqaraAccessSettings)));
-        set => Preferences.Default.Set(nameof(ExpiresAt), DateTimeHelper.ConvertToMilliseconds(value), nameof(AqaraAccessSettings));
+        get => DateTime.FromBinary(Preferences.Default.Get<long>(nameof(ExpiresAt), 0, nameof(AqaraAccessSettings)));
+        set => Preferences.Default.Set(nameof(ExpiresAt), value.ToBinary(), nameof(AqaraAccessSettings));
     }
 
     #endregion

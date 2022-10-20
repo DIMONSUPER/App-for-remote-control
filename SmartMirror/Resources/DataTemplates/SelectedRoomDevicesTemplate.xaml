@@ -4,8 +4,7 @@
              xmlns:extensions="clr-namespace:SmartMirror.Extensions"
              xmlns:models="clr-namespace:SmartMirror.Models"
              xmlns:controls="clr-namespace:SmartMirror.Controls"
-             x:Class="SmartMirror.Resources.DataTemplates.SelectedRoomDevicesTemplate"
-             x:DataType="models:FanDevice">
+             x:Class="SmartMirror.Resources.DataTemplates.SelectedRoomDevicesTemplate">
 
     <Grid Margin="0,0,24,0">
 
@@ -66,7 +65,7 @@
 
                     <Label Grid.RowSpan="2"
                            Grid.Column="1"
-                           Text="{Binding AdditionalInfo}"
+                           Text="{Binding AdditionalInfoFormatted}"
                            HorizontalTextAlignment="End"
                            VerticalTextAlignment="End"
                            Style="{x:DynamicResource tstyle_i11}"/>

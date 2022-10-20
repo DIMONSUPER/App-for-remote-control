@@ -1,4 +1,6 @@
-﻿using SmartMirror.Enums;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
+using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
@@ -45,8 +47,8 @@ public class RoomDetailsPageViewModel : BaseViewModel
         set => SetProperty(ref _rooms, value);
     }
 
-    private ObservableCollection<DeviceModel> _selectedRoomDevices;
-    public ObservableCollection<DeviceModel> SelectedRoomDevices
+    private ObservableCollection<DeviceBindableModel> _selectedRoomDevices;
+    public ObservableCollection<DeviceBindableModel> SelectedRoomDevices
     {
         get => _selectedRoomDevices;
         set => SetProperty(ref _selectedRoomDevices, value);
@@ -78,13 +80,22 @@ public class RoomDetailsPageViewModel : BaseViewModel
         }
     }
 
-    protected override void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
             DataState = EPageState.Loading;
 
-            SelectRoom(_selectedRoom);
+            var devicesResponse = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
+
+            if (devicesResponse.IsSuccess)
+            {
+                SelectRoom(_selectedRoom);
+            }
+            else
+            {
+                //TODO: devices are not updated
+            }
         }
         else
         {
@@ -101,7 +112,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
         return NavigationService.GoBackAsync();
     }
 
-    private async void SelectRoom(RoomBindableModel selectedRoom)
+    private void SelectRoom(RoomBindableModel selectedRoom)
     {
         if (Rooms?.Count > 0)
         {
@@ -112,16 +123,11 @@ public class RoomDetailsPageViewModel : BaseViewModel
                 room.IsSelected = room.Id == selectedRoom.Id;
             }
 
-            var resultOfGettingDevices = await _devicesService.GetDevicesAsync(selectedRoom.Id);
+            DataState = EPageState.Loading;
 
-            if (resultOfGettingDevices.IsSuccess)
-            {
-                SelectedRoomDevices = new(resultOfGettingDevices.Result.Data);
-            }
-            else
-            {
-                SelectedRoomDevices = new();
-            }
+            var roomDevices = _devicesService.AllSupportedDevices.Where(x => x.PositionId == selectedRoom.Id);
+
+            SelectedRoomDevices = new(roomDevices);
 
             DataState = IsInternetConnected
                 ? SelectedRoomDevices.Count == 0

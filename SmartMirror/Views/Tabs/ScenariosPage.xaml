@@ -45,7 +45,7 @@
 
         <controls:CustomStateView.CompleteContent>
 
-            <ScrollView
+            <controls:CustomScrollView
                 VerticalScrollBarVisibility="Never"
                 HorizontalScrollBarVisibility="Never"
                 Padding="0, 0, 0, 30"
@@ -65,7 +65,7 @@
                         Number="{Binding FavoriteScenarios.Count}"/>
 
                     <!-- FAVORITE SCENARIOS COLLECTION -->
-                    <ScrollView
+                    <controls:CustomScrollView
                         Margin="0, 16, 0, 0"
                         Orientation="Horizontal"
                         HorizontalScrollBarVisibility="Never"
@@ -78,7 +78,7 @@
                             BindableLayout.ItemTemplate="{StaticResource favoriteScenariosTemplate}"
                             BindableLayout.ItemsSource="{Binding FavoriteScenarios}"/>
 
-                    </ScrollView>
+                    </controls:CustomScrollView>
 
                     <!-- SCENARIOS -->
                     <controls:BadgeTitleView
@@ -123,7 +123,7 @@
 
                 </VerticalStackLayout>
 
-            </ScrollView>
+            </controls:CustomScrollView>
 
         </controls:CustomStateView.CompleteContent>
 
