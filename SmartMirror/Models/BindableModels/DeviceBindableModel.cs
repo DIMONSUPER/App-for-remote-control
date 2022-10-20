@@ -203,7 +203,7 @@ public class DeviceBindableModel : BindableBase
             result = IconSource switch
             {
                 IconsNames.pic_humidity => double.Parse(AdditionalInfo) / 100 + "%",
-                IconsNames.pic_pressure => double.Parse(AdditionalInfo) / 1000 + "kPa",
+                IconsNames.pic_pressure => Math.Round(double.Parse(AdditionalInfo) / 1000, 2) + "kPa",
                 IconsNames.pic_temperature => double.Parse(AdditionalInfo) / 100 + "℃",
                 IconsNames.pic_wall_switch_double_left => "",
                 IconsNames.pic_wall_switch_double_right => "",

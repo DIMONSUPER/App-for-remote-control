@@ -78,12 +78,13 @@ public class CamerasPageViewModel : BaseTabViewModel
     public override async void OnAppearing()
     {
         base.OnAppearing();
+        
+        if (!IsDataLoading)
+        {
+            DataState = EPageState.Loading;
 
-        DataState = EPageState.Loading;
-
-        await RefreshCamerasAsync();
-
-        VideoAction = EVideoAction.Play;
+            await LoadCamerasAndChangeStateAsync();
+        }
     }
 
     public override void OnDisappearing()
@@ -97,16 +98,17 @@ public class CamerasPageViewModel : BaseTabViewModel
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
-            DataState = EPageState.Loading;
-
-            await RefreshCamerasAsync();
-
-            VideoAction = EVideoAction.Play;
+            if (!IsDataLoading && DataState != EPageState.Complete)
+            {
+                DataState = EPageState.Loading;
+                
+                await LoadCamerasAndChangeStateAsync();
+            }
         }
         else
         {
+            IsCamerasRefreshing = false;
             VideoAction = EVideoAction.Pause;
-
             DataState = EPageState.NoInternet;
         }
     }
@@ -117,9 +119,25 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private async Task OnTryAgainCommandAsync()
     {
-        DataState = EPageState.NoInternetLoader;
+        if (!IsDataLoading)
+        {
+            DataState = EPageState.NoInternetLoader;
 
-        await RefreshCamerasAsync();
+            var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
+
+            var isDataLoaded = await TaskRepeater.RepeatAsync(LoadCamerasAsync, executionTime);
+
+            if (IsInternetConnected)
+            {
+                (DataState, VideoAction) = isDataLoaded
+                    ? (EPageState.Complete, EVideoAction.Play)
+                    : (EPageState.Empty, EVideoAction.Pause);
+            }
+            else
+            {
+                DataState = EPageState.NoInternet;
+            }
+        }
     }
 
     private Task OnSelectCameraCommandAsync(CameraBindableModel selectedCamera)
@@ -131,17 +149,45 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private async Task OnRefreshCamerasCommandAsync() 
     {
-        await RefreshCamerasAsync();
+        if (!IsDataLoading)
+        {
+            await LoadCamerasAndChangeStateAsync();
 
-        IsCamerasRefreshing = false;
+            IsCamerasRefreshing = false;
+        }
     }
 
-    private async Task RefreshCamerasAsync()
+    private async Task LoadCamerasAndChangeStateAsync()
     {
-        await Task.Delay(2000);
+        if (IsInternetConnected)
+        {
+            var isDataLoaded = await LoadCamerasAsync();
+
+            if (IsInternetConnected)
+            {
+                (DataState, VideoAction) = isDataLoaded
+                    ? (EPageState.Complete, EVideoAction.Play)
+                    : (EPageState.Empty, EVideoAction.Pause);
+            }
+            else
+            {
+                DataState = EPageState.NoInternet;
+            }
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
+    }
+
+    private async Task<bool> LoadCamerasAsync()
+    {
+        bool isLoaded = false;
 
         if (IsInternetConnected)
         {
+            await Task.Delay(1000);
+
             var resultOfGettingCameras = await _camerasService.GetCamerasAsync();
 
             if (resultOfGettingCameras.IsSuccess)
@@ -159,17 +205,11 @@ public class CamerasPageViewModel : BaseTabViewModel
 
                 SelectCamera(camera);
 
-                DataState = EPageState.Complete;
-            }
-            else if(!IsInternetConnected)
-            {
-                DataState = EPageState.NoInternet;
-            }
+                isLoaded = true;
+            } 
         }
-        else
-        {
-            DataState = EPageState.NoInternet;
-        }
+
+        return isLoaded;
     }
 
     private void SelectCamera(CameraBindableModel selectedCamera)

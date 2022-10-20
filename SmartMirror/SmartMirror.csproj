@@ -166,9 +166,6 @@
 		<MauiXaml Update="Views\Tabs\ScenariosPage.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Resources\DataTemplates\FavoriteAccessories.xaml">
-		  <SubType></SubType>
-		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\RoomsTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
@@ -181,13 +178,13 @@
 		<MauiXaml Update="Resources\DataTemplates\RoomsVerticalListTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Resources\DataTemplates\SelectedRoomDevicesTemplate.xaml">
-		  <SubType></SubType>
-		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\TemporaryDialog.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Controls\CustomSwitch.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\DeviceTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 	</ItemGroup>
