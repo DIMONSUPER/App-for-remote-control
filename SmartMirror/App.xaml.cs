@@ -16,12 +16,12 @@ public partial class App
 		base.OnStart();
 
 #if !DEBUG
-		AppCenter.Start(
-            $"android={Constants.Analytics.AndroidKey};",
-            typeof(Analytics),
-            typeof(Crashes));
-	 
-        Analytics.SetEnabledAsync(true);
+        AppCenter.Start(
+			$"android={Constants.Analytics.AndroidKey};",
+			typeof(Analytics),
+			typeof(Crashes));
+
+        Analytics.SetEnabledAsync(true);
 #endif
     }
 }
