@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<controls:CustomStateView
+<views:BaseContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:tabs="clr-namespace:SmartMirror.Views.Tabs.Pages"
@@ -10,15 +10,10 @@
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
-    State="{Binding DataState}"
-    TryAgainCommand="{Binding TryAgainCommand}"
-    EmptyTitle="{extensions:Translate NoScenariosYet}"
-    EmptyStateImage="empty_scenarios"
-    LoadingTitle="{extensions:Translate Scenarios}"
     x:Class="SmartMirror.Views.Tabs.Views.ScenariosPageView"
     x:DataType="vm:ScenariosPageViewModel">
 
-    <controls:CustomStateView.Resources>
+    <views:BaseContentView.Resources>
 
         <ResourceDictionary>
 
@@ -28,9 +23,9 @@
 
         </ResourceDictionary>
 
-    </controls:CustomStateView.Resources>
+    </views:BaseContentView.Resources>
 
-    <controls:CustomStateView.Triggers>
+    <views:BaseContentView.Triggers>
 
         <EventTrigger Event="Appearing">
 
@@ -39,90 +34,99 @@
 
         </EventTrigger>
 
-    </controls:CustomStateView.Triggers>
+    </views:BaseContentView.Triggers>
 
-    <controls:CustomStateView.CompleteContent>
+    <controls:CustomStateView
+        State="{Binding DataState}"
+        TryAgainCommand="{Binding TryAgainCommand}"
+        EmptyTitle="{extensions:Translate NoScenariosYet}"
+        EmptyStateImage="empty_scenarios"
+        LoadingTitle="{extensions:Translate Scenarios}">
+        
+        <controls:CustomStateView.CompleteContent>
 
-        <controls:CustomScrollView
-            VerticalScrollBarVisibility="Never"
-            HorizontalScrollBarVisibility="Never"
-            Padding="0, 0, 0, 30"
-            x:Name="scrollViewCompleteState">
+            <controls:CustomScrollView
+                VerticalScrollBarVisibility="Never"
+                HorizontalScrollBarVisibility="Never"
+                Padding="0, 0, 0, 30"
+                x:Name="scrollViewCompleteState">
 
-            <VerticalStackLayout
-                Padding="0, 42, 0, 0"
-                Spacing="0">
+                <VerticalStackLayout
+                    Padding="0, 42, 0, 0"
+                    Spacing="0">
 
-                <!-- FAVORITE SCENARIOS -->
-                <controls:BadgeTitleView
-                    HorizontalOptions="Start"
-                    Margin="60, 0"
-                    Spacing="12"
-                    IsVisible="{Binding FavoriteScenarios.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
-                    Title="{extensions:Translate FavoriteScenarios}"
-                    Number="{Binding FavoriteScenarios.Count}"/>
+                    <!-- FAVORITE SCENARIOS -->
+                    <controls:BadgeTitleView
+                        HorizontalOptions="Start"
+                        Margin="60, 0"
+                        Spacing="12"
+                        IsVisible="{Binding FavoriteScenarios.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
+                        Title="{extensions:Translate FavoriteScenarios}"
+                        Number="{Binding FavoriteScenarios.Count}"/>
 
-                <!-- FAVORITE SCENARIOS COLLECTION -->
-                <controls:CustomScrollView
-                    Margin="0, 16, 0, 0"
-                    Orientation="Horizontal"
-                    HorizontalScrollBarVisibility="Never"
-                    IsVisible="{Binding FavoriteScenarios.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
-                    x:Name="scrollViewFavoriteScenarios">
+                    <!-- FAVORITE SCENARIOS COLLECTION -->
+                    <controls:CustomScrollView
+                        Margin="0, 16, 0, 0"
+                        Orientation="Horizontal"
+                        HorizontalScrollBarVisibility="Never"
+                        IsVisible="{Binding FavoriteScenarios.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
+                        x:Name="scrollViewFavoriteScenarios">
 
-                    <HorizontalStackLayout
-                        Spacing="30"
-                        Padding="60, 0"
-                        BindableLayout.ItemTemplate="{StaticResource favoriteScenariosTemplate}"
-                        BindableLayout.ItemsSource="{Binding FavoriteScenarios}"/>
+                        <HorizontalStackLayout
+                            Spacing="30"
+                            Padding="60, 0"
+                            BindableLayout.ItemTemplate="{StaticResource favoriteScenariosTemplate}"
+                            BindableLayout.ItemsSource="{Binding FavoriteScenarios}"/>
 
-                </controls:CustomScrollView>
+                    </controls:CustomScrollView>
 
-                <!-- SCENARIOS -->
-                <controls:BadgeTitleView
-                    HorizontalOptions="Start"
-                    Margin="60, 54, 60, 0"
-                    Spacing="12"
-                    Title="{extensions:Translate Scenarios}"
-                    Number="{Binding Scenarios.Count}">
+                    <!-- SCENARIOS -->
+                    <controls:BadgeTitleView
+                        HorizontalOptions="Start"
+                        Margin="60, 54, 60, 0"
+                        Spacing="12"
+                        Title="{extensions:Translate Scenarios}"
+                        Number="{Binding Scenarios.Count}">
 
-                    <controls:BadgeTitleView.Triggers>
-                        <DataTrigger
-                            TargetType="controls:BadgeTitleView"
-                            Binding="{Binding FavoriteScenarios.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
-                            Value="False">
+                        <controls:BadgeTitleView.Triggers>
+                            <DataTrigger
+                                TargetType="controls:BadgeTitleView"
+                                Binding="{Binding FavoriteScenarios.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
+                                Value="False">
 
-                            <Setter Property="Margin" Value="60, 0"/>
+                                <Setter Property="Margin" Value="60, 0"/>
 
-                        </DataTrigger>
-                    </controls:BadgeTitleView.Triggers>
+                            </DataTrigger>
+                        </controls:BadgeTitleView.Triggers>
 
-                </controls:BadgeTitleView>
+                    </controls:BadgeTitleView>
 
-                <!-- SCENARIOS COLLECTION -->
-                <CollectionView
-                    Margin="60, 16, 60, 0"
-                    ItemsSource="{Binding Scenarios}"
-                    ItemTemplate="{StaticResource scenariosTemplate}"
-                    VerticalScrollBarVisibility="Never"
-                    HorizontalScrollBarVisibility="Never">
+                    <!-- SCENARIOS COLLECTION -->
+                    <CollectionView
+                        Margin="60, 16, 60, 0"
+                        ItemsSource="{Binding Scenarios}"
+                        ItemTemplate="{StaticResource scenariosTemplate}"
+                        VerticalScrollBarVisibility="Never"
+                        HorizontalScrollBarVisibility="Never">
 
-                    <CollectionView.ItemsLayout>
+                        <CollectionView.ItemsLayout>
 
-                        <GridItemsLayout
-                            Orientation="Vertical"
-                            VerticalItemSpacing="30"
-                            HorizontalItemSpacing="30"
-                            Span="4"/>
+                            <GridItemsLayout
+                                Orientation="Vertical"
+                                VerticalItemSpacing="30"
+                                HorizontalItemSpacing="30"
+                                Span="4"/>
 
-                    </CollectionView.ItemsLayout>
+                        </CollectionView.ItemsLayout>
 
-                </CollectionView>
+                    </CollectionView>
 
-            </VerticalStackLayout>
+                </VerticalStackLayout>
 
-        </controls:CustomScrollView>
+            </controls:CustomScrollView>
 
-    </controls:CustomStateView.CompleteContent>
+        </controls:CustomStateView.CompleteContent>
 
-</controls:CustomStateView>
+    </controls:CustomStateView>
+    
+</views:BaseContentView>

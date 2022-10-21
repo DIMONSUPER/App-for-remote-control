@@ -1,31 +1,27 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<controls:CustomStateView
+<views:BaseContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"            
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:SmartMirror.Views.Tabs.Views"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs.Pages"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:models="clr-namespace:SmartMirror.Models"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
-    xmlns:templatesSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
-    State="{Binding DataState}"
-    TryAgainCommand="{Binding TryAgainCommand}"
-    EmptyTitle="{extensions:Translate NoNotificationsYet}"
-    EmptyStateImage="notifications_off"
-    LoadingTitle="{extensions:Translate Notifications}"              
+    xmlns:templatesSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"            
     x:Class="SmartMirror.Views.Tabs.Views.NotificationsPageView"
     x:DataType="vm:NotificationsPageViewModel">
 
-    <controls:CustomStateView.Resources>
+    <views:BaseContentView.Resources>
 
         <ResourceDictionary>
             <templatesSelectors:NotificationDataTemplateSelector x:Key="notificationTemplateSelector"/>
         </ResourceDictionary>
 
-    </controls:CustomStateView.Resources>
+    </views:BaseContentView.Resources>
 
-    <controls:CustomStateView.Triggers>
+    <views:BaseContentView.Triggers>
 
         <EventTrigger Event="Appearing">
 
@@ -33,32 +29,41 @@
 
         </EventTrigger>
 
-    </controls:CustomStateView.Triggers>
+    </views:BaseContentView.Triggers>
 
-    <controls:CustomStateView.CompleteContent>
+    <controls:CustomStateView
+        State="{Binding DataState}"
+        TryAgainCommand="{Binding TryAgainCommand}"
+        EmptyTitle="{extensions:Translate NoNotificationsYet}"
+        EmptyStateImage="notifications_off"
+        LoadingTitle="{extensions:Translate Notifications}"  >
 
-        <RefreshView
-            Margin="0, 24, 0, 0"
-            HorizontalOptions="Center"
-            IsRefreshing="{Binding IsNotificationsRefreshing}"
-            Command="{Binding RefreshNotificationsCommand}"
-            x:Name="refreshView">
+        <controls:CustomStateView.CompleteContent>
 
-            <controls:CustomScrollView
-                Padding="50, 0, 0, 0"
-                WidthRequest="660"
-                VerticalScrollBarVisibility="Always"
-                HorizontalScrollBarVisibility="Always"
-                x:Name="scrollViewNotifications">
+            <RefreshView
+                Margin="0, 24, 0, 0"
+                HorizontalOptions="Center"
+                IsRefreshing="{Binding IsNotificationsRefreshing}"
+                Command="{Binding RefreshNotificationsCommand}"
+                x:Name="refreshView">
 
-                <VerticalStackLayout
-                    BindableLayout.ItemsSource="{Binding Notifications}"
-                    BindableLayout.ItemTemplateSelector="{StaticResource notificationTemplateSelector}"/>
+                <controls:CustomScrollView
+                    Padding="50, 0, 0, 0"
+                    WidthRequest="660"
+                    VerticalScrollBarVisibility="Always"
+                    HorizontalScrollBarVisibility="Always"
+                    x:Name="scrollViewNotifications">
 
-            </controls:CustomScrollView>
+                    <VerticalStackLayout
+                        BindableLayout.ItemsSource="{Binding Notifications}"
+                        BindableLayout.ItemTemplateSelector="{StaticResource notificationTemplateSelector}"/>
 
-        </RefreshView>
+                </controls:CustomScrollView>
 
-    </controls:CustomStateView.CompleteContent>
+            </RefreshView>
 
-</controls:CustomStateView>
+        </controls:CustomStateView.CompleteContent>
+
+    </controls:CustomStateView>
+
+</views:BaseContentView>

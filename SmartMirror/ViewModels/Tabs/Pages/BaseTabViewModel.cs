@@ -3,7 +3,7 @@ using SmartMirror.Interfaces;
 
 namespace SmartMirror.ViewModels.Tabs.Pages;
 
-public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware, INavigationAware, IDestructible, ISelectable
+public class BaseTabViewModel : BindableBase, IPageLifecycleAware, INavigationAware, IDestructible, ISelectable
 {
     public BaseTabViewModel(INavigationService navigationService)
     {
@@ -36,14 +36,6 @@ public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware, 
     {
         get => _dataState;
         set => SetProperty(ref _dataState, value);
-    }
-
-    #endregion
-
-    #region -- IInitialize implementation --
-
-    public virtual void Initialize(INavigationParameters parameters)
-    {
     }
 
     #endregion

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<controls:CustomStateView
+<views:BaseContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"        
@@ -7,28 +7,24 @@
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:sc="clr-namespace:SmartMirror.Controls.StateContainer"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs.Pages"
+    xmlns:views="clr-namespace:SmartMirror.Views.Tabs.Views"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:video="clr-namespace:SmartMirror.Controls"
-    State="{Binding DataState}"
-    TryAgainCommand="{Binding TryAgainCommand}"
-    EmptyTitle="{extensions:Translate NoCamerasYet}"
-    EmptyStateImage="video_off"
-    LoadingTitle="{extensions:Translate Cameras}"
     x:DataType="vm:CamerasPageViewModel"
     x:Class="SmartMirror.Views.Tabs.Views.CamerasPageView">
 
-    <controls:CustomStateView.Resources>
+    <views:BaseContentView.Resources>
 
         <ResourceDictionary>
             <templates:CameraTemplate x:Key="cameraTemplate"/>
         </ResourceDictionary>
 
-    </controls:CustomStateView.Resources>
+    </views:BaseContentView.Resources>
 
-    <controls:CustomStateView.Triggers>
+    <views:BaseContentView.Triggers>
 
         <EventTrigger Event="Appearing">
 
@@ -36,104 +32,113 @@
 
         </EventTrigger>
 
-    </controls:CustomStateView.Triggers>
+    </views:BaseContentView.Triggers>
 
-    <controls:CustomStateView.CompleteContent>
+    <controls:CustomStateView
+        State="{Binding DataState}"
+        TryAgainCommand="{Binding TryAgainCommand}"
+        EmptyTitle="{extensions:Translate NoCamerasYet}"
+        EmptyStateImage="video_off"
+        LoadingTitle="{extensions:Translate Cameras}">
 
-        <Grid
-            ColumnDefinitions="390, *"
-            ColumnSpacing="105"
-            Margin="42, 70, 60, 0">
+        <controls:CustomStateView.CompleteContent>
 
-            <RefreshView 
-                Grid.Column="0"
-                IsRefreshing="{Binding IsCamerasRefreshing}"
-                Command="{Binding RefreshCamerasCommand}">
+            <Grid
+                ColumnDefinitions="390, *"
+                ColumnSpacing="105"
+                Margin="42, 70, 60, 0">
 
-                <CollectionView 
-                    ItemSizingStrategy="MeasureFirstItem"
-                    ItemsSource="{Binding Cameras}"
-                    ItemTemplate="{StaticResource cameraTemplate}"
-                    x:Name="collectionViewCameras"/>
+                <RefreshView 
+                    Grid.Column="0"
+                    IsRefreshing="{Binding IsCamerasRefreshing}"
+                    Command="{Binding RefreshCamerasCommand}">
 
-            </RefreshView>
+                    <CollectionView 
+                        ItemSizingStrategy="MeasureFirstItem"
+                        ItemsSource="{Binding Cameras}"
+                        ItemTemplate="{StaticResource cameraTemplate}"
+                        x:Name="collectionViewCameras"/>
 
-            <Grid 
-                Grid.Column="1"
-                Margin="0, 0, 0, 120">
+                </RefreshView>
 
-                <Border
-                    StrokeThickness="0.75"
-                    StrokeShape="RoundRectangle 9"
-                    BackgroundColor="{DynamicResource cbg_i2}"
-                    Stroke="{DynamicResource cbg_i4}"
-                    Shadow="{DynamicResource Shadow_i1}">
+                <Grid 
+                    Grid.Column="1"
+                    Margin="0, 0, 0, 120">
 
-                    <StackLayout VerticalOptions="CenterAndExpand">
+                    <Border
+                        StrokeThickness="0.75"
+                        StrokeShape="RoundRectangle 9"
+                        BackgroundColor="{DynamicResource cbg_i2}"
+                        Stroke="{DynamicResource cbg_i4}"
+                        Shadow="{DynamicResource Shadow_i1}">
 
-                        <Frame 
-                            VerticalOptions="Center"
-                            HorizontalOptions="Center"
-                            HeightRequest="90"
-                            WidthRequest="90"
-                            CornerRadius="9"
-                            HasShadow="False"
-                            BackgroundColor="{DynamicResource cbg_i1}">
+                        <StackLayout VerticalOptions="CenterAndExpand">
 
-                            <Image 
+                            <Frame 
+                                VerticalOptions="Center"
                                 HorizontalOptions="Center"
-                                Source="video_off"/>
+                                HeightRequest="90"
+                                WidthRequest="90"
+                                CornerRadius="9"
+                                HasShadow="False"
+                                BackgroundColor="{DynamicResource cbg_i1}">
+
+                                <Image 
+                                    HorizontalOptions="Center"
+                                    Source="video_off"/>
+
+                            </Frame>
+
+                            <Label 
+                                Style="{DynamicResource tstyle_i4}"
+                                Margin="0, 30, 0, 6"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"
+                                MaximumWidthRequest="600"
+                                LineBreakMode="TailTruncation"
+                                Text="{Binding SelectedCamera.Name}"/>
+
+                            <Label 
+                                Style="{DynamicResource tstyle_i6}"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"
+                                Text="{extensions:Translate CameraIsOff}"/>
+
+                        </StackLayout>
+
+                    </Border>
+
+                    <Frame 
+                        Padding="1"
+                        HasShadow="False"
+                        CornerRadius="9"
+                        BorderColor="{DynamicResource cbg_i7}"
+                        IsVisible="{Binding SelectedCamera.IsConnected}">
+
+                        <Frame
+                            Padding="0"
+                            HasShadow="False"
+                            CornerRadius="9">
+
+                            <video:Video 
+                                LoadingState="{Binding VideoLoadingState}"
+                                Action="{Binding VideoAction}"
+                                Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"/>
 
                         </Frame>
 
-                        <Label 
-                            Style="{DynamicResource tstyle_i4}"
-                            Margin="0, 30, 0, 6"
-                            HorizontalOptions="Center"
-                            HorizontalTextAlignment="Center"
-                            MaximumWidthRequest="600"
-                            LineBreakMode="TailTruncation"
-                            Text="{Binding SelectedCamera.Name}"/>
-
-                        <Label 
-                            Style="{DynamicResource tstyle_i6}"
-                            HorizontalOptions="Center"
-                            HorizontalTextAlignment="Center"
-                            Text="{extensions:Translate CameraIsOff}"/>
-
-                    </StackLayout>
-
-                </Border>
-
-                <Frame 
-                    Padding="1"
-                    HasShadow="False"
-                    CornerRadius="9"
-                    BorderColor="{DynamicResource cbg_i7}"
-                    IsVisible="{Binding SelectedCamera.IsConnected}">
-
-                    <Frame
-                        Padding="0"
-                        HasShadow="False"
-                        CornerRadius="9">
-
-                        <video:Video 
-                            LoadingState="{Binding VideoLoadingState}"
-                            Action="{Binding VideoAction}"
-                            Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"/>
-
                     </Frame>
 
-                </Frame>
+                    <ActivityIndicator 
+                        WidthRequest="90"
+                        IsRunning="{Binding VideoLoadingState, Converter={xct:IsEqualConverter}, ConverterParameter={Static enums:EVideoLoadingState.Preparing}}"/>
 
-                <ActivityIndicator 
-                    WidthRequest="90"
-                    IsRunning="{Binding VideoLoadingState, Converter={xct:IsEqualConverter}, ConverterParameter={Static enums:EVideoLoadingState.Preparing}}"/>
+                </Grid>
 
             </Grid>
 
-        </Grid>
+        </controls:CustomStateView.CompleteContent>
 
-    </controls:CustomStateView.CompleteContent>
-
-</controls:CustomStateView>
+    </controls:CustomStateView>
+    
+</views:BaseContentView>

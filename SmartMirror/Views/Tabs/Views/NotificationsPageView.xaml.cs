@@ -1,9 +1,8 @@
-using SmartMirror.Controls;
 using System.ComponentModel;
 
 namespace SmartMirror.Views.Tabs.Views;
 
-public partial class NotificationsPageView : CustomStateView
+public partial class NotificationsPageView : BaseContentView
 {
 	public NotificationsPageView()
 	{

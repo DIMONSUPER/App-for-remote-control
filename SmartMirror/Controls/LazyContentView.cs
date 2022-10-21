@@ -1,13 +1,13 @@
 ﻿namespace SmartMirror.Controls
 {
-    [ContentProperty("Tempalate")]
+    [ContentProperty("Template")]
     public class LazyContentView : ContentView
     {
         private bool _isPageLoaded;
 
         #region -- Public properties --
 
-        public DataTemplate Tempalate { get; set; }
+        public DataTemplate Template { get; set; }
 
         #endregion
 
@@ -19,7 +19,7 @@
             {
                 try
                 {
-                    var content = Tempalate?.CreateContent();
+                    var content = Template?.CreateContent();
 
                     if (content is View view)
                     {

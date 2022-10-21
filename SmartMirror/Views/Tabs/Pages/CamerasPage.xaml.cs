@@ -15,8 +15,10 @@ public partial class CamerasPage : BaseTabContentPage
 
 		lazyView.TryLoadView();
 
-
-        (Content as IView).InvalidateMeasure();
+		if (lazyView.Content is IPageLifecycleAware content)
+		{
+			content.OnAppearing();
+		}
     }
 
 	#endregion
