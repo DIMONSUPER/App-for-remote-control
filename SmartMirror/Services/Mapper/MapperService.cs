@@ -94,7 +94,7 @@ namespace SmartMirror.Services.Mapper
                 .ForMember(nameof(DeviceAqaraModel.CreateTime), opt => opt.MapFrom(src => DateTimeHelper.ConvertToMilliseconds(src.CreateTime)))
                 .ForMember(nameof(DeviceAqaraModel.UpdateTime), opt => opt.MapFrom(src => DateTimeHelper.ConvertToMilliseconds(src.UpdateTime)))
                 .ForMember(nameof(DeviceAqaraModel.Did), opt => opt.MapFrom(src => src.DeviceId))
-                .ForMember(nameof(DeviceAqaraModel.DeviceName), opt => opt.MapFrom(src => src.Name));  
+                .ForMember(nameof(DeviceAqaraModel.DeviceName), opt => opt.MapFrom(src => src.Name));
         }
 
         #endregion
