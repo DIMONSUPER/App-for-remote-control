@@ -1,6 +1,6 @@
 ﻿namespace SmartMirror.Views.Tabs.Views
 {
-    public  class BaseContentView : ContentView, IPageLifecycleAware
+    public class BaseContentView : ContentView, IPageLifecycleAware
     {
         #region -- Public properties --
 
@@ -19,7 +19,7 @@
 
         public void OnDisappearing()
         {
-            Disappearing.Invoke(this, EventArgs.Empty);
+            Disappearing?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion

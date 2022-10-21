@@ -11,8 +11,12 @@
     x:Class="SmartMirror.Views.Tabs.Pages.CamerasPage"
     x:DataType="vm:CamerasPageViewModel">
 
-    <controls:LazyView
-        x:TypeArguments="views:CamerasPageView"
-        x:Name="lazyView"/>
+    <controls:LazyView x:Name="lazyView">
+
+        <DataTemplate>
+            <views:CamerasPageView/>
+        </DataTemplate>
+        
+    </controls:LazyView>
 
 </tabs:BaseTabContentPage>

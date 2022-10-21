@@ -1,16 +1,23 @@
 ﻿namespace SmartMirror.Controls
 {
-    public class LazyView<TView> : ContentView where TView : View, new ()
+    [ContentProperty("Template")]
+    public class LazyView : ContentView
     {
         private bool _isPageLoaded;
 
+        #region -- Public properties --
+        
+        public DataTemplate Template { get; set; }
+        
+        #endregion
+
         #region -- Public helpers --
 
-        public void TryLoadView()
+        public void LoadView()
         {
             if (!_isPageLoaded)
             {
-                Content = new TView { BindingContext = BindingContext };
+                Content = (View)Template.CreateContent();
 
                 _isPageLoaded = true;
             }

@@ -2,9 +2,9 @@
 
 public partial class NotificationsPage : BaseTabContentPage
 {
-	public NotificationsPage()
-	{
-		InitializeComponent();
+    public NotificationsPage()
+    {
+        InitializeComponent();
     }
 
     #region -- Overrides --
@@ -13,7 +13,7 @@ public partial class NotificationsPage : BaseTabContentPage
     {
         base.OnAppearing();
 
-        lazyView.TryLoadView();
+        lazyView.LoadView();
 
         if (lazyView.Content is IPageLifecycleAware content)
         {

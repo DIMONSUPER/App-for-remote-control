@@ -2,24 +2,24 @@
 
 public partial class CamerasPage : BaseTabContentPage
 {
-	public CamerasPage()
-	{
-		InitializeComponent();
+    public CamerasPage()
+    {
+        InitializeComponent();
     }
 
     #region -- Overrides --
 
     protected override void OnAppearing()
-	{
-		base.OnAppearing();
+    {
+        base.OnAppearing();
 
-		lazyView.TryLoadView();
+        lazyView.LoadView();
 
-		if (lazyView.Content is IPageLifecycleAware content)
-		{
-			content.OnAppearing();
-		}
+        if (lazyView.Content is IPageLifecycleAware content)
+        {
+            content.OnAppearing();
+        }
     }
 
-	#endregion
+    #endregion
 }

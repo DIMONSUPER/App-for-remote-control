@@ -13,7 +13,7 @@ public partial class RoomsPage : BaseTabContentPage
     {
         base.OnAppearing();
 
-        lazyView.TryLoadView();
+        lazyView.LoadView();
 
         if (lazyView.Content is IPageLifecycleAware content)
         {

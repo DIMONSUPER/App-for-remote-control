@@ -11,8 +11,12 @@
     x:Class="SmartMirror.Views.Tabs.Pages.NotificationsPage"
     x:DataType="vm:NotificationsPageViewModel">
 
-    <controls:LazyView
-        x:TypeArguments="views:NotificationsPageView"
-        x:Name="lazyView"/>
+    <controls:LazyView x:Name="lazyView">
+
+        <DataTemplate>
+            <views:NotificationsPageView/>
+        </DataTemplate>
+
+    </controls:LazyView>
 
 </tabs:BaseTabContentPage>
