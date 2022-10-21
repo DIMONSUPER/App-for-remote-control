@@ -11,12 +11,8 @@
     x:Class="SmartMirror.Views.Tabs.Pages.RoomsPage"
     x:DataType="vm:RoomsPageViewModel">
 
-    <controls:LazyContentView x:Name="lazyView">
-        <DataTemplate>
-
-            <views:RoomsPageView/>
-
-        </DataTemplate>
-    </controls:LazyContentView>
+    <controls:LazyView
+        x:TypeArguments="views:RoomsPageView"
+        x:Name="lazyView"/>
 
 </tabs:BaseTabContentPage>

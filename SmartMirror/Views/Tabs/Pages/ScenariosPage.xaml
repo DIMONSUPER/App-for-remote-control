@@ -11,12 +11,8 @@
     x:Class="SmartMirror.Views.Tabs.Pages.ScenariosPage"
     x:DataType="vm:ScenariosPageViewModel">
 
-    <controls:LazyContentView x:Name="lazyView">
-        <DataTemplate>
-
-            <views:ScenariosPageView/>
-
-        </DataTemplate>
-    </controls:LazyContentView>
+    <controls:LazyView
+        x:TypeArguments="views:ScenariosPageView"
+        x:Name="lazyView"/>
 
 </tabs:BaseTabContentPage>
