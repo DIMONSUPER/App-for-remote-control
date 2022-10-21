@@ -30,6 +30,9 @@
                 public const string HUMIDITY_STATUS = "0.2.85";
                 public const string TEMPERATURE_STATUS = "0.1.85";
                 public const string AIR_PRESSURE_STATUS = "0.3.85";
+                public const string MOTION_STATUS = "3.1.85";
+                public const string LUX_STATUS = "0.3.85";
+                public const string ILLUMINATION_STATUS = "0.4.85";
             }
         }
 
@@ -43,6 +46,11 @@
         public static class Limits
         {
             public const int TIME_TO_ATTEMPT_UPDATE_IN_SECONDS = 15;
+        }
+
+        public static class Analytics
+        {
+            public const string AndroidKey = "8a361957-36a1-4bf0-a252-f03a47119eca";
         }
     }
 }

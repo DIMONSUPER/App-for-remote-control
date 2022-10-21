@@ -29,8 +29,6 @@
 		<Configurations>DEV;Debug;Release</Configurations>
 	</PropertyGroup>
 	<ItemGroup>
-		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" />
 		<!-- Splash Screen -->
 		<MauiImage Include="Resources\Images\*" />
 		<MauiFont Include="Resources\Fonts\*" />
@@ -81,6 +79,8 @@
 		<None Remove="Models\Aqara\" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.3" />
+		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.5.3" />
 		<PackageReference Include="Prism.DryIoc.Maui" Version="8.1.273-pre" />
 		<PackageReference Include="Prism.Maui" Version="8.1.273-pre" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="1.3.0" />
