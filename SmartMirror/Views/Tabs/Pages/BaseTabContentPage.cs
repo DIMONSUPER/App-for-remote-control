@@ -1,4 +1,4 @@
-﻿namespace SmartMirror.Views.Tabs;
+﻿namespace SmartMirror.Views.Tabs.Pages;
 
 public class BaseTabContentPage : ContentPage
 {
@@ -7,4 +7,3 @@ public class BaseTabContentPage : ContentPage
         NavigationPage.SetHasNavigationBar(this, false);
     }
 }
-

@@ -4,11 +4,11 @@ using SmartMirror.Models.BindableModels;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace SmartMirror.ViewModels
+namespace SmartMirror.ViewModels.Tabs.Details
 {
     public class ScenarioDetailsPageViewModel : BaseViewModel
     {
-        public ScenarioDetailsPageViewModel(INavigationService navigationService) 
+        public ScenarioDetailsPageViewModel(INavigationService navigationService)
             : base(navigationService)
         {
         }
@@ -31,7 +31,7 @@ namespace SmartMirror.ViewModels
 
         private ICommand _goBackCommand;
         public ICommand GoBackCommand => _goBackCommand ??= SingleExecutionCommand.FromFunc(OnGoBackCommandAsync);
-        
+
         private ICommand _tryAgainCommand;
         public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
 

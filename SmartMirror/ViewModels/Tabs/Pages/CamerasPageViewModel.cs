@@ -6,7 +6,7 @@ using SmartMirror.Services.Mapper;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace SmartMirror.ViewModels.Tabs;
+namespace SmartMirror.ViewModels.Tabs.Pages;
 
 public class CamerasPageViewModel : BaseTabViewModel
 {
@@ -64,7 +64,7 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private ICommand _selectCameraCommand;
     public ICommand SelectCameraCommand => _selectCameraCommand ??= SingleExecutionCommand.FromFunc<CameraBindableModel>(OnSelectCameraCommandAsync);
-    
+
     private ICommand _refreshCamerasCommand;
     public ICommand RefreshCamerasCommand => _refreshCamerasCommand ??= SingleExecutionCommand.FromFunc(OnRefreshCamerasCommandAsync);
 
@@ -78,7 +78,7 @@ public class CamerasPageViewModel : BaseTabViewModel
     public override async void OnAppearing()
     {
         base.OnAppearing();
-        
+
         if (!IsDataLoading)
         {
             DataState = EPageState.Loading;
@@ -101,7 +101,7 @@ public class CamerasPageViewModel : BaseTabViewModel
             if (!IsDataLoading && DataState != EPageState.Complete)
             {
                 DataState = EPageState.Loading;
-                
+
                 await LoadCamerasAndChangeStateAsync();
             }
         }
@@ -147,7 +147,7 @@ public class CamerasPageViewModel : BaseTabViewModel
         return Task.CompletedTask;
     }
 
-    private async Task OnRefreshCamerasCommandAsync() 
+    private async Task OnRefreshCamerasCommandAsync()
     {
         if (!IsDataLoading)
         {
@@ -206,7 +206,7 @@ public class CamerasPageViewModel : BaseTabViewModel
                 SelectCamera(camera);
 
                 isLoaded = true;
-            } 
+            }
         }
 
         return isLoaded;

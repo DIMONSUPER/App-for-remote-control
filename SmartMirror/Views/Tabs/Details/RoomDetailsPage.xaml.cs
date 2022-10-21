@@ -1,4 +1,4 @@
-﻿namespace SmartMirror.Views;
+﻿namespace SmartMirror.Views.Tabs.Details;
 
 public partial class RoomDetailsPage : BaseContentPage
 {

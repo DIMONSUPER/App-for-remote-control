@@ -4,11 +4,12 @@ using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
+using SmartMirror.ViewModels.Tabs.Details;
 using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace SmartMirror.ViewModels.Tabs;
+namespace SmartMirror.ViewModels.Tabs.Pages;
 
 public class ScenariosPageViewModel : BaseTabViewModel
 {
@@ -178,7 +179,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
             }
         }
         else
-        {     
+        {
             DataState = EPageState.NoInternet;
         }
     }

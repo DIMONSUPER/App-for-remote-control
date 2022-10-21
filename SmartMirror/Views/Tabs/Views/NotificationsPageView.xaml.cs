@@ -1,10 +1,11 @@
-﻿using System.ComponentModel;
+using SmartMirror.Controls;
+using System.ComponentModel;
 
-namespace SmartMirror.Views.Tabs;
+namespace SmartMirror.Views.Tabs.Views;
 
-public partial class NotificationsPage : BaseTabContentPage
+public partial class NotificationsPageView : CustomStateView
 {
-	public NotificationsPage()
+	public NotificationsPageView()
 	{
 		InitializeComponent();
 

@@ -1,7 +1,7 @@
 using SmartMirror.Enums;
 using SmartMirror.Interfaces;
 
-namespace SmartMirror.ViewModels.Tabs;
+namespace SmartMirror.ViewModels.Tabs.Pages;
 
 public class BaseTabViewModel : BindableBase, IInitialize, IPageLifecycleAware, INavigationAware, IDestructible, ISelectable
 {

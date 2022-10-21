@@ -18,7 +18,8 @@ using SmartMirror.Services.Settings;
 using SmartMirror.ViewModels;
 using SmartMirror.Views;
 using SmartMirror.Views.Dialogs;
-using SmartMirror.Views.Tabs;
+using SmartMirror.Views.Tabs.Details;
+using SmartMirror.Views.Tabs.Pages;
 using System.Diagnostics;
 
 namespace SmartMirror;
