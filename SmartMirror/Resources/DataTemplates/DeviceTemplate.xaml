@@ -120,8 +120,8 @@
                        IsVisible="False"
                        HorizontalOptions="End"
                        VerticalOptions="End"
-                       WidthRequest="37"
-                       HeightRequest="32"
+                       WidthRequest="{Binding ActivityIndicatorSize, Source={x:Reference deviceTemplate}}"
+                       HeightRequest="{Binding ActivityIndicatorSize, Source={x:Reference deviceTemplate}}"
                        Source="orange_triangle">
 
                     <Image.Triggers>
@@ -154,7 +154,7 @@
                        VerticalTextAlignment="Start"
                        HorizontalOptions="FillAndExpand"
                        HorizontalTextAlignment="End"
-                       Margin="0,0,12,0"
+                       Margin="0,0,0,0"
                        Style="{x:DynamicResource tstyle_i12}">
 
                     <Label.Triggers>
@@ -237,7 +237,7 @@
                 <controls:CustomSwitch InputTransparent="True"
                                        VerticalOptions="Start"
                                        HorizontalOptions="End"
-                                       Margin="0,6,3,0">
+                                       Margin="12,6,3,0">
 
                     <controls:CustomSwitch.Triggers>
 
