@@ -47,5 +47,10 @@
         {
             public const int TIME_TO_ATTEMPT_UPDATE_IN_SECONDS = 15;
         }
+
+        public static class Analytics
+        {
+            public const string AndroidKey = "8a361957-36a1-4bf0-a252-f03a47119eca";
+        }
     }
 }
