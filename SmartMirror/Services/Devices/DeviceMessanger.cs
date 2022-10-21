@@ -4,6 +4,8 @@ using SmartMirror.Models.Aqara;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using SmartMirror.Models;
+using static Android.Provider.CalendarContract;
 
 namespace SmartMirror.Services.Devices
 {
@@ -19,11 +21,7 @@ namespace SmartMirror.Services.Devices
 
         #region -- Public properties --
 
-        public event EventHandler<MessageChangeResponse> MessageChangeReceived;
-
-        public event EventHandler<MessageEventResponse> MessageEventReceived;
-
-        public event EventHandler<MessageDicsonnectReponse> MessageDicsonnectReceived;
+        public event EventHandler<AqaraMessageEventArgs> MessageReceived;
 
         public event EventHandler StoppedListenning;
 
@@ -51,22 +49,11 @@ namespace SmartMirror.Services.Devices
                         {
                             var message = Encoding.UTF8.GetString(data.Buffer);
 
-                            if (TryDeserealize(message, out MessageEventResponse messageEventResponse))
-                            {
-                                MessageEventReceived?.Invoke(this, messageEventResponse);
-                            }
-                            else if (TryDeserealize(message, out MessageChangeResponse messageChangeResponse))
-                            {
-                                MessageChangeReceived?.Invoke(this, messageChangeResponse);
-                            }
-                            else if (TryDeserealize(message, out MessageDicsonnectReponse messageDisconnectResponse))
-                            {
-                                MessageDicsonnectReceived?.Invoke(this, messageDisconnectResponse);
-                            }
-                            else
-                            {
-                                System.Diagnostics.Debug.WriteLine($"Failed to serealize {message}");
-                            }
+                            DeserealizeAndInvokeHandler(message);
+                        }
+                        else
+                        {
+                            break;
                         }
                     }
                 }
@@ -93,6 +80,69 @@ namespace SmartMirror.Services.Devices
         #endregion
 
         #region -- Private helpers --
+
+        private void DeserealizeAndInvokeHandler(string message)
+        {
+            if (TryDeserealize(message, out MessageEventResponse messageEventResponse))
+            {
+                foreach (var eventData in messageEventResponse.Data)
+                {
+                    MessageReceived?.Invoke(this, new()
+                    {
+                        EventType = messageEventResponse.MsgType,
+                        DeviceId = eventData.SubjectId,
+                        Time = eventData.Time,
+                        ResourceId = eventData.ResourceId,
+                        Value = eventData.Value,
+                    });
+                }
+            }
+            else if (TryDeserealize(message, out MessageChangeResponse messageChangeResponse))
+            {
+                if (messageChangeResponse.Data?.ChangeValues is not null && messageChangeResponse.Data.ChangeValues.Any())
+                {
+                    foreach (var changeValue in messageChangeResponse.Data?.ChangeValues)
+                    {
+                        MessageReceived?.Invoke(this, new()
+                        {
+                            EventType = messageChangeResponse.EventType,
+                            DeviceId = messageChangeResponse.Data.Did,
+                            Time = messageChangeResponse.Time,
+                            ResourceId = changeValue.ResourceId,
+                            Value = changeValue.Name,
+                        });
+                    }
+                }
+                else
+                {
+                    MessageReceived?.Invoke(this, new()
+                    {
+                        EventType = messageChangeResponse.EventType,
+                        DeviceId = messageChangeResponse.Data.Did,
+                        Time = messageChangeResponse.Data.Time,
+                        Value = messageChangeResponse.Data.DeviceName,
+                    });
+                }
+            }
+            else if (TryDeserealize(message, out MessageDicsonnectReponse messageDisconnectResponse))
+            {
+                foreach (var subDid in messageDisconnectResponse.Data.SubDids)
+                {
+                    MessageReceived?.Invoke(this, new()
+                    {
+                        EventType = messageDisconnectResponse.EventType,
+                        DeviceId = messageDisconnectResponse.Data.Did,
+                        Time = messageDisconnectResponse.Data.Time,
+                        ResourceId = subDid,
+                        Value = messageDisconnectResponse.Data.Cause.ToString(),
+                    });
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to serealize {message}");
+            }
+        }
 
         private bool TryDeserealize<T>(string json, out T target)
         {
