@@ -14,4 +14,7 @@ public static class IconsNames
     public const string pic_motion = nameof(pic_motion);
     public const string pic_dimmer = nameof(pic_dimmer);
     public const string grey_question_mark = nameof(grey_question_mark);
+    public const string pic_wall_switch_three = nameof(pic_wall_switch_three);
+    public const string pic_wall_switch_double = nameof(pic_wall_switch_double);
+    public const string pic_hub = nameof(pic_hub);
 }

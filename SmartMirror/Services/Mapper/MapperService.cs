@@ -75,6 +75,8 @@ namespace SmartMirror.Services.Mapper
                 cfg.CreateMap<FanDevice, DeviceBindableModel>().ReverseMap();
                 ConfigureDeviceMapping(cfg);
                 cfg.CreateMap<NotificationModel, NotificationGroupItemBindableModel>().ReverseMap();
+                cfg.CreateMap<DetailSceneAqaraModel, ScenarioBindableModel>().ReverseMap();
+                cfg.CreateMap<ActionAqaraModel, ScenarioActionBindableModel>().ReverseMap();
             });
 
             return mapperConfiguration.CreateMapper();
@@ -92,7 +94,7 @@ namespace SmartMirror.Services.Mapper
                 .ForMember(nameof(DeviceAqaraModel.CreateTime), opt => opt.MapFrom(src => DateTimeHelper.ConvertToMilliseconds(src.CreateTime)))
                 .ForMember(nameof(DeviceAqaraModel.UpdateTime), opt => opt.MapFrom(src => DateTimeHelper.ConvertToMilliseconds(src.UpdateTime)))
                 .ForMember(nameof(DeviceAqaraModel.Did), opt => opt.MapFrom(src => src.DeviceId))
-                .ForMember(nameof(DeviceAqaraModel.DeviceName), opt => opt.MapFrom(src => src.Name));
+                .ForMember(nameof(DeviceAqaraModel.DeviceName), opt => opt.MapFrom(src => src.Name));  
         }
 
         #endregion

@@ -1,6 +1,9 @@
 ﻿using SmartMirror.Helpers;
 using SmartMirror.Models;
+using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Aqara;
+using SmartMirror.Services.Devices;
+using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 
 namespace SmartMirror.Services.Scenarios
@@ -9,13 +12,19 @@ namespace SmartMirror.Services.Scenarios
     {
         private readonly ISmartHomeMockService _smartHomeMockService;
         private readonly IAqaraService _aqaraService;
+        private readonly IMapperService _mapperService;
+        private readonly IDevicesService _devicesService;
 
         public ScenariosService(
             ISmartHomeMockService smartHomeMockService,
-            IAqaraService aqaraService)
+            IAqaraService aqaraService,
+            IMapperService mapperService,
+            IDevicesService devicesService)
         {
             _smartHomeMockService = smartHomeMockService;
             _aqaraService = aqaraService;
+            _mapperService = mapperService;
+            _devicesService = devicesService;
         }
 
         #region -- IScenariosService implementation --
@@ -26,18 +35,23 @@ namespace SmartMirror.Services.Scenarios
             {
                 var scenarios = Enumerable.Empty<ScenarioModel>();
 
-                var resultOfGettingScenaries = await GetScenariosFromAqaraAsync();
-
-                if (resultOfGettingScenaries.IsSuccess)
+                if (_aqaraService.IsAuthorized)
                 {
-                    scenarios = resultOfGettingScenaries.Result;
+                    var resultOfGettingScenaries = await GetScenariosFromAqaraAsync();
+
+                    if (resultOfGettingScenaries.IsSuccess)
+                    {
+                        scenarios = resultOfGettingScenaries.Result;
+                    }
                 }
-
-                var mockScenarios = _smartHomeMockService.GetScenarios();
-
-                if (mockScenarios is not null)
+                else
                 {
-                    scenarios = scenarios.Concat(mockScenarios);
+                    var mockScenarios = _smartHomeMockService.GetScenarios();
+
+                    if (mockScenarios is not null)
+                    {
+                        scenarios = mockScenarios;
+                    }
                 }
 
                 return scenarios;
@@ -65,11 +79,11 @@ namespace SmartMirror.Services.Scenarios
             });
         }
 
-        public Task<AOResult<ScenarioModel>> GetScenarioByIdAsync(string sceneId)
+        public Task<AOResult<ScenarioBindableModel>> GetScenarioByIdAsync(string sceneId)
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
-                var scenario = new ScenarioModel();
+                var scenario = new ScenarioBindableModel();
 
                 var resultOfGetttingSceneById = await _aqaraService.GetSceneByIdAsync(sceneId);
 
@@ -79,11 +93,12 @@ namespace SmartMirror.Services.Scenarios
                     {
                         var scene = resultOfGetttingSceneById?.Result;
 
-                        scenario = new ScenarioModel
+                        scenario = _mapperService.Map<ScenarioBindableModel>(scene);
+
+                        foreach (var action in scenario.Actions)
                         {
-                            Id = scene.SceneId,
-                            Name = scene.Name,
-                        };
+                            action.Device = _devicesService.AllDevices.FirstOrDefault(x => x.DeviceId == action.SubjectId);
+                        }
                     }
                     else
                     {
@@ -164,7 +179,7 @@ namespace SmartMirror.Services.Scenarios
 
                 return scenarios;
             });
-        } 
+        }
 
         #endregion
     }
