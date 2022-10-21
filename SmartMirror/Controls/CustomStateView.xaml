@@ -92,15 +92,11 @@
                        Text="{extensions:Translate NoInternetConnection}"
                        HorizontalOptions="Center"/>
 
-                <Button Margin="0,37,0,0"
+                <Button Style="{DynamicResource ButtonStyle_i2}"
+                        Margin="0,37,0,0"
                         Text="{extensions:Translate TryAgain}"
-                        TextColor="{StaticResource tcolor_i2}"
-                        FontFamily="InterBold"
-                        BackgroundColor="{StaticResource cbg_i3}"
-                        Shadow="{DynamicResource Shadow_i3}"
                         Command="{Binding TryAgainCommand, Source={x:Reference stateContanier}}"
-                        WidthRequest="163"
-                        CornerRadius="16"/>
+                        WidthRequest="183"/>
 
             </VerticalStackLayout>
                 

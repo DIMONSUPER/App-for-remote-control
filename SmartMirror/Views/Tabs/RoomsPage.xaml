@@ -70,15 +70,11 @@
                                                  Number="{Binding FavoriteAccessories.Count}"/>
 
                         <!-- TODO: remove when doesn't needed -->
-                        <Button Text="Login with Aqara"
+                        <Button Style="{DynamicResource ButtonStyle_i1}"
+                                Text="Login with Aqara"
                                 VerticalOptions="Center"
                                 HorizontalOptions="EndAndExpand"
-                                BackgroundColor="#E5FFFFFF"
-                                TextColor="Black"
-                                FontSize="{x:DynamicResource tsize_i2}"
-                                FontFamily="InterBold"
                                 Margin="40,0"
-                                Padding="10,3"
                                 IsVisible="{Binding IsAqaraLoginButtonVisible}"
                                 Command="{Binding AqaraLoginButtonTappedCommand}"/>
 

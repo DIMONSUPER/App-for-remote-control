@@ -1,8 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
-using SmartMirror.Enums;
+﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
-using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
