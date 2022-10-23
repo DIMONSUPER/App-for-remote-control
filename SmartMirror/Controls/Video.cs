@@ -1,6 +1,7 @@
 ﻿using SmartMirror.Enums;
 using SmartMirror.Interfaces;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace SmartMirror.Controls
 {
@@ -51,6 +52,18 @@ namespace SmartMirror.Controls
         {
             get => (EVideoAction)GetValue(ActionProperty);
             set => SetValue(ActionProperty, value);
+        }
+
+        public static readonly BindableProperty VideoPlaybackErrorCommandProperty = BindableProperty.Create(
+            propertyName: nameof(VideoPlaybackErrorCommand),
+            returnType: typeof(ICommand),
+            declaringType: typeof(Video),
+            defaultBindingMode: BindingMode.OneWay);
+
+        public ICommand VideoPlaybackErrorCommand
+        {
+            get => (ICommand)GetValue(VideoPlaybackErrorCommandProperty);
+            set => SetValue(VideoPlaybackErrorCommandProperty, value);
         }
 
         #endregion

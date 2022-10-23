@@ -1,21 +1,22 @@
 ﻿using Android.Content;
+using Android.Media;
 using Android.Views;
 using Android.Widget;
 using AndroidX.CoordinatorLayout.Widget;
 using SmartMirror.Controls;
 using SmartMirror.Enums;
 using SmartMirror.Interfaces;
-using Color = Android.Graphics.Color;
 using Uri = Android.Net.Uri;
 
 namespace SmartMirror.Platforms.Android.Controls
 {
     public class MauiVideoPlayer : CoordinatorLayout
     {
+        private readonly IVideoController _videoController;
         private readonly Context _context;
         private VideoView _videoView;
         private Video _video;
-        private IVideoController _videoController;
+        private RelativeLayout _relativeLayout;
 
         public MauiVideoPlayer(Context context, Video video) : base(context)
         {
@@ -33,11 +34,13 @@ namespace SmartMirror.Platforms.Android.Controls
                 if (_videoView is not null)
                 {
                     _videoView.Prepared -= OnVideoViewPrepared;
+                    _videoView.Error -= OnVideoViewError;
                     _videoView.Dispose();
                 }
                 
-                _videoView = null; 
                 _video = null;
+                _videoView = null; 
+                _relativeLayout = null;
             }
 
             base.Dispose(disposing);
@@ -49,38 +52,26 @@ namespace SmartMirror.Platforms.Android.Controls
 
         public void TryUpdateSource()
         {
-            bool hasSetSource = false;
-            
-            RefreshView();
+            if (ChildCount == 0)
+            {
+                InitVideoPlayer();
+            }
+            else
+            {
+                ResetVideoPlayer();
+            }
 
             try
             {
-                if (!string.IsNullOrWhiteSpace(_video.Source))
+                if (!string.IsNullOrWhiteSpace(_video?.Source))
                 {
-                    _videoView?.SetVideoURI(Uri.Parse(_video.Source));
-
-                    hasSetSource = true;
+                    _videoView?.SetVideoURI(Uri.Parse(_video?.Source));
+                    
+                    _videoController.LoadingState = EVideoLoadingState.Preparing;
                 }
             }
             catch
             {
-            }
-
-            if (hasSetSource)
-            {
-                if (_video.Action == EVideoAction.Play)
-                {
-                    _videoController.LoadingState = EVideoLoadingState.Preparing;
-                    
-                    _videoView?.Start();
-                }
-            }
-            else
-            {
-                _videoController.LoadingState = EVideoLoadingState.Unprepared;
-
-                _videoView?.StopPlayback();
-                _videoView?.Resume();
             }
         }
 
@@ -97,47 +88,64 @@ namespace SmartMirror.Platforms.Android.Controls
         public void StopRequested()
         {
             _videoView?.StopPlayback();
-
-            _videoView?.Resume();
         }
 
         #endregion
 
         #region -- Private helpres --
 
-        private void RefreshView()
+        private void OnVideoViewPrepared(object sender, EventArgs args)
         {
-            RemoveViews(0, ChildCount);
+            _videoController.LoadingState = EVideoLoadingState.Prepared;
 
-            if (_videoView is not null)
+            if (_video.Action == EVideoAction.Play)
             {
-                _videoView.Prepared -= OnVideoViewPrepared;
-                _videoView.Dispose();
+                _videoView?.Start();
             }
+        }
 
+        private void OnVideoViewError(object sender, MediaPlayer.ErrorEventArgs e)
+        {
+            ResetVideoPlayer();
+
+            _video.VideoPlaybackErrorCommand?.Execute(null);
+        }
+
+        private void InitVideoPlayer()
+        {
             _videoView = new VideoView(_context)
             {
                 LayoutParameters = new RelativeLayout.LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent),
             };
 
             _videoView.Prepared += OnVideoViewPrepared;
+            _videoView.Error += OnVideoViewError;
 
-            var relativeLayout = new RelativeLayout(_context)
+            _relativeLayout = new RelativeLayout(_context)
             {
                 LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent)
                 {
-                    Gravity = (int)GravityFlags.Center
-                }
+                    Gravity = (int)GravityFlags.Center,
+                },
             };
 
-            SetBackgroundColor(Color.Black);
+            _relativeLayout.AddView(_videoView);
 
-            relativeLayout.AddView(_videoView);
-
-            AddView(relativeLayout);
+            AddView(_relativeLayout);
         }
 
-        private void OnVideoViewPrepared(object sender, EventArgs args) => _videoController.LoadingState = EVideoLoadingState.Prepared; 
+        private void ResetVideoPlayer()
+        {
+            _videoController.LoadingState = EVideoLoadingState.Unprepared;
+
+            _videoView?.StopPlayback();
+            _videoView?.SetVideoURI(null);
+
+            _relativeLayout?.RemoveView(_videoView);
+            _relativeLayout?.AddView(_videoView);
+
+            _videoView?.SetZOrderOnTop(true);
+        }
 
         #endregion
     }
