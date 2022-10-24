@@ -63,7 +63,7 @@ namespace SmartMirror.ViewModels
 
                 Task.Run(async () =>
                 {
-                    await LoadScenarioInformation(_scenarioBindableModel);
+                    await LoadScenarioInformationAsync(_scenarioBindableModel);
 
                     DataState = ScenarioActions?.Count > 0
                         ? EPageState.Complete
@@ -78,7 +78,7 @@ namespace SmartMirror.ViewModels
             {
                 DataState = EPageState.Loading;
 
-                await LoadScenarioInformation(_scenarioBindableModel);
+                await LoadScenarioInformationAsync(_scenarioBindableModel);
 
                 DataState = ScenarioActions?.Count > 0
                     ? EPageState.Complete
@@ -94,7 +94,7 @@ namespace SmartMirror.ViewModels
 
         #region -- Private helpers --
 
-        private async Task LoadScenarioInformation(ScenarioBindableModel scenario)
+        private async Task LoadScenarioInformationAsync(ScenarioBindableModel scenario)
         {
             var scenarioDetailInformation = await _scenariosService.GetScenarioByIdAsync(scenario.Id);
 
