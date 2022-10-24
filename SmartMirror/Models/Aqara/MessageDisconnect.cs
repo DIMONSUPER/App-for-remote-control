@@ -12,6 +12,9 @@ public class MessageDicsonnectData
 
     [JsonProperty("did")]
     public string Did { get; set; }
+
+    [JsonProperty("subDids")]
+    public IEnumerable<string> SubDids { get; set; }
 }
 
 public class MessageDicsonnectReponse

@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using SmartMirror.Enums;
 using SmartMirror.Helpers;
+using SmartMirror.Models;
 using SmartMirror.Models.Aqara;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources;
@@ -32,13 +33,14 @@ namespace SmartMirror.Services.Devices
             _mapperService = mapperService;
 
             _deviceMessanger.StartListening();
-            _deviceMessanger.MessageChangeReceived += OnMessageChangeReceived;
-            _deviceMessanger.MessageDicsonnectReceived += OnMessageDicsonnectReceived;
-            _deviceMessanger.MessageEventReceived += OnMessageEventReceived;
+            _deviceMessanger.MessageReceived += OnMessageReceived;
             _deviceMessanger.StoppedListenning += OnStoppedListenning;
         }
 
         #region -- IDevicesService implementation --
+
+        //Can't contain repeatable device ids
+        public List<DeviceBindableModel> AllDevices { get; private set; } = new();
 
         //Can contain repeatable device ids
         public List<DeviceBindableModel> AllSupportedDevices { get; private set; } = new();
@@ -61,11 +63,17 @@ namespace SmartMirror.Services.Devices
                     {
                         _cachedDevices[device.DeviceId] = device;
 
+                        if (device.Model.Contains("gateway"))
+                        {
+                            device.IconSource = IconsNames.pic_hub;
+                        }
+
                         var devices = await GetTaskForDevice(device);
 
                         result = result.Concat(devices);
                     }
 
+                    AllDevices = new(_cachedDevices.Select(x => x.Value));
                     AllSupportedDevices = new(result);
                 }
                 else
@@ -376,6 +384,8 @@ namespace SmartMirror.Services.Devices
 
             if (HasDeviceNSwitches(device, 3))
             {
+                device.IconSource = IconsNames.pic_wall_switch_three;
+
                 result = await GetDevicesForAttributesAsync(device,
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS,
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS,
@@ -383,12 +393,16 @@ namespace SmartMirror.Services.Devices
             }
             else if (HasDeviceNSwitches(device, 2))
             {
+                device.IconSource = IconsNames.pic_wall_switch_double;
+
                 result = await GetDevicesForAttributesAsync(device,
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS,
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS);
             }
             else if (HasDeviceNSwitches(device, 1))
             {
+                device.IconSource = IconsNames.pic_wall_switch_single;
+
                 result = await GetDevicesForAttributesAsync(device, Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS);
             }
 
@@ -456,49 +470,86 @@ namespace SmartMirror.Services.Devices
             return newDevice;
         }
 
-        private void OnStoppedListenning(object sender, EventArgs e)
+        //TODO: Add support to more events
+        private void OnMessageReceived(object sender, AqaraMessageEventArgs e)
         {
+            Action<AqaraMessageEventArgs> action = e.EventType switch
+            {
+                Constants.Aqara.EventTypes.resource_alias_changed => OnResourceAliasChanged,
+                Constants.Aqara.EventTypes.resource_report => OnReousrceReported,
+                Constants.Aqara.EventTypes.dev_name_change => OnDeviceNameChanged,
+                _ => x => { }
+                ,
+            };
+
+            action(e);
         }
 
-        private void OnMessageEventReceived(object sender, MessageEventResponse messageEventResponse)
+        private void OnDeviceNameChanged(AqaraMessageEventArgs aqaraMessage)
         {
-            foreach (var messageEvent in messageEventResponse.Data)
+            if (_cachedDevices.ContainsKey(aqaraMessage.DeviceId))
             {
-                System.Diagnostics.Debug.WriteLine("SubjectId: {0}, ResourceId: {1}, Value: {2}", messageEvent.SubjectId, messageEvent.ResourceId, messageEvent.Value);
-
-                var devicesWithId = AllSupportedDevices.Where(x => x.DeviceId == messageEvent.SubjectId);
-
-                foreach (var device in devicesWithId)
+                if (!string.IsNullOrWhiteSpace(aqaraMessage.ResourceId))
                 {
-                    if (device.EditableResourceId == messageEvent.ResourceId)
+                    var deviceAttribute = AllSupportedDevices.FirstOrDefault(x => x.EditableResourceId == aqaraMessage.ResourceId);
+
+                    if (deviceAttribute is not null)
                     {
-                        device.AdditionalInfo = messageEvent.Value;
+                        deviceAttribute.Name = aqaraMessage.Value;
                     }
                 }
-
-                System.Diagnostics.Debug.WriteLine($"Found: {devicesWithId.Count()}");
-            }
-        }
-
-        private void OnMessageDicsonnectReceived(object sender, MessageDicsonnectReponse e)
-        {
-        }
-
-        private void OnMessageChangeReceived(object sender, MessageChangeResponse messageChangeResponse)
-        {
-            var devicesWithId = AllSupportedDevices.Where(x => x.DeviceId == messageChangeResponse.Data.Did);
-
-            foreach (var changeValue in messageChangeResponse.Data.ChangeValues)
-            {
-                var device = devicesWithId.FirstOrDefault(x => x.EditableResourceId == changeValue.ResourceId);
-
-                if (device is not null)
+                else
                 {
-                    device.Name = changeValue.Name;
+                    var device = AllSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
+
+                    if (device is null)
+                    {
+                        device = _cachedDevices[aqaraMessage.DeviceId];
+                    }
+
+                    device.Name = aqaraMessage.Value;
                 }
 
-                System.Diagnostics.Debug.WriteLine("Name: {0}, ResourceId: {1}", changeValue.Name, changeValue.ResourceId);
+                System.Diagnostics.Debug.WriteLine($"{aqaraMessage.DeviceId}: resource {aqaraMessage.ResourceId} was changed to {aqaraMessage.Value}");
             }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Device {aqaraMessage.DeviceId} was not found");
+            }
+        }
+
+        private void OnReousrceReported(AqaraMessageEventArgs aqaraMessage)
+        {
+            var device = AllSupportedDevices.Where(x => x.DeviceId == aqaraMessage.DeviceId).FirstOrDefault(x => x.EditableResourceId == aqaraMessage.ResourceId);
+
+            if (device is not null)
+            {
+                device.AdditionalInfo = aqaraMessage.Value;
+                System.Diagnostics.Debug.WriteLine($"{device.Model}: resourceName {device.Name} was changed to {aqaraMessage.Value}");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Device {aqaraMessage.DeviceId} was not found");
+            }
+        }
+
+        private void OnResourceAliasChanged(AqaraMessageEventArgs aqaraMessage)
+        {
+            var device = AllSupportedDevices.Where(x => x.DeviceId == aqaraMessage.DeviceId).FirstOrDefault(x => x.EditableResourceId == aqaraMessage.ResourceId);
+
+            if (device is not null)
+            {
+                device.Name = aqaraMessage.Value;
+                System.Diagnostics.Debug.WriteLine($"{device.Model}: resource {device.EditableResourceId} was changed to {aqaraMessage.Value}");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Device {aqaraMessage.DeviceId} was not found");
+            }
+        }
+
+        private void OnStoppedListenning(object sender, EventArgs e)
+        {
         }
 
         #endregion
