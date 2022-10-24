@@ -75,6 +75,8 @@ namespace SmartMirror.Services.Mapper
                 cfg.CreateMap<FanDevice, DeviceBindableModel>().ReverseMap();
                 ConfigureDeviceMapping(cfg);
                 cfg.CreateMap<NotificationModel, NotificationGroupItemBindableModel>().ReverseMap();
+                cfg.CreateMap<DetailSceneAqaraModel, ScenarioBindableModel>().ReverseMap();
+                cfg.CreateMap<ActionAqaraModel, ScenarioActionBindableModel>().ReverseMap();
             });
 
             return mapperConfiguration.CreateMapper();

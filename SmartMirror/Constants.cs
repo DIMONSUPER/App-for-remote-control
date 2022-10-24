@@ -34,6 +34,29 @@
                 public const string LUX_STATUS = "0.3.85";
                 public const string ILLUMINATION_STATUS = "0.4.85";
             }
+
+            public static class EventTypes
+            {
+                //Documentation: https://opendoc.aqara.cn/en/docs/developmanual/messagePush/messagePushFormat.html
+                public const string gateway_bind = nameof(gateway_bind);
+                public const string subdevice_bind = nameof(subdevice_bind);
+                public const string gateway_unbind = nameof(gateway_unbind);
+                public const string unbind_sub_gw = nameof(unbind_sub_gw);
+                public const string gateway_online = nameof(gateway_online);
+                public const string gateway_offline = nameof(gateway_offline);
+                public const string subdevice_online = nameof(subdevice_online);
+                public const string subdevice_offline = nameof(subdevice_offline);
+                public const string dev_name_change = nameof(dev_name_change);
+                public const string dev_position_assign = nameof(dev_position_assign);
+                public const string resource_alias_changed = nameof(resource_alias_changed);
+                public const string linkage_created = nameof(linkage_created);
+                public const string scene_created = nameof(scene_created);
+                public const string event_created = nameof(event_created);
+                public const string linkage_deleted = nameof(linkage_deleted);
+                public const string scene_deleted = nameof(scene_deleted);
+                public const string event_deleted = nameof(event_deleted);
+                public const string resource_report = nameof(resource_report);
+            }
         }
 
         public static class Formats
@@ -46,6 +69,11 @@
         public static class Limits
         {
             public const int TIME_TO_ATTEMPT_UPDATE_IN_SECONDS = 15;
+        }
+
+        public static class Analytics
+        {
+            public const string AndroidKey = "8a361957-36a1-4bf0-a252-f03a47119eca";
         }
     }
 }

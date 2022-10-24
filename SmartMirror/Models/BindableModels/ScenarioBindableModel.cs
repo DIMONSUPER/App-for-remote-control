@@ -12,6 +12,13 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _id, value);
         }
 
+        private string _sceneId;
+        public string SceneId
+        {
+            get => _sceneId;
+            set => SetProperty(ref _sceneId, value);
+        }
+
         private string _name;
         public string Name
         {
@@ -40,11 +47,11 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _activationTime, value);
         }
 
-        private ObservableCollection<ScenarioActionBindableModel> _scenarioActions;
-        public ObservableCollection<ScenarioActionBindableModel> ScenarioActions
+        private ObservableCollection<ScenarioActionBindableModel> _actions;
+        public ObservableCollection<ScenarioActionBindableModel> Actions
         {
-            get => _scenarioActions;
-            set => SetProperty(ref _scenarioActions, value);
+            get => _actions;
+            set => SetProperty(ref _actions, value);
         }
 
         private bool _isUpdating;

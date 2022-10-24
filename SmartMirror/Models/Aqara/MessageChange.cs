@@ -17,10 +17,22 @@ public class MessageChangeData
     public List<ChangeValue> ChangeValues { get; set; }
 
     [JsonProperty("time")]
-    public long Time { get; set; }
+    public string Time { get; set; }
 
     [JsonProperty("did")]
     public string Did { get; set; }
+
+    [JsonProperty("parentDid")]
+    public string ParentDid { get; set; }
+
+    [JsonProperty("positionId")]
+    public string PositionId { get; set; }
+
+    [JsonProperty("model")]
+    public string Model { get; set; }
+
+    [JsonProperty("deviceName")]
+    public string DeviceName { get; set; }
 }
 
 public class MessageChangeResponse

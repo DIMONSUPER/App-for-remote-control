@@ -1,8 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
-using SmartMirror.Enums;
+﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
-using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
@@ -74,8 +71,6 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
         if (parameters.TryGetValue(nameof(RoomBindableModel), out RoomBindableModel selectedRoom))
         {
-            DataState = EPageState.Loading;
-
             SelectRoom(selectedRoom);
         }
     }
@@ -123,24 +118,32 @@ public class RoomDetailsPageViewModel : BaseViewModel
                 room.IsSelected = room.Id == selectedRoom.Id;
             }
 
-            DataState = EPageState.Loading;
-
             var roomDevices = _devicesService.AllSupportedDevices.Where(x => x.PositionId == selectedRoom.Id);
 
-            SelectedRoomDevices = new(roomDevices);
+            if (roomDevices.Any())
+            {
+                DataState = EPageState.Loading;
 
-            DataState = IsInternetConnected
-                ? SelectedRoomDevices.Count == 0
+                Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    SelectedRoomDevices = new(roomDevices);
+
+                    DataState = EPageState.Complete;
+                }));
+            }
+            else
+            {
+                SelectedRoomDevices = new();
+
+                DataState = IsInternetConnected
                     ? EPageState.Empty
-                    : EPageState.Complete
-                : EPageState.NoInternet;
+                    : EPageState.NoInternet;
+            }
         }
     }
 
     private Task OnRoomSelectedCommandAsync(RoomBindableModel room)
     {
-        DataState = EPageState.Loading;
-
         SelectRoom(room);
 
         return Task.CompletedTask;
