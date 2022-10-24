@@ -39,6 +39,9 @@ namespace SmartMirror.Services.Devices
 
         #region -- IDevicesService implementation --
 
+        //Can't contain repeatable device ids
+        public List<DeviceBindableModel> AllDevices { get; private set; } = new();
+
         //Can contain repeatable device ids
         public List<DeviceBindableModel> AllSupportedDevices { get; private set; } = new();
 
@@ -60,11 +63,17 @@ namespace SmartMirror.Services.Devices
                     {
                         _cachedDevices[device.DeviceId] = device;
 
+                        if (device.Model.Contains("gateway"))
+                        {
+                            device.IconSource = IconsNames.pic_hub;
+                        }
+
                         var devices = await GetTaskForDevice(device);
 
                         result = result.Concat(devices);
                     }
 
+                    AllDevices = new(_cachedDevices.Select(x => x.Value));
                     AllSupportedDevices = new(result);
                 }
                 else
@@ -375,6 +384,8 @@ namespace SmartMirror.Services.Devices
 
             if (HasDeviceNSwitches(device, 3))
             {
+                device.IconSource = IconsNames.pic_wall_switch_three;
+
                 result = await GetDevicesForAttributesAsync(device,
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS,
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS,
@@ -382,12 +393,16 @@ namespace SmartMirror.Services.Devices
             }
             else if (HasDeviceNSwitches(device, 2))
             {
+                device.IconSource = IconsNames.pic_wall_switch_double;
+
                 result = await GetDevicesForAttributesAsync(device,
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS,
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS);
             }
             else if (HasDeviceNSwitches(device, 1))
             {
+                device.IconSource = IconsNames.pic_wall_switch_single;
+
                 result = await GetDevicesForAttributesAsync(device, Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS);
             }
 

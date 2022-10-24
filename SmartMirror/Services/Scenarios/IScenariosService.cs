@@ -1,5 +1,6 @@
 ﻿using SmartMirror.Helpers;
 using SmartMirror.Models;
+using SmartMirror.Models.BindableModels;
 
 namespace SmartMirror.Services.Scenarios
 {
@@ -9,7 +10,7 @@ namespace SmartMirror.Services.Scenarios
 
         Task<AOResult<IEnumerable<ScenarioModel>>> GetFavoriteScenariosAsync();
 
-        Task<AOResult<ScenarioModel>> GetScenarioByIdAsync(string scenarioId);
+        Task<AOResult<ScenarioBindableModel>> GetScenarioByIdAsync(string scenarioId);
 
         Task<AOResult> RunScenarioAsync(string scenarioId);
     }
