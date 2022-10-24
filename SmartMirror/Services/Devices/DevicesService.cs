@@ -455,6 +455,7 @@ namespace SmartMirror.Services.Devices
             return newDevice;
         }
 
+        //TODO: Add support to more events
         private void OnMessageReceived(object sender, AqaraMessageEventArgs e)
         {
             Action<AqaraMessageEventArgs> action = e.EventType switch
@@ -473,9 +474,7 @@ namespace SmartMirror.Services.Devices
         {
             if (_cachedDevices.ContainsKey(aqaraMessage.DeviceId))
             {
-                var device = _cachedDevices[aqaraMessage.DeviceId];
-
-                if (string.IsNullOrWhiteSpace(aqaraMessage.ResourceId))
+                if (!string.IsNullOrWhiteSpace(aqaraMessage.ResourceId))
                 {
                     var deviceAttribute = AllSupportedDevices.FirstOrDefault(x => x.EditableResourceId == aqaraMessage.ResourceId);
 
@@ -486,10 +485,17 @@ namespace SmartMirror.Services.Devices
                 }
                 else
                 {
+                    var device = AllSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
+
+                    if (device is null)
+                    {
+                        device = _cachedDevices[aqaraMessage.DeviceId];
+                    }
+
                     device.Name = aqaraMessage.Value;
                 }
 
-                System.Diagnostics.Debug.WriteLine($"{device.Model}: name {device.EditableResourceId} was changed to {aqaraMessage.Value}");
+                System.Diagnostics.Debug.WriteLine($"{aqaraMessage.DeviceId}: resource {aqaraMessage.ResourceId} was changed to {aqaraMessage.Value}");
             }
             else
             {
