@@ -108,7 +108,10 @@ namespace SmartMirror.Platforms.Android.Controls
         {
             ResetVideoPlayer();
 
-            _video.VideoPlaybackErrorCommand?.Execute(null);
+            if (_video.VideoPlaybackErrorCommand is not null && _video.VideoPlaybackErrorCommand.CanExecute(null))
+            {
+                _video.VideoPlaybackErrorCommand.Execute(null);
+            }
         }
 
         private void InitVideoPlayer()
