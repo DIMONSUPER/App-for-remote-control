@@ -151,19 +151,19 @@
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\ScenarioDetailsPage.xaml">
+		<MauiXaml Update="Views\Tabs\Details\ScenarioDetailsPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\Tabs\CamerasPage.xaml">
+		<MauiXaml Update="Views\Tabs\Pages\CamerasPage.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\Tabs\NotificationsPage.xaml">
+		<MauiXaml Update="Views\Tabs\Pages\NotificationsPage.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\Tabs\RoomsPage.xaml">
+		<MauiXaml Update="Views\Tabs\Pages\RoomsPage.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\Tabs\ScenariosPage.xaml">
+		<MauiXaml Update="Views\Tabs\Pages\ScenariosPage.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\RoomsTemplate.xaml">
@@ -172,7 +172,7 @@
 		<MauiXaml Update="Controls\CustomStateView.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\RoomDetailsPage.xaml">
+		<MauiXaml Update="Views\Tabs\Details\RoomDetailsPage.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\RoomsVerticalListTemplate.xaml">
@@ -186,6 +186,18 @@
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\DeviceTemplate.xaml">
 		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Tabs\Views\CamerasPageView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Tabs\Views\NotificationsPageView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Tabs\Views\RoomsPageView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Tabs\Views\ScenariosPageView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
@@ -203,10 +215,10 @@
 	  <Compile Update="Views\Dialogs\ErrorDialog.xaml.cs">
 	    <DependentUpon>ErrorDialog.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\RoomDetailsPage.xaml.cs">
+	  <Compile Update="Views\Tabs\Details\RoomDetailsPage.xaml.cs">
 	    <DependentUpon>RoomDetailsPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\ScenarioDetailsPage.xaml.cs">
+	  <Compile Update="Views\Tabs\Details\ScenarioDetailsPage.xaml.cs">
 	    <DependentUpon>ScenarioDetailsPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>

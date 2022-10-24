@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<tabs:BaseTabContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:tabs="clr-namespace:SmartMirror.Views.Tabs.Pages"
+    xmlns:views="clr-namespace:SmartMirror.Views.Tabs.Views"
+    xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs.Pages"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
+    Title="{extensions:Translate Rooms}"
+    x:Class="SmartMirror.Views.Tabs.Pages.RoomsPage"
+    x:DataType="vm:RoomsPageViewModel">
+
+    <controls:LazyView x:Name="lazyView">
+
+        <DataTemplate>
+            <views:RoomsPageView/>
+        </DataTemplate>
+
+    </controls:LazyView>
+
+</tabs:BaseTabContentPage>

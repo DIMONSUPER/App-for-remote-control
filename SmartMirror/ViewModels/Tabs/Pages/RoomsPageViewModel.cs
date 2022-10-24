@@ -7,11 +7,12 @@ using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Rooms;
 using SmartMirror.ViewModels.Dialogs;
+using SmartMirror.ViewModels.Tabs.Details;
 using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace SmartMirror.ViewModels.Tabs;
+namespace SmartMirror.ViewModels.Tabs.Pages;
 
 public class RoomsPageViewModel : BaseTabViewModel
 {
@@ -56,7 +57,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private ICommand _tryAgainCommand;
     public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
-    
+
     private bool _isAqaraLoginButtonVisible;
     public bool IsAqaraLoginButtonVisible
     {
@@ -108,7 +109,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         else
         {
             DataState = EPageState.NoInternet;
-        } 
+        }
     }
 
     #endregion
@@ -202,7 +203,7 @@ public class RoomsPageViewModel : BaseTabViewModel
                 });
 
                 if (!IsDataLoading)
-                {                 
+                {
                     await LoadRoomsAndDevicesAndChangeStateAsync();
                 }
             }
@@ -228,7 +229,7 @@ public class RoomsPageViewModel : BaseTabViewModel
             var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
 
             var isDataLoaded = await TaskRepeater.RepeatAsync(LoadRoomsAndDevicesAsync, executionTime);
-            
+
             if (IsInternetConnected)
             {
                 DataState = isDataLoaded
@@ -268,7 +269,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     private async Task<bool> LoadRoomsAndDevicesAsync()
     {
         bool isLoaded = false;
-        
+
         if (IsInternetConnected)
         {
             await Task.Delay(4000);
@@ -294,7 +295,7 @@ public class RoomsPageViewModel : BaseTabViewModel
                 Rooms = new(rooms);
 
                 isLoaded = true;
-            } 
+            }
         }
 
         return isLoaded;
@@ -322,7 +323,7 @@ public class RoomsPageViewModel : BaseTabViewModel
             devices = _mapperService.MapRange<DeviceBindableModel>(_smartHomeMockService.GetDevices());
         }
 
-        foreach(var device in devices)
+        foreach (var device in devices)
         {
             device.TappedCommand = AccessorieTappedCommand;
         }

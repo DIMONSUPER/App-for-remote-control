@@ -3,11 +3,11 @@ using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
-using SmartMirror.ViewModels.Tabs;
+using SmartMirror.ViewModels.Tabs.Pages;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace SmartMirror.ViewModels;
+namespace SmartMirror.ViewModels.Tabs.Details;
 
 public class RoomDetailsPageViewModel : BaseViewModel
 {

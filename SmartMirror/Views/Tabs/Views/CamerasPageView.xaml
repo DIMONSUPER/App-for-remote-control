@@ -1,29 +1,30 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<tabs:BaseTabContentPage 
-    xmlns:tabs="clr-namespace:SmartMirror.Views.Tabs"
+<?xml version="1.0" encoding="utf-8" ?>
+<views:BaseContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"        
     xmlns:bindables="clr-namespace:SmartMirror.Models.BindableModels"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:sc="clr-namespace:SmartMirror.Controls.StateContainer"
-    xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
+    xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs.Pages"
+    xmlns:views="clr-namespace:SmartMirror.Views.Tabs.Views"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:video="clr-namespace:SmartMirror.Controls"
-    Title="{extensions:Translate Cameras}"
     x:DataType="vm:CamerasPageViewModel"
-    x:Class="SmartMirror.Views.Tabs.CamerasPage">
+    x:Class="SmartMirror.Views.Tabs.Views.CamerasPageView">
 
-    <tabs:BaseTabContentPage.Resources>
+    <views:BaseContentView.Resources>
 
-        <templates:CameraTemplate x:Key="cameraTemplate"/>
+        <ResourceDictionary>
+            <templates:CameraTemplate x:Key="cameraTemplate"/>
+        </ResourceDictionary>
 
-    </tabs:BaseTabContentPage.Resources>
+    </views:BaseContentView.Resources>
 
-    <tabs:BaseTabContentPage.Triggers>
+    <views:BaseContentView.Triggers>
 
         <EventTrigger Event="Appearing">
 
@@ -31,9 +32,9 @@
 
         </EventTrigger>
 
-    </tabs:BaseTabContentPage.Triggers>
+    </views:BaseContentView.Triggers>
 
-    <controls:CustomStateView 
+    <controls:CustomStateView
         State="{Binding DataState}"
         TryAgainCommand="{Binding TryAgainCommand}"
         EmptyTitle="{extensions:Translate NoCamerasYet}"
@@ -55,7 +56,7 @@
                     <CollectionView 
                         ItemSizingStrategy="MeasureFirstItem"
                         ItemsSource="{Binding Cameras}"
-                        ItemTemplate="{DynamicResource cameraTemplate}"
+                        ItemTemplate="{StaticResource cameraTemplate}"
                         x:Name="collectionViewCameras"/>
 
                 </RefreshView>
@@ -125,7 +126,7 @@
                                 Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"/>
 
                         </Frame>
-                        
+
                     </Frame>
 
                     <ActivityIndicator 
@@ -139,5 +140,5 @@
         </controls:CustomStateView.CompleteContent>
 
     </controls:CustomStateView>
-
-</tabs:BaseTabContentPage>
+    
+</views:BaseContentView>

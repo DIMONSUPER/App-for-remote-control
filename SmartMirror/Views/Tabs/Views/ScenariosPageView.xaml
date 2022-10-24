@@ -1,19 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<tabs:BaseTabContentPage
-    xmlns:tabs="clr-namespace:SmartMirror.Views.Tabs"
+<?xml version="1.0" encoding="utf-8" ?>
+<views:BaseContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:tabs="clr-namespace:SmartMirror.Views.Tabs.Pages"
+    xmlns:views="clr-namespace:SmartMirror.Views.Tabs.Views"
     xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs"
+    xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs.Pages"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
-    x:Class="SmartMirror.Views.Tabs.ScenariosPage"
-    Title="Scenarios"
+    x:Class="SmartMirror.Views.Tabs.Views.ScenariosPageView"
     x:DataType="vm:ScenariosPageViewModel">
 
-    <tabs:BaseTabContentPage.Resources>
+    <views:BaseContentView.Resources>
 
         <ResourceDictionary>
 
@@ -23,9 +23,9 @@
 
         </ResourceDictionary>
 
-    </tabs:BaseTabContentPage.Resources>
+    </views:BaseContentView.Resources>
 
-    <tabs:BaseTabContentPage.Triggers>
+    <views:BaseContentView.Triggers>
 
         <EventTrigger Event="Appearing">
 
@@ -34,7 +34,7 @@
 
         </EventTrigger>
 
-    </tabs:BaseTabContentPage.Triggers>
+    </views:BaseContentView.Triggers>
 
     <controls:CustomStateView
         State="{Binding DataState}"
@@ -42,7 +42,7 @@
         EmptyTitle="{extensions:Translate NoScenariosYet}"
         EmptyStateImage="empty_scenarios"
         LoadingTitle="{extensions:Translate Scenarios}">
-
+        
         <controls:CustomStateView.CompleteContent>
 
             <controls:CustomScrollView
@@ -93,9 +93,9 @@
                                 TargetType="controls:BadgeTitleView"
                                 Binding="{Binding FavoriteScenarios.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
                                 Value="False">
-                                
+
                                 <Setter Property="Margin" Value="60, 0"/>
-                                
+
                             </DataTrigger>
                         </controls:BadgeTitleView.Triggers>
 
@@ -118,7 +118,7 @@
                                 Span="4"/>
 
                         </CollectionView.ItemsLayout>
-                        
+
                     </CollectionView>
 
                 </VerticalStackLayout>
@@ -128,5 +128,5 @@
         </controls:CustomStateView.CompleteContent>
 
     </controls:CustomStateView>
-
-</tabs:BaseTabContentPage>
+    
+</views:BaseContentView>

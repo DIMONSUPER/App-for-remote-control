@@ -6,7 +6,7 @@ using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace SmartMirror.ViewModels
+namespace SmartMirror.ViewModels.Tabs.Details
 {
     public class ScenarioDetailsPageViewModel : BaseViewModel
     {
@@ -43,7 +43,7 @@ namespace SmartMirror.ViewModels
 
         private ICommand _goBackCommand;
         public ICommand GoBackCommand => _goBackCommand ??= SingleExecutionCommand.FromFunc(OnGoBackCommandAsync);
-        
+
         private ICommand _tryAgainCommand;
         public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
 
