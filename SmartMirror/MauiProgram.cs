@@ -62,7 +62,7 @@ public static class MauiProgram
     private static void RegisterTypes(IContainerRegistry containerRegistry)
     {
         containerRegistry.RegisterDialog<ErrorDialog>();
-        containerRegistry.RegisterDialog<TemporaryDialog>();
+        containerRegistry.RegisterDialog<EnterCodeDialog>();
 
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
         containerRegistry.RegisterForNavigation<WelcomePage>();
@@ -113,7 +113,7 @@ public static class MauiProgram
     private static void OnConfigureMauiHandlers(IMauiHandlersCollection handlers)
     {
         handlers.AddCompatibilityRenderer(typeof(CustomTabbedPage), typeof(CustomTabbedPageRenderer));
-        handlers.AddCompatibilityRenderer(typeof(BlurredImage), typeof(BlurredImageRenderer));
+        handlers.AddCompatibilityRenderer(typeof(CustomNoBorderEntry), typeof(CustomNoBorderEntryRenderer));
     }
 
     #endregion

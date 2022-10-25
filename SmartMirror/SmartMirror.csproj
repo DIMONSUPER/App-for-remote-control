@@ -152,7 +152,7 @@
 		<MauiXaml Update="Resources\DataTemplates\ScenarioTemplate.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\Dialogs\AqaraEnterCode.xaml">
+		<MauiXaml Update="Views\Dialogs\EnterCodeDialog.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\ErrorDialog.xaml">
@@ -188,9 +188,6 @@
 		<MauiXaml Update="Resources\DataTemplates\RoomsVerticalListTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\Dialogs\TemporaryDialog.xaml">
-		  <SubType></SubType>
-		</MauiXaml>
 		<MauiXaml Update="Controls\CustomSwitch.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
@@ -224,6 +221,9 @@
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>Strings.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Dialogs\EnterCodeDialog.xaml.cs">
+	    <DependentUpon>EnterCodeDialog.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Dialogs\ErrorDialog.xaml.cs">
 	    <DependentUpon>ErrorDialog.xaml</DependentUpon>

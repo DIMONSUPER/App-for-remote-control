@@ -1,6 +1,4 @@
-﻿using SmartMirror.Controls;
-
-namespace SmartMirror.Views;
+﻿namespace SmartMirror.Views;
 
 public class BaseContentPage : ContentPage
 {
@@ -9,4 +7,3 @@ public class BaseContentPage : ContentPage
         NavigationPage.SetHasNavigationBar(this, false);
     }
 }
-

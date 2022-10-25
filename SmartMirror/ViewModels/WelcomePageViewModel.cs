@@ -1,6 +1,7 @@
-﻿using SmartMirror.Helpers;
+﻿using SmartMirror.Enums;
+using SmartMirror.Helpers;
+using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Aqara;
-using SmartMirror.ViewModels.Dialogs;
 using SmartMirror.Views;
 using SmartMirror.Views.Dialogs;
 using System.Windows.Input;
@@ -25,7 +26,7 @@ namespace SmartMirror.ViewModels
         #region -- Public properties --
 
         private ICommand _loginWithAqaraCommand;
-        public ICommand LoginWithAqaraCommand => _loginWithAqaraCommand ??= SingleExecutionCommand.FromFunc(OnLoginWithAqaraCommandAsync);
+        public ICommand LoginWithAqaraCommand => _loginWithAqaraCommand ??= SingleExecutionCommand.FromFunc<EAuthType>(OnLoginWithAqaraCommandAsync);
 
         private Stream _screenStream;
         public Stream ScreenStream
@@ -38,31 +39,31 @@ namespace SmartMirror.ViewModels
 
         #region -- Private helpers --
 
-        private async Task OnLoginWithAqaraCommandAsync()
+        private async Task OnLoginWithAqaraCommandAsync(EAuthType authType)
         {
             if (IsInternetConnected)
             {
                 var testEmail = "botheadworks@gmail.com";
 
-                //var resultOfSendingCodeToMail = await _aqaraService.SendLoginCodeAsync(testEmail);
+                var resultOfSendingCodeToMail = await _aqaraService.SendLoginCodeAsync(testEmail);
 
                 IDialogResult dialogResult;
 
-                if (true)
-                //if (resultOfSendingCodeToMail.IsSuccess)
+                if (resultOfSendingCodeToMail.IsSuccess)
                 {
-                    dialogResult = await _dialogService.ShowDialogAsync(nameof(TemporaryDialog), new DialogParameters
+                    dialogResult = await _dialogService.ShowDialogAsync(nameof(EnterCodeDialog), new DialogParameters
                     {
-                        { "ScreenStream", ScreenStream }
+                        { Constants.DialogsParameterKeys.TITLE, Strings.Aqara },
+                        { Constants.DialogsParameterKeys.AUTH_TYPE, authType },
                     });
                 }
                 else
                 {
-                    //dialogResult = await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
-                    //{
-                    //    { Constants.DialogsParameterKeys.TITLE, "FAIL" },
-                    //    { Constants.DialogsParameterKeys.DESCRIPTION, resultOfSendingCodeToMail.Result?.MsgDetails ?? resultOfSendingCodeToMail.Message },
-                    //});
+                    dialogResult = await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
+                    {
+                        { Constants.DialogsParameterKeys.TITLE, "FAIL" },
+                        { Constants.DialogsParameterKeys.DESCRIPTION, resultOfSendingCodeToMail.Result?.MsgDetails ?? resultOfSendingCodeToMail.Message },
+                    });
                 }
 
                 await ProcessDialogResultAsync(dialogResult, testEmail);
@@ -75,29 +76,11 @@ namespace SmartMirror.ViewModels
 
         private async Task ProcessDialogResultAsync(IDialogResult dialogResult, string email)
         {
-            if (dialogResult.Parameters.TryGetValue(nameof(TemporaryDialogViewModel.CodeText), out string code))
+            if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result))
             {
-                var loginWithCodeResponse = await _aqaraService.LoginWithCodeAsync(email, code);
-
-                if (loginWithCodeResponse.IsSuccess)
-                {
-                    await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
-                    {
-                        { Constants.DialogsParameterKeys.TITLE, "Success!" }
-                    });
-
-                    await NavigationService.CreateBuilder()
-                        .AddSegment<MainTabbedPage>()
-                        .NavigateAsync();
-                }
-                else
-                {
-                    await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
-                    {
-                        { Constants.DialogsParameterKeys.TITLE, "Fail!" },
-                        { Constants.DialogsParameterKeys.DESCRIPTION, loginWithCodeResponse.Message }
-                    });
-                }
+                await NavigationService.CreateBuilder()
+                    .AddSegment<MainTabbedPage>()
+                    .NavigateAsync();
             }
         }
 

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Grid
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:prismmaui="clr-namespace:Prism.Services.Xaml;assembly=Prism.Maui"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
+    RowDefinitions="60, auto, 300"
+    prismmaui:DialogLayout.UseMask="True"
+    prismmaui:DialogLayout.MaskStyle="{DynamicResource DialogMaskBoxViewStyle_i1}"
+    prismmaui:DialogLayout.CloseOnBackgroundTapped="True"
+    x:Class="SmartMirror.Views.Dialogs.EnterCodeDialog"
+    x:DataType="vm:EnterCodeDialogViewModel">
+
+    <Frame
+        Grid.Row="1"
+        Padding="0"
+        BackgroundColor="Transparent">
+
+        <Border
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 9"
+            Stroke="{DynamicResource tcolor_i1}"
+            BackgroundColor="{StaticResource cbg_i2}">
+
+            <VerticalStackLayout
+                Padding="30, 24"
+                Spacing="6">
+
+                <Label 
+                    Style="{DynamicResource tstyle_i11}"
+                    Text="{Binding Title}" />
+
+                <Border
+                    Margin="0, 10, 0, 0"
+                    Padding="1"
+                    HeightRequest="76"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 9"
+                    Stroke="{DynamicResource tcolor_i1}"
+                    BackgroundColor="{StaticResource cbg_i15}">
+
+                    <controls:CustomNoBorderEntry
+                        Margin="24, 18"
+                        BackgroundColor="{DynamicResource cbg_i15}"
+                        FontSize="{DynamicResource tsize_i2}"
+                        FontFamily="InterBold"
+                        Text="{Binding CodeText}"
+                        TextColor="{DynamicResource tcolor_i1}"
+                        Placeholder="{extensions:Translate EnterCode}"
+                        PlaceholderColor="{DynamicResource tcolor_i9}"
+                        x:Name="customNoBorderEntry"/>
+
+                </Border>
+
+                <Grid
+                    HorizontalOptions="Center"
+                    Margin="138, 36, 138, 20">
+
+                    <Button
+                        Style="{DynamicResource ButtonStyle_i1}"
+                        Text="{extensions:Translate Continue}"
+                        Command="{Binding ContinueCommand}">
+
+                        <Button.Triggers>
+
+                            <DataTrigger TargetType="Button" Binding="{Binding IsLoggingWithCode}" Value="True">
+
+                                <Setter Property="TextColor" Value="Transparent"/>
+
+                            </DataTrigger>
+
+                        </Button.Triggers>
+
+                    </Button>
+
+                    <ActivityIndicator
+                        IsVisible="{Binding IsLoggingWithCode}"
+                        IsRunning="{Binding IsLoggingWithCode}"
+                        Color="{DynamicResource cbg_i2}"/>
+
+                </Grid>
+
+            </VerticalStackLayout>
+
+        </Border>
+        
+    </Frame>
+    
+</Grid>

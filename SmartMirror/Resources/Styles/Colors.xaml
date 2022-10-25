@@ -23,6 +23,7 @@
     <Color x:Key="cbg_i12">#252525</Color>  <!--Dark Gray-->
     <Color x:Key="cbg_i13">#505053</Color>
     <Color x:Key="cbg_i14">#CCCCCC</Color>
+    <Color x:Key="cbg_i15">#262626</Color>
 
     <!-- TEXT COLORS -->
     <Color x:Key="tcolor_i1">#FFFFFF</Color>    <!-- White -->
@@ -33,6 +34,8 @@
     <Color x:Key="tcolor_i6">#969697</Color>    <!-- Light Gray -->
     <Color x:Key="tcolor_i7">#525252</Color>    <!--  -->
     <Color x:Key="tcolor_i8">#EBA17E</Color>    <!-- Orange -->
+    <Color x:Key="tcolor_i9">#20FFFFFF</Color>  <!-- White 32 opacity-->
+
 
     <!-- BRUSHES -->
     <LinearGradientBrush x:Key="GrayGradientBrush">
