@@ -42,6 +42,7 @@
 		<None Remove="Platforms\Android\Resources\drawable\scrollbar_track.xml" />
 		<None Remove="Prism.DryIoc.Maui" />
 		<None Remove="Prism.Maui" />
+		<None Remove="Resources\Images\carbon_settings.svg" />
 		<None Remove="Views\" />
 		<None Remove="ViewModels\" />
 		<None Remove="Services\" />

@@ -1,4 +1,5 @@
-﻿using Microsoft.Maui.Controls.Shapes;
+﻿using Bumptech.Glide.Load.Resource.Gif;
+using Microsoft.Maui.Controls.Shapes;
 using SmartMirror.Interfaces;
 
 namespace SmartMirror.Controls;
@@ -126,18 +127,72 @@ public class CustomTabbedPage : TabbedPage
             RowSpacing = 0,
         };
 
-        var stackTimeAndTabs = new StackLayout() { Spacing = 0 };
+        var tabBarStack = new StackLayout() { Spacing = 0 };
 
-        stackTimeAndTabs.Add(CreateTimeLabel());
+        tabBarStack.Add(CreateTimeLabel());
+        var grid = new Grid
+        {
+            ColumnSpacing = 0,
+            Padding = new Thickness(0, 0, 0, 0),
+            Margin = new Thickness(0, 0, 0, 0),
+        };
 
-        stackTimeAndTabs.Add(CreateBorder());
+        var r = grid.RowDefinitions;
 
-        tabBarView.Add(stackTimeAndTabs);
+        grid.Add(CreateBorder());
+        grid.Add(CreateSettingsIcon());
+
+        tabBarStack.Add(grid);
+
+        tabBarView.Add(tabBarStack);
 
         OnCurrentPageChanged();
 
         return tabBarView;
     }
+
+    private Border CreateSettingsIcon()
+    {
+        var border = new Border
+        {
+            VerticalOptions = LayoutOptions.EndAndExpand,
+            HorizontalOptions = LayoutOptions.EndAndExpand,
+            Padding = new Thickness
+            {
+                Left = 18,
+                Top = 16,
+                Right = 18,
+                Bottom = 16,
+            },
+            Margin = new Thickness
+            {
+                Left = 0,
+                Top = 0,
+                Right = 60,
+                Bottom = 0,
+            },
+            StrokeThickness = 1,
+            StrokeShape = new RoundRectangle() { CornerRadius = 9 },
+            Stroke = Color.FromArgb("#FFFFFF"),
+            BackgroundColor = Color.FromArgb("#3A3A3C"),
+            Content = new Image()
+            {
+                HeightRequest = 36,
+                WidthRequest = 36,
+                Source = "carbon_settings",
+            },
+            Shadow = new Shadow()
+            {
+                Radius = 4,
+                Brush = Color.FromArgb("F000000"),
+                Offset = new Point(0, 2),
+                Opacity = 0.4f,
+            },
+        };
+
+        return border;
+    }
+
 
     private CurrentTimeControl CreateTimeLabel()
     {
