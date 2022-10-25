@@ -76,16 +76,6 @@
                             Title="{extensions:Translate FavoriteAccessories}"
                             Number="{Binding FavoriteAccessories.Count}"/>
 
-                        <!-- TODO: remove when doesn't needed -->
-                        <Button
-                            Style="{DynamicResource ButtonStyle_i1}"
-                            Text="Login with Aqara"
-                            VerticalOptions="Center"
-                            HorizontalOptions="EndAndExpand"
-                            Margin="40,0"
-                            IsVisible="{Binding IsAqaraLoginButtonVisible}"
-                            Command="{Binding AqaraLoginButtonTappedCommand}"/>
-
                     </StackLayout>
 
                     <!-- FAVORITE ACCESSORIES COLLECTION -->

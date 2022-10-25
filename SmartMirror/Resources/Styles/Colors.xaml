@@ -45,4 +45,14 @@
 
     </LinearGradientBrush>
 
+    <LinearGradientBrush x:Key="GrayGradientBrush_i2">
+
+        <GradientStop Color="#3A3A3C"
+                      Offset="0"/>
+
+        <GradientStop Color="#2A2A2A"
+                      Offset="1"/>
+
+    </LinearGradientBrush>
+
 </ResourceDictionary>

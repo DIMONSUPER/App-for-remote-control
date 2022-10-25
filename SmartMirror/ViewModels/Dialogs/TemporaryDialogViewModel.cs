@@ -1,6 +1,5 @@
 ﻿using SmartMirror.Helpers;
 using System.Windows.Input;
-
 namespace SmartMirror.ViewModels.Dialogs;
 
 public class TemporaryDialogViewModel : BaseDialogViewModel
@@ -19,6 +18,27 @@ public class TemporaryDialogViewModel : BaseDialogViewModel
     {
         get => _codeText;
         set => SetProperty(ref _codeText, value);
+    }
+
+    private Stream _screenStream;
+    public Stream ScreenStream
+    {
+        get => _screenStream;
+        set => SetProperty(ref _screenStream, value);
+    }
+
+    #endregion
+
+    #region -- Overrides --
+
+    public override void OnDialogOpened(IDialogParameters parameters)
+    {
+        if (parameters.TryGetValue("ScreenStream", out Stream title))
+        {
+            ScreenStream = title;
+
+            RaisePropertyChanged("ScreenStream");
+        }
     }
 
     #endregion

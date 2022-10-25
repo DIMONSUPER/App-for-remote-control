@@ -15,7 +15,6 @@ using SmartMirror.Services.Rest;
 using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Services.Settings;
-using SmartMirror.ViewModels;
 using SmartMirror.Views;
 using SmartMirror.Views.Dialogs;
 using SmartMirror.Views.Tabs.Details;
@@ -26,6 +25,10 @@ namespace SmartMirror;
 
 public static class MauiProgram
 {
+    private readonly static ISettingsManager _settingsManager = new SettingsManager();
+    private readonly static IRestService _restService = new RestService();
+    private readonly static IAqaraService _aqaraService = new AqaraService(_restService, _settingsManager);
+
     #region -- Public static helpers --
 
     public static MauiApp CreateMauiApp()
@@ -62,6 +65,7 @@ public static class MauiProgram
         containerRegistry.RegisterDialog<TemporaryDialog>();
 
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
+        containerRegistry.RegisterForNavigation<WelcomePage>();
         containerRegistry.RegisterForNavigation<MainTabbedPage>();
         containerRegistry.RegisterForNavigation<RoomsPage>();
         containerRegistry.RegisterForNavigation<NotificationsPage>();
@@ -71,12 +75,12 @@ public static class MauiProgram
         containerRegistry.RegisterForNavigation<ScenarioDetailsPage>();
 
         containerRegistry.RegisterSingleton<IMapperService, MapperService>();
-        containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
-        containerRegistry.RegisterSingleton<IRestService, RestService>();
+        containerRegistry.RegisterInstance(_settingsManager);
+        containerRegistry.RegisterInstance(_restService);
         //TODO: Remove when companion app is ready
         //containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
-        containerRegistry.RegisterSingleton<IAqaraService, AqaraService>();
+        containerRegistry.RegisterInstance(_aqaraService);
         containerRegistry.RegisterSingleton<INotificationsService, NotificationsService>();
         containerRegistry.RegisterSingleton<ICamerasService, CamerasService>();
         containerRegistry.RegisterSingleton<IScenariosService, ScenariosService>();
@@ -86,9 +90,18 @@ public static class MauiProgram
 
     private static void OnAppStart(INavigationService navigationService)
     {
-        navigationService.CreateBuilder()   
-            .AddSegment<MainTabbedPageViewModel>()
-            .Navigate(HandleErrors);
+        var navigationBuilder = navigationService.CreateBuilder();
+
+        if (_aqaraService.IsAuthorized)
+        {
+            navigationBuilder.AddSegment<MainTabbedPage>();
+        }
+        else
+        {
+            navigationBuilder.AddSegment<WelcomePage>();
+        }
+
+        navigationBuilder.Navigate(HandleErrors);
     }
 
     private static void HandleErrors(Exception exception)
@@ -100,6 +113,7 @@ public static class MauiProgram
     private static void OnConfigureMauiHandlers(IMauiHandlersCollection handlers)
     {
         handlers.AddCompatibilityRenderer(typeof(CustomTabbedPage), typeof(CustomTabbedPageRenderer));
+        handlers.AddCompatibilityRenderer(typeof(BlurredImage), typeof(BlurredImageRenderer));
     }
 
     #endregion

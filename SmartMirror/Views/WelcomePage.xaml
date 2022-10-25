@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:BaseContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:SmartMirror.Views"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+    xmlns:vm="clr-namespace:SmartMirror.ViewModels"
+    Title="WelcomePage"
+    Background="{x:DynamicResource GrayGradientBrush}"
+    x:Class="SmartMirror.Views.WelcomePage"
+    x:DataType="vm:WelcomePageViewModel"
+    x:Name="page">
+
+    <Grid>
+        
+        <VerticalStackLayout>
+
+            <controls:CurrentTimeControl
+                VerticalOptions="Start"
+                HorizontalOptions="Start"
+                Margin="60, 9, 0, 9"
+                TextColor="{DynamicResource tcolor_i1}"
+                FontFamily="InterSemiBold"/>
+
+            <Border
+                Margin="0, 111, 0, 0"
+                HorizontalOptions="Center"
+                WidthRequest="790"
+                HeightRequest="167"
+                Padding="52, 33"
+                Shadow="{DynamicResource Shadow_i1}"
+                StrokeShape="RoundRectangle 12"
+                Background="{DynamicResource GrayGradientBrush_i2}">
+
+                <StackLayout Orientation="Horizontal">
+
+                    <Image
+                        Source="home"
+                        VerticalOptions="Start"/>
+
+                    <StackLayout Margin="40, 0">
+
+                        <Label
+                            Style="{DynamicResource tstyle_i1}"
+                            Text="{extensions:Translate Welcome}"/>
+
+                        <Label
+                            Style="{DynamicResource tstyle_i2}"
+                            Text="{extensions:Translate PleaseSelectYourSmartHomeProvider}"/>
+
+                    </StackLayout>
+
+                </StackLayout>
+            
+            </Border>
+
+            <Grid
+                ColumnSpacing="25"
+                ColumnDefinitions="0.25*, 0.25*, 0.25*, 0.25*"
+                Margin="60, 98, 60, 0">
+
+                <controls:CustomImageBotton
+                    Grid.Column="0"
+                    Style="{DynamicResource ImageButtonStyle_i1}"
+                    behaviors:TouchBehavior.Command="{Binding LoginWithAqaraCommand}"
+                    Source="aqara_logo"/>
+
+                <controls:CustomImageBotton
+                    Grid.Column="1"
+                    Style="{DynamicResource ImageButtonStyle_i1}"
+                    Source="amazon_logo">
+
+                    <controls:CustomImageBotton.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                    </controls:CustomImageBotton.GestureRecognizers>
+                </controls:CustomImageBotton>
+
+                <controls:CustomImageBotton
+                    Grid.Column="2"
+                    Style="{DynamicResource ImageButtonStyle_i1}"
+                    Source="apple_logo"/>
+
+                <controls:CustomImageBotton
+                    Grid.Column="3"
+                    Style="{DynamicResource ImageButtonStyle_i1}"
+                    Source="google_logo"/>
+
+            </Grid>
+
+        </VerticalStackLayout>
+
+        <controls:BlurredImage x:Name="image"/>
+
+    </Grid>
+
+</views:BaseContentPage>

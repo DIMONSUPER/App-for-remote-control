@@ -211,4 +211,10 @@
 	<data name="ScenarioActions" xml:space="preserve">
 		<value>Scenario actions</value>
 	</data>
+  <data name="PleaseSelectYourSmartHomeProvider" xml:space="preserve">
+    <value>Please, select your Smart Home provider</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Welcome!</value>
+  </data>
 </root>

@@ -3,6 +3,7 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:converters="clr-namespace:SmartMirror.Converters"
+                    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
                     xmlns:maui="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                     xmlns:controls="clr-namespace:SmartMirror.Controls">
@@ -180,7 +181,21 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
-    
+
+    <Style x:Key="ImageButtonStyle_i1" TargetType="controls:CustomImageBotton">
+        <Setter Property="Padding" Value="24, 30"/>
+        <Setter Property="Stroke" Value="{DynamicResource cbg_i4}"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 9"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i2}"/>
+        <Setter Property="Shadow" Value="{DynamicResource Shadow_i1}"/>
+        <Setter Property="HeightRequest" Value="165"/>
+        <Setter Property="HeightImage" Value="55"/>
+        <Setter Property="behaviors:TouchBehavior.IsAnimation" Value="True"/>
+        <Setter Property="behaviors:TouchBehavior.NormalBackgroundColor" Value="{DynamicResource cbg_i2}"/>
+        <Setter Property="behaviors:TouchBehavior.PressedBackgroundColor" Value="{DynamicResource cbg_i13}"/>
+    </Style>
+
     <!-- SHADOWS -->
     <!--box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);-->
     <Shadow

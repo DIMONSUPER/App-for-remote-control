@@ -1,4 +1,6 @@
-﻿namespace SmartMirror.Views;
+﻿using SmartMirror.Controls;
+
+namespace SmartMirror.Views;
 
 public class BaseContentPage : ContentPage
 {

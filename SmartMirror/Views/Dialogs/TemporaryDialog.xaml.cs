@@ -1,10 +1,13 @@
-﻿namespace SmartMirror.Views.Dialogs;
+﻿using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
+using Microsoft.Maui.Controls.PlatformConfiguration;
+using System.Runtime.CompilerServices;
 
-//TODO: Remove when doesn't need it anymore
+namespace SmartMirror.Views.Dialogs;
+
 public partial class TemporaryDialog : Frame
 {
 	public TemporaryDialog()
 	{
 		InitializeComponent();
-	}
+    }
 }

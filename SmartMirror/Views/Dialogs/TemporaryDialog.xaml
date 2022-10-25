@@ -4,15 +4,21 @@
        xmlns:prismmaui="clr-namespace:Prism.Services.Xaml;assembly=Prism.Maui"
        xmlns:prism="http://prismlibrary.com"
        xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
+       xmlns:controls="clr-namespace:SmartMirror.Controls"
        Padding="0"
        HasShadow="False"
        BackgroundColor="Transparent"
        prismmaui:DialogLayout.UseMask="True"
-       prismmaui:DialogLayout.MaskStyle="{DynamicResource DialogMaskBoxViewStyle_i1}"
        prismmaui:DialogLayout.CloseOnBackgroundTapped="False"
        x:Class="SmartMirror.Views.Dialogs.TemporaryDialog"
-       x:DataType="{x:Type vm:TemporaryDialogViewModel}">
+       x:DataType="vm:TemporaryDialogViewModel">
 
+    <prismmaui:DialogLayout.Mask>
+        
+        <controls:BlurredImage Source="{Binding ScreenStream}" x:Name="image"/>
+        
+    </prismmaui:DialogLayout.Mask>
+    
     <Border HorizontalOptions="Center"
             VerticalOptions="Center"
             StrokeThickness="0.75"
