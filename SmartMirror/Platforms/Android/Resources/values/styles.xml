@@ -3,10 +3,12 @@
 	
 	<style name="StartingThemeApp" parent="Theme.SplashScreen">
 
-		<!-- Android < 12-->
 		<item name="android:windowBackground">@drawable/splash_screen</item>
 
-		<!-- Android >= 12 -->
+		<!-- 
+			Android+ 12.0 specific settings 
+			See: https://developer.android.com/guide/topics/ui/splash-screen#set-theme 
+		-->
 		<item name="android:windowSplashScreenBackground">@color/splashScreenBackgroundColor</item>
 		<item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_screen_icon</item>		
 		<item name="postSplashScreenTheme">@style/MainThemeApp</item>
@@ -25,10 +27,6 @@
 		<item name="android:windowFullscreen">true</item>
 		
 		<!--<item name="maui_splash">true</item>-->
-		<!--
-			Android 12+ specific settings
-			See: https://developer.android.com/guide/topics/ui/splash-screen#set-theme
-		-->
 		<item name="android:fadeScrollbars">false</item>
 		<item name="android:scrollbarThumbVertical">@drawable/scrollbar_thumb</item>
 		<item name="android:scrollbarTrackVertical">@drawable/scrollbar_track</item>

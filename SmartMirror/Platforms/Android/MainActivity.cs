@@ -2,7 +2,6 @@
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
-using AndroidX.Core.SplashScreen;
 //using Com.Amazon.Identity.Auth.Device.Api.Authorization;
 //using Com.Amazon.Identity.Auth.Device.Api.Workflow;
 
