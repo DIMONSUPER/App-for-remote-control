@@ -13,6 +13,8 @@
 
         public static class DialogsParameterKeys
         {
+            public const string RESULT = nameof(RESULT);
+            public const string AUTH_TYPE = nameof(AUTH_TYPE);
             public const string TITLE = nameof(TITLE);
             public const string DESCRIPTION = nameof(DESCRIPTION);
         }

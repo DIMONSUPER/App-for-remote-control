@@ -1,7 +1,4 @@
-﻿using System;
-using System.Globalization;
-
-namespace SmartMirror.Controls
+﻿namespace SmartMirror.Controls
 {
     public class CurrentTimeControl : Label
     {
