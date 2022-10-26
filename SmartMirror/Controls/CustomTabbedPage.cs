@@ -1,5 +1,6 @@
 ﻿using Microsoft.Maui.Controls.Shapes;
 using SmartMirror.Interfaces;
+using System.Windows.Input;
 
 namespace SmartMirror.Controls;
 
@@ -85,6 +86,17 @@ public class CustomTabbedPage : TabbedPage
         set => SetValue(BorderColorProperty, value);
     }
 
+    public static readonly BindableProperty SettingsCommandProperty = BindableProperty.Create(
+        propertyName: nameof(SettingsCommand),
+        returnType: typeof(ICommand),
+        declaringType: typeof(CustomTabbedPage));
+
+    public ICommand SettingsCommand
+    {
+        get => (ICommand)GetValue(SettingsCommandProperty);
+        set => SetValue(SettingsCommandProperty, value);
+    }
+
     private Grid _tabBarView;
     public Grid TabBarView => _tabBarView ??= CreateTabBar();
 
@@ -130,13 +142,50 @@ public class CustomTabbedPage : TabbedPage
 
         stackTimeAndTabs.Add(CreateTimeLabel());
 
-        stackTimeAndTabs.Add(CreateBorder());
+        var grid = new Grid();
+
+        grid.Children.Add(CreateBorder());
+
+        grid.Children.Add(CreateSettingsButton());
+
+        stackTimeAndTabs.Add(grid);
 
         tabBarView.Add(stackTimeAndTabs);
 
         OnCurrentPageChanged();
 
         return tabBarView;
+    }
+
+    private Border CreateSettingsButton()
+    {
+        var icon = new Image()
+        {
+            Source = "carbon_settings",
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Center,
+        };
+
+        return new Border()
+        {
+            Content = icon,
+            HeightRequest = 68,
+            WidthRequest = 68,
+            Margin = new Thickness(0, 0, 60, 0),
+            Padding = 17,
+            BackgroundColor = Color.FromArgb("#3A3A3C"),
+            HorizontalOptions = LayoutOptions.End,
+            StrokeThickness = 1,
+            StrokeShape = new RoundRectangle() { CornerRadius = 9 },
+            Stroke = Color.FromArgb("#fff"),
+            GestureRecognizers =
+            {
+                new TapGestureRecognizer()
+                {
+                    Command = SettingsCommand,
+                },
+            },
+        };
     }
 
     private CurrentTimeControl CreateTimeLabel()

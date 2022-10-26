@@ -43,6 +43,7 @@
 		<None Remove="Platforms\Android\Resources\drawable\splash_screen_icon.png" />
 		<None Remove="Prism.DryIoc.Maui" />
 		<None Remove="Prism.Maui" />
+		<None Remove="Resources\Images\carbon_settings.svg" />
 		<None Remove="Views\" />
 		<None Remove="ViewModels\" />
 		<None Remove="Services\" />
@@ -160,6 +161,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
 		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\SettingsPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Details\ScenarioDetailsPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>

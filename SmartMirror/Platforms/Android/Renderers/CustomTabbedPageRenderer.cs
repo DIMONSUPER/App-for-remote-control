@@ -1,17 +1,11 @@
 ﻿using Android.Content;
 using Android.Views;
-using Android.Widget;
 using AndroidX.ViewPager.Widget;
-using AndroidX.ViewPager2.Widget;
-using Google.Android.Material.BottomNavigation;
 using Google.Android.Material.Tabs;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android.AppCompat;
 using Microsoft.Maui.Controls.Platform;
 using Microsoft.Maui.Platform;
 using SmartMirror.Controls;
-using Button = Android.Widget.Button;
 
 namespace SmartMirror.Platforms.Android.Renderers;
 
