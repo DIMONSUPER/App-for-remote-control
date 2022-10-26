@@ -1,11 +1,12 @@
-﻿using SmartMirror.Helpers;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+using SmartMirror.Helpers;
+using SmartMirror.Services.Blur;
 
 namespace SmartMirror.ViewModels.Dialogs;
 
 public class TemporaryDialogViewModel : BaseDialogViewModel
 {
-    public TemporaryDialogViewModel()
+    public TemporaryDialogViewModel(IBlurService blurService) : base(blurService)
     {
     }
 
