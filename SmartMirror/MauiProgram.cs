@@ -3,7 +3,9 @@ using Microsoft.Maui.Controls.Compatibility.Hosting;
 using SmartMirror.Controls;
 using SmartMirror.Handlers;
 using SmartMirror.Platforms.Android.Renderers;
+using SmartMirror.Platforms.Android.Services;
 using SmartMirror.Services.Aqara;
+using SmartMirror.Services.Blur;
 //using SmartMirror.Platforms.Services;
 //using SmartMirror.Services.Amazon;
 using SmartMirror.Services.Cameras;
@@ -42,10 +44,6 @@ public static class MauiProgram
                 fonts.AddFont("Inter-Medium-500.ttf", "InterMedium");
                 fonts.AddFont("Inter-SemiBold-600.ttf", "InterSemiBold");
                 fonts.AddFont("Inter-Bold-700.ttf", "InterBold");
-            })
-            .ConfigureMauiHandlers(handlers =>
-            {
-                handlers.AddHandler(typeof(Video), typeof(VideoHandler));
             });
 
         builder.Services.AddLocalization();
@@ -75,6 +73,7 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
         containerRegistry.RegisterSingleton<IRepositoryService, RepositoryService>();
         containerRegistry.RegisterSingleton<IRestService, RestService>();
+        containerRegistry.RegisterSingleton<IBlurService, BlurService>();
         //TODO: Remove when companion app is ready
         //containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
@@ -101,6 +100,7 @@ public static class MauiProgram
 
     private static void OnConfigureMauiHandlers(IMauiHandlersCollection handlers)
     {
+        handlers.AddHandler(typeof(Video), typeof(VideoHandler));
         handlers.AddCompatibilityRenderer(typeof(CustomTabbedPage), typeof(CustomTabbedPageRenderer));
     }
 
