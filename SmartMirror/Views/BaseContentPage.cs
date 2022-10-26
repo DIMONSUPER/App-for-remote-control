@@ -7,4 +7,3 @@ public class BaseContentPage : ContentPage
         NavigationPage.SetHasNavigationBar(this, false);
     }
 }
-

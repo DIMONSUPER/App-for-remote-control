@@ -40,8 +40,13 @@
 	<ItemGroup>
 		<None Remove="Platforms\Android\Resources\drawable\scrollbar_thumb.xml" />
 		<None Remove="Platforms\Android\Resources\drawable\scrollbar_track.xml" />
+		<None Remove="Platforms\Android\Resources\drawable\splash_screen_icon.png" />
 		<None Remove="Prism.DryIoc.Maui" />
 		<None Remove="Prism.Maui" />
+		<None Remove="Resources\Images\amazon_logo.svg" />
+		<None Remove="Resources\Images\apple_logo.svg" />
+		<None Remove="Resources\Images\aqara_logo.svg" />
+		<None Remove="Resources\Images\google_logo.svg" />
 		<None Remove="Views\" />
 		<None Remove="ViewModels\" />
 		<None Remove="Services\" />
@@ -78,6 +83,13 @@
 		<None Remove="Services\Aqara\" />
 		<None Remove="Models\Aqara\" />
 		<None Remove="Views\Skeletons\" />
+		<None Remove="SQLitePCLRaw.provider.dynamic_cdecl" />
+		<None Remove="Services\Repository\" />
+		<None Remove="sqlite-net-pcl" />
+		<None Remove="sqlite-net" />
+		<None Remove="Models\DTO\" />
+		<None Remove="Karamunting.Android.Wasabeef.Blurry" />
+		<None Remove="Services\Blur\" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.3" />
@@ -88,6 +100,9 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta2" />
 		<PackageReference Include="AutoMapper" Version="12.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.9" />
+		<PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.2" />
+		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+		<PackageReference Include="sqlite-net" Version="1.6.292" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Controls\" />
@@ -110,96 +125,118 @@
 		<Folder Include="Extensions\" />
 		<Folder Include="Services\Mock\" />
 		<Folder Include="Platforms\Android\Renderers\" />
-		<Folder Include="Platforms\Android\Resources\drawable\" />
 		<Folder Include="Controls\StateContainer\" />
 		<Folder Include="Services\Mapper\" />
 		<Folder Include="Services\Settings\" />
 		<Folder Include="Services\Aqara\" />
 		<Folder Include="Models\Aqara\" />
 		<Folder Include="Views\Skeletons\" />
+		<Folder Include="Services\Repository\" />
+		<Folder Include="Models\DTO\" />
+		<Folder Include="Services\Blur\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Controls\BadgeTitleView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Controls\CustomImageBotton.xaml">
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Platforms\Windows\App.xaml">
 			<SubType>
 			</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Controls\CustomTabView.xaml">
-		  <SubType></SubType>
+			<SubType>
+			</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\FavoriteScenariosTemplate.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-	    </MauiXaml>
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\CameraTemplate.xaml">
-		  <SubType></SubType>
+			<SubType>
+			</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\NotificationHeaderTemplate.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\NotificationTemplate.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\ScenariosTemplate.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\ScenarioTemplate.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\EnterCodeDialog.xaml">
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\ErrorDialog.xaml">
-		  <SubType></SubType>
+			<SubType>
+			</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
-		  <SubType></SubType>
+			<SubType>
+			</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Details\ScenarioDetailsPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Pages\CamerasPage.xaml">
-		  <SubType></SubType>
+			<SubType>
+			</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Pages\NotificationsPage.xaml">
-		  <SubType></SubType>
+			<SubType>
+			</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Pages\RoomsPage.xaml">
-		  <SubType></SubType>
+			<SubType>
+			</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Pages\ScenariosPage.xaml">
-		  <SubType></SubType>
+			<SubType>
+			</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\RoomsTemplate.xaml">
-		  <SubType></SubType>
+			<SubType>
+			</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Controls\CustomStateView.xaml">
-		  <SubType></SubType>
+			<SubType>
+			</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Details\RoomDetailsPage.xaml">
-		  <SubType></SubType>
+			<SubType>
+			</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\RoomsVerticalListTemplate.xaml">
-		  <SubType></SubType>
-		</MauiXaml>
-		<MauiXaml Update="Views\Dialogs\TemporaryDialog.xaml">
-		  <SubType></SubType>
+			<SubType>
+			</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Controls\CustomSwitch.xaml">
-		  <SubType></SubType>
+			<SubType>
+			</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\DeviceTemplate.xaml">
-		  <SubType></SubType>
+			<SubType>
+			</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Views\CamerasPageView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Views\NotificationsPageView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Views\RoomsPageView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Views\ScenariosPageView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\WelcomePage.xaml">
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Skeletons\RoomsTab.xaml">
 		  <SubType></SubType>
@@ -224,10 +261,10 @@
 		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
-	  <EmbeddedResource Update="Resources\Strings\Strings.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
+		<EmbeddedResource Update="Resources\Strings\Strings.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Strings.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="Resources\Strings\Strings.Designer.cs">
@@ -256,6 +293,9 @@
 	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\RoomsTabSkeleton.xaml.cs">
 	    <DependentUpon>RoomsTabSkeleton.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\Dialogs\EnterCodeDialog.xaml.cs">
+		<DependentUpon>EnterCodeDialog.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
 		<AndroidKeyStore>True</AndroidKeyStore>
@@ -265,30 +305,34 @@
 		<AndroidSigningStorePass>1Q2w3e4r5t</AndroidSigningStorePass>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DEV|AnyCPU' ">
-	  <IntermediateOutputPath>obj\DEV\net6.0-android</IntermediateOutputPath>
-	  <DebugSymbols>true</DebugSymbols>
-	  <Optimize>true</Optimize>
-	  <DefineConstants>TRACE;DEV;NET;NET6_0;NETCOREAPP</DefineConstants>
-	  <WarningLevel>4</WarningLevel>
-	  <DocumentationFile>bin\DEV\net6.0-android\SmartMirror.xml</DocumentationFile>
-	  <AndroidManagedSymbols>true</AndroidManagedSymbols>
-	  <AndroidPackageFormat>apk</AndroidPackageFormat>
-	  <AotAssemblies>false</AotAssemblies>
-	  <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-	  <AndroidLinkMode>None</AndroidLinkMode>
+		<IntermediateOutputPath>obj\DEV\net6.0-android</IntermediateOutputPath>
+		<DebugSymbols>true</DebugSymbols>
+		<Optimize>true</Optimize>
+		<DefineConstants>TRACE;DEV;NET;NET6_0;NETCOREAPP</DefineConstants>
+		<WarningLevel>4</WarningLevel>
+		<DocumentationFile>bin\DEV\net6.0-android\SmartMirror.xml</DocumentationFile>
+		<AndroidManagedSymbols>true</AndroidManagedSymbols>
+		<AndroidPackageFormat>apk</AndroidPackageFormat>
+		<AotAssemblies>false</AotAssemblies>
+		<AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+		<AndroidLinkMode>None</AndroidLinkMode>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-	  <WarningLevel>4</WarningLevel>
+		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-	  <DebugSymbols>true</DebugSymbols>
-	  <Optimize>true</Optimize>
-	  <AotAssemblies>true</AotAssemblies>
-	  <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
-	  <WarningLevel>4</WarningLevel>
+		<DebugSymbols>true</DebugSymbols>
+		<Optimize>true</Optimize>
+		<AotAssemblies>true</AotAssemblies>
+		<AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<ItemGroup Condition="$(TargetFramework.StartsWith('net6.0-android')) != true">
 		<Compile Remove="**\**\*.Android.cs" />
 		<None Include="**\**\*.Android.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-android'">
+		<PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.0.1" />
+		<PackageReference Include="Karamunting.Android.Wasabeef.Blurry" Version="3.0.0" />
 	</ItemGroup>
 </Project>

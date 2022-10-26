@@ -2,6 +2,8 @@
 {
     public static class Constants
     {
+        public const string DATABASE_NAME = "SmartMirror.db3";
+
         public static class Amazon
         {
             public const string API_URL = "https://api.amazon.com";
@@ -11,6 +13,8 @@
 
         public static class DialogsParameterKeys
         {
+            public const string RESULT = nameof(RESULT);
+            public const string AUTH_TYPE = nameof(AUTH_TYPE);
             public const string TITLE = nameof(TITLE);
             public const string DESCRIPTION = nameof(DESCRIPTION);
         }

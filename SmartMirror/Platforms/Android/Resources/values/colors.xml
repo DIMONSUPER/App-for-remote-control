@@ -6,5 +6,6 @@
 
     <color name="gradientstart">#39393B</color>
     <color name="gradientend">#212121</color>
+    <color name="splashScreenBackgroundColor">#2F2F30</color>
 </resources>
 

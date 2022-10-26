@@ -1,11 +1,12 @@
 ﻿using SmartMirror.Helpers;
+using SmartMirror.Services.Blur;
 using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
     public class ErrorDialogViewModel : BaseDialogViewModel
     {
-        public ErrorDialogViewModel()
+        public ErrorDialogViewModel(IBlurService blurService) : base(blurService)
         {
         }
 
