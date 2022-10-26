@@ -42,6 +42,7 @@
                     BackgroundColor="{StaticResource cbg_i15}">
 
                     <controls:CustomNoBorderEntry
+                        NeedToFocus="True"
                         Margin="24, 18"
                         BackgroundColor="{DynamicResource cbg_i15}"
                         FontSize="{DynamicResource tsize_i2}"

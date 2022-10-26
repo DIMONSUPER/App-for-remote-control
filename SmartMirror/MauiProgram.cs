@@ -2,6 +2,8 @@
 using Microsoft.Maui.Controls.Compatibility.Hosting;
 using SmartMirror.Controls;
 using SmartMirror.Handlers;
+using SmartMirror.Helpers;
+using SmartMirror.Platforms.Android.Helpers;
 using SmartMirror.Platforms.Android.Renderers;
 using SmartMirror.Services.Aqara;
 //using SmartMirror.Platforms.Services;
@@ -26,9 +28,7 @@ namespace SmartMirror;
 
 public static class MauiProgram
 {
-    private readonly static ISettingsManager _settingsManager = new SettingsManager();
-    private readonly static IRestService _restService = new RestService();
-    private readonly static IAqaraService _aqaraService = new AqaraService(_restService, _settingsManager);
+    private static bool _isAuthorized;
 
     #region -- Public static helpers --
 
@@ -39,7 +39,7 @@ public static class MauiProgram
             .UseMauiCommunityToolkit()
             .UseMauiCompatibility()
             .ConfigureMauiHandlers(OnConfigureMauiHandlers)
-            .UsePrism(prism => prism.RegisterTypes(RegisterTypes).OnAppStart(OnAppStart))
+            .UsePrism(prism => prism.RegisterTypes(RegisterTypes).OnInitialized(OnInitialized).OnAppStart(OnAppStart))
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("Inter-Medium-500.ttf", "InterMedium");
@@ -76,25 +76,33 @@ public static class MauiProgram
         containerRegistry.RegisterForNavigation<ScenarioDetailsPage>();
 
         containerRegistry.RegisterSingleton<IMapperService, MapperService>();
-        containerRegistry.RegisterInstance(_settingsManager);
-        containerRegistry.RegisterInstance(_restService);
+        containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
+        containerRegistry.RegisterSingleton<IRestService, RestService>();
         containerRegistry.RegisterSingleton<IRepositoryService, RepositoryService>();
         //TODO: Remove when companion app is ready
         //containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
-        containerRegistry.RegisterInstance(_aqaraService);
+        containerRegistry.RegisterSingleton<IAqaraService, AqaraService>();
         containerRegistry.RegisterSingleton<INotificationsService, NotificationsService>();
         containerRegistry.RegisterSingleton<ICamerasService, CamerasService>();
         containerRegistry.RegisterSingleton<IScenariosService, ScenariosService>();
         containerRegistry.RegisterSingleton<IRoomsService, RoomsService>();
         containerRegistry.RegisterSingleton<IDevicesService, DevicesService>();
+        containerRegistry.RegisterSingleton<IKeyboardHelper, KeyboardHelper>();
+    }
+
+    private static void OnInitialized(IContainerProvider container)
+    {
+        var aqaraService = container.Resolve<IAqaraService>();
+
+        _isAuthorized = aqaraService.IsAuthorized;
     }
 
     private static void OnAppStart(INavigationService navigationService)
     {
         var navigationBuilder = navigationService.CreateBuilder();
 
-        if (_aqaraService.IsAuthorized)
+        if (_isAuthorized)
         {
             navigationBuilder.AddSegment<MainTabbedPage>();
         }
@@ -115,7 +123,6 @@ public static class MauiProgram
     private static void OnConfigureMauiHandlers(IMauiHandlersCollection handlers)
     {
         handlers.AddCompatibilityRenderer(typeof(CustomTabbedPage), typeof(CustomTabbedPageRenderer));
-        handlers.AddCompatibilityRenderer(typeof(CustomNoBorderEntry), typeof(CustomNoBorderEntryRenderer));
     }
 
     #endregion

@@ -10,13 +10,16 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
 {
     private readonly IAqaraService _aqaraService;
     private readonly IDialogService _dialogService;
+    private readonly IKeyboardHelper _keyboardHelper;
 
     public EnterCodeDialogViewModel(
         IAqaraService aqaraService,
+        IKeyboardHelper keyboardHelper,
         IDialogService dialogService)
     {
         _aqaraService = aqaraService;
         _dialogService = dialogService;
+        _keyboardHelper = keyboardHelper;
     }
 
     #region -- Public properties --
@@ -58,6 +61,8 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
 
     public override void OnDialogOpened(IDialogParameters parameters)
     {
+        _keyboardHelper.ShowKeyboard();
+
         if (parameters.TryGetValue(Constants.DialogsParameterKeys.TITLE, out string title))
         {
             Title = title;
@@ -85,6 +90,8 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
 
             if (loginWithCodeResponse.IsSuccess)
             {
+                _keyboardHelper.HideKeyboard();
+
                 RequestClose.Invoke(new DialogParameters
                 {
                     { Constants.DialogsParameterKeys.RESULT, true },
