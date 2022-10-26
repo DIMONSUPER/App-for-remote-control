@@ -28,13 +28,6 @@ namespace SmartMirror.ViewModels
         private ICommand _loginWithAqaraCommand;
         public ICommand LoginWithAqaraCommand => _loginWithAqaraCommand ??= SingleExecutionCommand.FromFunc<EAuthType>(OnLoginWithAqaraCommandAsync);
 
-        private Stream _screenStream;
-        public Stream ScreenStream
-        {
-            get => _screenStream;
-            set => SetProperty(ref _screenStream, value);
-        }
-
         #endregion
 
         #region -- Private helpers --
