@@ -1,14 +1,16 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.OS;
 //using Com.Amazon.Identity.Auth.Device.Api.Authorization;
 //using Com.Amazon.Identity.Auth.Device.Api.Workflow;
+
 using Org.Json;
 
 namespace SmartMirror;
 
 [Activity(
-    Theme = "@style/MainThemeApp",
+    Theme = "@style/StartingThemeApp",
     Icon = "@mipmap/ic_launcher",
     RoundIcon = "@mipmap/ic_launcher_round",
     MainLauncher = true,
@@ -18,6 +20,17 @@ namespace SmartMirror;
     Exported = true)]
 public class MainActivity : MauiAppCompatActivity
 {
+    #region -- Overrides --
+
+    protected override void OnCreate(Bundle savedInstanceState)
+    {
+        AndroidX.Core.SplashScreen.SplashScreen.InstallSplashScreen(this);
+
+        base.OnCreate(savedInstanceState);
+    } 
+
+    #endregion
+
     //TODO: Remove when companion app is ready
     /*private RequestContext _currentRequestContext;
 

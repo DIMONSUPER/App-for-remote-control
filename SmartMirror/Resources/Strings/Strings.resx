@@ -162,6 +162,9 @@
     <data name="CameraIsOff" xml:space="preserve">
         <value>Camera is off</value>
     </data>
+    <data name="CannotPlayVideo" xml:space="preserve">
+        <value>Can't play this video</value>
+    </data>
     <data name="NoScenariosYet" xml:space="preserve">
         <value>No scenarios yet</value>
     </data>

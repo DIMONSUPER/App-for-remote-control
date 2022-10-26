@@ -11,6 +11,7 @@ using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Notifications;
+using SmartMirror.Services.Repository;
 using SmartMirror.Services.Rest;
 using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
@@ -77,6 +78,7 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IMapperService, MapperService>();
         containerRegistry.RegisterInstance(_settingsManager);
         containerRegistry.RegisterInstance(_restService);
+        containerRegistry.RegisterSingleton<IRepositoryService, RepositoryService>();
         //TODO: Remove when companion app is ready
         //containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();

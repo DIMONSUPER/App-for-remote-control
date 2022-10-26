@@ -130,6 +130,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t play this video.
+        /// </summary>
+        internal static string CannotPlayVideo {
+            get {
+                return ResourceManager.GetString("CannotPlayVideo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string Close {

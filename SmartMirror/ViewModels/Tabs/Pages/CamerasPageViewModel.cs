@@ -1,6 +1,8 @@
+using CommunityToolkit.Maui.Alerts;
 using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
+using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Mapper;
 using System.Collections.ObjectModel;
@@ -70,6 +72,9 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private ICommand _tryAgainCommand;
     public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
+    
+    private ICommand _videoPaybackErrorCommand;
+    public ICommand VideoPaybackErrorCommand => _videoPaybackErrorCommand ??= SingleExecutionCommand.FromFunc(OnVideoPaybackErrorCommandAsync);
 
     #endregion
 
@@ -116,6 +121,13 @@ public class CamerasPageViewModel : BaseTabViewModel
     #endregion
 
     #region -- Private helpers --
+
+    private Task OnVideoPaybackErrorCommandAsync()
+    {
+        Toast.Make(Strings.CannotPlayVideo).Show();
+
+        return Task.CompletedTask;
+    }
 
     private async Task OnTryAgainCommandAsync()
     {

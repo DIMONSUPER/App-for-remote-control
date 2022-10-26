@@ -118,12 +118,15 @@
                         <Frame
                             Padding="0"
                             HasShadow="False"
+                            IsClippedToBounds="True"
                             CornerRadius="9">
 
                             <video:Video 
+                                BackgroundColor="{DynamicResource cbg_i2}"
                                 LoadingState="{Binding VideoLoadingState}"
                                 Action="{Binding VideoAction}"
-                                Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"/>
+                                Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"
+                                VideoPlaybackErrorCommand="{Binding VideoPaybackErrorCommand}"/>
 
                         </Frame>
 

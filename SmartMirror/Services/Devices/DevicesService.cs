@@ -8,9 +8,11 @@ using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Models.Aqara;
 using SmartMirror.Models.BindableModels;
+using SmartMirror.Models.DTO;
 using SmartMirror.Resources;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Mapper;
+using SmartMirror.Services.Repository;
 using SmartMirror.Services.Rest;
 using SmartMirror.Services.Settings;
 
@@ -18,19 +20,24 @@ namespace SmartMirror.Services.Devices
 {
     public class DevicesService : BaseAqaraService, IDevicesService
     {
-        private readonly ConcurrentDictionary<string, IEnumerable<AttributeAqaraResponse>> _devicesAttributes = new();
-        private readonly ConcurrentDictionary<string, DeviceBindableModel> _cachedDevices = new();
+        private readonly Dictionary<string, IEnumerable<AttributeAqaraDTO>> _devicesAttributes = new();
+        private readonly Dictionary<string, DeviceBindableModel> _cachedDevices = new();
         private readonly DeviceMessanger _deviceMessanger = new();
 
         private readonly IMapperService _mapperService;
+        private readonly IRepositoryService _repositoryService;
+
+        private List<AttributeNameAqaraResponse> _attributeNames = new();
 
         public DevicesService(
             IMapperService mapperService,
             IRestService restService,
-            ISettingsManager settingsManager)
+            ISettingsManager settingsManager,
+            IRepositoryService repositoryService)
             : base(restService, settingsManager)
         {
             _mapperService = mapperService;
+            _repositoryService = repositoryService;
 
             _deviceMessanger.StartListening();
             _deviceMessanger.MessageReceived += OnMessageReceived;
@@ -57,16 +64,13 @@ namespace SmartMirror.Services.Devices
 
                     await SetAttributesForDevicesAsync(bindableModels);
 
+                    await SetAttributeNamesForDevicesAsync(bindableModels);
+
                     var result = Enumerable.Empty<DeviceBindableModel>();
 
                     foreach (var device in bindableModels)
                     {
                         _cachedDevices[device.DeviceId] = device;
-
-                        if (device.Model.Contains("gateway"))
-                        {
-                            device.IconSource = IconsNames.pic_hub;
-                        }
 
                         var devices = await GetTaskForDevice(device);
 
@@ -78,7 +82,6 @@ namespace SmartMirror.Services.Devices
                 }
                 else
                 {
-
                     onFailure("Request failed");
                 }
             });
@@ -304,21 +307,50 @@ namespace SmartMirror.Services.Devices
             return result;
         }
 
+        private async Task SetAttributeNamesForDevicesAsync(IEnumerable<DeviceBindableModel> devices)
+        {
+            var attributeNamesResponse = await GetAttributeNamesForDevices(devices.Select(x => x.DeviceId).ToArray());
+
+            if (attributeNamesResponse.IsSuccess)
+            {
+                _attributeNames = new(attributeNamesResponse.Result);
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Can't download attribute names");
+            }
+        }
+
         private async Task SetAttributesForDevicesAsync(IEnumerable<DeviceBindableModel> devices)
         {
             foreach (var bindableModel in devices)
             {
+                var downloadedAttributes = await _repositoryService.GetAllAsync<AttributeAqaraDTO>();
+
                 if (!_devicesAttributes.ContainsKey(bindableModel.Model))
                 {
-                    var res = await GetAttributesForDeviceModel(bindableModel.Model);
-
-                    if (res.IsSuccess)
+                    if (downloadedAttributes.Any(x => x.Model == bindableModel.Model))
                     {
-                        _devicesAttributes[bindableModel.Model] = res.Result;
+                        var modelAttributes = downloadedAttributes.Where(x => x.Model == bindableModel.Model);
+
+                        _devicesAttributes[bindableModel.Model] = modelAttributes;
                     }
                     else
                     {
-                        System.Diagnostics.Debug.WriteLine($"Failed to get attributes for {bindableModel.Model}: {res.Message}");
+                        var res = await GetAttributesForDeviceModel(bindableModel.Model);
+
+                        if (res.IsSuccess)
+                        {
+                            var attributesDTO = _mapperService.MapRange<AttributeAqaraDTO>(res.Result);
+
+                            await _repositoryService.SaveOrUpdateRangeAsync(attributesDTO);
+
+                            _devicesAttributes[bindableModel.Model] = attributesDTO;
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Failed to get attributes for {bindableModel.Model}: {res.Message}");
+                        }
                     }
                 }
                 else
@@ -343,6 +375,10 @@ namespace SmartMirror.Services.Devices
             {
                 return GetMotionSensorsAsync(device);
             }
+            else if (device.Model.Contains("gateway"))
+            {
+                return GetHubAsync(device);
+            }
             else
             {
                 return Task.FromResult(Enumerable.Empty<DeviceBindableModel>());
@@ -359,6 +395,16 @@ namespace SmartMirror.Services.Devices
                 Constants.Aqara.AttibutesId.HUMIDITY_STATUS,
                 Constants.Aqara.AttibutesId.TEMPERATURE_STATUS,
                 Constants.Aqara.AttibutesId.AIR_PRESSURE_STATUS);
+        }
+
+        private Task<IEnumerable<DeviceBindableModel>> GetHubAsync(DeviceBindableModel device)
+        {
+            System.Diagnostics.Debug.WriteLine($"GetHubAsync for {device.Model}, {device.State}");
+
+            device.DeviceType = EDeviceType.Sensor;
+            device.IconSource = IconsNames.pic_hub;
+
+            return Task.FromResult(new List<DeviceBindableModel> { device } as IEnumerable<DeviceBindableModel>);
         }
 
         private Task<IEnumerable<DeviceBindableModel>> GetMotionSensorsAsync(DeviceBindableModel device)
@@ -413,35 +459,27 @@ namespace SmartMirror.Services.Devices
         {
             var result = new List<DeviceBindableModel>();
 
-            var namesResponse = await GetAttributeNamesForDevices(device.DeviceId);
+            var names = _attributeNames.Where(x => x.SubjectId == device.DeviceId).ToDictionary(x => x.ResourceId);
 
-            if (namesResponse.IsSuccess)
+            var deviceAttributeResponse = await GetDeviceAttributeValueAsync(device.DeviceId, resouceIds);
+
+            if (deviceAttributeResponse.IsSuccess)
             {
-                var names = namesResponse.Result.ToDictionary(x => x.ResourceId);
-                var deviceAttributeResponse = await GetDeviceAttributeValueAsync(device.DeviceId, resouceIds);
+                var attributes = deviceAttributeResponse.Result.ToDictionary(x => x.ResourceId);
 
-                if (deviceAttributeResponse.IsSuccess)
+                foreach (var id in resouceIds)
                 {
-                    var attributes = deviceAttributeResponse.Result.ToDictionary(x => x.ResourceId);
-
-                    foreach (var id in resouceIds)
-                    {
-                        result.Add(CreateNewDevice(device, attributes[id].ResourceId, names[id].Name, attributes[id].Value));
-                    }
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine($"Can't get attributes for {device.Model}, {device.DeviceId}");
-
-                    foreach (var id in resouceIds)
-                    {
-                        result.Add(CreateNewDevice(device, id, names[id].Name, "Fail"));
-                    }
+                    result.Add(CreateNewDevice(device, attributes[id].ResourceId, names[id].Name, attributes[id].Value));
                 }
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine($"Can't get names for {device.DeviceId}");
+                System.Diagnostics.Debug.WriteLine($"Can't get attributes for {device.Model}, {device.DeviceId}");
+
+                foreach (var id in resouceIds)
+                {
+                    result.Add(CreateNewDevice(device, id, names[id].Name, "Fail"));
+                }
             }
 
             return result;

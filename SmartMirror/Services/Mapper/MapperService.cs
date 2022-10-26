@@ -3,6 +3,7 @@ using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Models.Aqara;
 using SmartMirror.Models.BindableModels;
+using SmartMirror.Models.DTO;
 
 namespace SmartMirror.Services.Mapper
 {
@@ -73,6 +74,8 @@ namespace SmartMirror.Services.Mapper
                 cfg.CreateMap<ScenarioActionModel, ScenarioActionBindableModel>().ReverseMap();
                 cfg.CreateMap<DeviceModel, DeviceBindableModel>().ReverseMap();
                 cfg.CreateMap<FanDevice, DeviceBindableModel>().ReverseMap();
+                cfg.CreateMap<DeviceDTO, DeviceBindableModel>().ReverseMap();
+                cfg.CreateMap<AttributeAqaraResponse, AttributeAqaraDTO>().ReverseMap();
                 ConfigureDeviceMapping(cfg);
                 cfg.CreateMap<NotificationModel, NotificationGroupItemBindableModel>().ReverseMap();
                 cfg.CreateMap<DetailSceneAqaraModel, ScenarioBindableModel>().ReverseMap();

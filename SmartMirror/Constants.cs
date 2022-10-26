@@ -2,6 +2,8 @@
 {
     public static class Constants
     {
+        public const string DATABASE_NAME = "SmartMirror.db3";
+
         public static class Amazon
         {
             public const string API_URL = "https://api.amazon.com";
