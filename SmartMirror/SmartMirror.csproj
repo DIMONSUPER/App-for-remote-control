@@ -77,6 +77,7 @@
 		<None Remove="Services\Settings\" />
 		<None Remove="Services\Aqara\" />
 		<None Remove="Models\Aqara\" />
+		<None Remove="Views\Skeletons\" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.3" />
@@ -115,6 +116,7 @@
 		<Folder Include="Services\Settings\" />
 		<Folder Include="Services\Aqara\" />
 		<Folder Include="Models\Aqara\" />
+		<Folder Include="Views\Skeletons\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Controls\BadgeTitleView.xaml">
@@ -199,6 +201,27 @@
 		<MauiXaml Update="Views\Tabs\Views\ScenariosPageView.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\RoomsTab.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\CameraTab.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\NotificationsTab.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\ScenariosTab.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\RoomDetailsPageSkeleton.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\ScenarioDetailsPageSkeleton.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\CamerasTabSkeleton.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
 	  <EmbeddedResource Update="Resources\Strings\Strings.resx">
@@ -220,6 +243,18 @@
 	  </Compile>
 	  <Compile Update="Views\Tabs\Details\ScenarioDetailsPage.xaml.cs">
 	    <DependentUpon>ScenarioDetailsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\NotificationsTab.xaml.cs">
+	    <DependentUpon>NotificationsTabSkeleton.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\NotificationsTabSkeleton.xaml.cs">
+	    <DependentUpon>NotificationsTabSkeleton.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\RoomsTab.xaml.cs">
+	    <DependentUpon>RoomsTabSkeleton.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\RoomsTabSkeleton.xaml.cs">
+	    <DependentUpon>RoomsTabSkeleton.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">

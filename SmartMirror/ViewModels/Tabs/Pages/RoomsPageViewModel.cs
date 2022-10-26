@@ -89,7 +89,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
         if (!IsDataLoading)
         {
-            DataState = EPageState.Loading;
+            DataState = EPageState.LoadingSkeleton;
 
             await LoadRoomsAndDevicesAndChangeStateAsync();
         }
@@ -101,7 +101,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         {
             if (!IsDataLoading && DataState != EPageState.Complete)
             {
-                DataState = EPageState.Loading;
+                DataState = EPageState.LoadingSkeleton;
 
                 await LoadRoomsAndDevicesAndChangeStateAsync();
             }
@@ -191,7 +191,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (dialogResult.Parameters.TryGetValue(nameof(TemporaryDialogViewModel.CodeText), out string code))
         {
-            DataState = EPageState.Loading;
+            DataState = EPageState.LoadingSkeleton;
 
             var loginWithCodeResponse = await _aqaraService.LoginWithCodeAsync(email, code);
 

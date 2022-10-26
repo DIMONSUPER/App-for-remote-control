@@ -7,6 +7,7 @@
                        xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs.Details"
                        xmlns:controls="clr-namespace:SmartMirror.Controls"
                        xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+                       xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
                        x:Class="SmartMirror.Views.Tabs.Details.RoomDetailsPage"
                        x:DataType="{x:Type vm:RoomDetailsPageViewModel}">
 
@@ -30,68 +31,40 @@
 
     </views:BaseContentPage.Resources>
 
-    <Grid RowDefinitions="auto, *"
-          RowSpacing="15"
-          Padding="14,42,0,0">
+    <controls:CustomStateView State="{Binding DataState}">
 
-        <!-- BACK BUTTON -->
-        <HorizontalStackLayout Grid.Row="0"
-                               Spacing="17"
-                               Margin="20,0,0,0"
-                               HorizontalOptions="Start"
-                               behaviors:TouchBehavior.Command="{Binding BackArrowTappedCommand}">
+        <controls:CustomStateView.CompleteContent>
 
-            <Image Source="arrow_left_aqua"
-                   VerticalOptions="Center"/>
+            <Grid RowDefinitions="auto, *"
+                  RowSpacing="15"
+                  Padding="14,42,0,0">
 
-            <Label Text="{extensions:Translate Back}"
-                   TextTransform="Uppercase"
-                   VerticalOptions="Center"
-                   Style="{x:DynamicResource tstyle_i12}"/>
+                <!-- BACK BUTTON -->
+                <HorizontalStackLayout Grid.Row="0"
+                                       Spacing="17"
+                                       Margin="20,0,0,0"
+                                       HorizontalOptions="Start"
+                                       behaviors:TouchBehavior.Command="{Binding BackArrowTappedCommand}">
 
-        </HorizontalStackLayout>
+                    <Image Source="arrow_left_aqua"
+                           VerticalOptions="Center"/>
 
-        <Grid Grid.Row="1"
-              ColumnDefinitions="0.22*, 0.78*"
-              ColumnSpacing="30"
-              Margin="0,0,0,0">
+                    <Label Text="{extensions:Translate Back}"
+                           TextTransform="Uppercase"
+                           VerticalOptions="Center"
+                           Style="{x:DynamicResource tstyle_i12}"/>
 
-            <!-- ROOMS COLLECTION -->
-            <CollectionView ItemsSource="{Binding Rooms}"
-                            SelectionMode="None"
-                            ItemTemplate="{x:StaticResource roomsVerticalListTemplate}">
+                </HorizontalStackLayout>
 
-                <CollectionView.Footer>
+                <Grid Grid.Row="1"
+                      ColumnDefinitions="0.22*, 0.78*"
+                      ColumnSpacing="30"
+                      Margin="0,0,0,0">
 
-                    <BoxView Color="Transparent"
-                             HeightRequest="20"/>
-
-                </CollectionView.Footer>
-
-            </CollectionView>
-
-            <controls:CustomStateView Grid.Column="1"
-                                      State="{Binding DataState}"
-                                      TryAgainCommand="{Binding TryAgainCommand}"
-                                      EmptyStateImage="no_accessories_yet"
-                                      EmptyTitle="{extensions:Translate NoAccessoriesYet}"
-                                      LoadingTitle="{extensions:Translate Accessories}">
-
-                <controls:CustomStateView.CompleteContent>
-
-                    <!-- DEVICES COLLECTION -->
-                    <CollectionView ItemsSource="{Binding SelectedRoomDevices}"
-                                    ItemTemplate="{x:StaticResource deviceTemplate}"
-                                    SelectionMode="None">
-
-                        <CollectionView.ItemsLayout>
-                            
-                            <GridItemsLayout Orientation="Vertical"
-                                             Span="3"
-                                             HorizontalItemSpacing="0"
-                                             VerticalItemSpacing="24"/>
-                            
-                        </CollectionView.ItemsLayout>
+                    <!-- ROOMS COLLECTION -->
+                    <CollectionView ItemsSource="{Binding Rooms}"
+                                    SelectionMode="None"
+                                    ItemTemplate="{x:StaticResource roomsVerticalListTemplate}">
 
                         <CollectionView.Footer>
 
@@ -101,12 +74,54 @@
                         </CollectionView.Footer>
 
                     </CollectionView>
+
+                    <controls:CustomStateView Grid.Column="1"
+                                              State="{Binding DataState}"
+                                              TryAgainCommand="{Binding TryAgainCommand}"
+                                              EmptyStateImage="no_accessories_yet"
+                                              EmptyTitle="{extensions:Translate NoAccessoriesYet}">
+
+                        <controls:CustomStateView.CompleteContent>
+
+                             <!-- DEVICES COLLECTION --> 
+                            <CollectionView ItemsSource="{Binding SelectedRoomDevices}"
+                                            ItemTemplate="{x:StaticResource deviceTemplate}"
+                                            SelectionMode="None">
+
+                                <CollectionView.ItemsLayout>
+                            
+                                    <GridItemsLayout Orientation="Vertical"
+                                                     Span="3"
+                                                     HorizontalItemSpacing="0"
+                                                     VerticalItemSpacing="24"/>
+                            
+                                </CollectionView.ItemsLayout>
+
+                                <CollectionView.Footer>
+
+                                    <BoxView Color="Transparent"
+                                             HeightRequest="20"/>
+
+                                </CollectionView.Footer>
+
+                            </CollectionView>
                     
-                </controls:CustomStateView.CompleteContent>
-            </controls:CustomStateView>
+                        </controls:CustomStateView.CompleteContent>
 
-        </Grid>
+                    </controls:CustomStateView>
 
-    </Grid>
+                </Grid>
+
+            </Grid>
+
+        </controls:CustomStateView.CompleteContent>
+
+        <controls:CustomStateView.LoadingContent>
+
+            <skeleton:RoomDetailsPageSkeleton/>
+
+        </controls:CustomStateView.LoadingContent>
+
+    </controls:CustomStateView>
     
 </views:BaseContentPage>
