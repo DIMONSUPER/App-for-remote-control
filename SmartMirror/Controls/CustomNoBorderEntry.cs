@@ -31,7 +31,7 @@ namespace SmartMirror.Controls
         {
             base.OnPropertyChanged(propertyName);
 
-            if (propertyName == nameof(NeedToFocus))
+            if (NeedToFocus && propertyName == nameof(NeedToFocus))
             {
                 Dispatcher.StartTimer(TimeSpan.FromMilliseconds(250), () =>
                 {

@@ -7,7 +7,7 @@ namespace SmartMirror.Platforms.Android.Helpers
 {
     public class KeyboardHelper : IKeyboardHelper
     {
-        static Context _context;
+        private static Context _context;
 
         public static void Init(Context context)
         {

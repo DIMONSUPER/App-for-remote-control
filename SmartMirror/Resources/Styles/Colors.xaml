@@ -36,7 +36,6 @@
     <Color x:Key="tcolor_i8">#EBA17E</Color>    <!-- Orange -->
     <Color x:Key="tcolor_i9">#20FFFFFF</Color>  <!-- White 32 opacity-->
 
-
     <!-- BRUSHES -->
     <LinearGradientBrush x:Key="GrayGradientBrush">
 
