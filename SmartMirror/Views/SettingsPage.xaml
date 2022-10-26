@@ -3,16 +3,92 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:SmartMirror.Views"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels"
-    Title="SettingsPage"
+    Title="Settings"
+    Background="{x:DynamicResource GrayGradientBrush}"
     x:Class="SmartMirror.Views.SettingsPage"
     x:DataType="vm:SettingsPageViewModel">
-    
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
-    
+
+    <views:BaseContentPage.Resources>
+
+        <ResourceDictionary>
+            <templates:CategoryTemplate x:Key="categoryTemplate"/>
+        </ResourceDictionary>
+
+    </views:BaseContentPage.Resources>
+
+    <Grid
+        ColumnDefinitions="390, *"
+        RowDefinitions="auto, auto, *"
+        ColumnSpacing="105">
+
+        <controls:CurrentTimeControl
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            VerticalOptions="Start"
+            HorizontalOptions="Start"
+            Margin="60, 9, 0, 9"
+            TextColor="{DynamicResource tcolor_i1}"
+            FontFamily="InterSemiBold"/>
+
+        <Label
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Style="{DynamicResource tstyle_i1}"
+            HorizontalOptions="CenterAndExpand"
+            Text="{extensions:Translate Settings}"/>
+
+        <Border
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            HeightRequest="68"
+            WidthRequest="68"
+            Margin="0, 0, 45, 0"
+            Padding="17"
+            BackgroundColor="#3A3A3C"
+            HorizontalOptions="End"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 9"
+            Stroke="#fff">
+
+            <Image
+                Source="ci_close_big"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"/>
+
+        </Border>
+
+        <CollectionView
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="42, 60, 60, 0"
+            ItemSizingStrategy="MeasureFirstItem"
+            ItemsSource="{Binding Categories}"
+            ItemTemplate="{StaticResource categoryTemplate}"/>
+
+        <controls:CustomStateView
+            Grid.Row="2"
+            Grid.Column="1"
+            Margin="0, 60, 0, 0"
+            State="{Binding DataState}"
+            EmptyTitle="{extensions:Translate NoCamerasYet}"
+            EmptyStateImage="empty_scenarios"
+            LoadingTitle="{extensions:Translate Scenarios}">
+
+            <controls:CustomStateView.CompleteContent>
+
+                <Label Text="sdds" TextColor="White"/>
+
+            </controls:CustomStateView.CompleteContent>
+            
+        </controls:CustomStateView>
+
+    </Grid>
+
 </views:BaseContentPage>

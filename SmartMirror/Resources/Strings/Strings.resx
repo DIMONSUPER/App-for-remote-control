@@ -228,4 +228,10 @@
     <data name="EnterCode" xml:space="preserve">
         <value>Enter Code</value>
     </data>
+    <data name="Providers" xml:space="preserve">
+        <value>Providers</value>
+    </data>
+    <data name="Settings" xml:space="preserve">
+        <value>Settings</value>
+    </data>
 </root>
