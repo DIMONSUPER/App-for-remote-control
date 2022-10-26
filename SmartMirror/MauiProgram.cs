@@ -2,8 +2,6 @@
 using Microsoft.Maui.Controls.Compatibility.Hosting;
 using SmartMirror.Controls;
 using SmartMirror.Handlers;
-using SmartMirror.Helpers;
-using SmartMirror.Platforms.Android.Helpers;
 using SmartMirror.Platforms.Android.Renderers;
 using SmartMirror.Platforms.Android.Services;
 using SmartMirror.Services.Aqara;
@@ -12,6 +10,7 @@ using SmartMirror.Services.Blur;
 //using SmartMirror.Services.Amazon;
 using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Devices;
+using SmartMirror.Services.Keyboard;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Notifications;
@@ -87,7 +86,7 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IScenariosService, ScenariosService>();
         containerRegistry.RegisterSingleton<IRoomsService, RoomsService>();
         containerRegistry.RegisterSingleton<IDevicesService, DevicesService>();
-        containerRegistry.RegisterSingleton<IKeyboardHelper, KeyboardHelper>();
+        containerRegistry.RegisterSingleton<IKeyboardService, KeyboardService>();
     }
 
     private static void OnInitialized(IContainerProvider container)

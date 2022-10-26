@@ -1,12 +1,8 @@
 ﻿using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 //using Com.Amazon.Identity.Auth.Device.Api.Authorization;
 //using Com.Amazon.Identity.Auth.Device.Api.Workflow;
-
-using Org.Json;
-using SmartMirror.Platforms.Android.Helpers;
 
 namespace SmartMirror;
 
@@ -26,7 +22,6 @@ public class MainActivity : MauiAppCompatActivity
     protected override void OnCreate(Bundle savedInstanceState)
     {
         AndroidX.Core.SplashScreen.SplashScreen.InstallSplashScreen(this);
-        KeyboardHelper.Init(this);
 
         base.OnCreate(savedInstanceState);
     } 

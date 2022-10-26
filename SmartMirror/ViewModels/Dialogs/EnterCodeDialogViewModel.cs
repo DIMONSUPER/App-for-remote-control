@@ -2,6 +2,7 @@
 using SmartMirror.Helpers;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Blur;
+using SmartMirror.Services.Keyboard;
 using SmartMirror.Views.Dialogs;
 using System.Windows.Input;
 
@@ -11,18 +12,18 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
 {
     private readonly IAqaraService _aqaraService;
     private readonly IDialogService _dialogService;
-    private readonly IKeyboardHelper _keyboardHelper;
+    private readonly IKeyboardService _keyboardService;
 
     public EnterCodeDialogViewModel(
         IAqaraService aqaraService,
-        IKeyboardHelper keyboardHelper,
+        IKeyboardService keyboardService,
         IBlurService blurService,
         IDialogService dialogService)
         : base(blurService)
     {
         _aqaraService = aqaraService;
         _dialogService = dialogService;
-        _keyboardHelper = keyboardHelper;
+        _keyboardService = keyboardService;
     }
 
     #region -- Public properties --
@@ -64,7 +65,7 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
 
     public override void OnDialogOpened(IDialogParameters parameters)
     {
-        _keyboardHelper.ShowKeyboard();
+        _keyboardService.ShowKeyboard();
 
         if (parameters.TryGetValue(Constants.DialogsParameterKeys.TITLE, out string title))
         {
@@ -93,7 +94,7 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
 
             if (loginWithCodeResponse.IsSuccess)
             {
-                _keyboardHelper.HideKeyboard();
+                _keyboardService.HideKeyboard();
 
                 RequestClose.Invoke(new DialogParameters
                 {
