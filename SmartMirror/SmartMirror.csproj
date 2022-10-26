@@ -44,6 +44,10 @@
 		<None Remove="Prism.DryIoc.Maui" />
 		<None Remove="Prism.Maui" />
 		<None Remove="Resources\Images\carbon_settings.svg" />
+		<None Remove="Resources\Images\amazon_logo.svg" />
+		<None Remove="Resources\Images\apple_logo.svg" />
+		<None Remove="Resources\Images\aqara_logo.svg" />
+		<None Remove="Resources\Images\google_logo.svg" />
 		<None Remove="Views\" />
 		<None Remove="ViewModels\" />
 		<None Remove="Services\" />
@@ -84,6 +88,8 @@
 		<None Remove="sqlite-net-pcl" />
 		<None Remove="sqlite-net" />
 		<None Remove="Models\DTO\" />
+		<None Remove="Karamunting.Android.Wasabeef.Blurry" />
+		<None Remove="Services\Blur\" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.3" />
@@ -97,6 +103,7 @@
 		<PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.2" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 		<PackageReference Include="sqlite-net" Version="1.6.292" />
+		<PackageReference Include="Karamunting.Android.Wasabeef.Blurry" Version="3.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Controls\" />
@@ -126,9 +133,13 @@
 		<Folder Include="Models\Aqara\" />
 		<Folder Include="Services\Repository\" />
 		<Folder Include="Models\DTO\" />
+		<Folder Include="Services\Blur\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Controls\BadgeTitleView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Controls\CustomImageBotton.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Platforms\Windows\App.xaml">
@@ -154,6 +165,9 @@
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\ScenarioTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\EnterCodeDialog.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\ErrorDialog.xaml">
@@ -192,9 +206,6 @@
 		<MauiXaml Update="Resources\DataTemplates\RoomsVerticalListTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\Dialogs\TemporaryDialog.xaml">
-		  <SubType></SubType>
-		</MauiXaml>
 		<MauiXaml Update="Controls\CustomSwitch.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
@@ -213,6 +224,9 @@
 		<MauiXaml Update="Views\Tabs\Views\ScenariosPageView.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\WelcomePage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
 	  <EmbeddedResource Update="Resources\Strings\Strings.resx">
@@ -225,6 +239,9 @@
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>Strings.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Dialogs\EnterCodeDialog.xaml.cs">
+	    <DependentUpon>EnterCodeDialog.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Dialogs\ErrorDialog.xaml.cs">
 	    <DependentUpon>ErrorDialog.xaml</DependentUpon>
@@ -271,8 +288,7 @@
 		<None Include="**\**\*.Android.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-android'">
-	  <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen">
-	    <Version>1.0.0.1</Version>
+	  <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.0.1">
 	  </PackageReference>
 	</ItemGroup>
 </Project>
