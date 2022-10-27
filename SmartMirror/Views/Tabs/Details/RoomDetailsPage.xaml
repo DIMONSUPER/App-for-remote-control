@@ -116,11 +116,11 @@
 
         </controls:CustomStateView.CompleteContent>
 
-        <controls:CustomStateView.LoadingContent>
+        <controls:CustomStateView.LoadingSkeletonContent>
 
             <skeleton:RoomDetailsPageSkeleton/>
 
-        </controls:CustomStateView.LoadingContent>
+        </controls:CustomStateView.LoadingSkeletonContent>
 
     </controls:CustomStateView>
     

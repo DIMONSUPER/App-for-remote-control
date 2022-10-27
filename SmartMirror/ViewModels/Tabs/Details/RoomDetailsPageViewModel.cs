@@ -124,8 +124,6 @@ public class RoomDetailsPageViewModel : BaseViewModel
             {
                 DataState = EPageState.LoadingSkeleton;
 
-                await Task.Delay(1000);
-
                 Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
                 {
                     SelectedRoomDevices = new(roomDevices);

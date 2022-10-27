@@ -64,11 +64,11 @@
 
         </controls:CustomStateView.CompleteContent>
 
-        <controls:CustomStateView.LoadingContent>
+        <controls:CustomStateView.LoadingSkeletonContent>
 
             <skeleton:NotificationsTabSkeleton/>
 
-        </controls:CustomStateView.LoadingContent>
+        </controls:CustomStateView.LoadingSkeletonContent>
 
     </controls:CustomStateView>
 

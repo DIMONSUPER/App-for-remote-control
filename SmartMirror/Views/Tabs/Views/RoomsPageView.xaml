@@ -130,9 +130,11 @@
 
         </controls:CustomStateView.CompleteContent>
 
-        <controls:CustomStateView.LoadingContent>
+        <controls:CustomStateView.LoadingSkeletonContent>
+
             <skeleton:RoomsTabSkeleton/>
-        </controls:CustomStateView.LoadingContent>
+
+        </controls:CustomStateView.LoadingSkeletonContent>
 
     </controls:CustomStateView>
 

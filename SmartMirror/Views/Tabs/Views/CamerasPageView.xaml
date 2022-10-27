@@ -142,11 +142,11 @@
 
         </controls:CustomStateView.CompleteContent>
 
-        <controls:CustomStateView.LoadingContent>
+        <controls:CustomStateView.LoadingSkeletonContent>
 
             <skeleton:CamerasTabSkeleton/>
 
-        </controls:CustomStateView.LoadingContent>
+        </controls:CustomStateView.LoadingSkeletonContent>
 
     </controls:CustomStateView>
     

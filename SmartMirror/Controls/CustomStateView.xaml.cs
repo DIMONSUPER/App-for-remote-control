@@ -56,15 +56,15 @@ public partial class CustomStateView : ContentView
         set => SetValue(CompleteContentProperty, value);
     }
 
-    public static readonly BindableProperty LoadingContentProperty = BindableProperty.Create(
-        propertyName: nameof(LoadingContent),
+    public static readonly BindableProperty LoadingSkeletonContentProperty = BindableProperty.Create(
+        propertyName: nameof(LoadingSkeletonContent),
         returnType: typeof(View),
         declaringType: typeof(CustomStateView));
 
-    public View LoadingContent
+    public View LoadingSkeletonContent
     {
-        get => (View)GetValue(LoadingContentProperty);
-        set => SetValue(LoadingContentProperty, value);
+        get => (View)GetValue(LoadingSkeletonContentProperty);
+        set => SetValue(LoadingSkeletonContentProperty, value);
     }
 
     public static readonly BindableProperty EmptyStateImageProperty = BindableProperty.Create(
