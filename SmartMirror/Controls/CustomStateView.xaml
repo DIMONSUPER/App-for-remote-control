@@ -72,7 +72,7 @@
         <stateContanier:StateCondition State="LoadingSkeleton">
 
             <ContentView Background="Transparent"
-                         Content="{Binding LoadingContent, Source={x:Reference stateContanier}}"/>
+                         Content="{Binding LoadingSkeletonContent, Source={x:Reference stateContanier}}"/>
 
         </stateContanier:StateCondition>
 
