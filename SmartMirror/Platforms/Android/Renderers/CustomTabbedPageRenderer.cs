@@ -68,8 +68,6 @@ public class CustomTabbedPageRenderer : TabbedPageRenderer
         {
             PageController.ContainerArea = new(0, tabsHeight, Context.FromPixels(width), Context.FromPixels(height) - tabsHeight);
 
-            SetNavigationRendererPadding(tabsHeight, 0);
-
             Pager.Layout(0, nativeTabsHeight, width, b);
 
             _tabBarView.Measure(MeasureSpec.MakeMeasureSpec(width, MeasureSpecMode.AtMost), MeasureSpec.MakeMeasureSpec(nativeTabsHeight, MeasureSpecMode.AtMost));
@@ -128,18 +126,6 @@ public class CustomTabbedPageRenderer : TabbedPageRenderer
         }
 
         return res;
-    }
-
-    private void SetNavigationRendererPadding(int paddingTop, int paddingBottom)
-    {
-        for (var i = 0; i < PageController.InternalChildren.Count; i++)
-        {
-            if (PageController.InternalChildren[i] is VisualElement child
-                && Microsoft.Maui.Controls.Compatibility.Platform.Android.Platform.GetRenderer(child) is NavigationPageRenderer navigationRenderer)
-            {
-                navigationRenderer.SetPadding(navigationRenderer.PaddingLeft, paddingTop, navigationRenderer.PaddingRight, PaddingBottom);
-            }
-        }
     }
 
     #endregion
