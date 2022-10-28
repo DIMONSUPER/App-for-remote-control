@@ -6,4 +6,13 @@ public partial class CamerasPageView : BaseContentView
 	{
 		InitializeComponent();
 	}
+
+	#region -- Private helpers --
+	
+	private void OnCamerasPageUnloaded(object sender, EventArgs e)
+	{
+		video.Handler?.DisconnectHandler();
+	} 
+
+	#endregion
 }

@@ -13,6 +13,7 @@
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:video="clr-namespace:SmartMirror.Controls"
+    Unloaded="OnCamerasPageUnloaded"
     x:DataType="vm:CamerasPageViewModel"
     x:Class="SmartMirror.Views.Tabs.Views.CamerasPageView">
 
@@ -123,10 +124,10 @@
 
                             <video:Video 
                                 BackgroundColor="{DynamicResource cbg_i2}"
-                                LoadingState="{Binding VideoLoadingState}"
                                 Action="{Binding VideoAction}"
                                 Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"
-                                VideoPlaybackErrorCommand="{Binding VideoPaybackErrorCommand}"/>
+                                VideoPlaybackErrorCommand="{Binding VideoPaybackErrorCommand}"
+                                x:Name="video"/>
 
                         </Frame>
 
@@ -134,7 +135,9 @@
 
                     <ActivityIndicator 
                         WidthRequest="90"
-                        IsRunning="{Binding VideoLoadingState, Converter={xct:IsEqualConverter}, ConverterParameter={Static enums:EVideoLoadingState.Preparing}}"/>
+                        IsRunning="{Binding LoadingState, Source={Reference video},
+                            Converter={xct:IsEqualConverter}, 
+                            ConverterParameter={Static enums:EVideoLoadingState.Preparing}}"/>
 
                 </Grid>
 

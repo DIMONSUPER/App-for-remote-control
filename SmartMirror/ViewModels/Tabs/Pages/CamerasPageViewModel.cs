@@ -57,13 +57,6 @@ public class CamerasPageViewModel : BaseTabViewModel
         set => SetProperty(ref _videoAction, value);
     }
 
-    private EVideoLoadingState _videoLoadingState;
-    public EVideoLoadingState VideoLoadingState
-    {
-        get => _videoLoadingState;
-        set => SetProperty(ref _videoLoadingState, value);
-    }
-
     private ICommand _selectCameraCommand;
     public ICommand SelectCameraCommand => _selectCameraCommand ??= SingleExecutionCommand.FromFunc<CameraBindableModel>(OnSelectCameraCommandAsync);
 
