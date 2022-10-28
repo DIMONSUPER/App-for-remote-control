@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <views:BaseContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -9,6 +9,7 @@
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
+    xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
     x:Class="SmartMirror.Views.Tabs.Views.RoomsPageView"
     x:DataType="vm:RoomsPageViewModel">
 
@@ -46,8 +47,7 @@
         State="{Binding DataState}"
         TryAgainCommand="{Binding TryAgainCommand}"
         EmptyTitle="{extensions:Translate NoAccessoriesYet}"
-        EmptyStateImage="no_accessories_yet"
-        LoadingTitle="{extensions:Translate Rooms}">
+        EmptyStateImage="no_accessories_yet">
         
         <controls:CustomStateView.CompleteContent>
 
@@ -129,6 +129,12 @@
             </Grid>
 
         </controls:CustomStateView.CompleteContent>
+
+        <controls:CustomStateView.LoadingSkeletonContent>
+
+            <skeleton:RoomsTabSkeleton/>
+
+        </controls:CustomStateView.LoadingSkeletonContent>
 
     </controls:CustomStateView>
 

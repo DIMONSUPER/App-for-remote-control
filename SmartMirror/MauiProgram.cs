@@ -19,6 +19,7 @@ using SmartMirror.Services.Rest;
 using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Services.Settings;
+using SmartMirror.ViewModels;
 using SmartMirror.Views;
 using SmartMirror.Views.Dialogs;
 using SmartMirror.Views.Tabs.Details;
@@ -103,11 +104,11 @@ public static class MauiProgram
 
         if (_isAuthorized)
         {
-            navigationBuilder.AddSegment<MainTabbedPage>();
+            navigationBuilder.AddSegment<MainTabbedPageViewModel>();
         }
         else
         {
-            navigationBuilder.AddSegment<WelcomePage>();
+            navigationBuilder.AddSegment<WelcomePageViewModel>();
         }
 
         navigationBuilder.Navigate(HandleErrors);

@@ -62,7 +62,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
         if (!IsDataLoading)
         {
-            DataState = EPageState.Loading;
+            DataState = EPageState.LoadingSkeleton;
 
             await LoadNotificationsAndChangeStateAsync();
         }
@@ -74,7 +74,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
         {
             if (!IsDataLoading && DataState != EPageState.Complete)
             {
-                DataState = EPageState.Loading;
+                DataState = EPageState.LoadingSkeleton;
 
                 await LoadNotificationsAndChangeStateAsync();
             }

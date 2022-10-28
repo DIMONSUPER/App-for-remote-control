@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <views:BaseContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -13,6 +13,7 @@
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:video="clr-namespace:SmartMirror.Controls"
+    xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
     x:DataType="vm:CamerasPageViewModel"
     x:Class="SmartMirror.Views.Tabs.Views.CamerasPageView">
 
@@ -38,8 +39,7 @@
         State="{Binding DataState}"
         TryAgainCommand="{Binding TryAgainCommand}"
         EmptyTitle="{extensions:Translate NoCamerasYet}"
-        EmptyStateImage="video_off"
-        LoadingTitle="{extensions:Translate Cameras}">
+        EmptyStateImage="video_off">
 
         <controls:CustomStateView.CompleteContent>
 
@@ -141,6 +141,12 @@
             </Grid>
 
         </controls:CustomStateView.CompleteContent>
+
+        <controls:CustomStateView.LoadingSkeletonContent>
+
+            <skeleton:CamerasTabSkeleton/>
+
+        </controls:CustomStateView.LoadingSkeletonContent>
 
     </controls:CustomStateView>
     

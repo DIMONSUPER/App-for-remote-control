@@ -84,6 +84,7 @@
 		<None Remove="Services\Settings\" />
 		<None Remove="Services\Aqara\" />
 		<None Remove="Models\Aqara\" />
+		<None Remove="Views\Skeletons\" />
 		<None Remove="SQLitePCLRaw.provider.dynamic_cdecl" />
 		<None Remove="Services\Repository\" />
 		<None Remove="sqlite-net-pcl" />
@@ -131,6 +132,7 @@
 		<Folder Include="Services\Settings\" />
 		<Folder Include="Services\Aqara\" />
 		<Folder Include="Models\Aqara\" />
+		<Folder Include="Views\Skeletons\" />
 		<Folder Include="Services\Repository\" />
 		<Folder Include="Models\DTO\" />
 		<Folder Include="Services\Blur\" />
@@ -244,6 +246,27 @@
 		<MauiXaml Update="Views\WelcomePage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\RoomsTab.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\CameraTab.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\NotificationsTab.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\ScenariosTab.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\RoomDetailsPageSkeleton.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\ScenarioDetailsPageSkeleton.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\CamerasTabSkeleton.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Update="Resources\Strings\Strings.resx">
@@ -252,23 +275,35 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Update="Resources\Strings\Strings.Designer.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>Strings.resx</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Dialogs\EnterCodeDialog.xaml.cs">
-			<DependentUpon>EnterCodeDialog.xaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Dialogs\ErrorDialog.xaml.cs">
-			<DependentUpon>ErrorDialog.xaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Tabs\Details\RoomDetailsPage.xaml.cs">
-			<DependentUpon>RoomDetailsPage.xaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Tabs\Details\ScenarioDetailsPage.xaml.cs">
-			<DependentUpon>ScenarioDetailsPage.xaml</DependentUpon>
-		</Compile>
+	  <Compile Update="Resources\Strings\Strings.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Strings.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Dialogs\ErrorDialog.xaml.cs">
+	    <DependentUpon>ErrorDialog.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Tabs\Details\RoomDetailsPage.xaml.cs">
+	    <DependentUpon>RoomDetailsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Tabs\Details\ScenarioDetailsPage.xaml.cs">
+	    <DependentUpon>ScenarioDetailsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\NotificationsTab.xaml.cs">
+	    <DependentUpon>NotificationsTabSkeleton.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\NotificationsTabSkeleton.xaml.cs">
+	    <DependentUpon>NotificationsTabSkeleton.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\RoomsTab.xaml.cs">
+	    <DependentUpon>RoomsTabSkeleton.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\RoomsTabSkeleton.xaml.cs">
+	    <DependentUpon>RoomsTabSkeleton.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Dialogs\EnterCodeDialog.xaml.cs">
+		<DependentUpon>EnterCodeDialog.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
 		<AndroidKeyStore>True</AndroidKeyStore>
