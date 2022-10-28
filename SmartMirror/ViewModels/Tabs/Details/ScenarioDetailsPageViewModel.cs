@@ -57,7 +57,7 @@ namespace SmartMirror.ViewModels.Tabs.Details
 
             if (parameters.TryGetValue(nameof(ScenarioBindableModel), out ScenarioBindableModel scenario))
             {
-                DataState = EPageState.Loading;
+                DataState = EPageState.LoadingSkeleton;
 
                 _scenarioBindableModel = scenario;
 
@@ -76,7 +76,7 @@ namespace SmartMirror.ViewModels.Tabs.Details
         {
             if (e.NetworkAccess == NetworkAccess.Internet)
             {
-                DataState = EPageState.Loading;
+                DataState = EPageState.LoadingSkeleton;
 
                 await LoadScenarioInformationAsync(_scenarioBindableModel);
 

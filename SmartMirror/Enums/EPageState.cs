@@ -4,6 +4,7 @@
     {
         None,
         Loading,
+        LoadingSkeleton,
         Empty,
         Complete,
         NoInternet,

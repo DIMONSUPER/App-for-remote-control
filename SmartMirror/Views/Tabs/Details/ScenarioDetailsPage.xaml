@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <views:BaseContentPage 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -8,6 +8,7 @@
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:views="clr-namespace:SmartMirror.Views"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+    xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
     x:Class="SmartMirror.Views.Tabs.Details.ScenarioDetailsPage"
     x:DataType="{x:Type vm:ScenarioDetailsPageViewModel}">
 
@@ -16,60 +17,72 @@
         <templates:ScenarioTemplate x:Key="scenarioTemplate"/>
         
     </views:BaseContentPage.Resources>
-    
-    <Grid
-        RowDefinitions="Auto, *"
-        Margin="42, 36, 42, 0">
 
-        <!-- BACK BUTTON -->
-        <HorizontalStackLayout 
-            Grid.Row="0"
-            Padding="18, 12"
-            Spacing="12"
-            behaviors:TouchBehavior.Command="{Binding GoBackCommand}">
+    <controls:CustomStateView State="{Binding DataState}">
 
-            <Image 
-                VerticalOptions="Center"
-                HeightRequest="24"
-                WidthRequest="24"
-                Source="arrow_left_aqua"/>
+        <controls:CustomStateView.CompleteContent>
 
-            <Label 
-                Style="{x:DynamicResource tstyle_i12}"
-                VerticalOptions="Center"
-                TextTransform="Uppercase"
-                Text="{extensions:Translate Back}"/>
+            <Grid RowDefinitions="Auto, *"
+                  Margin="42, 36, 42, 0">
 
-        </HorizontalStackLayout>
+                <!-- BACK BUTTON -->
+                <HorizontalStackLayout 
+                    Grid.Row="0"
+                    Padding="18, 12"
+                    Spacing="12"
+                    behaviors:TouchBehavior.Command="{Binding GoBackCommand}">
 
-        <Label
-            Grid.Row="0"
-            Style="{DynamicResource tstyle_i11}"
-            VerticalOptions="Center"
-            HorizontalOptions="Center"
-            Text="{Binding ScenarioName}"/>
+                    <Image 
+                        VerticalOptions="Center"
+                        HeightRequest="24"
+                        WidthRequest="24"
+                        Source="arrow_left_aqua"/>
 
-        <!-- SCENARIO ACTIONS COLLECTION -->
-        <controls:CustomStateView
-            Grid.Row="1"
-            WidthRequest="571"
-            State="{Binding DataState}"
-            TryAgainCommand="{Binding TryAgainCommand}"
-            EmptyTitle="{extensions:Translate NoScenarioActionsYet}"
-            EmptyStateImage="empty_scenarios"
-            LoadingTitle="{extensions:Translate ScenarioActions}">
+                    <Label 
+                        Style="{x:DynamicResource tstyle_i12}"
+                        VerticalOptions="Center"
+                        TextTransform="Uppercase"
+                        Text="{extensions:Translate Back}"/>
 
-            <controls:CustomStateView.CompleteContent>
+                </HorizontalStackLayout>
 
-                <CollectionView
-                    VerticalScrollBarVisibility="Never"
-                    ItemTemplate="{x:StaticResource scenarioTemplate}"
-                    ItemsSource="{Binding ScenarioActions}"/>
+                <Label
+                    Grid.Row="0"
+                    Style="{DynamicResource tstyle_i11}"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Text="{Binding ScenarioName}"/>
 
-            </controls:CustomStateView.CompleteContent>
+                <!-- SCENARIO ACTIONS COLLECTION -->
+                <controls:CustomStateView
+                    Grid.Row="1"
+                    WidthRequest="571"
+                    State="{Binding DataState}"
+                    TryAgainCommand="{Binding TryAgainCommand}"
+                    EmptyTitle="{extensions:Translate NoScenarioActionsYet}"
+                    EmptyStateImage="empty_scenarios">
+
+                    <controls:CustomStateView.CompleteContent>
+
+                        <CollectionView
+                            VerticalScrollBarVisibility="Never"
+                            ItemTemplate="{x:StaticResource scenarioTemplate}"
+                            ItemsSource="{Binding ScenarioActions}"/>
+
+                    </controls:CustomStateView.CompleteContent>
             
-        </controls:CustomStateView>
+                </controls:CustomStateView>
 
-    </Grid>
+            </Grid>
+
+        </controls:CustomStateView.CompleteContent>
+
+        <controls:CustomStateView.LoadingSkeletonContent>
+
+           <skeleton:ScenarioDetailsPageSkeleton/>
+
+        </controls:CustomStateView.LoadingSkeletonContent>
+
+    </controls:CustomStateView>
     
 </views:BaseContentPage>

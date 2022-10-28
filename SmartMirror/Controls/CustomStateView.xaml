@@ -69,6 +69,13 @@
                 
         </stateContanier:StateCondition>
 
+        <stateContanier:StateCondition State="LoadingSkeleton">
+
+            <ContentView Background="Transparent"
+                         Content="{Binding LoadingSkeletonContent, Source={x:Reference stateContanier}}"/>
+
+        </stateContanier:StateCondition>
+
         <!-- NO INTERNET STATE -->
         <stateContanier:StateCondition State="NoInternet">
 
