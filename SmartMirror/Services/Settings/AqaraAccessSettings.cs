@@ -38,10 +38,13 @@ public class AqaraAccessSettings
 
     public void SetAccessSettings(AccessResponse accessResponse)
     {
-        AccessToken = accessResponse.AccessToken;
-        RefreshToken = accessResponse.RefreshToken;
-        OpenId = accessResponse.OpenId;
-        ExpiresAt = DateTime.UtcNow.AddSeconds(accessResponse.ExpiresIn);
+        if (accessResponse is not null)
+        {
+            AccessToken = accessResponse.AccessToken;
+            RefreshToken = accessResponse.RefreshToken;
+            OpenId = accessResponse.OpenId;
+            ExpiresAt = DateTime.UtcNow.AddSeconds(accessResponse.ExpiresIn);
+        }
     }
 
     public void Clear()
