@@ -100,10 +100,10 @@ namespace SmartMirror.Services.Mock
         {
             List<RoomModel> rooms = new()
             {
-                new() { Id = "real2.1999738989430480896", Name = "Dining Room", Description = "0 Accessories"},
-                new() { Id = "real2.2999738989430480896", Name = "Downstairs", Description = "0 Accessories"},
-                new() { Id = "real2.3999738989430480896", Name = "Front Door", Description = "0 Accessories"},
-                new() { Id = "real2.4999738989430480896", Name = "Garage", Description = "0 Accessories" },
+                new() { Id = "real2.1999738989430480896", Name = "Dining Room",},
+                new() { Id = "real2.2999738989430480896", Name = "Downstairs", },
+                new() { Id = "real2.3999738989430480896", Name = "Front Door", },
+                new() { Id = "real2.4999738989430480896", Name = "Garage", },
             };
 
             return rooms;

@@ -3,6 +3,7 @@ using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
+using SmartMirror.Services.Rooms;
 using SmartMirror.ViewModels.Tabs.Pages;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -13,17 +14,22 @@ public class RoomDetailsPageViewModel : BaseViewModel
 {
     private readonly IMapperService _mapperService;
     private readonly IDevicesService _devicesService;
+    private readonly IRoomsService _roomsService;
 
     private RoomBindableModel _selectedRoom;
 
     public RoomDetailsPageViewModel(
         INavigationService navigationService,
         IMapperService mapperService,
-        IDevicesService devicesService)
+        IDevicesService devicesService,
+        IRoomsService roomsService)
         : base(navigationService)
     {
         _mapperService = mapperService;
         _devicesService = devicesService;
+        _roomsService = roomsService;
+
+        _roomsService.AllRoomsChanged += OnAllRoomsChanged;
     }
 
     #region -- Public properties --
@@ -55,6 +61,13 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
     #region -- Overrides --
 
+    public override void Destroy()
+    {
+        _roomsService.AllRoomsChanged -= OnAllRoomsChanged;
+
+        base.Destroy();
+    }
+
     public override void Initialize(INavigationParameters parameters)
     {
         base.Initialize(parameters);
@@ -83,6 +96,13 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
             var devicesResponse = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
 
+            var downloadRoomsResponse = await _roomsService.DownloadAllRoomsAsync();
+
+            if (downloadRoomsResponse.IsSuccess)
+            {
+                Rooms = new(_roomsService.AllRooms);
+            }
+
             if (devicesResponse.IsSuccess)
             {
                 SelectRoom(_selectedRoom);
@@ -101,6 +121,19 @@ public class RoomDetailsPageViewModel : BaseViewModel
     #endregion
 
     #region -- Private helpers --
+
+    private void OnAllRoomsChanged(object sender, EventArgs e)
+    {
+        if (_selectedRoom is not null)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                DataState = EPageState.Loading;
+
+                SelectRoom(_selectedRoom);
+            });
+        }
+    }
 
     private Task OnBackArrowTappedCommandAsync()
     {

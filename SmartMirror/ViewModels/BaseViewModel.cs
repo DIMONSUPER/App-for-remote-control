@@ -2,7 +2,7 @@
 
 namespace SmartMirror.ViewModels
 {
-    public class BaseViewModel : BindableBase, IPageLifecycleAware, INavigationAware, IInitialize, IApplicationLifecycleAware
+    public class BaseViewModel : BindableBase, IPageLifecycleAware, INavigationAware, IInitialize, IApplicationLifecycleAware, IDestructible
     {
         public BaseViewModel(INavigationService navigationService)
         {
@@ -69,6 +69,14 @@ namespace SmartMirror.ViewModels
         }
 
         public virtual void OnSleep()
+        {
+        }
+
+        #endregion
+
+        #region -- IDestructible implementation --
+
+        public virtual void Destroy()
         {
         }
 
