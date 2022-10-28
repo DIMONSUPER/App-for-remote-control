@@ -34,6 +34,12 @@ namespace SmartMirror.Platforms.Android.Controls
                 {
                     _videoView.Prepared -= OnVideoViewPrepared;
                     _videoView.Error -= OnVideoViewError;
+
+                    _videoView.StopPlayback();
+                    _videoView.SetOnPreparedListener(null);
+                    _videoView.SetOnCompletionListener(null);
+                    _videoView.SetOnErrorListener(null);
+
                     _videoView.Dispose();
                 }
                 
