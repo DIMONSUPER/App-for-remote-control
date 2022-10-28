@@ -68,7 +68,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
         if (_isNeedReloadData && !IsDataLoading)
         {
-            DataState = EPageState.Loading;
+            DataState = EPageState.LoadingSkeleton;
 
             await LoadScenariosAsyncAndChangeState();
         }
@@ -87,7 +87,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
         {
             if (!IsDataLoading && DataState != EPageState.Complete)
             {
-                DataState = EPageState.Loading;
+                DataState = EPageState.LoadingSkeleton;
 
                 await LoadScenariosAsyncAndChangeState();
             }

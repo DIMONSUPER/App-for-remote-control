@@ -41,7 +41,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
         Title = "Rooms";
 
-        DataState = EPageState.Loading;
+        DataState = EPageState.LoadingSkeleton;
 
         Task.Run(LoadRoomsAndDevicesAndChangeStateAsync);
     }
@@ -81,7 +81,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         {
             if (!IsDataLoading && DataState != EPageState.Complete)
             {
-                DataState = EPageState.Loading;
+                DataState = EPageState.LoadingSkeleton;
 
                 await LoadRoomsAndDevicesAndChangeStateAsync();
             }
