@@ -1,26 +1,36 @@
 ﻿using SmartMirror.Enums;
+using SmartMirror.Helpers;
+using SmartMirror.Interfaces;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
+using SmartMirror.Services.Mapper;
+using SmartMirror.Services.Scenarios;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace SmartMirror.ViewModels
 {
     public class SettingsPageViewModel : BaseViewModel
     {
+        private readonly IMapperService _mapperService;
+        private readonly IScenariosService _scenariosService;
+
+        private readonly ICommand _selectCategoryCommand;
+        private IEnumerable<ImageAndTitleBindableModel> _allScenarios;
+
         public SettingsPageViewModel(
+            IScenariosService scenariosService,
+            IMapperService mapperService,
             INavigationService navigationService)
             : base(navigationService)
         {
+            _scenariosService = scenariosService;
+            _mapperService = mapperService;
+
+            _selectCategoryCommand = SingleExecutionCommand.FromFunc<CategoryBindableModel>(OnSelectCategoryCommandAsync);
         }
 
         #region -- Public properties --
-
-        private ObservableCollection<CategoryBindableModel> _categories;
-        public ObservableCollection<CategoryBindableModel> Categories
-        {
-            get => _categories;
-            set => SetProperty(ref _categories, value);
-        }
 
         private CategoryBindableModel _selectedCategory;
         public CategoryBindableModel SelectedCategory
@@ -29,15 +39,34 @@ namespace SmartMirror.ViewModels
             set => SetProperty(ref _selectedCategory, value);
         }
 
+        private ObservableCollection<CategoryBindableModel> _categories;
+        public ObservableCollection<CategoryBindableModel> Categories
+        {
+            get => _categories;
+            set => SetProperty(ref _categories, value);
+        }
+
+        private ObservableCollection<ICategoryElementModel> _categoryElements = new();
+        public ObservableCollection<ICategoryElementModel> CategoryElements
+        {
+            get => _categoryElements;
+            set => SetProperty(ref _categoryElements, value);
+        }
+
+        private ICommand _closeSettingsCommand;
+        public ICommand CloseSettingsCommand => _closeSettingsCommand ??= SingleExecutionCommand.FromFunc(OnCloseSettingsCommandAsync);
+
         #endregion
 
         #region -- Overrides --
 
-        public override void OnAppearing()
+        public override async void OnAppearing()
         {
             base.OnAppearing();
 
             LoadCategories();
+
+            await LoadAllScenariosAsync();
 
             DataState = EPageState.Complete;
         }
@@ -54,28 +83,90 @@ namespace SmartMirror.ViewModels
                 {
                     Type = ECategoryType.Accessories,
                     Name = Strings.Accessories,
-                    Count = 1,
                     IsSelected = true,
+                    TapCommand = _selectCategoryCommand,
                 },
                 new()
                 {
                     Type = ECategoryType.Scenarios,
                     Name = Strings.Scenarios,
-                    Count = 15,
+                    TapCommand = _selectCategoryCommand,
                 },
                 new()
                 {
                     Type = ECategoryType.Cameras,
                     Name = Strings.Cameras,
-                    Count = 13,
+                    TapCommand = _selectCategoryCommand,
                 },
                 new()
                 {
                     Type = ECategoryType.Providers,
                     Name = Strings.Providers,
-                    Count = 8,
+                    TapCommand = _selectCategoryCommand,
                 },
             };
+
+            SelectedCategory = Categories.FirstOrDefault();
+        }
+
+        private void SelectCategory(CategoryBindableModel category)
+        {
+            if (SelectedCategory is not null)
+            {
+                SelectedCategory.IsSelected = false;
+            }
+
+            if (category is not null)
+            {
+                category.IsSelected = true;
+            }
+
+            SelectedCategory = category;
+        }
+
+        private async Task OnSelectCategoryCommandAsync(CategoryBindableModel category)
+        {
+            SelectCategory(category);
+
+            switch (category.Type)
+            {
+                case ECategoryType.Scenarios:
+                    DataState = _allScenarios.Count() == 0
+                        ? EPageState.Empty
+                        : EPageState.Complete;
+
+                    CategoryElements = new(_allScenarios);
+                    break;
+                default:
+                    CategoryElements = new();
+                    DataState = EPageState.Empty;
+                    break;
+            }
+        }
+
+        private async Task<bool> LoadAllScenariosAsync()
+        {
+            var resultOfGettingAllScenarios = await _scenariosService.GetScenariosAsync();
+
+            if (resultOfGettingAllScenarios.IsSuccess)
+            {
+                _allScenarios = _mapperService.MapRange<ImageAndTitleBindableModel>(resultOfGettingAllScenarios.Result, (m, vm) =>
+                {
+                    vm.ImageSource = "play_gray";
+                    vm.TapCommand = null;
+                });
+
+                var scenarioCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Scenarios);
+
+                scenarioCategory.Count = _allScenarios.Count();
+            }
+
+            return resultOfGettingAllScenarios.IsSuccess;
+        }
+
+        private Task OnCloseSettingsCommandAsync()
+        {
+            return NavigationService.GoBackAsync();
         }
 
         #endregion

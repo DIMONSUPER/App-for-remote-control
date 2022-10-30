@@ -5,7 +5,11 @@
     xmlns:views="clr-namespace:SmartMirror.Views"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:enums="clr-namespace:SmartMirror.Enums"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+    xmlns:sc="clr-namespace:SmartMirror.Controls.StateContainer"
+    xmlns:templateSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels"
     Title="Settings"
     Background="{x:DynamicResource GrayGradientBrush}"
@@ -16,6 +20,7 @@
 
         <ResourceDictionary>
             <templates:CategoryTemplate x:Key="categoryTemplate"/>
+            <templateSelectors:CategoryElementTemplate x:Key="elementCategoryTemplateSelector"/>
         </ResourceDictionary>
 
     </views:BaseContentPage.Resources>
@@ -51,23 +56,24 @@
             WidthRequest="68"
             Margin="0, 0, 45, 0"
             Padding="17"
-            BackgroundColor="#3A3A3C"
+            BackgroundColor="{DynamicResource cbg_i2}"
             HorizontalOptions="End"
             StrokeThickness="1"
             StrokeShape="RoundRectangle 9"
-            Stroke="#fff">
+            Stroke="{DynamicResource cbg_i4}">
 
             <Image
                 Source="ci_close_big"
                 HorizontalOptions="Center"
-                VerticalOptions="Center"/>
+                VerticalOptions="Center"
+                behaviors:TouchBehavior.Command="{Binding CloseSettingsCommand}"/>
 
         </Border>
 
         <CollectionView
             Grid.Row="2"
             Grid.Column="0"
-            Margin="42, 60, 60, 0"
+            Margin="42, 60, 0, 0"
             ItemSizingStrategy="MeasureFirstItem"
             ItemsSource="{Binding Categories}"
             ItemTemplate="{StaticResource categoryTemplate}"/>
@@ -76,17 +82,51 @@
             Grid.Row="2"
             Grid.Column="1"
             Margin="0, 60, 0, 0"
-            State="{Binding DataState}"
-            EmptyTitle="{extensions:Translate NoCamerasYet}"
-            EmptyStateImage="empty_scenarios"
-            LoadingTitle="{extensions:Translate Scenarios}">
+            State="{Binding DataState}">
+
+            <controls:CustomStateView.Triggers>
+
+                <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Accessories}">
+                    <Setter Property="EmptyTitle" Value="{extensions:Translate NoAccessoriesYet}"/>
+                    <Setter Property="EmptyStateImage" Value="no_accessories_yet"/>
+                    <Setter Property="LoadingTitle" Value="{extensions:Translate Accessories}"/>
+                </DataTrigger>
+
+                <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Scenarios}">
+                    <Setter Property="EmptyTitle" Value="{extensions:Translate NoScenariosYet}"/>
+                    <Setter Property="EmptyStateImage" Value="empty_scenarios"/>
+                    <Setter Property="LoadingTitle" Value="{extensions:Translate Scenarios}"/>
+                </DataTrigger>
+
+                <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Cameras}">
+                    <Setter Property="EmptyTitle" Value="{extensions:Translate NoCamerasYet}"/>
+                    <Setter Property="EmptyStateImage" Value="video_off"/>
+                    <Setter Property="LoadingTitle" Value="{extensions:Translate Cameras}"/>
+                </DataTrigger>
+
+            </controls:CustomStateView.Triggers>
 
             <controls:CustomStateView.CompleteContent>
 
-                <Label Text="sdds" TextColor="White"/>
+                <CollectionView
+                    Margin="0, 0, 45, 0"
+                    ItemsSource="{Binding CategoryElements}"
+                    ItemTemplate="{StaticResource elementCategoryTemplateSelector}">
+
+                    <CollectionView.ItemsLayout>
+
+                        <GridItemsLayout
+                            Span="2"
+                            VerticalItemSpacing="25"
+                            HorizontalItemSpacing="25"
+                            Orientation="Vertical"/>
+
+                    </CollectionView.ItemsLayout>
+
+                </CollectionView>
 
             </controls:CustomStateView.CompleteContent>
-            
+
         </controls:CustomStateView>
 
     </Grid>

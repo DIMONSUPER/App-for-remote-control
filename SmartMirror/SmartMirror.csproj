@@ -162,6 +162,9 @@
 			<SubType>
 			</SubType>
 		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\ImageAndTitleTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\NotificationHeaderTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
@@ -275,6 +278,12 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
+	  <Compile Update="Resources\DataTemplates\CameraTemplate.xaml.cs">
+	    <DependentUpon>CameraTemplate.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Resources\DataTemplates\ImageAndTitleTemplate.xaml.cs">
+	    <DependentUpon>ImageAndTitleTemplate.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Resources\Strings\Strings.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
