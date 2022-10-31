@@ -128,7 +128,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                DataState = EPageState.Loading;
+                DataState = EPageState.LoadingSkeleton;
 
                 SelectRoom(_selectedRoom);
             });
@@ -140,7 +140,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
         return NavigationService.GoBackAsync();
     }
 
-    private async void SelectRoom(RoomBindableModel selectedRoom)
+    private void SelectRoom(RoomBindableModel selectedRoom)
     {
         if (Rooms?.Count > 0)
         {
