@@ -16,6 +16,7 @@ namespace SmartMirror.ViewModels
         private readonly IScenariosService _scenariosService;
 
         private readonly ICommand _selectCategoryCommand;
+        private readonly ICommand _showScenarioDescriptionCommand;
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios;
 
         public SettingsPageViewModel(
@@ -28,6 +29,7 @@ namespace SmartMirror.ViewModels
             _mapperService = mapperService;
 
             _selectCategoryCommand = SingleExecutionCommand.FromFunc<CategoryBindableModel>(OnSelectCategoryCommandAsync);
+            _showScenarioDescriptionCommand = SingleExecutionCommand.FromFunc(OnShowScenarioDescriptionCommandAsync);
         }
 
         #region -- Public properties --
@@ -53,6 +55,16 @@ namespace SmartMirror.ViewModels
             set => SetProperty(ref _categoryElements, value);
         }
 
+        private EPageState _pageState;
+        public EPageState PageState
+        {
+            get => _pageState;
+            set => SetProperty(ref _pageState, value);
+        }
+
+        private ICommand _tryAgainCommand;
+        public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
+
         private ICommand _closeSettingsCommand;
         public ICommand CloseSettingsCommand => _closeSettingsCommand ??= SingleExecutionCommand.FromFunc(OnCloseSettingsCommandAsync);
 
@@ -66,9 +78,24 @@ namespace SmartMirror.ViewModels
 
             LoadCategories();
 
-            await LoadAllScenariosAsync();
+            await LoadAllDataAsync();
 
-            DataState = EPageState.Complete;
+            //temporarily
+            DataState = EPageState.Empty;
+        }
+
+        protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        {
+            base.OnConnectivityChanged(sender, e);
+
+            if (IsInternetConnected)
+            {
+                await LoadAllDataAsync();
+            }
+            else
+            {
+                PageState = EPageState.NoInternet;
+            }
         }
 
         #endregion
@@ -124,7 +151,7 @@ namespace SmartMirror.ViewModels
             SelectedCategory = category;
         }
 
-        private async Task OnSelectCategoryCommandAsync(CategoryBindableModel category)
+        private Task OnSelectCategoryCommandAsync(CategoryBindableModel category)
         {
             SelectCategory(category);
 
@@ -142,9 +169,18 @@ namespace SmartMirror.ViewModels
                     DataState = EPageState.Empty;
                     break;
             }
+
+            return Task.CompletedTask;
         }
 
-        private async Task<bool> LoadAllScenariosAsync()
+        private async Task LoadAllDataAsync()
+        {
+            await LoadAllScenariosAsync();
+
+            PageState = EPageState.Complete;
+        }
+
+        private async Task LoadAllScenariosAsync()
         {
             var resultOfGettingAllScenarios = await _scenariosService.GetScenariosAsync();
 
@@ -153,6 +189,7 @@ namespace SmartMirror.ViewModels
                 _allScenarios = _mapperService.MapRange<ImageAndTitleBindableModel>(resultOfGettingAllScenarios.Result, (m, vm) =>
                 {
                     vm.ImageSource = "play_gray";
+                    vm.TapOnActionCommand = _showScenarioDescriptionCommand;
                     vm.TapCommand = null;
                 });
 
@@ -160,8 +197,19 @@ namespace SmartMirror.ViewModels
 
                 scenarioCategory.Count = _allScenarios.Count();
             }
+        }
 
-            return resultOfGettingAllScenarios.IsSuccess;
+        private Task OnTryAgainCommandAsync()
+        {
+            PageState = EPageState.NoInternetLoader;
+
+            return LoadAllDataAsync();
+        }
+
+        private Task OnShowScenarioDescriptionCommandAsync()
+        {
+
+            return LoadAllDataAsync();
         }
 
         private Task OnCloseSettingsCommandAsync()

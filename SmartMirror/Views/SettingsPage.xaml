@@ -25,10 +25,7 @@
 
     </views:BaseContentPage.Resources>
 
-    <Grid
-        ColumnDefinitions="390, *"
-        RowDefinitions="auto, auto, *"
-        ColumnSpacing="105">
+    <Grid RowDefinitions="auto, auto, *">
 
         <controls:CurrentTimeControl
             Grid.Row="0"
@@ -70,60 +67,72 @@
 
         </Border>
 
-        <CollectionView
-            Grid.Row="2"
-            Grid.Column="0"
-            Margin="42, 60, 0, 0"
-            ItemSizingStrategy="MeasureFirstItem"
-            ItemsSource="{Binding Categories}"
-            ItemTemplate="{StaticResource categoryTemplate}"/>
-
         <controls:CustomStateView
             Grid.Row="2"
-            Grid.Column="1"
-            Margin="0, 60, 0, 0"
-            State="{Binding DataState}">
-
-            <controls:CustomStateView.Triggers>
-
-                <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Accessories}">
-                    <Setter Property="EmptyTitle" Value="{extensions:Translate NoAccessoriesYet}"/>
-                    <Setter Property="EmptyStateImage" Value="no_accessories_yet"/>
-                    <Setter Property="LoadingTitle" Value="{extensions:Translate Accessories}"/>
-                </DataTrigger>
-
-                <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Scenarios}">
-                    <Setter Property="EmptyTitle" Value="{extensions:Translate NoScenariosYet}"/>
-                    <Setter Property="EmptyStateImage" Value="empty_scenarios"/>
-                    <Setter Property="LoadingTitle" Value="{extensions:Translate Scenarios}"/>
-                </DataTrigger>
-
-                <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Cameras}">
-                    <Setter Property="EmptyTitle" Value="{extensions:Translate NoCamerasYet}"/>
-                    <Setter Property="EmptyStateImage" Value="video_off"/>
-                    <Setter Property="LoadingTitle" Value="{extensions:Translate Cameras}"/>
-                </DataTrigger>
-
-            </controls:CustomStateView.Triggers>
+            State="{Binding PageState}">
 
             <controls:CustomStateView.CompleteContent>
 
-                <CollectionView
-                    Margin="0, 0, 45, 0"
-                    ItemsSource="{Binding CategoryElements}"
-                    ItemTemplate="{StaticResource elementCategoryTemplateSelector}">
+                <Grid ColumnDefinitions="390, *">
+                    
+                    <CollectionView
+                        Grid.Column="0"
+                        Margin="42, 60, 0, 0"
+                        ItemSizingStrategy="MeasureFirstItem"
+                        ItemsSource="{Binding Categories}"
+                        ItemTemplate="{StaticResource categoryTemplate}"/>
 
-                    <CollectionView.ItemsLayout>
+                    <controls:CustomStateView
+                        Grid.Column="1"
+                        Margin="0, 60, 0, 0"
+                        State="{Binding DataState}">
 
-                        <GridItemsLayout
-                            Span="2"
-                            VerticalItemSpacing="25"
-                            HorizontalItemSpacing="25"
-                            Orientation="Vertical"/>
+                        <controls:CustomStateView.Triggers>
 
-                    </CollectionView.ItemsLayout>
+                            <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Accessories}">
+                                <Setter Property="EmptyTitle" Value="{extensions:Translate NoAccessoriesYet}"/>
+                                <Setter Property="EmptyStateImage" Value="no_accessories_yet"/>
+                                <Setter Property="LoadingTitle" Value="{extensions:Translate Accessories}"/>
+                            </DataTrigger>
 
-                </CollectionView>
+                            <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Scenarios}">
+                                <Setter Property="EmptyTitle" Value="{extensions:Translate NoScenariosYet}"/>
+                                <Setter Property="EmptyStateImage" Value="empty_scenarios"/>
+                                <Setter Property="LoadingTitle" Value="{extensions:Translate Scenarios}"/>
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Cameras}">
+                                <Setter Property="EmptyTitle" Value="{extensions:Translate NoCamerasYet}"/>
+                                <Setter Property="EmptyStateImage" Value="video_off"/>
+                                <Setter Property="LoadingTitle" Value="{extensions:Translate Cameras}"/>
+                            </DataTrigger>
+
+                        </controls:CustomStateView.Triggers>
+
+                        <controls:CustomStateView.CompleteContent>
+
+                            <CollectionView
+                                Margin="105, 0, 45, 0"
+                                ItemsSource="{Binding CategoryElements}"
+                                ItemTemplate="{StaticResource elementCategoryTemplateSelector}">
+
+                                <CollectionView.ItemsLayout>
+
+                                    <GridItemsLayout
+                                        Span="2"
+                                        VerticalItemSpacing="25"
+                                        HorizontalItemSpacing="25"
+                                        Orientation="Vertical"/>
+
+                                </CollectionView.ItemsLayout>
+
+                            </CollectionView>
+
+                        </controls:CustomStateView.CompleteContent>
+
+                    </controls:CustomStateView>
+
+                </Grid>
 
             </controls:CustomStateView.CompleteContent>
 
