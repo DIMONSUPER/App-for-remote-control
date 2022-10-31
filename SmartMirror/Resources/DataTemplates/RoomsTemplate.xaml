@@ -14,7 +14,6 @@
                 StrokeThickness="1"
                 StrokeShape="RoundRectangle 9"
                 BackgroundColor="{x:DynamicResource cbg_i2}"
-                Shadow="{x:StaticResource Shadow_i1}"
                 Margin="0,0,0,3"
                 Padding="30, 24"
                 behaviors:TouchBehavior.Command="{Binding TappedCommand}"

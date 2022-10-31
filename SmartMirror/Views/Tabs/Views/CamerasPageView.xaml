@@ -70,8 +70,7 @@
                         StrokeThickness="0.75"
                         StrokeShape="RoundRectangle 9"
                         BackgroundColor="{DynamicResource cbg_i2}"
-                        Stroke="{DynamicResource cbg_i4}"
-                        Shadow="{DynamicResource Shadow_i1}">
+                        Stroke="{DynamicResource cbg_i4}">
 
                         <StackLayout VerticalOptions="CenterAndExpand">
 
