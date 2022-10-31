@@ -79,7 +79,7 @@ public class CamerasPageViewModel : BaseTabViewModel
 
         if (!IsDataLoading)
         {
-            DataState = EPageState.Loading;
+            DataState = EPageState.LoadingSkeleton;
 
             await LoadCamerasAndChangeStateAsync();
         }
@@ -98,7 +98,7 @@ public class CamerasPageViewModel : BaseTabViewModel
         {
             if (!IsDataLoading && DataState != EPageState.Complete)
             {
-                DataState = EPageState.Loading;
+                DataState = EPageState.LoadingSkeleton;
 
                 await LoadCamerasAndChangeStateAsync();
             }
