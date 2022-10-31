@@ -28,13 +28,6 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _imageSource, value);
         }
 
-        private ICommand _tapOnActionCommand;
-        public ICommand TapOnActionCommand
-        {
-            get => _tapOnActionCommand;
-            set => SetProperty(ref _tapOnActionCommand, value);
-        }
-
         #endregion
 
         #region -- ITappable implementation

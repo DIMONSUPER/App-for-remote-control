@@ -3,7 +3,7 @@ using SmartMirror.Resources.DataTemplates;
 
 namespace SmartMirror.Resources.DataTemplateSelectors
 {
-    public class CategoryElementTemplate : DataTemplateSelector
+    public class CategoryElementTemplateSelector : DataTemplateSelector
     {
         private readonly Dictionary<Type, DataTemplate> _dataTemplatesDictionary = new()
         {

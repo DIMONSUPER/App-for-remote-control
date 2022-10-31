@@ -5,6 +5,7 @@ using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
+using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -14,6 +15,7 @@ namespace SmartMirror.ViewModels
     {
         private readonly IMapperService _mapperService;
         private readonly IScenariosService _scenariosService;
+        private readonly IDialogService _dialogService;
 
         private readonly ICommand _selectCategoryCommand;
         private readonly ICommand _showScenarioDescriptionCommand;
@@ -22,14 +24,16 @@ namespace SmartMirror.ViewModels
         public SettingsPageViewModel(
             IScenariosService scenariosService,
             IMapperService mapperService,
+            IDialogService dialogService,
             INavigationService navigationService)
             : base(navigationService)
         {
             _scenariosService = scenariosService;
             _mapperService = mapperService;
+            _dialogService = dialogService;
 
             _selectCategoryCommand = SingleExecutionCommand.FromFunc<CategoryBindableModel>(OnSelectCategoryCommandAsync);
-            _showScenarioDescriptionCommand = SingleExecutionCommand.FromFunc(OnShowScenarioDescriptionCommandAsync);
+            _showScenarioDescriptionCommand = SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowScenarioDescriptionCommandAsync);
         }
 
         #region -- Public properties --
@@ -189,8 +193,7 @@ namespace SmartMirror.ViewModels
                 _allScenarios = _mapperService.MapRange<ImageAndTitleBindableModel>(resultOfGettingAllScenarios.Result, (m, vm) =>
                 {
                     vm.ImageSource = "play_gray";
-                    vm.TapOnActionCommand = _showScenarioDescriptionCommand;
-                    vm.TapCommand = null;
+                    vm.TapCommand = _showScenarioDescriptionCommand;
                 });
 
                 var scenarioCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Scenarios);
@@ -206,10 +209,12 @@ namespace SmartMirror.ViewModels
             return LoadAllDataAsync();
         }
 
-        private Task OnShowScenarioDescriptionCommandAsync()
+        private Task OnShowScenarioDescriptionCommandAsync(ImageAndTitleBindableModel scenario)
         {
-
-            return LoadAllDataAsync();
+            return _dialogService.ShowDialogAsync(nameof(ScenarioDescriptionDialog), new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.SCENARIO, scenario },
+            });
         }
 
         private Task OnCloseSettingsCommandAsync()

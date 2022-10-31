@@ -20,7 +20,7 @@
 
         <ResourceDictionary>
             <templates:CategoryTemplate x:Key="categoryTemplate"/>
-            <templateSelectors:CategoryElementTemplate x:Key="elementCategoryTemplateSelector"/>
+            <templateSelectors:CategoryElementTemplateSelector x:Key="elementCategoryTemplateSelector"/>
         </ResourceDictionary>
 
     </views:BaseContentPage.Resources>

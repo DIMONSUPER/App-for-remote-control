@@ -144,6 +144,9 @@
 		<MauiXaml Update="Controls\CustomImageBotton.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Controls\TitleAndSwitchView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Platforms\Windows\App.xaml">
 			<SubType>
 			</SubType>

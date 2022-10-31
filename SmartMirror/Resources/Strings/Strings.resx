@@ -234,4 +234,13 @@
     <data name="Settings" xml:space="preserve">
         <value>Settings</value>
     </data>
+    <data name="AddToFavorites" xml:space="preserve">
+        <value>Add to Favorites</value>
+    </data>
+    <data name="ReceiveNotifications" xml:space="preserve">
+        <value>Receive Notifications</value>
+    </data>
+    <data name="ShowInScenarios" xml:space="preserve">
+        <value>Show in Scenarios</value>
+    </data>
 </root>

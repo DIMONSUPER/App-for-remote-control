@@ -1,6 +1,6 @@
 namespace SmartMirror.Views.Dialogs;
 
-public partial class ScenarioDescriptionDialog : ContentView
+public partial class ScenarioDescriptionDialog : Frame
 {
 	public ScenarioDescriptionDialog()
 	{

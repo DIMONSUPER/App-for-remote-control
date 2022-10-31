@@ -76,6 +76,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add to Favorites.
+        /// </summary>
+        internal static string AddToFavorites {
+            get {
+                return ResourceManager.GetString("AddToFavorites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aqara.
         /// </summary>
         internal static string Aqara {
@@ -553,6 +562,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Receive Notifications.
+        /// </summary>
+        internal static string ReceiveNotifications {
+            get {
+                return ResourceManager.GetString("ReceiveNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rooms.
         /// </summary>
         internal static string Rooms {
@@ -603,6 +621,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Shades {
             get {
                 return ResourceManager.GetString("Shades", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show in Scenarios.
+        /// </summary>
+        internal static string ShowInScenarios {
+            get {
+                return ResourceManager.GetString("ShowInScenarios", resourceCulture);
             }
         }
         
