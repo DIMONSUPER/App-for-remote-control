@@ -1,6 +1,6 @@
-﻿using Bumptech.Glide.Load.Resource.Gif;
-using Microsoft.Maui.Controls.Shapes;
+﻿using Microsoft.Maui.Controls.Shapes;
 using SmartMirror.Interfaces;
+using System.Windows.Input;
 
 namespace SmartMirror.Controls;
 
@@ -86,6 +86,17 @@ public class CustomTabbedPage : TabbedPage
         set => SetValue(BorderColorProperty, value);
     }
 
+    public static readonly BindableProperty SettingsCommandProperty = BindableProperty.Create(
+        propertyName: nameof(SettingsCommand),
+        returnType: typeof(ICommand),
+        declaringType: typeof(CustomTabbedPage));
+
+    public ICommand SettingsCommand
+    {
+        get => (ICommand)GetValue(SettingsCommandProperty);
+        set => SetValue(SettingsCommandProperty, value);
+    }
+
     private Grid _tabBarView;
     public Grid TabBarView => _tabBarView ??= CreateTabBar();
 
@@ -127,72 +138,55 @@ public class CustomTabbedPage : TabbedPage
             RowSpacing = 0,
         };
 
-        var tabBarStack = new StackLayout() { Spacing = 0 };
 
-        tabBarStack.Add(CreateTimeLabel());
-        var grid = new Grid
-        {
-            ColumnSpacing = 0,
-            Padding = new Thickness(0, 0, 0, 0),
-            Margin = new Thickness(0, 0, 0, 0),
-        };
+        var stackTimeAndTabs = new StackLayout() { Spacing = 0 };
+        stackTimeAndTabs.Add(CreateTimeLabel());
 
-        var r = grid.RowDefinitions;
+        var grid = new Grid();
 
-        grid.Add(CreateBorder());
-        grid.Add(CreateSettingsIcon());
+        grid.Children.Add(CreateBorder());
 
-        tabBarStack.Add(grid);
+        grid.Children.Add(CreateSettingsButton());
 
-        tabBarView.Add(tabBarStack);
+        stackTimeAndTabs.Add(grid);
+
+        tabBarView.Add(stackTimeAndTabs);
 
         OnCurrentPageChanged();
 
         return tabBarView;
     }
 
-    private Border CreateSettingsIcon()
+    private Border CreateSettingsButton()
     {
-        var border = new Border
+        var icon = new Image()
         {
-            VerticalOptions = LayoutOptions.EndAndExpand,
-            HorizontalOptions = LayoutOptions.EndAndExpand,
-            Padding = new Thickness
-            {
-                Left = 18,
-                Top = 16,
-                Right = 18,
-                Bottom = 16,
-            },
-            Margin = new Thickness
-            {
-                Left = 0,
-                Top = 0,
-                Right = 60,
-                Bottom = 0,
-            },
-            StrokeThickness = 1,
-            StrokeShape = new RoundRectangle() { CornerRadius = 9 },
-            Stroke = Color.FromArgb("#FFFFFF"),
-            BackgroundColor = Color.FromArgb("#3A3A3C"),
-            Content = new Image()
-            {
-                HeightRequest = 36,
-                WidthRequest = 36,
-                Source = "carbon_settings",
-            },
-            Shadow = new Shadow()
-            {
-                Radius = 4,
-                Brush = Color.FromArgb("F000000"),
-                Offset = new Point(0, 2),
-                Opacity = 0.4f,
-            },
+            Source = "carbon_settings",
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Center,
         };
 
-        return border;
+        return new Border()
+        {
+            Content = icon,
+            HeightRequest = 68,
+            WidthRequest = 68,
+            Margin = new Thickness(0, 0, 60, 0),
+            Padding = 17,
+            BackgroundColor = Color.FromArgb("#3A3A3C"),
+            HorizontalOptions = LayoutOptions.End,
+            StrokeThickness = 1,
+            StrokeShape = new RoundRectangle() { CornerRadius = 9 },
+            Stroke = Color.FromArgb("#fff"),
+            GestureRecognizers =
+            {
+                new TapGestureRecognizer()
+                {
+                    Command = SettingsCommand,
+                },
+            },
+        };
     }
-
 
     private CurrentTimeControl CreateTimeLabel()
     {

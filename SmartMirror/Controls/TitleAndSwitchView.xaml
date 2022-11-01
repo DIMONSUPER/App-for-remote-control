@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Grid
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
+    x:Class="SmartMirror.Controls.TitleAndSwitchView"
+    x:Name="titleAndSwitchView">
+
+    <Label
+        Grid.Column="0"
+        Style="{DynamicResource tstyle_i11}"
+        Text="{Binding Title, Source={x:Reference titleAndSwitchView}}"
+        WidthRequest="323"
+        VerticalOptions="Start" 
+        HorizontalOptions="Start"/>
+
+    <controls:CustomSwitch
+        Grid.Column="1"
+        IsToggled="{Binding IsToggled, Source={x:Reference titleAndSwitchView}}"
+        VerticalOptions="Start"
+        HorizontalOptions="End"
+        Margin="12, 6, 3, 0"/>
+
+</Grid>

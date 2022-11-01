@@ -46,6 +46,7 @@
     <controls:CustomStateView
         State="{Binding DataState}"
         TryAgainCommand="{Binding TryAgainCommand}"
+        LoadingTitle="{extensions:Translate Rooms}"
         EmptyTitle="{extensions:Translate NoAccessoriesYet}"
         EmptyStateImage="no_accessories_yet">
         

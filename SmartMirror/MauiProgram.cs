@@ -62,6 +62,7 @@ public static class MauiProgram
     {
         containerRegistry.RegisterDialog<ErrorDialog>();
         containerRegistry.RegisterDialog<EnterCodeDialog>();
+        containerRegistry.RegisterDialog<ScenarioDescriptionDialog>();
 
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
         containerRegistry.RegisterForNavigation<WelcomePage>();
@@ -72,6 +73,7 @@ public static class MauiProgram
         containerRegistry.RegisterForNavigation<ScenariosPage>();
         containerRegistry.RegisterForNavigation<RoomDetailsPage>();
         containerRegistry.RegisterForNavigation<ScenarioDetailsPage>();
+        containerRegistry.RegisterForNavigation<SettingsPage>();
 
         containerRegistry.RegisterSingleton<IMapperService, MapperService>();
         containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();

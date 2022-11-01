@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<DataTemplate
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:bindables="clr-namespace:SmartMirror.Models.BindableModels"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    x:DataType="bindables:CategoryBindableModel"
+    x:Class="SmartMirror.Resources.DataTemplates.CategoryTemplate">
+
+    <Grid
+        behaviors:TouchBehavior.Command="{Binding TapCommand}"
+        behaviors:TouchBehavior.CommandParameter="{Binding .}">
+
+        <Border
+            Margin="0, 0, 0, 15"
+            Padding="18, 12"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 9"
+            BackgroundColor="Transparent">
+
+            <Border.Triggers>
+
+                <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                    <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i11}"/>
+                    <Setter Property="Shadow" Value="{StaticResource Shadow_i2}"/>
+                    <Setter TargetName="categoryNameLabel" Property="Label.TextColor" Value="{DynamicResource cbg_i12}"/>
+                    <Setter TargetName="categoryCountLabel" Property="Label.TextColor" Value="{DynamicResource tcolor_i7}"/>
+                </DataTrigger>
+
+            </Border.Triggers>
+
+            <StackLayout Orientation="Horizontal">
+
+                <Label 
+                    Style="{DynamicResource tstyle_i11}"
+                    MaxLines="1"
+                    MaximumWidthRequest="265"
+                    LineBreakMode="TailTruncation"
+                    Text="{Binding Name}"    
+                    x:Name="categoryNameLabel"/>
+
+                <Label 
+                    Style="{DynamicResource tstyle_i6}"
+                    HorizontalOptions="EndAndExpand"
+                    Text="{Binding Count}"
+                    x:Name="categoryCountLabel"/>
+
+                <Image 
+                    Margin="6, 0, 0, 0"
+                    WidthRequest="24"
+                    HeightRequest="24"
+                    Source="devices"/>
+
+            </StackLayout>
+
+        </Border>
+
+    </Grid>
+
+</DataTemplate>

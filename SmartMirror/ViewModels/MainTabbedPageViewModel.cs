@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Maui.Alerts;
-using Microsoft.Maui.Dispatching;
+using SmartMirror.Helpers;
 using SmartMirror.Resources.Strings;
+using SmartMirror.Views;
+using System.Windows.Input;
 
 namespace SmartMirror.ViewModels;
 
@@ -13,6 +15,13 @@ public class MainTabbedPageViewModel : BaseViewModel
         : base(navigationService)
     {
     }
+
+    #region -- Public properties --
+
+    private ICommand _settingsCommand;
+    public ICommand SettingsCommand => _settingsCommand ??= SingleExecutionCommand.FromFunc(OnSettingsCommandAsync);
+
+    #endregion
 
     #region -- Overrides --
 
@@ -32,6 +41,13 @@ public class MainTabbedPageViewModel : BaseViewModel
     #endregion
 
     #region -- Private helpers --
+
+    private Task OnSettingsCommandAsync()
+    {
+        return NavigationService.CreateBuilder()
+            .AddSegment<SettingsPage>(false)
+            .NavigateAsync();
+    }
 
     private bool GetCountBackButtonPresses()
     {
