@@ -76,6 +76,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add to Favorites.
+        /// </summary>
+        internal static string AddToFavorites {
+            get {
+                return ResourceManager.GetString("AddToFavorites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Amazon.
         /// </summary>
         internal static string Amazon {
@@ -180,6 +189,24 @@ namespace SmartMirror.Resources.Strings {
         internal static string Closed {
             get {
                 return ResourceManager.GetString("Closed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connect.
+        /// </summary>
+        internal static string Connect {
+            get {
+                return ResourceManager.GetString("Connect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connected.
+        /// </summary>
+        internal static string Connected {
+            get {
+                return ResourceManager.GetString("Connected", resourceCulture);
             }
         }
         
@@ -589,6 +616,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Receive Notifications.
+        /// </summary>
+        internal static string ReceiveNotifications {
+            get {
+                return ResourceManager.GetString("ReceiveNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rooms.
         /// </summary>
         internal static string Rooms {
@@ -639,6 +675,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Shades {
             get {
                 return ResourceManager.GetString("Shades", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show in Scenarios.
+        /// </summary>
+        internal static string ShowInScenarios {
+            get {
+                return ResourceManager.GetString("ShowInScenarios", resourceCulture);
             }
         }
         

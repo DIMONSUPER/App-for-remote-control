@@ -249,4 +249,19 @@
     <data name="Google" xml:space="preserve">
         <value>Google</value>
     </data>
+    <data name="AddToFavorites" xml:space="preserve">
+        <value>Add to Favorites</value>
+    </data>
+    <data name="ReceiveNotifications" xml:space="preserve">
+        <value>Receive Notifications</value>
+    </data>
+    <data name="ShowInScenarios" xml:space="preserve">
+        <value>Show in Scenarios</value>
+    </data>
+    <data name="Connect" xml:space="preserve">
+        <value>Connect</value>
+    </data>
+    <data name="Connected" xml:space="preserve">
+        <value>Connected</value>
+    </data>
 </root>

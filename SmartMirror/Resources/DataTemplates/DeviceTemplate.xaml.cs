@@ -1,4 +1,5 @@
 ﻿using SmartMirror.Controls;
+using SmartMirror.Enums;
 
 namespace SmartMirror.Resources.DataTemplates;
 
@@ -68,6 +69,18 @@ public partial class DeviceTemplate : Grid
     {
         get => (Style)GetValue(DescriptionLabelStyleProperty);
         set => SetValue(DescriptionLabelStyleProperty, value);
+    }
+
+    public static readonly BindableProperty DeviceStatusProperty = BindableProperty.Create(
+        propertyName: nameof(DeviceStatus),
+        returnType: typeof(EDeviceStatus),
+        declaringType: typeof(DeviceTemplate),
+        defaultValue: EDeviceStatus.Disconnected);
+
+    public EDeviceStatus DeviceStatus
+    {
+        get => (EDeviceStatus)GetValue(DeviceStatusProperty);
+        set => SetValue(DeviceStatusProperty, value);
     }
 
     #endregion

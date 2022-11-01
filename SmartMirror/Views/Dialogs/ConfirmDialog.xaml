@@ -23,17 +23,17 @@
         <VerticalStackLayout Spacing="0"
                              Margin="30, 0">
 
-             <Label Margin="0,26,0,0"
-                    Style="{DynamicResource tstyle_i11}"
-                    Text="{Binding Title}" />
+            <Label Margin="0,26,0,0"
+                   Style="{DynamicResource tstyle_i11}"
+                   Text="{Binding Title}" />
 
-             <Label Margin="0,6,0,0"
-                    Style="{DynamicResource tstyle_i5}"
-                    Text="{Binding Description}" />
+            <Label Margin="0,6,0,0"
+                   Style="{DynamicResource tstyle_i5}"
+                   Text="{Binding Description}" />
 
-             <Grid Margin="0,42"
-                   ColumnDefinitions="*,*"
-                   ColumnSpacing="26">
+            <Grid Margin="0,42"
+                  ColumnDefinitions="*,*"
+                  ColumnSpacing="26">
 
                 <Button Grid.Column="0"
                         Style="{DynamicResource ButtonStyle_i1}"
@@ -46,7 +46,7 @@
                         Command="{Binding CloseCommand}"
                         CommandParameter="False"
                         WidthRequest="168"/>
-
+                
                 <Button Grid.Column="1"
                         Style="{DynamicResource ButtonStyle_i1}"
                         HorizontalOptions="Center"
@@ -55,10 +55,9 @@
                         CommandParameter="True"
                         WidthRequest="168"/>
 
-             </Grid>
+            </Grid>
 
         </VerticalStackLayout>
-       
 
     </Border>
 

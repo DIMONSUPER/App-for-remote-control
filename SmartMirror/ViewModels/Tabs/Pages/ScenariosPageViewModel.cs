@@ -30,6 +30,8 @@ public class ScenariosPageViewModel : BaseTabViewModel
         _mapperService = mapperService;
         _scenariosService = scenariosService;
 
+        _scenariosService.ScenariosChanged += OnScenariosChanged;
+
         Title = "Scenarios";
     }
 
@@ -62,13 +64,20 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
+    public override void Destroy()
+    {
+        _scenariosService.ScenariosChanged -= OnScenariosChanged;
+
+        base.Destroy();
+    }
+
     public override async void OnAppearing()
     {
         base.OnAppearing();
 
         if (_isNeedReloadData && !IsDataLoading)
         {
-            DataState = EPageState.Loading;
+            DataState = EPageState.LoadingSkeleton;
 
             await LoadScenariosAsyncAndChangeState();
         }
@@ -87,7 +96,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
         {
             if (!IsDataLoading && DataState != EPageState.Complete)
             {
-                DataState = EPageState.Loading;
+                DataState = EPageState.LoadingSkeleton;
 
                 await LoadScenariosAsyncAndChangeState();
             }
@@ -101,6 +110,13 @@ public class ScenariosPageViewModel : BaseTabViewModel
     #endregion
 
     #region -- Private helpers --
+
+    private async void OnScenariosChanged(object sender, EventArgs e)
+    {
+        DataState = EPageState.LoadingSkeleton;
+
+        await LoadScenariosAsyncAndChangeState();
+    }
 
     private async Task OnTryAgainCommandAsync()
     {

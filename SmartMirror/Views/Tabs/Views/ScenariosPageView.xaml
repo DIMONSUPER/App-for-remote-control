@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <views:BaseContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -10,6 +10,7 @@
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
+    xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
     x:Class="SmartMirror.Views.Tabs.Views.ScenariosPageView"
     x:DataType="vm:ScenariosPageViewModel">
 
@@ -39,9 +40,9 @@
     <controls:CustomStateView
         State="{Binding DataState}"
         TryAgainCommand="{Binding TryAgainCommand}"
+        LoadingTitle="{extensions:Translate Scenarios}"
         EmptyTitle="{extensions:Translate NoScenariosYet}"
-        EmptyStateImage="empty_scenarios"
-        LoadingTitle="{extensions:Translate Scenarios}">
+        EmptyStateImage="empty_scenarios">
         
         <controls:CustomStateView.CompleteContent>
 
@@ -126,6 +127,12 @@
             </controls:CustomScrollView>
 
         </controls:CustomStateView.CompleteContent>
+
+         <controls:CustomStateView.LoadingSkeletonContent>
+
+            <skeleton:ScenariosTabSkeleton/>
+
+        </controls:CustomStateView.LoadingSkeletonContent>
 
     </controls:CustomStateView>
     

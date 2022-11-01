@@ -57,13 +57,6 @@ public class CamerasPageViewModel : BaseTabViewModel
         set => SetProperty(ref _videoAction, value);
     }
 
-    private EVideoLoadingState _videoLoadingState;
-    public EVideoLoadingState VideoLoadingState
-    {
-        get => _videoLoadingState;
-        set => SetProperty(ref _videoLoadingState, value);
-    }
-
     private ICommand _selectCameraCommand;
     public ICommand SelectCameraCommand => _selectCameraCommand ??= SingleExecutionCommand.FromFunc<CameraBindableModel>(OnSelectCameraCommandAsync);
 
@@ -86,7 +79,7 @@ public class CamerasPageViewModel : BaseTabViewModel
 
         if (!IsDataLoading)
         {
-            DataState = EPageState.Loading;
+            DataState = EPageState.LoadingSkeleton;
 
             await LoadCamerasAndChangeStateAsync();
         }
@@ -105,7 +98,7 @@ public class CamerasPageViewModel : BaseTabViewModel
         {
             if (!IsDataLoading && DataState != EPageState.Complete)
             {
-                DataState = EPageState.Loading;
+                DataState = EPageState.LoadingSkeleton;
 
                 await LoadCamerasAndChangeStateAsync();
             }

@@ -25,4 +25,6 @@ public interface IDevicesService
     List<DeviceBindableModel> AllSupportedDevices { get; }
 
     List<DeviceBindableModel> AllDevices { get; }
+
+    event EventHandler AllDevicesChanged;
 }

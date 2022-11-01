@@ -40,6 +40,12 @@ public class RoomsPageViewModel : BaseTabViewModel
         _devicesService = devicesService;
 
         Title = "Rooms";
+
+        DataState = EPageState.LoadingSkeleton;
+
+        Task.Run(LoadRoomsAndDevicesAndChangeStateAsync);
+        _roomsService.AllRoomsChanged += OnAllRoomsChanged;
+        _devicesService.AllDevicesChanged += OnAllDevicesChanged;
     }
 
     #region -- Public properties --
@@ -71,16 +77,12 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override async void OnAppearing()
+    public override void Destroy()
     {
-        base.OnAppearing();
+        _roomsService.AllRoomsChanged -= OnAllRoomsChanged;
+        _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
 
-        if (!IsDataLoading)
-        {
-            DataState = EPageState.Loading;
-
-            await LoadRoomsAndDevicesAndChangeStateAsync();
-        }
+        base.Destroy();
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
@@ -89,7 +91,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         {
             if (!IsDataLoading && DataState != EPageState.Complete)
             {
-                DataState = EPageState.Loading;
+                DataState = EPageState.LoadingSkeleton;
 
                 await LoadRoomsAndDevicesAndChangeStateAsync();
             }
@@ -104,20 +106,47 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Private helpers --
 
+    private async void OnAllRoomsChanged(object sender, EventArgs e)
+    {
+        if (_roomsService.AllRooms is not null && _roomsService.AllRooms.Any())
+        {
+            foreach (var room in _roomsService.AllRooms)
+            {
+                room.TappedCommand = RoomTappedCommand;
+            };
+
+            Rooms = new(_roomsService.AllRooms);
+        }
+        else
+        {
+            DataState = EPageState.LoadingSkeleton;
+
+            await LoadRoomsAndDevicesAndChangeStateAsync();
+        }
+    }
+
+    private async void OnAllDevicesChanged(object sender, EventArgs e)
+    {
+        if (_devicesService.AllSupportedDevices is not null && _devicesService.AllSupportedDevices.Any())
+        {
+            foreach (var device in _devicesService.AllSupportedDevices)
+            {
+                device.TappedCommand = AccessorieTappedCommand;
+            };
+
+            FavoriteAccessories = new(_devicesService.AllSupportedDevices);
+        }
+        else
+        {
+            DataState = EPageState.LoadingSkeleton;
+
+            await LoadRoomsAndDevicesAndChangeStateAsync();
+        }
+    }
+
     private async Task OnAccessorieTappedCommandAsync(DeviceBindableModel device)
     {
-        if (string.IsNullOrWhiteSpace(device.DeviceId) && device.Status != EDeviceStatus.Disconnected && !device.IsExecuting)
-        {
-            //Mocked device
-            device.IsExecuting = true;
-
-            await Task.Delay(500);
-
-            device.Status = device.Status == EDeviceStatus.On ? EDeviceStatus.Off : EDeviceStatus.On;
-
-            device.IsExecuting = false;
-        }
-        else if (device.DeviceType == EDeviceType.Switcher && device.Status != EDeviceStatus.Disconnected && !device.IsExecuting)
+        if (device.DeviceType == EDeviceType.Switcher && device.Status != EDeviceStatus.Disconnected && !device.IsExecuting)
         {
             //Real device
             device.IsExecuting = true;
@@ -195,27 +224,18 @@ public class RoomsPageViewModel : BaseTabViewModel
 
         if (IsInternetConnected)
         {
-            await Task.Delay(4000);
-
-            var devices = _mapperService.MapRange<DeviceBindableModel>(_smartHomeMockService.GetDevices(), (m, vm) =>
-            {
-                vm.TappedCommand = AccessorieTappedCommand;
-            });
-
-            FavoriteAccessories = new(devices);
-
             await LoadDevicesAsync();
 
-            var resultOfGettingRooms = await _roomsService.GetAllRoomsAsync();
+            var resultOfGettingRooms = await _roomsService.DownloadAllRoomsAsync();
 
             if (resultOfGettingRooms.IsSuccess)
             {
-                var rooms = _mapperService.MapRange<RoomBindableModel>(resultOfGettingRooms.Result, (m, vm) =>
+                foreach (var room in _roomsService.AllRooms)
                 {
-                    vm.TappedCommand = RoomTappedCommand;
-                });
+                    room.TappedCommand = RoomTappedCommand;
+                };
 
-                Rooms = new(rooms);
+                Rooms = new(_roomsService.AllRooms);
 
                 isLoaded = true;
             }
@@ -228,22 +248,15 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         var devices = Enumerable.Empty<DeviceBindableModel>();
 
-        if (_aqaraService.IsAuthorized)
-        {
-            var aqaraDevicesResponse = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
+        var aqaraDevicesResponse = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
 
-            if (aqaraDevicesResponse.IsSuccess)
-            {
-                devices = _devicesService.AllSupportedDevices;
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine($"Can't download devices: {aqaraDevicesResponse.Message}");
-            }
+        if (aqaraDevicesResponse.IsSuccess)
+        {
+            devices = _devicesService.AllSupportedDevices;
         }
         else
         {
-            devices = _mapperService.MapRange<DeviceBindableModel>(_smartHomeMockService.GetDevices());
+            System.Diagnostics.Debug.WriteLine($"Can't download devices: {aqaraDevicesResponse.Message}");
         }
 
         foreach (var device in devices)

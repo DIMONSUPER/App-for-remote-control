@@ -16,7 +16,6 @@
             StrokeThickness="1"
             StrokeShape="RoundRectangle 9"
             BackgroundColor="{StaticResource cbg_i2}"
-            Shadow="{x:StaticResource Shadow_i1}"
             Margin="0,0,0,3"
             Padding="{Binding InnerPadding, Source={x:Reference deviceTemplate}}">
 
@@ -243,10 +242,12 @@
 
                         <DataTrigger Binding="{Binding Status}" TargetType="controls:CustomSwitch" Value="On">
                             <Setter Property="IsToggled" Value="True"/>
+                            <Setter Property="IsVisible" Value="True"/>
                         </DataTrigger>
 
                         <DataTrigger Binding="{Binding Status}" TargetType="controls:CustomSwitch" Value="Off">
                             <Setter Property="IsToggled" Value="False"/>
+                            <Setter Property="IsVisible" Value="True"/>
                         </DataTrigger>
 
                         <DataTrigger Binding="{Binding Status}" TargetType="controls:CustomSwitch" Value="Disconnected">

@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:SmartMirror.Controls"
+             x:Class="SmartMirror.Views.Skeletons.NotificationsTabSkeleton">
+
+    <VerticalStackLayout Margin="0,48,0,0">
+
+        <controls:SkeletonView WidthRequest="63"
+                               HeightRequest="29"
+                               StrokeShape="RoundRectangle 9"
+                               Background="{x:DynamicResource WhiteGradientBrush}"/>
+
+        <StackLayout Margin="0,26,0,0"
+                        Spacing="18">
+
+            <BindableLayout.ItemTemplate>
+
+                <DataTemplate>
+
+                    <controls:SkeletonView StrokeShape="RoundRectangle 9"
+                                           WidthRequest="572"
+                                           HeightRequest="114"
+                                           Background="{x:DynamicResource WhiteGradientBrush}"/>
+
+                </DataTemplate>
+
+            </BindableLayout.ItemTemplate>
+
+            <BindableLayout.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>1</x:String>
+                    <x:String>2</x:String>
+                    <x:String>2</x:String>
+                </x:Array>
+            </BindableLayout.ItemsSource>
+
+        </StackLayout>
+
+        <controls:SkeletonView Margin="0,42,0,28"
+                               WidthRequest="104"
+                               HeightRequest="29"
+                               StrokeShape="RoundRectangle 9"
+                               Background="{x:DynamicResource WhiteGradientBrush}"/>
+
+        <StackLayout Spacing="18">
+
+            <BindableLayout.ItemTemplate>
+
+                <DataTemplate>
+
+                    <controls:SkeletonView StrokeShape="RoundRectangle 9"
+                                           Background="{x:DynamicResource WhiteGradientBrush}"
+                                           WidthRequest="572"
+                                           HeightRequest="114"/>
+
+                </DataTemplate>
+
+            </BindableLayout.ItemTemplate>
+
+            <BindableLayout.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>1</x:String>
+                            <x:String>2</x:String>
+                        </x:Array>
+            </BindableLayout.ItemsSource>
+
+        </StackLayout>
+
+    </VerticalStackLayout>
+
+</ContentView>
+

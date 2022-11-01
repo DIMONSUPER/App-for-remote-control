@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <views:BaseContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -9,7 +9,8 @@
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:models="clr-namespace:SmartMirror.Models"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
-    xmlns:templatesSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"            
+    xmlns:templatesSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
+    xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
     x:Class="SmartMirror.Views.Tabs.Views.NotificationsPageView"
     x:DataType="vm:NotificationsPageViewModel">
 
@@ -34,9 +35,9 @@
     <controls:CustomStateView
         State="{Binding DataState}"
         TryAgainCommand="{Binding TryAgainCommand}"
+        LoadingTitle="{extensions:Translate Notifications}"
         EmptyTitle="{extensions:Translate NoNotificationsYet}"
-        EmptyStateImage="notifications_off"
-        LoadingTitle="{extensions:Translate Notifications}"  >
+        EmptyStateImage="notifications_off">
 
         <controls:CustomStateView.CompleteContent>
 
@@ -63,6 +64,12 @@
             </RefreshView>
 
         </controls:CustomStateView.CompleteContent>
+
+        <controls:CustomStateView.LoadingSkeletonContent>
+
+            <skeleton:NotificationsTabSkeleton/>
+
+        </controls:CustomStateView.LoadingSkeletonContent>
 
     </controls:CustomStateView>
 

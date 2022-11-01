@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frame xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       BorderColor="{Binding BorderColor, Source={Reference activityIndicatorButton}}"
+       x:Class="SmartMirror.Controls.ActivityIndicatorButton"
+       x:Name="activityIndicatorButton">
+
+    <Frame.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding Command, Source={Reference activityIndicatorButton}}"/>
+    </Frame.GestureRecognizers>
+
+    <VisualStateManager.VisualStateGroups>
+         <VisualStateGroupList>
+             <VisualStateGroup x:Name="CommonStates">
+                 <VisualState x:Name="Normal">
+                     <VisualState.Setters>
+                         <Setter TargetName="label" Property="Label.IsVisible" Value="True"/>
+                         <Setter TargetName="activityIndicator" Property="ActivityIndicator.IsRunning" Value="False"/>
+                     </VisualState.Setters>
+                 </VisualState>
+                 <VisualState x:Name="Disabled">
+                     <VisualState.Setters>
+                         <Setter TargetName="label" Property="Label.IsVisible" Value="False"/>
+                         <Setter TargetName="activityIndicator" Property="ActivityIndicator.IsRunning" Value="True"/>
+                     </VisualState.Setters>
+                 </VisualState>
+             </VisualStateGroup>
+         </VisualStateGroupList>
+    </VisualStateManager.VisualStateGroups>
+
+    <Grid>
+
+        <Label x:Name="label"
+               HorizontalOptions="CenterAndExpand"
+               VerticalOptions="CenterAndExpand"
+               Text="{Binding Text, Source={Reference activityIndicatorButton}}"
+               TextColor="{Binding TextColor, Source={Reference activityIndicatorButton}}"
+               FontSize="{Binding FontSize, Source={Reference activityIndicatorButton}}"/>
+        
+        <ActivityIndicator x:Name="activityIndicator"
+                           HorizontalOptions="CenterAndExpand"
+                           VerticalOptions="CenterAndExpand"
+                           Color="{Binding ActivityIndicatorColor, Source={Reference activityIndicatorButton}}"
+                           Scale="1"/>
+        
+    </Grid>
+
+</Frame>
+

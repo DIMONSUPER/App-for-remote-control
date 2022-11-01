@@ -28,7 +28,6 @@
             WidthRequest="790"
             HeightRequest="167"
             Padding="52, 33"
-            Shadow="{DynamicResource Shadow_i1}"
             StrokeShape="RoundRectangle 12"
             Background="{DynamicResource GrayGradientBrush_i2}">
 

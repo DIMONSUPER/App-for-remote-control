@@ -19,6 +19,7 @@ using SmartMirror.Services.Rest;
 using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Services.Settings;
+using SmartMirror.ViewModels;
 using SmartMirror.Views;
 using SmartMirror.Views.Dialogs;
 using SmartMirror.Views.Tabs.Details;
@@ -61,6 +62,8 @@ public static class MauiProgram
     {
         containerRegistry.RegisterDialog<ErrorDialog>();
         containerRegistry.RegisterDialog<EnterCodeDialog>();
+        containerRegistry.RegisterDialog<ScenarioDescriptionDialog>();
+        containerRegistry.RegisterDialog<ConfirmDialog>();
 
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
         containerRegistry.RegisterForNavigation<WelcomePage>();
@@ -82,11 +85,12 @@ public static class MauiProgram
         //containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
         containerRegistry.RegisterSingleton<IAqaraService, AqaraService>();
+        containerRegistry.RegisterSingleton<IAqaraMessanger, AqaraMessanger>();
         containerRegistry.RegisterSingleton<INotificationsService, NotificationsService>();
         containerRegistry.RegisterSingleton<ICamerasService, CamerasService>();
         containerRegistry.RegisterSingleton<IScenariosService, ScenariosService>();
-        containerRegistry.RegisterSingleton<IRoomsService, RoomsService>();
         containerRegistry.RegisterSingleton<IDevicesService, DevicesService>();
+        containerRegistry.RegisterSingleton<IRoomsService, RoomsService>();
         containerRegistry.RegisterSingleton<IKeyboardService, KeyboardService>();
     }
 
@@ -103,11 +107,11 @@ public static class MauiProgram
 
         if (_isAuthorized)
         {
-            navigationBuilder.AddSegment<MainTabbedPage>();
+            navigationBuilder.AddSegment<MainTabbedPageViewModel>();
         }
         else
         {
-            navigationBuilder.AddSegment<WelcomePage>();
+            navigationBuilder.AddSegment<WelcomePageViewModel>();
         }
 
         navigationBuilder.Navigate(HandleErrors);

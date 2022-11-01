@@ -7,6 +7,7 @@ public class BaseDialogViewModel : BindableBase, IDialogAware
     public BaseDialogViewModel(IBlurService blurService)
     {
         BlurService = blurService;
+        BlurService.BlurPopupBackground();
     }
 
     #region -- Protected properties --
@@ -31,7 +32,6 @@ public class BaseDialogViewModel : BindableBase, IDialogAware
 
     public virtual void OnDialogOpened(IDialogParameters parameters)
     {
-        BlurService.BlurPopupBackground();
     }
 
     #endregion

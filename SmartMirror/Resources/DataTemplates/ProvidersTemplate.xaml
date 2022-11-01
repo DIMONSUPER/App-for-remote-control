@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DataTemplate xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+              xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+              xmlns:vm="clr-namespace:SmartMirror.Models.BindableModels"
+              x:Class="SmartMirror.Resources.DataTemplates.ProvidersTemplate"
+              x:DataType="vm:SettingsProvidersBindableModel">
+
+    <Border HeightRequest="233"
+            StrokeShape="RoundRectangle 9"
+            StrokeThickness="1"
+            Shadow="{DynamicResource Shadow_i1}"
+            BackgroundColor="{DynamicResource cbg_i2}"
+            Padding="0">
+
+        <VerticalStackLayout Spacing="36"
+                             VerticalOptions="Center">
+
+            <Image Source="{Binding ImageSource}"
+                   VerticalOptions="Center"/>
+
+            <Border StrokeShape="RoundRectangle 26"
+                    StrokeThickness="1"
+                    WidthRequest="230"
+                    Stroke="{x:DynamicResource cbg_i4}"
+                    BackgroundColor="{x:DynamicResource cbg_i4}"
+                    behaviors:TouchBehavior.Command="{Binding TapCommand}"
+                    behaviors:TouchBehavior.CommandParameter="{Binding .}">
+                                    
+                <Border.Triggers>
+                    <DataTrigger TargetType="Border"
+                                 Binding="{Binding IsConnected}"
+                                 Value="True">
+
+                        <Setter Property="BackgroundColor"
+                                Value="Transparent"/>
+
+                    </DataTrigger>
+
+                </Border.Triggers>
+
+                <Grid>
+
+                    <Label Text="{Binding Title}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Style="{x:DynamicResource tstyle_i9}">
+
+                        <Label.Triggers>
+
+                            <DataTrigger TargetType="Label"
+                                         Binding="{Binding IsConnected}"
+                                         Value="True">
+                                                    
+                                <Setter Property="Style"
+                                        Value="{x:DynamicResource tstyle_i15}"/>
+
+                                <Setter Property="Text"
+                                        Value="{extensions:Translate Connected}"/>
+
+                            </DataTrigger>
+
+                        </Label.Triggers>
+
+                    </Label>
+                                        
+                    <ActivityIndicator IsRunning="False"/>
+
+                </Grid>
+
+            </Border>
+
+        </VerticalStackLayout>
+
+    </Border>
+
+</DataTemplate>

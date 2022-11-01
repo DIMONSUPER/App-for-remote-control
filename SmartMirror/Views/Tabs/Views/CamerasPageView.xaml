@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <views:BaseContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -13,6 +13,8 @@
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:video="clr-namespace:SmartMirror.Controls"
+    xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
+    Unloaded="OnCamerasPageUnloaded"
     x:DataType="vm:CamerasPageViewModel"
     x:Class="SmartMirror.Views.Tabs.Views.CamerasPageView">
 
@@ -37,9 +39,9 @@
     <controls:CustomStateView
         State="{Binding DataState}"
         TryAgainCommand="{Binding TryAgainCommand}"
+        LoadingTitle="{extensions:Translate Cameras}"
         EmptyTitle="{extensions:Translate NoCamerasYet}"
-        EmptyStateImage="video_off"
-        LoadingTitle="{extensions:Translate Cameras}">
+        EmptyStateImage="video_off">
 
         <controls:CustomStateView.CompleteContent>
 
@@ -69,8 +71,7 @@
                         StrokeThickness="0.75"
                         StrokeShape="RoundRectangle 9"
                         BackgroundColor="{DynamicResource cbg_i2}"
-                        Stroke="{DynamicResource cbg_i4}"
-                        Shadow="{DynamicResource Shadow_i1}">
+                        Stroke="{DynamicResource cbg_i4}">
 
                         <StackLayout VerticalOptions="CenterAndExpand">
 
@@ -123,10 +124,10 @@
 
                             <video:Video 
                                 BackgroundColor="{DynamicResource cbg_i2}"
-                                LoadingState="{Binding VideoLoadingState}"
                                 Action="{Binding VideoAction}"
                                 Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"
-                                VideoPlaybackErrorCommand="{Binding VideoPaybackErrorCommand}"/>
+                                VideoPlaybackErrorCommand="{Binding VideoPaybackErrorCommand}"
+                                x:Name="video"/>
 
                         </Frame>
 
@@ -134,13 +135,21 @@
 
                     <ActivityIndicator 
                         WidthRequest="90"
-                        IsRunning="{Binding VideoLoadingState, Converter={xct:IsEqualConverter}, ConverterParameter={Static enums:EVideoLoadingState.Preparing}}"/>
+                        IsRunning="{Binding LoadingState, Source={Reference video},
+                            Converter={xct:IsEqualConverter}, 
+                            ConverterParameter={Static enums:EVideoLoadingState.Preparing}}"/>
 
                 </Grid>
 
             </Grid>
 
         </controls:CustomStateView.CompleteContent>
+
+        <controls:CustomStateView.LoadingSkeletonContent>
+
+            <skeleton:CamerasTabSkeleton/>
+
+        </controls:CustomStateView.LoadingSkeletonContent>
 
     </controls:CustomStateView>
     

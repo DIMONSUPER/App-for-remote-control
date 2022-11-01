@@ -24,6 +24,7 @@
     <Color x:Key="cbg_i13">#505053</Color>
     <Color x:Key="cbg_i14">#CCCCCC</Color>
     <Color x:Key="cbg_i15">#262626</Color>
+    <Color x:Key="cbg_i16">#1FFFFFFF</Color> <!-- #FFFFFF with 12 opacity-->
 
     <!-- TEXT COLORS -->
     <Color x:Key="tcolor_i1">#FFFFFF</Color>    <!-- White -->
@@ -48,6 +49,16 @@
 
     </LinearGradientBrush>
 
+    <LinearGradientBrush x:Key="WhiteGradientBrush">
+
+        <GradientStop Color="{StaticResource cbg_i16}"
+                      Offset="0"/>
+
+        <GradientStop Color="{StaticResource cbg_i2}"
+                      Offset="1"/>
+
+    </LinearGradientBrush>
+    
     <LinearGradientBrush x:Key="GrayGradientBrush_i2">
 
         <GradientStop Color="#3A3A3C"

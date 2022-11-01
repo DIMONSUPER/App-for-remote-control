@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:SmartMirror.Controls"
+             xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+             x:Class="SmartMirror.Views.Skeletons.RoomDetailsPageSkeleton">
+
+    <Grid RowDefinitions="auto, *"
+          RowSpacing="15"
+          Padding="14,42,60,0">
+
+        <!-- BACK BUTTON -->
+        <HorizontalStackLayout Grid.Row="0"
+                               Spacing="17"
+                               Margin="20,0,0,0"
+                               HorizontalOptions="Start">
+
+            <Image Source="arrow_left_aqua"
+                   VerticalOptions="Center"/>
+
+            <Label Text="{extensions:Translate Back}"
+                   TextTransform="Uppercase"
+                   VerticalOptions="Center"
+                   Style="{x:DynamicResource tstyle_i12}"/>
+
+        </HorizontalStackLayout>
+
+        <Grid Grid.Row="1"
+              ColumnDefinitions="0.22*, 0.78*"
+              ColumnSpacing="30"
+              Margin="0,0,0,0">
+
+            <!-- ROOMS COLLECTION -->
+            <StackLayout Grid.Column="0">
+
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <controls:SkeletonView HeightRequest="53"
+                                               StrokeShape="RoundRectangle 9"
+                                               Margin="0,0,0,17"
+                                               Background="{x:DynamicResource WhiteGradientBrush}"/>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+
+                <BindableLayout.ItemsSource>
+
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>1</x:String>
+                        <x:String>1</x:String>
+                        <x:String>1</x:String>
+                        <x:String>1</x:String>
+                        <x:String>1</x:String>
+                    </x:Array>
+
+                </BindableLayout.ItemsSource>
+
+            </StackLayout>
+            
+            <!-- DEVICES COLLECTION --> 
+            <CollectionView Grid.Column="1"
+                            ItemsUpdatingScrollMode="KeepItemsInView">
+
+                <CollectionView.ItemsLayout>
+
+                    <GridItemsLayout Orientation="Vertical"
+                                     Span="3"
+                                     HorizontalItemSpacing="24"
+                                     VerticalItemSpacing="24"/>
+
+                </CollectionView.ItemsLayout>
+                 
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+
+                        <controls:SkeletonView HeightRequest="171"
+                                               StrokeShape="RoundRectangle 9"
+                                               Background="{x:DynamicResource WhiteGradientBrush}"/>
+
+                    </DataTemplate>
+
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.ItemsSource>
+
+                    <x:Array Type="{x:Type x:String}">
+
+                        <x:String>1</x:String>
+                        <x:String>1</x:String>
+                        <x:String>1</x:String>
+                        <x:String>1</x:String>
+
+                    </x:Array>
+
+                </CollectionView.ItemsSource>
+
+
+            </CollectionView>
+
+        </Grid>
+
+    </Grid>
+
+</ContentView>
+

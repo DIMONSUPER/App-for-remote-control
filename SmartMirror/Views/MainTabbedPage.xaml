@@ -41,15 +41,7 @@
                   Padding="0, 12">
 
                 <BoxView Color="{x:DynamicResource cbg_i3}"
-                         CornerRadius="35">
-
-                    <BoxView.Shadow>
-                        <Shadow Brush="Black"
-                                Opacity="0.5"
-                                Offset="0,17"/>
-                    </BoxView.Shadow>
-
-                </BoxView>
+                         CornerRadius="35"/>
 
                 <Label Text="{Binding Title}"
                        Padding="42,12"

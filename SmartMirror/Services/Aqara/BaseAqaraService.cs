@@ -26,18 +26,9 @@ namespace SmartMirror.Services.Aqara
 
         #region -- Protected helpers --
 
-
-        #endregion
-
-        #region -- Private helpers --
-
-        protected async Task<BaseAqaraResponse<T>> MakeRequestAsync<T>(string intent, object data, Action<string> onFailure)
+        protected async Task<BaseAqaraResponse<T>> MakeRequestAsync<T>(string intent, object data, Action<string> onFailure) where T : class
         {
-            var result = await RestService.PostAsync<BaseAqaraResponse<T>>(Constants.Aqara.API_URL, new
-            {
-                intent = intent,
-                data = data,
-            }, GetHeaders());
+            var result = await MakeAqaraPostAsync<BaseAqaraResponse<T>>(intent, data);
 
             if (result is null)
             {
@@ -45,7 +36,12 @@ namespace SmartMirror.Services.Aqara
             }
             else if (result.Code != 0)
             {
-                onFailure($"{result.Code}: {result.Message}, {result.MsgDetails}");
+                System.Diagnostics.Debug.WriteLine($"{result.Code}: {result.Message} {result.MsgDetails}");
+                onFailure($"{result.Code}: {result.Message} {result.MsgDetails}");
+            }
+            else if (result.Result is null)
+            {
+                onFailure("Returned result is null");
             }
 
             return result;
@@ -53,11 +49,7 @@ namespace SmartMirror.Services.Aqara
 
         protected async Task<BaseAqaraResponse> MakeRequestAsync(string intent, object data, Action<string> onFailure)
         {
-            var result = await RestService.PostAsync<BaseAqaraResponse>(Constants.Aqara.API_URL, new
-            {
-                intent = intent,
-                data = data,
-            }, GetHeaders());
+            var result = await MakeAqaraPostAsync<BaseAqaraResponse>(intent, data);
 
             if (result is null)
             {
@@ -65,10 +57,71 @@ namespace SmartMirror.Services.Aqara
             }
             else if (result.Code != 0)
             {
+                System.Diagnostics.Debug.WriteLine($"{result.Code}: {result.Message}, {result.MsgDetails}");
                 onFailure($"{result.Code}: {result.Message}, {result.MsgDetails}");
             }
 
             return result;
+        }
+
+        #endregion
+
+        #region -- Private helpers --
+
+        private async Task<T> MakeAqaraPostAsync<T>(string intent, object data)
+        {
+            if (SettingsManager.AqaraAccessSettings.ExpiresAt < DateTime.UtcNow && !string.IsNullOrWhiteSpace(SettingsManager.AqaraAccessSettings.RefreshToken))
+            {
+                await RefreshAndSetTokenAsync();
+            }
+
+            return await RestService.PostAsync<T>(Constants.Aqara.API_URL, new
+            {
+                intent = intent,
+                data = data,
+            }, GetHeaders());
+        }
+
+        private Task<AOResult<AccessResponse>> RefreshTokenAsync()
+        {
+            return AOResult.ExecuteTaskAsync(async onFailure =>
+            {
+                var data = new
+                {
+                    refreshToken = SettingsManager.AqaraAccessSettings.RefreshToken,
+                };
+
+                var intent = "config.auth.refreshToken";
+
+                var result = await RestService.PostAsync<BaseAqaraResponse<AccessResponse>>(Constants.Aqara.API_URL, new
+                {
+                    intent = intent,
+                    data = data,
+                }, GetHeaders());
+
+                if (result?.Result is null)
+                {
+                    onFailure($"{result?.Code}: {result?.Message}, {result?.MsgDetails}");
+                }
+
+                return result?.Result;
+            });
+        }
+
+        private async Task RefreshAndSetTokenAsync()
+        {
+            //Token has expired
+            var refreshResponse = await RefreshTokenAsync();
+
+            if (refreshResponse.IsSuccess)
+            {
+                SettingsManager.AqaraAccessSettings.SetAccessSettings(refreshResponse.Result);
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Can't refresh token {refreshResponse.Message}");
+                SettingsManager.AqaraAccessSettings.Clear();
+            }
         }
 
         private Dictionary<string, string> GetHeaders()
