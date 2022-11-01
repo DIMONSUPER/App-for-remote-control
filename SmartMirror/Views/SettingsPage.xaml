@@ -51,19 +51,19 @@
             Grid.ColumnSpan="2"
             HeightRequest="68"
             WidthRequest="68"
-            Margin="0, 0, 45, 0"
+            Margin="0, 5, 60, 0"
             Padding="17"
             BackgroundColor="{DynamicResource cbg_i2}"
             HorizontalOptions="End"
             StrokeThickness="1"
             StrokeShape="RoundRectangle 9"
-            Stroke="{DynamicResource cbg_i4}">
+            Stroke="{DynamicResource cbg_i4}"
+            behaviors:TouchBehavior.Command="{Binding CloseSettingsCommand}">
 
             <Image
                 Source="ci_close_big"
                 HorizontalOptions="Center"
-                VerticalOptions="Center"
-                behaviors:TouchBehavior.Command="{Binding CloseSettingsCommand}"/>
+                VerticalOptions="Center"/>
 
         </Border>
 

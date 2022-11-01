@@ -21,6 +21,10 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _name, value);
         }
 
+        #endregion
+
+        #region -- ICategoryElementModel implementation --
+
         private string _imageSource;
         public string ImageSource
         {
@@ -30,7 +34,7 @@ namespace SmartMirror.Models.BindableModels
 
         #endregion
 
-        #region -- ITappable implementation
+        #region -- ITappable implementation --
 
         private ICommand _tapCommand;
         public ICommand TapCommand

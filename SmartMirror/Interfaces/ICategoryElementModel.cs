@@ -2,5 +2,6 @@
 {
     public interface ICategoryElementModel
     {
+        string ImageSource { get; set;  }
     }
 }

@@ -24,7 +24,6 @@
 
                 <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
                     <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i11}"/>
-                    <Setter Property="Shadow" Value="{StaticResource Shadow_i2}"/>
                     <Setter TargetName="categoryNameLabel" Property="Label.TextColor" Value="{DynamicResource cbg_i12}"/>
                     <Setter TargetName="categoryCountLabel" Property="Label.TextColor" Value="{DynamicResource tcolor_i7}"/>
                 </DataTrigger>

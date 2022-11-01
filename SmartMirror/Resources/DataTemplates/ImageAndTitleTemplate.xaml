@@ -9,7 +9,6 @@
     x:DataType="vm:ImageAndTitleBindableModel">
 
     <Border
-        Shadow="{DynamicResource Shadow_i1}"
         BackgroundColor="{DynamicResource cbg_i2}"
         Stroke="{DynamicResource cbg_i4}"
         StrokeThickness="1"

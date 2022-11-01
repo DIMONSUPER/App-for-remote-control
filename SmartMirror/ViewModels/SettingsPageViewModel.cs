@@ -17,8 +17,6 @@ namespace SmartMirror.ViewModels
         private readonly IScenariosService _scenariosService;
         private readonly IDialogService _dialogService;
 
-        private readonly ICommand _selectCategoryCommand;
-        private readonly ICommand _showScenarioDescriptionCommand;
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios;
 
         public SettingsPageViewModel(
@@ -31,9 +29,6 @@ namespace SmartMirror.ViewModels
             _scenariosService = scenariosService;
             _mapperService = mapperService;
             _dialogService = dialogService;
-
-            _selectCategoryCommand = SingleExecutionCommand.FromFunc<CategoryBindableModel>(OnSelectCategoryCommandAsync);
-            _showScenarioDescriptionCommand = SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowScenarioDescriptionCommandAsync);
         }
 
         #region -- Public properties --
@@ -66,6 +61,12 @@ namespace SmartMirror.ViewModels
             set => SetProperty(ref _pageState, value);
         }
 
+        private ICommand _selectCategoryCommand;
+        public ICommand SelectCategoryCommand => _selectCategoryCommand ??= SingleExecutionCommand.FromFunc<CategoryBindableModel>(OnSelectCategoryCommandAsync);
+
+        private ICommand _showScenarioDescriptionCommand;
+        public ICommand ShowScenarioDescriptionCommand => _showScenarioDescriptionCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowScenarioDescriptionCommandAsync);
+
         private ICommand _tryAgainCommand;
         public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
 
@@ -76,9 +77,9 @@ namespace SmartMirror.ViewModels
 
         #region -- Overrides --
 
-        public override async void OnAppearing()
+        public override async void Initialize(INavigationParameters parameters)
         {
-            base.OnAppearing();
+            base.Initialize(parameters);
 
             LoadCategories();
 
@@ -115,25 +116,25 @@ namespace SmartMirror.ViewModels
                     Type = ECategoryType.Accessories,
                     Name = Strings.Accessories,
                     IsSelected = true,
-                    TapCommand = _selectCategoryCommand,
+                    TapCommand = SelectCategoryCommand,
                 },
                 new()
                 {
                     Type = ECategoryType.Scenarios,
                     Name = Strings.Scenarios,
-                    TapCommand = _selectCategoryCommand,
+                    TapCommand = SelectCategoryCommand,
                 },
                 new()
                 {
                     Type = ECategoryType.Cameras,
                     Name = Strings.Cameras,
-                    TapCommand = _selectCategoryCommand,
+                    TapCommand = SelectCategoryCommand,
                 },
                 new()
                 {
                     Type = ECategoryType.Providers,
                     Name = Strings.Providers,
-                    TapCommand = _selectCategoryCommand,
+                    TapCommand = SelectCategoryCommand,
                 },
             };
 
@@ -162,9 +163,9 @@ namespace SmartMirror.ViewModels
             switch (category.Type)
             {
                 case ECategoryType.Scenarios:
-                    DataState = _allScenarios.Count() == 0
-                        ? EPageState.Empty
-                        : EPageState.Complete;
+                    DataState = _allScenarios.Any()
+                        ? EPageState.Complete
+                        : EPageState.Empty;
 
                     CategoryElements = new(_allScenarios);
                     break;
@@ -193,7 +194,7 @@ namespace SmartMirror.ViewModels
                 _allScenarios = _mapperService.MapRange<ImageAndTitleBindableModel>(resultOfGettingAllScenarios.Result, (m, vm) =>
                 {
                     vm.ImageSource = "play_gray";
-                    vm.TapCommand = _showScenarioDescriptionCommand;
+                    vm.TapCommand = ShowScenarioDescriptionCommand;
                 });
 
                 var scenarioCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Scenarios);
