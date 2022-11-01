@@ -72,6 +72,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
     public override void Destroy()
     {
         _roomsService.AllRoomsChanged -= OnAllRoomsOrDevicesChanged;
+        _devicesService.AllDevicesChanged -= OnAllRoomsOrDevicesChanged;
 
         base.Destroy();
     }
