@@ -42,15 +42,19 @@
                         HorizontalOptions="Center"/>
 
                 </Border>
-                
-                <Label 
+
+                <controls:CustomLabel
                     Style="{DynamicResource tstyle_i11}"
+                    MaxLines="2"
+                    LineBreakMode="TailTruncation"
+                    VerticalTextAlignment="Center"
+                    WidthRequest="340"
                     Text="{Binding Title}"/>
 
             </HorizontalStackLayout>
 
             <Border
-                Margin="0, 10, 0, 0"
+                Margin="0, 42, 0, 0"
                 Padding="1"
                 StrokeThickness="1"
                 StrokeShape="RoundRectangle 9"
