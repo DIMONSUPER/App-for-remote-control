@@ -33,6 +33,8 @@
             <Label
                 Style="{DynamicResource tstyle_i11}"
                 Text="{Binding Name}"
+                WidthRequest="250"
+                LineBreakMode="TailTruncation"
                 Margin="10, 0"
                 HorizontalOptions="Start"
                 VerticalOptions="Center"/>

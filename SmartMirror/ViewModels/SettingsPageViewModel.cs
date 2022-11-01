@@ -163,11 +163,12 @@ namespace SmartMirror.ViewModels
             switch (category.Type)
             {
                 case ECategoryType.Scenarios:
-                    DataState = _allScenarios.Any()
+                    CategoryElements = new(_allScenarios);
+
+                    DataState = CategoryElements.Any()
                         ? EPageState.Complete
                         : EPageState.Empty;
 
-                    CategoryElements = new(_allScenarios);
                     break;
                 default:
                     CategoryElements = new();
@@ -193,6 +194,7 @@ namespace SmartMirror.ViewModels
             {
                 _allScenarios = _mapperService.MapRange<ImageAndTitleBindableModel>(resultOfGettingAllScenarios.Result, (m, vm) =>
                 {
+                    vm.Type = ECategoryType.Scenarios;
                     vm.ImageSource = "play_gray";
                     vm.TapCommand = ShowScenarioDescriptionCommand;
                 });

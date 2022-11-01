@@ -19,6 +19,6 @@
         IsToggled="{Binding IsToggled, Source={x:Reference titleAndSwitchView}}"
         VerticalOptions="Start"
         HorizontalOptions="End"
-        Margin="12, 6, 3, 0"/>
+        Margin="0, 4, 0, 0"/>
 
 </Grid>
