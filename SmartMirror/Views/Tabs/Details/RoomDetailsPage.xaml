@@ -76,7 +76,7 @@
                     </CollectionView>
 
                     <controls:CustomStateView Grid.Column="1"
-                                              State="{Binding DataState}"
+                                              State="{Binding RoomDeviceState}"
                                               TryAgainCommand="{Binding TryAgainCommand}"
                                               EmptyStateImage="no_accessories_yet"
                                               EmptyTitle="{extensions:Translate NoAccessoriesYet}">

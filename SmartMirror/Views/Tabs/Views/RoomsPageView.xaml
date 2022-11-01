@@ -10,6 +10,7 @@
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
+    xmlns:selectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
     x:Class="SmartMirror.Views.Tabs.Views.RoomsPageView"
     x:DataType="vm:RoomsPageViewModel">
 
@@ -17,14 +18,37 @@
 
         <ResourceDictionary>
 
-            <DataTemplate x:Key="deviceTemplate">
+            <Style x:Key="deviceTemplateStyle" TargetType="templates:DeviceTemplate">
+                <Setter Property="DescriptionLabelStyle" Value="{x:DynamicResource tstyle_i4}"/>
+                <Setter Property="WidthRequest" Value="375"/>
+                <Setter Property="MaximumHeightRequest" Value="201"/>
+            </Style>
 
-                <templates:DeviceTemplate
-                    DescriptionLabelStyle="{x:DynamicResource tstyle_i4}"
-                    WidthRequest="375"
-                    MaximumHeightRequest="201"/>
-
+            <DataTemplate x:Key="connectedDeviceTemplate">
+                <templates:DeviceTemplate Style="{x:DynamicResource deviceTemplateStyle}"
+                                          DeviceStatus="Connected"/>
             </DataTemplate>
+
+            <DataTemplate x:Key="disconnectedDeviceTemplate">
+                <templates:DeviceTemplate Style="{x:DynamicResource deviceTemplateStyle}"
+                                          DeviceStatus="Disconnected"/>
+            </DataTemplate>
+
+            <DataTemplate x:Key="onDeviceTemplate">
+                <templates:DeviceTemplate Style="{x:DynamicResource deviceTemplateStyle}"
+                                          DeviceStatus="On"/>
+            </DataTemplate>
+
+            <DataTemplate x:Key="offDeviceTemplate">
+                <templates:DeviceTemplate Style="{x:DynamicResource deviceTemplateStyle}"
+                                          DeviceStatus="Off"/>
+            </DataTemplate>
+
+            <selectors:DeviceTemplateSelector x:Key="deviceTemplateSelector"
+                                              ConnectedDataTemplate="{StaticResource connectedDeviceTemplate}"
+                                              DisconnectedDataTemplate="{StaticResource disconnectedDeviceTemplate}"
+                                              OnDataTemplate="{StaticResource onDeviceTemplate}"
+                                              OffDataTemplate="{StaticResource offDeviceTemplate}"/>
 
             <templates:RoomsTemplate x:Key="roomsTemplate"/>
 
@@ -85,7 +109,7 @@
                         Margin="0,16,0,0"
                         Padding="60,0"
                         HorizontalScrollBarVisibility="Never"
-                        ItemTemplate="{StaticResource deviceTemplate}"
+                        ItemTemplate="{StaticResource deviceTemplateSelector}"
                         ItemsSource="{Binding FavoriteAccessories}">
 
                         <controls:CustomCollectionView.ItemsLayout>

@@ -56,6 +56,8 @@ namespace SmartMirror.Services.Devices
         //Can contain repeatable device ids
         public List<DeviceBindableModel> AllSupportedDevices { get; private set; } = new();
 
+        public event EventHandler AllDevicesChanged;
+
         public Task<AOResult> DownloadAllDevicesWithSubInfoAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
@@ -462,11 +464,102 @@ namespace SmartMirror.Services.Devices
                 Constants.Aqara.EventTypes.dev_name_change => OnDeviceNameChanged,
                 Constants.Aqara.EventTypes.gateway_online => OnGatewayOnline,
                 Constants.Aqara.EventTypes.gateway_offline => OnGatewayOffline,
+                Constants.Aqara.EventTypes.gateway_bind => OnGatewayBind,
+                Constants.Aqara.EventTypes.gateway_unbind => OnGatewayUnbind,
+                Constants.Aqara.EventTypes.subdevice_offline => OnSubdeviceOffline,
+                Constants.Aqara.EventTypes.subdevice_online => OnSubdeviceOnline,
+                Constants.Aqara.EventTypes.subdevice_bind => OnSubdeviceBind,
+                Constants.Aqara.EventTypes.unbind_sub_gw => OnSubdeviceUnbind,
                 _ => x => { }
                 ,
             };
 
             action(e);
+        }
+
+        private void OnSubdeviceUnbind(AqaraMessageEventArgs aqaraMessage)
+        {
+            AllSupportedDevices.RemoveAll(x => x.DeviceId == aqaraMessage.DeviceId);
+            AllDevices.RemoveAll(x => x.DeviceId == aqaraMessage.DeviceId);
+
+            AllDevicesChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private async void OnSubdeviceBind(AqaraMessageEventArgs aqaraMessage)
+        {
+            await DownloadAllDevicesWithSubInfoAsync();
+
+            AllDevicesChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnSubdeviceOffline(AqaraMessageEventArgs aqaraMessage)
+        {
+            var devices = AllSupportedDevices.Where(x => x.DeviceId == aqaraMessage.DeviceId);
+
+            if (devices.Any())
+            {
+                foreach (var supportedDevice in devices)
+                {
+                    supportedDevice.State = 0;
+                }
+            }
+
+            var device = AllDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
+
+            if (device is not null)
+            {
+                device.State = 0;
+            }
+        }
+
+        private void OnSubdeviceOnline(AqaraMessageEventArgs aqaraMessage)
+        {
+            var devices = AllSupportedDevices.Where(x => x.DeviceId == aqaraMessage.DeviceId);
+
+            if (devices.Any())
+            {
+                foreach (var supportedDevice in devices)
+                {
+                    supportedDevice.State = 1;
+                }
+            }
+
+            var device = AllDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
+
+            if (device is not null)
+            {
+                device.State = 1;
+            }
+        }
+
+        private async void OnGatewayBind(AqaraMessageEventArgs aqaraMessage)
+        {
+            var gateway = AllSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId)
+                ?? AllDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
+
+            if (gateway is null)
+            {
+                await DownloadAllDevicesWithSubInfoAsync();
+
+                AllDevicesChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        private void OnGatewayUnbind(AqaraMessageEventArgs aqaraMessage)
+        {
+            var gateway = AllSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId)
+                ?? AllDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
+
+            if (gateway is not null)
+            {
+                AllSupportedDevices.Remove(gateway);
+                AllSupportedDevices.RemoveAll(x => x.ParentDid == gateway.DeviceId);
+
+                AllDevices.Remove(gateway);
+                AllDevices.RemoveAll(x => x.ParentDid == gateway.DeviceId);
+
+                AllDevicesChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         private async void OnGatewayOnline(AqaraMessageEventArgs aqaraMessage)

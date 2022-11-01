@@ -243,10 +243,12 @@
 
                         <DataTrigger Binding="{Binding Status}" TargetType="controls:CustomSwitch" Value="On">
                             <Setter Property="IsToggled" Value="True"/>
+                            <Setter Property="IsVisible" Value="True"/>
                         </DataTrigger>
 
                         <DataTrigger Binding="{Binding Status}" TargetType="controls:CustomSwitch" Value="Off">
                             <Setter Property="IsToggled" Value="False"/>
+                            <Setter Property="IsVisible" Value="True"/>
                         </DataTrigger>
 
                         <DataTrigger Binding="{Binding Status}" TargetType="controls:CustomSwitch" Value="Disconnected">

@@ -29,7 +29,8 @@ public class RoomDetailsPageViewModel : BaseViewModel
         _devicesService = devicesService;
         _roomsService = roomsService;
 
-        _roomsService.AllRoomsChanged += OnAllRoomsChanged;
+        _roomsService.AllRoomsChanged += OnAllRoomsOrDevicesChanged;
+        _devicesService.AllDevicesChanged += OnAllRoomsOrDevicesChanged;
     }
 
     #region -- Public properties --
@@ -57,13 +58,20 @@ public class RoomDetailsPageViewModel : BaseViewModel
         set => SetProperty(ref _selectedRoomDevices, value);
     }
 
+    private EPageState _roomDevicesState;
+    public EPageState RoomDeviceState
+    {
+        get => _roomDevicesState;
+        set => SetProperty(ref _roomDevicesState, value);
+    }
+
     #endregion
 
     #region -- Overrides --
 
     public override void Destroy()
     {
-        _roomsService.AllRoomsChanged -= OnAllRoomsChanged;
+        _roomsService.AllRoomsChanged -= OnAllRoomsOrDevicesChanged;
 
         base.Destroy();
     }
@@ -114,7 +122,8 @@ public class RoomDetailsPageViewModel : BaseViewModel
         }
         else
         {
-            DataState = EPageState.NoInternet;
+            DataState = EPageState.Complete;
+            RoomDeviceState = EPageState.NoInternet;
         }
     }
 
@@ -122,7 +131,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
     #region -- Private helpers --
 
-    private void OnAllRoomsChanged(object sender, EventArgs e)
+    private void OnAllRoomsOrDevicesChanged(object sender, EventArgs e)
     {
         if (_selectedRoom is not null)
         {
@@ -162,13 +171,15 @@ public class RoomDetailsPageViewModel : BaseViewModel
                     SelectedRoomDevices = new(roomDevices);
 
                     DataState = EPageState.Complete;
+                    RoomDeviceState = EPageState.Complete;
                 }));
             }
             else
             {
                 SelectedRoomDevices = new();
 
-                DataState = IsInternetConnected
+                DataState = EPageState.Complete;
+                RoomDeviceState = IsInternetConnected
                     ? EPageState.Empty
                     : EPageState.NoInternet;
             }
@@ -184,7 +195,8 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
     private Task OnTryAgainCommandAsync()
     {
-        DataState = EPageState.NoInternetLoader;
+        DataState = EPageState.Complete;
+        RoomDeviceState = EPageState.NoInternetLoader;
 
         SelectRoom(_selectedRoom);
 

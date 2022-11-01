@@ -44,6 +44,8 @@ public class RoomsPageViewModel : BaseTabViewModel
         DataState = EPageState.LoadingSkeleton;
 
         Task.Run(LoadRoomsAndDevicesAndChangeStateAsync);
+        _roomsService.AllRoomsChanged += OnAllRoomsChanged;
+        _devicesService.AllDevicesChanged += OnAllDevicesChanged;
     }
 
     #region -- Public properties --
@@ -75,6 +77,14 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
+    public override void Destroy()
+    {
+        _roomsService.AllRoomsChanged -= OnAllRoomsChanged;
+        _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
+
+        base.Destroy();
+    }
+
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
@@ -95,6 +105,44 @@ public class RoomsPageViewModel : BaseTabViewModel
     #endregion
 
     #region -- Private helpers --
+
+    private async void OnAllRoomsChanged(object sender, EventArgs e)
+    {
+        if (_roomsService.AllRooms is not null && _roomsService.AllRooms.Any())
+        {
+            foreach (var room in _roomsService.AllRooms)
+            {
+                room.TappedCommand = RoomTappedCommand;
+            };
+
+            Rooms = new(_roomsService.AllRooms);
+        }
+        else
+        {
+            DataState = EPageState.LoadingSkeleton;
+
+            await LoadRoomsAndDevicesAndChangeStateAsync();
+        }
+    }
+
+    private async void OnAllDevicesChanged(object sender, EventArgs e)
+    {
+        if (_devicesService.AllSupportedDevices is not null && _devicesService.AllSupportedDevices.Any())
+        {
+            foreach (var device in _devicesService.AllSupportedDevices)
+            {
+                device.TappedCommand = AccessorieTappedCommand;
+            };
+
+            FavoriteAccessories = new(_devicesService.AllSupportedDevices);
+        }
+        else
+        {
+            DataState = EPageState.LoadingSkeleton;
+
+            await LoadRoomsAndDevicesAndChangeStateAsync();
+        }
+    }
 
     private async Task OnAccessorieTappedCommandAsync(DeviceBindableModel device)
     {
@@ -182,7 +230,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             if (resultOfGettingRooms.IsSuccess)
             {
-                foreach(var room in _roomsService.AllRooms)
+                foreach (var room in _roomsService.AllRooms)
                 {
                     room.TappedCommand = RoomTappedCommand;
                 };

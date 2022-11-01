@@ -32,6 +32,7 @@ namespace SmartMirror.Services.Rooms
 
             _aqaraMessanger.MessageReceived += OnMessageReceived;
             _aqaraMessanger.StoppedListenning += OnStoppedListenning;
+            _devicesService.AllDevicesChanged += OnAllDevicesChanged;
         }
 
         #region -- IRoomsService implementation --
@@ -140,6 +141,15 @@ namespace SmartMirror.Services.Rooms
             });
         }
 
+        private void OnAllDevicesChanged(object sender, EventArgs e)
+        {
+            foreach (var room in AllRooms)
+            {
+                var count = _devicesService.AllSupportedDevices.Count(x => x.PositionId == room.Id);
+                room.DevicesCount = count;
+            }
+        }
+
         private void OnMessageReceived(object sender, AqaraMessageEventArgs e)
         {
             Action<AqaraMessageEventArgs> action = e.EventType switch
@@ -152,11 +162,18 @@ namespace SmartMirror.Services.Rooms
             action(e);
         }
 
-        private void OnDevPositionAssigned(AqaraMessageEventArgs aqaraMessage)
+        private async void OnDevPositionAssigned(AqaraMessageEventArgs aqaraMessage)
         {
             var device = _devicesService.AllSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
             var newRoom = AllRooms.FirstOrDefault(x => x.Id == aqaraMessage.Value);
             var oldRoom = AllRooms.FirstOrDefault(x => x.Id == device.PositionId);
+
+            if (newRoom is null)
+            {
+                await DownloadAllRoomsAsync();
+
+                newRoom = AllRooms.FirstOrDefault(x => x.Id == aqaraMessage.Value);
+            }
 
             oldRoom.DevicesCount--;
             newRoom.DevicesCount++;

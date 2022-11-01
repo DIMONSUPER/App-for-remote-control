@@ -26,7 +26,7 @@ public class AqaraService : BaseAqaraService, IAqaraService
             {
                 account = email,
                 accountType = 0,
-                accessTokenValidity = "1d",
+                accessTokenValidity = "1h",
             };
 
             var response = await MakeRequestAsync("config.auth.getAuthCode", data, onFailure);
