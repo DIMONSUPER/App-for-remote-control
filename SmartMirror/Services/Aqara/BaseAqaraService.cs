@@ -28,7 +28,7 @@ namespace SmartMirror.Services.Aqara
 
         protected async Task<BaseAqaraResponse<T>> MakeRequestAsync<T>(string intent, object data, Action<string> onFailure) where T : class
         {
-            if (SettingsManager.AqaraAccessSettings.ExpiresAt < DateTime.UtcNow)
+            if (SettingsManager.AqaraAccessSettings.ExpiresAt < DateTime.UtcNow && !string.IsNullOrWhiteSpace(SettingsManager.AqaraAccessSettings.RefreshToken))
             {
                 await RefreshAndSetTokenAsync();
             }
@@ -47,7 +47,11 @@ namespace SmartMirror.Services.Aqara
             {
                 await RefreshAndSetTokenAsync();
 
-                result = await MakeRequestAsync<T>(intent, data, onFailure);
+                result = await RestService.PostAsync<BaseAqaraResponse<T>>(Constants.Aqara.API_URL, new
+                {
+                    intent = intent,
+                    data = data,
+                }, GetHeaders());
             }
             else if (result.Code != 0)
             {
@@ -64,7 +68,7 @@ namespace SmartMirror.Services.Aqara
 
         protected async Task<BaseAqaraResponse> MakeRequestAsync(string intent, object data, Action<string> onFailure)
         {
-            if (SettingsManager.AqaraAccessSettings.ExpiresAt < DateTime.UtcNow)
+            if (SettingsManager.AqaraAccessSettings.ExpiresAt < DateTime.UtcNow && !string.IsNullOrWhiteSpace(SettingsManager.AqaraAccessSettings.RefreshToken))
             {
                 await RefreshAndSetTokenAsync();
             }
@@ -81,9 +85,16 @@ namespace SmartMirror.Services.Aqara
             }
             else if (result.Code == 108)
             {
-                await RefreshAndSetTokenAsync();
+                if (!string.IsNullOrWhiteSpace(SettingsManager.AqaraAccessSettings.RefreshToken))
+                {
+                    await RefreshAndSetTokenAsync();
+                }
 
-                result = await MakeRequestAsync(intent, data, onFailure);
+                result = await RestService.PostAsync<BaseAqaraResponse>(Constants.Aqara.API_URL, new
+                {
+                    intent = intent,
+                    data = data,
+                }, GetHeaders());
             }
             else if (result.Code != 0)
             {
@@ -107,7 +118,13 @@ namespace SmartMirror.Services.Aqara
                     refreshToken = SettingsManager.AqaraAccessSettings.RefreshToken,
                 };
 
-                var result = await MakeRequestAsync<AccessResponse>("config.auth.refreshToken", data, onFailure);
+                var intent = "config.auth.refreshToken";
+
+                var result = await RestService.PostAsync<BaseAqaraResponse<AccessResponse>>(Constants.Aqara.API_URL, new
+                {
+                    intent = intent,
+                    data = data,
+                }, GetHeaders());
 
                 return result?.Result;
             });
