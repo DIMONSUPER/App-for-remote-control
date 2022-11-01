@@ -105,6 +105,9 @@
     <Style x:Key="tstyle_i14" TargetType="Label" BasedOn="{StaticResource InterBold_Content_28px}"> <!-- Inter700/ 28px/ Orange -->
         <Setter Property="TextColor"  Value="{x:DynamicResource tcolor_i8}"/>
     </Style>
+     <Style x:Key="tstyle_i15" TargetType="Label" BasedOn="{StaticResource InterBold_Content_28px}"> <!-- Inter700/ 28px/ #E9E9E9 -->
+        <Setter Property="TextColor"  Value="{x:DynamicResource tcolor_i10}"/>
+    </Style>
  
     <!-- ACTIVITY INDICATOR STYLE-->
     <Style TargetType="ActivityIndicator">

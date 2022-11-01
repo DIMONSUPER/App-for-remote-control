@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <views:BaseContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -7,6 +7,8 @@
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+    xmlns:enums="clr-namespace:SmartMirror.Enums"
     Title="Settings"
     Background="{x:DynamicResource GrayGradientBrush}"
     x:Class="SmartMirror.Views.SettingsPage"
@@ -67,23 +69,303 @@
         <CollectionView
             Grid.Row="2"
             Grid.Column="0"
-            Margin="42, 60, 60, 0"
+            Margin="42, 60, 0, 0"
             ItemSizingStrategy="MeasureFirstItem"
             ItemsSource="{Binding Categories}"
             ItemTemplate="{StaticResource categoryTemplate}"/>
 
-        <controls:CustomStateView
-            Grid.Row="2"
-            Grid.Column="1"
-            Margin="0, 60, 0, 0"
-            State="{Binding DataState}"
-            EmptyTitle="{extensions:Translate NoCamerasYet}"
-            EmptyStateImage="empty_scenarios"
-            LoadingTitle="{extensions:Translate Scenarios}">
+        <controls:CustomStateView Margin="0,60,60,0"
+                                  Grid.Row="2"
+                                  Grid.Column="1"
+                                  State="{Binding DataState}">
 
             <controls:CustomStateView.CompleteContent>
 
-                <Label Text="sdds" TextColor="White"/>
+                <Grid ColumnDefinitions="*,*"
+                      ColumnSpacing="30">
+
+                    <StackLayout Grid.Column="0"
+                                 Spacing="30">
+
+                        <!-- AQARA -->
+                        <Border HeightRequest="233"
+                                StrokeShape="RoundRectangle 9"
+                                StrokeThickness="1"
+                                Shadow="{DynamicResource Shadow_i1}"
+                                BackgroundColor="{DynamicResource cbg_i2}"
+                                Padding="0">
+
+                            <VerticalStackLayout Spacing="36"
+                                                 VerticalOptions="Center">
+
+                                <Image Source="aqara_logo"
+                                       VerticalOptions="Center"/>
+
+                                <Border StrokeShape="RoundRectangle 26"
+                                        StrokeThickness="1"
+                                        WidthRequest="230"
+                                        Stroke="{x:DynamicResource cbg_i4}"
+                                        BackgroundColor="{x:DynamicResource cbg_i4}"
+                                        behaviors:TouchBehavior.Command="{Binding LoginWithAqaraCommand}"
+                                        behaviors:TouchBehavior.CommandParameter="{x:Static enums:EAuthType.Aqara}">
+                                    
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border"
+                                                     Binding="{Binding IsAqaraAccountConnected}"
+                                                     Value="True">
+                                            <Setter Property="BackgroundColor"
+                                                    Value="Transparent"/>
+
+                                        </DataTrigger>
+
+                                    </Border.Triggers>
+
+                                    <Grid>
+
+                                        <Label Text="{extensions:Translate Connect}"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               Style="{x:DynamicResource tstyle_i9}">
+
+                                            <Label.Triggers>
+
+                                                <DataTrigger TargetType="Label"
+                                                             Binding="{Binding IsAqaraAccountConnected}"
+                                                             Value="True">
+
+                                                    
+                                                    <Setter Property="Style"
+                                                            Value="{x:DynamicResource tstyle_i15}"/>
+                                                     <Setter Property="Text"
+                                                            Value="Connected"/>
+
+                                                </DataTrigger>
+
+                                            </Label.Triggers>
+
+                                        </Label>
+                                        
+                                        <ActivityIndicator IsRunning="False"/>
+
+                                    </Grid>
+
+                                </Border>
+
+                            </VerticalStackLayout>
+
+                        </Border>
+
+                        <!-- APPLE -->
+                        <Border HeightRequest="233"
+                                StrokeShape="RoundRectangle 9"
+                                StrokeThickness="1"
+                                Shadow="{DynamicResource Shadow_i1}"
+                                BackgroundColor="{DynamicResource cbg_i2}">
+
+                            <VerticalStackLayout Spacing="36"
+                                                 VerticalOptions="Center">
+
+                                <Image Source="Apple_logo"
+                                       VerticalOptions="Center"/>
+
+                                <Border StrokeShape="RoundRectangle 26"
+                                        StrokeThickness="1"
+                                        WidthRequest="230"
+                                        Stroke="{DynamicResource cbg_i4}"
+                                        BackgroundColor="{DynamicResource cbg_i4}"
+                                        behaviors:TouchBehavior.Command="{Binding LoginWithAppleCommand}"
+                                        behaviors:TouchBehavior.CommandParameter="{x:Static enums:EAuthType.Apple}">
+
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border"
+                                                     Binding="{Binding IsAppleAccountConnected}"
+                                                     Value="True">
+                                            <Setter Property="BackgroundColor"
+                                                    Value="Transparent"/>
+
+                                        </DataTrigger>
+
+                                    </Border.Triggers>
+
+                                    <Grid>
+
+                                        <Label Text="{extensions:Translate Connect}"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               Style="{DynamicResource tstyle_i9}">
+
+                                            <Label.Triggers>
+
+                                                <DataTrigger TargetType="Label"
+                                                     Binding="{Binding IsAppleAccountConnected}"
+                                                     Value="True">
+
+                                                    
+                                                    <Setter Property="Style"
+                                                            Value="{x:DynamicResource tstyle_i15}"/>
+                                                     <Setter Property="Text"
+                                                            Value="Connected"/>
+
+                                                </DataTrigger>
+
+                                            </Label.Triggers>
+
+                                        </Label>
+                                        
+                                        <ActivityIndicator IsRunning="False"/>
+
+                                    </Grid>
+
+                                </Border>
+
+                            </VerticalStackLayout>
+
+                        </Border>
+
+                    </StackLayout>
+                      
+                    <StackLayout Grid.Column="1"
+                                 Spacing="30">
+
+                        <!-- AMAZON -->
+                        <Border Grid.Column="1"
+                                HeightRequest="233"
+                                StrokeShape="RoundRectangle 9"
+                                StrokeThickness="1"
+                                Shadow="{DynamicResource Shadow_i1}"
+                                BackgroundColor="{DynamicResource cbg_i2}">
+
+                            <VerticalStackLayout Spacing="36"
+                                                 VerticalOptions="Center">
+
+                                <Image Source="amazon_logo"
+                                       VerticalOptions="Center"/>
+
+                                <Border StrokeShape="RoundRectangle 26"
+                                        StrokeThickness="1"
+                                        WidthRequest="230"
+                                        Stroke="{DynamicResource cbg_i4}"
+                                        BackgroundColor="{DynamicResource cbg_i4}"
+                                        behaviors:TouchBehavior.Command="{Binding LoginWithAmazonCommand}"
+                                        behaviors:TouchBehavior.CommandParameter="{x:Static enums:EAuthType.Amazon}">
+
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border"
+                                                     Binding="{Binding IsAmazonAccountConnected}"
+                                                     Value="True">
+                                            <Setter Property="BackgroundColor"
+                                                    Value="Transparent"/>
+
+                                        </DataTrigger>
+
+                                    </Border.Triggers>
+
+                                    <Grid>
+
+                                        <Label Text="{extensions:Translate Connect}"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               Style="{x:DynamicResource tstyle_i9}">
+
+                                            <Label.Triggers>
+
+                                                <DataTrigger TargetType="Label"
+                                                             Binding="{Binding IsAmazonAccountConnected}"
+                                                             Value="True">
+
+                                                    
+                                                    <Setter Property="Style"
+                                                            Value="{x:DynamicResource tstyle_i15}"/>
+                                                     <Setter Property="Text"
+                                                            Value="Connected"/>
+
+                                                </DataTrigger>
+
+                                            </Label.Triggers>
+
+                                        </Label>
+                                        
+                                        <ActivityIndicator IsRunning="False"/>
+
+                                    </Grid>
+
+                                </Border>
+
+                            </VerticalStackLayout>
+
+                        </Border>
+
+                        <!-- GOOGLE -->
+                        <Border HeightRequest="233"
+                                StrokeShape="RoundRectangle 9"
+                                StrokeThickness="1"
+                                Shadow="{DynamicResource Shadow_i1}"
+                                BackgroundColor="{DynamicResource cbg_i2}">
+
+                            <StackLayout Spacing="36"
+                                         VerticalOptions="Center">
+
+                                <Image Source="google_logo"/>
+
+                                <Border StrokeShape="RoundRectangle 26"
+                                        StrokeThickness="1"
+                                        WidthRequest="230"
+                                        Stroke="{DynamicResource cbg_i4}"
+                                        BackgroundColor="{DynamicResource cbg_i4}"
+                                        behaviors:TouchBehavior.Command="{Binding LoginWithGoogleCommand}"
+                                        behaviors:TouchBehavior.CommandParameter="{x:Static enums:EAuthType.Google}">
+
+                                    <Border.Triggers>
+
+                                        <DataTrigger TargetType="Border"
+                                                     Binding="{Binding IsGoogleAccountConnected}"
+                                                     Value="True">
+
+                                            <Setter Property="BackgroundColor"
+                                                    Value="Transparent"/>
+
+                                        </DataTrigger>
+
+                                    </Border.Triggers>
+
+                                    <Grid>
+
+                                        <Label Text="{extensions:Translate Connect}"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               Style="{x:DynamicResource tstyle_i9}">
+
+                                            <Label.Triggers>
+
+                                                <DataTrigger TargetType="Label"
+                                                     Binding="{Binding IsGoogleAccountConnected}"
+                                                     Value="True">
+
+                                                    
+                                                    <Setter Property="Style"
+                                                            Value="{x:DynamicResource tstyle_i15}"/>
+                                                    <Setter Property="Text"
+                                                            Value="Connected"/>
+
+                                                </DataTrigger>
+
+                                            </Label.Triggers>
+
+                                        </Label>
+                                        
+                                        <ActivityIndicator IsRunning="False"/>
+
+                                    </Grid>
+
+                                </Border>
+
+                            </StackLayout>
+
+                        </Border>
+
+                    </StackLayout>
+
+                </Grid>
 
             </controls:CustomStateView.CompleteContent>
             

@@ -244,6 +244,9 @@
 		<MauiXaml Update="Views\WelcomePage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\ConfirmDialog.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Update="Resources\Strings\Strings.resx">

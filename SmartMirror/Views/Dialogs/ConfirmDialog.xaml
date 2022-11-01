@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frame xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:prismmaui="clr-namespace:Prism.Services.Xaml;assembly=Prism.Maui"
+       xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+       xmlns:dialogviewmodels="clr-namespace:SmartMirror.ViewModels.Dialogs"
+       x:Class="SmartMirror.Views.Dialogs.ConfirmDialog"
+       Padding="0"
+       BackgroundColor="Transparent"
+       prismmaui:DialogLayout.UseMask="True"
+       prismmaui:DialogLayout.MaskStyle="{DynamicResource DialogMaskBoxViewStyle_i1}"
+       prismmaui:DialogLayout.CloseOnBackgroundTapped="True"
+       x:DataType="dialogviewmodels:ConfirmDialogViewModel">
+
+    <Border HorizontalOptions="Center"
+            VerticalOptions="Center"
+            StrokeThickness="0.75"
+            StrokeShape="RoundRectangle 9"
+            Stroke="{DynamicResource tcolor_i1}"
+            Padding="0"
+            BackgroundColor="{StaticResource cbg_i2}">
+
+        <VerticalStackLayout Spacing="0"
+                             Margin="30, 0">
+
+             <Label Margin="0,26,0,0"
+                    Style="{DynamicResource tstyle_i11}"
+                    Text="{Binding Title}" />
+
+             <Label Margin="0,6,0,0"
+                    Style="{DynamicResource tstyle_i5}"
+                    Text="{Binding Description}" />
+
+             <Grid Margin="0,42"
+                   ColumnDefinitions="*,*"
+                   ColumnSpacing="26">
+
+                <Button Grid.Column="0"
+                        Style="{DynamicResource ButtonStyle_i1}"
+                        HorizontalOptions="Center"
+                        Text="{extensions:Translate Close}"
+                        BackgroundColor="Transparent"
+                        TextColor="#E9E9E9"
+                        BorderColor="{DynamicResource cbg_i3}"
+                        BorderWidth="0.75"
+                        Command="{Binding CloseCommand}"
+                        CommandParameter="False"
+                        WidthRequest="168"/>
+
+                <Button Grid.Column="1"
+                        Style="{DynamicResource ButtonStyle_i1}"
+                        HorizontalOptions="Center"
+                        Text="{extensions:Translate Confirm}"
+                        Command="{Binding CloseCommand}"
+                        CommandParameter="True"
+                        WidthRequest="168"/>
+
+             </Grid>
+
+        </VerticalStackLayout>
+       
+
+    </Border>
+
+    
+</Frame>
+

@@ -234,4 +234,19 @@
     <data name="Settings" xml:space="preserve">
         <value>Settings</value>
     </data>
+    <data name="AreYouSure" xml:space="preserve">
+        <value>Are you sure?</value>
+    </data>
+    <data name="WillBeDisconnected" xml:space="preserve">
+        <value>will be disconnected</value>
+    </data>
+    <data name="Apple" xml:space="preserve">
+        <value>Apple</value>
+    </data>
+    <data name="Amazon" xml:space="preserve">
+        <value>Amazon</value>
+    </data>
+    <data name="Google" xml:space="preserve">
+        <value>Google</value>
+    </data>
 </root>
