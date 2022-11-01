@@ -80,6 +80,7 @@ namespace SmartMirror.Services.Mapper
                 cfg.CreateMap<NotificationModel, NotificationGroupItemBindableModel>().ReverseMap();
                 cfg.CreateMap<DetailSceneAqaraModel, ScenarioBindableModel>().ReverseMap();
                 cfg.CreateMap<ActionAqaraModel, ScenarioActionBindableModel>().ReverseMap();
+                cfg.CreateMap<ScenarioModel, ImageAndTitleBindableModel>().ReverseMap();
             });
 
             return mapperConfiguration.CreateMapper();

@@ -43,9 +43,11 @@
 		<None Remove="Platforms\Android\Resources\drawable\splash_screen_icon.png" />
 		<None Remove="Prism.DryIoc.Maui" />
 		<None Remove="Prism.Maui" />
+		<None Remove="Resources\Images\carbon_settings.svg" />
 		<None Remove="Resources\Images\amazon_logo.svg" />
 		<None Remove="Resources\Images\apple_logo.svg" />
 		<None Remove="Resources\Images\aqara_logo.svg" />
+		<None Remove="Resources\Images\ci_close_big.svg" />
 		<None Remove="Resources\Images\google_logo.svg" />
 		<None Remove="Views\" />
 		<None Remove="ViewModels\" />
@@ -142,6 +144,9 @@
 		<MauiXaml Update="Controls\CustomImageBotton.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Controls\TitleAndSwitchView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Platforms\Windows\App.xaml">
 			<SubType>
 			</SubType>
@@ -150,12 +155,18 @@
 			<SubType>
 			</SubType>
 		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\CategoryTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\FavoriteScenariosTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\CameraTemplate.xaml">
 			<SubType>
 			</SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\ImageAndTitleTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\NotificationHeaderTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -176,9 +187,15 @@
 			<SubType>
 			</SubType>
 		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\ScenarioDescriptionDialog.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
 			<SubType>
 			</SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\SettingsPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Details\ScenarioDetailsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -267,6 +284,12 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
+	  <Compile Update="Resources\DataTemplates\CameraTemplate.xaml.cs">
+	    <DependentUpon>CameraTemplate.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Resources\DataTemplates\ImageAndTitleTemplate.xaml.cs">
+	    <DependentUpon>ImageAndTitleTemplate.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Resources\Strings\Strings.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>

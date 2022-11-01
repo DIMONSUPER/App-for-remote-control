@@ -3,13 +3,16 @@
                            xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                            xmlns:pages="clr-namespace:SmartMirror.Views.Tabs.Pages"
+                           xmlns:vm="clr-namespace:SmartMirror.ViewModels"
                            xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
                            android:TabbedPage.IsSwipePagingEnabled="True"
                            android:TabbedPage.IsSmoothScrollEnabled="True"
                            NavigationPage.HasNavigationBar="False"
                            Background="{x:DynamicResource GrayGradientBrush}"
+                           SettingsCommand="{Binding SettingsCommand}"
                            Title="MainTabbedPage"
                            x:Class="SmartMirror.Views.MainTabbedPage"
+                           x:DataType="vm:MainTabbedPageViewModel"
                            x:Name="tabbedPage">
 
     <controls:CustomTabbedPage.TabBarCellTemplate>
