@@ -16,7 +16,7 @@ public class AqaraService : BaseAqaraService, IAqaraService
 
     #region -- IAqaraService implementation --
 
-    public bool IsAuthorized => !string.IsNullOrEmpty(SettingsManager.AqaraAccessSettings.AccessToken) && DateTime.UtcNow < SettingsManager.AqaraAccessSettings.ExpiresAt;
+    public bool IsAuthorized => !string.IsNullOrEmpty(SettingsManager.AqaraAccessSettings.AccessToken);
 
     public Task<AOResult<BaseAqaraResponse>> SendLoginCodeAsync(string email)
     {
