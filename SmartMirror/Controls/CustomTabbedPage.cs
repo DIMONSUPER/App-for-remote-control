@@ -140,6 +140,7 @@ public class CustomTabbedPage : TabbedPage
 
 
         var stackTimeAndTabs = new StackLayout() { Spacing = 0 };
+
         stackTimeAndTabs.Add(CreateTimeLabel());
 
         var grid = new Grid();

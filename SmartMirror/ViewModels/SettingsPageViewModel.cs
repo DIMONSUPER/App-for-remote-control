@@ -3,6 +3,7 @@ using SmartMirror.Helpers;
 using SmartMirror.Interfaces;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
+using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Views.Dialogs;
@@ -14,20 +15,25 @@ namespace SmartMirror.ViewModels
     public class SettingsPageViewModel : BaseViewModel
     {
         private readonly IMapperService _mapperService;
-        private readonly IScenariosService _scenariosService;
         private readonly IDialogService _dialogService;
+        private readonly IDevicesService _deviceService;
+        private readonly IScenariosService _scenariosService;
 
         private readonly ICommand _selectCategoryCommand;
         private readonly ICommand _showScenarioDescriptionCommand;
+
+        private IEnumerable<ImageAndTitleBindableModel> _allAccessories;
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios;
 
         public SettingsPageViewModel(
             IScenariosService scenariosService,
+            IDevicesService devicesService,
             IMapperService mapperService,
             IDialogService dialogService,
             INavigationService navigationService)
             : base(navigationService)
         {
+            _deviceService = devicesService;
             _scenariosService = scenariosService;
             _mapperService = mapperService;
             _dialogService = dialogService;
@@ -72,6 +78,9 @@ namespace SmartMirror.ViewModels
         private ICommand _closeSettingsCommand;
         public ICommand CloseSettingsCommand => _closeSettingsCommand ??= SingleExecutionCommand.FromFunc(OnCloseSettingsCommandAsync);
 
+        private ICommand _openAccessorySettingsCommand;
+        public ICommand OpenAccessorySettingsCommand => _openAccessorySettingsCommand ??= SingleExecutionCommand.FromFunc(OnOpenAccessorySettingsCommandAsync);
+
         #endregion
 
         #region -- Overrides --
@@ -84,8 +93,10 @@ namespace SmartMirror.ViewModels
 
             await LoadAllDataAsync();
 
-            //temporarily
-            DataState = EPageState.Empty;
+            var category = Categories.FirstOrDefault();
+
+            SelectCategory(category);
+            SetCategoryElements(category);
         }
 
         protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
@@ -136,8 +147,6 @@ namespace SmartMirror.ViewModels
                     TapCommand = _selectCategoryCommand,
                 },
             };
-
-            SelectedCategory = Categories.FirstOrDefault();
         }
 
         private void SelectCategory(CategoryBindableModel category)
@@ -159,29 +168,65 @@ namespace SmartMirror.ViewModels
         {
             SelectCategory(category);
 
-            switch (category.Type)
-            {
-                case ECategoryType.Scenarios:
-                    DataState = _allScenarios.Count() == 0
-                        ? EPageState.Empty
-                        : EPageState.Complete;
-
-                    CategoryElements = new(_allScenarios);
-                    break;
-                default:
-                    CategoryElements = new();
-                    DataState = EPageState.Empty;
-                    break;
-            }
+            SetCategoryElements(category);
 
             return Task.CompletedTask;
         }
 
+        private void SetCategoryElements(CategoryBindableModel category)
+        {
+            if (category is not null)
+            {
+                switch (category.Type)
+                {
+                    case ECategoryType.Accessories:
+                        DataState = _allAccessories.Any()
+                            ? EPageState.Complete
+                            : EPageState.None;
+
+                        CategoryElements = new(_allAccessories);
+                        break;
+
+                    case ECategoryType.Scenarios:
+                        DataState = _allScenarios.Count() == 0
+                            ? EPageState.Empty
+                            : EPageState.Complete;
+
+                        CategoryElements = new(_allScenarios);
+                        break;
+
+                    default:
+                        CategoryElements = new();
+                        DataState = EPageState.Empty;
+                        break;
+                } 
+            }
+        }
+
         private async Task LoadAllDataAsync()
         {
-            await LoadAllScenariosAsync();
+            await Task.WhenAll(
+                LoadAllDevicesAsync(),
+                LoadAllScenariosAsync());
 
             PageState = EPageState.Complete;
+        }
+
+        private async Task LoadAllDevicesAsync()
+        {
+            var resultOfGettingAllDevices = await _deviceService.DownloadAllDevicesWithSubInfoAsync();
+
+            if (resultOfGettingAllDevices.IsSuccess)
+            {
+                _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(_deviceService.AllSupportedDevices, (m, vm) =>
+                {
+                    vm.TapCommand = OpenAccessorySettingsCommand;
+                });
+
+                var deviceCategory = Categories.FirstOrDefault(c => c.Type == ECategoryType.Accessories);
+
+                deviceCategory.Count = _allAccessories.Count();
+            }
         }
 
         private async Task LoadAllScenariosAsync()
@@ -207,6 +252,11 @@ namespace SmartMirror.ViewModels
             PageState = EPageState.NoInternetLoader;
 
             return LoadAllDataAsync();
+        }
+
+        private Task OnOpenAccessorySettingsCommandAsync()
+        {
+            return Task.CompletedTask;
         }
 
         private Task OnShowScenarioDescriptionCommandAsync(ImageAndTitleBindableModel scenario)
