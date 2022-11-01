@@ -8,8 +8,6 @@
 
         public DateTime CreateTime { get; set; }
 
-        public string Description { get; set; }
-
         public int DevicesCount { get; set; }
     }
 }

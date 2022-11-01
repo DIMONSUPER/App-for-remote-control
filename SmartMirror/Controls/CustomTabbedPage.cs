@@ -214,12 +214,12 @@ public class CustomTabbedPage : TabbedPage
             BackgroundColor = Color.FromArgb("#801F1F1F"),
         };
 
-        border.Content = CreatTabsStackLayout();
+        border.Content = CreateTabsStackLayout();
 
         return border;
     }
 
-    private HorizontalStackLayout CreatTabsStackLayout()
+    private HorizontalStackLayout CreateTabsStackLayout()
     {
         _selectedTabCells.Clear();
         _tabCells.Clear();

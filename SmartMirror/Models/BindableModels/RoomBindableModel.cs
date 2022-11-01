@@ -1,9 +1,13 @@
-﻿using System.Windows.Input;
+﻿using System.ComponentModel;
+using System.Windows.Input;
+using SmartMirror.Resources.Strings;
 
 namespace SmartMirror.Models.BindableModels
 {
     public class RoomBindableModel : BindableBase
     {
+        #region -- Public properties --
+
         private string _id;
         public string Id
         {
@@ -25,11 +29,11 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _createTime, value);
         }
 
-        private string _description;
+        private string _description = $"0 {Strings.Accessories}";
         public string Description
         {
             get => _description;
-            set => SetProperty(ref _description, value);
+            private set => SetProperty(ref _description, value);
         }
 
         private int _devicesCount;
@@ -59,6 +63,22 @@ namespace SmartMirror.Models.BindableModels
             get => _selectedCommand;
             set => SetProperty(ref _selectedCommand, value);
         }
+
+        #endregion
+
+        #region -- Overrides --
+
+        protected override void OnPropertyChanged(PropertyChangedEventArgs args)
+        {
+            base.OnPropertyChanged(args);
+
+            if (args.PropertyName is nameof(DevicesCount))
+            {
+                Description = $"{DevicesCount} {Strings.Accessories}";
+            }
+        }
+
+        #endregion
     }
 }
 

@@ -10,6 +10,7 @@
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
+    xmlns:selectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
     x:Class="SmartMirror.Views.Tabs.Views.RoomsPageView"
     x:DataType="vm:RoomsPageViewModel">
 
@@ -17,14 +18,37 @@
 
         <ResourceDictionary>
 
-            <DataTemplate x:Key="deviceTemplate">
-                
-                <templates:DeviceTemplate
-                    DescriptionLabelStyle="{x:DynamicResource tstyle_i4}"
-                    WidthRequest="375"
-                    MaximumHeightRequest="201"/>
-                
+            <Style x:Key="deviceTemplateStyle" TargetType="templates:DeviceTemplate">
+                <Setter Property="DescriptionLabelStyle" Value="{x:DynamicResource tstyle_i4}"/>
+                <Setter Property="WidthRequest" Value="375"/>
+                <Setter Property="MaximumHeightRequest" Value="201"/>
+            </Style>
+
+            <DataTemplate x:Key="connectedDeviceTemplate">
+                <templates:DeviceTemplate Style="{x:DynamicResource deviceTemplateStyle}"
+                                          DeviceStatus="Connected"/>
             </DataTemplate>
+
+            <DataTemplate x:Key="disconnectedDeviceTemplate">
+                <templates:DeviceTemplate Style="{x:DynamicResource deviceTemplateStyle}"
+                                          DeviceStatus="Disconnected"/>
+            </DataTemplate>
+
+            <DataTemplate x:Key="onDeviceTemplate">
+                <templates:DeviceTemplate Style="{x:DynamicResource deviceTemplateStyle}"
+                                          DeviceStatus="On"/>
+            </DataTemplate>
+
+            <DataTemplate x:Key="offDeviceTemplate">
+                <templates:DeviceTemplate Style="{x:DynamicResource deviceTemplateStyle}"
+                                          DeviceStatus="Off"/>
+            </DataTemplate>
+
+            <selectors:DeviceTemplateSelector x:Key="deviceTemplateSelector"
+                                              ConnectedDataTemplate="{StaticResource connectedDeviceTemplate}"
+                                              DisconnectedDataTemplate="{StaticResource disconnectedDeviceTemplate}"
+                                              OnDataTemplate="{StaticResource onDeviceTemplate}"
+                                              OffDataTemplate="{StaticResource offDeviceTemplate}"/>
 
             <templates:RoomsTemplate x:Key="roomsTemplate"/>
 
@@ -36,8 +60,8 @@
 
         <EventTrigger Event="Appearing">
 
-            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewFavoriteAccessories}"/>
-            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewRooms}"/>
+            <triggerActions:ScrollToStartEventAction View="{x:Reference collectionViewFavoriteAccessories}"/>
+            <triggerActions:ScrollToStartEventAction View="{x:Reference collectionViewRooms}"/>
 
         </EventTrigger>
 
@@ -49,7 +73,7 @@
         LoadingTitle="{extensions:Translate Rooms}"
         EmptyTitle="{extensions:Translate NoAccessoriesYet}"
         EmptyStateImage="no_accessories_yet">
-        
+
         <controls:CustomStateView.CompleteContent>
 
             <Grid
@@ -62,7 +86,8 @@
                     </DataTrigger>
                 </Grid.Triggers>
 
-                <VerticalStackLayout
+                <StackLayout
+                    Orientation="Vertical"
                     IsVisible="{Binding FavoriteAccessories.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
                     Margin="0,24,0,0"
                     Spacing="0">
@@ -80,23 +105,26 @@
                     </StackLayout>
 
                     <!-- FAVORITE ACCESSORIES COLLECTION -->
-                    <controls:CustomScrollView
+                    <controls:CustomCollectionView
+                        x:Name="collectionViewFavoriteAccessories"
                         Margin="0,16,0,0"
-                        Orientation="Horizontal"
+                        Padding="60,0"
                         HorizontalScrollBarVisibility="Never"
-                        x:Name="scrollViewFavoriteAccessories">
+                        ItemTemplate="{StaticResource deviceTemplateSelector}"
+                        ItemsSource="{Binding FavoriteAccessories}">
 
-                        <HorizontalStackLayout
-                            Spacing="30"
-                            Padding="60,0"
-                            BindableLayout.ItemTemplate="{StaticResource deviceTemplate}"
-                            BindableLayout.ItemsSource="{Binding FavoriteAccessories}"/>
+                        <controls:CustomCollectionView.ItemsLayout>
 
-                    </controls:CustomScrollView>
+                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="30"/>
 
-                </VerticalStackLayout>
+                        </controls:CustomCollectionView.ItemsLayout>
 
-                <VerticalStackLayout
+                    </controls:CustomCollectionView>
+
+                </StackLayout>
+
+                <StackLayout
+                    Orientation="Vertical"
                     Grid.Row="1"
                     Spacing="0"
                     VerticalOptions="CenterAndExpand"
@@ -111,21 +139,23 @@
                         Number="{Binding Rooms.Count}"/>
 
                     <!-- ROOMS COLLECTION -->
-                    <controls:CustomScrollView
+                    <controls:CustomCollectionView
+                        x:Name="collectionViewRooms"
                         Margin="0,16,0,0"
-                        Orientation="Horizontal"
+                        Padding="60,0"
                         HorizontalScrollBarVisibility="Never"
-                        x:Name="scrollViewRooms">
+                        ItemTemplate="{StaticResource roomsTemplate}"
+                        ItemsSource="{Binding Rooms}">
 
-                        <HorizontalStackLayout
-                            Spacing="30"
-                            Padding="60,0"
-                            BindableLayout.ItemTemplate="{StaticResource roomsTemplate}"
-                            BindableLayout.ItemsSource="{Binding Rooms}"/>
+                        <controls:CustomCollectionView.ItemsLayout>
 
-                    </controls:CustomScrollView>
+                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="30"/>
 
-                </VerticalStackLayout>
+                        </controls:CustomCollectionView.ItemsLayout>
+
+                    </controls:CustomCollectionView>
+
+                </StackLayout>
 
             </Grid>
 

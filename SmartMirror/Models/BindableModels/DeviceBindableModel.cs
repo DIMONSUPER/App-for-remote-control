@@ -149,6 +149,8 @@ public class DeviceBindableModel : BindableBase
         set => SetProperty(ref _tappedCommand, value);
     }
 
+    public bool HasEditableResource => !string.IsNullOrWhiteSpace(EditableResourceId);
+
     #endregion
 
     #region -- Overrides --

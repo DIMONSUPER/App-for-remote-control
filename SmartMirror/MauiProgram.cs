@@ -84,11 +84,12 @@ public static class MauiProgram
         //containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
         containerRegistry.RegisterSingleton<IAqaraService, AqaraService>();
+        containerRegistry.RegisterSingleton<IAqaraMessanger, AqaraMessanger>();
         containerRegistry.RegisterSingleton<INotificationsService, NotificationsService>();
         containerRegistry.RegisterSingleton<ICamerasService, CamerasService>();
         containerRegistry.RegisterSingleton<IScenariosService, ScenariosService>();
-        containerRegistry.RegisterSingleton<IRoomsService, RoomsService>();
         containerRegistry.RegisterSingleton<IDevicesService, DevicesService>();
+        containerRegistry.RegisterSingleton<IRoomsService, RoomsService>();
         containerRegistry.RegisterSingleton<IKeyboardService, KeyboardService>();
     }
 
