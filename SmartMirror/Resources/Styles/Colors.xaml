@@ -16,13 +16,15 @@
     <Color x:Key="cbg_i5">#801F1F1F</Color> <!-- #1F1F1F with 50 opacity-->
     <Color x:Key="cbg_i6">#7EE5EB</Color>
     <Color x:Key="cbg_i7">#D0D1D3</Color>
-    <Color x:Key="cbg_i8">#CC030303</Color> <!-- 030303 with 80 opacity -->
+    <Color x:Key="cbg_i8">#80030303</Color> <!-- 030303 with 80 opacity -->
     <Color x:Key="cbg_i9">#E5FFFFFF</Color> <!-- #FFFFFF with 90 opacity-->
     <Color x:Key="cbg_i10">#000000</Color>  <!-- Black -->
     <Color x:Key="cbg_i11">#EAEAEA</Color>
     <Color x:Key="cbg_i12">#252525</Color>  <!--Dark Gray-->
     <Color x:Key="cbg_i13">#505053</Color>
     <Color x:Key="cbg_i14">#CCCCCC</Color>
+    <Color x:Key="cbg_i15">#262626</Color>
+    <Color x:Key="cbg_i16">#1FFFFFFF</Color> <!-- #FFFFFF with 12 opacity-->
 
     <!-- TEXT COLORS -->
     <Color x:Key="tcolor_i1">#FFFFFF</Color>    <!-- White -->
@@ -33,6 +35,7 @@
     <Color x:Key="tcolor_i6">#969697</Color>    <!-- Light Gray -->
     <Color x:Key="tcolor_i7">#525252</Color>    <!--  -->
     <Color x:Key="tcolor_i8">#EBA17E</Color>    <!-- Orange -->
+    <Color x:Key="tcolor_i9">#20FFFFFF</Color>  <!-- White 32 opacity-->
 
     <!-- BRUSHES -->
     <LinearGradientBrush x:Key="GrayGradientBrush">
@@ -41,6 +44,26 @@
                       Offset="0"/>
 
         <GradientStop Color="#202020"
+                      Offset="1"/>
+
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="WhiteGradientBrush">
+
+        <GradientStop Color="{StaticResource cbg_i16}"
+                      Offset="0"/>
+
+        <GradientStop Color="{StaticResource cbg_i2}"
+                      Offset="1"/>
+
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="GrayGradientBrush_i2">
+
+        <GradientStop Color="#3A3A3C"
+                      Offset="0"/>
+
+        <GradientStop Color="#2A2A2A"
                       Offset="1"/>
 
     </LinearGradientBrush>

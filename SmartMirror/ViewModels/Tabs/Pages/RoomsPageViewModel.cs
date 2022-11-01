@@ -6,7 +6,6 @@ using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Rooms;
-using SmartMirror.ViewModels.Dialogs;
 using SmartMirror.ViewModels.Tabs.Details;
 using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
@@ -40,7 +39,6 @@ public class RoomsPageViewModel : BaseTabViewModel
         _roomsService = roomsService;
         _devicesService = devicesService;
 
-        IsAqaraLoginButtonVisible = !_aqaraService.IsAuthorized;
         Title = "Rooms";
     }
 
@@ -52,18 +50,8 @@ public class RoomsPageViewModel : BaseTabViewModel
     private ICommand _accessorieTappedCommand;
     public ICommand AccessorieTappedCommand => _accessorieTappedCommand ??= new DelegateCommand<DeviceBindableModel>(async d => await OnAccessorieTappedCommandAsync(d));
 
-    private ICommand _aqaraLoginButtonTappedCommand;
-    public ICommand AqaraLoginButtonTappedCommand => _aqaraLoginButtonTappedCommand ??= SingleExecutionCommand.FromFunc(OnAqaraLoginButtonTappedAsync);
-
     private ICommand _tryAgainCommand;
     public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
-
-    private bool _isAqaraLoginButtonVisible;
-    public bool IsAqaraLoginButtonVisible
-    {
-        get => _isAqaraLoginButtonVisible;
-        set => SetProperty(ref _isAqaraLoginButtonVisible, value);
-    }
 
     private ObservableCollection<DeviceBindableModel> _favoriteAccessories = new();
     public ObservableCollection<DeviceBindableModel> FavoriteAccessories
@@ -89,7 +77,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
         if (!IsDataLoading)
         {
-            DataState = EPageState.Loading;
+            DataState = EPageState.LoadingSkeleton;
 
             await LoadRoomsAndDevicesAndChangeStateAsync();
         }
@@ -101,7 +89,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         {
             if (!IsDataLoading && DataState != EPageState.Complete)
             {
-                DataState = EPageState.Loading;
+                DataState = EPageState.LoadingSkeleton;
 
                 await LoadRoomsAndDevicesAndChangeStateAsync();
             }
@@ -152,71 +140,6 @@ public class RoomsPageViewModel : BaseTabViewModel
             }
 
             device.IsExecuting = false;
-        }
-    }
-
-    private async Task OnAqaraLoginButtonTappedAsync()
-    {
-        if (IsInternetConnected)
-        {
-            var testEmail = "botheadworks@gmail.com";
-            var sendLoginResponse = await _aqaraService.SendLoginCodeAsync(testEmail);
-
-            IDialogResult dialogResult;
-
-            if (sendLoginResponse.IsSuccess)
-            {
-                dialogResult = await _dialogService.ShowDialogAsync(nameof(TemporaryDialog));
-            }
-            else
-            {
-                dialogResult = await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
-                {
-                    { Constants.DialogsParameterKeys.TITLE, "FAIL" },
-                    { Constants.DialogsParameterKeys.DESCRIPTION, sendLoginResponse.Result?.MsgDetails ?? sendLoginResponse.Message },
-                });
-            }
-
-            await ProcessDialogResultAsync(dialogResult, testEmail);
-
-            IsAqaraLoginButtonVisible = !_aqaraService.IsAuthorized;
-        }
-        else
-        {
-            //TODO: notify
-        }
-    }
-
-    private async Task ProcessDialogResultAsync(IDialogResult dialogResult, string email)
-    {
-        if (dialogResult.Parameters.TryGetValue(nameof(TemporaryDialogViewModel.CodeText), out string code))
-        {
-            DataState = EPageState.Loading;
-
-            var loginWithCodeResponse = await _aqaraService.LoginWithCodeAsync(email, code);
-
-            if (loginWithCodeResponse.IsSuccess)
-            {
-                await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
-                {
-                    { Constants.DialogsParameterKeys.TITLE, "Success!" }
-                });
-
-                if (!IsDataLoading)
-                {
-                    await LoadRoomsAndDevicesAndChangeStateAsync();
-                }
-            }
-            else
-            {
-                await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
-                {
-                    { Constants.DialogsParameterKeys.TITLE, "Fail!" },
-                    { Constants.DialogsParameterKeys.DESCRIPTION, loginWithCodeResponse.Message }
-                });
-
-                DataState = EPageState.Complete;
-            }
         }
     }
 

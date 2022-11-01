@@ -79,7 +79,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
     {
         if (e.NetworkAccess == NetworkAccess.Internet)
         {
-            DataState = EPageState.Loading;
+            DataState = EPageState.LoadingSkeleton;
 
             var devicesResponse = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
 
@@ -107,7 +107,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
         return NavigationService.GoBackAsync();
     }
 
-    private void SelectRoom(RoomBindableModel selectedRoom)
+    private async void SelectRoom(RoomBindableModel selectedRoom)
     {
         if (Rooms?.Count > 0)
         {
@@ -122,7 +122,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
             if (roomDevices.Any())
             {
-                DataState = EPageState.Loading;
+                DataState = EPageState.LoadingSkeleton;
 
                 Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
                 {

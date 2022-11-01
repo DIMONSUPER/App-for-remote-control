@@ -3,6 +3,7 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:converters="clr-namespace:SmartMirror.Converters"
+                    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
                     xmlns:maui="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                     xmlns:controls="clr-namespace:SmartMirror.Controls">
@@ -134,7 +135,6 @@
                         
                         <VisualState.Setters>
                             <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i3}"/>
-                            <Setter Property="Shadow" Value="{DynamicResource Shadow_i5}"/>
                         </VisualState.Setters>
                         
                     </VisualState>
@@ -143,7 +143,6 @@
                         
                         <VisualState.Setters>
                             <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i14}"/>
-                            <Setter Property="Shadow" Value="{DynamicResource Shadow_i4}"/>
                         </VisualState.Setters>
                         
                     </VisualState>
@@ -162,7 +161,6 @@
                         
                         <VisualState.Setters>
                             <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i3}"/>
-                            <Setter Property="Shadow" Value="{DynamicResource Shadow_i3}"/>
                         </VisualState.Setters>
                         
                     </VisualState>
@@ -171,7 +169,6 @@
                         
                         <VisualState.Setters>
                             <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i14}"/>
-                            <Setter Property="Shadow" Value="{DynamicResource Shadow_i4}"/>
                         </VisualState.Setters>
                         
                     </VisualState>
@@ -180,47 +177,19 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
-    
-    <!-- SHADOWS -->
-    <!--box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);-->
-    <Shadow
-        Offset="0,2"
-        Opacity="0.4"
-        Radius="9"
-        Brush="{x:DynamicResource cbg_i10}"
-        x:Key="Shadow_i1"/>
 
-    <!---box-shadow: 0px 20px 25px rgba(0, 0, 0, 0.25);-->
-    <Shadow
-        Offset="0,16"
-        Opacity="0.15"
-        Radius="9"
-        Brush="{x:DynamicResource cbg_i10}"
-        x:Key="Shadow_i2"/>
-
-    <!--box-shadow: 0px 22px 34px rgba(0, 0, 0, 0.5);-->
-    <Shadow
-        Offset="0, 16"
-        Opacity="0.5"
-        Radius="9"
-        Brush="{x:DynamicResource cbg_i10}"
-        x:Key="Shadow_i3"/>
-
-    <!--box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.24);-->
-    <Shadow
-        Offset="0, 6"
-        Opacity="0.24"
-        Radius="12"
-        Brush="{x:DynamicResource cbg_i10}"
-        x:Key="Shadow_i4"/>
-    
-    <!--box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.24);-->
-    <Shadow
-        Offset="0, 12"
-        Opacity="0.24"
-        Radius="24"
-        Brush="{x:DynamicResource cbg_i10}"
-        x:Key="Shadow_i5"/>
+    <Style x:Key="ImageButtonStyle_i1" TargetType="controls:CustomImageBotton">
+        <Setter Property="Padding" Value="24, 30"/>
+        <Setter Property="Stroke" Value="{DynamicResource cbg_i4}"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 9"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i2}"/>
+        <Setter Property="HeightRequest" Value="165"/>
+        <Setter Property="HeightImage" Value="55"/>
+        <Setter Property="behaviors:TouchBehavior.IsAnimation" Value="True"/>
+        <Setter Property="behaviors:TouchBehavior.NormalBackgroundColor" Value="{DynamicResource cbg_i2}"/>
+        <Setter Property="behaviors:TouchBehavior.PressedBackgroundColor" Value="{DynamicResource cbg_i13}"/>
+    </Style>
 
     <!-- CUSTOM SWITCH -->
     <Style TargetType="controls:CustomSwitch">
