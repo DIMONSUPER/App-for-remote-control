@@ -12,17 +12,16 @@ namespace SmartMirror.Platforms.Android.Controls
 {
     public class MauiVideoPlayer : CoordinatorLayout
     {
-        private readonly IVideoController _videoController;
         private readonly Context _context;
         private VideoView _videoView;
         private Video _video;
         private RelativeLayout _relativeLayout;
 
-        public MauiVideoPlayer(Context context, Video video) : base(context)
+        public MauiVideoPlayer(Context context, Video video) 
+            : base(context)
         {
             _context = context;
             _video = video;
-            _videoController = video;
         }
 
         #region -- Overrides --
@@ -35,6 +34,12 @@ namespace SmartMirror.Platforms.Android.Controls
                 {
                     _videoView.Prepared -= OnVideoViewPrepared;
                     _videoView.Error -= OnVideoViewError;
+
+                    _videoView.StopPlayback();
+                    _videoView.SetOnPreparedListener(null);
+                    _videoView.SetOnCompletionListener(null);
+                    _videoView.SetOnErrorListener(null);
+
                     _videoView.Dispose();
                 }
                 
@@ -67,7 +72,7 @@ namespace SmartMirror.Platforms.Android.Controls
                 {
                     _videoView?.SetVideoURI(Uri.Parse(_video?.Source));
                     
-                    _videoController.LoadingState = EVideoLoadingState.Preparing;
+                    VideoLoadingState = EVideoLoadingState.Preparing;
                 }
             }
             catch
@@ -77,28 +82,52 @@ namespace SmartMirror.Platforms.Android.Controls
 
         public void PlayRequested()
         {
-            _videoView?.Start();
+            if (_videoView is not null && !_videoView.IsPlaying && VideoLoadingState == EVideoLoadingState.Prepared)
+            {
+                _videoView.Start(); 
+            }
         }
 
         public void PauseRequested()
         {
-            _videoView?.Pause();
+            if (_videoView is not null && _videoView.IsPlaying)
+            {
+                _videoView.Pause(); 
+            }
         }
 
         public void StopRequested()
         {
-            _videoView?.StopPlayback();
+            if (_videoView is not null && _videoView.IsPlaying)
+            {
+                _videoView.StopPlayback();
+                _videoView.Resume();
+            }
         }
 
         #endregion
 
         #region -- Private helpres --
 
+        private EVideoLoadingState VideoLoadingState
+        {
+            get => _video is not null
+                ? _video.LoadingState
+                : EVideoLoadingState.Unprepared;
+            set
+            {
+                if (_video is IVideoController videoController)
+                {
+                    videoController.LoadingState = value;
+                }
+            }
+        }
+
         private void OnVideoViewPrepared(object sender, EventArgs args)
         {
-            _videoController.LoadingState = EVideoLoadingState.Prepared;
+            VideoLoadingState = EVideoLoadingState.Prepared;
 
-            if (_video.Action == EVideoAction.Play)
+            if (_video is not null && _video.Action == EVideoAction.Play)
             {
                 _videoView?.Start();
             }
@@ -108,7 +137,7 @@ namespace SmartMirror.Platforms.Android.Controls
         {
             ResetVideoPlayer();
 
-            if (_video.VideoPlaybackErrorCommand is not null && _video.VideoPlaybackErrorCommand.CanExecute(null))
+            if (_video?.VideoPlaybackErrorCommand is not null && _video.VideoPlaybackErrorCommand.CanExecute(null))
             {
                 _video.VideoPlaybackErrorCommand.Execute(null);
             }
@@ -139,9 +168,14 @@ namespace SmartMirror.Platforms.Android.Controls
 
         private void ResetVideoPlayer()
         {
-            _videoController.LoadingState = EVideoLoadingState.Unprepared;
+            VideoLoadingState = EVideoLoadingState.Unprepared;
 
-            _videoView?.StopPlayback();
+            if (_videoView is not null && _videoView.IsPlaying)
+            {
+                _videoView.StopPlayback();
+                _videoView.Resume();
+            }
+
             _videoView?.SetVideoURI(null);
 
             _relativeLayout?.RemoveView(_videoView);

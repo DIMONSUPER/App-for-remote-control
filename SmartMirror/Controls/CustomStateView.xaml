@@ -27,7 +27,6 @@
                        HeightRequest="123"
                        WidthRequest="123"
                        CornerRadius="11"
-                       Shadow="{DynamicResource Shadow_i1}"
                        BackgroundColor="{StaticResource cbg_i2}">
 
                     <Image Source="{Binding EmptyStateImage, Source={x:Reference stateContanier}}"/>
@@ -53,7 +52,6 @@
                        HeightRequest="123"
                        WidthRequest="123"
                        CornerRadius="11"
-                       Shadow="{DynamicResource Shadow_i1}"
                        BackgroundColor="{StaticResource cbg_i2}">
 
                     <ActivityIndicator IsRunning="True"/>
@@ -87,7 +85,6 @@
                        HeightRequest="123"
                        WidthRequest="123"
                        CornerRadius="11"
-                       Shadow="{DynamicResource Shadow_i1}"
                        BackgroundColor="{StaticResource cbg_i2}">
 
                     <Image Source="wifi_off"/>
@@ -120,7 +117,6 @@
                        HeightRequest="123"
                        WidthRequest="123"
                        CornerRadius="11"
-                       Shadow="{DynamicResource Shadow_i1}"
                        BackgroundColor="{StaticResource cbg_i2}">
 
                     <ActivityIndicator IsRunning="True"/>
