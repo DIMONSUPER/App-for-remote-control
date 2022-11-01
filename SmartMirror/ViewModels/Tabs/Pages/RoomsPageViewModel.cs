@@ -269,8 +269,6 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private Task OnRoomTappedCommandAsync(RoomBindableModel room)
     {
-        DataState = EPageState.Loading;
-
         return NavigationService.CreateBuilder()
             .AddSegment<RoomDetailsPageViewModel>(false)
             .AddParameter(KnownNavigationParameters.Animated, true)

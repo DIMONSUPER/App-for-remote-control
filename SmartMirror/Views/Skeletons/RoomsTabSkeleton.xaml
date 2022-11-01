@@ -8,7 +8,9 @@
           RowDefinitions="0.55*, 0.45*"
           Margin="60,0,0,0">
 
-        <VerticalStackLayout Grid.Row="0">
+        <StackLayout Grid.Row="0"
+                     Orientation="Vertical"
+                     Spacing="0">
 
             <controls:SkeletonView Margin="6,24,0,0"
                                    HorizontalOptions="Start"
@@ -17,42 +19,45 @@
                                    WidthRequest="288"
                                    HeightRequest="38"/>
 
-        <HorizontalStackLayout Spacing="30"
-                                Margin="0,16,0,0">
+            <StackLayout Spacing="30"
+                         Orientation="Horizontal"
+                         Margin="0,16,0,0">
 
-            <BindableLayout.ItemsSource>
+                <BindableLayout.ItemsSource>
 
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>1</x:String>
-                    <x:String>2</x:String>
-                    <x:String>2</x:String>
-                    <x:String>2</x:String>
-                </x:Array>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>1</x:String>
+                        <x:String>2</x:String>
+                        <x:String>2</x:String>
+                        <x:String>2</x:String>
+                    </x:Array>
 
-            </BindableLayout.ItemsSource>
+                </BindableLayout.ItemsSource>
 
-            <BindableLayout.ItemTemplate>
+                <BindableLayout.ItemTemplate>
 
-                <DataTemplate>
+                    <DataTemplate>
 
-                    <controls:SkeletonView WidthRequest="420"
-                                           HeightRequest="224"
-                                           Background="{x:DynamicResource WhiteGradientBrush}"
-                                           StrokeShape="RoundRectangle 12"
-                                           StrokeThickness="0"
-                                           VerticalOptions="Start"
-                                           HorizontalOptions="Start"/>
+                        <controls:SkeletonView WidthRequest="375"
+                                               Padding="0"
+                                               Background="{x:DynamicResource WhiteGradientBrush}"
+                                               StrokeShape="RoundRectangle 12"
+                                               StrokeThickness="0">
 
-                </DataTemplate>
+                            <BoxView MaximumHeightRequest="201"/>
 
-            </BindableLayout.ItemTemplate>
+                        </controls:SkeletonView>
 
-        </HorizontalStackLayout>
+                    </DataTemplate>
 
-        </VerticalStackLayout>
+                </BindableLayout.ItemTemplate>
+
+            </StackLayout>
+
+        </StackLayout>
 
         <VerticalStackLayout Grid.Row="1">
-                    
+
             <controls:SkeletonView WidthRequest="94"
                                    HeightRequest="38"
                                    StrokeShape="RoundRectangle 9"
@@ -61,7 +66,7 @@
                                    Background="{x:DynamicResource WhiteGradientBrush}"/>
 
             <HorizontalStackLayout Margin="0,16,0,0"
-                                    Spacing="30">
+                                   Spacing="30">
 
                 <BindableLayout.ItemsSource>
 
@@ -89,7 +94,7 @@
                         </Grid>
 
                     </DataTemplate>
-                            
+
                 </BindableLayout.ItemTemplate>
 
             </HorizontalStackLayout>
