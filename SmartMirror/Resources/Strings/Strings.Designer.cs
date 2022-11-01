@@ -623,7 +623,18 @@ namespace SmartMirror.Resources.Strings {
                 return ResourceManager.GetString("Shades", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show in Rooms.
+        /// </summary>
+        internal static string ShowInRooms
+        {
+            get
+            {
+                return ResourceManager.GetString("ShowInRooms", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Show in Scenarios.
         /// </summary>

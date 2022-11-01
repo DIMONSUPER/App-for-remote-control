@@ -11,7 +11,7 @@
     <Border
         BackgroundColor="{DynamicResource cbg_i2}"
         Stroke="{DynamicResource cbg_i4}"
-        StrokeThickness="1"
+        StrokeThickness="0.75"
         StrokeShape="RoundRectangle 9"
         behaviors:TouchBehavior.IsAnimation="True"
         behaviors:TouchBehavior.Command="{Binding TapCommand}"
@@ -34,6 +34,9 @@
                 Style="{DynamicResource tstyle_i11}"
                 Text="{Binding Name}"
                 Margin="10, 0"
+                MaximumWidthRequest="220"
+                MaxLines="1"
+                LineBreakMode="TailTruncation"
                 HorizontalOptions="Start"
                 VerticalOptions="Center"/>
 

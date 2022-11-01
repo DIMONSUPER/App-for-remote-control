@@ -79,7 +79,7 @@ namespace SmartMirror.ViewModels
         public ICommand CloseSettingsCommand => _closeSettingsCommand ??= SingleExecutionCommand.FromFunc(OnCloseSettingsCommandAsync);
 
         private ICommand _openAccessorySettingsCommand;
-        public ICommand OpenAccessorySettingsCommand => _openAccessorySettingsCommand ??= SingleExecutionCommand.FromFunc(OnOpenAccessorySettingsCommandAsync);
+        public ICommand OpenAccessorySettingsCommand => _openAccessorySettingsCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnOpenAccessorySettingsCommandAsync);
 
         #endregion
 
@@ -212,7 +212,7 @@ namespace SmartMirror.ViewModels
         private async Task LoadAllDevicesAsync()
         {
             var resultOfGettingAllDevices = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
-
+            
             if (resultOfGettingAllDevices.IsSuccess)
             {
                 _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(_devicesService.AllSupportedDevices, (m, vm) =>
@@ -251,9 +251,12 @@ namespace SmartMirror.ViewModels
             return LoadAllDataAsync();
         }
 
-        private Task OnOpenAccessorySettingsCommandAsync()
+        private Task OnOpenAccessorySettingsCommandAsync(ImageAndTitleBindableModel accessory)
         {
-            return Task.CompletedTask;
+            return _dialogService.ShowDialogAsync(nameof(AccessorySettingsDialog), new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.ACCESSORY, accessory },
+            });
         }
 
         private Task OnShowScenarioDescriptionCommandAsync(ImageAndTitleBindableModel scenario)

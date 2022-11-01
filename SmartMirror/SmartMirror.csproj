@@ -180,6 +180,9 @@
 		<MauiXaml Update="Resources\DataTemplates\ScenarioTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\AccessorySettingsDialog.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\EnterCodeDialog.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
