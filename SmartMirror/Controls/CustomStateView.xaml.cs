@@ -101,7 +101,7 @@ public partial class CustomStateView : ContentView
 
         if (propertyName == nameof(State))
         {
-            (stateContanier as IView).InvalidateMeasure();
+            (stateContanier as IView)?.InvalidateMeasure();
         }
     }
 
