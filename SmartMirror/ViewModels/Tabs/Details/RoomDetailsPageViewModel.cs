@@ -3,6 +3,7 @@ using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
+using SmartMirror.Services.Rooms;
 using SmartMirror.ViewModels.Tabs.Pages;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -13,17 +14,23 @@ public class RoomDetailsPageViewModel : BaseViewModel
 {
     private readonly IMapperService _mapperService;
     private readonly IDevicesService _devicesService;
+    private readonly IRoomsService _roomsService;
 
     private RoomBindableModel _selectedRoom;
 
     public RoomDetailsPageViewModel(
         INavigationService navigationService,
         IMapperService mapperService,
-        IDevicesService devicesService)
+        IDevicesService devicesService,
+        IRoomsService roomsService)
         : base(navigationService)
     {
         _mapperService = mapperService;
         _devicesService = devicesService;
+        _roomsService = roomsService;
+
+        _roomsService.AllRoomsChanged += OnAllRoomsOrDevicesChanged;
+        _devicesService.AllDevicesChanged += OnAllRoomsOrDevicesChanged;
     }
 
     #region -- Public properties --
@@ -51,9 +58,24 @@ public class RoomDetailsPageViewModel : BaseViewModel
         set => SetProperty(ref _selectedRoomDevices, value);
     }
 
+    private EPageState _roomDevicesState;
+    public EPageState RoomDeviceState
+    {
+        get => _roomDevicesState;
+        set => SetProperty(ref _roomDevicesState, value);
+    }
+
     #endregion
 
     #region -- Overrides --
+
+    public override void Destroy()
+    {
+        _roomsService.AllRoomsChanged -= OnAllRoomsOrDevicesChanged;
+        _devicesService.AllDevicesChanged -= OnAllRoomsOrDevicesChanged;
+
+        base.Destroy();
+    }
 
     public override void Initialize(INavigationParameters parameters)
     {
@@ -83,6 +105,13 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
             var devicesResponse = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
 
+            var downloadRoomsResponse = await _roomsService.DownloadAllRoomsAsync();
+
+            if (downloadRoomsResponse.IsSuccess)
+            {
+                Rooms = new(_roomsService.AllRooms);
+            }
+
             if (devicesResponse.IsSuccess)
             {
                 SelectRoom(_selectedRoom);
@@ -94,7 +123,8 @@ public class RoomDetailsPageViewModel : BaseViewModel
         }
         else
         {
-            DataState = EPageState.NoInternet;
+            DataState = EPageState.Complete;
+            RoomDeviceState = EPageState.NoInternet;
         }
     }
 
@@ -102,12 +132,25 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
     #region -- Private helpers --
 
+    private void OnAllRoomsOrDevicesChanged(object sender, EventArgs e)
+    {
+        if (_selectedRoom is not null)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                DataState = EPageState.LoadingSkeleton;
+
+                SelectRoom(_selectedRoom);
+            });
+        }
+    }
+
     private Task OnBackArrowTappedCommandAsync()
     {
         return NavigationService.GoBackAsync();
     }
 
-    private async void SelectRoom(RoomBindableModel selectedRoom)
+    private void SelectRoom(RoomBindableModel selectedRoom)
     {
         if (Rooms?.Count > 0)
         {
@@ -129,13 +172,15 @@ public class RoomDetailsPageViewModel : BaseViewModel
                     SelectedRoomDevices = new(roomDevices);
 
                     DataState = EPageState.Complete;
+                    RoomDeviceState = EPageState.Complete;
                 }));
             }
             else
             {
                 SelectedRoomDevices = new();
 
-                DataState = IsInternetConnected
+                DataState = EPageState.Complete;
+                RoomDeviceState = IsInternetConnected
                     ? EPageState.Empty
                     : EPageState.NoInternet;
             }
@@ -151,7 +196,8 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
     private Task OnTryAgainCommandAsync()
     {
-        DataState = EPageState.NoInternetLoader;
+        DataState = EPageState.Complete;
+        RoomDeviceState = EPageState.NoInternetLoader;
 
         SelectRoom(_selectedRoom);
 

@@ -26,7 +26,7 @@ public class AqaraService : BaseAqaraService, IAqaraService
             {
                 account = email,
                 accountType = 0,
-                accessTokenValidity = "1d",
+                accessTokenValidity = "1h",
             };
 
             var response = await MakeRequestAsync("config.auth.getAuthCode", data, onFailure);
@@ -65,13 +65,9 @@ public class AqaraService : BaseAqaraService, IAqaraService
 
             var response = await MakeRequestAsync<AccessResponse>("config.auth.getToken", data, onFailure);
 
-            if (response?.Result is null)
+            if (response?.Result is not null)
             {
-                onFailure("response or result is null");
-            }
-            else
-            {
-                SettingsManager.AqaraAccessSettings.SetAccessSettings(response.Result);
+                SettingsManager.AqaraAccessSettings.SetAccessSettings(response?.Result);
             }
 
             return response as BaseAqaraResponse;
@@ -94,7 +90,7 @@ public class AqaraService : BaseAqaraService, IAqaraService
             return response?.Result;
         });
     }
-  
+
     public Task<AOResult<DetailSceneAqaraModel>> GetSceneByIdAsync(string sceneId)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>

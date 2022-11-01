@@ -1,10 +1,13 @@
 ﻿using SmartMirror.Helpers;
-using SmartMirror.Models;
+using SmartMirror.Models.BindableModels;
 
-namespace SmartMirror.Services.Rooms
+namespace SmartMirror.Services.Rooms;
+
+public interface IRoomsService
 {
-    public interface IRoomsService
-    {
-        Task<AOResult<IEnumerable<RoomModel>>> GetAllRoomsAsync();
-    }
+    List<RoomBindableModel> AllRooms { get; }
+
+    event EventHandler AllRoomsChanged;
+
+    Task<AOResult> DownloadAllRoomsAsync();
 }

@@ -14,20 +14,27 @@ namespace SmartMirror.Services.Scenarios
         private readonly IAqaraService _aqaraService;
         private readonly IMapperService _mapperService;
         private readonly IDevicesService _devicesService;
+        private readonly IAqaraMessanger _aqaraMessanger;
 
         public ScenariosService(
             ISmartHomeMockService smartHomeMockService,
             IAqaraService aqaraService,
             IMapperService mapperService,
-            IDevicesService devicesService)
+            IDevicesService devicesService,
+            IAqaraMessanger aqaraMessanger)
         {
             _smartHomeMockService = smartHomeMockService;
             _aqaraService = aqaraService;
             _mapperService = mapperService;
             _devicesService = devicesService;
+            _aqaraMessanger = aqaraMessanger;
+
+            _aqaraMessanger.MessageReceived += OnMessageReceived;
         }
 
         #region -- IScenariosService implementation --
+
+        public event EventHandler ScenariosChanged;
 
         public Task<AOResult<IEnumerable<ScenarioModel>>> GetScenariosAsync()
         {
@@ -146,6 +153,14 @@ namespace SmartMirror.Services.Scenarios
         #endregion
 
         #region -- Private helpers --
+
+        private void OnMessageReceived(object sender, AqaraMessageEventArgs e)
+        {
+            if (e.EventType is Constants.Aqara.EventTypes.scene_created or Constants.Aqara.EventTypes.scene_deleted)
+            {
+                ScenariosChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
 
         private Task<AOResult<IEnumerable<ScenarioModel>>> GetScenariosFromAqaraAsync()
         {

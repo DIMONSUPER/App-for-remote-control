@@ -48,7 +48,7 @@ namespace SmartMirror.Controls
 
         private void AppendToMapping()
         {
-            Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("CustomNoBorderEntry", (handler, view) =>
+            Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(CustomNoBorderEntry), (handler, view) =>
             {
                 if (view is CustomNoBorderEntry)
                 {
