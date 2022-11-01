@@ -15,11 +15,12 @@ public class BlurService : IBlurService
 
     public void BlurPopupBackground(int radius = 20)
     {
-        var mainPage = App.Current.MainPage;
-        var currentPageNativeView = mainPage.Handler?.PlatformView as global::Android.Views.View;
+        var currentPage = GetCurrentPage();
+
+        var currentPageNativeView = currentPage.Handler?.PlatformView as global::Android.Views.View;
 
         if (currentPageNativeView is not null)
-        {
+        {   
             radius = (int)currentPageNativeView.Context.ToPixels(radius);
 
             if (Build.VERSION.SdkInt >= BuildVersionCodes.S)
@@ -34,7 +35,7 @@ public class BlurService : IBlurService
             {
                 currentPageNativeView.Post(() =>
                 {
-                    if (mainPage.Navigation.ModalStack.Any() && mainPage.Navigation.ModalStack[^1] is ContentPage currentPopup)
+                    if (currentPage.Navigation.ModalStack.Any() && currentPage.Navigation.ModalStack[^1] is ContentPage currentPopup)
                     {
                         var byteArray = GetBlurredBackgroundBytes(currentPageNativeView, radius);
                         currentPopup.BackgroundImageSource = ImageSource.FromStream(() => new MemoryStream(byteArray));
@@ -46,8 +47,9 @@ public class BlurService : IBlurService
 
     public void UnblurPopupBackground()
     {
-        var mainPage = App.Current.MainPage;
-        var currentPageNativeView = mainPage.Handler?.PlatformView as global::Android.Views.View;
+        var currentPage = GetCurrentPage();
+
+        var currentPageNativeView = currentPage.Handler?.PlatformView as global::Android.Views.View;
 
         if (currentPageNativeView is not null && Build.VERSION.SdkInt >= BuildVersionCodes.S)
         {
@@ -58,6 +60,18 @@ public class BlurService : IBlurService
     #endregion
 
     #region -- Private helpers --
+
+    private Page GetCurrentPage()
+    {
+        var currentPage = App.Current.MainPage;
+
+        if (currentPage.Navigation.ModalStack.Count != 0)
+        {
+            currentPage = currentPage.Navigation.ModalStack[^1];
+        }
+
+        return currentPage;
+    }
 
     private byte[] GetBlurredBackgroundBytes(global::Android.Views.View view, int radius)
     {
