@@ -14,6 +14,7 @@
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:video="clr-namespace:SmartMirror.Controls"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
+    Unloaded="OnCamerasPageUnloaded"
     x:DataType="vm:CamerasPageViewModel"
     x:Class="SmartMirror.Views.Tabs.Views.CamerasPageView">
 
@@ -69,8 +70,7 @@
                         StrokeThickness="0.75"
                         StrokeShape="RoundRectangle 9"
                         BackgroundColor="{DynamicResource cbg_i2}"
-                        Stroke="{DynamicResource cbg_i4}"
-                        Shadow="{DynamicResource Shadow_i1}">
+                        Stroke="{DynamicResource cbg_i4}">
 
                         <StackLayout VerticalOptions="CenterAndExpand">
 
@@ -123,10 +123,10 @@
 
                             <video:Video 
                                 BackgroundColor="{DynamicResource cbg_i2}"
-                                LoadingState="{Binding VideoLoadingState}"
                                 Action="{Binding VideoAction}"
                                 Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"
-                                VideoPlaybackErrorCommand="{Binding VideoPaybackErrorCommand}"/>
+                                VideoPlaybackErrorCommand="{Binding VideoPaybackErrorCommand}"
+                                x:Name="video"/>
 
                         </Frame>
 
@@ -134,7 +134,9 @@
 
                     <ActivityIndicator 
                         WidthRequest="90"
-                        IsRunning="{Binding VideoLoadingState, Converter={xct:IsEqualConverter}, ConverterParameter={Static enums:EVideoLoadingState.Preparing}}"/>
+                        IsRunning="{Binding LoadingState, Source={Reference video},
+                            Converter={xct:IsEqualConverter}, 
+                            ConverterParameter={Static enums:EVideoLoadingState.Preparing}}"/>
 
                 </Grid>
 
