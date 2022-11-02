@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Frame xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:sys="clr-namespace:System;assembly=mscorlib"
        xmlns:prismmaui="clr-namespace:Prism.Services.Xaml;assembly=Prism.Maui"
        xmlns:extensions="clr-namespace:SmartMirror.Extensions"
        xmlns:dialogviewmodels="clr-namespace:SmartMirror.ViewModels.Dialogs"
@@ -11,6 +12,11 @@
        prismmaui:DialogLayout.MaskStyle="{DynamicResource DialogMaskBoxViewStyle_i1}"
        prismmaui:DialogLayout.CloseOnBackgroundTapped="True"
        x:DataType="dialogviewmodels:ConfirmDialogViewModel">
+
+    <Frame.Resources>
+        <sys:Boolean x:Key="falseValue">False</sys:Boolean>
+        <sys:Boolean x:Key="trueValue">True</sys:Boolean>
+    </Frame.Resources>
 
     <Border HorizontalOptions="Center"
             VerticalOptions="Center"
@@ -44,7 +50,7 @@
                         BorderColor="{DynamicResource cbg_i3}"
                         BorderWidth="0.75"
                         Command="{Binding CloseCommand}"
-                        CommandParameter="False"
+                        CommandParameter="{StaticResource falseValue}"
                         WidthRequest="168"/>
                 
                 <Button Grid.Column="1"
@@ -52,7 +58,7 @@
                         HorizontalOptions="Center"
                         Text="{extensions:Translate Confirm}"
                         Command="{Binding CloseCommand}"
-                        CommandParameter="True"
+                        CommandParameter="{StaticResource trueValue}"
                         WidthRequest="168"/>
 
             </Grid>

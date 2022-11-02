@@ -1,13 +1,9 @@
-using Prism.Services;
-using SmartMirror.Services.Aqara;
-using SmartMirror.Views;
-using System.ComponentModel;
-using static Android.Icu.Text.CaseMap;
 using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Interfaces;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
+using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
@@ -23,7 +19,6 @@ namespace SmartMirror.ViewModels
         private readonly IDialogService _dialogService;
         private readonly IMapperService _mapperService;
         private readonly IScenariosService _scenariosService;
-        private readonly IDialogService _dialogService;
         private readonly ICamerasService _camerasService;
 
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios;

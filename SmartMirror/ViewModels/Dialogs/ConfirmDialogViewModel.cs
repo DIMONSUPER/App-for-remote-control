@@ -1,9 +1,6 @@
-using System;
 using SmartMirror.Helpers;
-using System.Windows.Input;
-using SmartMirror.Platforms.Android.Services;
 using SmartMirror.Services.Blur;
-using Android.Telephony.Data;
+using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
@@ -32,7 +29,7 @@ namespace SmartMirror.ViewModels.Dialogs
         }
 
         private ICommand _closeCommand;
-        public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc<string>(OnCloseCommandAsync);
+        public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc<bool>(OnCloseCommandAsync);
 
         #endregion
 
@@ -57,22 +54,12 @@ namespace SmartMirror.ViewModels.Dialogs
 
         #region -- Private helpers --
 
-        private Task OnCloseCommandAsync(string result)
+        private Task OnCloseCommandAsync(bool confirm)
         {
-            var parameters = new DialogParameters();
-
-            if (result is not null)
+            RequestClose.Invoke(new DialogParameters()
             {
-                switch (result.ToLower())
-                {
-                    case "true": { parameters.Add(Constants.DialogsParameterKeys.RESULT, true); break; }
-                    case "false": { parameters.Add(Constants.DialogsParameterKeys.RESULT, false); break; }
-                    default:
-                        break;
-                }
-            }
-
-            RequestClose.Invoke(parameters);
+                { Constants.DialogsParameterKeys.RESULT, confirm },
+            });
 
             return Task.CompletedTask;
         }

@@ -1,20 +1,15 @@
 ﻿using SmartMirror.Helpers;
 using SmartMirror.Services.Blur;
-using SmartMirror.Services.Keyboard;
 using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
     public class AddNewCameraDialogViewModel : BaseDialogViewModel
     {
-        private readonly IKeyboardService _keyboardService;
-
         public AddNewCameraDialogViewModel(
-            IKeyboardService keyboardService,
             IBlurService blurService)
             : base(blurService)
         {
-            _keyboardService = keyboardService;
         }
 
         #region -- Public properties --
@@ -53,8 +48,6 @@ namespace SmartMirror.ViewModels.Dialogs
             {
                 Title = title;
             }
-
-            _keyboardService.ShowKeyboard();
         }
 
         #endregion
