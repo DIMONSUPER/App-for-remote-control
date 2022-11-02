@@ -58,6 +58,9 @@
             StrokeThickness="1"
             StrokeShape="RoundRectangle 9"
             Stroke="{DynamicResource cbg_i4}"
+            behaviors:TouchBehavior.IsAnimation="True"
+            behaviors:TouchBehavior.NormalBackgroundColor="{DynamicResource cbg_i2}"
+            behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}"
             behaviors:TouchBehavior.Command="{Binding CloseSettingsCommand}">
 
             <Image
@@ -112,7 +115,7 @@
                         <controls:CustomStateView.CompleteContent>
 
                             <CollectionView
-                                Margin="105, 0, 45, 0"
+                                Margin="105, 0, 60, 0"
                                 ItemsSource="{Binding CategoryElements}"
                                 ItemTemplate="{StaticResource elementCategoryTemplateSelector}">
 

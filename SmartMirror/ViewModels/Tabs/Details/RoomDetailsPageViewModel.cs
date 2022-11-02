@@ -31,6 +31,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
         _roomsService.AllRoomsChanged += OnAllRoomsOrDevicesChanged;
         _devicesService.AllDevicesChanged += OnAllRoomsOrDevicesChanged;
+        DataState = EPageState.LoadingSkeleton;
     }
 
     #region -- Public properties --
@@ -77,23 +78,35 @@ public class RoomDetailsPageViewModel : BaseViewModel
         base.Destroy();
     }
 
-    public override void Initialize(INavigationParameters parameters)
+    public override void OnNavigatedTo(INavigationParameters parameters)
     {
-        base.Initialize(parameters);
+        base.OnNavigatedTo(parameters);
 
         if (parameters.TryGetValue(nameof(RoomsPageViewModel.Rooms), out IEnumerable<RoomBindableModel> rooms))
         {
+            RoomBindableModel selectedRoom;
+
+            if (parameters.TryGetValue(nameof(RoomBindableModel), out RoomBindableModel roomBindable))
+            {
+                selectedRoom = roomBindable;
+            }
+            else
+            {
+                selectedRoom = Rooms?.FirstOrDefault();
+            }
+
             foreach (var room in rooms)
             {
                 room.SelectedCommand = RoomSelectedCommand;
             }
 
             Rooms = new(rooms);
-        }
 
-        if (parameters.TryGetValue(nameof(RoomBindableModel), out RoomBindableModel selectedRoom))
-        {
             SelectRoom(selectedRoom);
+        }
+        else
+        {
+            DataState = EPageState.Complete;
         }
     }
 
@@ -131,6 +144,11 @@ public class RoomDetailsPageViewModel : BaseViewModel
     #endregion
 
     #region -- Private helpers --
+
+    private void InitialLoadRoomsAsync(IEnumerable<RoomBindableModel> rooms, RoomBindableModel selectedRoom)
+    {
+
+    }
 
     private void OnAllRoomsOrDevicesChanged(object sender, EventArgs e)
     {

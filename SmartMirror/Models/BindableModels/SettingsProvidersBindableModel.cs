@@ -48,6 +48,13 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _imageSource, value);
         }
 
+        private ECategoryType _type;
+        public ECategoryType Type
+        {
+            get => _type;
+            set => SetProperty(ref _type, value);
+        }
+
         #endregion
     }
 }

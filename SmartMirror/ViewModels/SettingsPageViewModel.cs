@@ -186,19 +186,21 @@ namespace SmartMirror.ViewModels
             switch (category.Type)
             {
                 case ECategoryType.Scenarios:
-                    DataState = _allScenarios.Any()
+                    CategoryElements = new(_allScenarios);
+
+                    DataState = CategoryElements.Any()
                         ? EPageState.Complete
                         : EPageState.Empty;
 
-                    CategoryElements = new(_allScenarios);
                     break;
 
                 case ECategoryType.Providers:
-                    DataState = _allProviders.Any()
+                    CategoryElements = new(_allProviders);
+
+                    DataState = CategoryElements.Any()
                         ? EPageState.Complete
                         : EPageState.Empty;
-
-                    CategoryElements = new(_allProviders);
+                    
                     break;
 
                 default:
@@ -227,6 +229,7 @@ namespace SmartMirror.ViewModels
             {
                 _allScenarios = _mapperService.MapRange<ImageAndTitleBindableModel>(resultOfGettingAllScenarios.Result, (m, vm) =>
                 {
+                    vm.Type = ECategoryType.Scenarios;
                     vm.ImageSource = "play_gray";
                     vm.TapCommand = ShowScenarioDescriptionCommand;
                 });
@@ -246,6 +249,7 @@ namespace SmartMirror.ViewModels
                     ImageSource = "aqara_logo",
                     Title = Strings.Connect,
                     AuthType = EAuthType.Aqara,
+                    Type = ECategoryType.Providers,
                     IsConnected = _aqaraService.IsAuthorized,
                     TapCommand = LoginWithAqaraCommand,
                 },
@@ -255,6 +259,7 @@ namespace SmartMirror.ViewModels
                     ImageSource = "apple_logo",
                     Title = Strings.Connect,
                     AuthType = EAuthType.Apple,
+                    Type = ECategoryType.Providers,
                     IsConnected = false,
                     TapCommand = LoginWithAppleCommand,
                 },
@@ -264,6 +269,7 @@ namespace SmartMirror.ViewModels
                     ImageSource = "amazon_logo",
                     Title = Strings.Connect,
                     AuthType = EAuthType.Amazon,
+                    Type = ECategoryType.Providers,
                     IsConnected = false,
                     TapCommand = LoginWithAmazonCommand,
                 },
@@ -273,6 +279,7 @@ namespace SmartMirror.ViewModels
                     ImageSource = "google_logo",
                     Title = Strings.Connect,
                     AuthType = EAuthType.Google,
+                    Type = ECategoryType.Providers,
                     IsConnected = false,
                     TapCommand = LoginWithGoogleCommand,
                 },
