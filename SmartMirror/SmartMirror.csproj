@@ -255,6 +255,9 @@
 		<MauiXaml Update="Views\WelcomePage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\ConfirmDialog.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 		<MauiXaml Update="Views\Skeletons\RoomsTab.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
@@ -274,6 +277,9 @@
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\Skeletons\CamerasTabSkeleton.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\ProvidersTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 	</ItemGroup>

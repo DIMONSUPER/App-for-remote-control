@@ -119,5 +119,16 @@ public class AqaraService : BaseAqaraService, IAqaraService
         });
     }
 
+    public Task<AOResult> LogoutFromAqara()
+    {
+        return AOResult.ExecuteTaskAsync(onFailure =>
+        {
+            //TODO implement when is needed
+            //SettingsManager.AqaraAccessSettings.Clear();
+
+            return Task.CompletedTask;
+        });
+    }
+
     #endregion
 }
