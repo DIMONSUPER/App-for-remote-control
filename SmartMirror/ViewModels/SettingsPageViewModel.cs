@@ -3,6 +3,7 @@ using SmartMirror.Helpers;
 using SmartMirror.Interfaces;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
+using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Views.Dialogs;
@@ -16,19 +17,23 @@ namespace SmartMirror.ViewModels
         private readonly IMapperService _mapperService;
         private readonly IScenariosService _scenariosService;
         private readonly IDialogService _dialogService;
+        private readonly ICamerasService _camerasService;
 
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios;
+        private IEnumerable<ImageAndTitleBindableModel> _allCameras;
 
         public SettingsPageViewModel(
             IScenariosService scenariosService,
             IMapperService mapperService,
             IDialogService dialogService,
+            ICamerasService camerasService,
             INavigationService navigationService)
             : base(navigationService)
         {
             _scenariosService = scenariosService;
             _mapperService = mapperService;
             _dialogService = dialogService;
+            _camerasService = camerasService;
         }
 
         #region -- Public properties --
@@ -66,6 +71,9 @@ namespace SmartMirror.ViewModels
 
         private ICommand _showScenarioDescriptionCommand;
         public ICommand ShowScenarioDescriptionCommand => _showScenarioDescriptionCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowScenarioDescriptionCommandAsync);
+
+        private ICommand _showCameraDescriptionCommand;
+        public ICommand ShowCameraDescriptionCommand => _showCameraDescriptionCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowScenarioDescriptionCommandAsync);
 
         private ICommand _tryAgainCommand;
         public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
@@ -164,17 +172,18 @@ namespace SmartMirror.ViewModels
             {
                 case ECategoryType.Scenarios:
                     CategoryElements = new(_allScenarios);
-
-                    DataState = CategoryElements.Any()
-                        ? EPageState.Complete
-                        : EPageState.Empty;
-
+                    break;
+                case ECategoryType.Cameras:
+                    CategoryElements = new(_allCameras);
                     break;
                 default:
                     CategoryElements = new();
-                    DataState = EPageState.Empty;
                     break;
             }
+
+            DataState = CategoryElements.Any()
+                ? EPageState.Complete
+                : EPageState.Empty;
 
             return Task.CompletedTask;
         }
@@ -182,6 +191,8 @@ namespace SmartMirror.ViewModels
         private async Task LoadAllDataAsync()
         {
             await LoadAllScenariosAsync();
+
+            await LoadAllCamerasAsync();
 
             PageState = EPageState.Complete;
         }
@@ -202,6 +213,25 @@ namespace SmartMirror.ViewModels
                 var scenarioCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Scenarios);
 
                 scenarioCategory.Count = _allScenarios.Count();
+            }
+        }
+
+        private async Task LoadAllCamerasAsync()
+        {
+            var resultOfGettingCameras = await _camerasService.GetCamerasAsync();
+
+            if (resultOfGettingCameras.IsSuccess)
+            {
+                _allCameras = _mapperService.MapRange<ImageAndTitleBindableModel>(resultOfGettingCameras.Result, (m, vm) =>
+                {
+                    vm.Type = ECategoryType.Cameras;
+                    vm.ImageSource = "video_fill_dark";
+                    vm.TapCommand = ShowCameraDescriptionCommand;
+                });
+
+                var cameraCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Cameras);
+
+                cameraCategory.Count = _allCameras.Count();
             }
         }
 

@@ -165,7 +165,10 @@
 			<SubType>
 			</SubType>
 		</MauiXaml>
-		<MauiXaml Update="Resources\DataTemplates\ImageAndTitleTemplate.xaml">
+		<MauiXaml Update="Resources\DataTemplates\SimpleCameraTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\SimpleScenarioTemplate.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\NotificationHeaderTemplate.xaml">
@@ -287,8 +290,8 @@
 	  <Compile Update="Resources\DataTemplates\CameraTemplate.xaml.cs">
 	    <DependentUpon>CameraTemplate.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Resources\DataTemplates\ImageAndTitleTemplate.xaml.cs">
-	    <DependentUpon>ImageAndTitleTemplate.xaml</DependentUpon>
+	  <Compile Update="Resources\DataTemplates\SimpleScenarioTemplate.xaml.cs">
+	    <DependentUpon>SimpleScenarioTemplate.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Resources\Strings\Strings.Designer.cs">
 	    <DesignTime>True</DesignTime>
