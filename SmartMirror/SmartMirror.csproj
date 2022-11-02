@@ -123,7 +123,6 @@
 		<Folder Include="Views\Tabs\" />
 		<Folder Include="Resources\DataTemplateSelectors\" />
 		<Folder Include="ViewModels\Tabs\" />
-		<Folder Include="Resources\DataTemplates\" />
 		<Folder Include="Extensions\" />
 		<Folder Include="Services\Mock\" />
 		<Folder Include="Platforms\Android\Renderers\" />
@@ -164,6 +163,9 @@
 		<MauiXaml Update="Resources\DataTemplates\CameraTemplate.xaml">
 			<SubType>
 			</SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\AccessoryImageAndTitleTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\ImageAndTitleTemplate.xaml">
 		  <Generator>MSBuild:Compile</Generator>
@@ -289,6 +291,9 @@
 	<ItemGroup>
 	  <Compile Update="Resources\DataTemplates\CameraTemplate.xaml.cs">
 	    <DependentUpon>CameraTemplate.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Resources\DataTemplates\AccessoryImageAndTitleTemplate.xaml.cs">
+	    <DependentUpon>AccessoryImageAndTitleTemplate.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Resources\DataTemplates\ImageAndTitleTemplate.xaml.cs">
 	    <DependentUpon>ImageAndTitleTemplate.xaml</DependentUpon>

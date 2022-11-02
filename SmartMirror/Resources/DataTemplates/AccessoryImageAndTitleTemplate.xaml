@@ -5,7 +5,7 @@
     xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:vm="clr-namespace:SmartMirror.Models.BindableModels"
-    x:Class="SmartMirror.Resources.DataTemplates.ImageAndTitleTemplate"
+    x:Class="SmartMirror.Resources.DataTemplates.AccessoryImageAndTitleTemplate"
     x:DataType="vm:ImageAndTitleBindableModel">
 
     <Border
@@ -24,10 +24,8 @@
             <controls:CustomImageBotton
                 VerticalOptions="Center"
                 HorizontalOptions="Start"
-                StrokeShape="RoundRectangle 9"
-                BackgroundColor="{DynamicResource cbg_i1}"
-                HeightImage="24"
-                Padding="14, 12, 13, 12"
+                HeightImage="42"
+                Padding="0"
                 Source="{Binding ImageSource}"/>
 
             <Label

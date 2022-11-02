@@ -1,4 +1,6 @@
-﻿using SmartMirror.Views.Tabs;
+﻿using Android.Webkit;
+using SmartMirror.Views.Tabs;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace SmartMirror.Controls;
@@ -87,6 +89,20 @@ public partial class CustomStateView : ContentView
     {
         get => (ICommand)GetValue(TryAgainCommandProperty);
         set => SetValue(TryAgainCommandProperty, value);
+    }
+
+    #endregion
+
+    #region -- Overrides --
+
+    protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        base.OnPropertyChanged(propertyName);
+
+        if (propertyName == nameof(State))
+        {
+            (stateContanier as IView)?.InvalidateMeasure();
+        }
     }
 
     #endregion

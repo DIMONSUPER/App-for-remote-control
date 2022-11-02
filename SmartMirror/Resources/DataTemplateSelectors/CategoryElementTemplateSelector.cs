@@ -1,20 +1,27 @@
-﻿using SmartMirror.Models.BindableModels;
+﻿using SmartMirror.Enums;
+using SmartMirror.Interfaces;
 using SmartMirror.Resources.DataTemplates;
 
 namespace SmartMirror.Resources.DataTemplateSelectors
 {
     public class CategoryElementTemplateSelector : DataTemplateSelector
     {
-        private readonly Dictionary<Type, DataTemplate> _dataTemplatesDictionary = new()
+        private readonly Dictionary<ECategoryType, DataTemplate> _dataTemplatesDictionary = new()
         {
-            { typeof(ImageAndTitleBindableModel), new ImageAndTitleTemplate() },
+            { ECategoryType.Accessories, new AccessoryImageAndTitleTemplate() },
+            { ECategoryType.Scenarios, new ImageAndTitleTemplate() },
         };
 
         #region -- Overrides --
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            var key = item.GetType();
+            var key = ECategoryType.Scenarios;
+
+            if (item is ICategoryElementModel category)
+            {
+                key = category.Type;
+            }
 
             return _dataTemplatesDictionary[key];
         }

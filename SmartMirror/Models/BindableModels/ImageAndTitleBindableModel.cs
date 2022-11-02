@@ -1,4 +1,5 @@
-﻿using SmartMirror.Interfaces;
+﻿using SmartMirror.Enums;
+using SmartMirror.Interfaces;
 using System.Windows.Input;
 
 namespace SmartMirror.Models.BindableModels
@@ -30,6 +31,13 @@ namespace SmartMirror.Models.BindableModels
         {
             get => _imageSource;
             set => SetProperty(ref _imageSource, value);
+        }
+
+        private ECategoryType _type;
+        public ECategoryType Type
+        {
+            get => _type;
+            set => SetProperty(ref _type, value);
         }
 
         #endregion
