@@ -24,13 +24,16 @@ namespace SmartMirror.ViewModels.Dialogs
         private ICommand _closeCommand;
         public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc(OnCloseCommandAsync);
 
+        private ICommand _removeCameraCommand;
+        public ICommand RemoveCameraCommand => _removeCameraCommand ??= SingleExecutionCommand.FromFunc(OnRemoveCameraCommandAsync);
+
         #endregion
 
         #region -- Overrides --
 
         public override void OnDialogOpened(IDialogParameters parameters)
         {
-            if (parameters.TryGetValue(Constants.DialogsParameterKeys.SCENARIO, out ImageAndTitleBindableModel camera))
+            if (parameters.TryGetValue(Constants.DialogsParameterKeys.CAMERA, out ImageAndTitleBindableModel camera))
             {
                 Title = camera.Name;
             }
@@ -39,6 +42,16 @@ namespace SmartMirror.ViewModels.Dialogs
         #endregion
 
         #region -- Private helpers --
+
+        private Task OnRemoveCameraCommandAsync()
+        {
+            RequestClose.Invoke(new DialogParameters()
+            {
+                { Constants.DialogsParameterKeys.SHOW_CONFIRM_DIALOG, true },
+            });
+
+            return Task.CompletedTask;
+        }
 
         private Task OnCloseCommandAsync()
         {

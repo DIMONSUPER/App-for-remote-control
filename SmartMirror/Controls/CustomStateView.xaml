@@ -96,7 +96,7 @@
                        Text="{extensions:Translate NoInternetConnection}"
                        HorizontalOptions="Center"/>
 
-                <Button Style="{DynamicResource ButtonStyle_i2}"
+                <Button Style="{DynamicResource ButtonStyle_i1}"
                         Margin="0,37,0,0"
                         Text="{extensions:Translate TryAgain}"
                         Command="{Binding TryAgainCommand, Source={x:Reference stateContanier}}"

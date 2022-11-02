@@ -243,4 +243,19 @@
     <data name="ShowInScenarios" xml:space="preserve">
         <value>Show in Scenarios</value>
     </data>
+    <data name="Remove" xml:space="preserve">
+        <value>Remove</value>
+    </data>
+    <data name="ShowInCameras" xml:space="preserve">
+        <value>Show in Cameras</value>
+    </data>
+    <data name="Confirm" xml:space="preserve">
+        <value>Confirm</value>
+    </data>
+    <data name="AreYouSure" xml:space="preserve">
+        <value>Are you sure?</value>
+    </data>
+    <data name="TheCameraWillBeRemoved" xml:space="preserve">
+        <value>The camera will be removed</value>
+    </data>
 </root>

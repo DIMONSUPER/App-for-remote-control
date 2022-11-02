@@ -116,17 +116,18 @@
         <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i8}"/>
     </Style>
 
-    <!--BUTTON STYLES--> 
+    <!--BUTTON STYLES-->
     <Style x:Key="BaseButtonStyle_i1" TargetType="Button">
-        <Setter Property="Padding" Value="42, 12"/>
         <Setter Property="CornerRadius" Value="35"/>
-        <Setter Property="TextColor" Value="{DynamicResource tcolor_i2}"/>
         <Setter Property="FontFamily" Value="InterBold"/>
         <Setter Property="FontSize" Value="{DynamicResource tsize_i2}"/>
     </Style>
     
     <Style x:Key="ButtonStyle_i1" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle_i1}">
-
+        
+        <Setter Property="TextColor" Value="{DynamicResource tcolor_i2}"/>
+        <Setter Property="Padding" Value="42, 12"/>
+        
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup Name="CommonStates">
@@ -153,24 +154,30 @@
     </Style>
 
     <Style x:Key="ButtonStyle_i2" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle_i1}">
+
+        <Setter Property="Padding" Value="48, 12"/>
+        <Setter Property="TextColor" Value="{DynamicResource tcolor_i1}"/>
+        <Setter Property="BorderColor" Value="{DynamicResource tcolor_i1}"/>
+        <Setter Property="BorderWidth" Value="1"/>
+        
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup Name="CommonStates">
 
                     <VisualState Name="Normal">
-                        
+
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i3}"/>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i2}"/>
                         </VisualState.Setters>
-                        
+
                     </VisualState>
 
                     <VisualState Name="Pressed">
-                        
+
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i14}"/>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i17}"/>
                         </VisualState.Setters>
-                        
+
                     </VisualState>
 
                 </VisualStateGroup>

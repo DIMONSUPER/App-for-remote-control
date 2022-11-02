@@ -250,12 +250,21 @@ namespace SmartMirror.ViewModels
             });
         }
 
-        private Task OnShowCameraSettingsCommandAsync(ImageAndTitleBindableModel scenario)
+        private async Task OnShowCameraSettingsCommandAsync(ImageAndTitleBindableModel camera)
         {
-            return _dialogService.ShowDialogAsync(nameof(CameraSettingsDialog), new DialogParameters
+            var dialogResult = await _dialogService.ShowDialogAsync(nameof(CameraSettingsDialog), new DialogParameters
             {
-                { Constants.DialogsParameterKeys.SCENARIO, scenario },
+                { Constants.DialogsParameterKeys.CAMERA, camera },
             });
+
+            if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.SHOW_CONFIRM_DIALOG, out bool confirm) && confirm)
+            {
+                dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), new DialogParameters
+                {
+                    { Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure },
+                    { Constants.DialogsParameterKeys.DESCRIPTION, Strings.TheCameraWillBeRemoved },
+                });
+            }
         }
 
         private Task OnCloseSettingsCommandAsync()

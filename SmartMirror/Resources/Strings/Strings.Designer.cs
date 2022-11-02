@@ -94,6 +94,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure?.
+        /// </summary>
+        internal static string AreYouSure {
+            get {
+                return ResourceManager.GetString("AreYouSure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         internal static string Back {
@@ -162,6 +171,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Closed {
             get {
                 return ResourceManager.GetString("Closed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        internal static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
             }
         }
         
@@ -675,6 +693,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Synchronization {
             get {
                 return ResourceManager.GetString("Synchronization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The camera will be removed.
+        /// </summary>
+        internal static string TheCameraWillBeRemoved {
+            get {
+                return ResourceManager.GetString("TheCameraWillBeRemoved", resourceCulture);
             }
         }
         

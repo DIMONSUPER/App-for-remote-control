@@ -64,6 +64,7 @@ public static class MauiProgram
         containerRegistry.RegisterDialog<EnterCodeDialog>();
         containerRegistry.RegisterDialog<ScenarioSettingsDialog>();
         containerRegistry.RegisterDialog<CameraSettingsDialog>();
+        containerRegistry.RegisterDialog<ConfirmDialog>();
 
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
         containerRegistry.RegisterForNavigation<WelcomePage>();

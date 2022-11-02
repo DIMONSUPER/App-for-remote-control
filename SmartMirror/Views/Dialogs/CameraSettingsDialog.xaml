@@ -72,7 +72,9 @@
                         Title="{extensions:Translate ReceiveNotifications}"
                         Padding="24, 18"/>
 
-                    <HorizontalStackLayout Padding="24, 18">
+                    <HorizontalStackLayout
+                        behaviors:TouchBehavior.Command="{Binding RemoveCameraCommand}"
+                        Padding="24, 18">
 
                         <Image
                             Source="delete"
