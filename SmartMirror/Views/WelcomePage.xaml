@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <views:BaseContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -68,16 +68,22 @@
             <controls:CustomImageBotton
                 Grid.Column="1"
                 Style="{DynamicResource ImageButtonStyle_i1}"
+                behaviors:TouchBehavior.Command="{Binding LoginWithAqaraCommand}"
+                behaviors:TouchBehavior.CommandParameter="{x:Static enums:EAuthType.Amazon}"
                 Source="amazon_logo"/>
 
             <controls:CustomImageBotton
                 Grid.Column="2"
                 Style="{DynamicResource ImageButtonStyle_i1}"
+                behaviors:TouchBehavior.Command="{Binding LoginWithAqaraCommand}"
+                behaviors:TouchBehavior.CommandParameter="{x:Static enums:EAuthType.Apple}"
                 Source="apple_logo"/>
 
             <controls:CustomImageBotton
                 Grid.Column="3"
                 Style="{DynamicResource ImageButtonStyle_i1}"
+                behaviors:TouchBehavior.Command="{Binding LoginWithAqaraCommand}"
+                behaviors:TouchBehavior.CommandParameter="{x:Static enums:EAuthType.Google}"
                 Source="google_logo"/>
 
         </Grid>

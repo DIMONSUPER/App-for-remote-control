@@ -34,7 +34,13 @@ namespace SmartMirror.ViewModels
 
         private async Task OnLoginWithAqaraCommandAsync(EAuthType authType)
         {
-            if (IsInternetConnected)
+            if (authType == EAuthType.Amazon
+                || authType == EAuthType.Apple
+                || authType == EAuthType.Google)
+            {
+                DisplayNotImplementedDialog();
+            }
+            else if (IsInternetConnected)
             {
                 var testEmail = "botheadworks@gmail.com";
 
@@ -65,6 +71,15 @@ namespace SmartMirror.ViewModels
             {
                 //TODO: notify
             }
+        }
+
+        private void DisplayNotImplementedDialog()
+        {
+            _dialogService.ShowDialog(nameof(ErrorDialog), new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.TITLE, "It's not available right now" },
+                { Constants.DialogsParameterKeys.DESCRIPTION, $"Coming soon" },
+            });
         }
 
         private async Task ProcessDialogResultAsync(IDialogResult dialogResult, string email)
