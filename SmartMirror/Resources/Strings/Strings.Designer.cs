@@ -571,6 +571,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        internal static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rooms.
         /// </summary>
         internal static string Rooms {
@@ -621,6 +630,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Shades {
             get {
                 return ResourceManager.GetString("Shades", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show in Cameras.
+        /// </summary>
+        internal static string ShowInCameras {
+            get {
+                return ResourceManager.GetString("ShowInCameras", resourceCulture);
             }
         }
         

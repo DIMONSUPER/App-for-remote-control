@@ -5,9 +5,9 @@ using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
-    public class ScenarioDescriptionDialogViewModel : BaseDialogViewModel
+    public class CameraSettingsDialogViewModel : BaseDialogViewModel
     {
-        public ScenarioDescriptionDialogViewModel(IBlurService blurService)
+        public CameraSettingsDialogViewModel(IBlurService blurService)
             : base(blurService)
         {
         }
@@ -30,9 +30,9 @@ namespace SmartMirror.ViewModels.Dialogs
 
         public override void OnDialogOpened(IDialogParameters parameters)
         {
-            if (parameters.TryGetValue(Constants.DialogsParameterKeys.SCENARIO, out ImageAndTitleBindableModel scenario))
+            if (parameters.TryGetValue(Constants.DialogsParameterKeys.SCENARIO, out ImageAndTitleBindableModel camera))
             {
-                Title = scenario.Name;
+                Title = camera.Name;
             }
         }
 

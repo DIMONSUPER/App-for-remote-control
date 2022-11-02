@@ -40,7 +40,8 @@
                 LineBreakMode="TailTruncation"
                 Margin="12, 0"
                 HorizontalOptions="Start"
-                VerticalOptions="Center"/>
+                VerticalOptions="Center"
+                VerticalTextAlignment="Center"/>
 
         </HorizontalStackLayout>
 

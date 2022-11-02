@@ -69,11 +69,11 @@ namespace SmartMirror.ViewModels
         private ICommand _selectCategoryCommand;
         public ICommand SelectCategoryCommand => _selectCategoryCommand ??= SingleExecutionCommand.FromFunc<CategoryBindableModel>(OnSelectCategoryCommandAsync);
 
-        private ICommand _showScenarioDescriptionCommand;
-        public ICommand ShowScenarioDescriptionCommand => _showScenarioDescriptionCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowScenarioDescriptionCommandAsync);
+        private ICommand _showScenarioSettingsCommand;
+        public ICommand ShowScenarioSettingsCommand => _showScenarioSettingsCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowScenarioSettingsCommandAsync);
 
-        private ICommand _showCameraDescriptionCommand;
-        public ICommand ShowCameraDescriptionCommand => _showCameraDescriptionCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowScenarioDescriptionCommandAsync);
+        private ICommand _showCameraSettingsCommand;
+        public ICommand ShowCameraSettingsCommand => _showCameraSettingsCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowCameraSettingsCommandAsync);
 
         private ICommand _tryAgainCommand;
         public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
@@ -207,7 +207,7 @@ namespace SmartMirror.ViewModels
                 {
                     vm.Type = ECategoryType.Scenarios;
                     vm.ImageSource = "play_gray";
-                    vm.TapCommand = ShowScenarioDescriptionCommand;
+                    vm.TapCommand = ShowScenarioSettingsCommand;
                 });
 
                 var scenarioCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Scenarios);
@@ -226,7 +226,7 @@ namespace SmartMirror.ViewModels
                 {
                     vm.Type = ECategoryType.Cameras;
                     vm.ImageSource = "video_fill_dark";
-                    vm.TapCommand = ShowCameraDescriptionCommand;
+                    vm.TapCommand = ShowCameraSettingsCommand;
                 });
 
                 var cameraCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Cameras);
@@ -242,9 +242,17 @@ namespace SmartMirror.ViewModels
             return LoadAllDataAsync();
         }
 
-        private Task OnShowScenarioDescriptionCommandAsync(ImageAndTitleBindableModel scenario)
+        private Task OnShowScenarioSettingsCommandAsync(ImageAndTitleBindableModel scenario)
         {
-            return _dialogService.ShowDialogAsync(nameof(ScenarioDescriptionDialog), new DialogParameters
+            return _dialogService.ShowDialogAsync(nameof(ScenarioSettingsDialog), new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.SCENARIO, scenario },
+            });
+        }
+
+        private Task OnShowCameraSettingsCommandAsync(ImageAndTitleBindableModel scenario)
+        {
+            return _dialogService.ShowDialogAsync(nameof(CameraSettingsDialog), new DialogParameters
             {
                 { Constants.DialogsParameterKeys.SCENARIO, scenario },
             });

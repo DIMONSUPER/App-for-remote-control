@@ -9,8 +9,8 @@
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     Padding="0"
     BackgroundColor="Transparent"
-    x:Class="SmartMirror.Views.Dialogs.ScenarioDescriptionDialog"
-    x:DataType="vm:ScenarioDescriptionDialogViewModel">
+    x:Class="SmartMirror.Views.Dialogs.CameraSettingsDialog"
+    x:DataType="vm:CameraSettingsDialogViewModel">
 
     <Border
         WidthRequest="479"
@@ -24,20 +24,20 @@
             Spacing="6">
 
             <HorizontalStackLayout>
-                
+
                 <Border
                     HeightRequest="60"
                     WidthRequest="60"
                     Margin="0, 0, 15, 0"
-                    Padding="17"
-                    BackgroundColor="{DynamicResource cbg_i15}"
+                    Padding="16"
+                    BackgroundColor="{DynamicResource cbg_i7}"
                     StrokeShape="RoundRectangle 9"
                     behaviors:TouchBehavior.IsAnimation="True"
                     behaviors:TouchBehavior.NormalBackgroundColor="{DynamicResource cbg_i15}"
                     behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}">
 
                     <Image
-                        Source="play_gray"
+                        Source="video_fill_dark"
                         VerticalOptions="Center"
                         HorizontalOptions="Center"/>
 
@@ -64,7 +64,7 @@
                 <VerticalStackLayout>
 
                     <controls:TitleAndSwitchView
-                        Title="{extensions:Translate ShowInScenarios}"
+                        Title="{extensions:Translate ShowInCameras}"
                         IsToggled="True"
                         Padding="24, 18"/>
 
@@ -72,10 +72,21 @@
                         Title="{extensions:Translate ReceiveNotifications}"
                         Padding="24, 18"/>
 
-                    <controls:TitleAndSwitchView
-                        Title="{extensions:Translate AddToFavorites}"
-                        IsToggled="True"
-                        Padding="24, 18"/>
+                    <HorizontalStackLayout Padding="24, 18">
+
+                        <Image
+                            Source="delete"
+                            HeightRequest="24"
+                            VerticalOptions="Center"/>
+
+                        <Label
+                            Style="{DynamicResource tstyle_i11}"
+                            Margin="12, 0"
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Start"
+                            Text="{extensions:Translate Remove}"/>
+
+                    </HorizontalStackLayout>
 
                 </VerticalStackLayout>
 
