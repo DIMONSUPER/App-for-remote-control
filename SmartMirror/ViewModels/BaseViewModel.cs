@@ -17,11 +17,6 @@ namespace SmartMirror.ViewModels
 
         protected bool IsInternetConnected => Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
 
-        protected bool IsDataLoading => DataState
-            is EPageState.Loading
-            or EPageState.NoInternetLoader
-            or EPageState.LoadingSkeleton;
-
         #endregion
 
         #region -- Public properties --

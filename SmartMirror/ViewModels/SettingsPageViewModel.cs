@@ -45,6 +45,11 @@ namespace SmartMirror.ViewModels
 
         #region -- Public properties --
 
+        protected bool IsDataLoading => PageState
+            is EPageState.Loading
+            or EPageState.NoInternetLoader
+            or EPageState.LoadingSkeleton;
+
         private EPageState _pageState;
         public EPageState PageState
         {
@@ -121,9 +126,7 @@ namespace SmartMirror.ViewModels
 
         protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
-            base.OnConnectivityChanged(sender, e);
-
-            if (e.NetworkAccess == NetworkAccess.Internet)
+            if (IsInternetConnected)
             {
                 if (!IsDataLoading && PageState != EPageState.Complete)
                 {
@@ -204,36 +207,21 @@ namespace SmartMirror.ViewModels
                 {
                     case ECategoryType.Accessories:
                         CategoryElements = new(_allAccessories);
-                        
-                        DataState = CategoryElements.Any()
-                            ? EPageState.Complete
-                            : EPageState.Empty;
-
                         break;
 
                     case ECategoryType.Scenarios:
                         CategoryElements = new(_allScenarios);
-
-                        DataState = CategoryElements.Any()
-                            ? EPageState.Complete
-                            : EPageState.Empty;
-
                         break;
 
                     case ECategoryType.Providers:
                         CategoryElements = new(_allProviders);
-
-                        DataState = CategoryElements.Any()
-                            ? EPageState.Complete
-                            : EPageState.Empty;
-                    
                         break;
+                }
 
-                    default:
-                        CategoryElements = new();
-                        DataState = EPageState.Empty;
-                        break;
-                } 
+
+                DataState = CategoryElements.Any()
+                    ? EPageState.Complete
+                    : EPageState.Empty;
             }
         }
 
