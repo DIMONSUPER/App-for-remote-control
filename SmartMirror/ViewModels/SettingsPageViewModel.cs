@@ -316,35 +316,20 @@ namespace SmartMirror.ViewModels
 
             var dialogParameters = new DialogParameters();
 
-            switch (settingsProvider.AuthType)
+            var providerName = settingsProvider.AuthType switch
             {
-                case EAuthType.Amazon:
-                    {
-                        dialogParameters.Add(Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure);
-                        dialogParameters.Add(Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.Amazon} {Strings.WillBeDisconnected}");
-                        break;
-                    }
-                case EAuthType.Aqara:
-                    {
-                        dialogParameters.Add(Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure);
-                        dialogParameters.Add(Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.Aqara} {Strings.WillBeDisconnected}");
-                        break;
-                    }
-                case EAuthType.Apple:
-                    {
-                        dialogParameters.Add(Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure);
-                        dialogParameters.Add(Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.Apple} {Strings.WillBeDisconnected}");
-                        break;
-                    }
-                case EAuthType.Google:
-                    {
-                        dialogParameters.Add(Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure);
-                        dialogParameters.Add(Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.Google} {Strings.WillBeDisconnected}");
-                        break;
-                    }
-            }
+                EAuthType.Amazon => Strings.Amazon,
+                EAuthType.Aqara => Strings.Aqara,
+                EAuthType.Apple => Strings.Apple,
+                EAuthType.Google => Strings.Google,
 
-             _dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), dialogParameters);
+                _ => string.Empty,
+            };
+
+            dialogParameters.Add(Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure);
+            dialogParameters.Add(Constants.DialogsParameterKeys.DESCRIPTION, $"{providerName} {Strings.WillBeDisconnected}");
+
+            _dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), dialogParameters);
 
             if (_dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result))
             {
@@ -365,122 +350,86 @@ namespace SmartMirror.ViewModels
                     _aqaraService.LogoutFromAqara();
                 }
             }
-            else
+            else if (IsInternetConnected)
             {
-                if (IsInternetConnected)
+                var testEmail = "botheadworks@gmail.com";
+                var resultOfSendingCodeToMail = await _aqaraService.SendLoginCodeAsync(testEmail);
+
+                if (resultOfSendingCodeToMail.IsSuccess)
                 {
-                    var testEmail = "botheadworks@gmail.com";
-                    var resultOfSendingCodeToMail = await _aqaraService.SendLoginCodeAsync(testEmail);
-
-                    if (resultOfSendingCodeToMail.IsSuccess)
+                    _dialogResult = await _dialogService.ShowDialogAsync(nameof(EnterCodeDialog), new DialogParameters
                     {
-                        _dialogResult = await _dialogService.ShowDialogAsync(nameof(EnterCodeDialog), new DialogParameters
-                        {
-                            { Constants.DialogsParameterKeys.TITLE, Strings.Aqara },
-                            { Constants.DialogsParameterKeys.AUTH_TYPE, settingsProvider.AuthType },
-                        });
-                    }
-                    else
-                    {
-                        _dialogResult = await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
-                        {
-                            { Constants.DialogsParameterKeys.TITLE, "FAIL" },
-                            { Constants.DialogsParameterKeys.DESCRIPTION, resultOfSendingCodeToMail.Result?.MsgDetails ?? resultOfSendingCodeToMail.Message },
-                        });
-                    }
-
-                    await ProcessDialogResultAsync(_dialogResult, testEmail);
+                        { Constants.DialogsParameterKeys.TITLE, Strings.Aqara },
+                        { Constants.DialogsParameterKeys.AUTH_TYPE, settingsProvider.AuthType },
+                    });
                 }
                 else
                 {
                     _dialogResult = await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
                     {
                         { Constants.DialogsParameterKeys.TITLE, "FAIL" },
-                        { Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.NoInternetConnection}" },
+                        { Constants.DialogsParameterKeys.DESCRIPTION, resultOfSendingCodeToMail.Result?.MsgDetails ?? resultOfSendingCodeToMail.Message },
                     });
                 }
+            }
+            else
+            {
+                _dialogResult = await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
+                {
+                    { Constants.DialogsParameterKeys.TITLE, "FAIL" },
+                    { Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.NoInternetConnection}" },
+                });
             }
 
             settingsProvider.IsConnected = _aqaraService.IsAuthorized;
             _providersCategory.Count = GetConnectedProviders();
         }
 
-        private async Task OnLoginWithAppleCommandAsync(SettingsProvidersBindableModel settingsProvider)
+        private Task OnLoginWithAppleCommandAsync(SettingsProvidersBindableModel settingsProvider)
         {
-            if (settingsProvider.IsConnected)
-            {
-                var dialogResult = await ShowLogoutConfirmationDialog(settingsProvider);
+            //TODO Implement login and logout from Apple
 
-                if (dialogResult)
-                {
-                    //TODO Logout from Apple
-                    settingsProvider.IsConnected = !settingsProvider.IsConnected;
-                }
-            }
-            else
-            {
-                //TODO Loggin to Apple
-                settingsProvider.IsConnected = !settingsProvider.IsConnected;
-            }
+            DisplayNotImplementedDialog();
 
             _providersCategory.Count = GetConnectedProviders();
+
+            return Task.CompletedTask;
         }
 
-        private async Task OnLoginWithAmazonCommandAsync(SettingsProvidersBindableModel settingsProvider)
+        private Task OnLoginWithAmazonCommandAsync(SettingsProvidersBindableModel settingsProvider)
         {
-            if (settingsProvider.IsConnected)
-            {
-                var dialogResult = await ShowLogoutConfirmationDialog(settingsProvider);
+            //TODO Implement login and logout from Amazon
 
-                if (dialogResult)
-                {
-                    //TODO Logout from Amazon
-                    settingsProvider.IsConnected = !settingsProvider.IsConnected;
-                }
-            }
-            else
-            {
-                //TODO Loggin to Amazon
-                settingsProvider.IsConnected = !settingsProvider.IsConnected;
-            }
+            DisplayNotImplementedDialog();
 
             _providersCategory.Count = GetConnectedProviders();
+
+            return Task.CompletedTask;
         }
 
-        private async Task OnLoginWithGoogleCommandAsync(SettingsProvidersBindableModel settingsProvider)
+        private Task OnLoginWithGoogleCommandAsync(SettingsProvidersBindableModel settingsProvider)
         {
-            if (settingsProvider.IsConnected)
-            {
-                var dialogResult = await ShowLogoutConfirmationDialog(settingsProvider);
+            //TODO Implement login and logout from Google
 
-                if (dialogResult)
-                {
-                    //TODO Logout from Google
-                    settingsProvider.IsConnected = !settingsProvider.IsConnected;
-                }
-            }
-            else
-            {
-                //TODO Loggin to Google
-                settingsProvider.IsConnected = !settingsProvider.IsConnected;
-            }
+            DisplayNotImplementedDialog();
 
             _providersCategory.Count = GetConnectedProviders();
+
+            return Task.CompletedTask;
         }
 
-        private async Task ProcessDialogResultAsync(IDialogResult dialogResult, string email)
+        private void DisplayNotImplementedDialog()
         {
-            if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result))
+            _dialogService.ShowDialog(nameof(ErrorDialog), new DialogParameters
             {
-                //await NavigationService.CreateBuilder()
-                //    .AddSegment<MainTabbedPage>()
-                //    .NavigateAsync();
-            }
+                { Constants.DialogsParameterKeys.TITLE, "It's not available right now" },
+                { Constants.DialogsParameterKeys.DESCRIPTION, $"Coming soon" },
+            });
         }
 
         private int GetConnectedProviders()
         {
-            return _allProviders.Count(x => x.IsConnected.Equals(true));
+            return _allProviders.Count(x => x.IsConnected);
         }
 
         #endregion

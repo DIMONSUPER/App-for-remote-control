@@ -7,7 +7,6 @@ namespace SmartMirror.Models.BindableModels
 {
     public class SettingsProvidersBindableModel : BindableBase, ICategoryElementModel, ITappable
     {
-
         #region -- Public properties --
 
         private string _title;

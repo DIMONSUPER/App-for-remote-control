@@ -61,12 +61,15 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             var parameters = new DialogParameters();
 
-            switch (result.ToLower())
+            if (result is not null)
             {
-                case "true": { parameters.Add(Constants.DialogsParameterKeys.RESULT, true); break; }
-                case "false": { parameters.Add(Constants.DialogsParameterKeys.RESULT, false); break; }
-                default:
-                    break;
+                switch (result.ToLower())
+                {
+                    case "true": { parameters.Add(Constants.DialogsParameterKeys.RESULT, true); break; }
+                    case "false": { parameters.Add(Constants.DialogsParameterKeys.RESULT, false); break; }
+                    default:
+                        break;
+                }
             }
 
             RequestClose.Invoke(parameters);
