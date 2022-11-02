@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Grid
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -42,7 +42,7 @@
                     BackgroundColor="{StaticResource cbg_i15}">
 
                     <controls:CustomNoBorderEntry
-                        NeedToFocus="True"
+                        IsEntryFocused="{Binding IsEntryFocused}"
                         Margin="24, 18"
                         BackgroundColor="{DynamicResource cbg_i15}"
                         FontSize="{DynamicResource tsize_i2}"
@@ -86,7 +86,7 @@
             </VerticalStackLayout>
 
         </Border>
-        
+
     </Frame>
-    
+
 </Grid>
