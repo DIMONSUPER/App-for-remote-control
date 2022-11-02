@@ -258,4 +258,19 @@
     <data name="TheCameraWillBeRemoved" xml:space="preserve">
         <value>The camera will be removed</value>
     </data>
+    <data name="EnterIPAddress" xml:space="preserve">
+        <value>Enter IP Address</value>
+    </data>
+    <data name="EnterPassword" xml:space="preserve">
+        <value>Enter Password</value>
+    </data>
+    <data name="AddNewCamera" xml:space="preserve">
+        <value>Add New Camera</value>
+    </data>
+    <data name="Add" xml:space="preserve">
+        <value>Add</value>
+    </data>
+    <data name="NewCamera" xml:space="preserve">
+        <value>New Camera</value>
+    </data>
 </root>

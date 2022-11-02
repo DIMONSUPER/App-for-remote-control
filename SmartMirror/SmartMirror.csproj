@@ -50,6 +50,7 @@
 		<None Remove="Resources\Images\ci_close_big.svg" />
 		<None Remove="Resources\Images\delete.svg" />
 		<None Remove="Resources\Images\google_logo.svg" />
+		<None Remove="Resources\Images\subtract_plus.svg" />
 		<None Remove="Views\" />
 		<None Remove="ViewModels\" />
 		<None Remove="Services\" />
@@ -183,6 +184,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\ScenarioTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\AddNewCameraDialog.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\CameraSettingsDialog.xaml">
 		  <Generator>MSBuild:Compile</Generator>

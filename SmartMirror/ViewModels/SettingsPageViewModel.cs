@@ -75,6 +75,9 @@ namespace SmartMirror.ViewModels
         private ICommand _showCameraSettingsCommand;
         public ICommand ShowCameraSettingsCommand => _showCameraSettingsCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowCameraSettingsCommandAsync);
 
+        private ICommand _addNewCameraCommand;
+        public ICommand AddNewCameraCommand => _addNewCameraCommand ??= SingleExecutionCommand.FromFunc(OnAddNewCameraCommandAsync);
+
         private ICommand _tryAgainCommand;
         public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
 
@@ -229,9 +232,21 @@ namespace SmartMirror.ViewModels
                     vm.TapCommand = ShowCameraSettingsCommand;
                 });
 
+                var addCameraItem = new ImageAndTitleBindableModel()
+                {
+                    Name = Strings.AddNewCamera,
+                    Type = ECategoryType.Cameras,
+                    ImageSource = "subtract_plus",
+                    TapCommand = AddNewCameraCommand,
+                };
+
+                var firstItems = new[] { addCameraItem };
+
+                _allCameras = firstItems.Concat(_allCameras);
+
                 var cameraCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Cameras);
 
-                cameraCategory.Count = _allCameras.Count();
+                cameraCategory.Count = _allCameras.Count() - 1;
             }
         }
 
@@ -265,6 +280,14 @@ namespace SmartMirror.ViewModels
                     { Constants.DialogsParameterKeys.DESCRIPTION, Strings.TheCameraWillBeRemoved },
                 });
             }
+        }
+
+        private Task OnAddNewCameraCommandAsync()
+        {
+            return _dialogService.ShowDialogAsync(nameof(AddNewCameraDialog), new DialogParameters()
+            {
+                { Constants.DialogsParameterKeys.TITLE, Strings.NewCamera },
+            });
         }
 
         private Task OnCloseSettingsCommandAsync()

@@ -76,6 +76,24 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        internal static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add New Camera.
+        /// </summary>
+        internal static string AddNewCamera {
+            get {
+                return ResourceManager.GetString("AddNewCamera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to Favorites.
         /// </summary>
         internal static string AddToFavorites {
@@ -225,6 +243,24 @@ namespace SmartMirror.Resources.Strings {
         internal static string EnterCode {
             get {
                 return ResourceManager.GetString("EnterCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter IP Address.
+        /// </summary>
+        internal static string EnterIPAddress {
+            get {
+                return ResourceManager.GetString("EnterIPAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter Password.
+        /// </summary>
+        internal static string EnterPassword {
+            get {
+                return ResourceManager.GetString("EnterPassword", resourceCulture);
             }
         }
         
@@ -405,6 +441,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string NeedsTwoTaps {
             get {
                 return ResourceManager.GetString("NeedsTwoTaps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Camera.
+        /// </summary>
+        internal static string NewCamera {
+            get {
+                return ResourceManager.GetString("NewCamera", resourceCulture);
             }
         }
         

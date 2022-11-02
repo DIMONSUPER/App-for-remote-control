@@ -31,7 +31,21 @@
                 HeightRequest="36"
                 WidthRequest="36"
                 Padding="9"
-                Source="{Binding ImageSource}"/>
+                Source="{Binding ImageSource}">
+
+                <controls:CustomImageBotton.Triggers>
+
+                    <DataTrigger Binding="{Binding ImageSource}" Value="subtract_plus" TargetType="controls:CustomImageBotton">
+
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="HeightImage" Value="36"/>
+                        <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i2}"/>
+
+                    </DataTrigger>
+                    
+                </controls:CustomImageBotton.Triggers>
+
+            </controls:CustomImageBotton>
 
             <Label
                 Style="{DynamicResource tstyle_i11}"

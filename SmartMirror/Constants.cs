@@ -21,6 +21,8 @@
             public const string AUTH_TYPE = nameof(AUTH_TYPE);
             public const string TITLE = nameof(TITLE);
             public const string DESCRIPTION = nameof(DESCRIPTION);
+            public const string IP_ADDRESS = nameof(IP_ADDRESS);
+            public const string PASSWORD = nameof(PASSWORD);
         }
         
         public static class Aqara
