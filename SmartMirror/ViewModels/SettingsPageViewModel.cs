@@ -310,21 +310,60 @@ namespace SmartMirror.ViewModels
             return NavigationService.GoBackAsync();
         }
 
+        private async Task<bool> ShowLogoutConfirmationDialog(SettingsProvidersBindableModel settingsProvider)
+        {
+            var isSuccess = false;
+
+            var dialogParameters = new DialogParameters();
+
+            switch (settingsProvider.AuthType)
+            {
+                case EAuthType.Amazon:
+                    {
+                        dialogParameters.Add(Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure);
+                        dialogParameters.Add(Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.Amazon} {Strings.WillBeDisconnected}");
+                        break;
+                    }
+                case EAuthType.Aqara:
+                    {
+                        dialogParameters.Add(Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure);
+                        dialogParameters.Add(Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.Aqara} {Strings.WillBeDisconnected}");
+                        break;
+                    }
+                case EAuthType.Apple:
+                    {
+                        dialogParameters.Add(Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure);
+                        dialogParameters.Add(Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.Apple} {Strings.WillBeDisconnected}");
+                        break;
+                    }
+                case EAuthType.Google:
+                    {
+                        dialogParameters.Add(Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure);
+                        dialogParameters.Add(Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.Google} {Strings.WillBeDisconnected}");
+                        break;
+                    }
+            }
+
+             _dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), dialogParameters);
+
+            if (_dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result))
+            {
+                isSuccess = result;
+            }
+
+            return isSuccess;
+        }
+
         private async Task OnLoginWithAqaraCommandAsync(SettingsProvidersBindableModel settingsProvider)
         {
             if (_aqaraService.IsAuthorized)
             {
-                _dialogService.ShowDialog(nameof(ConfirmDialog), new DialogParameters
+                var dialogResult = await ShowLogoutConfirmationDialog(settingsProvider);
+
+                if (dialogResult)
                 {
-                    {Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure },
-                    { Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.Aqara} {Strings.WillBeDisconnected}" },
-                }, r =>
-                {
-                    if (r.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result) && result)
-                    {
-                        _aqaraService.LogoutFromAqara();
-                    }
-                });
+                    _aqaraService.LogoutFromAqara();
+                }
             }
             else
             {
@@ -368,17 +407,11 @@ namespace SmartMirror.ViewModels
 
         private async Task OnLoginWithAppleCommandAsync(SettingsProvidersBindableModel settingsProvider)
         {
-            IDialogResult dialogResult;
-
             if (settingsProvider.IsConnected)
             {
-                dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), new DialogParameters
-                {
-                    {Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure },
-                    { Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.Apple} {Strings.WillBeDisconnected}" },
-                });
+                var dialogResult = await ShowLogoutConfirmationDialog(settingsProvider);
 
-                if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result) && result)
+                if (dialogResult)
                 {
                     //TODO Logout from Apple
                     settingsProvider.IsConnected = !settingsProvider.IsConnected;
@@ -397,13 +430,9 @@ namespace SmartMirror.ViewModels
         {
             if (settingsProvider.IsConnected)
             {
-                _dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), new DialogParameters
-                {
-                    {Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure },
-                    { Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.Amazon} {Strings.WillBeDisconnected}" },
-                });
-                
-                if (_dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result) && result)
+                var dialogResult = await ShowLogoutConfirmationDialog(settingsProvider);
+
+                if (dialogResult)
                 {
                     //TODO Logout from Amazon
                     settingsProvider.IsConnected = !settingsProvider.IsConnected;
@@ -420,17 +449,11 @@ namespace SmartMirror.ViewModels
 
         private async Task OnLoginWithGoogleCommandAsync(SettingsProvidersBindableModel settingsProvider)
         {
-            IDialogResult dialogResult;
-
             if (settingsProvider.IsConnected)
             {
-                dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), new DialogParameters
-                {
-                    {Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure },
-                    { Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.Google} {Strings.WillBeDisconnected}" },
-                });
+                var dialogResult = await ShowLogoutConfirmationDialog(settingsProvider);
 
-                if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result) && result)
+                if (dialogResult)
                 {
                     //TODO Logout from Google
                     settingsProvider.IsConnected = !settingsProvider.IsConnected;

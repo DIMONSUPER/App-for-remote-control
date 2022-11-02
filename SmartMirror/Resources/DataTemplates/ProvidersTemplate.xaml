@@ -33,8 +33,9 @@
                                  Binding="{Binding IsConnected}"
                                  Value="True">
 
-                        <Setter Property="BackgroundColor"
-                                Value="Transparent"/>
+                        <Setter Property="BackgroundColor" Value="Transparent"/>
+                        <Setter TargetName="titlelabel" Property="Label.Style" Value="{x:DynamicResource tstyle_i15}"/>
+                        <Setter TargetName="titlelabel" Property="Label.Text" Value="{extensions:Translate Connected}"/>
 
                     </DataTrigger>
 
@@ -42,29 +43,12 @@
 
                 <Grid>
 
-                    <Label Text="{Binding Title}"
+                    <Label x:Name="titlelabel"
+                           Text="{Binding Title}"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
-                           Style="{x:DynamicResource tstyle_i9}">
+                           Style="{x:DynamicResource tstyle_i9}"/>
 
-                        <Label.Triggers>
-
-                            <DataTrigger TargetType="Label"
-                                         Binding="{Binding IsConnected}"
-                                         Value="True">
-                                                    
-                                <Setter Property="Style"
-                                        Value="{x:DynamicResource tstyle_i15}"/>
-
-                                <Setter Property="Text"
-                                        Value="{extensions:Translate Connected}"/>
-
-                            </DataTrigger>
-
-                        </Label.Triggers>
-
-                    </Label>
-                                        
                     <ActivityIndicator IsRunning="False"/>
 
                 </Grid>
