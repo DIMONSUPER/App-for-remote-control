@@ -10,6 +10,7 @@ namespace SmartMirror.Resources.DataTemplateSelectors
         {
             { ECategoryType.Scenarios, new SimpleScenarioTemplate() },
             { ECategoryType.Cameras, new SimpleCameraTemplate() },
+            { ECategoryType.Providers, new ProvidersTemplate() },
         };
 
         #region -- Overrides --

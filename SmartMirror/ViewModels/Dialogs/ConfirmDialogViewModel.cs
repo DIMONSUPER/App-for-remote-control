@@ -1,12 +1,16 @@
-﻿using SmartMirror.Helpers;
-using SmartMirror.Services.Blur;
+using System;
+using SmartMirror.Helpers;
 using System.Windows.Input;
+using SmartMirror.Platforms.Android.Services;
+using SmartMirror.Services.Blur;
+using Android.Telephony.Data;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
     public class ConfirmDialogViewModel : BaseDialogViewModel
     {
-        public ConfirmDialogViewModel(IBlurService blurService)
+        public ConfirmDialogViewModel(
+            IBlurService blurService)
             : base(blurService)
         {
         }
@@ -28,7 +32,7 @@ namespace SmartMirror.ViewModels.Dialogs
         }
 
         private ICommand _closeCommand;
-        public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc<bool>(OnCloseCommandAsync);
+        public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc<string>(OnCloseCommandAsync);
 
         #endregion
 
@@ -36,6 +40,8 @@ namespace SmartMirror.ViewModels.Dialogs
 
         public override void OnDialogOpened(IDialogParameters parameters)
         {
+            base.OnDialogOpened(parameters);
+
             if (parameters.TryGetValue(Constants.DialogsParameterKeys.TITLE, out string title))
             {
                 Title = title;
@@ -51,12 +57,22 @@ namespace SmartMirror.ViewModels.Dialogs
 
         #region -- Private helpers --
 
-        private Task OnCloseCommandAsync(bool confirm)
+        private Task OnCloseCommandAsync(string result)
         {
-            RequestClose.Invoke(new DialogParameters()
+            var parameters = new DialogParameters();
+
+            if (result is not null)
             {
-                { Constants.DialogsParameterKeys.CONFIRM, confirm },
-            });
+                switch (result.ToLower())
+                {
+                    case "true": { parameters.Add(Constants.DialogsParameterKeys.RESULT, true); break; }
+                    case "false": { parameters.Add(Constants.DialogsParameterKeys.RESULT, false); break; }
+                    default:
+                        break;
+                }
+            }
+
+            RequestClose.Invoke(parameters);
 
             return Task.CompletedTask;
         }
@@ -64,3 +80,4 @@ namespace SmartMirror.ViewModels.Dialogs
         #endregion
     }
 }
+

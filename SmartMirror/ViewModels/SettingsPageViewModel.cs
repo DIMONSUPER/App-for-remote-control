@@ -1,4 +1,9 @@
-﻿using SmartMirror.Enums;
+using Prism.Services;
+using SmartMirror.Services.Aqara;
+using SmartMirror.Views;
+using System.ComponentModel;
+using static Android.Icu.Text.CaseMap;
+using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Interfaces;
 using SmartMirror.Models.BindableModels;
@@ -14,6 +19,8 @@ namespace SmartMirror.ViewModels
 {
     public class SettingsPageViewModel : BaseViewModel
     {
+        private readonly IAqaraService _aqaraService;
+        private readonly IDialogService _dialogService;
         private readonly IMapperService _mapperService;
         private readonly IScenariosService _scenariosService;
         private readonly IDialogService _dialogService;
@@ -21,15 +28,21 @@ namespace SmartMirror.ViewModels
 
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios;
         private IEnumerable<ImageAndTitleBindableModel> _allCameras;
+        private IEnumerable<SettingsProvidersBindableModel> _allProviders;
+        
+        private CategoryBindableModel _providersCategory;
+        private IDialogResult _dialogResult;
 
         public SettingsPageViewModel(
             IScenariosService scenariosService,
             IMapperService mapperService,
             IDialogService dialogService,
             ICamerasService camerasService,
+            IAqaraService aqaraService,
             INavigationService navigationService)
             : base(navigationService)
         {
+            _aqaraService = aqaraService;
             _scenariosService = scenariosService;
             _mapperService = mapperService;
             _dialogService = dialogService;
@@ -37,6 +50,13 @@ namespace SmartMirror.ViewModels
         }
 
         #region -- Public properties --
+
+        private EPageState _pageState;
+        public EPageState PageState
+        {
+            get => _pageState;
+            set => SetProperty(ref _pageState, value);
+        }
 
         private CategoryBindableModel _selectedCategory;
         public CategoryBindableModel SelectedCategory
@@ -59,12 +79,17 @@ namespace SmartMirror.ViewModels
             set => SetProperty(ref _categoryElements, value);
         }
 
-        private EPageState _pageState;
-        public EPageState PageState
-        {
-            get => _pageState;
-            set => SetProperty(ref _pageState, value);
-        }
+        private ICommand _loginWithAqaraCommand;
+        public ICommand LoginWithAqaraCommand => _loginWithAqaraCommand ??= SingleExecutionCommand.FromFunc<SettingsProvidersBindableModel>(OnLoginWithAqaraCommandAsync);
+
+        private ICommand _loginWithAppleCommand;
+        public ICommand LoginWithAppleCommand => _loginWithAppleCommand ??= SingleExecutionCommand.FromFunc<SettingsProvidersBindableModel>(OnLoginWithAppleCommandAsync);
+
+        private ICommand _loginWithAmazonCommand;
+        public ICommand LoginWithAmazonCommand => _loginWithAmazonCommand ??= SingleExecutionCommand.FromFunc<SettingsProvidersBindableModel>(OnLoginWithAmazonCommandAsync);
+
+        private ICommand _loginWithGoogleCommand;
+        public ICommand LoginWithGoogleCommand => _loginWithGoogleCommand ??= SingleExecutionCommand.FromFunc<SettingsProvidersBindableModel>(OnLoginWithGoogleCommandAsync);
 
         private ICommand _selectCategoryCommand;
         public ICommand SelectCategoryCommand => _selectCategoryCommand ??= SingleExecutionCommand.FromFunc<CategoryBindableModel>(OnSelectCategoryCommandAsync);
@@ -179,6 +204,16 @@ namespace SmartMirror.ViewModels
                 case ECategoryType.Cameras:
                     CategoryElements = new(_allCameras);
                     break;
+
+                case ECategoryType.Providers:
+                    CategoryElements = new(_allProviders);
+
+                    DataState = CategoryElements.Any()
+                        ? EPageState.Complete
+                        : EPageState.Empty;
+                    
+                    break;
+
                 default:
                     CategoryElements = new();
                     break;
@@ -196,6 +231,8 @@ namespace SmartMirror.ViewModels
             await LoadAllScenariosAsync();
 
             await LoadAllCamerasAsync();
+            
+            CreateProviders();
 
             PageState = EPageState.Complete;
         }
@@ -250,6 +287,56 @@ namespace SmartMirror.ViewModels
             }
         }
 
+        private void CreateProviders()
+        {
+            _allProviders = new List<SettingsProvidersBindableModel>()
+            {
+                new SettingsProvidersBindableModel
+                {
+                    ImageSource = "aqara_logo",
+                    Title = Strings.Connect,
+                    AuthType = EAuthType.Aqara,
+                    Type = ECategoryType.Providers,
+                    IsConnected = _aqaraService.IsAuthorized,
+                    TapCommand = LoginWithAqaraCommand,
+                },
+
+                new SettingsProvidersBindableModel
+                {
+                    ImageSource = "apple_logo",
+                    Title = Strings.Connect,
+                    AuthType = EAuthType.Apple,
+                    Type = ECategoryType.Providers,
+                    IsConnected = false,
+                    TapCommand = LoginWithAppleCommand,
+                },
+
+                new SettingsProvidersBindableModel
+                {
+                    ImageSource = "amazon_logo",
+                    Title = Strings.Connect,
+                    AuthType = EAuthType.Amazon,
+                    Type = ECategoryType.Providers,
+                    IsConnected = false,
+                    TapCommand = LoginWithAmazonCommand,
+                },
+
+                new SettingsProvidersBindableModel
+                {
+                    ImageSource = "google_logo",
+                    Title = Strings.Connect,
+                    AuthType = EAuthType.Google,
+                    Type = ECategoryType.Providers,
+                    IsConnected = false,
+                    TapCommand = LoginWithGoogleCommand,
+                },
+            };
+
+            _providersCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Providers);
+
+            _providersCategory.Count = GetConnectedProviders();
+        }
+
         private Task OnTryAgainCommandAsync()
         {
             PageState = EPageState.NoInternetLoader;
@@ -293,6 +380,128 @@ namespace SmartMirror.ViewModels
         private Task OnCloseSettingsCommandAsync()
         {
             return NavigationService.GoBackAsync();
+        }
+
+        private async Task<bool> ShowLogoutConfirmationDialog(SettingsProvidersBindableModel settingsProvider)
+        {
+            var isSuccess = false;
+
+            var dialogParameters = new DialogParameters();
+
+            var providerName = settingsProvider.AuthType switch
+            {
+                EAuthType.Amazon => Strings.Amazon,
+                EAuthType.Aqara => Strings.Aqara,
+                EAuthType.Apple => Strings.Apple,
+                EAuthType.Google => Strings.Google,
+
+                _ => string.Empty,
+            };
+
+            dialogParameters.Add(Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure);
+            dialogParameters.Add(Constants.DialogsParameterKeys.DESCRIPTION, $"{providerName} {Strings.WillBeDisconnected}");
+
+            _dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), dialogParameters);
+
+            if (_dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result))
+            {
+                isSuccess = result;
+            }
+
+            return isSuccess;
+        }
+
+        private async Task OnLoginWithAqaraCommandAsync(SettingsProvidersBindableModel settingsProvider)
+        {
+            if (_aqaraService.IsAuthorized)
+            {
+                var dialogResult = await ShowLogoutConfirmationDialog(settingsProvider);
+
+                if (dialogResult)
+                {
+                    _aqaraService.LogoutFromAqara();
+                }
+            }
+            else if (IsInternetConnected)
+            {
+                var testEmail = "botheadworks@gmail.com";
+                var resultOfSendingCodeToMail = await _aqaraService.SendLoginCodeAsync(testEmail);
+
+                if (resultOfSendingCodeToMail.IsSuccess)
+                {
+                    _dialogResult = await _dialogService.ShowDialogAsync(nameof(EnterCodeDialog), new DialogParameters
+                    {
+                        { Constants.DialogsParameterKeys.TITLE, Strings.Aqara },
+                        { Constants.DialogsParameterKeys.AUTH_TYPE, settingsProvider.AuthType },
+                    });
+                }
+                else
+                {
+                    _dialogResult = await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
+                    {
+                        { Constants.DialogsParameterKeys.TITLE, "FAIL" },
+                        { Constants.DialogsParameterKeys.DESCRIPTION, resultOfSendingCodeToMail.Result?.MsgDetails ?? resultOfSendingCodeToMail.Message },
+                    });
+                }
+            }
+            else
+            {
+                _dialogResult = await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
+                {
+                    { Constants.DialogsParameterKeys.TITLE, "FAIL" },
+                    { Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.NoInternetConnection}" },
+                });
+            }
+
+            settingsProvider.IsConnected = _aqaraService.IsAuthorized;
+            _providersCategory.Count = GetConnectedProviders();
+        }
+
+        private Task OnLoginWithAppleCommandAsync(SettingsProvidersBindableModel settingsProvider)
+        {
+            //TODO Implement login and logout from Apple
+
+            DisplayNotImplementedDialog();
+
+            _providersCategory.Count = GetConnectedProviders();
+
+            return Task.CompletedTask;
+        }
+
+        private Task OnLoginWithAmazonCommandAsync(SettingsProvidersBindableModel settingsProvider)
+        {
+            //TODO Implement login and logout from Amazon
+
+            DisplayNotImplementedDialog();
+
+            _providersCategory.Count = GetConnectedProviders();
+
+            return Task.CompletedTask;
+        }
+
+        private Task OnLoginWithGoogleCommandAsync(SettingsProvidersBindableModel settingsProvider)
+        {
+            //TODO Implement login and logout from Google
+
+            DisplayNotImplementedDialog();
+
+            _providersCategory.Count = GetConnectedProviders();
+
+            return Task.CompletedTask;
+        }
+
+        private void DisplayNotImplementedDialog()
+        {
+            _dialogService.ShowDialog(nameof(ErrorDialog), new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.TITLE, "It's not available right now" },
+                { Constants.DialogsParameterKeys.DESCRIPTION, $"Coming soon" },
+            });
+        }
+
+        private int GetConnectedProviders()
+        {
+            return _allProviders.Count(x => x.IsConnected);
         }
 
         #endregion

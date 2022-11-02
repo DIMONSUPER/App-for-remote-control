@@ -2,7 +2,6 @@
 using SmartMirror.Helpers;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Blur;
-using SmartMirror.Services.Keyboard;
 using SmartMirror.Views.Dialogs;
 using System.Windows.Input;
 
@@ -12,18 +11,15 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
 {
     private readonly IAqaraService _aqaraService;
     private readonly IDialogService _dialogService;
-    private readonly IKeyboardService _keyboardService;
 
     public EnterCodeDialogViewModel(
         IAqaraService aqaraService,
-        IKeyboardService keyboardService,
         IBlurService blurService,
         IDialogService dialogService)
         : base(blurService)
     {
         _aqaraService = aqaraService;
         _dialogService = dialogService;
-        _keyboardService = keyboardService;
     }
 
     #region -- Public properties --
@@ -40,6 +36,13 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
     {
         get => _codeText;
         set => SetProperty(ref _codeText, value);
+    }
+
+    private bool _isEntryFocused;
+    public bool IsEntryFocused
+    {
+        get => _isEntryFocused;
+        set => SetProperty(ref _isEntryFocused, value);
     }
 
     private bool _isLoggingWithCode;
@@ -65,7 +68,7 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
 
     public override void OnDialogOpened(IDialogParameters parameters)
     {
-        _keyboardService.ShowKeyboard();
+        base.OnDialogOpened(parameters);
 
         if (parameters.TryGetValue(Constants.DialogsParameterKeys.TITLE, out string title))
         {
@@ -76,6 +79,15 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
         {
             AuthType = authType;
         }
+
+        IsEntryFocused = true;
+    }
+
+    public override void OnDialogClosed()
+    {
+        base.OnDialogClosed();
+
+        IsEntryFocused = false;
     }
 
     #endregion
@@ -94,8 +106,6 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
 
             if (loginWithCodeResponse.IsSuccess)
             {
-                _keyboardService.HideKeyboard();
-
                 RequestClose.Invoke(new DialogParameters
                 {
                     { Constants.DialogsParameterKeys.RESULT, true },
