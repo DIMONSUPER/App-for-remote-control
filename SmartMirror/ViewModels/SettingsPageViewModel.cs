@@ -45,17 +45,17 @@ namespace SmartMirror.ViewModels
 
         #region -- Public properties --
 
-        protected bool IsDataLoading => PageState
-            is EPageState.Loading
-            or EPageState.NoInternetLoader
-            or EPageState.LoadingSkeleton;
-
         private EPageState _pageState;
         public EPageState PageState
         {
             get => _pageState;
             set => SetProperty(ref _pageState, value);
         }
+
+        public bool IsDataLoading => PageState
+            is EPageState.Loading
+            or EPageState.NoInternetLoader
+            or EPageState.LoadingSkeleton;
 
         private CategoryBindableModel _selectedCategory;
         public CategoryBindableModel SelectedCategory
@@ -203,21 +203,14 @@ namespace SmartMirror.ViewModels
         {
             if (SelectedCategory is not null)
             {
-                switch (SelectedCategory.Type)
+                CategoryElements = SelectedCategory.Type switch
                 {
-                    case ECategoryType.Accessories:
-                        CategoryElements = new(_allAccessories);
-                        break;
-
-                    case ECategoryType.Scenarios:
-                        CategoryElements = new(_allScenarios);
-                        break;
-
-                    case ECategoryType.Providers:
-                        CategoryElements = new(_allProviders);
-                        break;
-                }
-
+                    ECategoryType.Accessories => new(_allAccessories),
+                    ECategoryType.Scenarios => new(_allScenarios),
+                    ECategoryType.Providers => new(_allProviders),
+                    ECategoryType.Cameras => throw new NotImplementedException(),
+                    _ => throw new NotImplementedException(),
+                };
 
                 DataState = CategoryElements.Any()
                     ? EPageState.Complete
