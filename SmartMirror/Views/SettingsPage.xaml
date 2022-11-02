@@ -72,7 +72,8 @@
 
         <controls:CustomStateView
             Grid.Row="2"
-            State="{Binding PageState}">
+            State="{Binding PageState}"
+            TryAgainCommand="{Binding TryAgainCommand}">
 
             <controls:CustomStateView.CompleteContent>
 

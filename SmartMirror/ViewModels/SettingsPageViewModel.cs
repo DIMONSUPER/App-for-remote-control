@@ -1,13 +1,9 @@
-using Prism.Services;
-using SmartMirror.Services.Aqara;
-using SmartMirror.Views;
-using System.ComponentModel;
-using static Android.Icu.Text.CaseMap;
 using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Interfaces;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
+using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
@@ -25,9 +21,9 @@ namespace SmartMirror.ViewModels
         private readonly IDevicesService _devicesService;
         private readonly IScenariosService _scenariosService;
 
-        private IEnumerable<ImageAndTitleBindableModel> _allAccessories;
-        private IEnumerable<ImageAndTitleBindableModel> _allScenarios;
-        private IEnumerable<SettingsProvidersBindableModel> _allProviders;
+        private IEnumerable<ImageAndTitleBindableModel> _allAccessories = Enumerable.Empty<ImageAndTitleBindableModel>();
+        private IEnumerable<ImageAndTitleBindableModel> _allScenarios = Enumerable.Empty<ImageAndTitleBindableModel>();
+        private IEnumerable<SettingsProvidersBindableModel> _allProviders = Enumerable.Empty<SettingsProvidersBindableModel>();
         private CategoryBindableModel _providersCategory;
         private IDialogResult _dialogResult;
 
@@ -112,21 +108,29 @@ namespace SmartMirror.ViewModels
         {
             base.Initialize(parameters);
 
-            LoadCategories();
+            if (!IsDataLoading)
+            {
+                PageState = EPageState.LoadingSkeleton;
+                
+                LoadCategories();
+                SelectCategory(Categories.FirstOrDefault());
 
-            await LoadAllDataAsync();
-
-            SelectCategory(Categories.FirstOrDefault());
-            SetElementsSelectedCategory();
+                await LoadAllDataAndChangeStateAsync();
+            }
         }
 
         protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
             base.OnConnectivityChanged(sender, e);
 
-            if (IsInternetConnected)
+            if (e.NetworkAccess == NetworkAccess.Internet)
             {
-                await LoadAllDataAsync();
+                if (!IsDataLoading && PageState != EPageState.Complete)
+                {
+                    PageState = EPageState.LoadingSkeleton;
+
+                    await LoadAllDataAndChangeStateAsync(); 
+                }
             }
             else
             {
@@ -146,7 +150,6 @@ namespace SmartMirror.ViewModels
                 {
                     Type = ECategoryType.Accessories,
                     Name = Strings.Accessories,
-                    IsSelected = true,
                     TapCommand = SelectCategoryCommand,
                 },
                 new()
@@ -202,9 +205,9 @@ namespace SmartMirror.ViewModels
                     case ECategoryType.Accessories:
                         CategoryElements = new(_allAccessories);
                         
-                        DataState = _allAccessories.Any()
+                        DataState = CategoryElements.Any()
                             ? EPageState.Complete
-                            : EPageState.None;
+                            : EPageState.Empty;
 
                         break;
 
@@ -217,14 +220,14 @@ namespace SmartMirror.ViewModels
 
                         break;
 
-                case ECategoryType.Providers:
-                    CategoryElements = new(_allProviders);
+                    case ECategoryType.Providers:
+                        CategoryElements = new(_allProviders);
 
-                    DataState = CategoryElements.Any()
-                        ? EPageState.Complete
-                        : EPageState.Empty;
+                        DataState = CategoryElements.Any()
+                            ? EPageState.Complete
+                            : EPageState.Empty;
                     
-                    break;
+                        break;
 
                     default:
                         CategoryElements = new();
@@ -234,18 +237,48 @@ namespace SmartMirror.ViewModels
             }
         }
 
-        private async Task LoadAllDataAsync()
+        private async Task LoadAllDataAndChangeStateAsync()
         {
-            await Task.WhenAll(
-                LoadAllDevicesAsync(),
-                LoadAllScenariosAsync());
+            if (IsInternetConnected)
+            {
+                await LoadAllDataAsync();
 
-            CreateProviders();
+                if (IsInternetConnected)
+                {
+                    PageState = EPageState.Complete;
 
-            PageState = EPageState.Complete;
+                    SetElementsSelectedCategory();
+                }
+                else
+                {
+                    PageState = EPageState.NoInternet;
+                }
+            }
+            else
+            {
+                PageState = EPageState.NoInternet;
+            }
         }
 
-        private async Task LoadAllDevicesAsync()
+        private async Task<bool> LoadAllDataAsync()
+        {
+            bool isLoaded = false;
+
+            if (IsInternetConnected)
+            {
+                var dataLoadingResults = await Task.WhenAll(
+                    LoadAllDevicesAsync(),
+                    LoadAllScenariosAsync());
+                
+                CreateProviders();
+
+                isLoaded = dataLoadingResults.Any(x => x);
+            }
+
+            return isLoaded;
+        }
+
+        private async Task<bool> LoadAllDevicesAsync()
         {
             var resultOfGettingAllDevices = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
             
@@ -260,9 +293,11 @@ namespace SmartMirror.ViewModels
 
                 deviceCategory.Count = _allAccessories.Count();
             }
+
+            return resultOfGettingAllDevices.IsSuccess;
         }
 
-        private async Task LoadAllScenariosAsync()
+        private async Task<bool> LoadAllScenariosAsync()
         {
             var resultOfGettingAllScenarios = await _scenariosService.GetScenariosAsync();
 
@@ -279,6 +314,8 @@ namespace SmartMirror.ViewModels
 
                 scenarioCategory.Count = _allScenarios.Count();
             }
+
+            return resultOfGettingAllScenarios.IsSuccess;
         }
 
         private void CreateProviders()
@@ -331,11 +368,27 @@ namespace SmartMirror.ViewModels
             _providersCategory.Count = GetConnectedProviders();
         }
 
-        private Task OnTryAgainCommandAsync()
+        private async Task OnTryAgainCommandAsync()
         {
-            PageState = EPageState.NoInternetLoader;
+            if (!IsDataLoading)
+            {
+                PageState = EPageState.NoInternetLoader;
 
-            return LoadAllDataAsync();
+                var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
+
+                var isDataLoaded = await TaskRepeater.RepeatAsync(LoadAllDataAsync, executionTime);
+
+                if (IsInternetConnected)
+                {
+                    PageState = EPageState.Complete;
+
+                    SetElementsSelectedCategory();
+                }
+                else
+                {
+                    PageState = EPageState.NoInternet;
+                } 
+            }
         }
 
         private Task OnOpenAccessorySettingsCommandAsync(ImageAndTitleBindableModel accessory)
