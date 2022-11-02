@@ -68,6 +68,26 @@ namespace SmartMirror.Behaviors
             return (Color)view.GetValue(PressedBackgroundColorProperty);
         }
 
+        public static void SetAnimation(BindableObject view, bool value)
+        {
+            view.SetValue(IsAnimationProperty, value);
+        }
+
+        public static void SetNormalBackgroundColor(BindableObject view, Color color)
+        {
+            view.SetValue(NormalBackgroundColorProperty, color);
+        }
+        
+        public static void SetPressedBackgroundColor(BindableObject view, Color color)
+        {
+            view.SetValue(PressedBackgroundColorProperty, color);
+        }
+
+        public static void SetCommand(BindableObject view, ICommand command)
+        {
+            view.SetValue(CommandProperty, command);
+        }
+
         #endregion
 
         #region -- Private helpers --
@@ -99,7 +119,7 @@ namespace SmartMirror.Behaviors
                     await bindable.Dispatcher.DispatchAsync(async () =>
                     {
                         await view.BackgroundColorTo(pressedBackgroundColor, 16, 60, Easing.SpringOut)
-                        .ContinueWith(x => view.BackgroundColorTo(normalBackgroundColor, 16, 60, Easing.SpringIn));
+                            .ContinueWith(x => view.BackgroundColorTo(normalBackgroundColor, 16, 60, Easing.SpringIn));
                     });
                 }
             }
