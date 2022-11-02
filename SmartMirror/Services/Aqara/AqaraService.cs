@@ -26,7 +26,7 @@ public class AqaraService : BaseAqaraService, IAqaraService
             {
                 account = email,
                 accountType = 0,
-                accessTokenValidity = "1h",
+                accessTokenValidity = "30d",
             };
 
             var response = await MakeRequestAsync("config.auth.getAuthCode", data, onFailure);
@@ -116,6 +116,17 @@ public class AqaraService : BaseAqaraService, IAqaraService
             };
 
             var response = await MakeRequestAsync<BaseAqaraResponse>("config.scene.run", data, onFailure);
+        });
+    }
+
+    public Task<AOResult> LogoutFromAqara()
+    {
+        return AOResult.ExecuteTaskAsync(onFailure =>
+        {
+            //TODO implement when is needed
+            //SettingsManager.AqaraAccessSettings.Clear();
+
+            return Task.CompletedTask;
         });
     }
 

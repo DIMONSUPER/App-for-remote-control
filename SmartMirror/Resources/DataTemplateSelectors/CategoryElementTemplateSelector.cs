@@ -10,6 +10,7 @@ namespace SmartMirror.Resources.DataTemplateSelectors
         {
             { ECategoryType.Accessories, new AccessoryImageAndTitleTemplate() },
             { ECategoryType.Scenarios, new ImageAndTitleTemplate() },
+            { ECategoryType.Providers, new ProvidersTemplate() },
         };
 
         #region -- Overrides --

@@ -10,7 +10,6 @@ using SmartMirror.Services.Blur;
 //using SmartMirror.Services.Amazon;
 using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Devices;
-using SmartMirror.Services.Keyboard;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Notifications;
@@ -64,6 +63,7 @@ public static class MauiProgram
         containerRegistry.RegisterDialog<EnterCodeDialog>();
         containerRegistry.RegisterDialog<AccessorySettingsDialog>();
         containerRegistry.RegisterDialog<ScenarioDescriptionDialog>();
+        containerRegistry.RegisterDialog<ConfirmDialog>();
 
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
         containerRegistry.RegisterForNavigation<WelcomePage>();
@@ -91,7 +91,6 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IScenariosService, ScenariosService>();
         containerRegistry.RegisterSingleton<IDevicesService, DevicesService>();
         containerRegistry.RegisterSingleton<IRoomsService, RoomsService>();
-        containerRegistry.RegisterSingleton<IKeyboardService, KeyboardService>();
     }
 
     private static void OnInitialized(IContainerProvider container)

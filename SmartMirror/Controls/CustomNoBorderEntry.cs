@@ -1,5 +1,7 @@
 ﻿using Microsoft.Maui.Controls.Compatibility.Platform.Android;
+using Microsoft.Maui.Handlers;
 using System.Runtime.CompilerServices;
+using Platform = Microsoft.Maui.ApplicationModel.Platform;
 
 namespace SmartMirror.Controls
 {
@@ -8,19 +10,22 @@ namespace SmartMirror.Controls
         public CustomNoBorderEntry()
         {
             AppendToMapping();
+
+            Focused += OnFocusChanged;
+            Unfocused += OnFocusChanged;
         }
 
         #region -- Public properties --
 
-        public static readonly BindableProperty NeedToFocusProperty = BindableProperty.Create(
-            propertyName: nameof(NeedToFocus),
+        public static readonly BindableProperty IsEntryFocusedProperty = BindableProperty.Create(
+            propertyName: nameof(IsEntryFocused),
             returnType: typeof(bool),
             declaringType: typeof(CustomNoBorderEntry));
 
-        public bool NeedToFocus
+        public bool IsEntryFocused
         {
-            get => (bool)GetValue(NeedToFocusProperty);
-            set => SetValue(NeedToFocusProperty, value);
+            get => (bool)GetValue(IsEntryFocusedProperty);
+            set => SetValue(IsEntryFocusedProperty, value);
         }
 
         #endregion
@@ -31,20 +36,27 @@ namespace SmartMirror.Controls
         {
             base.OnPropertyChanged(propertyName);
 
-            if (NeedToFocus && propertyName == nameof(NeedToFocus))
+            if (propertyName == IsEntryFocusedProperty.PropertyName)
             {
-                Dispatcher.StartTimer(TimeSpan.FromMilliseconds(250), () =>
+                if (IsEntryFocused)
                 {
-                    Focus();
-
-                    return false;
-                }); 
+                    Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(250), () => this.Focus());
+                }
+                else
+                {
+                    this.Unfocus();
+                }
             }
         }
 
         #endregion
 
         #region --- Private helpers ---
+
+        private void OnFocusChanged(object sender, FocusEventArgs e)
+        {
+            IsEntryFocused = e.IsFocused;
+        }
 
         private void AppendToMapping()
         {
@@ -58,6 +70,26 @@ namespace SmartMirror.Controls
                     handler.PlatformView.SetBackgroundColor(backgroundColor.ToAndroid());
                 }
             });
+
+            Entry.ControlsEntryMapper.AppendToMapping(nameof(Entry.IsFocused), UpdateFocus);
+        }
+
+        private void UpdateFocus(EntryHandler handler, IEntry entry)
+        {
+            var editText = handler.PlatformView;
+
+            if (Platform.CurrentActivity.GetSystemService(Android.Content.Context.InputMethodService) is Android.Views.InputMethods.InputMethodManager inputMethodManager)
+            {
+                if (IsFocused)
+                {
+                    editText.RequestFocus();
+                    inputMethodManager.ShowSoftInput(editText, Android.Views.InputMethods.ShowFlags.Forced);
+                }
+                else
+                {
+                    inputMethodManager.HideSoftInputFromWindow(editText.WindowToken, Android.Views.InputMethods.HideSoftInputFlags.None);
+                }
+            }
         }
 
         #endregion
