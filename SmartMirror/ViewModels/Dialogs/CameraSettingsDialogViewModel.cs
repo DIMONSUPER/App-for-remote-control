@@ -47,7 +47,7 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             RequestClose.Invoke(new DialogParameters()
             {
-                { Constants.DialogsParameterKeys.SHOW_CONFIRM_DIALOG, true },
+                { Constants.DialogsParameterKeys.RESULT, true },
             });
 
             return Task.CompletedTask;

@@ -354,7 +354,7 @@ namespace SmartMirror.ViewModels
                 { Constants.DialogsParameterKeys.CAMERA, camera },
             });
 
-            if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.SHOW_CONFIRM_DIALOG, out bool confirm) && confirm)
+            if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool confirm) && confirm)
             {
                 dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), new DialogParameters
                 {

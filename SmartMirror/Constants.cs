@@ -17,7 +17,6 @@
             public const string SCENARIO = nameof(SCENARIO);
             public const string CAMERA = nameof(CAMERA);
             public const string CONFIRM = nameof(CONFIRM);
-            public const string SHOW_CONFIRM_DIALOG = nameof(SHOW_CONFIRM_DIALOG);
             public const string AUTH_TYPE = nameof(AUTH_TYPE);
             public const string TITLE = nameof(TITLE);
             public const string DESCRIPTION = nameof(DESCRIPTION);
