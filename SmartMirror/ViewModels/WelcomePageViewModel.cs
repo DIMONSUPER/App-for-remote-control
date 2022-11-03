@@ -69,7 +69,11 @@ namespace SmartMirror.ViewModels
             }
             else
             {
-                //TODO: notify
+                await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
+                {
+                    { Constants.DialogsParameterKeys.TITLE, Strings.NoInternetConnection },
+                    { Constants.DialogsParameterKeys.DESCRIPTION, Strings.PleaseCheckInternet },
+                });
             }
         }
 
