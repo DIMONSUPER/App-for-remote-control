@@ -4,6 +4,7 @@ using SmartMirror.Interfaces;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Aqara;
+using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
@@ -20,10 +21,13 @@ namespace SmartMirror.ViewModels
         private readonly IMapperService _mapperService;
         private readonly IDevicesService _devicesService;
         private readonly IScenariosService _scenariosService;
+        private readonly ICamerasService _camerasService;
 
         private IEnumerable<ImageAndTitleBindableModel> _allAccessories = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios = Enumerable.Empty<ImageAndTitleBindableModel>();
+        private IEnumerable<ImageAndTitleBindableModel> _allCameras = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<SettingsProvidersBindableModel> _allProviders = Enumerable.Empty<SettingsProvidersBindableModel>();
+        
         private CategoryBindableModel _providersCategory;
         private IDialogResult _dialogResult;
 
@@ -33,6 +37,7 @@ namespace SmartMirror.ViewModels
             IMapperService mapperService,
             IDevicesService devicesService,
             IScenariosService scenariosService,
+            ICamerasService camerasService,
             IAqaraService aqaraService)
             : base(navigationService)
         {
@@ -41,6 +46,7 @@ namespace SmartMirror.ViewModels
             _dialogService = dialogService;
             _devicesService = devicesService;
             _scenariosService = scenariosService;
+            _camerasService = camerasService;
         }
 
         #region -- Public properties --
@@ -93,8 +99,14 @@ namespace SmartMirror.ViewModels
         private ICommand _selectCategoryCommand;
         public ICommand SelectCategoryCommand => _selectCategoryCommand ??= SingleExecutionCommand.FromFunc<CategoryBindableModel>(OnSelectCategoryCommandAsync);
 
-        private ICommand _showScenarioDescriptionCommand;
-        public ICommand ShowScenarioDescriptionCommand => _showScenarioDescriptionCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowScenarioDescriptionCommandAsync);
+        private ICommand _showScenarioSettingsCommand;
+        public ICommand ShowScenarioSettingsCommand => _showScenarioSettingsCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowScenarioSettingsCommandAsync);
+
+        private ICommand _showCameraSettingsCommand;
+        public ICommand ShowCameraSettingsCommand => _showCameraSettingsCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowCameraSettingsCommandAsync);
+
+        private ICommand _addNewCameraCommand;
+        public ICommand AddNewCameraCommand => _addNewCameraCommand ??= SingleExecutionCommand.FromFunc(OnAddNewCameraCommandAsync);
 
         private ICommand _tryAgainCommand;
         public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
@@ -207,8 +219,8 @@ namespace SmartMirror.ViewModels
                 {
                     ECategoryType.Accessories => new(_allAccessories),
                     ECategoryType.Scenarios => new(_allScenarios),
+                    ECategoryType.Cameras => new(_allCameras),
                     ECategoryType.Providers => new(_allProviders),
-                    ECategoryType.Cameras => throw new NotImplementedException(),
                     _ => throw new NotImplementedException(),
                 };
 
@@ -249,7 +261,8 @@ namespace SmartMirror.ViewModels
             {
                 var dataLoadingResults = await Task.WhenAll(
                     LoadAllDevicesAsync(),
-                    LoadAllScenariosAsync());
+                    LoadAllScenariosAsync(),
+                    LoadAllCamerasAsync());
                 
                 CreateProviders();
 
@@ -288,7 +301,7 @@ namespace SmartMirror.ViewModels
                 {
                     vm.Type = ECategoryType.Scenarios;
                     vm.ImageSource = "play_gray";
-                    vm.TapCommand = ShowScenarioDescriptionCommand;
+                    vm.TapCommand = ShowScenarioSettingsCommand;
                 });
 
                 var scenarioCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Scenarios);
@@ -297,6 +310,39 @@ namespace SmartMirror.ViewModels
             }
 
             return resultOfGettingAllScenarios.IsSuccess;
+        }
+
+        private async Task<bool> LoadAllCamerasAsync()
+        {
+            var resultOfGettingCameras = await _camerasService.GetCamerasAsync();
+
+            if (resultOfGettingCameras.IsSuccess)
+            {
+                _allCameras = _mapperService.MapRange<ImageAndTitleBindableModel>(resultOfGettingCameras.Result, (m, vm) =>
+                {
+                    vm.Type = ECategoryType.Cameras;
+                    vm.ImageSource = "video_fill_dark";
+                    vm.TapCommand = ShowCameraSettingsCommand;
+                });
+
+                var addCameraItem = new ImageAndTitleBindableModel()
+                {
+                    Name = Strings.AddNewCamera,
+                    Type = ECategoryType.Cameras,
+                    ImageSource = "subtract_plus",
+                    TapCommand = AddNewCameraCommand,
+                };
+
+                var firstItems = new[] { addCameraItem };
+
+                _allCameras = firstItems.Concat(_allCameras);
+
+                var cameraCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Cameras);
+
+                cameraCategory.Count = _allCameras.Count() - 1;
+            }
+
+            return resultOfGettingCameras.IsSuccess;
         }
 
         private void CreateProviders()
@@ -380,11 +426,36 @@ namespace SmartMirror.ViewModels
             });
         }
 
-        private Task OnShowScenarioDescriptionCommandAsync(ImageAndTitleBindableModel scenario)
+        private Task OnShowScenarioSettingsCommandAsync(ImageAndTitleBindableModel scenario)
         {
-            return _dialogService.ShowDialogAsync(nameof(ScenarioDescriptionDialog), new DialogParameters
+            return _dialogService.ShowDialogAsync(nameof(ScenarioSettingsDialog), new DialogParameters
             {
                 { Constants.DialogsParameterKeys.SCENARIO, scenario },
+            });
+        }
+
+        private async Task OnShowCameraSettingsCommandAsync(ImageAndTitleBindableModel camera)
+        {
+            var dialogResult = await _dialogService.ShowDialogAsync(nameof(CameraSettingsDialog), new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.CAMERA, camera },
+            });
+
+            if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool confirm) && confirm)
+            {
+                dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), new DialogParameters
+                {
+                    { Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure },
+                    { Constants.DialogsParameterKeys.DESCRIPTION, Strings.TheCameraWillBeRemoved },
+                });
+            }
+        }
+
+        private Task OnAddNewCameraCommandAsync()
+        {
+            return _dialogService.ShowDialogAsync(nameof(AddNewCameraDialog), new DialogParameters()
+            {
+                { Constants.DialogsParameterKeys.TITLE, Strings.NewCamera },
             });
         }
 

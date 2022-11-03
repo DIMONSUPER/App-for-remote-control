@@ -8,8 +8,9 @@ namespace SmartMirror.Resources.DataTemplateSelectors
     {
         private readonly Dictionary<ECategoryType, DataTemplate> _dataTemplatesDictionary = new()
         {
-            { ECategoryType.Accessories, new AccessoryImageAndTitleTemplate() },
-            { ECategoryType.Scenarios, new ImageAndTitleTemplate() },
+            { ECategoryType.Accessories, new SimpleAccessoryTemplate() },
+            { ECategoryType.Scenarios, new SimpleScenarioTemplate() },
+            { ECategoryType.Cameras, new SimpleCameraTemplate() },
             { ECategoryType.Providers, new ProvidersTemplate() },
         };
 

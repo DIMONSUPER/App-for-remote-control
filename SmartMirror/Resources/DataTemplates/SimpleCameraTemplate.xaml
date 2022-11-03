@@ -5,41 +5,60 @@
     xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:vm="clr-namespace:SmartMirror.Models.BindableModels"
-    x:Class="SmartMirror.Resources.DataTemplates.AccessoryImageAndTitleTemplate"
+    x:Class="SmartMirror.Resources.DataTemplates.SimpleCameraTemplate"
     x:DataType="vm:ImageAndTitleBindableModel">
 
     <Border
         BackgroundColor="{DynamicResource cbg_i2}"
         Stroke="{DynamicResource cbg_i4}"
-        StrokeThickness="0.75"
+        StrokeThickness="1"
         StrokeShape="RoundRectangle 9"
+        HeightRequest="78"
         behaviors:TouchBehavior.IsAnimation="True"
         behaviors:TouchBehavior.Command="{Binding TapCommand}"
         behaviors:TouchBehavior.CommandParameter="{Binding .}"
         behaviors:TouchBehavior.NormalBackgroundColor="{DynamicResource cbg_i2}"
         behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}">
 
-        <HorizontalStackLayout Padding="24, 18">
+        <HorizontalStackLayout Padding="24, 0">
 
             <controls:CustomImageBotton
                 VerticalOptions="Center"
                 HorizontalOptions="Start"
-                HeightImage="42"
-                Padding="0"
-                Source="{Binding ImageSource}"/>
+                StrokeShape="RoundRectangle 9"
+                BackgroundColor="{DynamicResource cbg_i7}"
+                HeightImage="10"
+                HeightRequest="36"
+                WidthRequest="36"
+                Padding="9"
+                Source="{Binding ImageSource}">
+
+                <controls:CustomImageBotton.Triggers>
+
+                    <DataTrigger Binding="{Binding ImageSource}" Value="subtract_plus" TargetType="controls:CustomImageBotton">
+
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="HeightImage" Value="36"/>
+                        <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i2}"/>
+
+                    </DataTrigger>
+                    
+                </controls:CustomImageBotton.Triggers>
+
+            </controls:CustomImageBotton>
 
             <Label
                 Style="{DynamicResource tstyle_i11}"
                 Text="{Binding Name}"
+                WidthRequest="250"
                 LineBreakMode="TailTruncation"
-                Margin="10, 0"
-                MaximumWidthRequest="220"
-                MaxLines="1"
+                Margin="12, 0"
                 HorizontalOptions="Start"
-                VerticalOptions="Center"/>
+                VerticalOptions="Center"
+                VerticalTextAlignment="Center"/>
 
         </HorizontalStackLayout>
 
     </Border>
-    
+
 </DataTemplate>

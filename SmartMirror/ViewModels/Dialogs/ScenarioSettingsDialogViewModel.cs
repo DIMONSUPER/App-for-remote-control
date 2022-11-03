@@ -5,9 +5,9 @@ using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
-    public class ScenarioDescriptionDialogViewModel : BaseDialogViewModel
+    public class ScenarioSettingsDialogViewModel : BaseDialogViewModel
     {
-        public ScenarioDescriptionDialogViewModel(IBlurService blurService)
+        public ScenarioSettingsDialogViewModel(IBlurService blurService)
             : base(blurService)
         {
         }
