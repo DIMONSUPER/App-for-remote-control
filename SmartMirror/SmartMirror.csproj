@@ -125,6 +125,7 @@
 		<Folder Include="Views\Tabs\" />
 		<Folder Include="Resources\DataTemplateSelectors\" />
 		<Folder Include="ViewModels\Tabs\" />
+		<Folder Include="Resources\DataTemplates\" />
 		<Folder Include="Extensions\" />
 		<Folder Include="Services\Mock\" />
 		<Folder Include="Platforms\Android\Renderers\" />

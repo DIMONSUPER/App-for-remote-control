@@ -11,7 +11,7 @@
     <Border
         BackgroundColor="{DynamicResource cbg_i2}"
         Stroke="{DynamicResource cbg_i4}"
-        StrokeThickness="1"
+        StrokeThickness="0.75"
         StrokeShape="RoundRectangle 9"
         HeightRequest="78"
         behaviors:TouchBehavior.IsAnimation="True"
