@@ -255,6 +255,9 @@
     <data name="ReceiveNotifications" xml:space="preserve">
         <value>Receive Notifications</value>
     </data>
+    <data name="ShowInRooms" xml:space="preserve">
+        <value>Show in Rooms</value>
+    </data>
     <data name="ShowInScenarios" xml:space="preserve">
         <value>Show in Scenarios</value>
     </data>

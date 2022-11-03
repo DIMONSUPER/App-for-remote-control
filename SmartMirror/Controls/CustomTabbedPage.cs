@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Controls.Shapes;
+using SmartMirror.Behaviors;
 using SmartMirror.Interfaces;
 using System.Windows.Input;
 
@@ -138,6 +139,7 @@ public class CustomTabbedPage : TabbedPage
             RowSpacing = 0,
         };
 
+
         var stackTimeAndTabs = new StackLayout() { Spacing = 0 };
 
         stackTimeAndTabs.Add(CreateTimeLabel());
@@ -166,7 +168,7 @@ public class CustomTabbedPage : TabbedPage
             VerticalOptions = LayoutOptions.Center,
         };
 
-        return new Border()
+        var border = new Border()
         {
             Content = icon,
             HeightRequest = 68,
@@ -178,14 +180,14 @@ public class CustomTabbedPage : TabbedPage
             StrokeThickness = 1,
             StrokeShape = new RoundRectangle() { CornerRadius = 9 },
             Stroke = Color.FromArgb("#fff"),
-            GestureRecognizers =
-            {
-                new TapGestureRecognizer()
-                {
-                    Command = SettingsCommand,
-                },
-            },
         };
+
+        TouchBehavior.SetAnimation(border, true);
+        TouchBehavior.SetNormalBackgroundColor(border, Color.FromArgb("#3A3A3C"));
+        TouchBehavior.SetPressedBackgroundColor(border, Color.FromArgb("#505053"));
+        TouchBehavior.SetCommand(border, SettingsCommand);
+
+        return border;
     }
 
     private CurrentTimeControl CreateTimeLabel()

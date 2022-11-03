@@ -61,6 +61,7 @@ public static class MauiProgram
     {
         containerRegistry.RegisterDialog<ErrorDialog>();
         containerRegistry.RegisterDialog<EnterCodeDialog>();
+        containerRegistry.RegisterDialog<AccessorySettingsDialog>();
         containerRegistry.RegisterDialog<ScenarioSettingsDialog>();
         containerRegistry.RegisterDialog<CameraSettingsDialog>();
         containerRegistry.RegisterDialog<ConfirmDialog>();

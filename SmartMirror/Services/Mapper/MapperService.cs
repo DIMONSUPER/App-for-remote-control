@@ -81,6 +81,9 @@ namespace SmartMirror.Services.Mapper
                 cfg.CreateMap<DetailSceneAqaraModel, ScenarioBindableModel>().ReverseMap();
                 cfg.CreateMap<ActionAqaraModel, ScenarioActionBindableModel>().ReverseMap();
                 cfg.CreateMap<ScenarioModel, ImageAndTitleBindableModel>().ReverseMap();
+                cfg.CreateMap<DeviceBindableModel, ImageAndTitleBindableModel>()
+                    .ForMember(nameof(ImageAndTitleBindableModel.ImageSource), opt => opt.MapFrom(scr => scr.IconSource))
+                    .ReverseMap();
             });
 
             return mapperConfiguration.CreateMapper();

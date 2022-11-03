@@ -14,7 +14,7 @@
 
     <Border
         WidthRequest="479"
-        StrokeThickness="1"
+        StrokeThickness="0.75"
         StrokeShape="RoundRectangle 9"
         Stroke="{DynamicResource tcolor_i1}"
         BackgroundColor="{StaticResource cbg_i2}">
@@ -31,10 +31,7 @@
                     Margin="0, 0, 15, 0"
                     Padding="16"
                     BackgroundColor="{DynamicResource cbg_i7}"
-                    StrokeShape="RoundRectangle 9"
-                    behaviors:TouchBehavior.IsAnimation="True"
-                    behaviors:TouchBehavior.NormalBackgroundColor="{DynamicResource cbg_i15}"
-                    behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}">
+                    StrokeShape="RoundRectangle 9">
 
                     <Image
                         Source="video_fill_dark"

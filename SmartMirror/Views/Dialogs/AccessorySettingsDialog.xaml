@@ -9,70 +9,59 @@
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     Padding="0"
     BackgroundColor="Transparent"
-    x:Class="SmartMirror.Views.Dialogs.ScenarioSettingsDialog"
-    x:DataType="vm:ScenarioSettingsDialogViewModel">
+    x:Class="SmartMirror.Views.Dialogs.AccessorySettingsDialog"
+    x:DataType="vm:AccessorySettingsDialogViewModel">
 
     <Border
         WidthRequest="479"
-        StrokeThickness="1"
+        StrokeThickness="0.75"
         StrokeShape="RoundRectangle 9"
         Stroke="{DynamicResource tcolor_i1}"
         BackgroundColor="{StaticResource cbg_i2}">
 
         <StackLayout
-            Padding="30, 24"
-            Spacing="6">
+            Padding="30, 24, 30, 42"
+            Spacing="42">
 
-            <HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="21">
+
+                <Image
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    HeightRequest="62"
+                    WidthRequest="62"
+                    Source="{Binding ImageSource}"/>
                 
-                <Border
-                    HeightRequest="60"
-                    WidthRequest="60"
-                    Margin="0, 0, 15, 0"
-                    Padding="17"
-                    BackgroundColor="{DynamicResource cbg_i15}"
-                    StrokeShape="RoundRectangle 9">
-
-                    <Image
-                        Source="play_gray"
-                        VerticalOptions="Center"
-                        HorizontalOptions="Center"/>
-
-                </Border>
-
                 <controls:CustomLabel
                     Style="{DynamicResource tstyle_i11}"
-                    MaxLines="2"
+                    VerticalOptions="Center"
+                    MaximumWidthRequest="340"
                     LineBreakMode="TailTruncation"
-                    VerticalTextAlignment="Center"
-                    WidthRequest="340"
+                    MaxLines="2"
                     Text="{Binding Title}"/>
 
             </HorizontalStackLayout>
 
             <Border
-                Margin="0, 42, 0, 0"
-                Padding="1"
-                StrokeThickness="1"
+                StrokeThickness="0.75"
                 StrokeShape="RoundRectangle 9"
                 Stroke="{DynamicResource tcolor_i1}"
                 BackgroundColor="{StaticResource cbg_i15}">
 
-                <VerticalStackLayout>
+                <VerticalStackLayout 
+                    Padding="24, 22" 
+                    Spacing="36">
 
                     <controls:TitleAndSwitchView
-                        Title="{extensions:Translate ShowInScenarios}"
-                        IsToggled="True"
-                        Padding="24, 18"/>
+                        Title="{extensions:Translate ShowInRooms}"
+                        IsToggled="True"/>
 
                     <controls:TitleAndSwitchView
-                        Title="{extensions:Translate ReceiveNotifications}"
-                        Padding="24, 18"/>
+                        Title="{extensions:Translate ReceiveNotifications}"/>
 
                     <controls:TitleAndSwitchView
                         Title="{extensions:Translate AddToFavorites}"
-                        IsToggled="True"
-                        Padding="24, 18"/>
+                        IsToggled="True"/>
 
                 </VerticalStackLayout>
 
@@ -81,7 +70,6 @@
             <Button 
                 Style="{DynamicResource ButtonStyle_i1}"
                 HorizontalOptions="Center"
-                Margin="0, 36, 0, 20"
                 Text="{extensions:Translate Close}"
                 Command="{Binding CloseCommand}"/>
 

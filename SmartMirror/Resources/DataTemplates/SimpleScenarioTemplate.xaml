@@ -11,7 +11,7 @@
     <Border
         BackgroundColor="{DynamicResource cbg_i2}"
         Stroke="{DynamicResource cbg_i4}"
-        StrokeThickness="1"
+        StrokeThickness="0.75"
         StrokeShape="RoundRectangle 9"
         HeightRequest="78"
         behaviors:TouchBehavior.IsAnimation="True"
@@ -36,9 +36,10 @@
             <Label
                 Style="{DynamicResource tstyle_i11}"
                 Text="{Binding Name}"
-                WidthRequest="250"
                 LineBreakMode="TailTruncation"
                 Margin="12, 0"
+                MaximumWidthRequest="220"
+                MaxLines="1"
                 HorizontalOptions="Start"
                 VerticalOptions="Center"
                 VerticalTextAlignment="Center"/>
