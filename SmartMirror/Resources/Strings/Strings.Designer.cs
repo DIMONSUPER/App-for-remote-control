@@ -76,6 +76,24 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        internal static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add New Camera.
+        /// </summary>
+        internal static string AddNewCamera {
+            get {
+                return ResourceManager.GetString("AddNewCamera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to Favorites.
         /// </summary>
         internal static string AddToFavorites {
@@ -193,6 +211,14 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        internal static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+        
         ///   Looks up a localized string similar to Connect.
         /// </summary>
         internal static string Connect {
@@ -252,6 +278,24 @@ namespace SmartMirror.Resources.Strings {
         internal static string EnterCode {
             get {
                 return ResourceManager.GetString("EnterCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter IP Address.
+        /// </summary>
+        internal static string EnterIPAddress {
+            get {
+                return ResourceManager.GetString("EnterIPAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter Password.
+        /// </summary>
+        internal static string EnterPassword {
+            get {
+                return ResourceManager.GetString("EnterPassword", resourceCulture);
             }
         }
         
@@ -445,6 +489,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Camera.
+        /// </summary>
+        internal static string NewCamera {
+            get {
+                return ResourceManager.GetString("NewCamera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No accessories yet.
         /// </summary>
         internal static string NoAccessoriesYet {
@@ -625,6 +678,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        internal static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rooms.
         /// </summary>
         internal static string Rooms {
@@ -679,6 +741,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show in Cameras.
+        /// </summary>
+        internal static string ShowInCameras {
+            get {
+                return ResourceManager.GetString("ShowInCameras", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show in Scenarios.
         /// </summary>
         internal static string ShowInScenarios {
@@ -711,6 +782,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Synchronization {
             get {
                 return ResourceManager.GetString("Synchronization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The camera will be removed.
+        /// </summary>
+        internal static string TheCameraWillBeRemoved {
+            get {
+                return ResourceManager.GetString("TheCameraWillBeRemoved", resourceCulture);
             }
         }
         

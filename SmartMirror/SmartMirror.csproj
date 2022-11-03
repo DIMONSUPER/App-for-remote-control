@@ -48,7 +48,9 @@
 		<None Remove="Resources\Images\apple_logo.svg" />
 		<None Remove="Resources\Images\aqara_logo.svg" />
 		<None Remove="Resources\Images\ci_close_big.svg" />
+		<None Remove="Resources\Images\delete.svg" />
 		<None Remove="Resources\Images\google_logo.svg" />
+		<None Remove="Resources\Images\subtract_plus.svg" />
 		<None Remove="Views\" />
 		<None Remove="ViewModels\" />
 		<None Remove="Services\" />
@@ -165,7 +167,10 @@
 			<SubType>
 			</SubType>
 		</MauiXaml>
-		<MauiXaml Update="Resources\DataTemplates\ImageAndTitleTemplate.xaml">
+		<MauiXaml Update="Resources\DataTemplates\SimpleCameraTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\SimpleScenarioTemplate.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\NotificationHeaderTemplate.xaml">
@@ -180,6 +185,15 @@
 		<MauiXaml Update="Resources\DataTemplates\ScenarioTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\AddNewCameraDialog.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\CameraSettingsDialog.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\ConfirmDialog.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\EnterCodeDialog.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
@@ -187,7 +201,7 @@
 			<SubType>
 			</SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\Dialogs\ScenarioDescriptionDialog.xaml">
+		<MauiXaml Update="Views\Dialogs\ScenarioSettingsDialog.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
@@ -293,8 +307,8 @@
 	  <Compile Update="Resources\DataTemplates\CameraTemplate.xaml.cs">
 	    <DependentUpon>CameraTemplate.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Resources\DataTemplates\ImageAndTitleTemplate.xaml.cs">
-	    <DependentUpon>ImageAndTitleTemplate.xaml</DependentUpon>
+	  <Compile Update="Resources\DataTemplates\SimpleScenarioTemplate.xaml.cs">
+	    <DependentUpon>SimpleScenarioTemplate.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Resources\Strings\Strings.Designer.cs">
 	    <DesignTime>True</DesignTime>
@@ -303,6 +317,9 @@
 	  </Compile>
 	  <Compile Update="Views\Dialogs\ErrorDialog.xaml.cs">
 	    <DependentUpon>ErrorDialog.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Dialogs\ScenarioSettingsDialog.xaml.cs">
+	    <DependentUpon>ScenarioSettingsDialog.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Tabs\Details\RoomDetailsPage.xaml.cs">
 	    <DependentUpon>RoomDetailsPage.xaml</DependentUpon>
