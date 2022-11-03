@@ -16,7 +16,8 @@ public partial class CustomSwitch : ContentView
     public static readonly BindableProperty IsToggledProperty = BindableProperty.Create(
         propertyName: nameof(IsToggled),
         returnType: typeof(bool),
-        declaringType: typeof(CustomSwitch));
+        declaringType: typeof(CustomSwitch),
+        defaultBindingMode: BindingMode.TwoWay);
 
     public bool IsToggled
     {

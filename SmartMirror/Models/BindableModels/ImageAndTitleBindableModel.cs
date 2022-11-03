@@ -22,6 +22,13 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _name, value);
         }
 
+        private object _model;
+        public object Model
+        {
+            get => _model;
+            set => SetProperty(ref _model, value);
+        }
+
         #endregion
 
         #region -- ICategoryElementModel implementation --

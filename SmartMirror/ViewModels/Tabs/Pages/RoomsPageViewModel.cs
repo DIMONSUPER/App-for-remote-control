@@ -252,7 +252,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
         if (aqaraDevicesResponse.IsSuccess)
         {
-            devices = _devicesService.AllSupportedDevices;
+            devices = _devicesService.AllSupportedDevices.Where(device => device.IsFavorite);
         }
         else
         {

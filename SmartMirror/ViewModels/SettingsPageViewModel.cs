@@ -274,21 +274,17 @@ namespace SmartMirror.ViewModels
 
         private async Task<bool> LoadAllDevicesAsync()
         {
-            var resultOfGettingAllDevices = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
-            
-            if (resultOfGettingAllDevices.IsSuccess)
+            _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(_devicesService.AllSupportedDevices, (m, vm) =>
             {
-                _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(_devicesService.AllSupportedDevices, (m, vm) =>
-                {
-                    vm.TapCommand = OpenAccessorySettingsCommand;
-                });
+                vm.Model = m;
+                vm.TapCommand = OpenAccessorySettingsCommand;
+            });
 
-                var deviceCategory = Categories.FirstOrDefault(c => c.Type == ECategoryType.Accessories);
+            var deviceCategory = Categories.FirstOrDefault(c => c.Type == ECategoryType.Accessories);
 
-                deviceCategory.Count = _allAccessories.Count();
-            }
+            deviceCategory.Count = _allAccessories.Count();
 
-            return resultOfGettingAllDevices.IsSuccess;
+            return true;
         }
 
         private async Task<bool> LoadAllScenariosAsync()

@@ -1,7 +1,7 @@
-﻿using System.ComponentModel;
-using System.Windows.Input;
-using SmartMirror.Enums;
+﻿using SmartMirror.Enums;
 using SmartMirror.Resources;
+using System.ComponentModel;
+using System.Windows.Input;
 
 namespace SmartMirror.Models.BindableModels;
 
@@ -140,6 +140,34 @@ public class DeviceBindableModel : BindableBase
     {
         get => _editableResource;
         set => SetProperty(ref _editableResource, value);
+    }
+
+    private EUnitMeasure _unitMeasure;
+    public EUnitMeasure UnitMeasure
+    {
+        get => _unitMeasure;
+        set => SetProperty(ref _unitMeasure, value);
+    }
+
+    private bool _isShowInRooms;
+    public bool IsShowInRooms
+    {
+        get => _isShowInRooms;
+        set => SetProperty(ref _isShowInRooms, value);
+    }
+
+    private bool _isReceiveNotifications;
+    public bool IsReceiveNotifications
+    {
+        get => _isReceiveNotifications;
+        set => SetProperty(ref _isReceiveNotifications, value);
+    }
+
+    private bool _isFavorite;
+    public bool IsFavorite
+    {
+        get => _isFavorite;
+        set => SetProperty(ref _isFavorite, value);
     }
 
     private ICommand _tappedCommand;

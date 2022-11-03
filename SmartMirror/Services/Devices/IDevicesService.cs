@@ -1,6 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
-using SmartMirror.Helpers;
+﻿using SmartMirror.Helpers;
 using SmartMirror.Models.Aqara;
 using SmartMirror.Models.BindableModels;
 
@@ -11,6 +9,8 @@ public interface IDevicesService
     Task<AOResult> DownloadAllDevicesWithSubInfoAsync(string positionId = null, int pageNum = 1, int pageSize = 100);
 
     Task<AOResult<DataAqaraResponse<DeviceAqaraModel>>> GetDevicesAsync(string positionId = null, int pageNum = 1, int pageSize = 100, params string[] deviceIds);
+
+    Task<AOResult> UpdateDeviceAsync(DeviceBindableModel device);
 
     Task<AOResult<IEnumerable<DeviceAqaraModel>>> GetSubdevicesForDeviceAsync(string deviceId);
 
