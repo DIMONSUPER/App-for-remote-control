@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:SmartMirror.Controls"
+             x:Class="SmartMirror.Views.Skeletons.SettingsPageSkeleton">
+
+    <Grid ColumnDefinitions="390, *">
+
+        <VerticalStackLayout Grid.Column="0"
+                             Margin="42, 60, 0, 0"
+                             Spacing="15">
+
+            <BindableLayout.ItemsSource>
+
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>1</x:String>
+                    <x:String>2</x:String>
+                    <x:String>3</x:String>
+                    <x:String>4</x:String>
+                </x:Array>
+
+            </BindableLayout.ItemsSource>
+
+            <BindableLayout.ItemTemplate>
+
+                <DataTemplate>
+
+                    <controls:SkeletonView WidthRequest="390"
+                                           HeightRequest="53"
+                                           Background="{x:DynamicResource WhiteGradientBrush}"
+                                           StrokeShape="RoundRectangle 9"
+                                           StrokeThickness="0"/>
+
+                </DataTemplate>
+
+            </BindableLayout.ItemTemplate>
+
+        </VerticalStackLayout>
+
+        <Grid Grid.Column="1"
+              Margin="105, 60, 60, 0"
+              ColumnDefinitions="*, *"
+              ColumnSpacing="25">
+
+            <VerticalStackLayout Grid.Column="0"
+                                 Spacing="25">
+
+                <BindableLayout.ItemsSource>
+
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>1</x:String>
+                        <x:String>2</x:String>
+                        <x:String>3</x:String>
+                        <x:String>4</x:String>
+                        <x:String>5</x:String>
+                    </x:Array>
+
+                </BindableLayout.ItemsSource>
+
+                <BindableLayout.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <controls:SkeletonView HeightRequest="74"
+                                               Background="{x:DynamicResource WhiteGradientBrush}"
+                                               StrokeShape="RoundRectangle 9"
+                                               StrokeThickness="0"/>
+
+                    </DataTemplate>
+
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="1"
+                                 Spacing="25">
+
+                <BindableLayout.ItemsSource>
+
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>1</x:String>
+                        <x:String>2</x:String>
+                        <x:String>3</x:String>
+                        <x:String>4</x:String>
+                        <x:String>5</x:String>
+                    </x:Array>
+
+                </BindableLayout.ItemsSource>
+
+                <BindableLayout.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <controls:SkeletonView HeightRequest="74"
+                                               Background="{x:DynamicResource WhiteGradientBrush}"
+                                               StrokeShape="RoundRectangle 9"
+                                               StrokeThickness="0"/>
+
+                    </DataTemplate>
+
+                </BindableLayout.ItemTemplate>
+
+            </VerticalStackLayout>
+
+        </Grid>
+
+    </Grid>
+
+</ContentView>

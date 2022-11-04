@@ -2,6 +2,7 @@
 using SmartMirror.Helpers;
 using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Aqara;
+using SmartMirror.Services.Google;
 using SmartMirror.Views;
 using SmartMirror.Views.Dialogs;
 using System.Windows.Input;
@@ -12,15 +13,18 @@ namespace SmartMirror.ViewModels
     {
         private readonly IAqaraService _aqaraService;
         private readonly IDialogService _dialogService;
+        private readonly IGoogleService _googleService;
 
         public WelcomePageViewModel(
             IAqaraService aqaraService,
             IDialogService dialogService,
-            INavigationService navigationService)
+            INavigationService navigationService,
+            IGoogleService googleService)
             : base(navigationService)
         {
             _aqaraService = aqaraService;
             _dialogService = dialogService;
+            _googleService = googleService;
         }
 
         #region -- Public properties --
@@ -28,15 +32,30 @@ namespace SmartMirror.ViewModels
         private ICommand _loginWithAqaraCommand;
         public ICommand LoginWithAqaraCommand => _loginWithAqaraCommand ??= SingleExecutionCommand.FromFunc<EAuthType>(OnLoginWithAqaraCommandAsync);
 
+        private ICommand _loginWithGoogleCommand;
+        public ICommand LoginWithGoogleCommand => _loginWithGoogleCommand ??= SingleExecutionCommand.FromFunc<EAuthType>(OnLoginWithGoogleCommandAsync);
+
         #endregion
 
         #region -- Private helpers --
 
+        private async Task OnLoginWithGoogleCommandAsync(EAuthType authType)
+        {
+            var result = await _googleService.AutorizeAsync();
+
+            if (result.IsSuccess)
+            {
+                //TODO: implement when have nest devices
+            }
+            else
+            {
+                //TODO: implement if needed
+            }
+        }
+
         private async Task OnLoginWithAqaraCommandAsync(EAuthType authType)
         {
-            if (authType == EAuthType.Amazon
-                || authType == EAuthType.Apple
-                || authType == EAuthType.Google)
+            if (authType == EAuthType.Amazon || authType == EAuthType.Apple)
             {
                 DisplayNotImplementedDialog();
             }
@@ -69,7 +88,11 @@ namespace SmartMirror.ViewModels
             }
             else
             {
-                //TODO: notify
+                await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
+                {
+                    { Constants.DialogsParameterKeys.TITLE, Strings.NoInternetConnection },
+                    { Constants.DialogsParameterKeys.DESCRIPTION, Strings.PleaseCheckInternet },
+                });
             }
         }
 

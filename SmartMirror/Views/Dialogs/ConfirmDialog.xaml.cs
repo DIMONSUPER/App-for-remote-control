@@ -1,4 +1,4 @@
-﻿namespace SmartMirror.Views.Dialogs;
+namespace SmartMirror.Views.Dialogs;
 
 public partial class ConfirmDialog : Frame
 {

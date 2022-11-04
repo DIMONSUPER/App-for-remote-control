@@ -14,12 +14,28 @@
         public static class DialogsParameterKeys
         {
             public const string RESULT = nameof(RESULT);
+            public const string ACCESSORY = nameof(ACCESSORY);
             public const string SCENARIO = nameof(SCENARIO);
+            public const string CAMERA = nameof(CAMERA);
             public const string AUTH_TYPE = nameof(AUTH_TYPE);
             public const string TITLE = nameof(TITLE);
             public const string DESCRIPTION = nameof(DESCRIPTION);
+            public const string IP_ADDRESS = nameof(IP_ADDRESS);
+            public const string PASSWORD = nameof(PASSWORD);
         }
-        
+
+        public static class Google
+        {
+            public const string NEST_SERVICES_URL = $"https://nestservices.google.com/partnerconnections/";
+            public const string CLIENT_ID = "584828440898-arffsu8ltmg71vhvctmcd6h5bdg8gofe.apps.googleusercontent.com";
+            public const string PROJECT_ID = "1f4c1129-0b4d-4b64-bc65-ddd682d036b8";
+            public const string WEB_CLIENT_ID = "584828440898-ud6okjt7qb6qrlspbmr55i90s6as8o90.apps.googleusercontent.com";
+            public const string WEB_CLIENT_SECRET = "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";
+            public const string API_KEY = "AIzaSyAYOtf5x02-DWhKyrEJwWstxg0ZZy7shZ4";
+            public const string SDM_SERVICE_SCOPE = "https://www.googleapis.com/auth/sdm.service";
+            public const string REDIRECT_URI = "https://smartmirror.page.link/open";
+        }
+
         public static class Aqara
         {
             public const string API_URL = "https://open-usa.aqara.com/v3.0/open/api";

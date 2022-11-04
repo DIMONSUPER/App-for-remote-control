@@ -10,6 +10,7 @@ using SmartMirror.Services.Blur;
 //using SmartMirror.Services.Amazon;
 using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Devices;
+using SmartMirror.Services.Google;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Notifications;
@@ -61,8 +62,11 @@ public static class MauiProgram
     {
         containerRegistry.RegisterDialog<ErrorDialog>();
         containerRegistry.RegisterDialog<EnterCodeDialog>();
-        containerRegistry.RegisterDialog<ScenarioDescriptionDialog>();
+        containerRegistry.RegisterDialog<AccessorySettingsDialog>();
+        containerRegistry.RegisterDialog<ScenarioSettingsDialog>();
+        containerRegistry.RegisterDialog<CameraSettingsDialog>();
         containerRegistry.RegisterDialog<ConfirmDialog>();
+        containerRegistry.RegisterDialog<AddNewCameraDialog>();
 
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
         containerRegistry.RegisterForNavigation<WelcomePage>();
@@ -84,6 +88,7 @@ public static class MauiProgram
         //containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
         containerRegistry.RegisterSingleton<IAqaraService, AqaraService>();
+        containerRegistry.RegisterSingleton<IGoogleService, GoogleService>();
         containerRegistry.RegisterSingleton<IAqaraMessanger, AqaraMessanger>();
         containerRegistry.RegisterSingleton<INotificationsService, NotificationsService>();
         containerRegistry.RegisterSingleton<ICamerasService, CamerasService>();

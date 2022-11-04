@@ -82,7 +82,7 @@
             <controls:CustomImageBotton
                 Grid.Column="3"
                 Style="{DynamicResource ImageButtonStyle_i1}"
-                behaviors:TouchBehavior.Command="{Binding LoginWithAqaraCommand}"
+                behaviors:TouchBehavior.Command="{Binding LoginWithGoogleCommand}"
                 behaviors:TouchBehavior.CommandParameter="{x:Static enums:EAuthType.Google}"
                 Source="google_logo"/>
 

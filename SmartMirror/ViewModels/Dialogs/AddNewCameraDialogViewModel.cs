@@ -1,12 +1,12 @@
-using SmartMirror.Helpers;
+﻿using SmartMirror.Helpers;
 using SmartMirror.Services.Blur;
 using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
-    public class ConfirmDialogViewModel : BaseDialogViewModel
+    public class AddNewCameraDialogViewModel : BaseDialogViewModel
     {
-        public ConfirmDialogViewModel(
+        public AddNewCameraDialogViewModel(
             IBlurService blurService)
             : base(blurService)
         {
@@ -21,15 +21,22 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _title, value);
         }
 
-        private string _description;
-        public string Description
+        private string _ipAddress;
+        public string IPAddress
         {
-            get => _description;
-            set => SetProperty(ref _description, value);
+            get => _ipAddress;
+            set => SetProperty(ref _ipAddress, value);
         }
 
-        private ICommand _closeCommand;
-        public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc<bool>(OnCloseCommandAsync);
+        private string _password;
+        public string Password
+        {
+            get => _password;
+            set => SetProperty(ref _password, value);
+        }
+
+        private ICommand _addCameraCommand;
+        public ICommand AddCameraCommand => _addCameraCommand ??= SingleExecutionCommand.FromFunc(OnAddCommandAsync);
 
         #endregion
 
@@ -37,16 +44,9 @@ namespace SmartMirror.ViewModels.Dialogs
 
         public override void OnDialogOpened(IDialogParameters parameters)
         {
-            base.OnDialogOpened(parameters);
-
             if (parameters.TryGetValue(Constants.DialogsParameterKeys.TITLE, out string title))
             {
                 Title = title;
-            }
-
-            if (parameters.TryGetValue(Constants.DialogsParameterKeys.DESCRIPTION, out string description))
-            {
-                Description = description;
             }
         }
 
@@ -54,11 +54,12 @@ namespace SmartMirror.ViewModels.Dialogs
 
         #region -- Private helpers --
 
-        private Task OnCloseCommandAsync(bool confirm)
+        private Task OnAddCommandAsync()
         {
-            RequestClose.Invoke(new DialogParameters()
+            RequestClose.Invoke(new DialogParameters
             {
-                { Constants.DialogsParameterKeys.RESULT, confirm },
+                { Constants.DialogsParameterKeys.IP_ADDRESS, IPAddress },
+                { Constants.DialogsParameterKeys.PASSWORD, Password },
             });
 
             return Task.CompletedTask;
@@ -67,4 +68,3 @@ namespace SmartMirror.ViewModels.Dialogs
         #endregion
     }
 }
-

@@ -81,6 +81,9 @@ namespace SmartMirror.Services.Mapper
                 cfg.CreateMap<DetailSceneAqaraModel, ScenarioBindableModel>().ReverseMap();
                 cfg.CreateMap<ActionAqaraModel, ScenarioActionBindableModel>().ReverseMap();
                 cfg.CreateMap<ScenarioModel, ImageAndTitleBindableModel>().ReverseMap();
+                cfg.CreateMap<DeviceBindableModel, ImageAndTitleBindableModel>()
+                    .ForMember(nameof(ImageAndTitleBindableModel.ImageSource), opt => opt.MapFrom(scr => scr.IconSource))
+                    .ReverseMap();
             });
 
             return mapperConfiguration.CreateMapper();
@@ -99,6 +102,10 @@ namespace SmartMirror.Services.Mapper
                 .ForMember(nameof(DeviceAqaraModel.UpdateTime), opt => opt.MapFrom(src => DateTimeHelper.ConvertToMilliseconds(src.UpdateTime)))
                 .ForMember(nameof(DeviceAqaraModel.Did), opt => opt.MapFrom(src => src.DeviceId))
                 .ForMember(nameof(DeviceAqaraModel.DeviceName), opt => opt.MapFrom(src => src.Name));
+
+            cfg.CreateMap<CameraModel, ImageAndTitleBindableModel>()
+                .ForMember(nameof(CameraModel.Id), opt => opt.MapFrom(src => src.Id.ToString()))
+                .ReverseMap();
         }
 
         #endregion
