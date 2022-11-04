@@ -13,7 +13,7 @@
             <controls:SkeletonView Margin="6,24,0,0"
                                    HorizontalOptions="Start"
                                    StrokeShape="RoundRectangle 9"
-                                   Background="{x:DynamicResource WhiteGradientBrush}"
+                                   Style="{DynamicResource WhiteGradientStyle_i1}"
                                    WidthRequest="288"
                                    HeightRequest="38"/>
 
@@ -37,7 +37,7 @@
 
                         <controls:SkeletonView WidthRequest="420"
                                                HeightRequest="224"
-                                               Background="{x:DynamicResource WhiteGradientBrush}"
+                                               Style="{DynamicResource WhiteGradientStyle_i1}"
                                                StrokeShape="RoundRectangle 12"
                                                StrokeThickness="0"
                                                VerticalOptions="Start"
@@ -58,7 +58,7 @@
                                    StrokeShape="RoundRectangle 9"
                                    HorizontalOptions="Start"
                                    Margin="6,0,0,0"
-                                   Background="{x:DynamicResource WhiteGradientBrush}"/>
+                                   Style="{DynamicResource WhiteGradientStyle_i1}"/>
 
             <HorizontalStackLayout Margin="0,16,0,0"
                                    Spacing="30">
@@ -83,7 +83,7 @@
                                 MaximumHeightRequest="157">
 
                             <controls:SkeletonView StrokeShape="RoundRectangle 9"
-                                                   Background="{x:DynamicResource WhiteGradientBrush}"
+                                                   Style="{DynamicResource WhiteGradientStyle_i1}"
                                                    Margin="0,0,0,3"/>
 
                         </Grid>

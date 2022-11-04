@@ -29,7 +29,7 @@
                                 WidthRequest="104"
                                 HeightRequest="29"
                                 StrokeShape="RoundRectangle 9"
-                                Background="{x:DynamicResource WhiteGradientBrush}"/>
+                                Style="{DynamicResource WhiteGradientStyle_i1}"/>
         
         <StackLayout Grid.Row="1"
                         Margin="0,26,0,0"
@@ -42,7 +42,7 @@
                     <controls:SkeletonView StrokeShape="RoundRectangle 9"
                                             WidthRequest="571"
                                             HeightRequest="114"
-                                            Background="{x:DynamicResource WhiteGradientBrush}"/>
+                                            Style="{DynamicResource WhiteGradientStyle_i1}"/>
         
                 </DataTemplate>
         

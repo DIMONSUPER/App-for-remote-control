@@ -39,22 +39,12 @@
     <Color x:Key="tcolor_i10">#E9E9E9</Color>
 
     <!-- BRUSHES -->
-    <LinearGradientBrush x:Key="GrayGradientBrush">
+    <LinearGradientBrush x:Key="GrayGradientBrush_i1">
 
         <GradientStop Color="#38383A"
                       Offset="0"/>
 
         <GradientStop Color="#202020"
-                      Offset="1"/>
-
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="WhiteGradientBrush">
-
-        <GradientStop Color="{StaticResource cbg_i16}"
-                      Offset="0"/>
-
-        <GradientStop Color="{StaticResource cbg_i2}"
                       Offset="1"/>
 
     </LinearGradientBrush>
@@ -65,6 +55,16 @@
                       Offset="0"/>
 
         <GradientStop Color="#2A2A2A"
+                      Offset="1"/>
+
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="WhiteGradientBrush_i1">
+
+        <GradientStop Color="{StaticResource cbg_i16}"
+                      Offset="0"/>
+
+        <GradientStop Color="{StaticResource cbg_i2}"
                       Offset="1"/>
 
     </LinearGradientBrush>

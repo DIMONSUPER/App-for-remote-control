@@ -4,6 +4,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:converters="clr-namespace:SmartMirror.Converters"
                     xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+                    xmlns:effects="clr-namespace:SmartMirror.Effects"
                     xmlns:maui="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                     xmlns:controls="clr-namespace:SmartMirror.Controls">
@@ -206,5 +207,21 @@
         <Setter Property="OffThumbColor" Value="{StaticResource cbg_i1}" />                           
     </Style>
 
+    <Style x:Key="DitheredBackgroundStyle" TargetType="VisualElement">
+        <Setter Property="effects:DitheredBackgroundEffect.IsDithered" Value="True"/>
+    </Style>
+
+    <Style x:Key="GrayGradientStyle_i1" TargetType="VisualElement" BasedOn="{StaticResource DitheredBackgroundStyle}">
+        <Setter Property="Background" Value="{DynamicResource GrayGradientBrush_i1}"/>
+    </Style>
+
+    <Style x:Key="GrayGradientStyle_i2" TargetType="VisualElement" BasedOn="{StaticResource DitheredBackgroundStyle}">
+        <Setter Property="Background" Value="{DynamicResource GrayGradientBrush_i2}"/>
+    </Style>
+
+    <Style x:Key="WhiteGradientStyle_i1" TargetType="VisualElement" BasedOn="{StaticResource DitheredBackgroundStyle}">
+        <Setter Property="Background" Value="{DynamicResource WhiteGradientBrush_i1}"/>
+    </Style>
+    
 </ResourceDictionary>
 
