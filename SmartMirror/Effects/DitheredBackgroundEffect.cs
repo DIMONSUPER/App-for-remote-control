@@ -2,7 +2,7 @@
 {
     public static class DitheredBackgroundEffect
     {
-        #region -- Public static properties --
+        #region -- Public properties --
 
         public static readonly BindableProperty IsDitheredProperty = BindableProperty.CreateAttached(
             propertyName: "IsDithered",
@@ -33,7 +33,7 @@
                 {
                     if (element.Handler?.PlatformView is Android.Views.View view)
                     {
-                        view.Background.SetDither(isBackgroundDithered);
+                        view.Background?.SetDither(isBackgroundDithered);
                     }
                 });
             }
