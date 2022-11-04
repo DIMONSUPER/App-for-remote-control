@@ -6,6 +6,7 @@ using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Devices;
+using SmartMirror.Services.Google;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Views.Dialogs;
@@ -22,6 +23,7 @@ namespace SmartMirror.ViewModels
         private readonly IDevicesService _devicesService;
         private readonly IScenariosService _scenariosService;
         private readonly ICamerasService _camerasService;
+        private readonly IGoogleService _googleService;
 
         private IEnumerable<ImageAndTitleBindableModel> _allAccessories = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios = Enumerable.Empty<ImageAndTitleBindableModel>();
@@ -38,7 +40,8 @@ namespace SmartMirror.ViewModels
             IDevicesService devicesService,
             IScenariosService scenariosService,
             ICamerasService camerasService,
-            IAqaraService aqaraService)
+            IAqaraService aqaraService,
+            IGoogleService googleService)
             : base(navigationService)
         {
             _aqaraService = aqaraService;
@@ -47,6 +50,7 @@ namespace SmartMirror.ViewModels
             _devicesService = devicesService;
             _scenariosService = scenariosService;
             _camerasService = camerasService;
+            _googleService = googleService;
         }
 
         #region -- Public properties --
@@ -561,15 +565,20 @@ namespace SmartMirror.ViewModels
             return Task.CompletedTask;
         }
 
-        private Task OnLoginWithGoogleCommandAsync(SettingsProvidersBindableModel settingsProvider)
+        private async Task OnLoginWithGoogleCommandAsync(SettingsProvidersBindableModel settingsProvider)
         {
-            //TODO Implement login and logout from Google
+            var result = await _googleService.AutorizeAsync();
 
-            DisplayNotImplementedDialog();
+            if (result.IsSuccess)
+            {
+                //TODO: implement when have nest devices
+            }
+            else
+            {
+                //TODO: implement if needed
+            }
 
             _providersCategory.Count = GetConnectedProviders();
-
-            return Task.CompletedTask;
         }
 
         private void DisplayNotImplementedDialog()
