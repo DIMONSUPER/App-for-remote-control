@@ -115,7 +115,7 @@ namespace SmartMirror.Services.Rooms
 
                     foreach (var room in simpleRooms)
                     {
-                        var roomDevices = _devicesService.AllSupportedDevices.Where(x => x.PositionId == room.PositionId);
+                        var roomDevices = _devicesService.AllSupportedDevices.Where(x => x.PositionId == room.PositionId && x.IsShowInRooms);
                         var count = roomDevices.Count();
 
                         foreach (var device in roomDevices)
@@ -145,7 +145,7 @@ namespace SmartMirror.Services.Rooms
         {
             foreach (var room in AllRooms)
             {
-                var count = _devicesService.AllSupportedDevices.Count(x => x.PositionId == room.Id);
+                var count = _devicesService.AllSupportedDevices.Count(x => x.PositionId == room.Id && x.IsShowInRooms);
                 room.DevicesCount = count;
             }
         }
@@ -164,7 +164,7 @@ namespace SmartMirror.Services.Rooms
 
         private async void OnDevPositionAssigned(AqaraMessageEventArgs aqaraMessage)
         {
-            var device = _devicesService.AllSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
+            var device = _devicesService.AllSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId && x.IsShowInRooms);
             var newRoom = AllRooms.FirstOrDefault(x => x.Id == aqaraMessage.Value);
             var oldRoom = AllRooms.FirstOrDefault(x => x.Id == device.PositionId);
 
