@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Frame
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+    xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+    Padding="0"
+    BackgroundColor="Transparent"
+    x:Class="SmartMirror.Views.Dialogs.AccessorySettingsDialog"
+    x:DataType="vm:AccessorySettingsDialogViewModel">
+
+    <Border
+        WidthRequest="479"
+        StrokeThickness="0.75"
+        StrokeShape="RoundRectangle 9"
+        Stroke="{DynamicResource tcolor_i1}"
+        BackgroundColor="{StaticResource cbg_i2}">
+
+        <StackLayout
+            Padding="30, 24, 30, 42"
+            Spacing="42">
+
+            <HorizontalStackLayout Spacing="21">
+
+                <Image
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    HeightRequest="62"
+                    WidthRequest="62"
+                    Source="{Binding ImageSource}"/>
+                
+                <controls:CustomLabel
+                    Style="{DynamicResource tstyle_i11}"
+                    VerticalOptions="Center"
+                    MaximumWidthRequest="340"
+                    LineBreakMode="TailTruncation"
+                    MaxLines="2"
+                    Text="{Binding Title}"/>
+
+            </HorizontalStackLayout>
+
+            <Border
+                StrokeThickness="0.75"
+                StrokeShape="RoundRectangle 9"
+                Stroke="{DynamicResource tcolor_i1}"
+                BackgroundColor="{StaticResource cbg_i15}">
+
+                <VerticalStackLayout 
+                    Padding="24, 22" 
+                    Spacing="36">
+
+                    <controls:TitleAndSwitchView
+                        Title="{extensions:Translate ShowInRooms}"
+                        IsToggled="True"/>
+
+                    <controls:TitleAndSwitchView
+                        Title="{extensions:Translate ReceiveNotifications}"/>
+
+                    <controls:TitleAndSwitchView
+                        Title="{extensions:Translate AddToFavorites}"
+                        IsToggled="True"/>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+            <Button 
+                Style="{DynamicResource ButtonStyle_i1}"
+                HorizontalOptions="Center"
+                Text="{extensions:Translate Close}"
+                Command="{Binding CloseCommand}"/>
+
+        </StackLayout>
+
+    </Border>
+
+</Frame>

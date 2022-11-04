@@ -1,13 +1,11 @@
-using Prism.Services;
-using SmartMirror.Services.Aqara;
-using SmartMirror.Views;
-using System.ComponentModel;
-using static Android.Icu.Text.CaseMap;
 using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Interfaces;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
+using SmartMirror.Services.Aqara;
+using SmartMirror.Services.Cameras;
+using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Views.Dialogs;
@@ -21,25 +19,34 @@ namespace SmartMirror.ViewModels
         private readonly IAqaraService _aqaraService;
         private readonly IDialogService _dialogService;
         private readonly IMapperService _mapperService;
+        private readonly IDevicesService _devicesService;
         private readonly IScenariosService _scenariosService;
+        private readonly ICamerasService _camerasService;
 
-        private IEnumerable<ImageAndTitleBindableModel> _allScenarios;
-        private IEnumerable<SettingsProvidersBindableModel> _allProviders;
+        private IEnumerable<ImageAndTitleBindableModel> _allAccessories = Enumerable.Empty<ImageAndTitleBindableModel>();
+        private IEnumerable<ImageAndTitleBindableModel> _allScenarios = Enumerable.Empty<ImageAndTitleBindableModel>();
+        private IEnumerable<ImageAndTitleBindableModel> _allCameras = Enumerable.Empty<ImageAndTitleBindableModel>();
+        private IEnumerable<SettingsProvidersBindableModel> _allProviders = Enumerable.Empty<SettingsProvidersBindableModel>();
+        
         private CategoryBindableModel _providersCategory;
         private IDialogResult _dialogResult;
 
         public SettingsPageViewModel(
-            IScenariosService scenariosService,
-            IMapperService mapperService,
+            INavigationService navigationService,
             IDialogService dialogService,
-            IAqaraService aqaraService,
-            INavigationService navigationService)
+            IMapperService mapperService,
+            IDevicesService devicesService,
+            IScenariosService scenariosService,
+            ICamerasService camerasService,
+            IAqaraService aqaraService)
             : base(navigationService)
         {
             _aqaraService = aqaraService;
-            _scenariosService = scenariosService;
             _mapperService = mapperService;
             _dialogService = dialogService;
+            _devicesService = devicesService;
+            _scenariosService = scenariosService;
+            _camerasService = camerasService;
         }
 
         #region -- Public properties --
@@ -50,6 +57,11 @@ namespace SmartMirror.ViewModels
             get => _pageState;
             set => SetProperty(ref _pageState, value);
         }
+
+        public bool IsDataLoading => PageState
+            is EPageState.Loading
+            or EPageState.NoInternetLoader
+            or EPageState.LoadingSkeleton;
 
         private CategoryBindableModel _selectedCategory;
         public CategoryBindableModel SelectedCategory
@@ -87,14 +99,23 @@ namespace SmartMirror.ViewModels
         private ICommand _selectCategoryCommand;
         public ICommand SelectCategoryCommand => _selectCategoryCommand ??= SingleExecutionCommand.FromFunc<CategoryBindableModel>(OnSelectCategoryCommandAsync);
 
-        private ICommand _showScenarioDescriptionCommand;
-        public ICommand ShowScenarioDescriptionCommand => _showScenarioDescriptionCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowScenarioDescriptionCommandAsync);
+        private ICommand _showScenarioSettingsCommand;
+        public ICommand ShowScenarioSettingsCommand => _showScenarioSettingsCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowScenarioSettingsCommandAsync);
+
+        private ICommand _showCameraSettingsCommand;
+        public ICommand ShowCameraSettingsCommand => _showCameraSettingsCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowCameraSettingsCommandAsync);
+
+        private ICommand _addNewCameraCommand;
+        public ICommand AddNewCameraCommand => _addNewCameraCommand ??= SingleExecutionCommand.FromFunc(OnAddNewCameraCommandAsync);
 
         private ICommand _tryAgainCommand;
         public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
 
         private ICommand _closeSettingsCommand;
         public ICommand CloseSettingsCommand => _closeSettingsCommand ??= SingleExecutionCommand.FromFunc(OnCloseSettingsCommandAsync);
+
+        private ICommand _openAccessorySettingsCommand;
+        public ICommand OpenAccessorySettingsCommand => _openAccessorySettingsCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnOpenAccessorySettingsCommandAsync);
 
         #endregion
 
@@ -104,21 +125,27 @@ namespace SmartMirror.ViewModels
         {
             base.Initialize(parameters);
 
-            LoadCategories();
+            if (!IsDataLoading)
+            {
+                PageState = EPageState.LoadingSkeleton;
+                
+                LoadCategories();
+                SelectCategory(Categories.FirstOrDefault());
 
-            await LoadAllDataAsync();
-
-            //temporarily
-            DataState = EPageState.Empty;
+                await LoadAllDataAndChangeStateAsync();
+            }
         }
 
         protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
-            base.OnConnectivityChanged(sender, e);
-
             if (IsInternetConnected)
             {
-                await LoadAllDataAsync();
+                if (!IsDataLoading && PageState != EPageState.Complete)
+                {
+                    PageState = EPageState.LoadingSkeleton;
+
+                    await LoadAllDataAndChangeStateAsync(); 
+                }
             }
             else
             {
@@ -138,7 +165,6 @@ namespace SmartMirror.ViewModels
                 {
                     Type = ECategoryType.Accessories,
                     Name = Strings.Accessories,
-                    IsSelected = true,
                     TapCommand = SelectCategoryCommand,
                 },
                 new()
@@ -160,8 +186,6 @@ namespace SmartMirror.ViewModels
                     TapCommand = SelectCategoryCommand,
                 },
             };
-
-            SelectedCategory = Categories.FirstOrDefault();
         }
 
         private void SelectCategory(CategoryBindableModel category)
@@ -182,46 +206,92 @@ namespace SmartMirror.ViewModels
         private Task OnSelectCategoryCommandAsync(CategoryBindableModel category)
         {
             SelectCategory(category);
-
-            switch (category.Type)
-            {
-                case ECategoryType.Scenarios:
-                    CategoryElements = new(_allScenarios);
-
-                    DataState = CategoryElements.Any()
-                        ? EPageState.Complete
-                        : EPageState.Empty;
-
-                    break;
-
-                case ECategoryType.Providers:
-                    CategoryElements = new(_allProviders);
-
-                    DataState = CategoryElements.Any()
-                        ? EPageState.Complete
-                        : EPageState.Empty;
-                    
-                    break;
-
-                default:
-                    CategoryElements = new();
-                    DataState = EPageState.Empty;
-                    break;
-            }
+            SetElementsSelectedCategory();
 
             return Task.CompletedTask;
         }
 
-        private async Task LoadAllDataAsync()
+        private void SetElementsSelectedCategory()
         {
-            await LoadAllScenariosAsync();
+            if (SelectedCategory is not null)
+            {
+                CategoryElements = SelectedCategory.Type switch
+                {
+                    ECategoryType.Accessories => new(_allAccessories),
+                    ECategoryType.Scenarios => new(_allScenarios),
+                    ECategoryType.Cameras => new(_allCameras),
+                    ECategoryType.Providers => new(_allProviders),
+                    _ => throw new NotImplementedException(),
+                };
 
-            CreateProviders();
-
-            PageState = EPageState.Complete;
+                DataState = CategoryElements.Any()
+                    ? EPageState.Complete
+                    : EPageState.Empty;
+            }
         }
 
-        private async Task LoadAllScenariosAsync()
+        private async Task LoadAllDataAndChangeStateAsync()
+        {
+            if (IsInternetConnected)
+            {
+                await LoadAllDataAsync();
+
+                if (IsInternetConnected)
+                {
+                    PageState = EPageState.Complete;
+
+                    SetElementsSelectedCategory();
+                }
+                else
+                {
+                    PageState = EPageState.NoInternet;
+                }
+            }
+            else
+            {
+                PageState = EPageState.NoInternet;
+            }
+        }
+
+        private async Task<bool> LoadAllDataAsync()
+        {
+            bool isLoaded = false;
+
+            if (IsInternetConnected)
+            {
+                var dataLoadingResults = await Task.WhenAll(
+                    LoadAllDevicesAsync(),
+                    LoadAllScenariosAsync(),
+                    LoadAllCamerasAsync());
+                
+                CreateProviders();
+
+                isLoaded = dataLoadingResults.Any(x => x);
+            }
+
+            return isLoaded;
+        }
+
+        private async Task<bool> LoadAllDevicesAsync()
+        {
+            var resultOfGettingAllDevices = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
+            
+            if (resultOfGettingAllDevices.IsSuccess)
+            {
+                _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(_devicesService.AllSupportedDevices, (m, vm) =>
+                {
+                    vm.TapCommand = OpenAccessorySettingsCommand;
+                });
+
+                var deviceCategory = Categories.FirstOrDefault(c => c.Type == ECategoryType.Accessories);
+
+                deviceCategory.Count = _allAccessories.Count();
+            }
+
+            return resultOfGettingAllDevices.IsSuccess;
+        }
+
+        private async Task<bool> LoadAllScenariosAsync()
         {
             var resultOfGettingAllScenarios = await _scenariosService.GetScenariosAsync();
 
@@ -231,13 +301,48 @@ namespace SmartMirror.ViewModels
                 {
                     vm.Type = ECategoryType.Scenarios;
                     vm.ImageSource = "play_gray";
-                    vm.TapCommand = ShowScenarioDescriptionCommand;
+                    vm.TapCommand = ShowScenarioSettingsCommand;
                 });
 
                 var scenarioCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Scenarios);
 
                 scenarioCategory.Count = _allScenarios.Count();
             }
+
+            return resultOfGettingAllScenarios.IsSuccess;
+        }
+
+        private async Task<bool> LoadAllCamerasAsync()
+        {
+            var resultOfGettingCameras = await _camerasService.GetCamerasAsync();
+
+            if (resultOfGettingCameras.IsSuccess)
+            {
+                _allCameras = _mapperService.MapRange<ImageAndTitleBindableModel>(resultOfGettingCameras.Result, (m, vm) =>
+                {
+                    vm.Type = ECategoryType.Cameras;
+                    vm.ImageSource = "video_fill_dark";
+                    vm.TapCommand = ShowCameraSettingsCommand;
+                });
+
+                var addCameraItem = new ImageAndTitleBindableModel()
+                {
+                    Name = Strings.AddNewCamera,
+                    Type = ECategoryType.Cameras,
+                    ImageSource = "subtract_plus",
+                    TapCommand = AddNewCameraCommand,
+                };
+
+                var firstItems = new[] { addCameraItem };
+
+                _allCameras = firstItems.Concat(_allCameras);
+
+                var cameraCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Cameras);
+
+                cameraCategory.Count = _allCameras.Count() - 1;
+            }
+
+            return resultOfGettingCameras.IsSuccess;
         }
 
         private void CreateProviders()
@@ -290,18 +395,67 @@ namespace SmartMirror.ViewModels
             _providersCategory.Count = GetConnectedProviders();
         }
 
-        private Task OnTryAgainCommandAsync()
+        private async Task OnTryAgainCommandAsync()
         {
-            PageState = EPageState.NoInternetLoader;
+            if (!IsDataLoading)
+            {
+                PageState = EPageState.NoInternetLoader;
 
-            return LoadAllDataAsync();
+                var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
+
+                var isDataLoaded = await TaskRepeater.RepeatAsync(LoadAllDataAsync, executionTime);
+
+                if (IsInternetConnected)
+                {
+                    PageState = EPageState.Complete;
+
+                    SetElementsSelectedCategory();
+                }
+                else
+                {
+                    PageState = EPageState.NoInternet;
+                } 
+            }
         }
 
-        private Task OnShowScenarioDescriptionCommandAsync(ImageAndTitleBindableModel scenario)
+        private Task OnOpenAccessorySettingsCommandAsync(ImageAndTitleBindableModel accessory)
         {
-            return _dialogService.ShowDialogAsync(nameof(ScenarioDescriptionDialog), new DialogParameters
+            return _dialogService.ShowDialogAsync(nameof(AccessorySettingsDialog), new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.ACCESSORY, accessory },
+            });
+        }
+
+        private Task OnShowScenarioSettingsCommandAsync(ImageAndTitleBindableModel scenario)
+        {
+            return _dialogService.ShowDialogAsync(nameof(ScenarioSettingsDialog), new DialogParameters
             {
                 { Constants.DialogsParameterKeys.SCENARIO, scenario },
+            });
+        }
+
+        private async Task OnShowCameraSettingsCommandAsync(ImageAndTitleBindableModel camera)
+        {
+            var dialogResult = await _dialogService.ShowDialogAsync(nameof(CameraSettingsDialog), new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.CAMERA, camera },
+            });
+
+            if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool confirm) && confirm)
+            {
+                dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), new DialogParameters
+                {
+                    { Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure },
+                    { Constants.DialogsParameterKeys.DESCRIPTION, Strings.TheCameraWillBeRemoved },
+                });
+            }
+        }
+
+        private Task OnAddNewCameraCommandAsync()
+        {
+            return _dialogService.ShowDialogAsync(nameof(AddNewCameraDialog), new DialogParameters()
+            {
+                { Constants.DialogsParameterKeys.TITLE, Strings.NewCamera },
             });
         }
 

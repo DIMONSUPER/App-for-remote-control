@@ -5,9 +5,9 @@ using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
-    public class ScenarioDescriptionDialogViewModel : BaseDialogViewModel
+    public class AccessorySettingsDialogViewModel : BaseDialogViewModel
     {
-        public ScenarioDescriptionDialogViewModel(IBlurService blurService)
+        public AccessorySettingsDialogViewModel(IBlurService blurService)
             : base(blurService)
         {
         }
@@ -21,6 +21,13 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _title, value);
         }
 
+        private string _imageSource;
+        public string ImageSource
+        {
+            get => _imageSource;
+            set => SetProperty(ref _imageSource, value);
+        }
+
         private ICommand _closeCommand;
         public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc(OnCloseCommandAsync);
 
@@ -30,9 +37,10 @@ namespace SmartMirror.ViewModels.Dialogs
 
         public override void OnDialogOpened(IDialogParameters parameters)
         {
-            if (parameters.TryGetValue(Constants.DialogsParameterKeys.SCENARIO, out ImageAndTitleBindableModel scenario))
+            if (parameters.TryGetValue(Constants.DialogsParameterKeys.ACCESSORY, out ImageAndTitleBindableModel accessory))
             {
-                Title = scenario.Name;
+                Title = accessory.Name;
+                ImageSource = accessory.ImageSource;
             }
         }
 

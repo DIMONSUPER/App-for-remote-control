@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Grid
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -6,12 +6,12 @@
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
-    RowDefinitions="60, auto, 300"
+    RowDefinitions="42, auto, 300"
     prismmaui:DialogLayout.UseMask="True"
     prismmaui:DialogLayout.MaskStyle="{DynamicResource DialogMaskBoxViewStyle_i1}"
     prismmaui:DialogLayout.CloseOnBackgroundTapped="True"
-    x:Class="SmartMirror.Views.Dialogs.EnterCodeDialog"
-    x:DataType="vm:EnterCodeDialogViewModel">
+    x:Class="SmartMirror.Views.Dialogs.AddNewCameraDialog"
+    x:DataType="vm:AddNewCameraDialogViewModel">
 
     <Frame
         Grid.Row="1"
@@ -42,45 +42,44 @@
                     BackgroundColor="{StaticResource cbg_i15}">
 
                     <controls:CustomNoBorderEntry
-                        IsEntryFocused="{Binding IsEntryFocused}"
                         Margin="24, 18"
                         BackgroundColor="{DynamicResource cbg_i15}"
                         FontSize="{DynamicResource tsize_i2}"
                         FontFamily="InterBold"
-                        Text="{Binding CodeText}"
+                        Text="{Binding IPAddress}"
                         TextColor="{DynamicResource tcolor_i1}"
-                        Placeholder="{extensions:Translate EnterCode}"
+                        Placeholder="{extensions:Translate EnterIPAddress}"
                         PlaceholderColor="{DynamicResource tcolor_i9}"/>
 
                 </Border>
 
-                <Grid
+                <Border
+                    Margin="0, 10, 0, 0"
+                    Padding="1"
+                    HeightRequest="76"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 9"
+                    Stroke="{DynamicResource tcolor_i1}"
+                    BackgroundColor="{StaticResource cbg_i15}">
+
+                    <controls:CustomNoBorderEntry
+                        Margin="24, 18"
+                        BackgroundColor="{DynamicResource cbg_i15}"
+                        FontSize="{DynamicResource tsize_i2}"
+                        FontFamily="InterBold"
+                        Text="{Binding Password}"
+                        TextColor="{DynamicResource tcolor_i1}"
+                        Placeholder="{extensions:Translate EnterPassword}"
+                        PlaceholderColor="{DynamicResource tcolor_i9}"/>
+
+                </Border>
+
+                <Button
+                    Style="{DynamicResource ButtonStyle_i1}"
                     HorizontalOptions="Center"
-                    Margin="138, 36, 138, 20">
-
-                    <Button
-                        Style="{DynamicResource ButtonStyle_i1}"
-                        Text="{extensions:Translate Continue}"
-                        Command="{Binding ContinueCommand}">
-
-                        <Button.Triggers>
-
-                            <DataTrigger TargetType="Button" Binding="{Binding IsLoggingWithCode}" Value="True">
-
-                                <Setter Property="TextColor" Value="Transparent"/>
-
-                            </DataTrigger>
-
-                        </Button.Triggers>
-
-                    </Button>
-
-                    <ActivityIndicator
-                        IsVisible="{Binding IsLoggingWithCode}"
-                        IsRunning="{Binding IsLoggingWithCode}"
-                        Color="{DynamicResource cbg_i2}"/>
-
-                </Grid>
+                    Margin="138, 36, 138, 20"
+                    Text="{extensions:Translate Add}"
+                    Command="{Binding AddCameraCommand}"/>
 
             </VerticalStackLayout>
 

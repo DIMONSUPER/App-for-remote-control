@@ -5,13 +5,13 @@
     xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:vm="clr-namespace:SmartMirror.Models.BindableModels"
-    x:Class="SmartMirror.Resources.DataTemplates.ImageAndTitleTemplate"
+    x:Class="SmartMirror.Resources.DataTemplates.SimpleAccessoryTemplate"
     x:DataType="vm:ImageAndTitleBindableModel">
 
     <Border
         BackgroundColor="{DynamicResource cbg_i2}"
         Stroke="{DynamicResource cbg_i4}"
-        StrokeThickness="1"
+        StrokeThickness="0.75"
         StrokeShape="RoundRectangle 9"
         behaviors:TouchBehavior.IsAnimation="True"
         behaviors:TouchBehavior.Command="{Binding TapCommand}"
@@ -24,18 +24,17 @@
             <controls:CustomImageBotton
                 VerticalOptions="Center"
                 HorizontalOptions="Start"
-                StrokeShape="RoundRectangle 9"
-                BackgroundColor="{DynamicResource cbg_i1}"
-                HeightImage="24"
-                Padding="14, 12, 13, 12"
+                HeightImage="38"
+                Padding="0"
                 Source="{Binding ImageSource}"/>
 
             <Label
                 Style="{DynamicResource tstyle_i11}"
                 Text="{Binding Name}"
-                WidthRequest="250"
                 LineBreakMode="TailTruncation"
                 Margin="10, 0"
+                MaximumWidthRequest="220"
+                MaxLines="1"
                 HorizontalOptions="Start"
                 VerticalOptions="Center"/>
 

@@ -1,4 +1,6 @@
-﻿namespace SmartMirror.Controls
+﻿using Microsoft.Maui.Handlers;
+
+namespace SmartMirror.Controls
 {
     public class CustomLabel : Label
     {
@@ -11,14 +13,15 @@
 
         private void AppendToMapping()
         {
-            Label.ControlsLabelMapper.AppendToMapping(nameof(Label.MaxLines), UpdateMaxLines);
-            Label.ControlsLabelMapper.AppendToMapping(nameof(Label.LineBreakMode), UpdateMaxLines);
+            ControlsLabelMapper.AppendToMapping(nameof(MaxLines), UpdateMaxLines);
+            ControlsLabelMapper.AppendToMapping(nameof(LineBreakMode), UpdateMaxLines);
         }
 
-        private void UpdateMaxLines(Microsoft.Maui.Handlers.LabelHandler handler, ILabel label)
+        private void UpdateMaxLines(LabelHandler handler, ILabel label)
         {
             var textView = handler.PlatformView;
-            if (label is Label controlsLabel && textView.Ellipsize == Android.Text.TextUtils.TruncateAt.End)
+
+            if (label is Label controlsLabel && textView is not null && textView.Ellipsize == Android.Text.TextUtils.TruncateAt.End)
             {
                 textView.SetMaxLines(controlsLabel.MaxLines);
             }
