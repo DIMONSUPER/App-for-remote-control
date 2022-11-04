@@ -190,9 +190,6 @@
 		<MauiXaml Update="Views\Dialogs\ScenarioDescriptionDialog.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\GradientPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
 			<SubType>
 			</SubType>

@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
 using SmartMirror.Controls;
-using SmartMirror.Effects;
 using SmartMirror.Handlers;
 using SmartMirror.Platforms.Android.Renderers;
 using SmartMirror.Platforms.Android.Services;
@@ -40,7 +39,6 @@ public static class MauiProgram
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
             .UseMauiCompatibility()
-            .ConfigureEffects(OnConfigureEffects)
             .ConfigureMauiHandlers(OnConfigureMauiHandlers)
             .UsePrism(prism => prism.RegisterTypes(RegisterTypes).OnInitialized(OnInitialized).OnAppStart(OnAppStart))
             .ConfigureFonts(fonts =>
@@ -53,11 +51,6 @@ public static class MauiProgram
         builder.Services.AddLocalization();
 
         return builder.Build();
-    }
-
-    private static void OnConfigureEffects(IEffectsBuilder effects)
-    {
-        effects.Add(typeof(LinearGradientEffect), typeof(ShadowPlatformEffect));
     }
 
     #endregion
@@ -81,7 +74,6 @@ public static class MauiProgram
         containerRegistry.RegisterForNavigation<RoomDetailsPage>();
         containerRegistry.RegisterForNavigation<ScenarioDetailsPage>();
         containerRegistry.RegisterForNavigation<SettingsPage>();
-        containerRegistry.RegisterForNavigation<GradientPage>();
 
         containerRegistry.RegisterSingleton<IMapperService, MapperService>();
         containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
@@ -111,16 +103,14 @@ public static class MauiProgram
     {
         var navigationBuilder = navigationService.CreateBuilder();
 
-        //if (_isAuthorized)
-        //{
-        //    navigationBuilder.AddSegment<MainTabbedPageViewModel>();
-        //}
-        //else
-        //{
-        //    navigationBuilder.AddSegment<WelcomePageViewModel>();
-        //}
-        
-        navigationBuilder.AddSegment<GradientPage>();
+        if (_isAuthorized)
+        {
+            navigationBuilder.AddSegment<MainTabbedPageViewModel>();
+        }
+        else
+        {
+            navigationBuilder.AddSegment<WelcomePageViewModel>();
+        }
 
         navigationBuilder.Navigate(HandleErrors);
     }
