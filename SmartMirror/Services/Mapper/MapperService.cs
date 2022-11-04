@@ -68,6 +68,8 @@ namespace SmartMirror.Services.Mapper
         {
             var mapperConfiguration = new MapperConfiguration(cfg =>
             {
+                ConfigureDeviceMapping(cfg);
+
                 cfg.CreateMap<RoomModel, RoomBindableModel>().ReverseMap();
                 cfg.CreateMap<CameraModel, CameraBindableModel>().ReverseMap();
                 cfg.CreateMap<ScenarioActionModel, ScenarioActionBindableModel>().ReverseMap();
@@ -76,14 +78,12 @@ namespace SmartMirror.Services.Mapper
                 cfg.CreateMap<DeviceDTO, DeviceBindableModel>().ReverseMap();
                 cfg.CreateMap<DeviceBindableModel, DeviceDTO>().ReverseMap();
                 cfg.CreateMap<AttributeAqaraResponse, AttributeAqaraDTO>().ReverseMap();
-                ConfigureDeviceMapping(cfg);
                 cfg.CreateMap<NotificationModel, NotificationGroupItemBindableModel>().ReverseMap();
                 cfg.CreateMap<DetailSceneAqaraModel, ScenarioBindableModel>().ReverseMap();
                 cfg.CreateMap<ActionAqaraModel, ScenarioActionBindableModel>().ReverseMap();
-                cfg.CreateMap<ScenarioModel, ImageAndTitleBindableModel>().ReverseMap();
-                cfg.CreateMap<DeviceBindableModel, ImageAndTitleBindableModel>()
-                    .ForMember(nameof(ImageAndTitleBindableModel.ImageSource), opt => opt.MapFrom(scr => scr.IconSource))
-                    .ReverseMap();
+                cfg.CreateMap<ScenarioBindableModel, ImageAndTitleBindableModel>().ReverseMap();
+                cfg.CreateMap<CameraModel, ImageAndTitleBindableModel>().ReverseMap();
+                cfg.CreateMap<ScenarioBindableModel, ScenarioDTO>().ReverseMap();
             });
 
             return mapperConfiguration.CreateMapper();
@@ -103,8 +103,13 @@ namespace SmartMirror.Services.Mapper
                 .ForMember(nameof(DeviceAqaraModel.Did), opt => opt.MapFrom(src => src.DeviceId))
                 .ForMember(nameof(DeviceAqaraModel.DeviceName), opt => opt.MapFrom(src => src.Name));
 
-            cfg.CreateMap<CameraModel, ImageAndTitleBindableModel>()
-                .ForMember(nameof(CameraModel.Id), opt => opt.MapFrom(src => src.Id.ToString()))
+            cfg.CreateMap<DeviceBindableModel, ImageAndTitleBindableModel>()
+                .ForMember(nameof(ImageAndTitleBindableModel.ImageSource), opt => opt.MapFrom(scr => scr.IconSource))
+                .ReverseMap();
+
+            cfg.CreateMap<ScenarioModel, ScenarioBindableModel>()
+                .ForMember(nameof(ScenarioBindableModel.Id), opt => opt.MapFrom(src => 0))
+                .ForMember(nameof(ScenarioBindableModel.SceneId), opt => opt.MapFrom(src => src.Id))
                 .ReverseMap();
         }
 

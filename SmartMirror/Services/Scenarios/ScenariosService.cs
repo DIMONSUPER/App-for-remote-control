@@ -55,11 +55,13 @@ namespace SmartMirror.Services.Scenarios
 
                     await GetSettingsScenariosAsync(bindableModels);
 
-                    AllScenarios = new(bindableModels);
-
                     var dbModels = _mapperService.MapRange<ScenarioDTO>(bindableModels);
 
                     await _repositoryService.SaveOrUpdateRangeAsync(dbModels);
+
+                    await GetSettingsScenariosAsync(bindableModels);
+
+                    AllScenarios = new(bindableModels);
 
                     ScenariosChanged?.Invoke(this, EventArgs.Empty);
                 }
@@ -111,27 +113,20 @@ namespace SmartMirror.Services.Scenarios
 
                 var resultOfGetttingSceneById = await _aqaraService.GetSceneByIdAsync(sceneId);
 
-                if (resultOfGetttingSceneById is not null)
+                if (resultOfGetttingSceneById.IsSuccess && resultOfGetttingSceneById.Result is not null)
                 {
-                    if (resultOfGetttingSceneById.IsSuccess && resultOfGetttingSceneById.Result is not null)
-                    {
-                        var scene = resultOfGetttingSceneById?.Result;
+                    var scene = resultOfGetttingSceneById?.Result;
 
-                        scenario = _mapperService.Map<ScenarioBindableModel>(scene);
+                    scenario = _mapperService.Map<ScenarioBindableModel>(scene);
 
-                        foreach (var action in scenario.Actions)
-                        {
-                            action.Device = _devicesService.AllDevices.FirstOrDefault(x => x.DeviceId == action.SubjectId);
-                        }
-                    }
-                    else
+                    foreach (var action in scenario.Actions)
                     {
-                        onFailure(resultOfGetttingSceneById.Message);
+                        action.Device = _devicesService.AllDevices.FirstOrDefault(x => x.DeviceId == action.SubjectId);
                     }
                 }
                 else
                 {
-                    onFailure("result is null");
+                    onFailure(resultOfGetttingSceneById.Message);
                 }
 
                 return scenario;
@@ -230,25 +225,18 @@ namespace SmartMirror.Services.Scenarios
 
                 var resultOfGettingAllScenaries = await _aqaraService.GetScenesAsync();
 
-                if (resultOfGettingAllScenaries is not null)
+                if (resultOfGettingAllScenaries.IsSuccess)
                 {
-                    if (resultOfGettingAllScenaries.IsSuccess)
-                    {
-                        scenarios = resultOfGettingAllScenaries.Result?.Data?
-                            .Select(x => new ScenarioModel
-                            {
-                                Id = x.SceneId,
-                                Name = x.Name,
-                            });
-                    }
-                    else
-                    {
-                        onFailure(resultOfGettingAllScenaries.Message);
-                    }
+                    scenarios = resultOfGettingAllScenaries.Result?.Data?
+                        .Select(x => new ScenarioModel
+                        {
+                            Id = x.SceneId,
+                            Name = x.Name,
+                        });
                 }
                 else
                 {
-                    onFailure("result is null");
+                    onFailure(resultOfGettingAllScenaries.Message);
                 }
 
                 return scenarios;

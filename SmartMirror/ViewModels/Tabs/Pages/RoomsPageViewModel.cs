@@ -9,6 +9,7 @@ using SmartMirror.Services.Rooms;
 using SmartMirror.ViewModels.Tabs.Details;
 using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Tabs.Pages;
@@ -47,6 +48,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         DataState = EPageState.LoadingSkeleton;
 
         Task.Run(LoadRoomsAndDevicesAndChangeStateAsync);
+
         _roomsService.AllRoomsChanged += OnAllRoomsChanged;
         _devicesService.AllDevicesChanged += OnAllDevicesChanged;
     }
@@ -90,7 +92,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         {
             _needReloadDevice = false;
 
-            ReloadAllDevice();
+            LoadAllDevices();
         }
     }
 
@@ -134,12 +136,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (_roomsService.AllRooms is not null && _roomsService.AllRooms.Any())
         {
-            foreach (var room in _roomsService.AllRooms)
-            {
-                room.TappedCommand = RoomTappedCommand;
-            };
-
-            Rooms = new(_roomsService.AllRooms);
+            LoadAllRooms();
         }
         else
         {
@@ -155,7 +152,7 @@ public class RoomsPageViewModel : BaseTabViewModel
         {
             if (_isPageFocused)
             {
-                ReloadAllDevice();
+                LoadAllDevices();
             }
             else
             {
@@ -170,7 +167,80 @@ public class RoomsPageViewModel : BaseTabViewModel
         }
     }
 
-    private void ReloadAllDevice()
+    private async Task OnTryAgainCommandAsync()
+    {
+        if (!IsDataLoading)
+        {
+            DataState = EPageState.NoInternetLoader;
+
+            var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
+
+            var isDataLoaded = await TaskRepeater.RepeatAsync(LoadRoomsAndDevicesAndChangeStateAsync, executionTime);
+        }
+    }
+
+    private async Task<bool> LoadRoomsAndDevicesAndChangeStateAsync()
+    {
+        var isDataLoaded = false;
+
+        if (IsInternetConnected)
+        {
+            isDataLoaded = await ReloadDevicesAsync();
+
+            isDataLoaded &= await ReloadRoomsAsync();
+
+            if (IsInternetConnected)
+            {
+                DataState = isDataLoaded
+                    ? EPageState.Complete
+                    : EPageState.Empty;
+            }
+            else
+            {
+                DataState = EPageState.NoInternet;
+            }
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
+
+        return isDataLoaded;
+    }
+
+    private async Task<bool> ReloadRoomsAsync()
+    {
+        var resultOfGettingRooms = await _roomsService.DownloadAllRoomsAsync();
+
+        if (resultOfGettingRooms.IsSuccess)
+        {
+            LoadAllRooms();
+        }
+        else
+        {
+            Debug.WriteLine($"Can't download rooms: {resultOfGettingRooms.Message}");
+        }
+
+        return resultOfGettingRooms.IsSuccess;
+    }
+
+    private async Task<bool> ReloadDevicesAsync()
+    {
+        var aqaraDevicesResponse = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
+
+        if (aqaraDevicesResponse.IsSuccess)
+        {
+            LoadAllDevices();
+        }
+        else
+        {
+            Debug.WriteLine($"Can't download devices: {aqaraDevicesResponse.Message}");
+        }
+
+        return aqaraDevicesResponse.IsSuccess;
+    }
+
+    private void LoadAllDevices()
     {
         var devices = _devicesService.AllSupportedDevices.Where(device => device.IsFavorite);
 
@@ -180,6 +250,18 @@ public class RoomsPageViewModel : BaseTabViewModel
         };
 
         FavoriteAccessories = new(devices);
+    }
+
+    private void LoadAllRooms()
+    {
+        var rooms = _roomsService.AllRooms;
+
+        foreach (var room in rooms)
+        {
+            room.TappedCommand = RoomTappedCommand;
+        }
+
+        Rooms = new(rooms);
     }
 
     private async Task OnAccessorieTappedCommandAsync(DeviceBindableModel device)
@@ -208,90 +290,6 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             device.IsExecuting = false;
         }
-    }
-
-    private async Task OnTryAgainCommandAsync()
-    {
-        if (!IsDataLoading)
-        {
-            DataState = EPageState.NoInternetLoader;
-
-            var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
-
-            var isDataLoaded = await TaskRepeater.RepeatAsync(LoadRoomsAndDevicesAsync, executionTime);
-
-            if (IsInternetConnected)
-            {
-                DataState = isDataLoaded
-                    ? EPageState.Complete
-                    : EPageState.Empty;
-            }
-            else
-            {
-                DataState = EPageState.NoInternet;
-            }
-        }
-    }
-
-    private async Task LoadRoomsAndDevicesAndChangeStateAsync()
-    {
-        if (IsInternetConnected)
-        {
-            var isDataLoaded = await LoadRoomsAndDevicesAsync();
-
-            if (IsInternetConnected)
-            {
-                DataState = isDataLoaded
-                    ? EPageState.Complete
-                    : EPageState.Empty;
-            }
-            else
-            {
-                DataState = EPageState.NoInternet;
-            }
-        }
-        else
-        {
-            DataState = EPageState.NoInternet;
-        }
-    }
-
-    private async Task<bool> LoadRoomsAndDevicesAsync()
-    {
-        bool isLoaded = false;
-
-        if (IsInternetConnected)
-        {
-            await LoadDevicesAsync();
-
-            var resultOfGettingRooms = await _roomsService.DownloadAllRoomsAsync();
-
-            if (resultOfGettingRooms.IsSuccess)
-            {
-                foreach (var room in _roomsService.AllRooms)
-                {
-                    room.TappedCommand = RoomTappedCommand;
-                };
-
-                Rooms = new(_roomsService.AllRooms);
-
-                isLoaded = true;
-            }
-        }
-
-        return isLoaded;
-    }
-
-    private async Task LoadDevicesAsync()
-    {
-        var aqaraDevicesResponse = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
-
-        if (!aqaraDevicesResponse.IsSuccess)
-        {
-            System.Diagnostics.Debug.WriteLine($"Can't download devices: {aqaraDevicesResponse.Message}");
-        }
-
-        ReloadAllDevice();
     }
 
     private Task OnRoomTappedCommandAsync(RoomBindableModel room)

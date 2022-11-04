@@ -287,25 +287,21 @@ namespace SmartMirror.ViewModels
             return Task.FromResult(true);
         }
 
-        private async Task<bool> LoadAllScenariosAsync()
+        private Task<bool> LoadAllScenariosAsync()
         {
-            var resultOfGettingAllScenarios = await _scenariosService.GetScenariosAsync();
-
-            if (resultOfGettingAllScenarios.IsSuccess)
+            _allScenarios = _mapperService.MapRange<ImageAndTitleBindableModel>(_scenariosService.AllScenarios, (m, vm) =>
             {
-                _allScenarios = _mapperService.MapRange<ImageAndTitleBindableModel>(resultOfGettingAllScenarios.Result, (m, vm) =>
-                {
-                    vm.Type = ECategoryType.Scenarios;
-                    vm.ImageSource = "play_gray";
-                    vm.TapCommand = ShowScenarioSettingsCommand;
-                });
+                vm.Model = m;
+                vm.Type = ECategoryType.Scenarios;
+                vm.ImageSource = "play_gray";
+                vm.TapCommand = ShowScenarioSettingsCommand;
+            });
 
-                var scenarioCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Scenarios);
+            var scenarioCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Scenarios);
 
-                scenarioCategory.Count = _allScenarios.Count();
-            }
+            scenarioCategory.Count = _allScenarios.Count();
 
-            return resultOfGettingAllScenarios.IsSuccess;
+            return Task.FromResult(true);
         }
 
         private async Task<bool> LoadAllCamerasAsync()
