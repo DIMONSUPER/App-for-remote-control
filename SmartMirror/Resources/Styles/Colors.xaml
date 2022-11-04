@@ -51,10 +51,10 @@
     
     <LinearGradientBrush x:Key="GrayGradientBrush_i2">
 
-        <GradientStop Color="#3A3A3C"
+        <GradientStop Color="#2A2A2A"
                       Offset="0"/>
 
-        <GradientStop Color="#2A2A2A"
+        <GradientStop Color="#3A3A3C"
                       Offset="1"/>
 
     </LinearGradientBrush>
