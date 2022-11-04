@@ -29,7 +29,7 @@ namespace SmartMirror.ViewModels
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allCameras = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<SettingsProvidersBindableModel> _allProviders = Enumerable.Empty<SettingsProvidersBindableModel>();
-        
+
         private CategoryBindableModel _providersCategory;
         private IDialogResult _dialogResult;
 
@@ -51,6 +51,8 @@ namespace SmartMirror.ViewModels
             _scenariosService = scenariosService;
             _camerasService = camerasService;
             _googleService = googleService;
+
+            PageState = EPageState.LoadingSkeleton;
         }
 
         #region -- Public properties --
@@ -125,19 +127,17 @@ namespace SmartMirror.ViewModels
 
         #region -- Overrides --
 
-        public override async void Initialize(INavigationParameters parameters)
+        public override void Initialize(INavigationParameters parameters)
         {
             base.Initialize(parameters);
 
-            if (!IsDataLoading)
+            Task.Run(async () =>
             {
-                PageState = EPageState.LoadingSkeleton;
-                
                 LoadCategories();
                 SelectCategory(Categories.FirstOrDefault());
 
                 await LoadAllDataAndChangeStateAsync();
-            }
+            });
         }
 
         protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
@@ -148,7 +148,7 @@ namespace SmartMirror.ViewModels
                 {
                     PageState = EPageState.LoadingSkeleton;
 
-                    await LoadAllDataAndChangeStateAsync(); 
+                    await LoadAllDataAndChangeStateAsync();
                 }
             }
             else
@@ -267,7 +267,7 @@ namespace SmartMirror.ViewModels
                     LoadAllDevicesAsync(),
                     LoadAllScenariosAsync(),
                     LoadAllCamerasAsync());
-                
+
                 CreateProviders();
 
                 isLoaded = dataLoadingResults.Any(x => x);
@@ -279,7 +279,7 @@ namespace SmartMirror.ViewModels
         private async Task<bool> LoadAllDevicesAsync()
         {
             var resultOfGettingAllDevices = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
-            
+
             if (resultOfGettingAllDevices.IsSuccess)
             {
                 _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(_devicesService.AllSupportedDevices, (m, vm) =>
@@ -418,7 +418,7 @@ namespace SmartMirror.ViewModels
                 else
                 {
                     PageState = EPageState.NoInternet;
-                } 
+                }
             }
         }
 

@@ -302,6 +302,9 @@
 		<MauiXaml Update="Resources\DataTemplates\ProvidersTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\SettingsPageSkeleton.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Update="Resources\Strings\Strings.resx">
