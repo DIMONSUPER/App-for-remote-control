@@ -18,6 +18,9 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
     private RoomBindableModel _selectedRoom;
 
+    private bool _isPageFocused;
+    private bool _needReloadDevice;
+
     public RoomDetailsPageViewModel(
         INavigationService navigationService,
         IMapperService mapperService,
@@ -69,6 +72,32 @@ public class RoomDetailsPageViewModel : BaseViewModel
     #endregion
 
     #region -- Overrides --
+
+    public override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        _isPageFocused = true;
+
+        if (_needReloadDevice)
+        {
+            _needReloadDevice = false;
+
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                DataState = EPageState.LoadingSkeleton;
+
+                SelectRoom(_selectedRoom);
+            });
+        }
+    }
+
+    public override void OnDisappearing()
+    {
+        base.OnDisappearing();
+
+        _isPageFocused = false;
+    }
 
     public override void Destroy()
     {
@@ -145,20 +174,22 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
     #region -- Private helpers --
 
-    private void InitialLoadRoomsAsync(IEnumerable<RoomBindableModel> rooms, RoomBindableModel selectedRoom)
-    {
-
-    }
-
     private void OnAllRoomsOrDevicesChanged(object sender, EventArgs e)
     {
         if (_selectedRoom is not null)
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                DataState = EPageState.LoadingSkeleton;
+                if (_isPageFocused)
+                {
+                    DataState = EPageState.LoadingSkeleton;
 
-                SelectRoom(_selectedRoom);
+                    SelectRoom(_selectedRoom);
+                }
+                else
+                {
+                    _needReloadDevice = true;
+                }
             });
         }
     }

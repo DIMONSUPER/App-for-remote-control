@@ -504,6 +504,11 @@ namespace SmartMirror.Services.Devices
 
             newDevice.IconSource = GetIconSourceForDevice(newDevice);
 
+            if (newDevice.IconSource == IconsNames.pic_temperature)
+            {
+                newDevice.UnitMeasure = EUnitMeasure.Fahrenheit;
+            }
+
             return newDevice;
         }
 

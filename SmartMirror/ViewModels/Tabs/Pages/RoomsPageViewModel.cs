@@ -22,6 +22,9 @@ public class RoomsPageViewModel : BaseTabViewModel
     private readonly IRoomsService _roomsService;
     private readonly IDevicesService _devicesService;
 
+    private bool _isPageFocused;
+    private bool _needReloadDevice;
+
     public RoomsPageViewModel(
         ISmartHomeMockService smartHomeMockService,
         INavigationService navigationService,
@@ -77,6 +80,27 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
+    public override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        _isPageFocused = true;
+
+        if (_needReloadDevice)
+        {
+            _needReloadDevice = false;
+
+            ReloadAllDevice();
+        }
+    }
+
+    public override void OnDisappearing()
+    {
+        base.OnDisappearing();
+
+        _isPageFocused = false;
+    }
+
     public override void Destroy()
     {
         _roomsService.AllRoomsChanged -= OnAllRoomsChanged;
@@ -129,18 +153,38 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (_devicesService.AllSupportedDevices is not null && _devicesService.AllSupportedDevices.Any())
         {
-            foreach (var device in _devicesService.AllSupportedDevices)
+            if (_isPageFocused)
             {
-                device.TappedCommand = AccessorieTappedCommand;
-            };
-
-            FavoriteAccessories = new(_devicesService.AllSupportedDevices);
+                ReloadAllDevice();
+            }
+            else
+            {
+                _needReloadDevice = true;
+            }
         }
         else
         {
             DataState = EPageState.LoadingSkeleton;
 
             await LoadRoomsAndDevicesAndChangeStateAsync();
+        }
+    }
+
+    private void ReloadAllDevice()
+    {
+        try
+        {
+            var devices = _devicesService.AllSupportedDevices.Where(device => device.IsFavorite);
+
+            foreach (var device in devices)
+            {
+                device.TappedCommand = AccessorieTappedCommand;
+            };
+
+            FavoriteAccessories = new(devices);
+        }
+        catch (Exception ex)
+        {
         }
     }
 
@@ -246,25 +290,14 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private async Task LoadDevicesAsync()
     {
-        var devices = Enumerable.Empty<DeviceBindableModel>();
-
         var aqaraDevicesResponse = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
 
-        if (aqaraDevicesResponse.IsSuccess)
-        {
-            devices = _devicesService.AllSupportedDevices.Where(device => device.IsFavorite);
-        }
-        else
+        if (!aqaraDevicesResponse.IsSuccess)
         {
             System.Diagnostics.Debug.WriteLine($"Can't download devices: {aqaraDevicesResponse.Message}");
         }
 
-        foreach (var device in devices)
-        {
-            device.TappedCommand = AccessorieTappedCommand;
-        }
-
-        FavoriteAccessories = new(devices);
+        ReloadAllDevice();
     }
 
     private Task OnRoomTappedCommandAsync(RoomBindableModel room)
