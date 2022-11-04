@@ -15,13 +15,13 @@ public class RoomDTO : IDTO
 
     #region -- Public properties --
 
-    public string Name;
+    public string Name { get; set; }
 
-    public DateTime CreateTime;
+    public DateTime CreateTime { get; set; }
 
-    public string Description;
+    public string Description { get; set; }
 
-    public int DevicesCount;
+    public int DevicesCount { get; set; }
 
     #endregion
 }

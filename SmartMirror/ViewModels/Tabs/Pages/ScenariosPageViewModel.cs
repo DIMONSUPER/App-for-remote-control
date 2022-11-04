@@ -145,12 +145,12 @@ public class ScenariosPageViewModel : BaseTabViewModel
     {
         selectedScenario.IsUpdating = true;
 
-        var resultOfUpdattingScenario = await _scenariosService.RunScenarioAsync(selectedScenario.Id);
+        var resultOfUpdattingScenario = await _scenariosService.RunScenarioAsync(selectedScenario.SceneId);
 
         if (resultOfUpdattingScenario.IsSuccess)
         {
-            UpdateStatusRunningScenario(FavoriteScenarios, selectedScenario.Id);
-            UpdateStatusRunningScenario(Scenarios, selectedScenario.Id);
+            UpdateStatusRunningScenario(FavoriteScenarios, selectedScenario.SceneId);
+            UpdateStatusRunningScenario(Scenarios, selectedScenario.SceneId);
         }
         else
         {
@@ -218,7 +218,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     private async Task<bool> LoadFavoritesScenariosAsync()
     {
-        var resultOfGettingFavoriteScenarios = await _scenariosService.GetFavoriteScenariosAsync();
+        var resultOfGettingFavoriteScenarios = await _scenariosService.GetScenariosAsync();
 
         if (resultOfGettingFavoriteScenarios.IsSuccess)
         {
@@ -255,7 +255,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     private void UpdateStatusRunningScenario(IEnumerable<ScenarioBindableModel> scenarios, string scenarioId)
     {
-        var scenario = scenarios?.FirstOrDefault(x => x.Id == scenarioId);
+        var scenario = scenarios?.FirstOrDefault(x => x.SceneId == scenarioId);
 
         if (scenario is not null)
         {

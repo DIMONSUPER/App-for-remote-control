@@ -5,8 +5,8 @@ namespace SmartMirror.Models.BindableModels
 {
     public class ScenarioBindableModel : BindableBase
     {
-        private string _id;
-        public string Id
+        private int _id;
+        public int Id
         {
             get => _id;
             set => SetProperty(ref _id, value);
@@ -31,6 +31,20 @@ namespace SmartMirror.Models.BindableModels
         {
             get => _isActive;
             set => SetProperty(ref _isActive, value);
+        }
+
+        private bool _isShowInScenarios = true;
+        public bool IsShowInScenarios
+        {
+            get => _isShowInScenarios;
+            set => SetProperty(ref _isShowInScenarios, value);
+        }
+
+        private bool _isReceiveNotifications = true;
+        public bool IsReceiveNotifications
+        {
+            get => _isReceiveNotifications;
+            set => SetProperty(ref _isReceiveNotifications, value);
         }
 
         private bool _isFavorite;

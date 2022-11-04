@@ -15,6 +15,10 @@ public class NotificationDTO : IDTO
 
     #region -- Public properties --
 
+    public int DeviceId { get; set; }
+
+    public bool IsShow { get; set; }
+
     public string Name { get; set; }
 
     public string Type { get; set; }

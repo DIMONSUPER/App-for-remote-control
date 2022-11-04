@@ -11,7 +11,6 @@ namespace SmartMirror.Services.Rooms
 {
     public class RoomsService : IRoomsService
     {
-        private readonly ISmartHomeMockService _smartHomeMockService;
         private readonly IAqaraService _aqaraService;
         private readonly IDevicesService _devicesService;
         private readonly IMapperService _mapperService;
@@ -20,11 +19,9 @@ namespace SmartMirror.Services.Rooms
         public RoomsService(
             IAqaraService aqaraService,
             IDevicesService devicesService,
-            ISmartHomeMockService smartHomeMockService,
             IMapperService mapperService,
             IAqaraMessanger aqaraMessanger)
         {
-            _smartHomeMockService = smartHomeMockService;
             _aqaraService = aqaraService;
             _devicesService = devicesService;
             _mapperService = mapperService;

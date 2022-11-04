@@ -15,13 +15,19 @@ public class ScenarioDTO : IDTO
 
     #region -- Public properties --
 
-    public string SceneId;
+    public string SceneId { get; set; }
 
-    public string Name;
+    public string Name { get; set; }
 
-    public bool IsFavorite;
+    public bool IsActive { get; set; }
 
-    public DateTime ActivationTime;
+    public bool IsShowInScenarios { get; set; }
+
+    public bool IsReceiveNotifications { get; set; }
+
+    public bool IsFavorite { get; set; }
+
+    public DateTime ActivationTime { get; set; }
 
     #endregion
 }

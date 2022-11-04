@@ -272,7 +272,7 @@ namespace SmartMirror.ViewModels
             return isLoaded;
         }
 
-        private async Task<bool> LoadAllDevicesAsync()
+        private Task<bool> LoadAllDevicesAsync()
         {
             _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(_devicesService.AllSupportedDevices, (m, vm) =>
             {
@@ -284,7 +284,7 @@ namespace SmartMirror.ViewModels
 
             deviceCategory.Count = _allAccessories.Count();
 
-            return true;
+            return Task.FromResult(true);
         }
 
         private async Task<bool> LoadAllScenariosAsync()

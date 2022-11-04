@@ -25,7 +25,7 @@ namespace SmartMirror.Services.Cameras
 
                 if (camerasGettingResult is not null)
                 {
-                    cameras = camerasGettingResult;
+                    cameras = camerasGettingResult.Where(camera => camera.IsShow);
                 }
                 else
                 {

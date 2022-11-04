@@ -172,20 +172,14 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private void ReloadAllDevice()
     {
-        try
-        {
-            var devices = _devicesService.AllSupportedDevices.Where(device => device.IsFavorite);
+        var devices = _devicesService.AllSupportedDevices.Where(device => device.IsFavorite);
 
-            foreach (var device in devices)
-            {
-                device.TappedCommand = AccessorieTappedCommand;
-            };
-
-            FavoriteAccessories = new(devices);
-        }
-        catch (Exception ex)
+        foreach (var device in devices)
         {
-        }
+            device.TappedCommand = AccessorieTappedCommand;
+        };
+
+        FavoriteAccessories = new(devices);
     }
 
     private async Task OnAccessorieTappedCommandAsync(DeviceBindableModel device)

@@ -1,12 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using Android.Content.Res;
-using Android.Hardware.Usb;
-using Android.OS;
-using SmartMirror.Enums;
+﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Models.Aqara;
@@ -14,7 +6,6 @@ using SmartMirror.Models.BindableModels;
 using SmartMirror.Models.DTO;
 using SmartMirror.Resources;
 using SmartMirror.Services.Aqara;
-using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Repository;
 using SmartMirror.Services.Rest;
@@ -134,7 +125,9 @@ namespace SmartMirror.Services.Devices
                 }
                 else
                 {
-                    var device = AllSupportedDevices.FirstOrDefault();
+                    var bindableDeviceId = bindableDevice.Id;
+
+                    var device = AllSupportedDevices.FirstOrDefault(row => row.Id == bindableDeviceId);
 
                     device = bindableDevice;
 
