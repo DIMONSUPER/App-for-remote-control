@@ -51,7 +51,7 @@ namespace SmartMirror.Services.Scenarios
 
                 if (resultOfGettingScenarios.IsSuccess)
                 {
-                    var bindableModels = _mapperService.MapRange<ScenarioBindableModel>(resultOfGettingScenarios.Result);
+                    var bindableModels = _mapperService.MapRange<ScenarioBindableModel>(resultOfGettingScenarios.Result).ToList();
 
                     await GetSettingsScenariosAsync(bindableModels);
 
