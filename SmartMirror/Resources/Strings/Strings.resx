@@ -297,4 +297,10 @@
     <data name="Connected" xml:space="preserve">
         <value>Connected</value>
     </data>
+    <data name="Celsius" xml:space="preserve">
+        <value>Celsius</value>
+    </data>
+    <data name="Fahrenheit" xml:space="preserve">
+        <value>Fahrenheit</value>
+    </data>
 </root>

@@ -17,6 +17,8 @@ public class CameraDTO : IDTO
 
     public string Name { get; set; }
 
+    public bool IsShown { get; set; }
+
     public bool IsConnected { get; set; }
 
     public DateTime CreateTime { get; set; }

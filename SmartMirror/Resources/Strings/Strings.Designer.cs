@@ -193,6 +193,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Celsius.
+        /// </summary>
+        internal static string Celsius {
+            get {
+                return ResourceManager.GetString("Celsius", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string Close {
@@ -219,6 +228,7 @@ namespace SmartMirror.Resources.Strings {
             }
         }
         
+        /// <summary>
         ///   Looks up a localized string similar to Connect.
         /// </summary>
         internal static string Connect {
@@ -305,6 +315,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string ErrorDescription {
             get {
                 return ResourceManager.GetString("ErrorDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fahrenheit.
+        /// </summary>
+        internal static string Fahrenheit {
+            get {
+                return ResourceManager.GetString("Fahrenheit", resourceCulture);
             }
         }
         
@@ -739,24 +758,22 @@ namespace SmartMirror.Resources.Strings {
                 return ResourceManager.GetString("Shades", resourceCulture);
             }
         }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Show in Rooms.
-        /// </summary>
-        internal static string ShowInRooms
-        {
-            get
-            {
-                return ResourceManager.GetString("ShowInRooms", resourceCulture);
-            }
-        }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Show in Cameras.
         /// </summary>
         internal static string ShowInCameras {
             get {
                 return ResourceManager.GetString("ShowInCameras", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show in Rooms.
+        /// </summary>
+        internal static string ShowInRooms {
+            get {
+                return ResourceManager.GetString("ShowInRooms", resourceCulture);
             }
         }
         

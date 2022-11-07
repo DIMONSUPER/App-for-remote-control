@@ -96,7 +96,7 @@ namespace SmartMirror.ViewModels.Tabs.Details
 
         private async Task LoadScenarioInformationAsync(ScenarioBindableModel scenario)
         {
-            var scenarioDetailInformation = await _scenariosService.GetScenarioByIdAsync(scenario.Id);
+            var scenarioDetailInformation = await _scenariosService.GetScenarioByIdAsync(scenario.SceneId);
 
             if (scenarioDetailInformation.IsSuccess)
             {

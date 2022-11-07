@@ -43,6 +43,7 @@
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Style="{DynamicResource tstyle_i1}"
+            Margin="0, 21, 0, 0"
             HorizontalOptions="CenterAndExpand"
             Text="{extensions:Translate Settings}"/>
 

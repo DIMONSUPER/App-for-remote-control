@@ -1,11 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using Android.Content.Res;
-using Android.Hardware.Usb;
-using SmartMirror.Enums;
+﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Models.Aqara;
@@ -13,7 +6,6 @@ using SmartMirror.Models.BindableModels;
 using SmartMirror.Models.DTO;
 using SmartMirror.Resources;
 using SmartMirror.Services.Aqara;
-using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Repository;
 using SmartMirror.Services.Rest;
@@ -80,11 +72,19 @@ namespace SmartMirror.Services.Devices
 
                         var devices = await GetTaskForDevice(device);
 
+                        await GetSettingsDevicesAsync(devices);
+
                         result = result.Concat(devices);
                     }
 
                     AllDevices = new(_cachedDevices.Select(x => x.Value));
                     AllSupportedDevices = new(result);
+
+                    var dbModels = _mapperService.MapRange<DeviceDTO>(AllSupportedDevices);
+
+                    await _repositoryService.SaveOrUpdateRangeAsync(dbModels);
+
+                    AllDevicesChanged?.Invoke(this, EventArgs.Empty);
                 }
                 else
                 {
@@ -108,6 +108,31 @@ namespace SmartMirror.Services.Devices
                 var response = await MakeRequestAsync<DataAqaraResponse<DeviceAqaraModel>>("query.device.info", data, onFailure);
 
                 return response?.Result;
+            });
+        }
+
+        public Task<AOResult> UpdateDeviceAsync(DeviceBindableModel bindableDevice)
+        {
+            return AOResult.ExecuteTaskAsync(async onFailure =>
+            {
+                var updateDevice = _mapperService.Map<DeviceDTO>(bindableDevice);
+
+                var response = await _repositoryService.SaveOrUpdateAsync(updateDevice);
+
+                if (response == -1)
+                {
+                    onFailure("Update failed");
+                }
+                else
+                {
+                    var bindableDeviceId = bindableDevice.Id;
+
+                    var device = AllSupportedDevices.FirstOrDefault(row => row.Id == bindableDeviceId);
+
+                    device = bindableDevice;
+
+                    AllDevicesChanged?.Invoke(this, EventArgs.Empty);
+                }
             });
         }
 
@@ -208,6 +233,26 @@ namespace SmartMirror.Services.Devices
         #endregion
 
         #region -- Private helpers --
+
+        private async Task GetSettingsDevicesAsync(IEnumerable<DeviceBindableModel> devices)
+        {
+            foreach (var device in devices)
+            {
+                var deviceId = device.DeviceId;
+                var resourceId = device.EditableResourceId;
+
+                var dbDevice = await _repositoryService.GetSingleAsync<DeviceDTO>(row => row.DeviceId == deviceId && row.EditableResourceId == resourceId);
+
+                if (dbDevice is not null)
+                {
+                    device.Id = dbDevice.Id;
+                    device.UnitMeasure = dbDevice.UnitMeasure;
+                    device.IsShownInRooms = dbDevice.IsShownInRooms;
+                    device.IsReceiveNotifications = dbDevice.IsReceiveNotifications;
+                    device.IsFavorite = dbDevice.IsFavorite;
+                }
+            }
+        }
 
         private bool HasDeviceNSwitches(DeviceBindableModel device, int n)
         {
@@ -451,6 +496,11 @@ namespace SmartMirror.Services.Devices
             };
 
             newDevice.IconSource = GetIconSourceForDevice(newDevice);
+
+            if (newDevice.IconSource == IconsNames.pic_temperature)
+            {
+                newDevice.UnitMeasure = EUnitMeasure.Fahrenheit;
+            }
 
             return newDevice;
         }

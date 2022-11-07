@@ -8,12 +8,16 @@ namespace SmartMirror.Services.Scenarios
     {
         event EventHandler ScenariosChanged;
 
-        Task<AOResult<IEnumerable<ScenarioModel>>> GetScenariosAsync();
+        List<ScenarioBindableModel> AllScenarios { get; }
 
-        Task<AOResult<IEnumerable<ScenarioModel>>> GetFavoriteScenariosAsync();
+        Task<AOResult> DownloadAllScenariosAsync();
+
+        Task<AOResult<IEnumerable<ScenarioModel>>> GetScenariosAsync();
 
         Task<AOResult<ScenarioBindableModel>> GetScenarioByIdAsync(string scenarioId);
 
         Task<AOResult> RunScenarioAsync(string scenarioId);
+
+        Task<AOResult> UpdateScenarioAsync(ScenarioBindableModel scenario);
     }
 }

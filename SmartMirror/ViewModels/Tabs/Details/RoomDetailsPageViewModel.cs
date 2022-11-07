@@ -70,6 +70,23 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
     #region -- Overrides --
 
+    public override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (IsNeedReloadData)
+        {
+            IsNeedReloadData = false;
+
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                DataState = EPageState.LoadingSkeleton;
+
+                SelectRoom(_selectedRoom);
+            });
+        }
+    }
+
     public override void Destroy()
     {
         _roomsService.AllRoomsChanged -= OnAllRoomsOrDevicesChanged;
@@ -145,20 +162,22 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
     #region -- Private helpers --
 
-    private void InitialLoadRoomsAsync(IEnumerable<RoomBindableModel> rooms, RoomBindableModel selectedRoom)
-    {
-
-    }
-
     private void OnAllRoomsOrDevicesChanged(object sender, EventArgs e)
     {
         if (_selectedRoom is not null)
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                DataState = EPageState.LoadingSkeleton;
+                if (IsPageFocused)
+                {
+                    DataState = EPageState.LoadingSkeleton;
 
-                SelectRoom(_selectedRoom);
+                    SelectRoom(_selectedRoom);
+                }
+                else
+                {
+                    IsNeedReloadData = true;
+                }
             });
         }
     }
@@ -179,7 +198,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
                 room.IsSelected = room.Id == selectedRoom.Id;
             }
 
-            var roomDevices = _devicesService.AllSupportedDevices.Where(x => x.PositionId == selectedRoom.Id);
+            var roomDevices = _devicesService.AllSupportedDevices.Where(x => x.PositionId == selectedRoom.Id && x.IsShownInRooms);
 
             if (roomDevices.Any())
             {
