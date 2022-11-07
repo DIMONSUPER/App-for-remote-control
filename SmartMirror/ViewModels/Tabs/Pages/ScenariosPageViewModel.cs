@@ -1,6 +1,5 @@
 ﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
-using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
@@ -17,9 +16,6 @@ public class ScenariosPageViewModel : BaseTabViewModel
     private readonly IMapperService _mapperService;
     private readonly IScenariosService _scenariosService;
     private readonly IDialogService _dialogService;
-
-    private bool _isNeedReloadData = true;
-    private bool _isPageFocused;
 
     public ScenariosPageViewModel(
         INavigationService navigationService,
@@ -81,24 +77,17 @@ public class ScenariosPageViewModel : BaseTabViewModel
     {
         base.OnAppearing();
 
-        if (_isNeedReloadData)
+        if (IsNeedReloadData)
         {
             LoadScenariosAndChangeState();
         }
-    }
-
-    public override void OnDisappearing()
-    {
-        base.OnDisappearing();
-
-        _isPageFocused = false;
     }
 
     public override void OnNavigatedTo(INavigationParameters parameters)
     {
         base.OnNavigatedTo(parameters);
 
-        _isNeedReloadData = true;
+        IsNeedReloadData = true;
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
@@ -126,13 +115,13 @@ public class ScenariosPageViewModel : BaseTabViewModel
     {
         if (_scenariosService.AllScenarios is not null && _scenariosService.AllScenarios.Any())
         {
-            if (_isPageFocused)
+            if (IsPageFocused)
             {
                 LoadScenariosAndChangeState();
             }
             else
             {
-                _isNeedReloadData = true;
+                IsNeedReloadData = true;
             }
         }
         else
@@ -222,7 +211,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     private Task OnGoToScenarioDetailsCommandAsync(ScenarioBindableModel scenario)
     {
-        _isNeedReloadData = false;
+        IsNeedReloadData = false;
 
         return NavigationService.CreateBuilder()
             .AddSegment<ScenarioDetailsPageViewModel>()

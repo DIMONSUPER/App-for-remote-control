@@ -23,9 +23,6 @@ public class RoomsPageViewModel : BaseTabViewModel
     private readonly IRoomsService _roomsService;
     private readonly IDevicesService _devicesService;
 
-    private bool _isPageFocused;
-    private bool _needReloadDevice;
-
     public RoomsPageViewModel(
         ISmartHomeMockService smartHomeMockService,
         INavigationService navigationService,
@@ -86,21 +83,12 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         base.OnAppearing();
 
-        _isPageFocused = true;
-
-        if (_needReloadDevice)
+        if (IsNeedReloadData)
         {
-            _needReloadDevice = false;
+            IsNeedReloadData = false;
 
             LoadAllDevices();
         }
-    }
-
-    public override void OnDisappearing()
-    {
-        base.OnDisappearing();
-
-        _isPageFocused = false;
     }
 
     public override void Destroy()
@@ -150,13 +138,13 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (_devicesService.AllSupportedDevices is not null && _devicesService.AllSupportedDevices.Any())
         {
-            if (_isPageFocused)
+            if (IsPageFocused)
             {
                 LoadAllDevices();
             }
             else
             {
-                _needReloadDevice = true;
+                IsNeedReloadData = true;
             }
         }
         else

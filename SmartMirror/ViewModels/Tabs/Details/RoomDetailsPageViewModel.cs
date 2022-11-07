@@ -18,9 +18,6 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
     private RoomBindableModel _selectedRoom;
 
-    private bool _isPageFocused;
-    private bool _needReloadDevice;
-
     public RoomDetailsPageViewModel(
         INavigationService navigationService,
         IMapperService mapperService,
@@ -77,11 +74,9 @@ public class RoomDetailsPageViewModel : BaseViewModel
     {
         base.OnAppearing();
 
-        _isPageFocused = true;
-
-        if (_needReloadDevice)
+        if (IsNeedReloadData)
         {
-            _needReloadDevice = false;
+            IsNeedReloadData = false;
 
             MainThread.BeginInvokeOnMainThread(() =>
             {
@@ -90,13 +85,6 @@ public class RoomDetailsPageViewModel : BaseViewModel
                 SelectRoom(_selectedRoom);
             });
         }
-    }
-
-    public override void OnDisappearing()
-    {
-        base.OnDisappearing();
-
-        _isPageFocused = false;
     }
 
     public override void Destroy()
@@ -180,7 +168,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                if (_isPageFocused)
+                if (IsPageFocused)
                 {
                     DataState = EPageState.LoadingSkeleton;
 
@@ -188,7 +176,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
                 }
                 else
                 {
-                    _needReloadDevice = true;
+                    IsNeedReloadData = true;
                 }
             });
         }

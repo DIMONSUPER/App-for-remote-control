@@ -81,23 +81,13 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             base.OnPropertyChanged(args);
 
-            switch (args.PropertyName)
+            if (args.PropertyName is nameof(IsFavorite) or nameof(IsShownInScenarios) or nameof(IsReceiveNotifications))
             {
-                case nameof(IsFavorite):
-                    Scenario.IsFavorite = _isFavorite;
+                Scenario.IsFavorite = _isFavorite;
+                Scenario.IsShownInScenarios = _isShownInScenarios;
+                Scenario.IsReceiveNotifications = _isReceiveNotifications;
 
-                    await _scenariosService.UpdateScenarioAsync(Scenario);
-                    break;
-                case nameof(IsShownInScenarios):
-                    Scenario.IsShownInScenarios = _isShownInScenarios;
-
-                    await _scenariosService.UpdateScenarioAsync(Scenario);
-                    break;
-                case nameof(IsReceiveNotifications):
-                    Scenario.IsReceiveNotifications = _isReceiveNotifications;
-
-                    await _scenariosService.UpdateScenarioAsync(Scenario);
-                    break;
+                await _scenariosService.UpdateScenarioAsync(Scenario);
             }
         }
 

@@ -93,23 +93,13 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             base.OnPropertyChanged(args);
 
-            switch (args.PropertyName)
+            if (args.PropertyName is nameof(IsFavorite) or nameof(IsShownInRooms) or nameof(IsReceiveNotifications))
             {
-                case nameof(IsFavorite):
-                    Accessory.IsFavorite = _isFavorite;
+                Accessory.IsFavorite = _isFavorite;
+                Accessory.IsShownInRooms = _isShownInRooms;
+                Accessory.IsReceiveNotifications = _isReceiveNotifications;
 
-                    await _devicesService.UpdateDeviceAsync(Accessory);
-                    break;
-                case nameof(IsShownInRooms):
-                    Accessory.IsShownInRooms = _isShownInRooms;
-
-                    await _devicesService.UpdateDeviceAsync(Accessory);
-                    break;
-                case nameof(IsReceiveNotifications):
-                    Accessory.IsReceiveNotifications = _isReceiveNotifications;
-
-                    await _devicesService.UpdateDeviceAsync(Accessory);
-                    break;
+                await _devicesService.UpdateDeviceAsync(Accessory);
             }
         }
 
