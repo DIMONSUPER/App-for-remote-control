@@ -9,7 +9,7 @@
         <controls:SkeletonView WidthRequest="63"
                                HeightRequest="29"
                                StrokeShape="RoundRectangle 9"
-                               Background="{x:DynamicResource WhiteGradientBrush}"/>
+                               Style="{DynamicResource WhiteGradientStyle_i1}"/>
 
         <StackLayout Margin="0,26,0,0"
                         Spacing="18">
@@ -21,7 +21,7 @@
                     <controls:SkeletonView StrokeShape="RoundRectangle 9"
                                            WidthRequest="572"
                                            HeightRequest="114"
-                                           Background="{x:DynamicResource WhiteGradientBrush}"/>
+                                           Style="{DynamicResource WhiteGradientStyle_i1}"/>
 
                 </DataTemplate>
 
@@ -41,7 +41,7 @@
                                WidthRequest="104"
                                HeightRequest="29"
                                StrokeShape="RoundRectangle 9"
-                               Background="{x:DynamicResource WhiteGradientBrush}"/>
+                               Style="{DynamicResource WhiteGradientStyle_i1}"/>
 
         <StackLayout Spacing="18">
 
@@ -50,7 +50,7 @@
                 <DataTemplate>
 
                     <controls:SkeletonView StrokeShape="RoundRectangle 9"
-                                           Background="{x:DynamicResource WhiteGradientBrush}"
+                                           Style="{DynamicResource WhiteGradientStyle_i1}"
                                            WidthRequest="572"
                                            HeightRequest="114"/>
 

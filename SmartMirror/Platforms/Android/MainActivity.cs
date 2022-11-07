@@ -1,6 +1,9 @@
 ﻿using Android.App;
 using Android.Content.PM;
+using Android.Graphics;
 using Android.OS;
+using Android.Views;
+using AndroidX.AppCompat.View;
 //using Com.Amazon.Identity.Auth.Device.Api.Authorization;
 //using Com.Amazon.Identity.Auth.Device.Api.Workflow;
 
@@ -24,7 +27,14 @@ public class MainActivity : MauiAppCompatActivity
         AndroidX.Core.SplashScreen.SplashScreen.InstallSplashScreen(this);
 
         base.OnCreate(savedInstanceState);
-    } 
+    }
+
+    public override void OnAttachedToWindow()
+    {
+        base.OnAttachedToWindow();
+
+        Window.SetFormat(Format.Rgba8888);
+    }
 
     #endregion
 

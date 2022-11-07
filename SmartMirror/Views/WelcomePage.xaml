@@ -9,7 +9,7 @@
     xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels"
     Title="WelcomePage"
-    Background="{x:DynamicResource GrayGradientBrush}"
+    Style="{DynamicResource GrayGradientStyle_i1}"
     x:Class="SmartMirror.Views.WelcomePage"
     x:DataType="vm:WelcomePageViewModel">
 
@@ -29,7 +29,7 @@
             HeightRequest="167"
             Padding="52, 33"
             StrokeShape="RoundRectangle 12"
-            Background="{DynamicResource GrayGradientBrush_i2}">
+            Style="{DynamicResource GrayGradientStyle_i2}">
 
             <StackLayout Orientation="Horizontal">
 
