@@ -191,6 +191,9 @@
 		<MauiXaml Update="Views\Dialogs\AccessorySettingsDialog.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\AddMoreProviderDialog.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\AddNewCameraDialog.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

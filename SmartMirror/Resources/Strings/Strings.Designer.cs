@@ -355,6 +355,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Finish.
+        /// </summary>
+        internal static string Finish {
+            get {
+                return ResourceManager.GetString("Finish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Follow all instructions and complete your registration.
         /// </summary>
         internal static string FollowAllInstructions {
@@ -432,6 +441,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string HalfBath {
             get {
                 return ResourceManager.GetString("HalfBath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Have another provider?.
+        /// </summary>
+        internal static string HaveAnotherProvider {
+            get {
+                return ResourceManager.GetString("HaveAnotherProvider", resourceCulture);
             }
         }
         

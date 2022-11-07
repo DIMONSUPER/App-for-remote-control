@@ -303,4 +303,10 @@
     <data name="Fahrenheit" xml:space="preserve">
         <value>Fahrenheit</value>
     </data>
+    <data name="Finish" xml:space="preserve">
+        <value>Finish</value>
+    </data>
+    <data name="HaveAnotherProvider" xml:space="preserve">
+        <value>Have another provider?</value>
+    </data>
 </root>
