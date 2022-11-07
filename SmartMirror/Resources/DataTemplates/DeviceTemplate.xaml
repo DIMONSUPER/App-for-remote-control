@@ -22,6 +22,7 @@
         <Grid RowDefinitions="Auto, *"
               RowSpacing="0"
               ColumnSpacing="0"
+              VerticalOptions="Fill"
               ColumnDefinitions="Auto, *">
 
             <Border Grid.Row="0"
@@ -45,23 +46,22 @@
             <Grid Grid.Row="1"
                   Grid.ColumnSpan="2"
                   RowSpacing="0"
-                  VerticalOptions="End"
                   HorizontalOptions="Fill"
-                  RowDefinitions="Auto"
+                  RowDefinitions="*"
                   ColumnDefinitions="*, Auto">
 
-                <VerticalStackLayout HorizontalOptions="Start"
-                                     VerticalOptions="End"
-                                     Spacing="0">
+                <StackLayout HorizontalOptions="Start"
+                             VerticalOptions="End">
 
-                    <Label Text="{Binding Name}"
-                           VerticalTextAlignment="End"
-                           LineBreakMode="TailTruncation"
-                           Style="{x:DynamicResource tstyle_i11}"/>
+                    <controls:CustomLabel Text="{Binding Name}"
+                                          VerticalOptions="End"
+                                          LineBreakMode="TailTruncation"
+                                          MaxLines="2"
+                                          Style="{x:DynamicResource tstyle_i11}"/>
 
                     <Label Text="{Binding RoomName}"
                            Margin="0,6,0,0"
-                           VerticalTextAlignment="End"
+                           VerticalOptions="End"
                            IsVisible="False"
                            Style="{x:DynamicResource tstyle_i5}">
 
@@ -79,12 +79,13 @@
 
                     </Label>
 
-                </VerticalStackLayout>
+                </StackLayout>
 
                 <Label Grid.Column="1"
                        Text="{Binding AdditionalInfoFormatted}"
                        HorizontalTextAlignment="End"
                        VerticalTextAlignment="End"
+                       VerticalOptions="End"
                        Style="{Binding DescriptionLabelStyle,Source={x:Reference deviceTemplate}}">
 
                     <Label.Triggers>
