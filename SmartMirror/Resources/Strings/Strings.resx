@@ -297,4 +297,13 @@
     <data name="Connected" xml:space="preserve">
         <value>Connected</value>
     </data>
+    <data name="Doorbell" xml:space="preserve">
+        <value>Doorbell</value>
+    </data>
+    <data name="End" xml:space="preserve">
+        <value>End</value>
+    </data>
+    <data name="Talk" xml:space="preserve">
+        <value>Talk</value>
+    </data>
 </root>

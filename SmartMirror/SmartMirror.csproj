@@ -94,6 +94,7 @@
 		<None Remove="Models\DTO\" />
 		<None Remove="Karamunting.Android.Wasabeef.Blurry" />
 		<None Remove="Services\Blur\" />
+		<None Remove="Services\Permissions\" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.3" />
@@ -138,6 +139,7 @@
 		<Folder Include="Services\Repository\" />
 		<Folder Include="Models\DTO\" />
 		<Folder Include="Services\Blur\" />
+		<Folder Include="Services\Permissions\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Controls\BadgeTitleView.xaml">
@@ -300,6 +302,9 @@
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\ProvidersTemplate.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\DoorBellDialog.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 	</ItemGroup>

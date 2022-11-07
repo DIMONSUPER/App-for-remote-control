@@ -22,6 +22,9 @@ public class RoomsPageViewModel : BaseTabViewModel
     private readonly IRoomsService _roomsService;
     private readonly IDevicesService _devicesService;
 
+    //TODO Delete when doorbell is implemented
+    private bool _displayDoorbellDialog = true;
+
     public RoomsPageViewModel(
         ISmartHomeMockService smartHomeMockService,
         INavigationService navigationService,
@@ -206,6 +209,9 @@ public class RoomsPageViewModel : BaseTabViewModel
                 DataState = isDataLoaded
                     ? EPageState.Complete
                     : EPageState.Empty;
+
+                //TODO Delete when doorbell is implemented
+                DisplayDoorbellDialog(isDataLoaded);
             }
             else
             {
@@ -275,6 +281,20 @@ public class RoomsPageViewModel : BaseTabViewModel
             .AddParameter(nameof(Rooms), Rooms)
             .AddParameter(nameof(RoomBindableModel), room)
             .NavigateAsync().ContinueWith(x => DataState = EPageState.Complete);
+    }
+
+    private void DisplayDoorbellDialog(bool isDataLoaded)
+    {
+        if (isDataLoaded && _displayDoorbellDialog)
+        {
+            //TODO Delete when doorbell is implemented
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await _dialogService.ShowDialogAsync(nameof(DoorBellDialog));
+            });
+
+            _displayDoorbellDialog = false;
+        }
     }
 
     #endregion

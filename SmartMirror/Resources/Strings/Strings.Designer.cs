@@ -219,6 +219,7 @@ namespace SmartMirror.Resources.Strings {
             }
         }
         
+        /// <summary>
         ///   Looks up a localized string similar to Connect.
         /// </summary>
         internal static string Connect {
@@ -264,11 +265,29 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Doorbell.
+        /// </summary>
+        internal static string Doorbell {
+            get {
+                return ResourceManager.GetString("Doorbell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Downstairs.
         /// </summary>
         internal static string Downstairs {
             get {
                 return ResourceManager.GetString("Downstairs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End.
+        /// </summary>
+        internal static string End {
+            get {
+                return ResourceManager.GetString("End", resourceCulture);
             }
         }
         
@@ -739,24 +758,22 @@ namespace SmartMirror.Resources.Strings {
                 return ResourceManager.GetString("Shades", resourceCulture);
             }
         }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Show in Rooms.
-        /// </summary>
-        internal static string ShowInRooms
-        {
-            get
-            {
-                return ResourceManager.GetString("ShowInRooms", resourceCulture);
-            }
-        }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Show in Cameras.
         /// </summary>
         internal static string ShowInCameras {
             get {
                 return ResourceManager.GetString("ShowInCameras", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show in Rooms.
+        /// </summary>
+        internal static string ShowInRooms {
+            get {
+                return ResourceManager.GetString("ShowInRooms", resourceCulture);
             }
         }
         
@@ -793,6 +810,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Synchronization {
             get {
                 return ResourceManager.GetString("Synchronization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Talk.
+        /// </summary>
+        internal static string Talk {
+            get {
+                return ResourceManager.GetString("Talk", resourceCulture);
             }
         }
         

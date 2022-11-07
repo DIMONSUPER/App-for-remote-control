@@ -20,6 +20,8 @@ namespace SmartMirror.Controls
 
         public event EventHandler StopRequested;
 
+        public event EventHandler UpdatePlayerVolumeRequested;
+
         public static readonly BindableProperty SourceProperty = BindableProperty.Create(
             propertyName: nameof(Source),
             returnType: typeof(string),
@@ -66,6 +68,17 @@ namespace SmartMirror.Controls
             set => SetValue(VideoPlaybackErrorCommandProperty, value);
         }
 
+        public static readonly BindableProperty PlayerVolumeProperty = BindableProperty.Create(
+            propertyName: nameof(PlayerVolume),
+            returnType: typeof(float),
+            declaringType: typeof(Video));
+
+        public float PlayerVolume
+        {
+            get => (float)GetValue(PlayerVolumeProperty);
+            set => SetValue(PlayerVolumeProperty, value);
+        }
+
         #endregion
 
         #region -- IVideoController implementation --
@@ -96,6 +109,10 @@ namespace SmartMirror.Controls
 
                 videoAction?.Invoke();
             }
+            else if (propertyName == nameof(PlayerVolume))
+            {
+                UpdatePlayerVolume();
+            }
         } 
 
         #endregion
@@ -118,6 +135,12 @@ namespace SmartMirror.Controls
         {
             StopRequested?.Invoke(this, EventArgs.Empty);
             Handler?.Invoke(nameof(StopRequested));
+        }
+
+        private void UpdatePlayerVolume()
+        {
+            UpdatePlayerVolumeRequested?.Invoke(this, EventArgs.Empty);
+            Handler?.Invoke(nameof(UpdatePlayerVolumeRequested));
         }
 
         #endregion

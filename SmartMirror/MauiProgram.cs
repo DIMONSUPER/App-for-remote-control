@@ -13,6 +13,7 @@ using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Notifications;
+using SmartMirror.Services.Permissions;
 using SmartMirror.Services.Repository;
 using SmartMirror.Services.Rest;
 using SmartMirror.Services.Rooms;
@@ -66,6 +67,7 @@ public static class MauiProgram
         containerRegistry.RegisterDialog<CameraSettingsDialog>();
         containerRegistry.RegisterDialog<ConfirmDialog>();
         containerRegistry.RegisterDialog<AddNewCameraDialog>();
+        containerRegistry.RegisterDialog<DoorBellDialog>();
 
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
         containerRegistry.RegisterForNavigation<WelcomePage>();
@@ -83,6 +85,7 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IRestService, RestService>();
         containerRegistry.RegisterSingleton<IRepositoryService, RepositoryService>();
         containerRegistry.RegisterSingleton<IBlurService, BlurService>();
+        containerRegistry.RegisterSingleton<IPermissionsService, PermissionsService>();
         //TODO: Remove when companion app is ready
         //containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
         containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
