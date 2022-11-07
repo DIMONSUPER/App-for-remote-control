@@ -78,7 +78,6 @@ namespace SmartMirror.Services.Mapper
                 cfg.CreateMap<DeviceDTO, DeviceBindableModel>().ReverseMap();
                 cfg.CreateMap<DeviceBindableModel, DeviceDTO>().ReverseMap();
                 cfg.CreateMap<AttributeAqaraResponse, AttributeAqaraDTO>().ReverseMap();
-                cfg.CreateMap<NotificationModel, NotificationGroupItemBindableModel>().ReverseMap();
                 cfg.CreateMap<DetailSceneAqaraModel, ScenarioBindableModel>().ReverseMap();
                 cfg.CreateMap<ActionAqaraModel, ScenarioActionBindableModel>().ReverseMap();
                 cfg.CreateMap<ScenarioBindableModel, ImageAndTitleBindableModel>().ReverseMap();

@@ -1,13 +1,13 @@
-﻿using SmartMirror.Enums;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows.Input;
+using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.ViewModels.Tabs.Details;
 using SmartMirror.Views.Dialogs;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Tabs.Pages;
 
@@ -32,9 +32,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
         DataState = EPageState.LoadingSkeleton;
 
-        Task.Run(_scenariosService.DownloadAllScenariosAsync);
-
-        _scenariosService.ScenariosChanged += OnScenariosChanged;
+        _scenariosService.AllScenariosChanged += OnScenariosChanged;
     }
 
     #region -- Public properties --
@@ -59,52 +57,15 @@ public class ScenariosPageViewModel : BaseTabViewModel
     private ICommand _goToScenarioDetailsCommand;
     public ICommand GoToScenarioDetailsCommand => _goToScenarioDetailsCommand ??= SingleExecutionCommand.FromFunc<ScenarioBindableModel>(OnGoToScenarioDetailsCommandAsync);
 
-    private ICommand _tryAgainCommand;
-    public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
-
     #endregion
 
     #region -- Overrides --
 
     public override void Destroy()
     {
-        _scenariosService.ScenariosChanged -= OnScenariosChanged;
+        _scenariosService.AllScenariosChanged -= OnScenariosChanged;
 
         base.Destroy();
-    }
-
-    public override void OnAppearing()
-    {
-        base.OnAppearing();
-
-        if (IsNeedReloadData)
-        {
-            LoadScenariosAndChangeState();
-        }
-    }
-
-    public override void OnNavigatedTo(INavigationParameters parameters)
-    {
-        base.OnNavigatedTo(parameters);
-
-        IsNeedReloadData = true;
-    }
-
-    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
-    {
-        if (e.NetworkAccess == NetworkAccess.Internet)
-        {
-            if (!IsDataLoading && DataState != EPageState.Complete)
-            {
-                DataState = EPageState.LoadingSkeleton;
-
-                await ReloadScenariosAndChangeStateAsync();
-            }
-        }
-        else
-        {
-            DataState = EPageState.NoInternet;
-        }
     }
 
     #endregion
@@ -113,56 +74,21 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     private async void OnScenariosChanged(object sender, EventArgs e)
     {
-        if (_scenariosService.AllScenarios is not null && _scenariosService.AllScenarios.Any())
+        var scenarios = await _scenariosService.GetAllScenariosAsync();
+
+        if (scenarios.Any())
         {
-            if (IsPageFocused)
-            {
-                LoadScenariosAndChangeState();
-            }
-            else
-            {
-                IsNeedReloadData = true;
-            }
+            await LoadScenariosAndChangeStateAsync();
         }
         else
         {
-            DataState = EPageState.LoadingSkeleton;
-
-            await ReloadScenariosAndChangeStateAsync();
+            DataState = EPageState.Empty;
         }
     }
 
-    private async Task OnTryAgainCommandAsync()
+    private async Task LoadScenariosAndChangeStateAsync()
     {
-        if (!IsDataLoading)
-        {
-            DataState = EPageState.NoInternetLoader;
-
-            var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
-
-            var isDataLoaded = await TaskRepeater.RepeatAsync(ReloadScenariosAndChangeStateAsync, executionTime);
-        }
-    }
-
-    private async Task<bool> ReloadScenariosAndChangeStateAsync()
-    {
-        var resultOfDownloadingScenarios = await _scenariosService.DownloadAllScenariosAsync();
-
-        if (resultOfDownloadingScenarios.IsSuccess)
-        {
-            LoadScenariosAndChangeState();
-        }
-        else
-        {
-            Debug.WriteLine($"Can't download devices: {resultOfDownloadingScenarios.Message}");
-        }
-
-        return resultOfDownloadingScenarios.IsSuccess;
-    }
-
-    private void LoadScenariosAndChangeState()
-    {
-        var scenarios = _scenariosService.AllScenarios;
+        var scenarios = await _scenariosService.GetAllScenariosAsync();
 
         SetScenariosCommands(scenarios);
 

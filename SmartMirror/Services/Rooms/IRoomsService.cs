@@ -5,9 +5,9 @@ namespace SmartMirror.Services.Rooms;
 
 public interface IRoomsService
 {
-    List<RoomBindableModel> AllRooms { get; }
-
     event EventHandler AllRoomsChanged;
 
     Task<AOResult> DownloadAllRoomsAsync();
+
+    Task<IEnumerable<RoomBindableModel>> GetAllRoomsAsync();
 }

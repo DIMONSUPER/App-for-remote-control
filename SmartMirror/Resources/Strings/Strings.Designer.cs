@@ -202,6 +202,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changed to.
+        /// </summary>
+        internal static string ChangedTo {
+            get {
+                return ResourceManager.GetString("ChangedTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string Close {
@@ -495,6 +504,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string MinutesAgo {
             get {
                 return ResourceManager.GetString("MinutesAgo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Movement.
+        /// </summary>
+        internal static string Movement {
+            get {
+                return ResourceManager.GetString("Movement", resourceCulture);
             }
         }
         
@@ -837,6 +855,24 @@ namespace SmartMirror.Resources.Strings {
         internal static string TryAgain {
             get {
                 return ResourceManager.GetString("TryAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turned off.
+        /// </summary>
+        internal static string TurnedOff {
+            get {
+                return ResourceManager.GetString("TurnedOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turned on.
+        /// </summary>
+        internal static string TurnedOn {
+            get {
+                return ResourceManager.GetString("TurnedOn", resourceCulture);
             }
         }
         

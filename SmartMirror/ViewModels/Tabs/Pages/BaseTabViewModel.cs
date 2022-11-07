@@ -107,6 +107,7 @@ public class BaseTabViewModel : BindableBase, IPageLifecycleAware, INavigationAw
 
     protected virtual void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
+        DataState = IsInternetConnected ? EPageState.LoadingSkeleton : EPageState.NoInternet;
     }
 
     #endregion

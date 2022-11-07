@@ -7,11 +7,10 @@
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
-    xmlns:models="clr-namespace:SmartMirror.Models"
-    xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:templatesSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
     x:Class="SmartMirror.Views.Tabs.Views.NotificationsPageView"
+    xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
     x:DataType="vm:NotificationsPageViewModel">
 
     <views:BaseContentView.Resources>
@@ -42,13 +41,21 @@
         <controls:CustomStateView.CompleteContent>
 
             <RefreshView
-                Margin="0, 24, 0, 0"
                 HorizontalOptions="Center"
                 IsRefreshing="{Binding IsNotificationsRefreshing}"
                 Command="{Binding RefreshNotificationsCommand}"
                 x:Name="refreshView">
 
-                <controls:CustomScrollView
+                <CollectionView
+                    Margin="0, 24, 0, 0"
+                    ItemsSource="{Binding Notifications}"
+                    ItemTemplate="{StaticResource notificationTemplateSelector}"
+                    WidthRequest="660"
+                    VerticalScrollBarVisibility="Always"
+                    HorizontalScrollBarVisibility="Always"
+                    x:Name="scrollViewNotifications"/>
+
+                <!--<controls:CustomScrollView
                     Padding="50, 0, 0, 0"
                     WidthRequest="660"
                     VerticalScrollBarVisibility="Always"
@@ -59,7 +66,7 @@
                         BindableLayout.ItemsSource="{Binding Notifications}"
                         BindableLayout.ItemTemplateSelector="{StaticResource notificationTemplateSelector}"/>
 
-                </controls:CustomScrollView>
+                </controls:CustomScrollView>-->
 
             </RefreshView>
 
