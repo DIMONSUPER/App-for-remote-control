@@ -8,7 +8,7 @@
                            android:TabbedPage.IsSwipePagingEnabled="True"
                            android:TabbedPage.IsSmoothScrollEnabled="True"
                            NavigationPage.HasNavigationBar="False"
-                           Background="{x:DynamicResource GrayGradientBrush}"
+                           Style="{DynamicResource GrayGradientStyle_i1}"
                            SettingsCommand="{Binding SettingsCommand}"
                            Title="MainTabbedPage"
                            x:Class="SmartMirror.Views.MainTabbedPage"
