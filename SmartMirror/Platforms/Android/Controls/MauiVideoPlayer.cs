@@ -3,9 +3,11 @@ using Android.Media;
 using Android.Views;
 using Android.Widget;
 using AndroidX.CoordinatorLayout.Widget;
+using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using SmartMirror.Controls;
 using SmartMirror.Enums;
 using SmartMirror.Interfaces;
+using Color = Android.Graphics.Color;
 using Uri = Android.Net.Uri;
 
 namespace SmartMirror.Platforms.Android.Controls
@@ -23,6 +25,8 @@ namespace SmartMirror.Platforms.Android.Controls
         {
             _context = context;
             _video = video;
+
+            InitVideoPlayer();
         }
 
         #region -- Overrides --
@@ -35,6 +39,7 @@ namespace SmartMirror.Platforms.Android.Controls
                 {
                     _videoView.Prepared -= OnVideoViewPrepared;
                     _videoView.Error -= OnVideoViewError;
+                    _videoView.Info -= OnVideoViewInfo;
 
                     _videoView.StopPlayback();
                     _videoView.SetOnPreparedListener(null);
@@ -58,21 +63,14 @@ namespace SmartMirror.Platforms.Android.Controls
 
         public void TryUpdateSource()
         {
-            if (ChildCount == 0)
-            {
-                InitVideoPlayer();
-            }
-            else
-            {
-                ResetVideoPlayer();
-            }
+            ResetVideoPlayer();
 
             try
             {
                 if (!string.IsNullOrWhiteSpace(_video?.Source))
                 {
                     _videoView?.SetVideoURI(Uri.Parse(_video?.Source));
-                    
+
                     VideoLoadingState = EVideoLoadingState.Preparing;
                 }
             }
@@ -151,6 +149,14 @@ namespace SmartMirror.Platforms.Android.Controls
             }
         }
 
+        private void OnVideoViewInfo(object sender, MediaPlayer.InfoEventArgs e)
+        {
+            if (e.What == MediaInfo.VideoRenderingStart)
+            {
+                _videoView?.SetBackgroundColor(Color.Transparent);
+            }
+        }
+
         private void InitVideoPlayer()
         {
             _videoView = new VideoView(_context)
@@ -160,6 +166,7 @@ namespace SmartMirror.Platforms.Android.Controls
 
             _videoView.Prepared += OnVideoViewPrepared;
             _videoView.Error += OnVideoViewError;
+            _videoView.Info += OnVideoViewInfo;
 
             _relativeLayout = new RelativeLayout(_context)
             {
@@ -186,10 +193,7 @@ namespace SmartMirror.Platforms.Android.Controls
 
             _videoView?.SetVideoURI(null);
 
-            _relativeLayout?.RemoveView(_videoView);
-            _relativeLayout?.AddView(_videoView);
-
-            _videoView?.SetZOrderOnTop(true);
+            _videoView?.SetBackgroundColor(_video.BackgroundColor.ToAndroid());
         }
 
         #endregion
