@@ -25,7 +25,7 @@ namespace SmartMirror.Services.Notifications
 
                 if (resultOfGettingNotifications is not null)
                 {
-                    notifications = resultOfGettingNotifications.Where(row => row.IsShow);
+                    notifications = resultOfGettingNotifications.Where(row => row.IsShown);
                 }
                 else
                 {

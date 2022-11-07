@@ -6,7 +6,7 @@
 
         public int DeviceId { get; set; }
 
-        public bool IsShow { get; set; }
+        public bool IsShown { get; set; }
 
         public string Name { get; set; }
 

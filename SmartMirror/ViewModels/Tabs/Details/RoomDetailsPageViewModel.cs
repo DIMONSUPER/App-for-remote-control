@@ -210,7 +210,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
                 room.IsSelected = room.Id == selectedRoom.Id;
             }
 
-            var roomDevices = _devicesService.AllSupportedDevices.Where(x => x.PositionId == selectedRoom.Id && x.IsShowInRooms);
+            var roomDevices = _devicesService.AllSupportedDevices.Where(x => x.PositionId == selectedRoom.Id && x.IsShownInRooms);
 
             if (roomDevices.Any())
             {

@@ -36,11 +36,11 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _imageSource, value);
         }
 
-        private bool _isShowInRooms;
-        public bool IsShowInRooms
+        private bool _isShownInRooms;
+        public bool IsShownInRooms
         {
-            get => _isShowInRooms;
-            set => SetProperty(ref _isShowInRooms, value);
+            get => _isShownInRooms;
+            set => SetProperty(ref _isShownInRooms, value);
         }
 
         private bool _isReceiveNotifications;
@@ -84,7 +84,7 @@ namespace SmartMirror.ViewModels.Dialogs
                 Accessory = accessory.Model as DeviceBindableModel;
 
                 IsFavorite = Accessory.IsFavorite;
-                IsShowInRooms = Accessory.IsShowInRooms;
+                IsShownInRooms = Accessory.IsShownInRooms;
                 IsReceiveNotifications = Accessory.IsReceiveNotifications;
             }
         }
@@ -100,8 +100,8 @@ namespace SmartMirror.ViewModels.Dialogs
 
                     await _devicesService.UpdateDeviceAsync(Accessory);
                     break;
-                case nameof(IsShowInRooms):
-                    Accessory.IsShowInRooms = _isShowInRooms;
+                case nameof(IsShownInRooms):
+                    Accessory.IsShownInRooms = _isShownInRooms;
 
                     await _devicesService.UpdateDeviceAsync(Accessory);
                     break;

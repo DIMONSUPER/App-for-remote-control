@@ -28,11 +28,11 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _title, value);
         }
 
-        private bool _isShowInScenarios;
-        public bool IsShowInScenarios
+        private bool _isShownInScenarios;
+        public bool IsShownInScenarios
         {
-            get => _isShowInScenarios;
-            set => SetProperty(ref _isShowInScenarios, value);
+            get => _isShownInScenarios;
+            set => SetProperty(ref _isShownInScenarios, value);
         }
 
         private bool _isReceiveNotifications;
@@ -71,7 +71,7 @@ namespace SmartMirror.ViewModels.Dialogs
 
                 Scenario = scenario.Model as ScenarioBindableModel;
 
-                IsShowInScenarios = Scenario.IsShowInScenarios;
+                IsShownInScenarios = Scenario.IsShownInScenarios;
                 IsReceiveNotifications = Scenario.IsReceiveNotifications;
                 IsFavorite = Scenario.IsFavorite;
             }
@@ -88,8 +88,8 @@ namespace SmartMirror.ViewModels.Dialogs
 
                     await _scenariosService.UpdateScenarioAsync(Scenario);
                     break;
-                case nameof(IsShowInScenarios):
-                    Scenario.IsShowInScenarios = _isShowInScenarios;
+                case nameof(IsShownInScenarios):
+                    Scenario.IsShownInScenarios = _isShownInScenarios;
 
                     await _scenariosService.UpdateScenarioAsync(Scenario);
                     break;

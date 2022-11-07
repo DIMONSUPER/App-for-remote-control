@@ -112,7 +112,7 @@
 
                     <controls:TitleAndSwitchView
                         Title="{extensions:Translate ShowInRooms}"
-                        IsToggled="{Binding IsShowInRooms}"/>
+                        IsToggled="{Binding IsShownInRooms}"/>
 
                     <controls:TitleAndSwitchView
                         Title="{extensions:Translate ReceiveNotifications}"

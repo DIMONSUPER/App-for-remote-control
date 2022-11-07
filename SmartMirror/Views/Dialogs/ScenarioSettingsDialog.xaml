@@ -62,7 +62,7 @@
 
                     <controls:TitleAndSwitchView
                         Title="{extensions:Translate ShowInScenarios}"
-                        IsToggled="{Binding IsShowInScenarios}"
+                        IsToggled="{Binding IsShownInScenarios}"
                         Padding="24, 18"/>
 
                     <controls:TitleAndSwitchView

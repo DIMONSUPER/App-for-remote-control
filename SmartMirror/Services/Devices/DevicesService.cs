@@ -247,7 +247,7 @@ namespace SmartMirror.Services.Devices
                 {
                     device.Id = dbDevice.Id;
                     device.UnitMeasure = dbDevice.UnitMeasure;
-                    device.IsShowInRooms = dbDevice.IsShowInRooms;
+                    device.IsShownInRooms = dbDevice.IsShownInRooms;
                     device.IsReceiveNotifications = dbDevice.IsReceiveNotifications;
                     device.IsFavorite = dbDevice.IsFavorite;
                 }

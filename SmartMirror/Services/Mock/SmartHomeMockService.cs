@@ -13,7 +13,7 @@ namespace SmartMirror.Services.Mock
                 { 
                     Id = 1,
                     Name = "Front Door 1",
-                    IsShow = true,
+                    IsShown = true,
                     IsConnected = true,
                     CreateTime = DateTime.Now,
                     VideoUrl = "https://videos-3.earthcam.com/fecnetwork/hdtimes10.flv/chunklist_w53922196.m3u8",
@@ -22,7 +22,7 @@ namespace SmartMirror.Services.Mock
                 {
                     Id = 2,
                     Name = "Front Door 2",
-                    IsShow = true,
+                    IsShown = true,
                     IsConnected = true, 
                     CreateTime = DateTime.Now,
                     VideoUrl = "https://videos-3.earthcam.com/fecnetwork/15659.flv/chunklist_w999153032.m3u8",
@@ -31,7 +31,7 @@ namespace SmartMirror.Services.Mock
                 { 
                     Id = 3,
                     Name = "Back Door 1",
-                    IsShow = true,
+                    IsShown = true,
                     IsConnected = false,
                     CreateTime = DateTime.Now,
                 },
@@ -39,7 +39,7 @@ namespace SmartMirror.Services.Mock
                 {
                     Id = 4,
                     Name = "Back Door 2",
-                    IsShow = true,
+                    IsShown = true,
                     IsConnected = true, 
                     CreateTime = DateTime.Now,
                     VideoUrl = "https://videos-3.earthcam.com/fecnetwork/17568.flv/chunklist_w1596475220.m3u8",
@@ -49,7 +49,7 @@ namespace SmartMirror.Services.Mock
                     Id = 5,
                     Name = "Garage",
                     CreateTime = DateTime.Now,
-                    IsShow = true,
+                    IsShown = true,
                     IsConnected = false,
                 },
             };
@@ -63,7 +63,7 @@ namespace SmartMirror.Services.Mock
             {
                 new()
                 {
-                    IsShow = true,
+                    IsShown = true,
                     Name = "Garage Door",
                     Type = "Garage",
                     Status = "Opened",
@@ -71,7 +71,7 @@ namespace SmartMirror.Services.Mock
                 },
                 new()
                 {
-                    IsShow = true,
+                    IsShown = true,
                     Name = "Upstairs Hallway Movement",
                     Type = "NoMovement",
                     Status = "No movement",
@@ -79,7 +79,7 @@ namespace SmartMirror.Services.Mock
                 },
                 new()
                 {
-                    IsShow = true,
+                    IsShown = true,
                     Name = "Balcony Door",
                     Type = "Unknown",
                     Status = "Unknown",
@@ -87,7 +87,7 @@ namespace SmartMirror.Services.Mock
                 },
                 new()
                 {
-                    IsShow = true,
+                    IsShown = true,
                     Name = "Balcony Door",
                     Type = "Door",
                     Status = "Closed",
@@ -95,7 +95,7 @@ namespace SmartMirror.Services.Mock
                 },
                 new()
                 {
-                    IsShow = true,
+                    IsShown = true,
                     Name = "Garage Door",
                     Type = "Garage",
                     Status = "Opened",

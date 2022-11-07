@@ -33,11 +33,11 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _isActive, value);
         }
 
-        private bool _isShowInScenarios = true;
-        public bool IsShowInScenarios
+        private bool _isShownInScenarios = true;
+        public bool IsShownInScenarios
         {
-            get => _isShowInScenarios;
-            set => SetProperty(ref _isShowInScenarios, value);
+            get => _isShownInScenarios;
+            set => SetProperty(ref _isShownInScenarios, value);
         }
 
         private bool _isReceiveNotifications = true;

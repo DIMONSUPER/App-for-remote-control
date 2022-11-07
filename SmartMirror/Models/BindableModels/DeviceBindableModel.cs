@@ -149,11 +149,11 @@ public class DeviceBindableModel : BindableBase
         set => SetProperty(ref _unitMeasure, value);
     }
 
-    private bool _isShowInRooms = true;
-    public bool IsShowInRooms
+    private bool _isShownInRooms = true;
+    public bool IsShownInRooms
     {
-        get => _isShowInRooms;
-        set => SetProperty(ref _isShowInRooms, value);
+        get => _isShownInRooms;
+        set => SetProperty(ref _isShownInRooms, value);
     }
 
     private bool _isReceiveNotifications = true;

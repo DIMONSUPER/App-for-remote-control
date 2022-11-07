@@ -21,7 +21,7 @@ public class ScenarioDTO : IDTO
 
     public bool IsActive { get; set; }
 
-    public bool IsShowInScenarios { get; set; }
+    public bool IsShownInScenarios { get; set; }
 
     public bool IsReceiveNotifications { get; set; }
 

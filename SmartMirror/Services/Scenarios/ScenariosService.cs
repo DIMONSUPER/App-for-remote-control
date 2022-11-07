@@ -202,7 +202,7 @@ namespace SmartMirror.Services.Scenarios
                 if (dbScenario is not null)
                 {
                     scenario.Id = dbScenario.Id;
-                    scenario.IsShowInScenarios = dbScenario.IsShowInScenarios;
+                    scenario.IsShownInScenarios = dbScenario.IsShownInScenarios;
                     scenario.IsReceiveNotifications = dbScenario.IsReceiveNotifications;
                     scenario.IsFavorite = dbScenario.IsFavorite;
                 }

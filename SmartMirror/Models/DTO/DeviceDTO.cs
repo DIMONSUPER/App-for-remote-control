@@ -50,7 +50,7 @@ public class DeviceDTO : IDTO
 
     public EUnitMeasure UnitMeasure { get; set; }
 
-    public bool IsShowInRooms { get; set; }
+    public bool IsShownInRooms { get; set; }
 
     public bool IsReceiveNotifications { get; set; }
 

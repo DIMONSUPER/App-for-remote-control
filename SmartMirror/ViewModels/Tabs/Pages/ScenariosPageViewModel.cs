@@ -177,7 +177,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
         SetScenariosCommands(scenarios);
 
-        Scenarios = new(scenarios.Where(scenario => scenario.IsShowInScenarios));
+        Scenarios = new(scenarios.Where(scenario => scenario.IsShownInScenarios));
 
         FavoriteScenarios = new(scenarios.Where(scenario => scenario.IsFavorite));
 
