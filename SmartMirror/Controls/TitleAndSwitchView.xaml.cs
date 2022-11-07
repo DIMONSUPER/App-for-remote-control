@@ -25,7 +25,7 @@ public partial class TitleAndSwitchView : Grid
         propertyName: nameof(IsToggled),
         returnType: typeof(bool),
         declaringType: typeof(TitleAndSwitchView),
-        defaultBindingMode: BindingMode.OneWay);
+        defaultBindingMode: BindingMode.TwoWay);
 
     public bool IsToggled
     {

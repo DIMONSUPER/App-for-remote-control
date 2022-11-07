@@ -6,6 +6,7 @@ using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Devices;
+using SmartMirror.Services.Google;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Views.Dialogs;
@@ -22,12 +23,13 @@ namespace SmartMirror.ViewModels
         private readonly IDevicesService _devicesService;
         private readonly IScenariosService _scenariosService;
         private readonly ICamerasService _camerasService;
+        private readonly IGoogleService _googleService;
 
         private IEnumerable<ImageAndTitleBindableModel> _allAccessories = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allCameras = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<SettingsProvidersBindableModel> _allProviders = Enumerable.Empty<SettingsProvidersBindableModel>();
-        
+
         private CategoryBindableModel _providersCategory;
         private IDialogResult _dialogResult;
 
@@ -38,7 +40,8 @@ namespace SmartMirror.ViewModels
             IDevicesService devicesService,
             IScenariosService scenariosService,
             ICamerasService camerasService,
-            IAqaraService aqaraService)
+            IAqaraService aqaraService,
+            IGoogleService googleService)
             : base(navigationService)
         {
             _aqaraService = aqaraService;
@@ -47,6 +50,9 @@ namespace SmartMirror.ViewModels
             _devicesService = devicesService;
             _scenariosService = scenariosService;
             _camerasService = camerasService;
+            _googleService = googleService;
+
+            PageState = EPageState.LoadingSkeleton;
         }
 
         #region -- Public properties --
@@ -121,19 +127,17 @@ namespace SmartMirror.ViewModels
 
         #region -- Overrides --
 
-        public override async void Initialize(INavigationParameters parameters)
+        public override void Initialize(INavigationParameters parameters)
         {
             base.Initialize(parameters);
 
-            if (!IsDataLoading)
+            Task.Run(async () =>
             {
-                PageState = EPageState.LoadingSkeleton;
-                
                 LoadCategories();
                 SelectCategory(Categories.FirstOrDefault());
 
                 await LoadAllDataAndChangeStateAsync();
-            }
+            });
         }
 
         protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
@@ -144,7 +148,7 @@ namespace SmartMirror.ViewModels
                 {
                     PageState = EPageState.LoadingSkeleton;
 
-                    await LoadAllDataAndChangeStateAsync(); 
+                    await LoadAllDataAndChangeStateAsync();
                 }
             }
             else
@@ -263,7 +267,7 @@ namespace SmartMirror.ViewModels
                     LoadAllDevicesAsync(),
                     LoadAllScenariosAsync(),
                     LoadAllCamerasAsync());
-                
+
                 CreateProviders();
 
                 isLoaded = dataLoadingResults.Any(x => x);
@@ -272,44 +276,36 @@ namespace SmartMirror.ViewModels
             return isLoaded;
         }
 
-        private async Task<bool> LoadAllDevicesAsync()
+        private Task<bool> LoadAllDevicesAsync()
         {
-            var resultOfGettingAllDevices = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
-            
-            if (resultOfGettingAllDevices.IsSuccess)
+            _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(_devicesService.AllSupportedDevices, (m, vm) =>
             {
-                _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(_devicesService.AllSupportedDevices, (m, vm) =>
-                {
-                    vm.TapCommand = OpenAccessorySettingsCommand;
-                });
+                vm.Model = m;
+                vm.TapCommand = OpenAccessorySettingsCommand;
+            });
 
-                var deviceCategory = Categories.FirstOrDefault(c => c.Type == ECategoryType.Accessories);
+            var deviceCategory = Categories.FirstOrDefault(c => c.Type == ECategoryType.Accessories);
 
-                deviceCategory.Count = _allAccessories.Count();
-            }
+            deviceCategory.Count = _allAccessories.Count();
 
-            return resultOfGettingAllDevices.IsSuccess;
+            return Task.FromResult(true);
         }
 
-        private async Task<bool> LoadAllScenariosAsync()
+        private Task<bool> LoadAllScenariosAsync()
         {
-            var resultOfGettingAllScenarios = await _scenariosService.GetScenariosAsync();
-
-            if (resultOfGettingAllScenarios.IsSuccess)
+            _allScenarios = _mapperService.MapRange<ImageAndTitleBindableModel>(_scenariosService.AllScenarios, (m, vm) =>
             {
-                _allScenarios = _mapperService.MapRange<ImageAndTitleBindableModel>(resultOfGettingAllScenarios.Result, (m, vm) =>
-                {
-                    vm.Type = ECategoryType.Scenarios;
-                    vm.ImageSource = "play_gray";
-                    vm.TapCommand = ShowScenarioSettingsCommand;
-                });
+                vm.Model = m;
+                vm.Type = ECategoryType.Scenarios;
+                vm.ImageSource = "play_gray";
+                vm.TapCommand = ShowScenarioSettingsCommand;
+            });
 
-                var scenarioCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Scenarios);
+            var scenarioCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Scenarios);
 
-                scenarioCategory.Count = _allScenarios.Count();
-            }
+            scenarioCategory.Count = _allScenarios.Count();
 
-            return resultOfGettingAllScenarios.IsSuccess;
+            return Task.FromResult(true);
         }
 
         private async Task<bool> LoadAllCamerasAsync()
@@ -414,7 +410,7 @@ namespace SmartMirror.ViewModels
                 else
                 {
                     PageState = EPageState.NoInternet;
-                } 
+                }
             }
         }
 
@@ -561,15 +557,20 @@ namespace SmartMirror.ViewModels
             return Task.CompletedTask;
         }
 
-        private Task OnLoginWithGoogleCommandAsync(SettingsProvidersBindableModel settingsProvider)
+        private async Task OnLoginWithGoogleCommandAsync(SettingsProvidersBindableModel settingsProvider)
         {
-            //TODO Implement login and logout from Google
+            var result = await _googleService.AutorizeAsync();
 
-            DisplayNotImplementedDialog();
+            if (result.IsSuccess)
+            {
+                //TODO: implement when have nest devices
+            }
+            else
+            {
+                //TODO: implement if needed
+            }
 
             _providersCategory.Count = GetConnectedProviders();
-
-            return Task.CompletedTask;
         }
 
         private void DisplayNotImplementedDialog()

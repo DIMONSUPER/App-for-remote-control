@@ -33,7 +33,8 @@
                    BackgroundColor="Transparent">
 
                 <controls:CustomStateView State="{Binding DataState}"
-                                          LoadingTitle="{extensions:Translate Doorbell}">
+                                          LoadingTitle="{extensions:Translate Doorbell}"
+                                          TryAgainCommand="{Binding TryAgainCommand}">
 
                     <controls:CustomStateView.CompleteContent>
 

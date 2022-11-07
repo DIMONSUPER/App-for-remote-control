@@ -10,9 +10,10 @@
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:sc="clr-namespace:SmartMirror.Controls.StateContainer"
     xmlns:templateSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
+    xmlns:skeletons="clr-namespace:SmartMirror.Views.Skeletons"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels"
     Title="Settings"
-    Background="{x:DynamicResource GrayGradientBrush}"
+    Style="{DynamicResource GrayGradientStyle_i1}"
     x:Class="SmartMirror.Views.SettingsPage"
     x:DataType="vm:SettingsPageViewModel">
 
@@ -25,7 +26,7 @@
 
     </views:BaseContentPage.Resources>
 
-    <Grid RowDefinitions="auto, auto, *">
+    <Grid RowDefinitions="Auto, Auto, *">
 
         <controls:CurrentTimeControl
             Grid.Row="0"
@@ -42,6 +43,7 @@
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Style="{DynamicResource tstyle_i1}"
+            Margin="0, 21, 0, 0"
             HorizontalOptions="CenterAndExpand"
             Text="{extensions:Translate Settings}"/>
 
@@ -74,6 +76,10 @@
             Grid.Row="2"
             State="{Binding PageState}"
             TryAgainCommand="{Binding TryAgainCommand}">
+
+            <controls:CustomStateView.LoadingSkeletonContent>
+                <skeletons:SettingsPageSkeleton/>
+            </controls:CustomStateView.LoadingSkeletonContent>
 
             <controls:CustomStateView.CompleteContent>
 

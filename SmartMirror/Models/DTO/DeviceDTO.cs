@@ -16,37 +16,45 @@ public class DeviceDTO : IDTO
 
     #region -- Public properties --
 
-    public string DeviceId;
+    public string DeviceId { get; set; }
 
-    public string PositionId;
+    public string PositionId { get; set; }
 
-    public string Name;
+    public string Name { get; set; }
 
-    public EDeviceStatus Status;
+    public EDeviceStatus Status { get; set; }
 
-    public EDeviceType DeviceType;
+    public EDeviceType DeviceType { get; set; }
 
-    public string IconSource;
+    public string IconSource { get; set; }
 
-    public string RoomName;
+    public string RoomName { get; set; }
 
-    public string AdditionalInfo;
+    public string AdditionalInfo { get; set; }
 
-    public string ParentDid;
+    public string ParentDid { get; set; }
 
-    public DateTime CreateTime;
+    public DateTime CreateTime { get; set; }
 
-    public string TimeZone;
+    public string TimeZone { get; set; }
 
-    public string Model;
+    public string Model { get; set; }
 
-    public DateTime UpdateTime;
+    public DateTime UpdateTime { get; set; }
 
-    public int ModelType;
+    public int ModelType { get; set; }
 
-    public int State;
+    public int State { get; set; }
 
-    public string EditableResourceId;
+    public string EditableResourceId { get; set; }
+
+    public EUnitMeasure UnitMeasure { get; set; }
+
+    public bool IsShownInRooms { get; set; }
+
+    public bool IsReceiveNotifications { get; set; }
+
+    public bool IsFavorite { get; set; }
 
     #endregion
 }

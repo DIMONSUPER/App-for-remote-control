@@ -8,8 +8,8 @@ namespace SmartMirror.Models.BindableModels
     {
         #region -- Public properties --
 
-        private string _id;
-        public string Id
+        private int _id;
+        public int Id
         {
             get => _id;
             set => SetProperty(ref _id, value);
@@ -20,6 +20,13 @@ namespace SmartMirror.Models.BindableModels
         {
             get => _name;
             set => SetProperty(ref _name, value);
+        }
+
+        private object _model;
+        public object Model
+        {
+            get => _model;
+            set => SetProperty(ref _model, value);
         }
 
         #endregion

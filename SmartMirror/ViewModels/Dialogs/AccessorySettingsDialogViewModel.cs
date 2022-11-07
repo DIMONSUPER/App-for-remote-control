@@ -1,15 +1,23 @@
-﻿using SmartMirror.Helpers;
+﻿using SmartMirror.Enums;
+using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Blur;
+using SmartMirror.Services.Devices;
+using System.ComponentModel;
 using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
     public class AccessorySettingsDialogViewModel : BaseDialogViewModel
     {
-        public AccessorySettingsDialogViewModel(IBlurService blurService)
+        private readonly IDevicesService _devicesService;
+
+        public AccessorySettingsDialogViewModel(
+            IDevicesService devicesService,
+            IBlurService blurService)
             : base(blurService)
         {
+            _devicesService = devicesService;
         }
 
         #region -- Public properties --
@@ -28,8 +36,39 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _imageSource, value);
         }
 
+        private bool _isShownInRooms;
+        public bool IsShownInRooms
+        {
+            get => _isShownInRooms;
+            set => SetProperty(ref _isShownInRooms, value);
+        }
+
+        private bool _isReceiveNotifications;
+        public bool IsReceiveNotifications
+        {
+            get => _isReceiveNotifications;
+            set => SetProperty(ref _isReceiveNotifications, value);
+        }
+
+        private bool _isFavorite;
+        public bool IsFavorite
+        {
+            get => _isFavorite;
+            set => SetProperty(ref _isFavorite, value);
+        }
+
+        private DeviceBindableModel _accessory;
+        public DeviceBindableModel Accessory
+        {
+            get => _accessory;
+            set => SetProperty(ref _accessory, value);
+        }
+
         private ICommand _closeCommand;
         public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc(OnCloseCommandAsync);
+
+        private ICommand _changeUnitMeasureCommand;
+        public ICommand ChangeUnitMeasureCommand => _changeUnitMeasureCommand ??= SingleExecutionCommand.FromFunc<EUnitMeasure>(OnChangeUnitMeasureCommandAsync);
 
         #endregion
 
@@ -41,12 +80,39 @@ namespace SmartMirror.ViewModels.Dialogs
             {
                 Title = accessory.Name;
                 ImageSource = accessory.ImageSource;
+
+                Accessory = accessory.Model as DeviceBindableModel;
+
+                IsFavorite = Accessory.IsFavorite;
+                IsShownInRooms = Accessory.IsShownInRooms;
+                IsReceiveNotifications = Accessory.IsReceiveNotifications;
+            }
+        }
+
+        protected override async void OnPropertyChanged(PropertyChangedEventArgs args)
+        {
+            base.OnPropertyChanged(args);
+
+            if (args.PropertyName is nameof(IsFavorite) or nameof(IsShownInRooms) or nameof(IsReceiveNotifications))
+            {
+                Accessory.IsFavorite = _isFavorite;
+                Accessory.IsShownInRooms = _isShownInRooms;
+                Accessory.IsReceiveNotifications = _isReceiveNotifications;
+
+                await _devicesService.UpdateDeviceAsync(Accessory);
             }
         }
 
         #endregion
 
         #region -- Private helpers --
+
+        private Task OnChangeUnitMeasureCommandAsync(EUnitMeasure unitMeasure)
+        {
+            Accessory.UnitMeasure = unitMeasure;
+
+            return _devicesService.UpdateDeviceAsync(Accessory);
+        }
 
         private Task OnCloseCommandAsync()
         {

@@ -12,6 +12,12 @@ public class BaseDialogViewModel : BindableBase, IDialogAware
 
     #region -- Protected properties --
 
+    protected bool IsInternetConnected => Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
+
+    #endregion
+
+    #region -- Protected properties --
+
     IBlurService BlurService { get; }
 
     #endregion

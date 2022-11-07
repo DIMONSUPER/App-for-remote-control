@@ -1,7 +1,7 @@
-﻿using System.ComponentModel;
-using System.Windows.Input;
-using SmartMirror.Enums;
+﻿using SmartMirror.Enums;
 using SmartMirror.Resources;
+using System.ComponentModel;
+using System.Windows.Input;
 
 namespace SmartMirror.Models.BindableModels;
 
@@ -142,6 +142,34 @@ public class DeviceBindableModel : BindableBase
         set => SetProperty(ref _editableResource, value);
     }
 
+    private EUnitMeasure _unitMeasure;
+    public EUnitMeasure UnitMeasure
+    {
+        get => _unitMeasure;
+        set => SetProperty(ref _unitMeasure, value);
+    }
+
+    private bool _isShownInRooms = true;
+    public bool IsShownInRooms
+    {
+        get => _isShownInRooms;
+        set => SetProperty(ref _isShownInRooms, value);
+    }
+
+    private bool _isReceiveNotifications = true;
+    public bool IsReceiveNotifications
+    {
+        get => _isReceiveNotifications;
+        set => SetProperty(ref _isReceiveNotifications, value);
+    }
+
+    private bool _isFavorite;
+    public bool IsFavorite
+    {
+        get => _isFavorite;
+        set => SetProperty(ref _isFavorite, value);
+    }
+
     private ICommand _tappedCommand;
     public ICommand TappedCommand
     {
@@ -206,7 +234,7 @@ public class DeviceBindableModel : BindableBase
             {
                 IconsNames.pic_humidity => double.Parse(AdditionalInfo) / 100 + "%",
                 IconsNames.pic_pressure => Math.Round(double.Parse(AdditionalInfo) / 1000, 2) + "kPa",
-                IconsNames.pic_temperature => double.Parse(AdditionalInfo) / 100 + "℃",
+                IconsNames.pic_temperature => UnitMeasure == EUnitMeasure.Celsius ? double.Parse(AdditionalInfo) / 100 + "℃" : string.Format("{0:F2}", double.Parse(AdditionalInfo) / 100 * 1.8 + 32) + "℉",
                 IconsNames.pic_wall_switch_double_left => "",
                 IconsNames.pic_wall_switch_double_right => "",
                 IconsNames.pic_wall_switch_single => "",

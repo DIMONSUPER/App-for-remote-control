@@ -8,8 +8,6 @@
 
         public bool IsActive { get; set; }
 
-        public bool IsFavorite { get; set; }
-
         public DateTime ActivationTime { get; set; }
 
         public IEnumerable<ScenarioActionModel> ScenarioActions { get; set; }

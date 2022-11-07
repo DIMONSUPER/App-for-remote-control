@@ -41,16 +41,32 @@ public class BaseTabViewModel : BindableBase, IPageLifecycleAware, INavigationAw
         set => SetProperty(ref _dataState, value);
     }
 
+    private bool _isPageFocused;
+    public bool IsPageFocused
+    {
+        get => _isPageFocused;
+        set => SetProperty(ref _isPageFocused, value);
+    }
+
+    private bool _isNeedReloadData = true;
+    public bool IsNeedReloadData
+    {
+        get => _isNeedReloadData;
+        set => SetProperty(ref _isNeedReloadData, value);
+    }
+
     #endregion
 
     #region -- IPageLifecycleAware implementation --
 
     public virtual void OnAppearing()
     {
+        IsPageFocused = true;
     }
 
     public virtual void OnDisappearing()
     {
+        IsPageFocused = false;
     }
 
     #endregion

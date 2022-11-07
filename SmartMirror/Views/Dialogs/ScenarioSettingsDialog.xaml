@@ -62,16 +62,17 @@
 
                     <controls:TitleAndSwitchView
                         Title="{extensions:Translate ShowInScenarios}"
-                        IsToggled="True"
+                        IsToggled="{Binding IsShownInScenarios}"
                         Padding="24, 18"/>
 
                     <controls:TitleAndSwitchView
                         Title="{extensions:Translate ReceiveNotifications}"
+                        IsToggled="{Binding IsReceiveNotifications}"
                         Padding="24, 18"/>
 
                     <controls:TitleAndSwitchView
                         Title="{extensions:Translate AddToFavorites}"
-                        IsToggled="True"
+                        IsToggled="{Binding IsFavorite}"
                         Padding="24, 18"/>
 
                 </VerticalStackLayout>

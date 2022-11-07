@@ -193,6 +193,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Celsius.
+        /// </summary>
+        internal static string Celsius {
+            get {
+                return ResourceManager.GetString("Celsius", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string Close {
@@ -324,6 +333,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string ErrorDescription {
             get {
                 return ResourceManager.GetString("ErrorDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fahrenheit.
+        /// </summary>
+        internal static string Fahrenheit {
+            get {
+                return ResourceManager.GetString("Fahrenheit", resourceCulture);
             }
         }
         
