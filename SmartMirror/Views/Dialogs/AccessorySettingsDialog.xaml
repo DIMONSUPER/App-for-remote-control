@@ -50,12 +50,10 @@
                 Stroke="{DynamicResource tcolor_i1}"
                 BackgroundColor="{StaticResource cbg_i15}">
 
-                <VerticalStackLayout
-                    Padding="0, 24"
-                    Spacing="36">
+                <StackLayout Padding="0, 24">
 
                     <Border
-                        Margin="18, 6, 18, 0"
+                        Margin="18, 6, 18, 36"
                         HeightRequest="53"
                         StrokeThickness="1"
                         StrokeShape="RoundRectangle 40"
@@ -112,21 +110,21 @@
                     </Border>
 
                     <controls:TitleAndSwitchView
-                        Margin="24, 0"
+                        Margin="24, 0, 24, 18"
                         Title="{extensions:Translate ShowInRooms}"
                         IsToggled="{Binding IsShownInRooms}"/>
 
                     <controls:TitleAndSwitchView
                         Title="{extensions:Translate ReceiveNotifications}"
-                        Margin="24, 0"
+                        Margin="24, 18"
                         IsToggled="{Binding IsReceiveNotifications}"/>
 
                     <controls:TitleAndSwitchView
                         Title="{extensions:Translate AddToFavorites}"
-                        Margin="24, 0"
+                        Margin="24, 18, 24, 0"
                         IsToggled="{Binding IsFavorite}"/>
 
-                </VerticalStackLayout>
+                </StackLayout>
 
             </Border>
 
