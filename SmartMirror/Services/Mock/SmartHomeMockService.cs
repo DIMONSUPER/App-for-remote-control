@@ -67,6 +67,7 @@ namespace SmartMirror.Services.Mock
                     Name = "Garage Door",
                     Type = "Garage",
                     Status = "Opened",
+                    RoomName = "Living Room",
                     LastActivityTime = DateTime.Now,
                 },
                 new()
@@ -75,6 +76,7 @@ namespace SmartMirror.Services.Mock
                     Name = "Upstairs Hallway Movement",
                     Type = "NoMovement",
                     Status = "No movement",
+                    RoomName = "Living Room",
                     LastActivityTime = DateTime.Now.AddMinutes(-15),
                 },
                 new()
@@ -83,6 +85,7 @@ namespace SmartMirror.Services.Mock
                     Name = "Balcony Door",
                     Type = "Unknown",
                     Status = "Unknown",
+                    RoomName = "Living Room",
                     LastActivityTime = DateTime.Now.AddHours(-3),
                 },
                 new()
@@ -91,6 +94,7 @@ namespace SmartMirror.Services.Mock
                     Name = "Balcony Door",
                     Type = "Door",
                     Status = "Closed",
+                    RoomName = "Living Room",
                     LastActivityTime = DateTime.Now.AddDays(-1),
                 },
                 new()
@@ -99,6 +103,7 @@ namespace SmartMirror.Services.Mock
                     Name = "Garage Door",
                     Type = "Garage",
                     Status = "Opened",
+                    RoomName = "Living Room",
                     LastActivityTime = DateTime.Now.AddDays(-2),
                 },
             };

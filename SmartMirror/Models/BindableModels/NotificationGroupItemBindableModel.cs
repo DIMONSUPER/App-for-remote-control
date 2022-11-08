@@ -32,6 +32,13 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _status, value);
         }
 
+        private string _roomName;
+        public string RoomName
+        {
+            get => _roomName;
+            set => SetProperty(ref _roomName, value);
+        }
+
         private DateTime _lastActivityTime;
         public DateTime LastActivityTime
         {

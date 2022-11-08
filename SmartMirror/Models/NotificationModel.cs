@@ -14,6 +14,8 @@
 
         public string Status { get; set; }
 
+        public string RoomName { get; set; }
+
         public DateTime LastActivityTime { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
+using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
@@ -11,6 +12,7 @@ namespace SmartMirror.ViewModels.Tabs.Details
     public class ScenarioDetailsPageViewModel : BaseViewModel
     {
         private readonly IScenariosService _scenariosService;
+        private readonly IRoomsService _roomsService;
         private readonly IDialogService _dialogService;
 
         private ScenarioBindableModel _scenarioBindableModel;
@@ -18,9 +20,11 @@ namespace SmartMirror.ViewModels.Tabs.Details
         public ScenarioDetailsPageViewModel(
             INavigationService navigationService,
             IScenariosService scenariosService,
+            IRoomsService roomsService,
             IDialogService dialogService) 
             : base(navigationService)
         {
+            _roomsService = roomsService;
             _scenariosService = scenariosService;
             _dialogService = dialogService;
         }
@@ -102,6 +106,14 @@ namespace SmartMirror.ViewModels.Tabs.Details
             {
                 ScenarioName = scenarioDetailInformation.Result.Name;
                 ScenarioActions = scenarioDetailInformation.Result.Actions;
+           
+                foreach (var action in ScenarioActions)
+                {
+                    if (action.Device is not null)
+                    {
+                        action.Device.RoomName = _roomsService.AllRooms.FirstOrDefault(x => x.Id == action.Device.PositionId).Name;
+                    }
+                }
             }
             else
             {
