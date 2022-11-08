@@ -37,11 +37,11 @@ public class MainTabbedPageViewModel : BaseViewModel
 
     #region -- Overrides --
 
-    public override async void Initialize(INavigationParameters parameters)
+    public override void OnNavigatedTo(INavigationParameters parameters)
     {
-        base.Initialize(parameters);
+        base.OnNavigatedTo(parameters);
 
-        await UpdateAllAqaraServicesAsync();
+        Task.Run(UpdateAllAqaraDataAsync);
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
@@ -50,7 +50,7 @@ public class MainTabbedPageViewModel : BaseViewModel
 
         if (IsInternetConnected)
         {
-            await UpdateAllAqaraServicesAsync();
+            await UpdateAllAqaraDataAsync();
         }
     }
 
@@ -71,7 +71,7 @@ public class MainTabbedPageViewModel : BaseViewModel
 
     #region -- Private helpers --
 
-    private async Task UpdateAllAqaraServicesAsync()
+    private async Task UpdateAllAqaraDataAsync()
     {
         await _devicesService.DownloadAllDevicesWithSubInfoAsync();
         await _roomsService.DownloadAllRoomsAsync();

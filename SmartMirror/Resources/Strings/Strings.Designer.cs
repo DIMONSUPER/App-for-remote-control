@@ -902,6 +902,15 @@ namespace SmartMirror.Resources.Strings {
                 return ResourceManager.GetString("Unknown", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Universal action step.
+        /// </summary>
+        internal static string UniversalActionStep {
+            get {
+                return ResourceManager.GetString("UniversalActionStep", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Unlocked.

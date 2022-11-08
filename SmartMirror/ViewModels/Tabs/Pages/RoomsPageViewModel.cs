@@ -85,6 +85,13 @@ public class RoomsPageViewModel : BaseTabViewModel
         base.Destroy();
     }
 
+    public override async void OnNavigatedTo(INavigationParameters parameters)
+    {
+        base.OnNavigatedTo(parameters);
+
+        await LoadRoomsAndDevicesAndChangeStateAsync();
+    }
+
     #endregion
 
     #region -- Private helpers --

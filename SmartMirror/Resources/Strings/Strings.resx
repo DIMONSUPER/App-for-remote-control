@@ -312,4 +312,7 @@
     <data name="Movement" xml:space="preserve">
         <value>Movement</value>
     </data>
+    <data name="UniversalActionStep" xml:space="preserve">
+        <value>Universal action step</value>
+    </data>
 </root>
