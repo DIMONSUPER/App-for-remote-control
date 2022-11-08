@@ -9,6 +9,7 @@
     x:DataType="vm:ImageAndTitleBindableModel">
 
     <Border
+        Padding="24, 0"
         BackgroundColor="{DynamicResource cbg_i2}"
         Stroke="{DynamicResource cbg_i4}"
         StrokeThickness="0.75"
@@ -20,9 +21,10 @@
         behaviors:TouchBehavior.NormalBackgroundColor="{DynamicResource cbg_i2}"
         behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}">
 
-        <HorizontalStackLayout Padding="24, 0">
+        <Grid ColumnDefinitions="Auto, *">
 
             <controls:CustomImageBotton
+                Grid.Column="0"
                 VerticalOptions="Center"
                 HorizontalOptions="Start"
                 StrokeShape="RoundRectangle 9"
@@ -48,16 +50,16 @@
             </controls:CustomImageBotton>
 
             <Label
+                Grid.Column="1"
                 Style="{DynamicResource tstyle_i11}"
                 Text="{Binding Name}"
-                WidthRequest="250"
                 LineBreakMode="TailTruncation"
                 Margin="12, 0"
                 HorizontalOptions="Start"
                 VerticalOptions="Center"
                 VerticalTextAlignment="Center"/>
 
-        </HorizontalStackLayout>
+        </Grid>
 
     </Border>
 
