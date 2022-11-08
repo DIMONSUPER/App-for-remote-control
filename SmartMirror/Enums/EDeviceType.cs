@@ -6,5 +6,7 @@ public enum EDeviceType
     Switcher, //On, Off
     Locker, //Unlocked, Closed
     Player, //Playing, Paused
+    DoorbellStream,
+    DoorbellNoStream,
 }
 

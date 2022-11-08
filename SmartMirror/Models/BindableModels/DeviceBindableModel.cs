@@ -217,6 +217,7 @@ public class DeviceBindableModel : BindableBase
                 IconsNames.pic_wall_switch_three_center => AdditionalInfo == "1" ? EDeviceStatus.On : EDeviceStatus.Off,
                 IconsNames.pic_wall_switch_three_left => AdditionalInfo == "1" ? EDeviceStatus.On : EDeviceStatus.Off,
                 IconsNames.pic_wall_switch_three_right => AdditionalInfo == "1" ? EDeviceStatus.On : EDeviceStatus.Off,
+                IconsNames.pic_bell => State == 1 ? EDeviceStatus.On : EDeviceStatus.Off,
                 _ => result,
             };
         }

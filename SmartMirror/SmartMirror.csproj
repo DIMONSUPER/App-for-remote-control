@@ -50,6 +50,8 @@
 		<None Remove="Resources\Images\ci_close_big.svg" />
 		<None Remove="Resources\Images\delete.svg" />
 		<None Remove="Resources\Images\google_logo.svg" />
+		<None Remove="Resources\Images\mock_camera_stream.png" />
+		<None Remove="Resources\Images\pic_bell.svg" />
 		<None Remove="Resources\Images\pic_gears.svg" />
 		<None Remove="Resources\Images\subtract_plus.svg" />
 		<None Remove="Views\" />

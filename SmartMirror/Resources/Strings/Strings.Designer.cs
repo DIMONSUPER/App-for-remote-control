@@ -832,6 +832,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sound.
+        /// </summary>
+        internal static string Sound {
+            get {
+                return ResourceManager.GetString("Sound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please, stay in the same Wi-Fi network with your smartphone and mirror to finish synchronozation.
         /// </summary>
         internal static string StayInSameWiFi {

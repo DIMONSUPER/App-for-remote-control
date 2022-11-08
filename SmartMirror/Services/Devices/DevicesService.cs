@@ -96,9 +96,15 @@ namespace SmartMirror.Services.Devices
                         result = result.Concat(devices);
                     }
 
+                    //Temporally mock
+                    result = await AddMockDevicesAsync(result);
+
                     var dbModels = _mapperService.MapRange<DeviceDTO>(result);
 
                     await _repositoryService.SaveOrUpdateRangeAsync(dbModels);
+
+                    //This is required! After first adding device id = 0, it is required to update to the real
+                    await GetSettingsDevicesAsync(result);
 
                     AllDevices = new(_cachedDevices.Select(x => x.Value));
 
@@ -265,6 +271,51 @@ namespace SmartMirror.Services.Devices
         #endregion
 
         #region -- Private helpers --
+
+        private async Task<IEnumerable<DeviceBindableModel>> AddMockDevicesAsync(IEnumerable<DeviceBindableModel> devices)
+        {
+            var dbDevices = (await _repositoryService.GetAllAsync<DeviceDTO>()).Where(row => row.DeviceId == "5000" || row.DeviceId == "5001");
+
+            if (dbDevices.Count() == 0)
+            {
+                var doorbellNoStream = new DeviceBindableModel()
+                {
+                    DeviceId = "5000",
+                    PositionId = "real2.1019738989430480896",
+                    Name = "Doorbell",
+                    DeviceType = EDeviceType.DoorbellNoStream,
+                    IconSource = "pic_bell",
+                    RoomName = "Main room",
+                    IsShownInRooms = true,
+                    IsFavorite = true,
+                };
+
+                var doorbellStream = new DeviceBindableModel()
+                {
+                    DeviceId = "5001",
+                    PositionId = "real2.1019738989430480896",
+                    Name = "Doorbell",
+                    Status = EDeviceStatus.On,
+                    DeviceType = EDeviceType.DoorbellStream,
+                    IconSource = "pic_bell",
+                    RoomName = "Main room",
+                    IsShownInRooms = true,
+                    IsFavorite = true,
+                };
+
+                var firstItems = new[] { doorbellNoStream, doorbellStream };
+
+                devices = firstItems.Concat(devices);
+            }
+            else
+            {
+                var dbTobindableModels = _mapperService.MapRange<DeviceBindableModel>(dbDevices);
+
+                devices = dbTobindableModels.Concat(devices);
+            }
+
+            return devices;
+        }
 
         private async Task GetSettingsDevicesAsync(IEnumerable<DeviceBindableModel> devices)
         {
