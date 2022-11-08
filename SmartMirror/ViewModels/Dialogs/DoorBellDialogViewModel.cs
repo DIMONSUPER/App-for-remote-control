@@ -37,6 +37,8 @@ namespace SmartMirror.ViewModels.Dialogs
             _settingsManager = settingsManager;
             _camerasService = camerasService;
             _mapperService = mapperService;
+
+            IsVideoOnTop = true;
         }
 
         #region -- Public properties --
@@ -67,6 +69,13 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             get => _videoPlayerVolume;
             set => SetProperty(ref _videoPlayerVolume, value);
+        }
+
+        private bool _isPopup;
+        public bool IsVideoOnTop
+        {
+            get => _isPopup;
+            set => SetProperty(ref _isPopup, value);
         }
 
         private ICommand _onTalkCommand;
@@ -106,6 +115,13 @@ namespace SmartMirror.ViewModels.Dialogs
             {
                 DataState = EPageState.NoInternet;
             }
+        }
+
+        public override void OnDialogClosed()
+        {
+            base.OnDialogClosed();
+
+            IsVideoOnTop = false;
         }
 
         #endregion

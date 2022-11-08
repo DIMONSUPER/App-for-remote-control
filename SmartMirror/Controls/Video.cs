@@ -79,6 +79,17 @@ namespace SmartMirror.Controls
             set => SetValue(PlayerVolumeProperty, value);
         }
 
+        public static readonly BindableProperty IsOnTopProperty = BindableProperty.Create(
+            propertyName: nameof(IsOnTop),
+            returnType: typeof(bool),
+            declaringType: typeof(Video));
+
+        public bool IsOnTop
+        {
+            get => (bool)GetValue(IsOnTopProperty);
+            set => SetValue(IsOnTopProperty, value);
+        }
+
         #endregion
 
         #region -- IVideoController implementation --

@@ -43,7 +43,8 @@
                                IsClippedToBounds="True"
                                CornerRadius="9">
 
-                            <video:Video BackgroundColor="{DynamicResource cbg_i2}"
+                            <video:Video IsOnTop="{Binding IsVideoOnTop}"
+                                         BackgroundColor="{DynamicResource cbg_i2}"
                                          Action="{Binding VideoAction}"
                                          Source="{Binding VideoSource, TargetNullValue={x:Null}}"
                                          VideoPlaybackErrorCommand="{Binding VideoPaybackErrorCommand}"

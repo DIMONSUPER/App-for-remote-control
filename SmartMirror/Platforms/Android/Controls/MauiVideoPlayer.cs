@@ -194,6 +194,8 @@ namespace SmartMirror.Platforms.Android.Controls
             _videoView?.SetVideoURI(null);
 
             _videoView?.SetBackgroundColor(_video.BackgroundColor.ToAndroid());
+
+            _videoView?.SetZOrderOnTop(_video.IsOnTop);
         }
 
         #endregion
