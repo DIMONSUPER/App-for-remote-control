@@ -2,6 +2,7 @@
 using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Models.DTO;
+using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
@@ -122,6 +123,15 @@ namespace SmartMirror.Services.Scenarios
                     foreach (var action in scenario.Actions)
                     {
                         action.Device = _devicesService.AllDevices.FirstOrDefault(x => x.DeviceId == action.SubjectId);
+
+                        if (action.Device is null)
+                        {
+                            action.Device = new DeviceBindableModel()
+                            {
+                                Name = Strings.UniversalActionStep,
+                                IconSource = "pic_gears",
+                            };
+                        }
                     }
                 }
                 else
