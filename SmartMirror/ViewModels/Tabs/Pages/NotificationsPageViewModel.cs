@@ -33,6 +33,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
         Title = "Notifications";
         _devicesService.AllDevicesChanged += OnAllDevicesChanged;
+        _notificationsService.NotificationReceived += OnNotificationReceived;
     }
 
     #region -- Public properties --
@@ -61,6 +62,14 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
+    public override void Destroy()
+    {
+        _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
+        _notificationsService.NotificationReceived -= OnNotificationReceived;
+
+        base.Destroy();
+    }
+
     protected override void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         base.OnConnectivityChanged(sender, e);
@@ -74,6 +83,11 @@ public class NotificationsPageViewModel : BaseTabViewModel
     #endregion
 
     #region -- Private helpers --
+
+    private async void OnNotificationReceived(object sender, NotificationGroupItemBindableModel notification)
+    {
+        await LoadNotificationsAndChangeStateAsync();
+    }
 
     private async void OnAllDevicesChanged(object sender, EventArgs e)
     {
