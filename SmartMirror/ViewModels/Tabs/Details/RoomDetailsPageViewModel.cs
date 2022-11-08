@@ -70,23 +70,6 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
     #region -- Overrides --
 
-    public override void OnAppearing()
-    {
-        base.OnAppearing();
-
-        if (IsNeedReloadData)
-        {
-            IsNeedReloadData = false;
-
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                DataState = EPageState.LoadingSkeleton;
-
-                SelectRoom(_selectedRoom);
-            });
-        }
-    }
-
     public override void Destroy()
     {
         _roomsService.AllRoomsChanged -= OnAllRoomsOrDevicesChanged;
@@ -127,57 +110,30 @@ public class RoomDetailsPageViewModel : BaseViewModel
         }
     }
 
-    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
-    {
-        if (e.NetworkAccess == NetworkAccess.Internet)
-        {
-            DataState = EPageState.LoadingSkeleton;
-
-            var devicesResponse = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
-
-            var downloadRoomsResponse = await _roomsService.DownloadAllRoomsAsync();
-
-            if (downloadRoomsResponse.IsSuccess)
-            {
-                Rooms = new(_roomsService.AllRooms);
-            }
-
-            if (devicesResponse.IsSuccess)
-            {
-                SelectRoom(_selectedRoom);
-            }
-            else
-            {
-                //TODO: devices are not updated
-            }
-        }
-        else
-        {
-            DataState = EPageState.Complete;
-            RoomDeviceState = EPageState.NoInternet;
-        }
-    }
-
     #endregion
 
     #region -- Private helpers --
 
-    private void OnAllRoomsOrDevicesChanged(object sender, EventArgs e)
+    private async void OnAllRoomsOrDevicesChanged(object sender, EventArgs e)
     {
+        DataState = EPageState.LoadingSkeleton;
+
+        var rooms = await _roomsService.GetAllRoomsAsync();
+
+        foreach (var room in rooms)
+        {
+            room.SelectedCommand = RoomSelectedCommand;
+        }
+
+        Rooms = new(rooms);
+
+        _selectedRoom ??= Rooms.FirstOrDefault();
+
         if (_selectedRoom is not null)
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                if (IsPageFocused)
-                {
-                    DataState = EPageState.LoadingSkeleton;
-
-                    SelectRoom(_selectedRoom);
-                }
-                else
-                {
-                    IsNeedReloadData = true;
-                }
+                SelectRoom(_selectedRoom);
             });
         }
     }
@@ -187,7 +143,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
         return NavigationService.GoBackAsync();
     }
 
-    private void SelectRoom(RoomBindableModel selectedRoom)
+    private async void SelectRoom(RoomBindableModel selectedRoom)
     {
         if (Rooms?.Count > 0)
         {
@@ -198,13 +154,15 @@ public class RoomDetailsPageViewModel : BaseViewModel
                 room.IsSelected = room.Id == selectedRoom.Id;
             }
 
-            var roomDevices = _devicesService.AllSupportedDevices.Where(x => x.PositionId == selectedRoom.Id && x.IsShownInRooms);
+            var devices = await _devicesService.GetAllSupportedDevicesAsync();
+
+            var roomDevices = devices.Where(x => x.PositionId == selectedRoom.Id && x.IsShownInRooms);
 
             if (roomDevices.Any())
             {
                 DataState = EPageState.LoadingSkeleton;
 
-                Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
+                _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
                 {
                     SelectedRoomDevices = new(roomDevices);
 

@@ -6,9 +6,9 @@ namespace SmartMirror.Services.Scenarios
 {
     public interface IScenariosService
     {
-        event EventHandler ScenariosChanged;
+        event EventHandler AllScenariosChanged;
 
-        List<ScenarioBindableModel> AllScenarios { get; }
+        Task<IEnumerable<ScenarioBindableModel>> GetAllScenariosAsync();
 
         Task<AOResult> DownloadAllScenariosAsync();
 

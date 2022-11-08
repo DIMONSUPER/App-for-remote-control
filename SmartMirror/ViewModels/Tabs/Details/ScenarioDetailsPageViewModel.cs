@@ -104,6 +104,7 @@ namespace SmartMirror.ViewModels.Tabs.Details
 
             if (scenarioDetailInformation.IsSuccess)
             {
+                var rooms = await _roomsService.GetAllRoomsAsync();
                 ScenarioName = scenarioDetailInformation.Result.Name;
                 ScenarioActions = scenarioDetailInformation.Result.Actions;
            
@@ -111,7 +112,7 @@ namespace SmartMirror.ViewModels.Tabs.Details
                 {
                     if (action.Device is not null)
                     {
-                        action.Device.RoomName = _roomsService.AllRooms.FirstOrDefault(x => x.Id == action.Device.PositionId).Name;
+                        action.Device.RoomName = rooms.FirstOrDefault(x => x.Id == action.Device.PositionId)?.Name;
                     }
                 }
             }

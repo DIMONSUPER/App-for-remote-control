@@ -44,10 +44,8 @@ public class RoomsPageViewModel : BaseTabViewModel
 
         DataState = EPageState.LoadingSkeleton;
 
-        Task.Run(LoadRoomsAndDevicesAndChangeStateAsync);
-
-        _roomsService.AllRoomsChanged += OnAllRoomsChanged;
-        _devicesService.AllDevicesChanged += OnAllDevicesChanged;
+        _roomsService.AllRoomsChanged += OnAllRoomsOrDevicesChanged;
+        _devicesService.AllDevicesChanged += OnAllRoomsOrDevicesChanged;
     }
 
     #region -- Public properties --
@@ -79,80 +77,28 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override void OnAppearing()
-    {
-        base.OnAppearing();
-
-        if (IsNeedReloadData)
-        {
-            IsNeedReloadData = false;
-
-            LoadAllDevices();
-        }
-    }
-
     public override void Destroy()
     {
-        _roomsService.AllRoomsChanged -= OnAllRoomsChanged;
-        _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
+        _roomsService.AllRoomsChanged -= OnAllRoomsOrDevicesChanged;
+        _devicesService.AllDevicesChanged -= OnAllRoomsOrDevicesChanged;
 
         base.Destroy();
     }
 
-    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    public override async void OnNavigatedTo(INavigationParameters parameters)
     {
-        if (e.NetworkAccess == NetworkAccess.Internet)
-        {
-            if (!IsDataLoading && DataState != EPageState.Complete)
-            {
-                DataState = EPageState.LoadingSkeleton;
+        base.OnNavigatedTo(parameters);
 
-                await LoadRoomsAndDevicesAndChangeStateAsync();
-            }
-        }
-        else
-        {
-            DataState = EPageState.NoInternet;
-        }
+        await LoadRoomsAndDevicesAndChangeStateAsync();
     }
 
     #endregion
 
     #region -- Private helpers --
 
-    private async void OnAllRoomsChanged(object sender, EventArgs e)
+    private async void OnAllRoomsOrDevicesChanged(object sender, EventArgs e)
     {
-        if (_roomsService.AllRooms is not null && _roomsService.AllRooms.Any())
-        {
-            LoadAllRooms();
-        }
-        else
-        {
-            DataState = EPageState.LoadingSkeleton;
-
-            await LoadRoomsAndDevicesAndChangeStateAsync();
-        }
-    }
-
-    private async void OnAllDevicesChanged(object sender, EventArgs e)
-    {
-        if (_devicesService.AllSupportedDevices is not null && _devicesService.AllSupportedDevices.Any())
-        {
-            if (IsPageFocused)
-            {
-                LoadAllDevices();
-            }
-            else
-            {
-                IsNeedReloadData = true;
-            }
-        }
-        else
-        {
-            DataState = EPageState.LoadingSkeleton;
-
-            await LoadRoomsAndDevicesAndChangeStateAsync();
-        }
+        await LoadRoomsAndDevicesAndChangeStateAsync();
     }
 
     private async Task OnTryAgainCommandAsync()
@@ -169,16 +115,17 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private async Task<bool> LoadRoomsAndDevicesAndChangeStateAsync()
     {
-        var isDataLoaded = false;
+        bool isDataLoaded = false;
 
         if (IsInternetConnected)
         {
-            isDataLoaded = await ReloadDevicesAsync();
-
-            isDataLoaded &= await ReloadRoomsAsync();
+            await LoadAllDevicesAsync();
+            await LoadAllRoomsAsync();
 
             if (IsInternetConnected)
             {
+                isDataLoaded = Rooms.Any();
+
                 DataState = isDataLoaded
                     ? EPageState.Complete
                     : EPageState.Empty;
@@ -196,53 +143,22 @@ public class RoomsPageViewModel : BaseTabViewModel
         return isDataLoaded;
     }
 
-    private async Task<bool> ReloadRoomsAsync()
+    private async Task LoadAllDevicesAsync()
     {
-        var resultOfGettingRooms = await _roomsService.DownloadAllRoomsAsync();
+        var allDevices = await _devicesService.GetAllSupportedDevicesAsync();
+        var favoriteDevices = allDevices.Where(device => device.IsFavorite);
 
-        if (resultOfGettingRooms.IsSuccess)
-        {
-            LoadAllRooms();
-        }
-        else
-        {
-            Debug.WriteLine($"Can't download rooms: {resultOfGettingRooms.Message}");
-        }
-
-        return resultOfGettingRooms.IsSuccess;
-    }
-
-    private async Task<bool> ReloadDevicesAsync()
-    {
-        var aqaraDevicesResponse = await _devicesService.DownloadAllDevicesWithSubInfoAsync();
-
-        if (aqaraDevicesResponse.IsSuccess)
-        {
-            LoadAllDevices();
-        }
-        else
-        {
-            Debug.WriteLine($"Can't download devices: {aqaraDevicesResponse.Message}");
-        }
-
-        return aqaraDevicesResponse.IsSuccess;
-    }
-
-    private void LoadAllDevices()
-    {
-        var devices = _devicesService.AllSupportedDevices.Where(device => device.IsFavorite);
-
-        foreach (var device in devices)
+        foreach (var device in favoriteDevices)
         {
             device.TappedCommand = AccessorieTappedCommand;
         };
 
-        FavoriteAccessories = new(devices);
+        FavoriteAccessories = new(favoriteDevices);
     }
 
-    private void LoadAllRooms()
+    private async Task LoadAllRoomsAsync()
     {
-        var rooms = _roomsService.AllRooms;
+        var rooms = await _roomsService.GetAllRoomsAsync();
 
         foreach (var room in rooms)
         {

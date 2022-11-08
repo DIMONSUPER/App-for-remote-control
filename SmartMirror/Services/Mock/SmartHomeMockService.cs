@@ -1,5 +1,6 @@
 ﻿using SmartMirror.Enums;
 using SmartMirror.Models;
+using SmartMirror.Models.BindableModels;
 
 namespace SmartMirror.Services.Mock
 {
@@ -57,53 +58,38 @@ namespace SmartMirror.Services.Mock
             return cameras;
         }
 
-        public IEnumerable<NotificationModel> GetNotifications()
+        public IEnumerable<NotificationGroupItemBindableModel> GetNotifications()
         {
-            List<NotificationModel> notifications = new()
+            List<NotificationGroupItemBindableModel> notifications = new()
             {
                 new()
                 {
                     IsShown = true,
-                    Name = "Garage Door",
-                    Type = "Garage",
                     Status = "Opened",
-                    RoomName = "Living Room",
                     LastActivityTime = DateTime.Now,
                 },
                 new()
                 {
                     IsShown = true,
-                    Name = "Upstairs Hallway Movement",
-                    Type = "NoMovement",
                     Status = "No movement",
-                    RoomName = "Living Room",
                     LastActivityTime = DateTime.Now.AddMinutes(-15),
                 },
                 new()
                 {
                     IsShown = true,
-                    Name = "Balcony Door",
-                    Type = "Unknown",
                     Status = "Unknown",
-                    RoomName = "Living Room",
                     LastActivityTime = DateTime.Now.AddHours(-3),
                 },
                 new()
                 {
                     IsShown = true,
-                    Name = "Balcony Door",
-                    Type = "Door",
                     Status = "Closed",
-                    RoomName = "Living Room",
                     LastActivityTime = DateTime.Now.AddDays(-1),
                 },
                 new()
                 {
                     IsShown = true,
-                    Name = "Garage Door",
-                    Type = "Garage",
                     Status = "Opened",
-                    RoomName = "Living Room",
                     LastActivityTime = DateTime.Now.AddDays(-2),
                 },
             };
