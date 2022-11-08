@@ -57,7 +57,7 @@
                                           VerticalOptions="End"
                                           LineBreakMode="TailTruncation"
                                           MaxLines="2"
-                                          Style="{x:DynamicResource tstyle_i16}"/>
+                                          Style="{Binding NameFontStyle, Source={x:Reference deviceTemplate}}"/>
 
                     <Label Text="{Binding RoomName}"
                            Margin="0,2,0,0"
