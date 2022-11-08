@@ -69,6 +69,7 @@ public static class MauiProgram
         containerRegistry.RegisterDialog<ConfirmDialog>();
         containerRegistry.RegisterDialog<AddNewCameraDialog>();
         containerRegistry.RegisterDialog<DoorBellDialog>();
+        containerRegistry.RegisterDialog<AddMoreProviderDialog>();
 
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
         containerRegistry.RegisterForNavigation<WelcomePage>();

@@ -53,6 +53,8 @@ namespace SmartMirror.ViewModels
             _googleService = googleService;
 
             PageState = EPageState.LoadingSkeleton;
+            _devicesService.AllDevicesChanged += OnAllDevicesChanged;
+            _scenariosService.AllScenariosChanged += OnAllScenariosChanged;
         }
 
         #region -- Public properties --
@@ -140,16 +142,21 @@ namespace SmartMirror.ViewModels
             });
         }
 
+        public override void Destroy()
+        {
+            _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
+            _scenariosService.AllScenariosChanged -= OnAllScenariosChanged;
+
+            base.Destroy();
+        }
+
         protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
             if (IsInternetConnected)
             {
-                if (!IsDataLoading && PageState != EPageState.Complete)
-                {
-                    PageState = EPageState.LoadingSkeleton;
+                PageState = EPageState.LoadingSkeleton;
 
-                    await LoadAllDataAndChangeStateAsync();
-                }
+                await LoadAllDataAndChangeStateAsync();
             }
             else
             {
@@ -160,6 +167,16 @@ namespace SmartMirror.ViewModels
         #endregion
 
         #region -- Private helpers --
+
+        private async void OnAllScenariosChanged(object sender, EventArgs e)
+        {
+            await LoadAllScenariosAsync();
+        }
+
+        private async void OnAllDevicesChanged(object sender, EventArgs e)
+        {
+            await LoadAllDevicesAsync();
+        }
 
         private void LoadCategories()
         {
@@ -263,22 +280,21 @@ namespace SmartMirror.ViewModels
 
             if (IsInternetConnected)
             {
-                var dataLoadingResults = await Task.WhenAll(
-                    LoadAllDevicesAsync(),
-                    LoadAllScenariosAsync(),
-                    LoadAllCamerasAsync());
+                isLoaded = await LoadAllDevicesAsync();
+                isLoaded &= await LoadAllScenariosAsync();
+                isLoaded &= await LoadAllCamerasAsync();
 
                 CreateProviders();
-
-                isLoaded = dataLoadingResults.Any(x => x);
             }
 
             return isLoaded;
         }
 
-        private Task<bool> LoadAllDevicesAsync()
+        private async Task<bool> LoadAllDevicesAsync()
         {
-            _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(_devicesService.AllSupportedDevices, (m, vm) =>
+            var devices = await _devicesService.GetAllSupportedDevicesAsync();
+
+            _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(devices, (m, vm) =>
             {
                 vm.Model = m;
                 vm.TapCommand = OpenAccessorySettingsCommand;
@@ -288,12 +304,14 @@ namespace SmartMirror.ViewModels
 
             deviceCategory.Count = _allAccessories.Count();
 
-            return Task.FromResult(true);
+            return true;
         }
 
-        private Task<bool> LoadAllScenariosAsync()
+        private async Task<bool> LoadAllScenariosAsync()
         {
-            _allScenarios = _mapperService.MapRange<ImageAndTitleBindableModel>(_scenariosService.AllScenarios, (m, vm) =>
+            var scenarios = await _scenariosService.GetAllScenariosAsync();
+
+            _allScenarios = _mapperService.MapRange<ImageAndTitleBindableModel>(scenarios, (m, vm) =>
             {
                 vm.Model = m;
                 vm.Type = ECategoryType.Scenarios;
@@ -305,7 +323,7 @@ namespace SmartMirror.ViewModels
 
             scenarioCategory.Count = _allScenarios.Count();
 
-            return Task.FromResult(true);
+            return true;
         }
 
         private async Task<bool> LoadAllCamerasAsync()

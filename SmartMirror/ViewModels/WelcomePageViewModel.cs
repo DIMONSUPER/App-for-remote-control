@@ -3,7 +3,6 @@ using SmartMirror.Helpers;
 using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Google;
-using SmartMirror.Views;
 using SmartMirror.Views.Dialogs;
 using System.Windows.Input;
 
@@ -84,7 +83,7 @@ namespace SmartMirror.ViewModels
                     });
                 }
 
-                await ProcessDialogResultAsync(dialogResult, testEmail);
+                await ProcessDialogResultAsync(dialogResult, authType);
             }
             else
             {
@@ -105,13 +104,21 @@ namespace SmartMirror.ViewModels
             });
         }
 
-        private async Task ProcessDialogResultAsync(IDialogResult dialogResult, string email)
+        private async Task ProcessDialogResultAsync(IDialogResult response, EAuthType authType)
         {
-            if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result))
+            if (response.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool resultAuth) && resultAuth)
             {
-                await NavigationService.CreateBuilder()
-                    .AddSegment<MainTabbedPage>()
-                    .NavigateAsync();
+                var dialogResult = await _dialogService.ShowDialogAsync(nameof(AddMoreProviderDialog), new DialogParameters
+                {
+                    { Constants.DialogsParameterKeys.AUTH_TYPE, authType },
+                });
+
+                if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result) && result)
+                {
+                    await NavigationService.CreateBuilder()
+                        .AddSegment<MainTabbedPageViewModel>()
+                        .NavigateAsync();
+                }
             }
         }
 

@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <DataTemplate
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:bindableModels="clr-namespace:SmartMirror.Models.BindableModels"
     x:DataType="bindableModels:NotificationGroupItemBindableModel"
     x:Class="SmartMirror.Resources.DataTemplates.NotificationTemplate">
@@ -27,31 +28,9 @@
                 BackgroundColor="{DynamicResource cbg_i1}">
 
                 <Image
-                    Source="front_door"
+                    Source="{Binding Device.IconSource}"
                     VerticalOptions="Center"
-                    HorizontalOptions="Center">
-
-                    <Image.Triggers>
-
-                        <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="Door">
-                            <Setter Property="Source" Value="front_door"/>
-                        </DataTrigger>
-
-                        <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="Garage">
-                            <Setter Property="Source" Value="garage_door"/>
-                        </DataTrigger>
-
-                        <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="NoMovement">
-                            <Setter Property="Source" Value="sleep"/>
-                        </DataTrigger>
-
-                        <DataTrigger TargetType="Image" Binding="{Binding Type}" Value="Unknown">
-                            <Setter Property="Source" Value="grey_question_mark"/>
-                        </DataTrigger>
-
-                    </Image.Triggers>
-
-                </Image>
+                    HorizontalOptions="Center"/>
 
             </Border>
 
@@ -60,18 +39,25 @@
                 WidthRequest="267">
 
                 <Label
-                    Text="{Binding Name}"
+                    Text="{Binding Device.Name}"
                     Style="{DynamicResource tstyle_i11}"/>
+
+                <controls:CustomLabel
+                    Style="{DynamicResource tstyle_i3}"
+                    VerticalOptions="Center"
+                    MaximumWidthRequest="200"
+                    MaxLines="2"
+                    LineBreakMode="TailTruncation"
+                    Text="{Binding Device.RoomName}"/>
 
                 <Label
                     Text="{Binding LastActivityTime, Converter={StaticResource timeToTimeAgoConverter}}"
-                    Style="{DynamicResource tstyle_i5}"
-                    Margin="0, 6, 0, 0"/>
+                    Style="{DynamicResource tstyle_i5}"/>
 
             </VerticalStackLayout>
 
             <Label
-                Text="{Binding Status}"
+                Text="{Binding StatusFormatted}"
                 Style="{DynamicResource tstyle_i8}"
                 VerticalOptions="Start"
                 HorizontalOptions="EndAndExpand"

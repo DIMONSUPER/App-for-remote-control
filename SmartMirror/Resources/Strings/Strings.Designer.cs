@@ -202,6 +202,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changed to.
+        /// </summary>
+        internal static string ChangedTo {
+            get {
+                return ResourceManager.GetString("ChangedTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string Close {
@@ -373,6 +382,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Finish.
+        /// </summary>
+        internal static string Finish {
+            get {
+                return ResourceManager.GetString("Finish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Follow all instructions and complete your registration.
         /// </summary>
         internal static string FollowAllInstructions {
@@ -454,6 +472,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Have another provider?.
+        /// </summary>
+        internal static string HaveAnotherProvider {
+            get {
+                return ResourceManager.GetString("HaveAnotherProvider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HomePod.
         /// </summary>
         internal static string HomePod {
@@ -513,6 +540,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string MinutesAgo {
             get {
                 return ResourceManager.GetString("MinutesAgo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Movement.
+        /// </summary>
+        internal static string Movement {
+            get {
+                return ResourceManager.GetString("Movement", resourceCulture);
             }
         }
         
@@ -868,6 +904,24 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Turned off.
+        /// </summary>
+        internal static string TurnedOff {
+            get {
+                return ResourceManager.GetString("TurnedOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turned on.
+        /// </summary>
+        internal static string TurnedOn {
+            get {
+                return ResourceManager.GetString("TurnedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Turn Off.
         /// </summary>
         internal static string TurnOff {
@@ -891,6 +945,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Unknown {
             get {
                 return ResourceManager.GetString("Unknown", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Universal action step.
+        /// </summary>
+        internal static string UniversalActionStep {
+            get {
+                return ResourceManager.GetString("UniversalActionStep", resourceCulture);
             }
         }
         

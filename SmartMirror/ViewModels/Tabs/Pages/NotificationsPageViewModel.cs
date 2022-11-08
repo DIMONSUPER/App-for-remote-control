@@ -3,6 +3,7 @@ using SmartMirror.Helpers;
 using SmartMirror.Interfaces;
 using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
+using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Notifications;
 using System.Collections.ObjectModel;
@@ -15,19 +16,24 @@ public class NotificationsPageViewModel : BaseTabViewModel
     private readonly INotificationsService _notificationsService;
     private readonly IDialogService _dialogService;
     private readonly IMapperService _mapperService;
+    private readonly IDevicesService _devicesService;
 
     public NotificationsPageViewModel(
         INotificationsService notificationsService,
         IDialogService dialogService,
         IMapperService mapperService,
-        INavigationService navigationService)
+        INavigationService navigationService,
+        IDevicesService devicesService)
         : base(navigationService)
     {
         _notificationsService = notificationsService;
         _dialogService = dialogService;
         _mapperService = mapperService;
+        _devicesService = devicesService;
 
         Title = "Notifications";
+        _devicesService.AllDevicesChanged += OnAllDevicesChanged;
+        _notificationsService.NotificationReceived += OnNotificationReceived;
     }
 
     #region -- Public properties --
@@ -56,40 +62,48 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override async void OnAppearing()
+    public override void Destroy()
     {
-        base.OnAppearing();
+        _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
+        _notificationsService.NotificationReceived -= OnNotificationReceived;
 
-        if (!IsDataLoading)
-        {
-            DataState = EPageState.LoadingSkeleton;
-
-            await LoadNotificationsAndChangeStateAsync();
-        }
+        base.Destroy();
     }
 
-    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    protected override void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
-        if (e.NetworkAccess == NetworkAccess.Internet)
-        {
-            if (!IsDataLoading && DataState != EPageState.Complete)
-            {
-                DataState = EPageState.LoadingSkeleton;
+        base.OnConnectivityChanged(sender, e);
 
-                await LoadNotificationsAndChangeStateAsync();
-            }
-        }
-        else
+        if (e.NetworkAccess != NetworkAccess.Internet)
         {
             IsNotificationsRefreshing = false;
-
-            DataState = EPageState.NoInternet;
         }
     }
 
     #endregion
 
     #region -- Private helpers --
+
+    private async void OnNotificationReceived(object sender, NotificationGroupItemBindableModel notification)
+    {
+        await LoadNotificationsAndChangeStateAsync();
+    }
+
+    private async void OnAllDevicesChanged(object sender, EventArgs e)
+    {
+        DataState = EPageState.LoadingSkeleton;
+
+        var devices = await _devicesService.GetAllSupportedDevicesAsync();
+
+        if (devices.Any())
+        {
+            await LoadNotificationsAndChangeStateAsync();
+        }
+        else
+        {
+            DataState = EPageState.Empty;
+        }
+    }
 
     private async Task OnTryAgainCommandAsync()
     {
@@ -153,26 +167,38 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
         if (IsInternetConnected)
         {
-            await Task.Delay(1000);
+            List<INotificationGroupItemModel> result = new();
 
-            var resultOfGettingNotifications = await _notificationsService.GetNotificationsAsync();
+            var devices = await _devicesService.GetAllSupportedDevicesAsync();
 
-            if (resultOfGettingNotifications.IsSuccess)
+            foreach (var device in _devicesService.AllDevices)
             {
-                var allNotifications = resultOfGettingNotifications.Result.OrderByDescending(row => row.LastActivityTime);
+                var resourceIds = devices
+                    .Where(x => x.IsReceiveNotifications && x.DeviceId == device.DeviceId && x.EditableResourceId is not null)
+                    .Select(x => x.EditableResourceId).ToArray();
 
-                var notificationGroups = GetNotificationGroups(allNotifications);
+                if (!resourceIds.Any()) continue;
 
-                Notifications = new(notificationGroups);
+                var resultOfGettingNotifications = await _notificationsService.GetNotificationsForDeviceAsync(device.DeviceId, resourceIds);
 
-                isLoaded = true;
+                if (resultOfGettingNotifications.IsSuccess)
+                {
+                    var allNotifications = resultOfGettingNotifications.Result.OrderByDescending(row => row.LastActivityTime);
+                    var notificationGroups = GetNotificationGroups(allNotifications);
+
+                    result.AddRange(notificationGroups);
+                }
             }
+
+            Notifications = new(result);
+
+            isLoaded = Notifications.Any();
         }
 
         return isLoaded;
     }
 
-    private ObservableCollection<INotificationGroupItemModel> GetNotificationGroups(IOrderedEnumerable<NotificationModel> notifications)
+    private ObservableCollection<INotificationGroupItemModel> GetNotificationGroups(IOrderedEnumerable<NotificationGroupItemBindableModel> notifications)
     {
         var lastTitleGroup = string.Empty;
 
@@ -192,7 +218,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
                 lastTitleGroup = titleGroup;
             }
 
-            notificationGrouped.Add(_mapperService.Map<NotificationGroupItemBindableModel>(notificafication));
+            notificationGrouped.Add(notificafication);
         }
 
         return notificationGrouped;

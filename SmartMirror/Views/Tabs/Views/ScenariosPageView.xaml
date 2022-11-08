@@ -39,7 +39,6 @@
 
     <controls:CustomStateView
         State="{Binding DataState}"
-        TryAgainCommand="{Binding TryAgainCommand}"
         LoadingTitle="{extensions:Translate Scenarios}"
         EmptyTitle="{extensions:Translate NoScenariosYet}"
         EmptyStateImage="empty_scenarios">

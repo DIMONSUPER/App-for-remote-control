@@ -2,6 +2,7 @@
 using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Models.DTO;
+using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
@@ -18,6 +19,9 @@ namespace SmartMirror.Services.Scenarios
         private readonly IDevicesService _devicesService;
         private readonly IAqaraMessanger _aqaraMessanger;
         private readonly IRepositoryService _repositoryService;
+
+        private TaskCompletionSource<object> _scenariosTaskCompletionSource = new();
+        private List<ScenarioBindableModel> _allScenarios = new();
 
         public ScenariosService(
             ISmartHomeMockService smartHomeMockService,
@@ -39,13 +43,30 @@ namespace SmartMirror.Services.Scenarios
 
         #region -- IScenariosService implementation --
 
-        public event EventHandler ScenariosChanged;
+        public event EventHandler AllScenariosChanged;
 
-        public List<ScenarioBindableModel> AllScenarios { get; private set; } = new();
-
-        public Task<AOResult> DownloadAllScenariosAsync()
+        public async Task<IEnumerable<ScenarioBindableModel>> GetAllScenariosAsync()
         {
-            return AOResult.ExecuteTaskAsync(async onFailure =>
+            await _scenariosTaskCompletionSource.Task;
+
+            return _allScenarios;
+        }
+
+        public async Task<AOResult> DownloadAllScenariosAsync()
+        {
+            var result = new AOResult();
+            result.SetFailure("Task is already running");
+
+            if (_scenariosTaskCompletionSource.Task.Status is not TaskStatus.RanToCompletion and not TaskStatus.WaitingForActivation and not TaskStatus.Canceled and not TaskStatus.Faulted)
+            {
+                return result;
+            }
+
+            _scenariosTaskCompletionSource = new();
+
+            System.Diagnostics.Debug.WriteLine($"{nameof(DownloadAllScenariosAsync)} STARTED");
+
+            result = await AOResult.ExecuteTaskAsync(async onFailure =>
             {
                 var resultOfGettingScenarios = await GetScenariosAsync();
 
@@ -61,15 +82,26 @@ namespace SmartMirror.Services.Scenarios
 
                     await GetSettingsScenariosAsync(bindableModels);
 
-                    AllScenarios = new(bindableModels);
-
-                    ScenariosChanged?.Invoke(this, EventArgs.Empty);
+                    _allScenarios = new(bindableModels);
                 }
                 else
                 {
                     onFailure("Request failed");
                 }
             });
+
+            if (!result.IsSuccess)
+            {
+                _allScenarios = new();
+            }
+
+            AllScenariosChanged?.Invoke(this, EventArgs.Empty);
+
+            System.Diagnostics.Debug.WriteLine($"{nameof(DownloadAllScenariosAsync)} FINISHED");
+
+            _scenariosTaskCompletionSource.TrySetResult(null);
+
+            return result;
         }
 
         public Task<AOResult<IEnumerable<ScenarioModel>>> GetScenariosAsync()
@@ -122,6 +154,15 @@ namespace SmartMirror.Services.Scenarios
                     foreach (var action in scenario.Actions)
                     {
                         action.Device = _devicesService.AllDevices.FirstOrDefault(x => x.DeviceId == action.SubjectId);
+
+                        if (action.Device is null)
+                        {
+                            action.Device = new DeviceBindableModel()
+                            {
+                                Name = Strings.UniversalActionStep,
+                                IconSource = "pic_gears",
+                            };
+                        }
                     }
                 }
                 else
@@ -178,11 +219,11 @@ namespace SmartMirror.Services.Scenarios
                 {
                     var bindableScenarioId = bindableScenario.Id;
 
-                    var scenario = AllScenarios.FirstOrDefault(row => row.Id == bindableScenarioId);
+                    var scenario = _allScenarios.FirstOrDefault(row => row.Id == bindableScenarioId);
 
                     scenario = bindableScenario;
 
-                    ScenariosChanged?.Invoke(this, EventArgs.Empty);
+                    AllScenariosChanged?.Invoke(this, EventArgs.Empty);
                 }
             });
         }
@@ -213,7 +254,7 @@ namespace SmartMirror.Services.Scenarios
         {
             if (e.EventType is Constants.Aqara.EventTypes.scene_created or Constants.Aqara.EventTypes.scene_deleted)
             {
-                ScenariosChanged?.Invoke(this, EventArgs.Empty);
+                AllScenariosChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 

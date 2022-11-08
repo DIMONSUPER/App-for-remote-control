@@ -27,7 +27,7 @@
 
                     <controls:SkeletonView WidthRequest="390"
                                            HeightRequest="53"
-                                           Background="{x:DynamicResource WhiteGradientBrush}"
+                                           Style="{DynamicResource WhiteGradientStyle_i1}"
                                            StrokeShape="RoundRectangle 9"
                                            StrokeThickness="0"/>
 
@@ -62,7 +62,7 @@
                     <DataTemplate>
 
                         <controls:SkeletonView HeightRequest="74"
-                                               Background="{x:DynamicResource WhiteGradientBrush}"
+                                               Style="{DynamicResource WhiteGradientStyle_i1}"
                                                StrokeShape="RoundRectangle 9"
                                                StrokeThickness="0"/>
 
@@ -91,7 +91,7 @@
                     <DataTemplate>
 
                         <controls:SkeletonView HeightRequest="74"
-                                               Background="{x:DynamicResource WhiteGradientBrush}"
+                                               Style="{DynamicResource WhiteGradientStyle_i1}"
                                                StrokeShape="RoundRectangle 9"
                                                StrokeThickness="0"/>
 

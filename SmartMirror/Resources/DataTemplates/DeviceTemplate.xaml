@@ -236,7 +236,7 @@
                 <controls:CustomSwitch InputTransparent="True"
                                        VerticalOptions="Start"
                                        HorizontalOptions="End"
-                                       Margin="12,6,3,0">
+                                       Margin="12,3,3,0">
 
                     <controls:CustomSwitch.Triggers>
 
