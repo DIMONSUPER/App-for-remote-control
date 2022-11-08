@@ -3,7 +3,6 @@ using SmartMirror.Helpers;
 using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Google;
-using SmartMirror.Views;
 using SmartMirror.Views.Dialogs;
 using System.Windows.Input;
 
@@ -117,7 +116,7 @@ namespace SmartMirror.ViewModels
                 if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result) && result)
                 {
                     await NavigationService.CreateBuilder()
-                        .AddSegment<MainTabbedPage>()
+                        .AddSegment<MainTabbedPageViewModel>()
                         .NavigateAsync();
                 }
             }

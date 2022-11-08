@@ -1,6 +1,7 @@
 ﻿using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Services.Blur;
+using SmartMirror.Services.Google;
 using SmartMirror.Views.Dialogs;
 using System.Windows.Input;
 
@@ -9,13 +10,16 @@ namespace SmartMirror.ViewModels.Dialogs
     public class AddMoreProviderDialogViewModel : BaseDialogViewModel
     {
         private readonly IDialogService _dialogService;
+        private readonly IGoogleService _googleService;
 
         public AddMoreProviderDialogViewModel(
             IDialogService dialogService,
+            IGoogleService googleService,
             IBlurService blurService)
             : base(blurService)
         {
             _dialogService = dialogService;
+            _googleService = googleService;
         }
 
         #region -- Public properties --
@@ -73,9 +77,18 @@ namespace SmartMirror.ViewModels.Dialogs
             return DisplayNotImplementedDialogAsync();
         }
 
-        private Task OnLoginWithGoogleCommandAsync()
+        private async Task OnLoginWithGoogleCommandAsync()
         {
-            return DisplayNotImplementedDialogAsync();
+            var result = await _googleService.AutorizeAsync();
+
+            if (result.IsSuccess)
+            {
+                //TODO: implement when have nest devices
+            }
+            else
+            {
+                //TODO: implement if needed
+            }
         }
 
         private Task OnFinishCommandAsync()
