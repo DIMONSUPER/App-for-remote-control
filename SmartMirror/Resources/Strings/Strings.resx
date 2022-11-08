@@ -303,4 +303,7 @@
     <data name="Fahrenheit" xml:space="preserve">
         <value>Fahrenheit</value>
     </data>
+    <data name="UniversalActionStep" xml:space="preserve">
+        <value>Universal action step</value>
+    </data>
 </root>
