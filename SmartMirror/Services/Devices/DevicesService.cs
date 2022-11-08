@@ -17,6 +17,9 @@ namespace SmartMirror.Services.Devices
     {
         private readonly Dictionary<string, IEnumerable<AttributeAqaraDTO>> _devicesAttributes = new();
         private readonly Dictionary<string, DeviceBindableModel> _cachedDevices = new();
+        private TaskCompletionSource<object> _devicesTaskCompletionSource = new();
+        //Can contain repeatable device ids
+        private List<DeviceBindableModel> _allSupportedDevices = new();
 
         private readonly IMapperService _mapperService;
         private readonly IRepositoryService _repositoryService;
@@ -45,14 +48,30 @@ namespace SmartMirror.Services.Devices
         //Can't contain repeatable device ids
         public List<DeviceBindableModel> AllDevices { get; private set; } = new();
 
-        //Can contain repeatable device ids
-        public List<DeviceBindableModel> AllSupportedDevices { get; private set; } = new();
-
         public event EventHandler AllDevicesChanged;
 
-        public Task<AOResult> DownloadAllDevicesWithSubInfoAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
+        public async Task<IEnumerable<DeviceBindableModel>> GetAllSupportedDevicesAsync()
         {
-            return AOResult.ExecuteTaskAsync(async onFailure =>
+            await _devicesTaskCompletionSource.Task;
+
+            return _allSupportedDevices;
+        }
+
+        public async Task<AOResult> DownloadAllDevicesWithSubInfoAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
+        {
+            var result = new AOResult();
+            result.SetFailure("Task is already running");
+
+            if (_devicesTaskCompletionSource.Task.Status is not TaskStatus.RanToCompletion and not TaskStatus.WaitingForActivation and not TaskStatus.Canceled and not TaskStatus.Faulted)
+            {
+                return result;
+            }
+
+            _devicesTaskCompletionSource = new();
+
+            System.Diagnostics.Debug.WriteLine($"{nameof(DownloadAllDevicesWithSubInfoAsync)} STARTED");
+
+            result = await AOResult.ExecuteTaskAsync(async onFailure =>
             {
                 var resultOfGettingDevices = await GetDevicesAsync();
 
@@ -77,20 +96,33 @@ namespace SmartMirror.Services.Devices
                         result = result.Concat(devices);
                     }
 
-                    AllDevices = new(_cachedDevices.Select(x => x.Value));
-                    AllSupportedDevices = new(result);
-
-                    var dbModels = _mapperService.MapRange<DeviceDTO>(AllSupportedDevices);
+                    var dbModels = _mapperService.MapRange<DeviceDTO>(result);
 
                     await _repositoryService.SaveOrUpdateRangeAsync(dbModels);
 
-                    AllDevicesChanged?.Invoke(this, EventArgs.Empty);
+                    AllDevices = new(_cachedDevices.Select(x => x.Value));
+
+                    _allSupportedDevices = new(result);
                 }
                 else
                 {
                     onFailure("Request failed");
                 }
             });
+
+            if (!result.IsSuccess)
+            {
+                AllDevices = new();
+                _allSupportedDevices = new();
+            }
+
+            AllDevicesChanged?.Invoke(this, EventArgs.Empty);
+
+            System.Diagnostics.Debug.WriteLine($"{nameof(DownloadAllDevicesWithSubInfoAsync)} FINISHED");
+
+            _devicesTaskCompletionSource.TrySetResult(null);
+
+            return result;
         }
 
         public Task<AOResult<DataAqaraResponse<DeviceAqaraModel>>> GetDevicesAsync(string positionId = null, int pageNum = 1, int pageSize = 100, params string[] deviceIds)
@@ -127,7 +159,7 @@ namespace SmartMirror.Services.Devices
                 {
                     var bindableDeviceId = bindableDevice.Id;
 
-                    var device = AllSupportedDevices.FirstOrDefault(row => row.Id == bindableDeviceId);
+                    var device = _allSupportedDevices.FirstOrDefault(row => row.Id == bindableDeviceId);
 
                     device = bindableDevice;
 
@@ -529,7 +561,7 @@ namespace SmartMirror.Services.Devices
 
         private void OnSubdeviceUnbind(AqaraMessageEventArgs aqaraMessage)
         {
-            AllSupportedDevices.RemoveAll(x => x.DeviceId == aqaraMessage.DeviceId);
+            _allSupportedDevices.RemoveAll(x => x.DeviceId == aqaraMessage.DeviceId);
             AllDevices.RemoveAll(x => x.DeviceId == aqaraMessage.DeviceId);
 
             AllDevicesChanged?.Invoke(this, EventArgs.Empty);
@@ -544,7 +576,7 @@ namespace SmartMirror.Services.Devices
 
         private void OnSubdeviceOffline(AqaraMessageEventArgs aqaraMessage)
         {
-            var devices = AllSupportedDevices.Where(x => x.DeviceId == aqaraMessage.DeviceId);
+            var devices = _allSupportedDevices.Where(x => x.DeviceId == aqaraMessage.DeviceId);
 
             if (devices.Any())
             {
@@ -564,7 +596,7 @@ namespace SmartMirror.Services.Devices
 
         private void OnSubdeviceOnline(AqaraMessageEventArgs aqaraMessage)
         {
-            var devices = AllSupportedDevices.Where(x => x.DeviceId == aqaraMessage.DeviceId);
+            var devices = _allSupportedDevices.Where(x => x.DeviceId == aqaraMessage.DeviceId);
 
             if (devices.Any())
             {
@@ -584,7 +616,7 @@ namespace SmartMirror.Services.Devices
 
         private async void OnGatewayBind(AqaraMessageEventArgs aqaraMessage)
         {
-            var gateway = AllSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId)
+            var gateway = _allSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId)
                 ?? AllDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
 
             if (gateway is null)
@@ -597,13 +629,13 @@ namespace SmartMirror.Services.Devices
 
         private void OnGatewayUnbind(AqaraMessageEventArgs aqaraMessage)
         {
-            var gateway = AllSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId)
+            var gateway = _allSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId)
                 ?? AllDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
 
             if (gateway is not null)
             {
-                AllSupportedDevices.Remove(gateway);
-                AllSupportedDevices.RemoveAll(x => x.ParentDid == gateway.DeviceId);
+                _allSupportedDevices.Remove(gateway);
+                _allSupportedDevices.RemoveAll(x => x.ParentDid == gateway.DeviceId);
 
                 AllDevices.Remove(gateway);
                 AllDevices.RemoveAll(x => x.ParentDid == gateway.DeviceId);
@@ -614,13 +646,13 @@ namespace SmartMirror.Services.Devices
 
         private async void OnGatewayOnline(AqaraMessageEventArgs aqaraMessage)
         {
-            var gateway = AllSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
+            var gateway = _allSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
 
             if (gateway is not null)
             {
                 gateway.State = 1;
 
-                var subDevices = AllSupportedDevices.Where(x => x.ParentDid == gateway.DeviceId);
+                var subDevices = _allSupportedDevices.Where(x => x.ParentDid == gateway.DeviceId);
                 var updatedSubdevicesRespose = await GetSubdevicesForDeviceAsync(gateway.DeviceId);
 
                 if (updatedSubdevicesRespose.IsSuccess)
@@ -663,13 +695,13 @@ namespace SmartMirror.Services.Devices
 
         private void OnGatewayOffline(AqaraMessageEventArgs aqaraMessage)
         {
-            var gateway = AllSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
+            var gateway = _allSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
 
             if (gateway is not null)
             {
                 gateway.State = 0;
 
-                foreach (var device in AllSupportedDevices)
+                foreach (var device in _allSupportedDevices)
                 {
                     if (device.ParentDid == gateway.DeviceId)
                     {
@@ -681,11 +713,11 @@ namespace SmartMirror.Services.Devices
 
         private void OnDeviceNameChanged(AqaraMessageEventArgs aqaraMessage)
         {
-            if (AllSupportedDevices.Any(x => x.DeviceId == aqaraMessage.DeviceId))
+            if (_allSupportedDevices.Any(x => x.DeviceId == aqaraMessage.DeviceId))
             {
                 if (!string.IsNullOrWhiteSpace(aqaraMessage.ResourceId))
                 {
-                    var deviceAttribute = AllSupportedDevices.FirstOrDefault(x => x.EditableResourceId == aqaraMessage.ResourceId);
+                    var deviceAttribute = _allSupportedDevices.FirstOrDefault(x => x.EditableResourceId == aqaraMessage.ResourceId);
 
                     if (deviceAttribute is not null)
                     {
@@ -694,7 +726,7 @@ namespace SmartMirror.Services.Devices
                 }
                 else
                 {
-                    var device = AllSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
+                    var device = _allSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
 
                     if (device is not null)
                     {
@@ -712,7 +744,7 @@ namespace SmartMirror.Services.Devices
 
         private void OnReousrceReported(AqaraMessageEventArgs aqaraMessage)
         {
-            var device = AllSupportedDevices.Where(x => x.DeviceId == aqaraMessage.DeviceId).FirstOrDefault(x => x.EditableResourceId == aqaraMessage.ResourceId);
+            var device = _allSupportedDevices.Where(x => x.DeviceId == aqaraMessage.DeviceId).FirstOrDefault(x => x.EditableResourceId == aqaraMessage.ResourceId);
 
             if (device is not null)
             {
@@ -727,7 +759,7 @@ namespace SmartMirror.Services.Devices
 
         private void OnResourceAliasChanged(AqaraMessageEventArgs aqaraMessage)
         {
-            var device = AllSupportedDevices.Where(x => x.DeviceId == aqaraMessage.DeviceId).FirstOrDefault(x => x.EditableResourceId == aqaraMessage.ResourceId);
+            var device = _allSupportedDevices.Where(x => x.DeviceId == aqaraMessage.DeviceId).FirstOrDefault(x => x.EditableResourceId == aqaraMessage.ResourceId);
 
             if (device is not null)
             {

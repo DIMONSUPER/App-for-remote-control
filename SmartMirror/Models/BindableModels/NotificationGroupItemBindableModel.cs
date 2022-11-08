@@ -11,18 +11,18 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _id, value);
         }
 
-        private string _name;
-        public string Name
+        private DeviceBindableModel _device;
+        public DeviceBindableModel Device
         {
-            get => _name;
-            set => SetProperty(ref _name, value);
+            get => _device;
+            set => SetProperty(ref _device, value);
         }
 
-        private string _type;
-        public string Type
+        private bool _isShown;
+        public bool IsShown
         {
-            get => _type;
-            set => SetProperty(ref _type, value);
+            get => _isShown;
+            set => SetProperty(ref _isShown, value);
         }
 
         private string _status;
@@ -30,6 +30,13 @@ namespace SmartMirror.Models.BindableModels
         {
             get => _status;
             set => SetProperty(ref _status, value);
+        }
+
+        private string _statusFormatted;
+        public string StatusFormatted
+        {
+            get => _statusFormatted;
+            set => SetProperty(ref _statusFormatted, value);
         }
 
         private DateTime _lastActivityTime;

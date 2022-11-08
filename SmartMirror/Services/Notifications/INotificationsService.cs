@@ -1,10 +1,13 @@
 ﻿using SmartMirror.Helpers;
 using SmartMirror.Models;
+using SmartMirror.Models.BindableModels;
 
 namespace SmartMirror.Services.Notifications
 {
     public interface INotificationsService
     {
-        Task<AOResult<IEnumerable<NotificationModel>>> GetNotificationsAsync();
+        event EventHandler<NotificationGroupItemBindableModel> NotificationReceived;
+
+        Task<AOResult<IEnumerable<NotificationGroupItemBindableModel>>> GetNotificationsForDeviceAsync(string deviceId, params string[] resourceIds);
     }
 }

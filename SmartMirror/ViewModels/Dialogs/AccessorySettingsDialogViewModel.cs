@@ -11,6 +11,7 @@ namespace SmartMirror.ViewModels.Dialogs
     public class AccessorySettingsDialogViewModel : BaseDialogViewModel
     {
         private readonly IDevicesService _devicesService;
+        private bool _isInitializing;
 
         public AccessorySettingsDialogViewModel(
             IDevicesService devicesService,
@@ -76,8 +77,12 @@ namespace SmartMirror.ViewModels.Dialogs
 
         public override void OnDialogOpened(IDialogParameters parameters)
         {
+            base.OnDialogOpened(parameters);
+
             if (parameters.TryGetValue(Constants.DialogsParameterKeys.ACCESSORY, out ImageAndTitleBindableModel accessory))
             {
+                _isInitializing = true;
+
                 Title = accessory.Name;
                 ImageSource = accessory.ImageSource;
 
@@ -86,6 +91,8 @@ namespace SmartMirror.ViewModels.Dialogs
                 IsFavorite = Accessory.IsFavorite;
                 IsShownInRooms = Accessory.IsShownInRooms;
                 IsReceiveNotifications = Accessory.IsReceiveNotifications;
+
+                _isInitializing = false;
             }
         }
 
@@ -93,11 +100,13 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             base.OnPropertyChanged(args);
 
-            if (args.PropertyName is nameof(IsFavorite) or nameof(IsShownInRooms) or nameof(IsReceiveNotifications))
+            if (!_isInitializing && args.PropertyName is nameof(IsFavorite) or nameof(IsShownInRooms) or nameof(IsReceiveNotifications))
             {
-                Accessory.IsFavorite = _isFavorite;
-                Accessory.IsShownInRooms = _isShownInRooms;
-                Accessory.IsReceiveNotifications = _isReceiveNotifications;
+                Accessory.IsFavorite = args.PropertyName is nameof(IsFavorite) ? _isFavorite : Accessory.IsFavorite;
+
+                Accessory.IsShownInRooms = args.PropertyName is nameof(IsShownInRooms) ? _isShownInRooms : Accessory.IsShownInRooms;
+
+                Accessory.IsReceiveNotifications = args.PropertyName is nameof(IsReceiveNotifications) ? _isReceiveNotifications : Accessory.IsReceiveNotifications;
 
                 await _devicesService.UpdateDeviceAsync(Accessory);
             }

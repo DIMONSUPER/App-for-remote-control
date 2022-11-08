@@ -3,12 +3,13 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:app="clr-namespace:SmartMirror"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:bindablemodels="clr-namespace:SmartMirror.Models.BindableModels"
     x:DataType="bindablemodels:ScenarioActionBindableModel"
     x:Class="SmartMirror.Resources.DataTemplates.ScenarioTemplate">
-    
+        
     <Grid>
-
+        
         <Border 
             Padding="24"
             Margin="0, 0, 0, 18"
@@ -20,6 +21,7 @@
 
                 <!-- ICON -->
                 <Border
+                    VerticalOptions="Start"
                     StrokeThickness="0"
                     StrokeShape="RoundRectangle 12"
                     BackgroundColor="{DynamicResource cbg_i1}">
@@ -32,22 +34,33 @@
 
                 </Border>
 
-                <Label
-                    Style="{DynamicResource tstyle_i11}"
-                    Margin="24, 0"
-                    VerticalOptions="Center"
-                    MaximumWidthRequest="200"
-                    MaxLines="1"
-                    LineBreakMode="TailTruncation"
-                    Text="{Binding Device.Name}"/>
+                <StackLayout Margin="24, 0">
+                    
+                    <controls:CustomLabel
+                        Style="{DynamicResource tstyle_i11}"
+                        VerticalOptions="Center"
+                        MaximumWidthRequest="200"
+                        MaxLines="2"
+                        LineBreakMode="TailTruncation"
+                        Text="{Binding Device.Name}"/>
 
-                <Label
+                    <controls:CustomLabel
+                        Style="{DynamicResource tstyle_i3}"
+                        VerticalOptions="Center"
+                        MaximumWidthRequest="200"
+                        MaxLines="2"
+                        LineBreakMode="TailTruncation"
+                        Text="{Binding Device.RoomName}"/>
+                    
+                </StackLayout>
+
+                <controls:CustomLabel
                     Style="{DynamicResource tstyle_i8}"
                     HorizontalOptions="EndAndExpand"
-                    VerticalOptions="CenterAndExpand"
+                    VerticalOptions="Start"
                     MaximumWidthRequest="225"
                     MaxLines="2"
-                    LineHeight="1.3"
+                    LineBreakMode="TailTruncation"
                     HorizontalTextAlignment="End"
                     Text="{Binding ActionName}"/>
 

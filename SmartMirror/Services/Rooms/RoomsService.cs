@@ -16,6 +16,9 @@ namespace SmartMirror.Services.Rooms
         private readonly IMapperService _mapperService;
         private readonly IAqaraMessanger _aqaraMessanger;
 
+        private TaskCompletionSource<object> _roomsTaskCompletionSource = new();
+        private List<RoomBindableModel> _allRooms = new();
+
         public RoomsService(
             IAqaraService aqaraService,
             IDevicesService devicesService,
@@ -34,13 +37,30 @@ namespace SmartMirror.Services.Rooms
 
         #region -- IRoomsService implementation --
 
-        public List<RoomBindableModel> AllRooms { get; private set; } = new();
-
         public event EventHandler AllRoomsChanged;
 
-        public Task<AOResult> DownloadAllRoomsAsync()
+        public async Task<IEnumerable<RoomBindableModel>> GetAllRoomsAsync()
         {
-            return AOResult.ExecuteTaskAsync(async onFailure =>
+            await _roomsTaskCompletionSource.Task;
+
+            return _allRooms;
+        }
+
+        public async Task<AOResult> DownloadAllRoomsAsync()
+        {
+            var result = new AOResult();
+            result.SetFailure("Task is already running");
+
+            if (_roomsTaskCompletionSource.Task.Status is not TaskStatus.RanToCompletion and not TaskStatus.WaitingForActivation and not TaskStatus.Canceled and not TaskStatus.Faulted)
+            {
+                return result;
+            }
+
+            _roomsTaskCompletionSource = new();
+
+            System.Diagnostics.Debug.WriteLine($"{nameof(DownloadAllRoomsAsync)} STARTED");
+
+            result = await AOResult.ExecuteTaskAsync(async onFailure =>
             {
                 var rooms = Enumerable.Empty<RoomBindableModel>();
 
@@ -49,14 +69,26 @@ namespace SmartMirror.Services.Rooms
                 if (resultOfGettingRoomsAqara.IsSuccess)
                 {
                     rooms = resultOfGettingRoomsAqara.Result;
+                    _allRooms = new(rooms);
                 }
                 else
                 {
                     onFailure($"Can't download all rooms: {resultOfGettingRoomsAqara.Message}");
                 }
-
-                AllRooms = new(rooms);
             });
+
+            if (!result.IsSuccess)
+            {
+                _allRooms = new();
+            }
+
+            AllRoomsChanged?.Invoke(this, EventArgs.Empty);
+
+            System.Diagnostics.Debug.WriteLine($"{nameof(DownloadAllRoomsAsync)} FINISHED");
+
+            _roomsTaskCompletionSource.TrySetResult(null);
+
+            return result;
         }
 
         #endregion
@@ -109,10 +141,11 @@ namespace SmartMirror.Services.Rooms
                 if (resultOfGettingRoomsHouse.IsSuccess)
                 {
                     var simpleRooms = resultOfGettingRoomsHouse.Result.Data;
+                    var devices = await _devicesService.GetAllSupportedDevicesAsync();
 
                     foreach (var room in simpleRooms)
                     {
-                        var roomDevices = _devicesService.AllSupportedDevices.Where(x => x.PositionId == room.PositionId && x.IsShownInRooms);
+                        var roomDevices = devices.Where(x => x.PositionId == room.PositionId && x.IsShownInRooms);
                         var count = roomDevices.Count();
 
                         foreach (var device in roomDevices)
@@ -138,11 +171,13 @@ namespace SmartMirror.Services.Rooms
             });
         }
 
-        private void OnAllDevicesChanged(object sender, EventArgs e)
+        private async void OnAllDevicesChanged(object sender, EventArgs e)
         {
-            foreach (var room in AllRooms)
+            var devices = await _devicesService.GetAllSupportedDevicesAsync();
+
+            foreach (var room in _allRooms)
             {
-                var count = _devicesService.AllSupportedDevices.Count(x => x.PositionId == room.Id && x.IsShownInRooms);
+                var count = devices.Count(x => x.PositionId == room.Id && x.IsShownInRooms);
                 room.DevicesCount = count;
             }
         }
@@ -161,15 +196,16 @@ namespace SmartMirror.Services.Rooms
 
         private async void OnDevPositionAssigned(AqaraMessageEventArgs aqaraMessage)
         {
-            var device = _devicesService.AllSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId && x.IsShownInRooms);
-            var newRoom = AllRooms.FirstOrDefault(x => x.Id == aqaraMessage.Value);
-            var oldRoom = AllRooms.FirstOrDefault(x => x.Id == device.PositionId);
+            var devices = await _devicesService.GetAllSupportedDevicesAsync();
+            var device = devices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId && x.IsShownInRooms);
+            var newRoom = _allRooms.FirstOrDefault(x => x.Id == aqaraMessage.Value);
+            var oldRoom = _allRooms.FirstOrDefault(x => x.Id == device.PositionId);
 
             if (newRoom is null)
             {
                 await DownloadAllRoomsAsync();
 
-                newRoom = AllRooms.FirstOrDefault(x => x.Id == aqaraMessage.Value);
+                newRoom = _allRooms.FirstOrDefault(x => x.Id == aqaraMessage.Value);
             }
 
             oldRoom.DevicesCount--;

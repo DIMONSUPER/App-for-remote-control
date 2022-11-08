@@ -270,9 +270,6 @@
     <data name="Confirm" xml:space="preserve">
         <value>Confirm</value>
     </data>
-    <data name="AreYouSure" xml:space="preserve">
-        <value>Are you sure?</value>
-    </data>
     <data name="TheCameraWillBeRemoved" xml:space="preserve">
         <value>The camera will be removed</value>
     </data>
@@ -308,5 +305,20 @@
     </data>
     <data name="HaveAnotherProvider" xml:space="preserve">
         <value>Have another provider?</value>
+    </data>
+    <data name="ChangedTo" xml:space="preserve">
+        <value>Changed to</value>
+    </data>
+    <data name="TurnedOn" xml:space="preserve">
+        <value>Turned on</value>
+    </data>
+    <data name="TurnedOff" xml:space="preserve">
+        <value>Turned off</value>
+    </data>
+    <data name="Movement" xml:space="preserve">
+        <value>Movement</value>
+    </data>
+    <data name="UniversalActionStep" xml:space="preserve">
+        <value>Universal action step</value>
     </data>
 </root>

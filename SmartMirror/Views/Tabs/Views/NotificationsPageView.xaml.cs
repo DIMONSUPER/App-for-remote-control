@@ -8,12 +8,12 @@ public partial class NotificationsPageView : BaseContentView
 	{
 		InitializeComponent();
 
-        refreshView.PropertyChanged += OnRefreshViewPropertyChanged;
+        //refreshView.PropertyChanged += OnRefreshViewPropertyChanged;
     }
 
     #region -- Private helpers --
 
-    private void OnRefreshViewPropertyChanged(object sender, PropertyChangedEventArgs e)
+    /*private void OnRefreshViewPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(refreshView.Height))
         {
@@ -21,7 +21,7 @@ public partial class NotificationsPageView : BaseContentView
 
             scrollViewNotifications.LayoutTo(new Rect(0, 0, (int)refreshView.Width, (int)refreshView.Height), 100);
         }
-    }
+    }*/
 
     #endregion
 }
