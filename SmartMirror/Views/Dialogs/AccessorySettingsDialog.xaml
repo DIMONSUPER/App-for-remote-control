@@ -68,14 +68,12 @@
                             </DataTrigger>
                         </Border.Triggers>
 
-                        <Grid
-                            ColumnDefinitions="*, *"
-                            Margin="1, 0">
+                        <Grid ColumnDefinitions="*, *">
 
                             <Button
                                 Grid.Column="0"
                                 Style="{DynamicResource ButtonStyle_i1}"
-                                Margin="0, 1"
+                                Padding="0"
                                 Text="{extensions:Translate Fahrenheit}"
                                 Command="{Binding ChangeUnitMeasureCommand}"
                                 CommandParameter="{x:Static enums:EUnitMeasure.Fahrenheit}">
@@ -84,6 +82,7 @@
                                     <DataTrigger Binding="{Binding Accessory.UnitMeasure}" Value="{x:Static enums:EUnitMeasure.Celsius}" TargetType="Button">
                                         <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i2}"/>
                                         <Setter Property="TextColor" Value="{DynamicResource tcolor_i1}"/>
+                                        <Setter Property="Margin" Value="1"/>
                                     </DataTrigger>
                                 </Button.Triggers>
                                 
@@ -92,7 +91,7 @@
                             <Button
                                 Grid.Column="1"
                                 Style="{DynamicResource ButtonStyle_i1}"
-                                Margin="0, 1"
+                                Padding="0"
                                 Text="{extensions:Translate Celsius}"
                                 Command="{Binding ChangeUnitMeasureCommand}"
                                 CommandParameter="{x:Static enums:EUnitMeasure.Celsius}">
@@ -101,6 +100,7 @@
                                     <DataTrigger Binding="{Binding Accessory.UnitMeasure}" Value="{x:Static enums:EUnitMeasure.Fahrenheit}" TargetType="Button">
                                         <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i2}"/>
                                         <Setter Property="TextColor" Value="{DynamicResource tcolor_i1}"/>
+                                        <Setter Property="Margin" Value="1"/>
                                     </DataTrigger>
                                 </Button.Triggers>
                                 
