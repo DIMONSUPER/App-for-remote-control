@@ -208,7 +208,7 @@ public class DeviceBindableModel : BindableBase
         var result = State == 0 ? EDeviceStatus.Disconnected : EDeviceStatus.Connected;
 
         //Temporally mock
-        result = DeviceType is EDeviceType.DoorbellStream or EDeviceType.DoorbellNoStream
+        result = (DeviceType is EDeviceType.DoorbellStream or EDeviceType.DoorbellNoStream)
             ? EDeviceStatus.Connected
             : result;
 
