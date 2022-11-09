@@ -46,6 +46,11 @@ namespace SmartMirror.Handlers
             handler.PlatformView?.StopRequested();
         }
 
+        public static void MapUpdateVolumeRequested(VideoHandler handler, Video video, object args)
+        {
+            handler.PlatformView?.UpdatePlayerVolume();
+        }
+
         #endregion
     }
 }
