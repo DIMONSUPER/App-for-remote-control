@@ -286,6 +286,7 @@ namespace SmartMirror.Services.Devices
                     DeviceType = EDeviceType.DoorbellNoStream,
                     IconSource = "pic_bell",
                     RoomName = "Main room",
+                    State = 1,
                     IsShownInRooms = true,
                     IsFavorite = true,
                 };
@@ -299,9 +300,12 @@ namespace SmartMirror.Services.Devices
                     DeviceType = EDeviceType.DoorbellStream,
                     IconSource = "pic_bell",
                     RoomName = "Main room",
+                    State = 1,
                     IsShownInRooms = true,
                     IsFavorite = true,
                 };
+
+                doorbellNoStream.Status = EDeviceStatus.On;
 
                 var firstItems = new[] { doorbellNoStream, doorbellStream };
 

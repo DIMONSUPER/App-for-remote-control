@@ -200,6 +200,17 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             device.IsExecuting = false;
         }
+        else if (device.DeviceType == EDeviceType.DoorbellStream)
+        {
+            await _dialogService.ShowDialogAsync(nameof(DoorBellDialog));
+        }
+        else if (device.DeviceType == EDeviceType.DoorbellNoStream)
+        {
+            device.Status = device.Status == EDeviceStatus.On ? EDeviceStatus.Off : EDeviceStatus.On;
+            device.State = device.Status == EDeviceStatus.On ? 1 : 0;
+
+            await _devicesService.UpdateDeviceAsync(device);
+        }
     }
 
     private Task OnRoomTappedCommandAsync(RoomBindableModel room)
