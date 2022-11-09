@@ -1,15 +1,24 @@
 ﻿using SmartMirror.Helpers;
+using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Blur;
+using SmartMirror.Services.Cameras;
+using System.ComponentModel;
 using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
     public class CameraSettingsDialogViewModel : BaseDialogViewModel
     {
-        public CameraSettingsDialogViewModel(IBlurService blurService)
+        private readonly ICamerasService _camerasService;
+        private bool _isInitializing = true;
+
+        public CameraSettingsDialogViewModel(
+            IBlurService blurService,
+            ICamerasService camerasService)
             : base(blurService)
         {
+            _camerasService = camerasService;
         }
 
         #region -- Public properties --
@@ -19,6 +28,20 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             get => _title;
             set => SetProperty(ref _title, value);
+        }
+
+        private bool _isShownInCameras;
+        public bool IsShownInCameras
+        {
+            get => _isShownInCameras;
+            set => SetProperty(ref _isShownInCameras, value);
+        }
+
+        private CameraModel _cameraBindableModel;
+        public CameraModel CameraModel
+        {
+            get => _cameraBindableModel;
+            set => SetProperty(ref _cameraBindableModel, value);
         }
 
         private ICommand _closeCommand;
@@ -36,6 +59,25 @@ namespace SmartMirror.ViewModels.Dialogs
             if (parameters.TryGetValue(Constants.DialogsParameterKeys.CAMERA, out ImageAndTitleBindableModel camera))
             {
                 Title = camera.Name;
+
+                if (camera.Model is CameraModel cameraModel)
+                {
+                    CameraModel = cameraModel;
+                    IsShownInCameras = CameraModel.IsShown;
+                }
+            }
+
+            _isInitializing = false;
+        }
+
+        protected override async void OnPropertyChanged(PropertyChangedEventArgs args)
+        {
+            base.OnPropertyChanged(args);
+
+            if (!_isInitializing && args.PropertyName is nameof(IsShownInCameras))
+            {
+                CameraModel.IsShown = IsShownInCameras;
+                await _camerasService.UpdateCameraAsync(CameraModel);
             }
         }
 

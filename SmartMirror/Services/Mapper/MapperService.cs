@@ -72,6 +72,7 @@ namespace SmartMirror.Services.Mapper
 
                 cfg.CreateMap<RoomModel, RoomBindableModel>().ReverseMap();
                 cfg.CreateMap<CameraModel, CameraBindableModel>().ReverseMap();
+                cfg.CreateMap<CameraModel, CameraDTO>().ReverseMap();
                 cfg.CreateMap<ScenarioActionModel, ScenarioActionBindableModel>().ReverseMap();
                 cfg.CreateMap<DeviceModel, DeviceBindableModel>().ReverseMap();
                 cfg.CreateMap<FanDevice, DeviceBindableModel>().ReverseMap();

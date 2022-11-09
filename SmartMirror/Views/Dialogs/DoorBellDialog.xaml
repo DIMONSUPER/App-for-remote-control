@@ -30,6 +30,7 @@
                    CornerRadius="9"
                    BorderColor="{DynamicResource cbg_i4}"
                    HeightRequest="499"
+                   IsClippedToBounds="True"
                    BackgroundColor="Transparent">
 
                 <controls:CustomStateView State="{Binding DataState}"
