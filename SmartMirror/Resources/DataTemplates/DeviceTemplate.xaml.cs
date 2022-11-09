@@ -83,5 +83,16 @@ public partial class DeviceTemplate : Grid
         set => SetValue(DeviceStatusProperty, value);
     }
 
+    public static readonly BindableProperty NameFontStyleProperty = BindableProperty.Create(
+        propertyName: nameof(NameFontStyle),
+        returnType: typeof(Style),
+        declaringType: typeof(DeviceTemplate));
+
+    public Style NameFontStyle
+    {
+        get => (Style)GetValue(NameFontStyleProperty);
+        set => SetValue(NameFontStyleProperty, value);
+    }
+
     #endregion
 }

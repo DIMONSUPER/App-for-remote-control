@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Grid xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      xmlns:prismmaui="clr-namespace:Prism.Services.Xaml;assembly=Prism.Maui"
+      xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
+      xmlns:video="clr-namespace:SmartMirror.Controls"
+      xmlns:controls="clr-namespace:SmartMirror.Controls"
+      xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+      prismmaui:DialogLayout.UseMask="True"
+      prismmaui:DialogLayout.MaskStyle="{DynamicResource DialogMaskBoxViewStyle_i1}"
+      prismmaui:DialogLayout.CloseOnBackgroundTapped="True"
+      Unloaded="OnCamerasPageUnloaded"
+      x:Class="SmartMirror.Views.Dialogs.DoorBellDialog"
+      x:DataType="vm:DoorBellDialogViewModel">
+
+    <Border WidthRequest="929"
+            StrokeThickness="0.75"
+            StrokeShape="RoundRectangle 9"
+            Stroke="{DynamicResource tcolor_i1}"
+            BackgroundColor="{StaticResource cbg_i2}">
+
+        <StackLayout Margin="30,26,30,0">
+
+            <Label Text="{extensions:Translate Doorbell}"
+                    Style="{StaticResource tstyle_i11}"/>
+
+            <Frame Margin="0,26,0,0"
+                   Padding="1"
+                   HasShadow="False"
+                   CornerRadius="9"
+                   BorderColor="{DynamicResource cbg_i4}"
+                   HeightRequest="499"
+                   IsClippedToBounds="True"
+                   BackgroundColor="Transparent">
+
+                <controls:CustomStateView State="{Binding DataState}"
+                                          LoadingTitle="{extensions:Translate Doorbell}"
+                                          TryAgainCommand="{Binding TryAgainCommand}">
+
+                    <controls:CustomStateView.CompleteContent>
+
+                        <Frame Padding="0"
+                               HasShadow="False"
+                               IsClippedToBounds="True"
+                               CornerRadius="9">
+
+                            <video:Video IsOnTop="{Binding IsVideoOnTop}"
+                                         BackgroundColor="{DynamicResource cbg_i2}"
+                                         Action="{Binding VideoAction}"
+                                         Source="{Binding VideoSource, TargetNullValue={x:Null}}"
+                                         VideoPlaybackErrorCommand="{Binding VideoPaybackErrorCommand}"
+                                         PlayerVolume="{Binding Source={Reference soundSlider}, Path=Value}"
+                                         x:Name="video"/>
+
+                        </Frame>
+
+                    </controls:CustomStateView.CompleteContent>
+                    
+
+                </controls:CustomStateView>
+
+            </Frame>
+
+            <HorizontalStackLayout Margin="0,36,0,42"
+                                   Spacing="32"
+                                   HorizontalOptions="Center">
+
+                <Button Style="{DynamicResource ButtonStyle_i1}"
+                        BackgroundColor="{DynamicResource cbg_i18}"
+                        Text="{extensions:Translate End}"
+                        Command="{Binding OnEndCommand}"/>
+
+                <Button Style="{DynamicResource ButtonStyle_i1}"
+                        BackgroundColor="{DynamicResource cbg_i6}"
+                        Text="{extensions:Translate Talk}"
+                        Command="{Binding OnTalkCommand}"/>
+
+                <Frame HasShadow="False"
+                        Padding="0"
+                        WidthRequest="279"
+                        CornerRadius="35"
+                        BackgroundColor="{DynamicResource cbg_i3}">
+
+                    <Grid Margin="18,0"
+                            ColumnDefinitions="*, 40"
+                            ColumnSpacing="16">
+
+                        <Slider x:Name="soundSlider"
+                                Grid.Column="0"
+                                Maximum="100"
+                                Value="{Binding VideoPlayerVolume}"
+                                ThumbImageSource="sound_thumb"
+                                MinimumTrackColor="{StaticResource cbg_i10}"
+                                MaximumTrackColor="{StaticResource cbg_i10}">
+
+                            <Slider.Triggers>
+
+                                <DataTrigger TargetType="Slider"
+                                                Binding="{Binding VideoPlayerVolume}"
+                                                Value="0">
+
+                                    <Setter TargetName="soundImage"
+                                            Property="Image.Source"
+                                            Value="sound_mute"/>
+
+                                </DataTrigger>
+
+                            </Slider.Triggers>
+
+                        </Slider>
+
+                        <Image x:Name="soundImage"
+                                Grid.Column="1"
+                                Source="sound_up"/>
+
+                    </Grid>
+
+                </Frame>
+
+            </HorizontalStackLayout>
+
+        </StackLayout>
+
+    </Border>
+
+</Grid>
+

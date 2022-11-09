@@ -73,7 +73,9 @@
                 <Label
                     Text="{Binding Name}"
                     VerticalOptions="EndAndExpand"
-                    Style="{DynamicResource tstyle_i11}"/>
+                    LineBreakMode="TailTruncation"
+                    MaxLines="2"
+                    Style="{DynamicResource tstyle_i16}"/>
 
                 <Label
                     Text="{Binding ActivationTime, StringFormat={x:Static app:Constants+Formats.TIME_FORMAT_2}}"

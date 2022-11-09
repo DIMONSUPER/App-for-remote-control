@@ -18,6 +18,7 @@ namespace SmartMirror.Platforms.Android.Controls
         private VideoView _videoView;
         private Video _video;
         private RelativeLayout _relativeLayout;
+        private MediaPlayer _mediaPlayer;
 
         public MauiVideoPlayer(Context context, Video video) 
             : base(context)
@@ -82,7 +83,7 @@ namespace SmartMirror.Platforms.Android.Controls
         {
             if (_videoView is not null && !_videoView.IsPlaying && VideoLoadingState == EVideoLoadingState.Prepared)
             {
-                _videoView.Start(); 
+                _videoView.Start();
             }
         }
 
@@ -101,6 +102,12 @@ namespace SmartMirror.Platforms.Android.Controls
                 _videoView.StopPlayback();
                 _videoView.Resume();
             }
+        }
+
+        public void UpdatePlayerVolume()
+        {
+            var volume = (float)Math.Min(100, Math.Max(0, _video.PlayerVolume)) / 100;
+            _mediaPlayer.SetVolume(volume, volume);
         }
 
         #endregion
@@ -125,8 +132,9 @@ namespace SmartMirror.Platforms.Android.Controls
         {
             VideoLoadingState = EVideoLoadingState.Prepared;
 
-            if (_video is not null && _video.Action == EVideoAction.Play)
+            if (_video is not null && _video.Action == EVideoAction.Play && sender is MediaPlayer mediaPlayer)
             {
+                _mediaPlayer = mediaPlayer;
                 _videoView?.Start();
             }
         }
@@ -186,6 +194,8 @@ namespace SmartMirror.Platforms.Android.Controls
             _videoView?.SetVideoURI(null);
 
             _videoView?.SetBackgroundColor(_video.BackgroundColor.ToAndroid());
+
+            _videoView?.SetZOrderOnTop(_video.IsOnTop);
         }
 
         #endregion
