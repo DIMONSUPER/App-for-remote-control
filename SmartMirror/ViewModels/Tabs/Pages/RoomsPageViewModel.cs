@@ -216,13 +216,10 @@ public class RoomsPageViewModel : BaseTabViewModel
     {
         if (isDataLoaded && _displayDoorbellDialog)
         {
-            //TODO Delete when doorbell is implemented
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                await _dialogService.ShowDialogAsync(nameof(DoorBellDialog));
-            });
-
             _displayDoorbellDialog = false;
+
+            //TODO Delete when doorbell is implemented
+            MainThread.BeginInvokeOnMainThread(async () => await _dialogService.ShowDialogAsync(nameof(DoorBellDialog)));
         }
     }
 

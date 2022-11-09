@@ -2,10 +2,13 @@
 using SmartMirror.Models;
 using System.Collections;
 
-namespace SmartMirror.Services.Cameras
+namespace SmartMirror.Services.Cameras;
+
+public interface ICamerasService
 {
-    public interface ICamerasService
-    {
-        Task<AOResult<IEnumerable<CameraModel>>> GetCamerasAsync();
-    }
+    public event EventHandler AllCamerasChanged;
+
+    Task<AOResult<IEnumerable<CameraModel>>> GetCamerasAsync();
+
+    Task<AOResult> UpdateCameraAsync(CameraModel cameraModel);
 }

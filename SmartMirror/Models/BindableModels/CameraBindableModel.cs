@@ -28,6 +28,13 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _isConnected, value);
         }
 
+        private bool _isShown;
+        public bool IsShown
+        {
+            get => _isShown;
+            set => SetProperty(ref _isShown, value);
+        }
+
         private DateTime _createTime;
         public DateTime CreateTime
         {

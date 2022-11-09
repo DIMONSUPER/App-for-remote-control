@@ -334,6 +334,7 @@ namespace SmartMirror.ViewModels
             {
                 _allCameras = _mapperService.MapRange<ImageAndTitleBindableModel>(resultOfGettingCameras.Result, (m, vm) =>
                 {
+                    vm.Model = m;
                     vm.Type = ECategoryType.Cameras;
                     vm.ImageSource = "video_fill_dark";
                     vm.TapCommand = ShowCameraSettingsCommand;

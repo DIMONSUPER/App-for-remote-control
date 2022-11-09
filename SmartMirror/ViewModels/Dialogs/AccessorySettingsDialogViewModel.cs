@@ -11,7 +11,7 @@ namespace SmartMirror.ViewModels.Dialogs
     public class AccessorySettingsDialogViewModel : BaseDialogViewModel
     {
         private readonly IDevicesService _devicesService;
-        private bool _isInitializing;
+        private bool _isInitializing = true;
 
         public AccessorySettingsDialogViewModel(
             IDevicesService devicesService,
@@ -81,8 +81,6 @@ namespace SmartMirror.ViewModels.Dialogs
 
             if (parameters.TryGetValue(Constants.DialogsParameterKeys.ACCESSORY, out ImageAndTitleBindableModel accessory))
             {
-                _isInitializing = true;
-
                 Title = accessory.Name;
                 ImageSource = accessory.ImageSource;
 
@@ -91,9 +89,9 @@ namespace SmartMirror.ViewModels.Dialogs
                 IsFavorite = Accessory.IsFavorite;
                 IsShownInRooms = Accessory.IsShownInRooms;
                 IsReceiveNotifications = Accessory.IsReceiveNotifications;
-
-                _isInitializing = false;
             }
+
+            _isInitializing = false;
         }
 
         protected override async void OnPropertyChanged(PropertyChangedEventArgs args)

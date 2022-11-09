@@ -25,6 +25,7 @@ public class CamerasPageViewModel : BaseTabViewModel
         _camerasService = camerasService;
 
         Title = "Cameras";
+        _camerasService.AllCamerasChanged += OnAllCamerasChanged;
     }
 
     #region -- Public properties --
@@ -65,7 +66,7 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private ICommand _tryAgainCommand;
     public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
-    
+
     private ICommand _videoPaybackErrorCommand;
     public ICommand VideoPaybackErrorCommand => _videoPaybackErrorCommand ??= SingleExecutionCommand.FromFunc(OnVideoPaybackErrorCommandAsync);
 
@@ -114,6 +115,11 @@ public class CamerasPageViewModel : BaseTabViewModel
     #endregion
 
     #region -- Private helpers --
+
+    private async void OnAllCamerasChanged(object sender, EventArgs e)
+    {
+        await LoadCamerasAndChangeStateAsync();
+    }
 
     private Task OnVideoPaybackErrorCommandAsync()
     {
@@ -197,14 +203,14 @@ public class CamerasPageViewModel : BaseTabViewModel
 
             if (resultOfGettingCameras.IsSuccess)
             {
-                var cameras = _mapperService.MapRange<CameraBindableModel>(resultOfGettingCameras.Result, (m, vm) =>
+                var cameras = _mapperService.MapRange<CameraBindableModel>(resultOfGettingCameras.Result.Where(x => x.IsShown), (m, vm) =>
                 {
                     vm.TapCommand = SelectCameraCommand;
                 });
 
                 Cameras = new(cameras);
 
-                var camera = SelectedCamera is null
+                var camera = (SelectedCamera is null || !SelectedCamera.IsShown)
                     ? Cameras.FirstOrDefault()
                     : Cameras.FirstOrDefault(x => x.Id == SelectedCamera.Id) ?? Cameras.FirstOrDefault();
 
