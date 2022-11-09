@@ -19,7 +19,8 @@ namespace SmartMirror.Handlers
         {
             [nameof(Video.PlayRequested)] = MapPlayRequested,
             [nameof(Video.PauseRequested)] = MapPauseRequested,
-            [nameof(Video.StopRequested)] = MapStopRequested
+            [nameof(Video.StopRequested)] = MapStopRequested,
+            [nameof(Video.UpdatePlayerVolumeRequested)] = MapUpdateVolumeRequested,
         };
 
         #endregion
