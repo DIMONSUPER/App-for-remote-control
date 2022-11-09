@@ -167,7 +167,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
         if (IsInternetConnected)
         {
-            List<INotificationGroupItemModel> result = new();
+            List<NotificationGroupItemBindableModel> result = new();
 
             var devices = await _devicesService.GetAllSupportedDevicesAsync();
 
@@ -175,7 +175,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
             {
                 var resourceIds = devices
                     .Where(x => x.IsReceiveNotifications && x.DeviceId == device.DeviceId && x.EditableResourceId is not null)
-                    .Select(x => x.EditableResourceId).ToArray();
+                    .Select(x => x.EditableResourceId)
+                    .ToArray();
 
                 if (!resourceIds.Any()) continue;
 
@@ -183,14 +184,13 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
                 if (resultOfGettingNotifications.IsSuccess)
                 {
-                    var allNotifications = resultOfGettingNotifications.Result.OrderByDescending(row => row.LastActivityTime);
-                    var notificationGroups = GetNotificationGroups(allNotifications);
-
-                    result.AddRange(notificationGroups);
+                    result.AddRange(resultOfGettingNotifications.Result);
                 }
             }
 
-            Notifications = new(result);
+            result.Sort(Comparer<NotificationGroupItemBindableModel>.Create((item1, item2) => item2.LastActivityTime.CompareTo(item1.LastActivityTime)));
+
+            Notifications = new(GetNotificationGroups(result));
 
             isLoaded = Notifications.Any();
         }
@@ -198,7 +198,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
         return isLoaded;
     }
 
-    private ObservableCollection<INotificationGroupItemModel> GetNotificationGroups(IOrderedEnumerable<NotificationGroupItemBindableModel> notifications)
+    private ObservableCollection<INotificationGroupItemModel> GetNotificationGroups(IEnumerable<NotificationGroupItemBindableModel> notifications)
     {
         var lastTitleGroup = string.Empty;
 

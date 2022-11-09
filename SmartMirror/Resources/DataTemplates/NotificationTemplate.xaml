@@ -36,7 +36,7 @@
 
             <VerticalStackLayout
                 Margin="20, 0, 24, 0"
-                WidthRequest="267">
+                MaximumWidthRequest="267">
 
                 <Label
                     Text="{Binding Device.Name}"
