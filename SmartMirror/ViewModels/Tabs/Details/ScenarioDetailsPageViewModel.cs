@@ -107,7 +107,7 @@ namespace SmartMirror.ViewModels.Tabs.Details
                 var rooms = await _roomsService.GetAllRoomsAsync();
 
                 ScenarioName = scenarioDetailInformation.Result.Name;
-                ScenarioActions = scenarioDetailInformation.Result.Actions; 
+                ScenarioActions = scenarioDetailInformation.Result.Actions;
            
                 foreach (var action in ScenarioActions)
                 {
