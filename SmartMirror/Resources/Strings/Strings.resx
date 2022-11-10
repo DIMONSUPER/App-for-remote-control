@@ -60,6 +60,9 @@
     <data name="SomethingWentWrong" xml:space="preserve">
         <value>Something went wrong</value>
     </data>
+    <data name="Error" xml:space="preserve">
+        <value>Error</value>
+    </data>
     <data name="ErrorDescription" xml:space="preserve">
         <value>Error description</value>
     </data>
