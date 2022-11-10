@@ -9,6 +9,8 @@ namespace SmartMirror.Extensions
 
         public string? Name { get; set; }
 
+        public string? StringFormat { get; set; }
+
         #endregion
 
         #region -- IMarkupExtension implementation --
@@ -20,11 +22,39 @@ namespace SmartMirror.Extensions
 
         #endregion
 
-        #region -- Public methods --
+        #region -- Public helpers --
 
         public object ProvideValue(IServiceProvider serviceProvider)
         {
-            return LocalizationResourceManager.Instance[Name];
+            var text = LocalizationResourceManager.Instance[Name];
+
+            var formattedText = TryFormat(StringFormat, text);
+
+            return formattedText == string.Empty
+                ? text
+                : formattedText;
+        }
+
+        #endregion
+
+        #region -- Private helpers --
+
+        private string TryFormat(string format, object value)
+        {
+            var result = string.Empty;
+
+            try
+            {
+                if (format is not null)
+                {
+                    result = string.Format(format, value); 
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return result;
         }
 
         #endregion

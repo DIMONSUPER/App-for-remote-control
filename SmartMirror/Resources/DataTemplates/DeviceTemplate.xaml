@@ -134,6 +134,24 @@
 
                 </Image>
 
+                <Image Grid.Column="1"
+                       IsVisible="False"
+                       HorizontalOptions="End"
+                       VerticalOptions="End"
+                       WidthRequest="125"
+                       HeightRequest="75"
+                       Source="mock_camera_stream">
+
+                    <Image.Triggers>
+
+                        <DataTrigger TargetType="Image" Binding="{Binding DeviceType}" Value="DoorbellStream">
+                            <Setter Property="IsVisible" Value="True"/>
+                        </DataTrigger>
+
+                    </Image.Triggers>
+
+                </Image>
+
                 <ActivityIndicator Grid.Column="1"
                                    IsRunning="{Binding IsExecuting}"
                                    HorizontalOptions="End"
@@ -219,6 +237,29 @@
                             <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
                         </MultiTrigger>
 
+                        <!-- SOUND -->
+                        <MultiTrigger TargetType="Label">
+                            <MultiTrigger.Conditions>
+                                <BindingCondition Binding="{Binding Status}" Value="On" />
+                                <BindingCondition Binding="{Binding DeviceType}" Value="DoorbellNoStream" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Text" Value="{extensions:Translate Sound, StringFormat=' {0}'}"/>
+                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i12}"/>
+                        </MultiTrigger>
+
+                        <MultiTrigger TargetType="Label">
+                            <MultiTrigger.Conditions>
+                                <BindingCondition Binding="{Binding Status}" Value="Off" />
+                                <BindingCondition Binding="{Binding DeviceType}" Value="DoorbellNoStream" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Text" Value="{extensions:Translate Sound}"/>
+                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
+                        </MultiTrigger>
+
+                        <DataTrigger Binding="{Binding DeviceType}" TargetType="Label" Value="DoorbellStream">
+                            <Setter Property="IsVisible" Value="False"/>
+                        </DataTrigger>
+
                         <!-- DISCONNECTED -->
                         <DataTrigger Binding="{Binding Status}" TargetType="Label" Value="Disconnected">
                             <Setter Property="Text" Value="{extensions:Translate Disconnected}"/>
@@ -259,6 +300,10 @@
                         <DataTrigger Binding="{Binding Status}" TargetType="controls:CustomSwitch" Value="Connected">
                             <Setter Property="IsVisible" Value="False"/>
                             <Setter Property="IsToggled" Value="True"/>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding DeviceType}" TargetType="controls:CustomSwitch" Value="DoorbellStream">
+                            <Setter Property="IsVisible" Value="False"/>
                         </DataTrigger>
 
                     </controls:CustomSwitch.Triggers>

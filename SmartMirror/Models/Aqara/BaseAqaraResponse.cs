@@ -7,7 +7,18 @@ public class BaseAqaraResponse<T> : BaseAqaraResponse
 {
     private T _result;
     [JsonIgnore]
-    public T Result => _result ??= JsonResult.ToObject<T>();
+    public T Result
+    {
+        get
+        {
+            if (JsonResult is not null)
+            {
+                _result ??= JsonResult.ToObject<T>(); 
+            }
+
+            return _result;
+        }
+    }
 }
 
 public class BaseAqaraResponse

@@ -207,6 +207,11 @@ public class DeviceBindableModel : BindableBase
     {
         var result = State == 0 ? EDeviceStatus.Disconnected : EDeviceStatus.Connected;
 
+        //Temporally mock
+        result = (DeviceType is EDeviceType.DoorbellStream or EDeviceType.DoorbellNoStream)
+            ? EDeviceStatus.Connected
+            : result;
+
         if (result is EDeviceStatus.Connected)
         {
             result = IconSource switch
@@ -217,6 +222,7 @@ public class DeviceBindableModel : BindableBase
                 IconsNames.pic_wall_switch_three_center => AdditionalInfo == "1" ? EDeviceStatus.On : EDeviceStatus.Off,
                 IconsNames.pic_wall_switch_three_left => AdditionalInfo == "1" ? EDeviceStatus.On : EDeviceStatus.Off,
                 IconsNames.pic_wall_switch_three_right => AdditionalInfo == "1" ? EDeviceStatus.On : EDeviceStatus.Off,
+                IconsNames.pic_bell => State == 1 ? EDeviceStatus.On : EDeviceStatus.Off,
                 _ => result,
             };
         }
