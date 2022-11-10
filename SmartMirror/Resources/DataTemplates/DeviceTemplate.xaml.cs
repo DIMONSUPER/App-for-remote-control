@@ -108,11 +108,15 @@ public partial class DeviceTemplate : Grid
 
         if (propertyName == nameof(BindingContext) && BindingContext is DeviceBindableModel model)
         {
-            model.PropertyChanged += Model_PropertyChanged;
+            model.PropertyChanged += OnBindingContextPropertyChanged;
         }
     }
 
-    private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    #endregion
+
+    #region -- Private helpers --
+
+    private void OnBindingContextPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(DeviceBindableModel.Status) && sender is DeviceBindableModel model)
         {

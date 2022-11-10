@@ -269,7 +269,8 @@
 
                 </Label>
 
-                <controls:CustomSwitch VerticalOptions="Start"
+                <controls:CustomSwitch InputTransparent="True"
+                                       VerticalOptions="Start"
                                        HorizontalOptions="End"
                                        Margin="12, 3, 3, 0">
 
