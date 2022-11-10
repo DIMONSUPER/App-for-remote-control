@@ -152,6 +152,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     private async Task LoadAllDevicesAsync()
     {
         var allDevices = await _devicesService.GetAllSupportedDevicesAsync();
+
         var favoriteDevices = allDevices.Where(device => device.IsFavorite);
 
         foreach (var device in favoriteDevices)
