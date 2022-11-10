@@ -330,4 +330,7 @@
     <data name="UniversalActionStep" xml:space="preserve">
         <value>Universal action step</value>
     </data>
+    <data name="Sound" xml:space="preserve">
+        <value>Sound</value>
+    </data>
 </root>

@@ -13,8 +13,9 @@ public class BaseAqaraResponse<T> : BaseAqaraResponse
         {
             if (JsonResult is not null)
             {
-                _result ??= JsonResult.ToObject<T>();
+                _result ??= JsonResult.ToObject<T>(); 
             }
+
             return _result;
         }
     }
