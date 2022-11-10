@@ -7,6 +7,25 @@ namespace SmartMirror.Models.BindableModels;
 
 public class DeviceBindableModel : BindableBase
 {
+    public DeviceBindableModel()
+    {
+        Application.Current.Dispatcher.StartTimer(TimeSpan.FromSeconds(10), () =>
+        {
+            //State = State == 0 ? 1 : 0;
+
+            //Status = Status == EDeviceStatus.On ? EDeviceStatus.Off : EDeviceStatus.On;
+
+            if (Id == 5)
+            {
+                Console.WriteLine($"{Id} {DeviceId} {PositionId} {Name} {Status} {DeviceType} " +
+                            $"{IconSource} {RoomName} {AdditionalInfo} {AdditionalInfoFormatted} " +
+                            $"{ParentDid} {Model} {ModelType} {State} {IsExecuting} {EditableResourceId}"); 
+            }
+
+            return true;
+        });
+    }
+
     #region -- Public properties --
 
     private int _id;

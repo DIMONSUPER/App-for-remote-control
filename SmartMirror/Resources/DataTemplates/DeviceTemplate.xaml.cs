@@ -1,5 +1,6 @@
 ﻿using SmartMirror.Controls;
 using SmartMirror.Enums;
+using System.ComponentModel;
 
 namespace SmartMirror.Resources.DataTemplates;
 

@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Grid xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+      xmlns:enums="clr-namespace:SmartMirror.Enums"
       xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
       xmlns:extensions="clr-namespace:SmartMirror.Extensions"
       xmlns:controls="clr-namespace:SmartMirror.Controls"
@@ -143,10 +145,28 @@
 
             </Grid>
 
+            <StackLayout Grid.Row="0"
+                         Grid.Column="1"
+                         IsVisible="False"
+                         VerticalOptions="End"
+                         HorizontalOptions="End">
+
+                <Label
+                    Margin="0, 16, 0, 0"
+                    Text="{Binding Id, StringFormat='* {0} *'}"/>
+                
+                <Label Text="{Binding Status}"/>
+
+                <Label Text="{Binding State}"/>
+
+                <Label Text="{Binding DeviceType}"/>
+                
+            </StackLayout>
+            
             <!-- SWITCH -->
             <StackLayout Grid.Row="0"
-                         Orientation="Horizontal"
                          Grid.Column="1"
+                         Orientation="Horizontal"
                          VerticalOptions="Start"
                          HorizontalOptions="End">
 
@@ -154,10 +174,37 @@
                        VerticalTextAlignment="Start"
                        HorizontalOptions="FillAndExpand"
                        HorizontalTextAlignment="End"
-                       Margin="0,0,0,0"
-                       Style="{x:DynamicResource tstyle_i12}">
+                       Margin="0,0,0,0">
 
                     <Label.Triggers>
+
+                        <!--<DataTrigger TargetType="controls:CustomSwitch" Value="True">
+
+                            <DataTrigger.Binding>
+                                <MultiBinding Converter="{xct:VariableMultiValueConverter ConditionType=All}">
+
+                                    <Binding Path="Status" Converter="{xct:IsEqualConverter}" ConverterParameter="{x:Static enums:EDeviceStatus.On}"/>
+
+                                </MultiBinding>
+                            </DataTrigger.Binding>
+
+                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i12}"/>
+
+                        </DataTrigger>
+
+                        <DataTrigger TargetType="controls:CustomSwitch" Value="True">
+
+                            <DataTrigger.Binding>
+                                <MultiBinding Converter="{xct:VariableMultiValueConverter ConditionType=All}">
+
+                                    <Binding Path="Status" Converter="{xct:IsEqualConverter}" ConverterParameter="{x:Static enums:EDeviceStatus.Off}"/>
+
+                                </MultiBinding>
+                            </DataTrigger.Binding>
+
+                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
+
+                        </DataTrigger>-->
 
                         <!-- UNLOCKED -->
                         <MultiTrigger TargetType="Label">
@@ -166,7 +213,6 @@
                                 <BindingCondition Binding="{Binding DeviceType}" Value="Locker" />
                             </MultiTrigger.Conditions>
                             <Setter Property="Text" Value="{extensions:Translate Unlocked}"/>
-                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i12}"/>
                         </MultiTrigger>
 
                         <!-- CLOSED -->
@@ -176,7 +222,6 @@
                                 <BindingCondition Binding="{Binding DeviceType}" Value="Locker" />
                             </MultiTrigger.Conditions>
                             <Setter Property="Text" Value="{extensions:Translate Closed}"/>
-                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
                         </MultiTrigger>
 
                         <!-- ON -->
@@ -186,7 +231,6 @@
                                 <BindingCondition Binding="{Binding DeviceType}" Value="Switcher" />
                             </MultiTrigger.Conditions>
                             <Setter Property="Text" Value="{extensions:Translate On}"/>
-                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i12}"/>
                         </MultiTrigger>
 
                         <!-- OFF -->
@@ -196,7 +240,6 @@
                                 <BindingCondition Binding="{Binding DeviceType}" Value="Switcher" />
                             </MultiTrigger.Conditions>
                             <Setter Property="Text" Value="{extensions:Translate Off}"/>
-                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
                         </MultiTrigger>
 
                         <!-- Playing -->
@@ -206,7 +249,6 @@
                                 <BindingCondition Binding="{Binding DeviceType}" Value="Player" />
                             </MultiTrigger.Conditions>
                             <Setter Property="Text" Value="{extensions:Translate Playing}"/>
-                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i12}"/>
                         </MultiTrigger>
 
                         <!-- Paused -->
@@ -216,7 +258,6 @@
                                 <BindingCondition Binding="{Binding DeviceType}" Value="Player" />
                             </MultiTrigger.Conditions>
                             <Setter Property="Text" Value="{extensions:Translate Paused}"/>
-                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
                         </MultiTrigger>
 
                         <!-- DISCONNECTED -->
@@ -234,31 +275,40 @@
 
                 </Label>
 
-                <controls:CustomSwitch InputTransparent="True"
-                                       VerticalOptions="Start"
+                <controls:CustomSwitch VerticalOptions="Start"
                                        HorizontalOptions="End"
-                                       Margin="12,3,3,0">
+                                       Margin="12, 3, 3, 0">
 
                     <controls:CustomSwitch.Triggers>
 
-                        <DataTrigger Binding="{Binding Status}" TargetType="controls:CustomSwitch" Value="On">
-                            <Setter Property="IsToggled" Value="True"/>
-                            <Setter Property="IsVisible" Value="True"/>
-                        </DataTrigger>
+                        <DataTrigger TargetType="controls:CustomSwitch" Value="True">
 
-                        <DataTrigger Binding="{Binding Status}" TargetType="controls:CustomSwitch" Value="Off">
-                            <Setter Property="IsToggled" Value="False"/>
-                            <Setter Property="IsVisible" Value="True"/>
-                        </DataTrigger>
+                            <DataTrigger.Binding>
+                                <MultiBinding Converter="{xct:VariableMultiValueConverter ConditionType=Any}">
 
-                        <DataTrigger Binding="{Binding Status}" TargetType="controls:CustomSwitch" Value="Disconnected">
+                                    <Binding Path="Status" Converter="{xct:IsEqualConverter}" ConverterParameter="{x:Static enums:EDeviceStatus.Connected}"/>
+                                    <Binding Path="Status" Converter="{xct:IsEqualConverter}" ConverterParameter="{x:Static enums:EDeviceStatus.Disconnected}"/>
+
+                                </MultiBinding>
+                            </DataTrigger.Binding>
+
                             <Setter Property="IsVisible" Value="False"/>
-                            <Setter Property="IsToggled" Value="False"/>
+
                         </DataTrigger>
 
-                        <DataTrigger Binding="{Binding Status}" TargetType="controls:CustomSwitch" Value="Connected">
-                            <Setter Property="IsVisible" Value="False"/>
+                        <DataTrigger TargetType="controls:CustomSwitch" Value="True">
+
+                            <DataTrigger.Binding>
+                                <MultiBinding Converter="{xct:VariableMultiValueConverter ConditionType=Any}">
+
+                                    <Binding Path="Status" Converter="{xct:IsEqualConverter}" ConverterParameter="{x:Static enums:EDeviceStatus.On}"/>
+                                    <Binding Path="Status" Converter="{xct:IsEqualConverter}" ConverterParameter="{x:Static enums:EDeviceStatus.Connected}"/>
+
+                                </MultiBinding>
+                            </DataTrigger.Binding>
+
                             <Setter Property="IsToggled" Value="True"/>
+
                         </DataTrigger>
 
                     </controls:CustomSwitch.Triggers>
