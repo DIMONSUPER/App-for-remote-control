@@ -163,24 +163,6 @@
 
             </Grid>
 
-            <StackLayout Grid.Row="0"
-                         Grid.Column="1"
-                         IsVisible="False"
-                         VerticalOptions="End"
-                         HorizontalOptions="End">
-
-                <Label
-                    Margin="0, 16, 0, 0"
-                    Text="{Binding Id, StringFormat='* {0} *'}"/>
-                
-                <Label Text="{Binding Status}"/>
-
-                <Label Text="{Binding State}"/>
-
-                <Label Text="{Binding DeviceType}"/>
-                
-            </StackLayout>
-            
             <!-- SWITCH -->
             <StackLayout Grid.Row="0"
                          Grid.Column="1"
@@ -188,41 +170,15 @@
                          VerticalOptions="Start"
                          HorizontalOptions="End">
 
-                <Label Text="{extensions:Translate Unlocked}"
+                <Label Style="{DynamicResource tstyle_i10}"
+                       Text="{extensions:Translate Unlocked}"
                        VerticalTextAlignment="Start"
                        HorizontalOptions="FillAndExpand"
                        HorizontalTextAlignment="End"
-                       Margin="0,0,0,0">
+                       Margin="0"
+                       x:Name="statusLabel">
 
                     <Label.Triggers>
-
-                        <!--<DataTrigger TargetType="controls:CustomSwitch" Value="True">
-
-                            <DataTrigger.Binding>
-                                <MultiBinding Converter="{xct:VariableMultiValueConverter ConditionType=All}">
-
-                                    <Binding Path="Status" Converter="{xct:IsEqualConverter}" ConverterParameter="{x:Static enums:EDeviceStatus.On}"/>
-
-                                </MultiBinding>
-                            </DataTrigger.Binding>
-
-                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i12}"/>
-
-                        </DataTrigger>
-
-                        <DataTrigger TargetType="controls:CustomSwitch" Value="True">
-
-                            <DataTrigger.Binding>
-                                <MultiBinding Converter="{xct:VariableMultiValueConverter ConditionType=All}">
-
-                                    <Binding Path="Status" Converter="{xct:IsEqualConverter}" ConverterParameter="{x:Static enums:EDeviceStatus.Off}"/>
-
-                                </MultiBinding>
-                            </DataTrigger.Binding>
-
-                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
-
-                        </DataTrigger>-->
 
                         <!-- UNLOCKED -->
                         <MultiTrigger TargetType="Label">
@@ -285,7 +241,6 @@
                                 <BindingCondition Binding="{Binding DeviceType}" Value="DoorbellNoStream" />
                             </MultiTrigger.Conditions>
                             <Setter Property="Text" Value="{extensions:Translate Sound, StringFormat=' {0}'}"/>
-                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i12}"/>
                         </MultiTrigger>
 
                         <MultiTrigger TargetType="Label">
@@ -294,7 +249,6 @@
                                 <BindingCondition Binding="{Binding DeviceType}" Value="DoorbellNoStream" />
                             </MultiTrigger.Conditions>
                             <Setter Property="Text" Value="{extensions:Translate Sound}"/>
-                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i10}"/>
                         </MultiTrigger>
 
                         <DataTrigger Binding="{Binding DeviceType}" TargetType="Label" Value="DoorbellStream">
@@ -304,7 +258,6 @@
                         <!-- DISCONNECTED -->
                         <DataTrigger Binding="{Binding Status}" TargetType="Label" Value="Disconnected">
                             <Setter Property="Text" Value="{extensions:Translate Disconnected}"/>
-                            <Setter Property="Style" Value="{x:DynamicResource tstyle_i14}"/>
                         </DataTrigger>
 
                         <!-- CONNECTED -->
