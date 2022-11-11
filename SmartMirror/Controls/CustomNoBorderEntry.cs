@@ -1,4 +1,5 @@
-﻿using Microsoft.Maui.Controls.Compatibility.Platform.Android;
+﻿using Android.Views;
+using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Microsoft.Maui.Handlers;
 using System.Runtime.CompilerServices;
 using Platform = Microsoft.Maui.ApplicationModel.Platform;
@@ -82,11 +83,15 @@ namespace SmartMirror.Controls
             {
                 if (IsFocused)
                 {
+                    Platform.CurrentActivity.Window.ClearFlags(WindowManagerFlags.Fullscreen);
+
                     editText.RequestFocus();
                     inputMethodManager.ShowSoftInput(editText, Android.Views.InputMethods.ShowFlags.Forced);
                 }
                 else
                 {
+                    Platform.CurrentActivity.Window.AddFlags(WindowManagerFlags.Fullscreen);
+
                     inputMethodManager.HideSoftInputFromWindow(editText.WindowToken, Android.Views.InputMethods.HideSoftInputFlags.None);
                 }
             }

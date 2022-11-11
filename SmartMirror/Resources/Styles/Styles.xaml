@@ -124,7 +124,7 @@
 
     <!-- MASK STYLES -->
     <Style x:Key="DialogMaskBoxViewStyle_i1" TargetType="BoxView">
-        <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i8}"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
     </Style>
 
     <!--BUTTON STYLES--> 

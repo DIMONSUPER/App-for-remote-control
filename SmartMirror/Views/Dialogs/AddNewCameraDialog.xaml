@@ -6,8 +6,6 @@
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
-    RowDefinitions="42, auto, 300"
-    prismmaui:DialogLayout.UseMask="True"
     prismmaui:DialogLayout.MaskStyle="{DynamicResource DialogMaskBoxViewStyle_i1}"
     prismmaui:DialogLayout.CloseOnBackgroundTapped="True"
     x:Class="SmartMirror.Views.Dialogs.AddNewCameraDialog"

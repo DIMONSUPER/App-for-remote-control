@@ -12,6 +12,7 @@
 		<item name="android:windowSplashScreenBackground">@color/splashScreenBackgroundColor</item>
 		<item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_screen_icon</item>		
 		<item name="postSplashScreenTheme">@style/MainThemeApp</item>
+		<item name="android:windowFullscreen">true</item>
 	
 	</style>
 		
