@@ -35,7 +35,15 @@
 
                 <Label Margin="0,37,0,0"
                        Style="{DynamicResource tstyle_i4}"
+                       HorizontalTextAlignment="Center"
                        Text="{Binding EmptyTitle, Source={x:Reference stateContanier}}"/>
+
+                <Label Margin="0, 18, 0, 0"
+                       Style="{DynamicResource tstyle_i17}"
+                       HorizontalTextAlignment="Center"
+                       MaximumWidthRequest="609"
+                       IsVisible="{Binding ShowDescriptionEmptyStateLabel, Source={x:Reference stateContanier}}"
+                       Text="{Binding DescriptionEmptyState, Source={x:Reference stateContanier}}"/>
 
             </VerticalStackLayout>
                 

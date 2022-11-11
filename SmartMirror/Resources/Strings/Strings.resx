@@ -57,6 +57,18 @@
     <data name="PleaseWait" xml:space="preserve">
         <value>Please, wait</value>
     </data>
+    <data name="PleaseCheckTheAccessoriesSettings" xml:space="preserve">
+        <value>Please check the accessories settings in your Smart Home system or in the settings of this app</value>
+    </data>
+    <data name="PleaseCheckTheCamerasSettings" xml:space="preserve">
+        <value>Please check the cameras settings in your Smart Home system or in the settings of this app</value>
+    </data>
+    <data name="PleaseCheckTheNotificationsSettings" xml:space="preserve">
+        <value>Please check the notifications settings in your Smart Home system or in the settings of this app</value>
+    </data>
+    <data name="PleaseCheckTheScenariosSettings" xml:space="preserve">
+        <value>Please check the scenarios settings in your Smart Home system or in the settings of this app</value>
+    </data>
     <data name="SomethingWentWrong" xml:space="preserve">
         <value>Something went wrong</value>
     </data>
