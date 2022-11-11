@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
+using Plugin.Maui.Audio;
 using SmartMirror.Controls;
 using SmartMirror.Handlers;
 using SmartMirror.Platforms.Android.Renderers;
@@ -50,7 +51,9 @@ public static class MauiProgram
                 fonts.AddFont("Inter-Bold-700.ttf", "InterBold");
             });
 
-        builder.Services.AddLocalization();
+        builder.Services
+            .AddLocalization()
+            .AddSingleton(AudioManager.Current);
 
         return builder.Build();
     }

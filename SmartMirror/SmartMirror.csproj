@@ -98,6 +98,7 @@
 		<None Remove="Karamunting.Android.Wasabeef.Blurry" />
 		<None Remove="Services\Blur\" />
 		<None Remove="Services\Permissions\" />
+		<None Remove="Plugin.Maui.Audio" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.3" />
@@ -111,6 +112,7 @@
 		<PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.2" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 		<PackageReference Include="sqlite-net" Version="1.6.292" />
+		<PackageReference Include="Plugin.Maui.Audio" Version="0.1.0-preview2" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Controls\" />

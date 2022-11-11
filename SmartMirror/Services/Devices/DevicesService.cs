@@ -296,11 +296,11 @@ namespace SmartMirror.Services.Devices
                     DeviceId = "5001",
                     PositionId = "real2.1019738989430480896",
                     Name = "Doorbell",
-                    Status = EDeviceStatus.On,
+                    Status = EDeviceStatus.Off,
                     DeviceType = EDeviceType.DoorbellStream,
                     IconSource = "pic_bell",
                     RoomName = "Main room",
-                    State = 1,
+                    State = 0,
                     IsShownInRooms = true,
                     IsFavorite = true,
                 };
