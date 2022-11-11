@@ -135,7 +135,7 @@ public class RoomsPageViewModel : BaseTabViewModel
                     : EPageState.Empty;
 
                 //TODO Delete when doorbell is implemented
-                DisplayDoorbellDialog(isDataLoaded);
+                await DisplayDoorbellDialogAsync(isDataLoaded);
             }
             else
             {
@@ -203,7 +203,10 @@ public class RoomsPageViewModel : BaseTabViewModel
         }
         else if (device.DeviceType == EDeviceType.DoorbellStream)
         {
-            await _dialogService.ShowDialogAsync(nameof(DoorBellDialog));
+            await _dialogService.ShowDialogAsync(nameof(DoorBellDialog), new DialogParameters()
+            {
+                { Constants.DialogsParameterKeys.ACCESSORY, device },
+            });
         }
         else if (device.DeviceType == EDeviceType.DoorbellNoStream)
         {
@@ -238,14 +241,21 @@ public class RoomsPageViewModel : BaseTabViewModel
             .NavigateAsync().ContinueWith(x => DataState = EPageState.Complete);
     }
 
-    private void DisplayDoorbellDialog(bool isDataLoaded)
+    private async Task DisplayDoorbellDialogAsync(bool isDataLoaded)
     {
         if (isDataLoaded && _displayDoorbellDialog)
         {
             _displayDoorbellDialog = false;
 
+            var allDevices = await _devicesService.GetAllSupportedDevicesAsync();
+
+            var mockDoorbell = allDevices.FirstOrDefault(row => row.DeviceId == "5000");
+
             //TODO Delete when doorbell is implemented
-            MainThread.BeginInvokeOnMainThread(async () => await _dialogService.ShowDialogAsync(nameof(DoorBellDialog)));
+            MainThread.BeginInvokeOnMainThread(async () => await _dialogService.ShowDialogAsync(nameof(DoorBellDialog), new DialogParameters()
+            {
+                { Constants.DialogsParameterKeys.ACCESSORY, mockDoorbell },
+            }));
         }
     }
 

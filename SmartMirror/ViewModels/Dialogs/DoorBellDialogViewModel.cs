@@ -12,6 +12,7 @@ using SmartMirror.Services.Settings;
 using SmartMirror.Views.Dialogs;
 using SmartMirror.Resources.Strings;
 using CommunityToolkit.Maui.Alerts;
+using Plugin.Maui.Audio;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
@@ -22,6 +23,9 @@ namespace SmartMirror.ViewModels.Dialogs
         private readonly ISettingsManager _settingsManager;
         private readonly ICamerasService _camerasService;
         private readonly IMapperService _mapperService;
+        private readonly IAudioManager _audioManager;
+
+        private IAudioPlayer _audioPlayer;
 
         public DoorBellDialogViewModel(
             IBlurService blurService,
@@ -29,6 +33,7 @@ namespace SmartMirror.ViewModels.Dialogs
             IPermissionsService permissionsService,
             ISettingsManager settingsManager,
             ICamerasService camerasService,
+            IAudioManager audioManager,
             IMapperService mapperService)
             : base(blurService)
         {
@@ -37,6 +42,7 @@ namespace SmartMirror.ViewModels.Dialogs
             _settingsManager = settingsManager;
             _camerasService = camerasService;
             _mapperService = mapperService;
+            _audioManager = audioManager;
 
             IsVideoOnTop = true;
         }
@@ -71,11 +77,18 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _videoPlayerVolume, value);
         }
 
-        private bool _isPopup;
+        private bool _isVideoOnTop;
         public bool IsVideoOnTop
         {
-            get => _isPopup;
-            set => SetProperty(ref _isPopup, value);
+            get => _isVideoOnTop;
+            set => SetProperty(ref _isVideoOnTop, value);
+        }
+
+        private DeviceBindableModel _device;
+        public DeviceBindableModel Device
+        {
+            get => _device;
+            set => SetProperty(ref _device, value);
         }
 
         private ICommand _onTalkCommand;
@@ -97,6 +110,22 @@ namespace SmartMirror.ViewModels.Dialogs
         public async override void OnDialogOpened(IDialogParameters parameters)
         {
             base.OnDialogOpened(parameters);
+
+            if (parameters.TryGetValue(Constants.DialogsParameterKeys.ACCESSORY, out DeviceBindableModel device))
+            {
+                Device = device;
+
+                if (device.Status == EDeviceStatus.On)
+                {
+                    var fileStream = await FileSystem.OpenAppPackageFileAsync(Constants.Rings.DOORBELL);
+
+                    _audioPlayer = _audioManager.CreatePlayer(fileStream);
+
+                    _audioPlayer.Volume = 1;
+
+                    _audioPlayer.Play();
+                }
+            }
 
             if (IsInternetConnected)
             {
@@ -120,6 +149,8 @@ namespace SmartMirror.ViewModels.Dialogs
         public override void OnDialogClosed()
         {
             base.OnDialogClosed();
+
+            _audioPlayer?.Dispose();
 
             IsVideoOnTop = false;
         }

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
+using Plugin.Maui.Audio;
 using SmartMirror.Controls;
 using SmartMirror.Handlers;
 using SmartMirror.Platforms.Android.Renderers;
@@ -99,6 +100,7 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IScenariosService, ScenariosService>();
         containerRegistry.RegisterSingleton<IDevicesService, DevicesService>();
         containerRegistry.RegisterSingleton<IRoomsService, RoomsService>();
+        containerRegistry.RegisterInstance<IAudioManager>(AudioManager.Current);
     }
 
     private static void OnInitialized(IContainerProvider container)
