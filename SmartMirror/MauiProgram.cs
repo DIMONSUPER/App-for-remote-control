@@ -100,7 +100,7 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IScenariosService, ScenariosService>();
         containerRegistry.RegisterSingleton<IDevicesService, DevicesService>();
         containerRegistry.RegisterSingleton<IRoomsService, RoomsService>();
-        containerRegistry.RegisterSingleton<IAudioManager, AudioManager>();
+        containerRegistry.RegisterInstance<IAudioManager>(AudioManager.Current);
     }
 
     private static void OnInitialized(IContainerProvider container)
