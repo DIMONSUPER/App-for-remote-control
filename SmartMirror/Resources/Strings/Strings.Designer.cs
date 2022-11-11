@@ -499,6 +499,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to hour ago.
+        /// </summary>
+        internal static string HourAgo {
+            get {
+                return ResourceManager.GetString("HourAgo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to hours ago.
         /// </summary>
         internal static string HoursAgo {
@@ -540,6 +549,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Loading {
             get {
                 return ResourceManager.GetString("Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to minute ago.
+        /// </summary>
+        internal static string MinuteAgo {
+            get {
+                return ResourceManager.GetString("MinuteAgo", resourceCulture);
             }
         }
         

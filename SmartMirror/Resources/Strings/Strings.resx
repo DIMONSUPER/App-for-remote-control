@@ -135,6 +135,9 @@
     <data name="Today" xml:space="preserve">
         <value>Today</value>
     </data>
+    <data name="MinuteAgo" xml:space="preserve">
+        <value>minute ago</value>
+    </data>
     <data name="MinutesAgo" xml:space="preserve">
         <value>minutes ago</value>
     </data>
@@ -197,6 +200,9 @@
     </data>
     <data name="TurnOff" xml:space="preserve">
         <value>Turn Off</value>
+    </data>
+    <data name="HourAgo" xml:space="preserve">
+        <value>hour ago</value>
     </data>
     <data name="HoursAgo" xml:space="preserve">
         <value>hours ago</value>
