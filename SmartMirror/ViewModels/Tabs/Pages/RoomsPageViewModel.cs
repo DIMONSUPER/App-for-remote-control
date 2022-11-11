@@ -11,6 +11,7 @@ using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
+using SmartMirror.Resources.Strings;
 
 namespace SmartMirror.ViewModels.Tabs.Pages;
 
@@ -206,10 +207,24 @@ public class RoomsPageViewModel : BaseTabViewModel
         }
         else if (device.DeviceType == EDeviceType.DoorbellNoStream)
         {
-            device.Status = device.Status == EDeviceStatus.On ? EDeviceStatus.Off : EDeviceStatus.On;
+            device.IsExecuting = true;
             device.State = device.Status == EDeviceStatus.On ? 1 : 0;
 
-            await _devicesService.UpdateDeviceAsync(device);
+            var updateResponse = await _devicesService.UpdateDeviceAsync(device);
+
+            if (updateResponse.IsSuccess)
+            {
+                device.IsExecuting = false;
+                device.Status = device.Status == EDeviceStatus.On ? EDeviceStatus.Off : EDeviceStatus.On;
+            }
+            else
+            {
+                await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
+                {
+                    { Constants.DialogsParameterKeys.TITLE, Strings.Error},
+                    { Constants.DialogsParameterKeys.DESCRIPTION, updateResponse.Exception?.Message },
+                });
+            }
         }
     }
 
