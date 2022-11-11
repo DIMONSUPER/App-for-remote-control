@@ -94,6 +94,8 @@ namespace SmartMirror.Services.Devices
 
                     foreach (var device in bindableModels)
                     {
+                        device.IconSource = GetIconSourceForDevice(device);
+
                         _cachedDevices[device.DeviceId] = device;
 
                         var devices = await GetTaskForDevice(device);
@@ -386,7 +388,7 @@ namespace SmartMirror.Services.Devices
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS => IconsNames.pic_wall_switch_three_left,
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS => IconsNames.pic_wall_switch_three_center,
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_2_STATUS => IconsNames.pic_wall_switch_three_right,
-                    _ => IconsNames.grey_question_mark,
+                    _ => IconsNames.pic_wall_switch_three,
                 };
             }
             else if (HasDeviceNSwitches(device, 2))
@@ -395,7 +397,7 @@ namespace SmartMirror.Services.Devices
                 {
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS => IconsNames.pic_wall_switch_double_left,
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS => IconsNames.pic_wall_switch_double_right,
-                    _ => IconsNames.grey_question_mark,
+                    _ => IconsNames.pic_wall_switch_double,
                 };
             }
             else if (HasDeviceNSwitches(device, 1))
@@ -590,8 +592,6 @@ namespace SmartMirror.Services.Devices
             };
 
             newDevice.IconSource = GetIconSourceForDevice(newDevice);
-
-            device.IconSource = newDevice.IconSource;
 
             if (newDevice.IconSource == IconsNames.pic_temperature)
             {
