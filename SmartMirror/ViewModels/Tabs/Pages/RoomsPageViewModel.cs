@@ -239,6 +239,7 @@ public class RoomsPageViewModel : BaseTabViewModel
             .AddParameter(KnownNavigationParameters.Animated, true)
             .AddParameter(nameof(Rooms), Rooms)
             .AddParameter(nameof(RoomBindableModel), room)
+            .AddParameter(nameof(AccessorieTappedCommand), AccessorieTappedCommand)
             .NavigateAsync().ContinueWith(x => DataState = EPageState.Complete);
     }
 

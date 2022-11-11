@@ -189,12 +189,12 @@ public class NotificationsPageViewModel : BaseTabViewModel
                     result.AddRange(resultOfGettingNotifications.Result);
                 }
             }
-
+            
             result.Sort(Comparer<NotificationGroupItemBindableModel>.Create((item1, item2) => item2.LastActivityTime.CompareTo(item1.LastActivityTime)));
 
-            Notifications = new(GetNotificationGroups(result));
+            _ = Task.Run(() => Notifications = new(GetNotificationGroups(result)));
 
-            isLoaded = Notifications.Any();
+            isLoaded = result.Any();
         }
 
         return isLoaded;

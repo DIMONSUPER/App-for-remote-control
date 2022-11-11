@@ -1,10 +1,10 @@
-﻿using SmartMirror.Helpers;
+﻿using System.ComponentModel;
+using System.Windows.Input;
+using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Blur;
 using SmartMirror.Services.Cameras;
-using System.ComponentModel;
-using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
@@ -37,11 +37,18 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _isShownInCameras, value);
         }
 
-        private CameraModel _cameraBindableModel;
+        private bool _isReceiveNotifications;
+        public bool IsReceiveNotifications
+        {
+            get => _isReceiveNotifications;
+            set => SetProperty(ref _isReceiveNotifications, value);
+        }
+
+        private CameraModel _cameraModel;
         public CameraModel CameraModel
         {
-            get => _cameraBindableModel;
-            set => SetProperty(ref _cameraBindableModel, value);
+            get => _cameraModel;
+            set => SetProperty(ref _cameraModel, value);
         }
 
         private ICommand _closeCommand;
@@ -64,6 +71,7 @@ namespace SmartMirror.ViewModels.Dialogs
                 {
                     CameraModel = cameraModel;
                     IsShownInCameras = CameraModel.IsShown;
+                    IsReceiveNotifications = CameraModel.IsReceiveNotifications;
                 }
             }
 
@@ -74,9 +82,10 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             base.OnPropertyChanged(args);
 
-            if (!_isInitializing && args.PropertyName is nameof(IsShownInCameras))
+            if (!_isInitializing && args.PropertyName is nameof(IsShownInCameras) or nameof(IsReceiveNotifications))
             {
                 CameraModel.IsShown = IsShownInCameras;
+                CameraModel.IsReceiveNotifications = IsReceiveNotifications;
                 await _camerasService.UpdateCameraAsync(CameraModel);
             }
         }
