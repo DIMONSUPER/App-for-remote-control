@@ -117,7 +117,7 @@ namespace SmartMirror.ViewModels.Dialogs
 
                 if (device.Status == EDeviceStatus.On)
                 {
-                    var fileStream = await FileSystem.OpenAppPackageFileAsync("doorbell.mp3");
+                    var fileStream = await FileSystem.OpenAppPackageFileAsync(Constants.Rings.DOORBELL);
 
                     _audioPlayer = _audioManager.CreatePlayer(fileStream);
 
@@ -150,7 +150,7 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             base.OnDialogClosed();
 
-            _audioPlayer.Dispose();
+            _audioPlayer?.Dispose();
 
             IsVideoOnTop = false;
         }

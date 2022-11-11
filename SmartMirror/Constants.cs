@@ -96,5 +96,10 @@
         {
             public const string AndroidKey = "8a361957-36a1-4bf0-a252-f03a47119eca";
         }
+
+        public static class Rings
+        {
+            public const string DOORBELL = "doorbell.mp3";
+        }
     }
 }

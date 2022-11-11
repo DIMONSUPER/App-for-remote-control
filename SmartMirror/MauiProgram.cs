@@ -51,9 +51,7 @@ public static class MauiProgram
                 fonts.AddFont("Inter-Bold-700.ttf", "InterBold");
             });
 
-        builder.Services
-            .AddLocalization()
-            .AddSingleton(AudioManager.Current);
+        builder.Services.AddLocalization();
 
         return builder.Build();
     }
@@ -102,6 +100,7 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IScenariosService, ScenariosService>();
         containerRegistry.RegisterSingleton<IDevicesService, DevicesService>();
         containerRegistry.RegisterSingleton<IRoomsService, RoomsService>();
+        containerRegistry.RegisterSingleton<IAudioManager, AudioManager>();
     }
 
     private static void OnInitialized(IContainerProvider container)
