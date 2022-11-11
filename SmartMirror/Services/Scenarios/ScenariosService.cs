@@ -151,7 +151,7 @@ namespace SmartMirror.Services.Scenarios
 
                     scenario = _mapperService.Map<ScenarioBindableModel>(scene);
 
-                    var allDevices = await _devicesService.GetAllSupportedDevicesAsync();
+                    var allDevices = await _devicesService.GetAllDevicesAsync();
 
                     foreach (var action in scenario.Actions)
                     {

@@ -169,11 +169,13 @@ public class NotificationsPageViewModel : BaseTabViewModel
         {
             List<NotificationGroupItemBindableModel> result = new();
 
-            var devices = await _devicesService.GetAllSupportedDevicesAsync();
+            var devices = await _devicesService.GetAllDevicesAsync();
 
-            foreach (var device in _devicesService.AllDevices)
+            var supportedDevices = await _devicesService.GetAllSupportedDevicesAsync();
+
+            foreach (var device in devices)
             {
-                var resourceIds = devices
+                var resourceIds = supportedDevices
                     .Where(x => x.IsReceiveNotifications && x.DeviceId == device.DeviceId && x.EditableResourceId is not null)
                     .Select(x => x.EditableResourceId)
                     .ToArray();
