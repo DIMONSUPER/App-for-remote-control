@@ -21,6 +21,9 @@ namespace SmartMirror.Services.Devices
         //Can contain repeatable device ids
         private List<DeviceBindableModel> _allSupportedDevices = new();
 
+        //Can't contain repeatable device ids
+        private List<DeviceBindableModel> _allDevices = new();
+
         private readonly IMapperService _mapperService;
         private readonly IRepositoryService _repositoryService;
         private readonly IAqaraMessanger _aqaraMessanger;
@@ -42,11 +45,8 @@ namespace SmartMirror.Services.Devices
             _aqaraMessanger.MessageReceived += OnMessageReceived;
             _aqaraMessanger.StoppedListenning += OnStoppedListenning;
         }
-
+        
         #region -- IDevicesService implementation --
-
-        //Can't contain repeatable device ids
-        public List<DeviceBindableModel> AllDevices { get; private set; } = new();
 
         public event EventHandler AllDevicesChanged;
 
@@ -55,6 +55,13 @@ namespace SmartMirror.Services.Devices
             await _devicesTaskCompletionSource.Task;
 
             return _allSupportedDevices;
+        }
+
+        public async Task<IEnumerable<DeviceBindableModel>> GetAllDevicesAsync()
+        {
+            await _devicesTaskCompletionSource.Task;
+
+            return _allDevices;
         }
 
         public async Task<AOResult> DownloadAllDevicesWithSubInfoAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
@@ -87,6 +94,8 @@ namespace SmartMirror.Services.Devices
 
                     foreach (var device in bindableModels)
                     {
+                        device.IconSource = GetIconSourceForDevice(device);
+
                         _cachedDevices[device.DeviceId] = device;
 
                         var devices = await GetTaskForDevice(device);
@@ -106,7 +115,7 @@ namespace SmartMirror.Services.Devices
                     //This is required! After first adding device id = 0, it is required to update to the real
                     await GetSettingsDevicesAsync(result);
 
-                    AllDevices = new(_cachedDevices.Select(x => x.Value));
+                    _allDevices = new(_cachedDevices.Select(x => x.Value));
 
                     _allSupportedDevices = new(result);
                 }
@@ -118,7 +127,7 @@ namespace SmartMirror.Services.Devices
 
             if (!result.IsSuccess)
             {
-                AllDevices = new();
+                _allDevices = new();
                 _allSupportedDevices = new();
             }
 
@@ -377,7 +386,7 @@ namespace SmartMirror.Services.Devices
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS => IconsNames.pic_wall_switch_three_left,
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS => IconsNames.pic_wall_switch_three_center,
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_2_STATUS => IconsNames.pic_wall_switch_three_right,
-                    _ => IconsNames.grey_question_mark,
+                    _ => IconsNames.pic_wall_switch_three,
                 };
             }
             else if (HasDeviceNSwitches(device, 2))
@@ -386,7 +395,7 @@ namespace SmartMirror.Services.Devices
                 {
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_0_STATUS => IconsNames.pic_wall_switch_double_left,
                     Constants.Aqara.AttibutesId.SWITCH_CHANNEL_1_STATUS => IconsNames.pic_wall_switch_double_right,
-                    _ => IconsNames.grey_question_mark,
+                    _ => IconsNames.pic_wall_switch_double,
                 };
             }
             else if (HasDeviceNSwitches(device, 1))
@@ -615,7 +624,7 @@ namespace SmartMirror.Services.Devices
         private void OnSubdeviceUnbind(AqaraMessageEventArgs aqaraMessage)
         {
             _allSupportedDevices.RemoveAll(x => x.DeviceId == aqaraMessage.DeviceId);
-            AllDevices.RemoveAll(x => x.DeviceId == aqaraMessage.DeviceId);
+            _allDevices.RemoveAll(x => x.DeviceId == aqaraMessage.DeviceId);
 
             AllDevicesChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -639,7 +648,7 @@ namespace SmartMirror.Services.Devices
                 }
             }
 
-            var device = AllDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
+            var device = _allDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
 
             if (device is not null)
             {
@@ -659,7 +668,7 @@ namespace SmartMirror.Services.Devices
                 }
             }
 
-            var device = AllDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
+            var device = _allDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
 
             if (device is not null)
             {
@@ -670,7 +679,7 @@ namespace SmartMirror.Services.Devices
         private async void OnGatewayBind(AqaraMessageEventArgs aqaraMessage)
         {
             var gateway = _allSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId)
-                ?? AllDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
+                ?? _allDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
 
             if (gateway is null)
             {
@@ -683,15 +692,15 @@ namespace SmartMirror.Services.Devices
         private void OnGatewayUnbind(AqaraMessageEventArgs aqaraMessage)
         {
             var gateway = _allSupportedDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId)
-                ?? AllDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
+                ?? _allDevices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId);
 
             if (gateway is not null)
             {
                 _allSupportedDevices.Remove(gateway);
                 _allSupportedDevices.RemoveAll(x => x.ParentDid == gateway.DeviceId);
 
-                AllDevices.Remove(gateway);
-                AllDevices.RemoveAll(x => x.ParentDid == gateway.DeviceId);
+                _allDevices.Remove(gateway);
+                _allDevices.RemoveAll(x => x.ParentDid == gateway.DeviceId);
 
                 AllDevicesChanged?.Invoke(this, EventArgs.Empty);
             }

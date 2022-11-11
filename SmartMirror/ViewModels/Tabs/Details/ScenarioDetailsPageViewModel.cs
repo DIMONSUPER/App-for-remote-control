@@ -105,6 +105,7 @@ namespace SmartMirror.ViewModels.Tabs.Details
             if (scenarioDetailInformation.IsSuccess)
             {
                 var rooms = await _roomsService.GetAllRoomsAsync();
+
                 ScenarioName = scenarioDetailInformation.Result.Name;
                 ScenarioActions = scenarioDetailInformation.Result.Actions;
            
