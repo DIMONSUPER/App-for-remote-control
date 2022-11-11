@@ -274,9 +274,9 @@ namespace SmartMirror.Services.Devices
 
         private async Task<IEnumerable<DeviceBindableModel>> AddMockDevicesAsync(IEnumerable<DeviceBindableModel> devices)
         {
-            var dbDevices = (await _repositoryService.GetAllAsync<DeviceDTO>()).Where(row => row.DeviceId == "5000" || row.DeviceId == "5001");
+            var dbDevices = (await _repositoryService.GetAllAsync<DeviceDTO>()).Where(row => row.DeviceId is "5000" or "5001");
 
-            if (dbDevices.Count() == 0)
+            if (!dbDevices.Any())
             {
                 var doorbellNoStream = new DeviceBindableModel()
                 {

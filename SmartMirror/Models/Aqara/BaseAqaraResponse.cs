@@ -4,21 +4,11 @@ using Newtonsoft.Json.Linq;
 namespace SmartMirror.Models.Aqara;
 
 public class BaseAqaraResponse<T> : BaseAqaraResponse
+    where T : class
 {
     private T _result;
     [JsonIgnore]
-    public T Result
-    {
-        get
-        {
-            if (JsonResult is not null)
-            {
-                _result ??= JsonResult.ToObject<T>(); 
-            }
-
-            return _result;
-        }
-    }
+    public T Result => _result ??= JsonResult?.ToObject<T>();
 }
 
 public class BaseAqaraResponse

@@ -1,5 +1,9 @@
 ﻿using SmartMirror.Controls;
 using SmartMirror.Enums;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using SmartMirror.Models.BindableModels;
+using System;
 
 namespace SmartMirror.Resources.DataTemplates;
 
@@ -92,6 +96,42 @@ public partial class DeviceTemplate : Grid
     {
         get => (Style)GetValue(NameFontStyleProperty);
         set => SetValue(NameFontStyleProperty, value);
+    }
+
+    #endregion
+
+    #region -- Overrides --
+
+    protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        base.OnPropertyChanged(propertyName);
+
+        if (propertyName == nameof(BindingContext) && BindingContext is DeviceBindableModel model)
+        {
+            model.PropertyChanged += OnBindingContextPropertyChanged;
+        }
+    }
+
+    #endregion
+
+    #region -- Private helpers --
+
+    private void OnBindingContextPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(DeviceBindableModel.Status) && sender is DeviceBindableModel model)
+        {
+            var resourceStyles = App.Current.Resources.MergedDictionaries.Last();
+
+            var styleKey = model.Status switch
+            {
+                EDeviceStatus.On => "tstyle_i12",
+                EDeviceStatus.Off => "tstyle_i10",
+                EDeviceStatus.Disconnected => "tstyle_i14",
+                _ => "tstyle_i10",
+            };
+
+            statusLabel.Style = resourceStyles[styleKey] as Style;
+        }
     }
 
     #endregion
