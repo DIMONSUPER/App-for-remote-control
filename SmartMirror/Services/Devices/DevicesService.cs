@@ -177,6 +177,8 @@ namespace SmartMirror.Services.Devices
                     var device = _allSupportedDevices.FirstOrDefault(row => row.Id == bindableDeviceId);
 
                     device = bindableDevice;
+
+                    AllDevicesChanged?.Invoke(this, EventArgs.Empty);
                 }
             });
         }
