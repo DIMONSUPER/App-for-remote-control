@@ -8,6 +8,8 @@
 
         public bool IsShown { get; set; }
 
+        public bool IsReceiveNotifications { get; set; }
+
         public bool IsConnected { get; set; }
 
         public DateTime CreateTime { get; set; }

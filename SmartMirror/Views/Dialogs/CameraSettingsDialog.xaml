@@ -67,6 +67,7 @@
 
                     <controls:TitleAndSwitchView
                         Title="{extensions:Translate ReceiveNotifications}"
+                        IsToggled="{Binding IsReceiveNotifications}"
                         Padding="24, 18"/>
 
                     <HorizontalStackLayout
