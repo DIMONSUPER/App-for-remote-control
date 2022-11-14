@@ -25,7 +25,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     private readonly IDevicesService _devicesService;
 
     //TODO Delete when doorbell is implemented
-    private bool _displayDoorbellDialog = true;
+    private volatile bool _displayDoorbellDialog = true;
 
     public RoomsPageViewModel(
         ISmartHomeMockService smartHomeMockService,

@@ -36,6 +36,8 @@
         TryAgainCommand="{Binding TryAgainCommand}"
         LoadingTitle="{extensions:Translate Notifications}"
         EmptyTitle="{extensions:Translate NoNotificationsYet}"
+        ShowDescriptionEmptyStateLabel="True"
+        DescriptionEmptyState="{extensions:Translate PleaseCheckTheNotificationsSettings}"
         EmptyStateImage="notifications_off">
 
         <controls:CustomStateView.CompleteContent>

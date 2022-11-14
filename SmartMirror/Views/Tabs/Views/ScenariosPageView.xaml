@@ -41,6 +41,8 @@
         State="{Binding DataState}"
         LoadingTitle="{extensions:Translate Scenarios}"
         EmptyTitle="{extensions:Translate NoScenariosYet}"
+        ShowDescriptionEmptyStateLabel="True"
+        DescriptionEmptyState="{extensions:Translate PleaseCheckTheScenariosSettings}"
         EmptyStateImage="empty_scenarios">
         
         <controls:CustomStateView.CompleteContent>

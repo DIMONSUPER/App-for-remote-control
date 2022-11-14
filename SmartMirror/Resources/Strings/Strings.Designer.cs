@@ -715,6 +715,42 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please check the accessories settings in your Smart Home system or in the settings of this app.
+        /// </summary>
+        internal static string PleaseCheckTheAccessoriesSettings {
+            get {
+                return ResourceManager.GetString("PleaseCheckTheAccessoriesSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please check the cameras settings in your Smart Home system or in the settings of this app.
+        /// </summary>
+        internal static string PleaseCheckTheCamerasSettings {
+            get {
+                return ResourceManager.GetString("PleaseCheckTheCamerasSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please check the notifications settings in your Smart Home system or in the settings of this app.
+        /// </summary>
+        internal static string PleaseCheckTheNotificationsSettings {
+            get {
+                return ResourceManager.GetString("PleaseCheckTheNotificationsSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please check the scenarios settings in your Smart Home system or in the settings of this app.
+        /// </summary>
+        internal static string PleaseCheckTheScenariosSettings {
+            get {
+                return ResourceManager.GetString("PleaseCheckTheScenariosSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please, select your Smart Home provider.
         /// </summary>
         internal static string PleaseSelectYourSmartHomeProvider {
