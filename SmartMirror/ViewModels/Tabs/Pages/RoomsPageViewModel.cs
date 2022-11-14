@@ -212,14 +212,18 @@ public class RoomsPageViewModel : BaseTabViewModel
         else if (device.DeviceType == EDeviceType.DoorbellNoStream)
         {
             device.IsExecuting = true;
-            device.State = device.Status == EDeviceStatus.On ? 1 : 0;
 
-            var updateResponse = await _devicesService.UpdateDeviceAsync(device);
+            var updateDevice = _mapperService.Map<DeviceBindableModel>(device);
+
+            updateDevice.State = device.State == 0 ? 1 : 0;
+
+            var updateResponse = await _devicesService.UpdateDeviceAsync(updateDevice);
 
             if (updateResponse.IsSuccess)
             {
                 device.IsExecuting = false;
-                device.Status = device.Status == EDeviceStatus.On ? EDeviceStatus.Off : EDeviceStatus.On;
+
+                device.State = device.State == 0 ? 1 : 0;
             }
             else
             {
