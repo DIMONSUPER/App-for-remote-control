@@ -74,31 +74,29 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
     private async void OnScenariosChanged(object sender, EventArgs e)
     {
-        var scenarios = await _scenariosService.GetAllScenariosAsync();
-
-        if (scenarios.Any())
-        {
-            await LoadScenariosAndChangeStateAsync();
-        }
-        else
-        {
-            DataState = EPageState.Empty;
-        }
+        await LoadScenariosAndChangeStateAsync();
     }
 
     private async Task LoadScenariosAndChangeStateAsync()
     {
         var scenarios = await _scenariosService.GetAllScenariosAsync();
 
-        SetScenariosCommands(scenarios);
+        if (scenarios.Any())
+        {
+            SetScenariosCommands(scenarios);
 
-        Scenarios = new(scenarios.Where(scenario => scenario.IsShownInScenarios));
+            Scenarios = new(scenarios.Where(scenario => scenario.IsShownInScenarios));
 
-        FavoriteScenarios = new(scenarios.Where(scenario => scenario.IsFavorite));
+            FavoriteScenarios = new(scenarios.Where(scenario => scenario.IsFavorite));
 
-        DataState = scenarios.Any()
-            ? EPageState.Complete
-            : EPageState.Empty;
+            DataState = Scenarios.Any()
+                ? EPageState.Complete
+                : EPageState.Empty;
+        }
+        else
+        {
+            DataState = EPageState.Empty;
+        }
     }
 
     private void SetScenariosCommands(IEnumerable<ScenarioBindableModel> scenarios)

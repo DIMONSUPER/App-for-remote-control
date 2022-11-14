@@ -128,7 +128,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             if (IsInternetConnected)
             {
-                isDataLoaded = Rooms.Any();
+                isDataLoaded = Rooms.Any() || FavoriteAccessories.Any();
 
                 DataState = isDataLoaded
                     ? EPageState.Complete
