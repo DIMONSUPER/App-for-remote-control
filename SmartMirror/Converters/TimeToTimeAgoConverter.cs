@@ -22,19 +22,15 @@ namespace SmartMirror.Converters
                 }
                 else if (differenceInTime.TotalHours >= 1)
                 {
-                    string[] words = { Strings.HourAgo, Strings.HoursAgo};
+                    var word = differenceInTime.TotalHours > 2 ? Strings.HoursAgo : Strings.HourAgo;
 
-                    var index = GetIndexForNumber((int)differenceInTime.TotalHours);
-
-                    result = $"{(int)differenceInTime.TotalHours} {words[index]}";
+                    result = $"{(int)differenceInTime.TotalHours} {word}";
                 }
                 else if (differenceInTime.TotalMinutes >= 1)
                 {
-                    string[] words = { Strings.MinuteAgo, Strings.MinutesAgo};
+                    var word = differenceInTime.TotalMinutes > 2 ? Strings.MinutesAgo : Strings.MinuteAgo;
 
-                    var index = GetIndexForNumber((int)differenceInTime.TotalMinutes);
-
-                    result = $"{(int)differenceInTime.TotalMinutes} {words[index]}";
+                    result = $"{(int)differenceInTime.TotalMinutes} {word}";
                 }
                 else
                 {
@@ -48,15 +44,6 @@ namespace SmartMirror.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value;
-        }
-
-        #endregion
-
-        #region -- Private helpers --
-
-        private int GetIndexForNumber(int number)
-        {
-            return number > 1 ? 1 : 0;
         }
 
         #endregion
