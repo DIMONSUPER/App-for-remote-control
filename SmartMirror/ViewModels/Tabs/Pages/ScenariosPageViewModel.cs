@@ -89,7 +89,7 @@ public class ScenariosPageViewModel : BaseTabViewModel
 
             FavoriteScenarios = new(scenarios.Where(scenario => scenario.IsFavorite));
 
-            DataState = Scenarios.Any()
+            DataState = (Scenarios.Any() || FavoriteScenarios.Any())
                 ? EPageState.Complete
                 : EPageState.Empty;
         }
