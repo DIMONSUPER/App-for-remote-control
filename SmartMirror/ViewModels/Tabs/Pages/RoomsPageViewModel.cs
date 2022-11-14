@@ -25,8 +25,7 @@ public class RoomsPageViewModel : BaseTabViewModel
     private readonly IDevicesService _devicesService;
 
     //TODO Delete when doorbell is implemented
-    private bool _displayDoorbellDialog = true;
-    private object _locker = new();
+    private volatile bool _displayDoorbellDialog = true;
 
     public RoomsPageViewModel(
         ISmartHomeMockService smartHomeMockService,
@@ -246,19 +245,10 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private async Task DisplayDoorbellDialogAsync(bool isDataLoaded)
     {
-        var displayDoorbellDialog = false;
-
-        lock (_locker)
+        if (isDataLoaded && _displayDoorbellDialog)
         {
-            if (_displayDoorbellDialog)
-            {
-                _displayDoorbellDialog = false;
-                displayDoorbellDialog = true;
-            }
-        }
+            _displayDoorbellDialog = false;
 
-        if (isDataLoaded && displayDoorbellDialog)
-        {
             var allDevices = await _devicesService.GetAllSupportedDevicesAsync();
 
             var mockDoorbell = allDevices.FirstOrDefault(row => row.DeviceId == "5000");
