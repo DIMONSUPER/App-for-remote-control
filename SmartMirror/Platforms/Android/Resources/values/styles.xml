@@ -17,7 +17,9 @@
 	</style>
 		
 	<style name="MainThemeApp" parent="MainTheme.Base">
-		
+
+		<item name="android:windowBackground">@color/colorPrimary</item>
+
 		<item name="windowActionBar">false</item>
 		<item name="windowNoTitle">true</item>
 		<item name="windowActionModeOverlay">true</item>

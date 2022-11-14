@@ -1,4 +1,5 @@
 ﻿using Android.Views;
+using Microsoft.Maui;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Handlers;
@@ -40,12 +41,24 @@ namespace SmartMirror.Controls
 
             if (propertyName == IsEntryFocusedProperty.PropertyName)
             {
+                var needHideSystemBarWhenKeyboardOpened = Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.R;
+
                 if (IsEntryFocused)
                 {
+                    if (needHideSystemBarWhenKeyboardOpened)
+                    {
+                        Platform.CurrentActivity.Window.ClearFlags(WindowManagerFlags.Fullscreen);
+                    }
+
                     Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(250), () => this.Focus());
                 }
                 else
                 {
+                    if (needHideSystemBarWhenKeyboardOpened)
+                    {
+                        Platform.CurrentActivity.Window.AddFlags(WindowManagerFlags.Fullscreen);
+                    }
+
                     this.Unfocus();
                 }
             }
@@ -61,7 +74,7 @@ namespace SmartMirror.Controls
         }
 
         private void AppendToMapping()
-        {
+        {            
             Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(CustomNoBorderEntry), (handler, view) =>
             {
                 if (view is CustomNoBorderEntry)
@@ -80,27 +93,15 @@ namespace SmartMirror.Controls
         {
             var editText = handler.PlatformView;
 
-            var needHideSystemBarWhenKeyboardOpened = Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.R;
-
             if (Platform.CurrentActivity.GetSystemService(Android.Content.Context.InputMethodService) is Android.Views.InputMethods.InputMethodManager inputMethodManager)
             {
                 if (IsFocused)
                 {
-                    if (needHideSystemBarWhenKeyboardOpened)
-                    {
-                        Platform.CurrentActivity.Window.ClearFlags(WindowManagerFlags.Fullscreen);
-                    }
-
                     editText.RequestFocus();
                     inputMethodManager.ShowSoftInput(editText, Android.Views.InputMethods.ShowFlags.Forced);
                 }
                 else
                 {
-                    if (needHideSystemBarWhenKeyboardOpened)
-                    {
-                        Platform.CurrentActivity.Window.AddFlags(WindowManagerFlags.Fullscreen); 
-                    }
-
                     inputMethodManager.HideSoftInputFromWindow(editText.WindowToken, Android.Views.InputMethods.HideSoftInputFlags.None);
                 }
             }
