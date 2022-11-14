@@ -1,5 +1,4 @@
 ﻿using Android.Views;
-using Microsoft.Maui;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Handlers;
@@ -41,11 +40,11 @@ namespace SmartMirror.Controls
 
             if (propertyName == IsEntryFocusedProperty.PropertyName)
             {
-                var needHideSystemBarWhenKeyboardOpened = Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.R;
+                var needToDisableFullscreenWhileKeyboardDisplayed = Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.R;
 
                 if (IsEntryFocused)
                 {
-                    if (needHideSystemBarWhenKeyboardOpened)
+                    if (needToDisableFullscreenWhileKeyboardDisplayed)
                     {
                         Platform.CurrentActivity.Window.ClearFlags(WindowManagerFlags.Fullscreen);
                     }
@@ -54,7 +53,7 @@ namespace SmartMirror.Controls
                 }
                 else
                 {
-                    if (needHideSystemBarWhenKeyboardOpened)
+                    if (needToDisableFullscreenWhileKeyboardDisplayed)
                     {
                         Platform.CurrentActivity.Window.AddFlags(WindowManagerFlags.Fullscreen);
                     }
