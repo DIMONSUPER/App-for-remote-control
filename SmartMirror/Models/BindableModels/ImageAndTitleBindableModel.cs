@@ -29,6 +29,13 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _model, value);
         }
 
+        private bool _isToggled;
+        public bool IsToggled
+        {
+            get => _isToggled;
+            set => SetProperty(ref _isToggled, value);
+        }
+
         #endregion
 
         #region -- ICategoryElementModel implementation --

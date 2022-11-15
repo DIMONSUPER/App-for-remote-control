@@ -15,6 +15,7 @@ namespace SmartMirror.Services.Notifications
     {
         private readonly IDevicesService _devicesService;
         private readonly IAqaraMessanger _aqaraMessanger;
+        private readonly ISettingsManager _settingsManager;
 
         public NotificationsService(
             IRestService restService,
@@ -25,6 +26,7 @@ namespace SmartMirror.Services.Notifications
         {
             _devicesService = devicesService;
             _aqaraMessanger = aqaraMessanger;
+            _settingsManager = settingsManager;
 
             _aqaraMessanger.MessageReceived += OnMessageReceived;
         }
@@ -32,6 +34,8 @@ namespace SmartMirror.Services.Notifications
         #region -- INotificationsService implementation --
 
         public event EventHandler<NotificationGroupItemBindableModel> NotificationReceived;
+
+        public bool IsAllowNotifications => _settingsManager.NotificationsSettings.IsAllowNotifications;
 
         public Task<AOResult<IEnumerable<NotificationGroupItemBindableModel>>> GetNotificationsForDeviceAsync(string deviceId, params string[] resourceIds)
         {

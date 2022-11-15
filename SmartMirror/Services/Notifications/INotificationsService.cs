@@ -8,6 +8,8 @@ namespace SmartMirror.Services.Notifications
     {
         event EventHandler<NotificationGroupItemBindableModel> NotificationReceived;
 
+        bool IsAllowNotifications { get; }
+
         Task<AOResult<IEnumerable<NotificationGroupItemBindableModel>>> GetNotificationsForDeviceAsync(string deviceId, params string[] resourceIds);
     }
 }

@@ -20,8 +20,29 @@
     <views:BaseContentPage.Resources>
 
         <ResourceDictionary>
+
             <templates:CategoryTemplate x:Key="categoryTemplate"/>
-            <templateSelectors:CategoryElementTemplateSelector x:Key="elementCategoryTemplateSelector"/>
+
+            <DataTemplate x:Key="simpleAccessoryDataTemplate">
+                <templates:SimpleAccessoryTemplate/>
+            </DataTemplate>
+
+            <templates:SimpleScenarioTemplate x:Key="simpleScenarioTemplate"/>
+            <templates:SimpleCameraTemplate x:Key="simpleCameraTemplate"/>
+            <templates:ProvidersTemplate x:Key="simpleProviderTemplate"/>
+
+            <DataTemplate x:Key="simpleNotificationTemplate">
+                <templates:SimpleAccessoryTemplate HasSwitch="True"/>
+            </DataTemplate>
+
+            <templateSelectors:CategoryElementTemplateSelector
+                x:Key="elementCategoryTemplateSelector"
+                AccessoriesDataTemplate="{StaticResource simpleAccessoryDataTemplate}"
+                ScenariosDataTemplate="{StaticResource simpleScenarioTemplate}"
+                CamerasDataTemplate="{StaticResource simpleCameraTemplate}"
+                ProvidersDataTemplate="{StaticResource simpleProviderTemplate}"
+                NotificationsDataTemplate="{StaticResource simpleNotificationTemplate}"/>
+
         </ResourceDictionary>
 
     </views:BaseContentPage.Resources>

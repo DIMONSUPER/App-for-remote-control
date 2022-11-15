@@ -6,5 +6,6 @@
         Scenarios,
         Cameras,
         Providers,
+        Notifications,
     }
 }

@@ -5,6 +5,7 @@ using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Cameras;
+using SmartMirror.Services.Notifications;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Google;
 using SmartMirror.Services.Mapper;
@@ -24,11 +25,13 @@ namespace SmartMirror.ViewModels
         private readonly IScenariosService _scenariosService;
         private readonly ICamerasService _camerasService;
         private readonly IGoogleService _googleService;
+        private readonly INotificationsService _notificationsService;
 
         private IEnumerable<ImageAndTitleBindableModel> _allAccessories = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allCameras = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<SettingsProvidersBindableModel> _allProviders = Enumerable.Empty<SettingsProvidersBindableModel>();
+        private IEnumerable<ImageAndTitleBindableModel> _allNotifications = Enumerable.Empty<ImageAndTitleBindableModel>();
 
         private CategoryBindableModel _providersCategory;
         private IDialogResult _dialogResult;
@@ -41,6 +44,7 @@ namespace SmartMirror.ViewModels
             IScenariosService scenariosService,
             ICamerasService camerasService,
             IAqaraService aqaraService,
+            INotificationsService notificationsService,
             IGoogleService googleService)
             : base(navigationService)
         {
@@ -51,6 +55,7 @@ namespace SmartMirror.ViewModels
             _scenariosService = scenariosService;
             _camerasService = camerasService;
             _googleService = googleService;
+            _notificationsService = notificationsService;
 
             PageState = EPageState.LoadingSkeleton;
             _devicesService.AllDevicesChanged += OnAllDevicesChanged;
@@ -76,6 +81,13 @@ namespace SmartMirror.ViewModels
         {
             get => _selectedCategory;
             set => SetProperty(ref _selectedCategory, value);
+        }
+
+        private bool _isAllowNotifications;
+        public bool IsAllowNotifications
+        {
+            get => _isAllowNotifications;
+            set => SetProperty(ref _isAllowNotifications, value);
         }
 
         private ObservableCollection<CategoryBindableModel> _categories;
@@ -124,6 +136,9 @@ namespace SmartMirror.ViewModels
 
         private ICommand _openAccessorySettingsCommand;
         public ICommand OpenAccessorySettingsCommand => _openAccessorySettingsCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnOpenAccessorySettingsCommandAsync);
+
+        private ICommand _changeStatusReceivingNotificationCommand;
+        public ICommand ChangeStatusReceivingNotificationCommand => _changeStatusReceivingNotificationCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnChangeStatusReceivingNotificationCommandAsync);
 
         #endregion
 
@@ -206,6 +221,12 @@ namespace SmartMirror.ViewModels
                     Name = Strings.Providers,
                     TapCommand = SelectCategoryCommand,
                 },
+                new()
+                {
+                    Type = ECategoryType.Notifications,
+                    Name = Strings.Notifications,
+                    TapCommand = SelectCategoryCommand,
+                },
             };
         }
 
@@ -242,6 +263,7 @@ namespace SmartMirror.ViewModels
                     ECategoryType.Scenarios => new(_allScenarios),
                     ECategoryType.Cameras => new(_allCameras),
                     ECategoryType.Providers => new(_allProviders),
+                    ECategoryType.Notifications => new(_allNotifications),
                     _ => throw new NotImplementedException(),
                 };
 
@@ -283,6 +305,7 @@ namespace SmartMirror.ViewModels
                 isLoaded = await LoadAllDevicesAsync();
                 isLoaded &= await LoadAllScenariosAsync();
                 isLoaded &= await LoadAllCamerasAsync();
+                isLoaded &= await LoadAllNotificationsAsync();
 
                 CreateProviders();
             }
@@ -297,6 +320,7 @@ namespace SmartMirror.ViewModels
             _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(devices, (m, vm) =>
             {
                 vm.Model = m;
+                vm.Type = ECategoryType.Accessories;
                 vm.TapCommand = OpenAccessorySettingsCommand;
             });
 
@@ -410,6 +434,23 @@ namespace SmartMirror.ViewModels
             _providersCategory.Count = GetConnectedProviders();
         }
 
+        private async Task<bool> LoadAllNotificationsAsync()
+        {
+            var devices = await _devicesService.GetAllSupportedDevicesAsync();
+
+            _allNotifications = _mapperService.MapRange<ImageAndTitleBindableModel>(devices, (m, vm) =>
+            {
+                vm.Model = m;
+                vm.Type = ECategoryType.Notifications;
+                vm.IsToggled = m is DeviceBindableModel device && device.IsReceiveNotifications;
+                vm.TapCommand = ChangeStatusReceivingNotificationCommand;
+            });
+
+            IsAllowNotifications = _notificationsService.IsAllowNotifications;
+
+            return true;
+        }
+
         private async Task OnTryAgainCommandAsync()
         {
             if (!IsDataLoading)
@@ -431,6 +472,14 @@ namespace SmartMirror.ViewModels
                     PageState = EPageState.NoInternet;
                 }
             }
+        }
+
+        private Task OnChangeStatusReceivingNotificationCommandAsync(ImageAndTitleBindableModel accessory)
+        {
+            return _dialogService.ShowDialogAsync(nameof(AccessorySettingsDialog), new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.ACCESSORY, accessory },
+            });
         }
 
         private Task OnOpenAccessorySettingsCommandAsync(ImageAndTitleBindableModel accessory)

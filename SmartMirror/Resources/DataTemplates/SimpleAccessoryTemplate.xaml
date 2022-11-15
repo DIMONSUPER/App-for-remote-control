@@ -1,47 +1,49 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<DataTemplate
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Border
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:vm="clr-namespace:SmartMirror.Models.BindableModels"
+    Padding="24, 18"
+    BackgroundColor="{DynamicResource cbg_i2}"
+    Stroke="{DynamicResource cbg_i4}"
+    StrokeThickness="0.75"
+    StrokeShape="RoundRectangle 9"
+    behaviors:TouchBehavior.IsAnimation="True"
+    behaviors:TouchBehavior.Command="{Binding TapCommand}"
+    behaviors:TouchBehavior.CommandParameter="{Binding .}"
+    behaviors:TouchBehavior.NormalBackgroundColor="{DynamicResource cbg_i2}"
+    behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}"
     x:Class="SmartMirror.Resources.DataTemplates.SimpleAccessoryTemplate"
-    x:DataType="vm:ImageAndTitleBindableModel">
+    x:DataType="vm:ImageAndTitleBindableModel"
+    x:Name="simpleAccessoryTemplate">
 
-    <Border
-        Padding="24, 18"
-        BackgroundColor="{DynamicResource cbg_i2}"
-        Stroke="{DynamicResource cbg_i4}"
-        StrokeThickness="0.75"
-        StrokeShape="RoundRectangle 9"
-        behaviors:TouchBehavior.IsAnimation="True"
-        behaviors:TouchBehavior.Command="{Binding TapCommand}"
-        behaviors:TouchBehavior.CommandParameter="{Binding .}"
-        behaviors:TouchBehavior.NormalBackgroundColor="{DynamicResource cbg_i2}"
-        behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}">
+    <Grid ColumnDefinitions="Auto, *, Auto">
 
-        <Grid ColumnDefinitions="Auto, *">
+        <controls:CustomImageBotton
+            Grid.Column="0"
+            VerticalOptions="Center"
+            HorizontalOptions="Start"
+            HeightImage="38"
+            Padding="0"
+            Source="{Binding ImageSource}"/>
 
-            <controls:CustomImageBotton
-                Grid.Column="0"
-                VerticalOptions="Center"
-                HorizontalOptions="Start"
-                HeightImage="38"
-                Padding="0"
-                Source="{Binding ImageSource}"/>
+        <Label
+            Grid.Column="1"
+            Style="{DynamicResource tstyle_i11}"
+            Text="{Binding Name}"
+            LineBreakMode="TailTruncation"
+            Margin="10, 0"
+            MaxLines="1"
+            HorizontalOptions="Start"
+            VerticalOptions="Center"/>
 
-            <Label
-                Grid.Column="1"
-                Style="{DynamicResource tstyle_i11}"
-                Text="{Binding Name}"
-                LineBreakMode="TailTruncation"
-                Margin="10, 0"
-                MaxLines="1"
-                HorizontalOptions="Start"
-                VerticalOptions="Center"/>
+        <controls:CustomSwitch
+            Grid.Column="2"
+            IsVisible="{Binding HasSwitch, Source={x:Reference simpleAccessoryTemplate}}"
+            IsToggled="{Binding IsToggled}"/>
 
-        </Grid>
+    </Grid>
 
-    </Border>
-    
-</DataTemplate>
+</Border>
