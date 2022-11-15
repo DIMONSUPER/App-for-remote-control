@@ -8,7 +8,7 @@
       xmlns:extensions="clr-namespace:SmartMirror.Extensions"
       prismmaui:DialogLayout.UseMask="True"
       prismmaui:DialogLayout.MaskStyle="{DynamicResource DialogMaskBoxViewStyle_i1}"
-      prismmaui:DialogLayout.CloseOnBackgroundTapped="True"
+      prismmaui:DialogLayout.CloseOnBackgroundTapped="False"
       Unloaded="OnCamerasPageUnloaded"
       x:Class="SmartMirror.Views.Dialogs.DoorBellDialog"
       x:DataType="vm:DoorBellDialogViewModel">
