@@ -10,6 +10,7 @@ namespace SmartMirror.ViewModels.Dialogs
     public class ScenarioSettingsDialogViewModel : BaseDialogViewModel
     {
         private readonly IScenariosService _scenariosService;
+        private bool _isInitializing = true;
 
         public ScenarioSettingsDialogViewModel(
             IScenariosService scenariosService,
@@ -75,17 +76,21 @@ namespace SmartMirror.ViewModels.Dialogs
                 IsReceiveNotifications = Scenario.IsReceiveNotifications;
                 IsFavorite = Scenario.IsFavorite;
             }
+
+            _isInitializing = false;
         }
 
         protected override async void OnPropertyChanged(PropertyChangedEventArgs args)
         {
             base.OnPropertyChanged(args);
 
-            if (args.PropertyName is nameof(IsFavorite) or nameof(IsShownInScenarios) or nameof(IsReceiveNotifications))
+            if (!_isInitializing && args.PropertyName is nameof(IsFavorite) or nameof(IsShownInScenarios) or nameof(IsReceiveNotifications))
             {
-                Scenario.IsFavorite = _isFavorite;
-                Scenario.IsShownInScenarios = _isShownInScenarios;
-                Scenario.IsReceiveNotifications = _isReceiveNotifications;
+                Scenario.IsFavorite = args.PropertyName is nameof(IsFavorite) ? _isFavorite : Scenario.IsFavorite;
+
+                Scenario.IsShownInScenarios = args.PropertyName is nameof(IsShownInScenarios) ? _isShownInScenarios : Scenario.IsShownInScenarios;
+
+                Scenario.IsReceiveNotifications = args.PropertyName is nameof(IsReceiveNotifications) ? _isReceiveNotifications : Scenario.IsReceiveNotifications;
 
                 await _scenariosService.UpdateScenarioAsync(Scenario);
             }

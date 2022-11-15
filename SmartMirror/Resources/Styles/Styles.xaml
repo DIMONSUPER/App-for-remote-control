@@ -81,6 +81,9 @@
     <Style x:Key="tstyle_i5" TargetType="Label" BasedOn="{StaticResource Intermedium_Content_24px}"> <!-- Inter500/ 24px/ Gray -->
         <Setter Property="TextColor"  Value="{x:DynamicResource tcolor_i3}"/>
     </Style>
+    <Style x:Key="tstyle_i17" TargetType="Label" BasedOn="{StaticResource Intermedium_Content_28px}"> <!-- Inter500/ 28px/ Gray -->
+        <Setter Property="TextColor"  Value="{x:DynamicResource tcolor_i3}"/>
+    </Style>
 
     <Style x:Key="tstyle_i6" TargetType="Label" BasedOn="{StaticResource InterSemiBold_Content_28px}"> <!-- Inter600/ 28px/  Light Gray -->
         <Setter Property="TextColor"  Value="{x:DynamicResource tcolor_i6}"/>

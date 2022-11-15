@@ -8,7 +8,7 @@
       xmlns:extensions="clr-namespace:SmartMirror.Extensions"
       prismmaui:DialogLayout.UseMask="True"
       prismmaui:DialogLayout.MaskStyle="{DynamicResource DialogMaskBoxViewStyle_i1}"
-      prismmaui:DialogLayout.CloseOnBackgroundTapped="True"
+      prismmaui:DialogLayout.CloseOnBackgroundTapped="False"
       Unloaded="OnCamerasPageUnloaded"
       x:Class="SmartMirror.Views.Dialogs.DoorBellDialog"
       x:DataType="vm:DoorBellDialogViewModel">
@@ -71,9 +71,21 @@
                         Command="{Binding OnEndCommand}"/>
 
                 <Button Style="{DynamicResource ButtonStyle_i1}"
-                        BackgroundColor="{DynamicResource cbg_i6}"
+                        BackgroundColor="{DynamicResource cbg_i3}"
                         Text="{extensions:Translate Talk}"
-                        Command="{Binding OnTalkCommand}"/>
+                        Command="{Binding OnTalkCommand}">
+
+                    <Button.Triggers>
+
+                        <DataTrigger Binding="{Binding IsTalking}" Value="True" TargetType="Button">
+
+                            <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i6}"/>
+
+                        </DataTrigger>
+
+                    </Button.Triggers>
+
+                </Button>
 
                 <Frame HasShadow="False"
                         Padding="0"

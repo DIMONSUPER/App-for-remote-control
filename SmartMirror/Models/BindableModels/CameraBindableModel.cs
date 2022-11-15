@@ -54,6 +54,13 @@ namespace SmartMirror.Models.BindableModels
         {
             get => _isSelected;
             set => SetProperty(ref _isSelected, value);
+        }
+
+        private bool _isReceiveNotifications;
+        public bool IsReceiveNotifications
+        {
+            get => _isReceiveNotifications;
+            set => SetProperty(ref _isReceiveNotifications, value);
         } 
 
         #endregion

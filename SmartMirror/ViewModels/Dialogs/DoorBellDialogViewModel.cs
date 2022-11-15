@@ -84,6 +84,13 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _isVideoOnTop, value);
         }
 
+        private bool _isTalking;
+        public bool IsTalking
+        {
+            get => _isTalking;
+            set => SetProperty(ref _isTalking, value);
+        }
+
         private DeviceBindableModel _device;
         public DeviceBindableModel Device
         {
@@ -161,26 +168,35 @@ namespace SmartMirror.ViewModels.Dialogs
 
         private async Task OnTalkCommandAsync()
         {
-            var status = await _permissionsService.RequestPermissionAsync<Permissions.Microphone>();
-
-            if (status == PermissionStatus.Granted)
+            if (IsTalking)
             {
-                return;
+                IsTalking = false;
             }
-
-            var rationalePermission = _permissionsService.ShouldShowRationale<Permissions.Microphone>();
-
-            if (!rationalePermission)
+            else
             {
-                var dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), new DialogParameters
-                {
-                    { Constants.DialogsParameterKeys.TITLE, "Permission alert" },
-                    { Constants.DialogsParameterKeys.DESCRIPTION, "You need give permissions for microphone, open application settings?" }
-                });
+                var status = await _permissionsService.RequestPermissionAsync<Permissions.Microphone>();
 
-                if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result) && result)
+                if (status != PermissionStatus.Granted)
                 {
-                    _permissionsService.OpenApplicationSettingsPage();
+                    var rationalePermission = _permissionsService.ShouldShowRationale<Permissions.Microphone>();
+
+                    if (!rationalePermission)
+                    {
+                        var dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), new DialogParameters
+                        {
+                            { Constants.DialogsParameterKeys.TITLE, "Permission alert" },
+                            { Constants.DialogsParameterKeys.DESCRIPTION, "You need give permissions for microphone, open application settings?" }
+                        });
+
+                        if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result) && result)
+                        {
+                            _permissionsService.OpenApplicationSettingsPage();
+                        }
+                    }
+                }
+                else
+                {
+                    IsTalking = true;
                 }
             }
         }

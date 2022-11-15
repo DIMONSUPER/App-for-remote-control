@@ -499,6 +499,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to hour ago.
+        /// </summary>
+        internal static string HourAgo {
+            get {
+                return ResourceManager.GetString("HourAgo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to hours ago.
         /// </summary>
         internal static string HoursAgo {
@@ -540,6 +549,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Loading {
             get {
                 return ResourceManager.GetString("Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to minute ago.
+        /// </summary>
+        internal static string MinuteAgo {
+            get {
+                return ResourceManager.GetString("MinuteAgo", resourceCulture);
             }
         }
         
@@ -711,6 +729,42 @@ namespace SmartMirror.Resources.Strings {
         internal static string PleaseCheckInternet {
             get {
                 return ResourceManager.GetString("PleaseCheckInternet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please check the accessories settings in your Smart Home system or in the settings of this app.
+        /// </summary>
+        internal static string PleaseCheckTheAccessoriesSettings {
+            get {
+                return ResourceManager.GetString("PleaseCheckTheAccessoriesSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please check the cameras settings in your Smart Home system or in the settings of this app.
+        /// </summary>
+        internal static string PleaseCheckTheCamerasSettings {
+            get {
+                return ResourceManager.GetString("PleaseCheckTheCamerasSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please check the notifications settings in your Smart Home system or in the settings of this app.
+        /// </summary>
+        internal static string PleaseCheckTheNotificationsSettings {
+            get {
+                return ResourceManager.GetString("PleaseCheckTheNotificationsSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please check the scenarios settings in your Smart Home system or in the settings of this app.
+        /// </summary>
+        internal static string PleaseCheckTheScenariosSettings {
+            get {
+                return ResourceManager.GetString("PleaseCheckTheScenariosSettings", resourceCulture);
             }
         }
         

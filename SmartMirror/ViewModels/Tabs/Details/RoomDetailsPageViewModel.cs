@@ -5,6 +5,8 @@ using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Rooms;
 using SmartMirror.ViewModels.Tabs.Pages;
+using SmartMirror.Views.Dialogs;
+using SmartMirror.Resources.Strings;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -15,19 +17,23 @@ public class RoomDetailsPageViewModel : BaseViewModel
     private readonly IMapperService _mapperService;
     private readonly IDevicesService _devicesService;
     private readonly IRoomsService _roomsService;
+    private readonly IDialogService _dialogService;
 
     private RoomBindableModel _selectedRoom;
+    private ICommand _accessorieTappedCommand;
 
     public RoomDetailsPageViewModel(
         INavigationService navigationService,
         IMapperService mapperService,
         IDevicesService devicesService,
-        IRoomsService roomsService)
+        IRoomsService roomsService,
+        IDialogService dialogService)
         : base(navigationService)
     {
         _mapperService = mapperService;
         _devicesService = devicesService;
         _roomsService = roomsService;
+        _dialogService = dialogService;
 
         _roomsService.AllRoomsChanged += OnAllRoomsOrDevicesChanged;
         _devicesService.AllDevicesChanged += OnAllRoomsOrDevicesChanged;
@@ -81,6 +87,11 @@ public class RoomDetailsPageViewModel : BaseViewModel
     public override void OnNavigatedTo(INavigationParameters parameters)
     {
         base.OnNavigatedTo(parameters);
+
+        if (parameters.TryGetValue(nameof(RoomsPageViewModel.AccessorieTappedCommand), out ICommand command))
+        {
+            _accessorieTappedCommand = command;
+        }
 
         if (parameters.TryGetValue(nameof(RoomsPageViewModel.Rooms), out IEnumerable<RoomBindableModel> rooms))
         {
@@ -157,6 +168,11 @@ public class RoomDetailsPageViewModel : BaseViewModel
             var devices = await _devicesService.GetAllSupportedDevicesAsync();
 
             var roomDevices = devices.Where(x => x.PositionId == selectedRoom.Id && x.IsShownInRooms);
+
+            foreach (var device in roomDevices)
+            {
+                device.TappedCommand = _accessorieTappedCommand;
+            }
 
             if (roomDevices.Any())
             {

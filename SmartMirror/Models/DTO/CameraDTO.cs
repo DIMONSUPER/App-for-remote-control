@@ -21,6 +21,8 @@ public class CameraDTO : IDTO
 
     public bool IsConnected { get; set; }
 
+    public bool IsReceiveNotifications { get; set; }
+
     public DateTime CreateTime { get; set; }
 
     public string VideoUrl { get; set; }

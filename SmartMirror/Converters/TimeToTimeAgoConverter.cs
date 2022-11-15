@@ -22,11 +22,15 @@ namespace SmartMirror.Converters
                 }
                 else if (differenceInTime.TotalHours >= 1)
                 {
-                    result = $"{(int)differenceInTime.TotalHours} {Strings.HoursAgo}";
+                    var word = differenceInTime.TotalHours > 2 ? Strings.HoursAgo : Strings.HourAgo;
+
+                    result = $"{(int)differenceInTime.TotalHours} {word}";
                 }
                 else if (differenceInTime.TotalMinutes >= 1)
                 {
-                    result = $"{(int)differenceInTime.TotalMinutes} {Strings.MinutesAgo}";
+                    var word = differenceInTime.TotalMinutes > 2 ? Strings.MinutesAgo : Strings.MinuteAgo;
+
+                    result = $"{(int)differenceInTime.TotalMinutes} {word}";
                 }
                 else
                 {

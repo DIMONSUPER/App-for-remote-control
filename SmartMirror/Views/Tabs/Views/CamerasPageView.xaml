@@ -41,6 +41,8 @@
         TryAgainCommand="{Binding TryAgainCommand}"
         LoadingTitle="{extensions:Translate Cameras}"
         EmptyTitle="{extensions:Translate NoCamerasYet}"
+        ShowDescriptionEmptyStateLabel="True"
+        DescriptionEmptyState="{extensions:Translate PleaseCheckTheCamerasSettings}"
         EmptyStateImage="video_off">
 
         <controls:CustomStateView.CompleteContent>

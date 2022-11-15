@@ -31,6 +31,13 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _isShown, value);
         }
 
+        private bool _isReceiveNotifications;
+        public bool IsReceiveNotifications
+        {
+            get => _isReceiveNotifications;
+            set => SetProperty(ref _isReceiveNotifications, value);
+        }
+
         private string _status;
         public string Status
         {

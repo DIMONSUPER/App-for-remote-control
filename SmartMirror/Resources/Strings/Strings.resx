@@ -57,6 +57,18 @@
     <data name="PleaseWait" xml:space="preserve">
         <value>Please, wait</value>
     </data>
+    <data name="PleaseCheckTheAccessoriesSettings" xml:space="preserve">
+        <value>Please check the accessories settings in your Smart Home system or in the settings of this app</value>
+    </data>
+    <data name="PleaseCheckTheCamerasSettings" xml:space="preserve">
+        <value>Please check the cameras settings in your Smart Home system or in the settings of this app</value>
+    </data>
+    <data name="PleaseCheckTheNotificationsSettings" xml:space="preserve">
+        <value>Please check the notifications settings in your Smart Home system or in the settings of this app</value>
+    </data>
+    <data name="PleaseCheckTheScenariosSettings" xml:space="preserve">
+        <value>Please check the scenarios settings in your Smart Home system or in the settings of this app</value>
+    </data>
     <data name="SomethingWentWrong" xml:space="preserve">
         <value>Something went wrong</value>
     </data>
@@ -135,6 +147,9 @@
     <data name="Today" xml:space="preserve">
         <value>Today</value>
     </data>
+    <data name="MinuteAgo" xml:space="preserve">
+        <value>minute ago</value>
+    </data>
     <data name="MinutesAgo" xml:space="preserve">
         <value>minutes ago</value>
     </data>
@@ -197,6 +212,9 @@
     </data>
     <data name="TurnOff" xml:space="preserve">
         <value>Turn Off</value>
+    </data>
+    <data name="HourAgo" xml:space="preserve">
+        <value>hour ago</value>
     </data>
     <data name="HoursAgo" xml:space="preserve">
         <value>hours ago</value>

@@ -26,6 +26,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     //TODO Delete when doorbell is implemented
     private bool _displayDoorbellDialog = true;
+    private object _locker = new();
 
     public RoomsPageViewModel(
         ISmartHomeMockService smartHomeMockService,
@@ -128,7 +129,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             if (IsInternetConnected)
             {
-                isDataLoaded = Rooms.Any();
+                isDataLoaded = Rooms.Any() || FavoriteAccessories.Any();
 
                 DataState = isDataLoaded
                     ? EPageState.Complete
@@ -212,14 +213,18 @@ public class RoomsPageViewModel : BaseTabViewModel
         else if (device.DeviceType == EDeviceType.DoorbellNoStream)
         {
             device.IsExecuting = true;
-            device.State = device.Status == EDeviceStatus.On ? 1 : 0;
 
-            var updateResponse = await _devicesService.UpdateDeviceAsync(device);
+            var updateDevice = _mapperService.Map<DeviceBindableModel>(device);
+
+            updateDevice.State = device.State == 0 ? 1 : 0;
+
+            var updateResponse = await _devicesService.UpdateDeviceAsync(updateDevice);
 
             if (updateResponse.IsSuccess)
             {
                 device.IsExecuting = false;
-                device.Status = device.Status == EDeviceStatus.On ? EDeviceStatus.Off : EDeviceStatus.On;
+
+                device.State = device.State == 0 ? 1 : 0;
             }
             else
             {
@@ -239,15 +244,25 @@ public class RoomsPageViewModel : BaseTabViewModel
             .AddParameter(KnownNavigationParameters.Animated, true)
             .AddParameter(nameof(Rooms), Rooms)
             .AddParameter(nameof(RoomBindableModel), room)
+            .AddParameter(nameof(AccessorieTappedCommand), AccessorieTappedCommand)
             .NavigateAsync().ContinueWith(x => DataState = EPageState.Complete);
     }
 
     private async Task DisplayDoorbellDialogAsync(bool isDataLoaded)
     {
-        if (isDataLoaded && _displayDoorbellDialog)
-        {
-            _displayDoorbellDialog = false;
+        var displayDoorbellDialog = false;
 
+        lock (_locker)
+        {
+            if (_displayDoorbellDialog)
+            {
+                displayDoorbellDialog = true;
+                _displayDoorbellDialog = false;
+            }
+        }
+
+        if (isDataLoaded && displayDoorbellDialog)
+        {
             var allDevices = await _devicesService.GetAllSupportedDevicesAsync();
 
             var mockDoorbell = allDevices.FirstOrDefault(row => row.DeviceId == "5000");
