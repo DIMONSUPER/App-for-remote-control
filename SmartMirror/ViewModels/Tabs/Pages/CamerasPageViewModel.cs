@@ -179,6 +179,10 @@ public class CamerasPageViewModel : BaseTabViewModel
                 (DataState, VideoAction) = isDataLoaded
                     ? (EPageState.Complete, EVideoAction.Play)
                     : (EPageState.Empty, EVideoAction.Pause);
+
+                DataState = Cameras.Any()
+                    ? EPageState.Complete
+                    : EPageState.Empty;
             }
             else
             {
