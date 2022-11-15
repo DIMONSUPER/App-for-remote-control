@@ -1,11 +1,11 @@
 using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Interfaces;
-using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Notifications;
+using SmartMirror.Services.Rooms;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -17,26 +17,86 @@ public class NotificationsPageViewModel : BaseTabViewModel
     private readonly IDialogService _dialogService;
     private readonly IMapperService _mapperService;
     private readonly IDevicesService _devicesService;
+    private readonly IRoomsService _roomsService;
 
     public NotificationsPageViewModel(
         INotificationsService notificationsService,
         IDialogService dialogService,
         IMapperService mapperService,
         INavigationService navigationService,
-        IDevicesService devicesService)
+        IDevicesService devicesService, 
+        IRoomsService roomsService)
         : base(navigationService)
     {
         _notificationsService = notificationsService;
         _dialogService = dialogService;
         _mapperService = mapperService;
         _devicesService = devicesService;
+        _roomsService = roomsService;
 
         Title = "Notifications";
         _devicesService.AllDevicesChanged += OnAllDevicesChanged;
         _notificationsService.NotificationReceived += OnNotificationReceived;
+        _roomsService.AllRoomsChanged += OnAllRoomsChanged;
+
+        NotificationsSources = new ObservableCollection<NotificationSourceBindableModel>()
+        {
+            new NotificationSourceBindableModel
+            {
+                Name = "All",
+                NotificationsCount = 123,
+                SelectCommand = SelectNotificationSourceCommand,
+            },
+            new NotificationSourceBindableModel
+            {
+                Name = "Dining Room",
+                NotificationsCount = 23,
+                SelectCommand = SelectNotificationSourceCommand,
+            },
+            new NotificationSourceBindableModel
+            {
+                Name = "Front Door",
+                NotificationsCount = 54,
+                SelectCommand = SelectNotificationSourceCommand,
+            },
+            new NotificationSourceBindableModel
+            {
+                Name = "Garage",
+                NotificationsCount = 12,
+                SelectCommand = SelectNotificationSourceCommand,
+            },
+            new NotificationSourceBindableModel
+            {
+                Name = "Half Bath",
+                NotificationsCount = 3,
+                SelectCommand = SelectNotificationSourceCommand,
+            },
+            new NotificationSourceBindableModel
+            {
+                Name = "Living Room",
+                NotificationsCount = 30,
+                SelectCommand = SelectNotificationSourceCommand,
+            },
+        };
+
+        SelectNotificationSource(NotificationsSources.FirstOrDefault());
     }
 
     #region -- Public properties --
+
+    private ObservableCollection<NotificationSourceBindableModel> _notificationsSources;
+    public ObservableCollection<NotificationSourceBindableModel> NotificationsSources
+    {
+        get => _notificationsSources;
+        set => SetProperty(ref _notificationsSources, value);
+    }
+
+    private NotificationSourceBindableModel _selectedNotificationSource;
+    public NotificationSourceBindableModel SelectedNotificationSource
+    {
+        get => _selectedNotificationSource;
+        set => SetProperty(ref _selectedNotificationSource, value);
+    }
 
     private ObservableCollection<INotificationGroupItemModel> _notifications;
     public ObservableCollection<INotificationGroupItemModel> Notifications
@@ -51,6 +111,10 @@ public class NotificationsPageViewModel : BaseTabViewModel
         get => _isNotificationsRefreshing;
         set => SetProperty(ref _isNotificationsRefreshing, value);
     }
+
+    private ICommand _selectNotificationSourceCommand;
+    public ICommand SelectNotificationSourceCommand => _selectNotificationSourceCommand ??= 
+        SingleExecutionCommand.FromFunc<NotificationSourceBindableModel>(OnSelectNotificationSourceCommandAsync, delayMillisec: 0);
 
     private ICommand _refreshNotificationsCommand;
     public ICommand RefreshNotificationsCommand => _refreshNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnRefreshNotificationsCommandAsync, delayMillisec: 0);
@@ -89,6 +153,10 @@ public class NotificationsPageViewModel : BaseTabViewModel
         await LoadNotificationsAndChangeStateAsync();
     }
 
+    private void OnAllRoomsChanged(object sender, EventArgs e)
+    {
+    }
+
     private async void OnAllDevicesChanged(object sender, EventArgs e)
     {
         DataState = EPageState.LoadingSkeleton;
@@ -103,6 +171,28 @@ public class NotificationsPageViewModel : BaseTabViewModel
         {
             DataState = EPageState.Empty;
         }
+    }
+
+    private Task OnSelectNotificationSourceCommandAsync(NotificationSourceBindableModel notificationSource)
+    {
+        SelectNotificationSource(notificationSource);
+
+        return Task.CompletedTask;
+    }
+
+    private void SelectNotificationSource(NotificationSourceBindableModel notificationSource)
+    {
+        if (SelectedNotificationSource is not null)
+        {
+            SelectedNotificationSource.IsSelected = false;
+        }
+
+        if (notificationSource is not null)
+        {
+            notificationSource.IsSelected = true;
+        }
+
+        SelectedNotificationSource = notificationSource;
     }
 
     private async Task OnTryAgainCommandAsync()

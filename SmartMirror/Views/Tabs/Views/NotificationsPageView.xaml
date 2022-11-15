@@ -7,6 +7,7 @@
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
+    xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:templatesSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
     x:Class="SmartMirror.Views.Tabs.Views.NotificationsPageView"
@@ -16,6 +17,7 @@
     <views:BaseContentView.Resources>
 
         <ResourceDictionary>
+            <templates:NotificationSourceTemplate x:Key="notificationSourceTemplate"/>
             <templatesSelectors:NotificationDataTemplateSelector x:Key="notificationTemplateSelector"/>
         </ResourceDictionary>
 
@@ -42,35 +44,86 @@
 
         <controls:CustomStateView.CompleteContent>
 
-            <RefreshView
-                HorizontalOptions="Center"
-                IsRefreshing="{Binding IsNotificationsRefreshing}"
-                Command="{Binding RefreshNotificationsCommand}"
-                x:Name="refreshView">
+            <Grid 
+                ColumnDefinitions="0.34*, 0.66*"
+                Margin="0, 40, 0, 0">
 
-                <CollectionView
-                    Margin="0, 24, 0, 0"
-                    ItemsSource="{Binding Notifications}"
-                    ItemTemplate="{StaticResource notificationTemplateSelector}"
-                    WidthRequest="660"
-                    VerticalScrollBarVisibility="Always"
-                    HorizontalScrollBarVisibility="Always"
-                    x:Name="scrollViewNotifications"/>
+                <StackLayout 
+                    Padding="0"
+                    Margin="0, 34, 0, 0">
+                    
+                    <!-- SELECTOR --> 
+                    <Border
+                        Margin="31, 13, 31, 30"
+                        HeightRequest="52"
+                        StrokeThickness="0.75"
+                        StrokeShape="RoundRectangle 40"
+                        Stroke="{DynamicResource tcolor_i1}"
+                        BackgroundColor="{DynamicResource cbg_i2}">
 
-                <!--<controls:CustomScrollView
-                    Padding="50, 0, 0, 0"
-                    WidthRequest="660"
-                    VerticalScrollBarVisibility="Always"
-                    HorizontalScrollBarVisibility="Always"
-                    x:Name="scrollViewNotifications">
+                        <Grid ColumnDefinitions="*, *">
 
-                    <VerticalStackLayout
-                        BindableLayout.ItemsSource="{Binding Notifications}"
-                        BindableLayout.ItemTemplateSelector="{StaticResource notificationTemplateSelector}"/>
+                            <Button
+                                Grid.Column="0"
+                                Style="{DynamicResource ButtonStyle_i1}"
+                                Padding="0"
+                                Text="{extensions:Translate Rooms}">
 
-                </controls:CustomScrollView>-->
+                                <Button.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected}" Value="False" TargetType="Button">
+                                            <Setter Property="BackgroundColor" Value="Transparent"/>
+                                            <Setter Property="TextColor" Value="{DynamicResource tcolor_i3}"/>
+                                    </DataTrigger>
+                                </Button.Triggers>
 
-            </RefreshView>
+                            </Button>
+
+                            <Button
+                                Grid.Column="1"
+                                Style="{DynamicResource ButtonStyle_i1}"
+                                Padding="0"
+                                Text="{extensions:Translate Accessories}">
+
+                                <Button.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected}" Value="True" TargetType="Button">
+                                        <Setter Property="BackgroundColor" Value="Transparent"/>
+                                        <Setter Property="TextColor" Value="{DynamicResource tcolor_i3}"/>
+                                    </DataTrigger>
+                                </Button.Triggers>
+
+                            </Button>
+
+                        </Grid>
+
+                    </Border>
+
+                    <CollectionView 
+                        Grid.Column="0"
+                        WidthRequest="360"
+                        ItemTemplate="{DynamicResource notificationSourceTemplate}"
+                        ItemsSource="{Binding NotificationsSources}"/>
+                    
+                </StackLayout>
+
+                <RefreshView
+                    Grid.Column="1"
+                    HorizontalOptions="Center"
+                    IsRefreshing="{Binding IsNotificationsRefreshing}"
+                    Command="{Binding RefreshNotificationsCommand}"
+                    x:Name="refreshView">
+
+                    <CollectionView
+                        Margin="0, 24, 0, 0"
+                        ItemsSource="{Binding Notifications}"
+                        ItemTemplate="{StaticResource notificationTemplateSelector}"
+                        WidthRequest="571"
+                        VerticalScrollBarVisibility="Always"
+                        HorizontalScrollBarVisibility="Always"
+                        x:Name="scrollViewNotifications"/>
+
+                </RefreshView>
+                
+            </Grid>
 
         </controls:CustomStateView.CompleteContent>
 
