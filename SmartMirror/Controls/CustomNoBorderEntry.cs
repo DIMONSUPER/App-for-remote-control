@@ -1,4 +1,6 @@
-﻿using Microsoft.Maui.Controls.Compatibility.Platform.Android;
+﻿using Android.Views;
+using Microsoft.Maui.Controls.Compatibility.Platform.Android;
+using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Handlers;
 using System.Runtime.CompilerServices;
 using Platform = Microsoft.Maui.ApplicationModel.Platform;
@@ -38,12 +40,24 @@ namespace SmartMirror.Controls
 
             if (propertyName == IsEntryFocusedProperty.PropertyName)
             {
+                var needToDisableFullscreenWhileKeyboardDisplayed = Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.R;
+
                 if (IsEntryFocused)
                 {
+                    if (needToDisableFullscreenWhileKeyboardDisplayed)
+                    {
+                        Platform.CurrentActivity.Window.ClearFlags(WindowManagerFlags.Fullscreen);
+                    }
+
                     Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(250), () => this.Focus());
                 }
                 else
                 {
+                    if (needToDisableFullscreenWhileKeyboardDisplayed)
+                    {
+                        Platform.CurrentActivity.Window.AddFlags(WindowManagerFlags.Fullscreen);
+                    }
+
                     this.Unfocus();
                 }
             }
@@ -59,7 +73,7 @@ namespace SmartMirror.Controls
         }
 
         private void AppendToMapping()
-        {
+        {            
             Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(CustomNoBorderEntry), (handler, view) =>
             {
                 if (view is CustomNoBorderEntry)

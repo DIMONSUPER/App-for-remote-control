@@ -2,7 +2,7 @@
 
 public interface IBlurService
 {
-    void BlurPopupBackground(int radius = 20);
+    void BlurPopupBackground(Color color, int radius = 20);
 
     void UnblurPopupBackground();
 }
