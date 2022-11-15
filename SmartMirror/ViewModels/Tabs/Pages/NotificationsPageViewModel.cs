@@ -167,34 +167,37 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
         if (IsInternetConnected)
         {
-            List<NotificationGroupItemBindableModel> result = new();
-
-            var devices = await _devicesService.GetAllDevicesAsync();
-
-            var supportedDevices = await _devicesService.GetAllSupportedDevicesAsync();
-
-            foreach (var device in devices)
+            if (_notificationsService.IsAllowNotifications)
             {
-                var resourceIds = supportedDevices
-                    .Where(x => x.IsReceiveNotifications && x.DeviceId == device.DeviceId && x.EditableResourceId is not null)
-                    .Select(x => x.EditableResourceId)
-                    .ToArray();
+                List<NotificationGroupItemBindableModel> result = new();
 
-                if (!resourceIds.Any()) continue;
+                var devices = await _devicesService.GetAllDevicesAsync();
 
-                var resultOfGettingNotifications = await _notificationsService.GetNotificationsForDeviceAsync(device.DeviceId, resourceIds);
+                var supportedDevices = await _devicesService.GetAllSupportedDevicesAsync();
 
-                if (resultOfGettingNotifications.IsSuccess)
+                foreach (var device in devices)
                 {
-                    result.AddRange(resultOfGettingNotifications.Result);
+                    var resourceIds = supportedDevices
+                        .Where(x => x.IsReceiveNotifications && x.DeviceId == device.DeviceId && x.EditableResourceId is not null)
+                        .Select(x => x.EditableResourceId)
+                        .ToArray();
+
+                    if (!resourceIds.Any()) continue;
+
+                    var resultOfGettingNotifications = await _notificationsService.GetNotificationsForDeviceAsync(device.DeviceId, resourceIds);
+
+                    if (resultOfGettingNotifications.IsSuccess)
+                    {
+                        result.AddRange(resultOfGettingNotifications.Result);
+                    }
                 }
+
+                result.Sort(Comparer<NotificationGroupItemBindableModel>.Create((item1, item2) => item2.LastActivityTime.CompareTo(item1.LastActivityTime)));
+
+                _ = Task.Run(() => Notifications = new(GetNotificationGroups(result)));
+
+                isLoaded = result.Any();
             }
-            
-            result.Sort(Comparer<NotificationGroupItemBindableModel>.Create((item1, item2) => item2.LastActivityTime.CompareTo(item1.LastActivityTime)));
-
-            _ = Task.Run(() => Notifications = new(GetNotificationGroups(result)));
-
-            isLoaded = result.Any();
         }
 
         return isLoaded;

@@ -10,6 +10,8 @@ namespace SmartMirror.Services.Notifications
 
         bool IsAllowNotifications { get; }
 
+        Task<AOResult> ChangeAllowNotificationsAsync(bool state);
+
         Task<AOResult<IEnumerable<NotificationGroupItemBindableModel>>> GetNotificationsForDeviceAsync(string deviceId, params string[] resourceIds);
     }
 }

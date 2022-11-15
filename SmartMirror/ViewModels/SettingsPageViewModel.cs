@@ -58,6 +58,7 @@ namespace SmartMirror.ViewModels
             _notificationsService = notificationsService;
 
             PageState = EPageState.LoadingSkeleton;
+
             _devicesService.AllDevicesChanged += OnAllDevicesChanged;
             _scenariosService.AllScenariosChanged += OnAllScenariosChanged;
         }
@@ -139,6 +140,9 @@ namespace SmartMirror.ViewModels
 
         private ICommand _changeStatusReceivingNotificationCommand;
         public ICommand ChangeStatusReceivingNotificationCommand => _changeStatusReceivingNotificationCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnChangeStatusReceivingNotificationCommandAsync);
+
+        private ICommand _changeAllowNotificationsCommand;
+        public ICommand ChangeAllowNotificationsCommand => _changeAllowNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnChangeAllowNotificationsCommandAsync);
 
         #endregion
 
@@ -263,13 +267,20 @@ namespace SmartMirror.ViewModels
                     ECategoryType.Scenarios => new(_allScenarios),
                     ECategoryType.Cameras => new(_allCameras),
                     ECategoryType.Providers => new(_allProviders),
-                    ECategoryType.Notifications => new(_allNotifications),
+                    ECategoryType.Notifications => IsAllowNotifications ? new(_allNotifications) : new(),
                     _ => throw new NotImplementedException(),
                 };
 
-                DataState = CategoryElements.Any()
+                if (!IsAllowNotifications && SelectedCategory.Type == ECategoryType.Notifications)
+                {
+                    DataState = EPageState.Complete;
+                }
+                else
+                {
+                    DataState = CategoryElements.Any()
                     ? EPageState.Complete
                     : EPageState.Empty;
+                }
             }
         }
 
@@ -476,10 +487,23 @@ namespace SmartMirror.ViewModels
 
         private Task OnChangeStatusReceivingNotificationCommandAsync(ImageAndTitleBindableModel accessory)
         {
-            return _dialogService.ShowDialogAsync(nameof(AccessorySettingsDialog), new DialogParameters
-            {
-                { Constants.DialogsParameterKeys.ACCESSORY, accessory },
-            });
+            var device = accessory.Model as DeviceBindableModel;
+
+            accessory.IsToggled = !accessory.IsToggled;
+            device.IsReceiveNotifications = !device.IsReceiveNotifications;
+
+            return _devicesService.UpdateDeviceAsync(device);
+        }
+
+        private Task OnChangeAllowNotificationsCommandAsync()
+        {
+            var state = !_notificationsService.IsAllowNotifications;
+
+            IsAllowNotifications = state;
+
+            SetElementsSelectedCategory();
+
+            return _notificationsService.ChangeAllowNotificationsAsync(state);
         }
 
         private Task OnOpenAccessorySettingsCommandAsync(ImageAndTitleBindableModel accessory)

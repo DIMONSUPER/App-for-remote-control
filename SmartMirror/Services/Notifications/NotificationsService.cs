@@ -37,6 +37,16 @@ namespace SmartMirror.Services.Notifications
 
         public bool IsAllowNotifications => _settingsManager.NotificationsSettings.IsAllowNotifications;
 
+        public Task<AOResult> ChangeAllowNotificationsAsync(bool state)
+        {
+            return AOResult.ExecuteTaskAsync(onFailure =>
+            {
+                _settingsManager.NotificationsSettings.IsAllowNotifications = state;
+
+                return Task.CompletedTask;
+            });
+        }
+
         public Task<AOResult<IEnumerable<NotificationGroupItemBindableModel>>> GetNotificationsForDeviceAsync(string deviceId, params string[] resourceIds)
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
