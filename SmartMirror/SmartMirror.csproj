@@ -153,6 +153,9 @@
 		<MauiXaml Update="Controls\CustomImageBotton.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Controls\TabsSelector.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Controls\TitleAndSwitchView.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
@@ -331,6 +334,9 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
+	  <Compile Update="Controls\TabsSelector.xaml.cs">
+	    <DependentUpon>TabsSelector.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Resources\DataTemplates\CameraTemplate.xaml.cs">
 	    <DependentUpon>CameraTemplate.xaml</DependentUpon>
 	  </Compile>

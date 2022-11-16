@@ -44,66 +44,31 @@
 
         <controls:CustomStateView.CompleteContent>
 
-            <Grid 
+            <Grid
                 ColumnDefinitions="0.34*, 0.66*"
                 Margin="0, 40, 0, 0">
 
-                <StackLayout 
-                    Padding="0"
+                <Grid 
+                    RowDefinitions="auto, *"
                     Margin="0, 34, 0, 0">
-                    
-                    <!-- SELECTOR --> 
-                    <Border
+
+                    <controls:TabsSelector
+                        Grid.Row="0"
                         Margin="31, 13, 31, 30"
-                        HeightRequest="52"
-                        StrokeThickness="0.75"
-                        StrokeShape="RoundRectangle 40"
-                        Stroke="{DynamicResource tcolor_i1}"
-                        BackgroundColor="{DynamicResource cbg_i2}">
-
-                        <Grid ColumnDefinitions="*, *">
-
-                            <Button
-                                Grid.Column="0"
-                                Style="{DynamicResource ButtonStyle_i1}"
-                                Padding="0"
-                                Text="{extensions:Translate Rooms}">
-
-                                <Button.Triggers>
-                                    <DataTrigger Binding="{Binding IsSelected}" Value="False" TargetType="Button">
-                                            <Setter Property="BackgroundColor" Value="Transparent"/>
-                                            <Setter Property="TextColor" Value="{DynamicResource tcolor_i3}"/>
-                                    </DataTrigger>
-                                </Button.Triggers>
-
-                            </Button>
-
-                            <Button
-                                Grid.Column="1"
-                                Style="{DynamicResource ButtonStyle_i1}"
-                                Padding="0"
-                                Text="{extensions:Translate Accessories}">
-
-                                <Button.Triggers>
-                                    <DataTrigger Binding="{Binding IsSelected}" Value="True" TargetType="Button">
-                                        <Setter Property="BackgroundColor" Value="Transparent"/>
-                                        <Setter Property="TextColor" Value="{DynamicResource tcolor_i3}"/>
-                                    </DataTrigger>
-                                </Button.Triggers>
-
-                            </Button>
-
-                        </Grid>
-
-                    </Border>
+                        HorizontalOptions="Center"
+                        x:Name="tabsSelector"
+                        TabWidth="191"
+                        SelectedTabIndex="{Binding SelectedNotificationFilterIndex}"
+                        TabNames="{Binding NotificationsFilters}"
+                        SelectedTabChangedCommand="{Binding SelectedNotificationFilterChangedCommand}"/>
 
                     <CollectionView 
-                        Grid.Column="0"
+                        Grid.Row="1"
                         WidthRequest="360"
                         ItemTemplate="{DynamicResource notificationSourceTemplate}"
                         ItemsSource="{Binding NotificationsSources}"/>
-                    
-                </StackLayout>
+
+                </Grid>
 
                 <RefreshView
                     Grid.Column="1"
@@ -119,7 +84,16 @@
                         WidthRequest="571"
                         VerticalScrollBarVisibility="Always"
                         HorizontalScrollBarVisibility="Always"
-                        x:Name="scrollViewNotifications"/>
+                        x:Name="scrollViewNotifications">
+
+                        <CollectionView.Footer>
+
+                            <BoxView Color="Red"
+                                     HeightRequest="20"/>
+
+                        </CollectionView.Footer>
+
+                    </CollectionView>
 
                 </RefreshView>
                 

@@ -77,12 +77,44 @@ public class NotificationsPageViewModel : BaseTabViewModel
                 NotificationsCount = 30,
                 SelectCommand = SelectNotificationSourceCommand,
             },
+            new NotificationSourceBindableModel
+            {
+                Name = "Garage",
+                NotificationsCount = 12,
+                SelectCommand = SelectNotificationSourceCommand,
+            },
+            new NotificationSourceBindableModel
+            {
+                Name = "Half Bath",
+                NotificationsCount = 3,
+                SelectCommand = SelectNotificationSourceCommand,
+            },
+            new NotificationSourceBindableModel
+            {
+                Name = "Living Room",
+                NotificationsCount = 30,
+                SelectCommand = SelectNotificationSourceCommand,
+            },
         };
 
         SelectNotificationSource(NotificationsSources.FirstOrDefault());
     }
 
     #region -- Public properties --
+
+    private ObservableCollection<string> _notificationsFilters = new() { "Rooms", "Accessories" };
+    public ObservableCollection<string> NotificationsFilters
+    {
+        get => _notificationsFilters;
+        set => SetProperty(ref _notificationsFilters, value);
+    }
+
+    private int _selectedNotificationFilterIndex;
+    public int SelectedNotificationFilterIndex
+    {
+        get => _selectedNotificationFilterIndex;
+        set => SetProperty(ref _selectedNotificationFilterIndex, value);
+    }
 
     private ObservableCollection<NotificationSourceBindableModel> _notificationsSources;
     public ObservableCollection<NotificationSourceBindableModel> NotificationsSources
@@ -115,6 +147,15 @@ public class NotificationsPageViewModel : BaseTabViewModel
     private ICommand _selectNotificationSourceCommand;
     public ICommand SelectNotificationSourceCommand => _selectNotificationSourceCommand ??= 
         SingleExecutionCommand.FromFunc<NotificationSourceBindableModel>(OnSelectNotificationSourceCommandAsync, delayMillisec: 0);
+
+    private ICommand _selectedNotificationFilterChangedCommand;
+    public ICommand SelectedNotificationFilterChangedCommand => _selectedNotificationFilterChangedCommand ??=
+        SingleExecutionCommand.FromFunc(OnSelectedNotificationFilterChangedCommandAsync);
+
+    private Task OnSelectedNotificationFilterChangedCommandAsync()
+    {
+        return Task.CompletedTask;
+    }
 
     private ICommand _refreshNotificationsCommand;
     public ICommand RefreshNotificationsCommand => _refreshNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnRefreshNotificationsCommandAsync, delayMillisec: 0);
