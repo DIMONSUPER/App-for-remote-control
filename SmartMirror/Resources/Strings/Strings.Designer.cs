@@ -328,6 +328,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter Login.
+        /// </summary>
+        internal static string EnterLogin {
+            get {
+                return ResourceManager.GetString("EnterLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter Password.
         /// </summary>
         internal static string EnterPassword {
@@ -553,6 +562,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login or password is incorrect.
+        /// </summary>
+        internal static string LoginPasswordIncorrect {
+            get {
+                return ResourceManager.GetString("LoginPasswordIncorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to minute ago.
         /// </summary>
         internal static string MinuteAgo {
@@ -639,6 +657,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string NoNotificationsYet {
             get {
                 return ResourceManager.GetString("NoNotificationsYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No response from IP Address.
+        /// </summary>
+        internal static string NoResponseIPAddress {
+            get {
+                return ResourceManager.GetString("NoResponseIPAddress", resourceCulture);
             }
         }
         

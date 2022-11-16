@@ -1,10 +1,12 @@
-﻿using SmartMirror.Helpers;
+﻿using System.Net.Sockets;
+using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Models.DTO;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Mock;
 using SmartMirror.Services.Repository;
+using SmartMirror.Services.Rest;
 
 namespace SmartMirror.Services.Cameras
 {
@@ -13,53 +15,76 @@ namespace SmartMirror.Services.Cameras
         private readonly ISmartHomeMockService _smartHomeMockService;
         private readonly IRepositoryService _repositoryService;
         private readonly IMapperService _mapperService;
+        private readonly IRestService _restService;
 
         public CamerasService(
             ISmartHomeMockService smartHomeMockService,
             IRepositoryService repositoryService,
-            IMapperService mapperService)
+            IMapperService mapperService,
+            IRestService restService)
         {
             _smartHomeMockService = smartHomeMockService;
             _repositoryService = repositoryService;
             _mapperService = mapperService;
+            _restService = restService;
         }
 
         #region -- ICamerasService implementation --
 
         public event EventHandler AllCamerasChanged;
 
-        public Task<AOResult<IEnumerable<CameraModel>>> GetCamerasAsync()
+        public Task<AOResult<bool>> VerifyCameraIPAddressAsync(string ipAddress)
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
-                var cameras = Enumerable.Empty<CameraModel>();
+                using var httpClient = new HttpClient();
+
+                var response = await httpClient.GetAsync($"http://{ipAddress}");
+
+                return response?.StatusCode is System.Net.HttpStatusCode.OK;
+            });
+        }
+
+        public Task<AOResult<bool>> CheckCameraConnection(CameraBindableModel camera)
+        {
+            return AOResult.ExecuteTaskAsync(async onFailure =>
+            {
+                var url = new Uri($"rtsp://{camera.Login}:{camera.Password}@{camera.IpAddress}/live");
+
+                using var rtspClient = new RtspClientSharp.RtspClient(new RtspClientSharp.ConnectionParameters(url));
+
+                try
+                {
+                    using var tokenSource = new CancellationTokenSource();
+
+                    await rtspClient.ConnectAsync(tokenSource.Token);
+
+                    tokenSource.Cancel();
+                }
+                catch (OperationCanceledException ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"{nameof(CheckCameraConnection)}: {ex.Message}");
+                }
+
+                return true;
+            });
+        }
+
+        public Task<AOResult<IEnumerable<CameraBindableModel>>> GetCamerasAsync()
+        {
+            return AOResult.ExecuteTaskAsync(async onFailure =>
+            {
+                var cameras = Enumerable.Empty<CameraBindableModel>();
 
                 var camerasDb = await _repositoryService.GetAllAsync<CameraDTO>();
 
-                if (!camerasDb.Any())
-                {
-                    var camerasGettingResult = _smartHomeMockService.GetCameras();
-
-                    if (camerasGettingResult is not null)
-                    {
-                        await _repositoryService.SaveOrUpdateRangeAsync(_mapperService.MapRange<CameraDTO>(camerasGettingResult));
-                        cameras = camerasGettingResult;
-                    }
-                    else
-                    {
-                        onFailure("Cameras is null");
-                    }
-                }
-                else
-                {
-                    cameras = _mapperService.MapRange<CameraModel>(camerasDb);
-                }
+                cameras = _mapperService.MapRange<CameraBindableModel>(camerasDb);
 
                 return cameras;
             });
         }
 
-        public Task<AOResult> UpdateCameraAsync(CameraModel cameraModel)
+        public Task<AOResult> UpdateCameraAsync(CameraBindableModel cameraModel)
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
@@ -77,6 +102,18 @@ namespace SmartMirror.Services.Cameras
 
                     AllCamerasChanged?.Invoke(this, EventArgs.Empty);
                 }
+            });
+        }
+
+        public Task<AOResult> RemoveCameraAsync(CameraBindableModel cameraModel)
+        {
+            return AOResult.ExecuteTaskAsync(async onFailure =>
+            {
+                var updateCamera = _mapperService.Map<CameraDTO>(cameraModel);
+
+                await _repositoryService.DeleteAsync(updateCamera);
+
+                AllCamerasChanged?.Invoke(this, EventArgs.Empty);
             });
         }
 

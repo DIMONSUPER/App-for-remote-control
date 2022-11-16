@@ -6,9 +6,9 @@ namespace SmartMirror.Services.Mock
 {
     public class SmartHomeMockService : ISmartHomeMockService
     {
-        public IEnumerable<CameraModel> GetCameras()
+        public IEnumerable<CameraBindableModel> GetCameras()
         {
-            List<CameraModel> cameras= new()
+            List<CameraBindableModel> cameras= new()
             {
                 new() 
                 { 
@@ -17,7 +17,7 @@ namespace SmartMirror.Services.Mock
                     IsShown = true,
                     IsConnected = true,
                     CreateTime = DateTime.Now,
-                    VideoUrl = "https://videos-3.earthcam.com/fecnetwork/hdtimes10.flv/chunklist_w53922196.m3u8",
+                    VideoUrl = "https://videos-3.earthcam.com/fecnetwork/15659.flv/chunklist_w999153032.m3u8",
                 },
                 new() 
                 {

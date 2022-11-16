@@ -17,6 +17,12 @@ public class CameraDTO : IDTO
 
     public string Name { get; set; }
 
+    public string IpAddress { get; set; }
+
+    public string Login { get; set; }
+
+    public string Password { get; set; }
+
     public bool IsShown { get; set; }
 
     public bool IsConnected { get; set; }

@@ -10,7 +10,7 @@ namespace SmartMirror.Controls
         {
             base.OnPropertyChanged(propertyName);
 
-            (this as IView).InvalidateMeasure();
+            (this as IView)?.InvalidateMeasure();
         }
 
         #endregion

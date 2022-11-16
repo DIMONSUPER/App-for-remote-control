@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Grid
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -45,9 +45,21 @@
                         FontSize="{DynamicResource tsize_i2}"
                         FontFamily="InterBold"
                         Text="{Binding IPAddress}"
+                        IsEntryFocused="{Binding IsIpAddressEntryFocused}"
                         TextColor="{DynamicResource tcolor_i1}"
                         Placeholder="{extensions:Translate EnterIPAddress}"
-                        PlaceholderColor="{DynamicResource tcolor_i9}"/>
+                        PlaceholderColor="{DynamicResource tcolor_i9}">
+
+                        <controls:CustomNoBorderEntry.Triggers>
+
+                            <DataTrigger TargetType="controls:CustomNoBorderEntry" Binding="{Binding IsIpAddressCorrect}" Value="True">
+                                <Setter Property="Placeholder" Value="{extensions:Translate EnterLogin}"/>
+                                <Setter Property="Text" Value="{Binding Login}"/>
+                            </DataTrigger>
+
+                        </controls:CustomNoBorderEntry.Triggers>
+
+                    </controls:CustomNoBorderEntry>
 
                 </Border>
 
@@ -56,6 +68,7 @@
                     Padding="1"
                     HeightRequest="76"
                     StrokeThickness="1"
+                    IsVisible="{Binding IsIpAddressCorrect}"
                     StrokeShape="RoundRectangle 9"
                     Stroke="{DynamicResource tcolor_i1}"
                     BackgroundColor="{StaticResource cbg_i15}">
@@ -76,8 +89,18 @@
                     Style="{DynamicResource ButtonStyle_i1}"
                     HorizontalOptions="Center"
                     Margin="138, 36, 138, 20"
-                    Text="{extensions:Translate Add}"
-                    Command="{Binding AddCameraCommand}"/>
+                    Text="{extensions:Translate Continue}"
+                    Command="{Binding AddCameraCommand}">
+
+                    <Button.Triggers>
+
+                        <DataTrigger TargetType="Button" Binding="{Binding IsIpAddressCorrect}" Value="True">
+                            <Setter Property="Text" Value="{extensions:Translate Add}"/>
+                        </DataTrigger>
+
+                    </Button.Triggers>
+
+                </Button>
 
             </VerticalStackLayout>
 

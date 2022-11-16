@@ -44,8 +44,8 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _isReceiveNotifications, value);
         }
 
-        private CameraModel _cameraModel;
-        public CameraModel CameraModel
+        private CameraBindableModel _cameraModel;
+        public CameraBindableModel CameraModel
         {
             get => _cameraModel;
             set => SetProperty(ref _cameraModel, value);
@@ -67,7 +67,7 @@ namespace SmartMirror.ViewModels.Dialogs
             {
                 Title = camera.Name;
 
-                if (camera.Model is CameraModel cameraModel)
+                if (camera.Model is CameraBindableModel cameraModel)
                 {
                     CameraModel = cameraModel;
                     IsShownInCameras = CameraModel.IsShown;

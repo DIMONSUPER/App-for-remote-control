@@ -463,15 +463,48 @@ namespace SmartMirror.ViewModels
                     { Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure },
                     { Constants.DialogsParameterKeys.DESCRIPTION, Strings.TheCameraWillBeRemoved },
                 });
+
+                if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool isConfirmed) && isConfirmed)
+                {
+                    var cameraModel = _mapperService.Map<CameraBindableModel>(camera.Model);
+
+                    var removeResponse = await _camerasService.RemoveCameraAsync(cameraModel);
+
+                    await LoadAllCamerasAsync();
+
+                    SetElementsSelectedCategory();
+                }
             }
         }
 
-        private Task OnAddNewCameraCommandAsync()
+        private async Task OnAddNewCameraCommandAsync()
         {
-            return _dialogService.ShowDialogAsync(nameof(AddNewCameraDialog), new DialogParameters()
+            var dialogResult = await _dialogService.ShowDialogAsync(nameof(AddNewCameraDialog), new DialogParameters()
             {
                 { Constants.DialogsParameterKeys.TITLE, Strings.NewCamera },
             });
+
+            if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.IP_ADDRESS, out string ipAddress)
+                && dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.LOGIN, out string login)
+                && dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.PASSWORD, out string password))
+            {
+                var camera = new CameraBindableModel
+                {
+                    IpAddress = ipAddress,
+                    Login = login,
+                    Password = password,
+                    CreateTime = DateTime.UtcNow,
+                    Name = ipAddress,
+                    IsShown = true,
+                    VideoUrl = $"rtsp://{login}:{password}@{ipAddress}/live"
+                };
+
+                await _camerasService.UpdateCameraAsync(camera);
+
+                await LoadAllCamerasAsync();
+
+                SetElementsSelectedCategory();
+            }
         }
 
         private Task OnCloseSettingsCommandAsync()
@@ -521,8 +554,7 @@ namespace SmartMirror.ViewModels
             }
             else if (IsInternetConnected)
             {
-                var testEmail = "botheadworks@gmail.com";
-                var resultOfSendingCodeToMail = await _aqaraService.SendLoginCodeAsync(testEmail);
+                var resultOfSendingCodeToMail = await _aqaraService.SendLoginCodeAsync(Constants.Aqara.TEST_EMAIL);
 
                 if (resultOfSendingCodeToMail.IsSuccess)
                 {

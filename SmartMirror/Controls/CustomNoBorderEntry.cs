@@ -1,4 +1,6 @@
-﻿using Android.Views;
+﻿using Android.Content;
+using Android.Views;
+using Android.Views.InputMethods;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Handlers;
@@ -22,7 +24,8 @@ namespace SmartMirror.Controls
         public static readonly BindableProperty IsEntryFocusedProperty = BindableProperty.Create(
             propertyName: nameof(IsEntryFocused),
             returnType: typeof(bool),
-            declaringType: typeof(CustomNoBorderEntry));
+            declaringType: typeof(CustomNoBorderEntry),
+            defaultBindingMode: BindingMode.TwoWay);
 
         public bool IsEntryFocused
         {
@@ -42,23 +45,25 @@ namespace SmartMirror.Controls
             {
                 var needToDisableFullscreenWhileKeyboardDisplayed = Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.R;
 
-                if (IsEntryFocused)
+                try
                 {
-                    if (needToDisableFullscreenWhileKeyboardDisplayed)
+                    if (IsEntryFocused && needToDisableFullscreenWhileKeyboardDisplayed)
                     {
                         Platform.CurrentActivity.Window.ClearFlags(WindowManagerFlags.Fullscreen);
                     }
-
-                    Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(250), () => this.Focus());
-                }
-                else
-                {
-                    if (needToDisableFullscreenWhileKeyboardDisplayed)
+                    else if (!IsEntryFocused && needToDisableFullscreenWhileKeyboardDisplayed)
                     {
                         Platform.CurrentActivity.Window.AddFlags(WindowManagerFlags.Fullscreen);
                     }
 
-                    this.Unfocus();
+                    if (this.Handler is EntryHandler entryHandler)
+                    {
+                        UpdateFocus(entryHandler);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
                 }
             }
         }
@@ -73,34 +78,33 @@ namespace SmartMirror.Controls
         }
 
         private void AppendToMapping()
-        {            
+        {
             Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(CustomNoBorderEntry), (handler, view) =>
             {
                 if (view is CustomNoBorderEntry)
                 {
                     var backgroundColor = BackgroundColor ?? Color.FromArgb("#ffffff");
 
-                    handler.PlatformView.SetPadding(0, 0, 0, 0);
-                    handler.PlatformView.SetBackgroundColor(backgroundColor.ToAndroid());
+                    handler.PlatformView?.SetPadding(0, 0, 0, 0);
+                    handler.PlatformView?.SetBackgroundColor(backgroundColor.ToAndroid());
                 }
             });
-
-            Entry.ControlsEntryMapper.AppendToMapping(nameof(Entry.IsFocused), UpdateFocus);
         }
 
-        private void UpdateFocus(EntryHandler handler, IEntry entry)
+        private void UpdateFocus(EntryHandler handler)
         {
-            var editText = handler.PlatformView;
+            var editText = handler?.PlatformView;
 
-            if (Platform.CurrentActivity.GetSystemService(Android.Content.Context.InputMethodService) is Android.Views.InputMethods.InputMethodManager inputMethodManager)
+            if (editText is not null && Platform.CurrentActivity?.GetSystemService(Context.InputMethodService) is InputMethodManager inputMethodManager)
             {
-                if (IsFocused)
+                if (IsEntryFocused && editText.Focusable)
                 {
                     editText.RequestFocus();
                     inputMethodManager.ShowSoftInput(editText, Android.Views.InputMethods.ShowFlags.Forced);
                 }
                 else
                 {
+                    Unfocus();
                     inputMethodManager.HideSoftInputFromWindow(editText.WindowToken, Android.Views.InputMethods.HideSoftInputFlags.None);
                 }
             }
