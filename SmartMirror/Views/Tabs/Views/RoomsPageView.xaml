@@ -73,7 +73,6 @@
         TryAgainCommand="{Binding TryAgainCommand}"
         LoadingTitle="{extensions:Translate Rooms}"
         EmptyTitle="{extensions:Translate NoAccessoriesYet}"
-        ShowDescriptionEmptyStateLabel="True"
         DescriptionEmptyState="{extensions:Translate PleaseCheckTheAccessoriesSettings}"
         EmptyStateImage="no_accessories_yet">
 

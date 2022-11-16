@@ -10,7 +10,6 @@
     xmlns:templatesSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
     x:Class="SmartMirror.Views.Tabs.Views.NotificationsPageView"
-    xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
     x:DataType="vm:NotificationsPageViewModel">
 
     <views:BaseContentView.Resources>
@@ -36,7 +35,6 @@
         TryAgainCommand="{Binding TryAgainCommand}"
         LoadingTitle="{extensions:Translate Notifications}"
         EmptyTitle="{extensions:Translate NoNotificationsYet}"
-        ShowDescriptionEmptyStateLabel="True"
         DescriptionEmptyState="{extensions:Translate PleaseCheckTheNotificationsSettings}"
         EmptyStateImage="notifications_off">
 
