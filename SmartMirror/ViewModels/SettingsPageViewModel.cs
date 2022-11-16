@@ -337,7 +337,7 @@ namespace SmartMirror.ViewModels
 
             var deviceCategory = Categories.FirstOrDefault(c => c.Type == ECategoryType.Accessories);
 
-            deviceCategory.Count = _allAccessories.Count();
+            deviceCategory.Count = _allAccessories.Count().ToString();
 
             return true;
         }
@@ -356,7 +356,7 @@ namespace SmartMirror.ViewModels
 
             var scenarioCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Scenarios);
 
-            scenarioCategory.Count = _allScenarios.Count();
+            scenarioCategory.Count = _allScenarios.Count().ToString();
 
             return true;
         }
@@ -389,7 +389,7 @@ namespace SmartMirror.ViewModels
 
                 var cameraCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Cameras);
 
-                cameraCategory.Count = _allCameras.Count() - 1;
+                cameraCategory.Count = (_allCameras.Count() - 1).ToString();
             }
 
             return resultOfGettingCameras.IsSuccess;
@@ -458,6 +458,10 @@ namespace SmartMirror.ViewModels
             });
 
             IsAllowNotifications = _notificationsService.IsAllowNotifications;
+
+            var _notificationsCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Notifications);
+
+            _notificationsCategory.Count = IsAllowNotifications ? Strings.On : Strings.Off;
 
             return true;
         }
@@ -674,9 +678,9 @@ namespace SmartMirror.ViewModels
             });
         }
 
-        private int GetConnectedProviders()
+        private string GetConnectedProviders()
         {
-            return _allProviders.Count(x => x.IsConnected);
+            return _allProviders.Count(x => x.IsConnected).ToString();
         }
 
         #endregion

@@ -138,18 +138,28 @@
                                 <Setter Property="EmptyTitle" Value="{extensions:Translate NoAccessoriesYet}"/>
                                 <Setter Property="EmptyStateImage" Value="no_accessories_yet"/>
                                 <Setter Property="LoadingTitle" Value="{extensions:Translate Accessories}"/>
+                                <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheAccessoriesSettings}"/>
                             </DataTrigger>
 
                             <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Scenarios}">
                                 <Setter Property="EmptyTitle" Value="{extensions:Translate NoScenariosYet}"/>
                                 <Setter Property="EmptyStateImage" Value="empty_scenarios"/>
                                 <Setter Property="LoadingTitle" Value="{extensions:Translate Scenarios}"/>
+                                <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheScenariosSettings}"/>
                             </DataTrigger>
 
                             <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Cameras}">
                                 <Setter Property="EmptyTitle" Value="{extensions:Translate NoCamerasYet}"/>
                                 <Setter Property="EmptyStateImage" Value="video_off"/>
                                 <Setter Property="LoadingTitle" Value="{extensions:Translate Cameras}"/>
+                                <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheCamerasSettings}"/>
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Notifications}">
+                                <Setter Property="EmptyTitle" Value="{extensions:Translate NoNotificationsYet}"/>
+                                <Setter Property="EmptyStateImage" Value="notifications_off"/>
+                                <Setter Property="LoadingTitle" Value="{extensions:Translate Notifications}"/>
+                                <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheNotificationsSettings}"/>
                             </DataTrigger>
 
                         </controls:CustomStateView.Triggers>

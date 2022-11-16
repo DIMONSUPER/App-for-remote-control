@@ -22,8 +22,8 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _name, value);
         }
 
-        private int _count;
-        public int Count
+        private string _count;
+        public string Count
         {
             get => _count;
             set => SetProperty(ref _count, value);
