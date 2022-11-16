@@ -91,17 +91,6 @@ public partial class CustomStateView : ContentView
         set => SetValue(TryAgainCommandProperty, value);
     }
 
-    public static readonly BindableProperty ShowDescriptionEmptyStateLabelProperty = BindableProperty.Create(
-        propertyName: nameof(ShowDescriptionEmptyStateLabel),
-        returnType: typeof(bool),
-        declaringType: typeof(CustomStateView));
-
-    public bool ShowDescriptionEmptyStateLabel
-    {
-        get => (bool)GetValue(ShowDescriptionEmptyStateLabelProperty);
-        set => SetValue(ShowDescriptionEmptyStateLabelProperty, value);
-    }
-
     public static readonly BindableProperty DescriptionEmptyStateProperty = BindableProperty.Create(
         propertyName: nameof(DescriptionEmptyState),
         returnType: typeof(string),

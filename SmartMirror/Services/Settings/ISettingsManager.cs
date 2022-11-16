@@ -3,5 +3,7 @@
 public interface ISettingsManager
 {
     AqaraAccessSettings AqaraAccessSettings { get; }
+
+    NotificationsSettings NotificationsSettings { get; }
 }
 

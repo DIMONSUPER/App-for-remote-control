@@ -22,8 +22,8 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _name, value);
         }
 
-        private int _count;
-        public int Count
+        private string _count;
+        public string Count
         {
             get => _count;
             set => SetProperty(ref _count, value);
@@ -34,6 +34,13 @@ namespace SmartMirror.Models.BindableModels
         {
             get => _isSelected;
             set => SetProperty(ref _isSelected, value);
+        }
+
+        private bool _hasImage = true;
+        public bool HasImage
+        {
+            get => _hasImage;
+            set => SetProperty(ref _hasImage, value);
         }
 
         #endregion

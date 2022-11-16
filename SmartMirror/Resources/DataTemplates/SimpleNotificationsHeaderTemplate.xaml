@@ -4,20 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
-    xmlns:vm="clr-namespace:SmartMirror.Models.BindableModels"
     Padding="24, 18"
     BackgroundColor="{DynamicResource cbg_i2}"
     Stroke="{DynamicResource cbg_i4}"
     StrokeThickness="0.75"
     StrokeShape="RoundRectangle 9"
-    behaviors:TouchBehavior.IsAnimation="True"
-    behaviors:TouchBehavior.Command="{Binding TapCommand}"
-    behaviors:TouchBehavior.CommandParameter="{Binding .}"
-    behaviors:TouchBehavior.NormalBackgroundColor="{DynamicResource cbg_i2}"
-    behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}"
-    x:Class="SmartMirror.Resources.DataTemplates.SimpleAccessoryTemplate"
-    x:DataType="vm:ImageAndTitleBindableModel"
-    x:Name="simpleAccessoryTemplate">
+    x:Class="SmartMirror.Resources.DataTemplates.SimpleNotificationsHeaderTemplate"
+    x:Name="simpleNotificationsHeaderTemplate">
 
     <Grid ColumnDefinitions="Auto, *, Auto">
 
@@ -27,12 +20,12 @@
             HorizontalOptions="Start"
             HeightImage="38"
             Padding="0"
-            Source="{Binding ImageSource}"/>
+            Source="{Binding ImageSource, Source={x:Reference simpleNotificationsHeaderTemplate}}"/>
 
         <Label
             Grid.Column="1"
             Style="{DynamicResource tstyle_i11}"
-            Text="{Binding Name}"
+            Text="{Binding Title, Source={x:Reference simpleNotificationsHeaderTemplate}}"
             LineBreakMode="TailTruncation"
             Margin="10, 0"
             MaxLines="1"
@@ -42,8 +35,7 @@
         <controls:CustomSwitch
             Grid.Column="2"
             InputTransparent="True"
-            IsVisible="{Binding HasSwitch, Source={x:Reference simpleAccessoryTemplate}}"
-            IsToggled="{Binding IsToggled}"/>
+            IsToggled="{Binding IsToggled, Source={x:Reference simpleNotificationsHeaderTemplate}}"/>
 
     </Grid>
 

@@ -2,13 +2,13 @@
 <views:BaseContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"  
     xmlns:views="clr-namespace:SmartMirror.Views"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
-    xmlns:sc="clr-namespace:SmartMirror.Controls.StateContainer"
     xmlns:templateSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
     xmlns:skeletons="clr-namespace:SmartMirror.Views.Skeletons"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels"
@@ -20,8 +20,43 @@
     <views:BaseContentPage.Resources>
 
         <ResourceDictionary>
+
             <templates:CategoryTemplate x:Key="categoryTemplate"/>
-            <templateSelectors:CategoryElementTemplateSelector x:Key="elementCategoryTemplateSelector"/>
+
+            <DataTemplate x:Key="simpleAccessoryDataTemplate">
+                <templates:SimpleAccessoryTemplate/>
+            </DataTemplate>
+
+            <DataTemplate x:Key="simpleNotificationHeaderTemplate">
+
+                <templates:SimpleNotificationsHeaderTemplate
+                    BindingContext="{Binding .}"
+                    IsToggled="{Binding IsAllowNotifications}"
+                    ImageSource="subtract_bell"
+                    Title="{extensions:Translate AllowNotifications}"
+                    behaviors:TouchBehavior.IsAnimation="True"
+                    behaviors:TouchBehavior.Command="{Binding ChangeAllowNotificationsCommand}"
+                    behaviors:TouchBehavior.NormalBackgroundColor="{DynamicResource cbg_i2}"
+                    behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}"/>
+
+            </DataTemplate>
+
+            <templates:SimpleScenarioTemplate x:Key="simpleScenarioTemplate"/>
+            <templates:SimpleCameraTemplate x:Key="simpleCameraTemplate"/>
+            <templates:ProvidersTemplate x:Key="simpleProviderTemplate"/>
+
+            <DataTemplate x:Key="simpleNotificationTemplate">
+                <templates:SimpleAccessoryTemplate HasSwitch="True"/>
+            </DataTemplate>
+
+            <templateSelectors:CategoryElementTemplateSelector
+                x:Key="elementCategoryTemplateSelector"
+                AccessoriesDataTemplate="{StaticResource simpleAccessoryDataTemplate}"
+                ScenariosDataTemplate="{StaticResource simpleScenarioTemplate}"
+                CamerasDataTemplate="{StaticResource simpleCameraTemplate}"
+                ProvidersDataTemplate="{StaticResource simpleProviderTemplate}"
+                NotificationsDataTemplate="{StaticResource simpleNotificationTemplate}"/>
+
         </ResourceDictionary>
 
     </views:BaseContentPage.Resources>
@@ -103,41 +138,73 @@
                                 <Setter Property="EmptyTitle" Value="{extensions:Translate NoAccessoriesYet}"/>
                                 <Setter Property="EmptyStateImage" Value="no_accessories_yet"/>
                                 <Setter Property="LoadingTitle" Value="{extensions:Translate Accessories}"/>
+                                <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheAccessoriesSettings}"/>
                             </DataTrigger>
 
                             <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Scenarios}">
                                 <Setter Property="EmptyTitle" Value="{extensions:Translate NoScenariosYet}"/>
                                 <Setter Property="EmptyStateImage" Value="empty_scenarios"/>
                                 <Setter Property="LoadingTitle" Value="{extensions:Translate Scenarios}"/>
+                                <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheScenariosSettings}"/>
                             </DataTrigger>
 
                             <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Cameras}">
                                 <Setter Property="EmptyTitle" Value="{extensions:Translate NoCamerasYet}"/>
                                 <Setter Property="EmptyStateImage" Value="video_off"/>
                                 <Setter Property="LoadingTitle" Value="{extensions:Translate Cameras}"/>
+                                <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheCamerasSettings}"/>
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Notifications}">
+                                <Setter Property="EmptyTitle" Value="{extensions:Translate NoNotificationsYet}"/>
+                                <Setter Property="EmptyStateImage" Value="notifications_off"/>
+                                <Setter Property="LoadingTitle" Value="{extensions:Translate Notifications}"/>
+                                <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheNotificationsSettings}"/>
                             </DataTrigger>
 
                         </controls:CustomStateView.Triggers>
 
                         <controls:CustomStateView.CompleteContent>
 
-                            <CollectionView
+                            <controls:CustomScrollView
                                 Margin="105, 0, 60, 0"
-                                ItemsSource="{Binding CategoryElements}"
-                                ItemTemplate="{StaticResource elementCategoryTemplateSelector}">
+                                BindingForInvalidateMeasure="{Binding SelectedCategory.Type}"
+                                VerticalScrollBarVisibility="Never"
+                                HorizontalScrollBarVisibility="Never">
 
-                                <CollectionView.ItemsLayout>
+                                <StackLayout>
 
-                                    <GridItemsLayout
-                                        Span="2"
-                                        VerticalItemSpacing="25"
-                                        HorizontalItemSpacing="25"
-                                        Orientation="Vertical"/>
+                                    <templates:SimpleNotificationsHeaderTemplate
+                                        Margin="0, 0, 0, 25"
+                                        IsVisible="{Binding SelectedCategory.Type, Converter={xct:IsEqualConverter}, ConverterParameter={x:Static enums:ECategoryType.Notifications}}"
+                                        IsToggled="{Binding IsAllowNotifications}"
+                                        ImageSource="subtract_bell"
+                                        Title="{extensions:Translate AllowNotifications}"
+                                        behaviors:TouchBehavior.IsAnimation="True"
+                                        behaviors:TouchBehavior.Command="{Binding ChangeAllowNotificationsCommand}"
+                                        behaviors:TouchBehavior.NormalBackgroundColor="{DynamicResource cbg_i2}"
+                                        behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}"/>
 
-                                </CollectionView.ItemsLayout>
+                                    <CollectionView
+                                        ItemsSource="{Binding CategoryElements}"
+                                        ItemTemplate="{StaticResource elementCategoryTemplateSelector}">
 
-                            </CollectionView>
+                                        <CollectionView.ItemsLayout>
 
+                                            <GridItemsLayout
+                                                Span="2"
+                                                VerticalItemSpacing="25"
+                                                HorizontalItemSpacing="25"
+                                                Orientation="Vertical"/>
+
+                                        </CollectionView.ItemsLayout>
+
+                                    </CollectionView>
+
+                                </StackLayout>
+
+                            </controls:CustomScrollView>
+                            
                         </controls:CustomStateView.CompleteContent>
 
                     </controls:CustomStateView>

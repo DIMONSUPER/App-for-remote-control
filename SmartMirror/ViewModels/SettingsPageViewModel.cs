@@ -5,6 +5,7 @@ using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Cameras;
+using SmartMirror.Services.Notifications;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Google;
 using SmartMirror.Services.Mapper;
@@ -24,13 +25,16 @@ namespace SmartMirror.ViewModels
         private readonly IScenariosService _scenariosService;
         private readonly ICamerasService _camerasService;
         private readonly IGoogleService _googleService;
+        private readonly INotificationsService _notificationsService;
 
         private IEnumerable<ImageAndTitleBindableModel> _allAccessories = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allCameras = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<SettingsProvidersBindableModel> _allProviders = Enumerable.Empty<SettingsProvidersBindableModel>();
+        private IEnumerable<ImageAndTitleBindableModel> _allNotifications = Enumerable.Empty<ImageAndTitleBindableModel>();
 
         private CategoryBindableModel _providersCategory;
+        private CategoryBindableModel _notificationsCategory;
         private IDialogResult _dialogResult;
 
         public SettingsPageViewModel(
@@ -41,6 +45,7 @@ namespace SmartMirror.ViewModels
             IScenariosService scenariosService,
             ICamerasService camerasService,
             IAqaraService aqaraService,
+            INotificationsService notificationsService,
             IGoogleService googleService)
             : base(navigationService)
         {
@@ -51,8 +56,10 @@ namespace SmartMirror.ViewModels
             _scenariosService = scenariosService;
             _camerasService = camerasService;
             _googleService = googleService;
+            _notificationsService = notificationsService;
 
             PageState = EPageState.LoadingSkeleton;
+
             _devicesService.AllDevicesChanged += OnAllDevicesChanged;
             _scenariosService.AllScenariosChanged += OnAllScenariosChanged;
         }
@@ -76,6 +83,13 @@ namespace SmartMirror.ViewModels
         {
             get => _selectedCategory;
             set => SetProperty(ref _selectedCategory, value);
+        }
+
+        private bool _isAllowNotifications;
+        public bool IsAllowNotifications
+        {
+            get => _isAllowNotifications;
+            set => SetProperty(ref _isAllowNotifications, value);
         }
 
         private ObservableCollection<CategoryBindableModel> _categories;
@@ -124,6 +138,12 @@ namespace SmartMirror.ViewModels
 
         private ICommand _openAccessorySettingsCommand;
         public ICommand OpenAccessorySettingsCommand => _openAccessorySettingsCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnOpenAccessorySettingsCommandAsync);
+
+        private ICommand _changeStatusReceivingNotificationCommand;
+        public ICommand ChangeStatusReceivingNotificationCommand => _changeStatusReceivingNotificationCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnChangeStatusReceivingNotificationCommandAsync);
+
+        private ICommand _changeAllowNotificationsCommand;
+        public ICommand ChangeAllowNotificationsCommand => _changeAllowNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnChangeAllowNotificationsCommandAsync);
 
         #endregion
 
@@ -206,6 +226,13 @@ namespace SmartMirror.ViewModels
                     Name = Strings.Providers,
                     TapCommand = SelectCategoryCommand,
                 },
+                new()
+                {
+                    Type = ECategoryType.Notifications,
+                    Name = Strings.Notifications,
+                    HasImage = false,
+                    TapCommand = SelectCategoryCommand,
+                },
             };
         }
 
@@ -242,12 +269,20 @@ namespace SmartMirror.ViewModels
                     ECategoryType.Scenarios => new(_allScenarios),
                     ECategoryType.Cameras => new(_allCameras),
                     ECategoryType.Providers => new(_allProviders),
+                    ECategoryType.Notifications => IsAllowNotifications ? new(_allNotifications) : new(),
                     _ => throw new NotImplementedException(),
                 };
 
-                DataState = CategoryElements.Any()
+                if (!IsAllowNotifications && SelectedCategory.Type == ECategoryType.Notifications)
+                {
+                    DataState = EPageState.Complete;
+                }
+                else
+                {
+                    DataState = CategoryElements.Any()
                     ? EPageState.Complete
                     : EPageState.Empty;
+                }
             }
         }
 
@@ -283,6 +318,7 @@ namespace SmartMirror.ViewModels
                 isLoaded = await LoadAllDevicesAsync();
                 isLoaded &= await LoadAllScenariosAsync();
                 isLoaded &= await LoadAllCamerasAsync();
+                isLoaded &= await LoadAllNotificationsAsync();
 
                 CreateProviders();
             }
@@ -297,12 +333,13 @@ namespace SmartMirror.ViewModels
             _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(devices, (m, vm) =>
             {
                 vm.Model = m;
+                vm.Type = ECategoryType.Accessories;
                 vm.TapCommand = OpenAccessorySettingsCommand;
             });
 
             var deviceCategory = Categories.FirstOrDefault(c => c.Type == ECategoryType.Accessories);
 
-            deviceCategory.Count = _allAccessories.Count();
+            deviceCategory.Count = _allAccessories.Count().ToString();
 
             return true;
         }
@@ -321,7 +358,7 @@ namespace SmartMirror.ViewModels
 
             var scenarioCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Scenarios);
 
-            scenarioCategory.Count = _allScenarios.Count();
+            scenarioCategory.Count = _allScenarios.Count().ToString();
 
             return true;
         }
@@ -354,7 +391,7 @@ namespace SmartMirror.ViewModels
 
                 var cameraCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Cameras);
 
-                cameraCategory.Count = _allCameras.Count() - 1;
+                cameraCategory.Count = (_allCameras.Count() - 1).ToString();
             }
 
             return resultOfGettingCameras.IsSuccess;
@@ -410,6 +447,27 @@ namespace SmartMirror.ViewModels
             _providersCategory.Count = GetConnectedProviders();
         }
 
+        private async Task<bool> LoadAllNotificationsAsync()
+        {
+            var devices = await _devicesService.GetAllSupportedDevicesAsync();
+
+            _allNotifications = _mapperService.MapRange<ImageAndTitleBindableModel>(devices, (m, vm) =>
+            {
+                vm.Model = m;
+                vm.Type = ECategoryType.Notifications;
+                vm.IsToggled = m is DeviceBindableModel device && device.IsReceiveNotifications;
+                vm.TapCommand = ChangeStatusReceivingNotificationCommand;
+            });
+
+            IsAllowNotifications = _notificationsService.IsAllowNotifications;
+
+            _notificationsCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Notifications);
+
+            _notificationsCategory.Count = IsAllowNotifications ? Strings.On : Strings.Off;
+
+            return true;
+        }
+
         private async Task OnTryAgainCommandAsync()
         {
             if (!IsDataLoading)
@@ -431,6 +489,29 @@ namespace SmartMirror.ViewModels
                     PageState = EPageState.NoInternet;
                 }
             }
+        }
+
+        private Task OnChangeStatusReceivingNotificationCommandAsync(ImageAndTitleBindableModel accessory)
+        {
+            var device = accessory.Model as DeviceBindableModel;
+
+            accessory.IsToggled = !accessory.IsToggled;
+            device.IsReceiveNotifications = !device.IsReceiveNotifications;
+
+            return _devicesService.UpdateDeviceAsync(device);
+        }
+
+        private Task OnChangeAllowNotificationsCommandAsync()
+        {
+            var state = !_notificationsService.IsAllowNotifications;
+
+            IsAllowNotifications = state;
+
+            _notificationsCategory.Count = IsAllowNotifications ? Strings.On : Strings.Off;
+
+            SetElementsSelectedCategory();
+
+            return _notificationsService.ChangeAllowNotificationsAsync(state);
         }
 
         private Task OnOpenAccessorySettingsCommandAsync(ImageAndTitleBindableModel accessory)
@@ -633,9 +714,9 @@ namespace SmartMirror.ViewModels
             });
         }
 
-        private int GetConnectedProviders()
+        private string GetConnectedProviders()
         {
-            return _allProviders.Count(x => x.IsConnected);
+            return _allProviders.Count(x => x.IsConnected).ToString();
         }
 
         #endregion

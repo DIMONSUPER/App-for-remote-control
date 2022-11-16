@@ -103,6 +103,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow Notifications.
+        /// </summary>
+        internal static string AllowNotifications {
+            get {
+                return ResourceManager.GetString("AllowNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Amazon.
         /// </summary>
         internal static string Amazon {
