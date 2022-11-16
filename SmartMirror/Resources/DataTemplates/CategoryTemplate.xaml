@@ -13,7 +13,6 @@
 
         <Border
             Margin="0, 0, 0, 15"
-            Padding="18, 12"
             StrokeThickness="1"
             StrokeShape="RoundRectangle 9"
             BackgroundColor="Transparent">
@@ -28,7 +27,9 @@
 
             </Border.Triggers>
 
-            <StackLayout Orientation="Horizontal">
+            <StackLayout
+                Orientation="Horizontal"
+                Margin="18, 12">
 
                 <Label 
                     Style="{DynamicResource tstyle_i11}"
@@ -44,7 +45,8 @@
                     Text="{Binding Count}"
                     x:Name="categoryCountLabel"/>
 
-                <Image 
+                <Image
+                    IsVisible="{Binding HasImage}"
                     Margin="6, 0, 0, 0"
                     WidthRequest="24"
                     HeightRequest="24"

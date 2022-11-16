@@ -36,6 +36,13 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _isSelected, value);
         }
 
+        private bool _hasImage = true;
+        public bool HasImage
+        {
+            get => _hasImage;
+            set => SetProperty(ref _hasImage, value);
+        }
+
         #endregion
 
         #region -- ITappable implementation

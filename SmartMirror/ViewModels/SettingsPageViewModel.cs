@@ -34,6 +34,7 @@ namespace SmartMirror.ViewModels
         private IEnumerable<ImageAndTitleBindableModel> _allNotifications = Enumerable.Empty<ImageAndTitleBindableModel>();
 
         private CategoryBindableModel _providersCategory;
+        private CategoryBindableModel _notificationsCategory;
         private IDialogResult _dialogResult;
 
         public SettingsPageViewModel(
@@ -229,6 +230,7 @@ namespace SmartMirror.ViewModels
                 {
                     Type = ECategoryType.Notifications,
                     Name = Strings.Notifications,
+                    HasImage = false,
                     TapCommand = SelectCategoryCommand,
                 },
             };
@@ -459,7 +461,7 @@ namespace SmartMirror.ViewModels
 
             IsAllowNotifications = _notificationsService.IsAllowNotifications;
 
-            var _notificationsCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Notifications);
+            _notificationsCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Notifications);
 
             _notificationsCategory.Count = IsAllowNotifications ? Strings.On : Strings.Off;
 
@@ -504,6 +506,8 @@ namespace SmartMirror.ViewModels
             var state = !_notificationsService.IsAllowNotifications;
 
             IsAllowNotifications = state;
+
+            _notificationsCategory.Count = IsAllowNotifications ? Strings.On : Strings.Off;
 
             SetElementsSelectedCategory();
 
