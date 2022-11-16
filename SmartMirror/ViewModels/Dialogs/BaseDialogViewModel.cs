@@ -4,6 +4,8 @@ namespace SmartMirror.ViewModels.Dialogs;
 
 public class BaseDialogViewModel : BindableBase, IDialogAware
 {
+    protected const int FOCUS_DELAY = 350;
+
     public BaseDialogViewModel(IBlurService blurService)
     {
         BlurService = blurService;

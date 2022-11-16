@@ -22,6 +22,7 @@
             public const string DESCRIPTION = nameof(DESCRIPTION);
             public const string IP_ADDRESS = nameof(IP_ADDRESS);
             public const string PASSWORD = nameof(PASSWORD);
+            public const string LOGIN = nameof(LOGIN);
         }
 
         public static class Google
@@ -39,9 +40,18 @@
         public static class Aqara
         {
             public const string API_URL = "https://open-usa.aqara.com/v3.0/open/api";
-            public const string APP_ID = "1019974506077405184fac3b";
-            public const string APP_KEY = "gvnepmdyciqbb4ob7rocp6nnxt9elxmf";
-            public const string KEY_ID = "K.1019974506438115328";
+            public const string TEST_EMAIL = "botheadworks@gmail.com";
+            //public const string TEST_EMAIL = "dmytro.fedchenko@headworks.com.ua";
+
+            //botheadworks@gmail.com
+            //public const string APP_ID = "1019974506077405184fac3b";
+            //public const string APP_KEY = "gvnepmdyciqbb4ob7rocp6nnxt9elxmf";
+            //public const string KEY_ID = "K.1019974506438115328";
+
+            //dmytro.fedchenko@headworks.com.ua
+            public const string APP_ID = "10424569422108057604ba21";
+            public const string APP_KEY = "rf9bq7v5f118s8v2balwfsatqgwhz8wz";
+            public const string KEY_ID = "K.1042456943007723522";
 
             public static class AttibutesId
             {
