@@ -6,6 +6,8 @@ namespace SmartMirror.ViewModels.Dialogs
 {
     public class ConfirmDialogViewModel : BaseDialogViewModel
     {
+        private Action _confirmAction;
+
         public ConfirmDialogViewModel(
             IBlurService blurService)
             : base(blurService)
@@ -48,6 +50,11 @@ namespace SmartMirror.ViewModels.Dialogs
             {
                 Description = description;
             }
+
+            if (parameters.TryGetValue(Constants.DialogsParameterKeys.CONFIRM_ACTION, out Action action))
+            {
+                _confirmAction = action;
+            }
         }
 
         #endregion
@@ -56,6 +63,11 @@ namespace SmartMirror.ViewModels.Dialogs
 
         private Task OnCloseCommandAsync(bool confirm)
         {
+            if (confirm)
+            {
+                _confirmAction?.Invoke();
+            }
+
             RequestClose.Invoke(new DialogParameters()
             {
                 { Constants.DialogsParameterKeys.RESULT, confirm },

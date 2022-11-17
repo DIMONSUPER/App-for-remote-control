@@ -52,6 +52,8 @@ namespace SmartMirror.ViewModels.Dialogs
 
         public override void OnDialogOpened(IDialogParameters parameters)
         {
+            base.OnDialogOpened(parameters);
+
             if (parameters.TryGetValue(Constants.DialogsParameterKeys.AUTH_TYPE, out EAuthType authType))
             {
                 AuthType = authType;
