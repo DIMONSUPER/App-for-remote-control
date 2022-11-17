@@ -76,6 +76,8 @@ namespace SmartMirror.ViewModels.Dialogs
 
         public override async void OnDialogOpened(IDialogParameters parameters)
         {
+            base.OnDialogOpened(parameters);
+
             if (parameters.TryGetValue(Constants.DialogsParameterKeys.TITLE, out string title))
             {
                 Title = title;

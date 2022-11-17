@@ -23,6 +23,7 @@
             public const string IP_ADDRESS = nameof(IP_ADDRESS);
             public const string PASSWORD = nameof(PASSWORD);
             public const string LOGIN = nameof(LOGIN);
+            public const string CONFIRM_ACTION = nameof(CONFIRM_ACTION);
         }
 
         public static class Google

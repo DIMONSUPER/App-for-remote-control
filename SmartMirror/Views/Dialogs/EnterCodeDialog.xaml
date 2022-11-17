@@ -6,8 +6,8 @@
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
-    prismmaui:DialogLayout.MaskStyle="{DynamicResource DialogMaskBoxViewStyle_i1}"
     prismmaui:DialogLayout.CloseOnBackgroundTapped="True"
+    prismmaui:DialogLayout.UseMask="False"
     x:Class="SmartMirror.Views.Dialogs.EnterCodeDialog"
     x:DataType="vm:EnterCodeDialogViewModel">
 
