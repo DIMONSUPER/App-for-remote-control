@@ -4,70 +4,106 @@
              xmlns:controls="clr-namespace:SmartMirror.Controls"
              x:Class="SmartMirror.Views.Skeletons.NotificationsTabSkeleton">
 
-    <VerticalStackLayout Margin="0,48,0,0">
+    <Grid ColumnDefinitions="0.34*, 0.66*"
+          Margin="0, 40, 0, 0">
 
-        <controls:SkeletonView WidthRequest="63"
-                               HeightRequest="29"
-                               StrokeShape="RoundRectangle 9"
-                               Style="{DynamicResource WhiteGradientStyle_i1}"/>
-
-        <StackLayout Margin="0,26,0,0"
-                        Spacing="18">
-
-            <BindableLayout.ItemTemplate>
-
-                <DataTemplate>
-
-                    <controls:SkeletonView StrokeShape="RoundRectangle 9"
-                                           WidthRequest="572"
-                                           HeightRequest="114"
-                                           Style="{DynamicResource WhiteGradientStyle_i1}"/>
-
-                </DataTemplate>
-
-            </BindableLayout.ItemTemplate>
+        <VerticalStackLayout Grid.Column="0">
 
             <BindableLayout.ItemsSource>
                 <x:Array Type="{x:Type x:String}">
                     <x:String>1</x:String>
                     <x:String>2</x:String>
-                    <x:String>2</x:String>
+                    <x:String>3</x:String>
+                    <x:String>4</x:String>
+                    <x:String>5</x:String>
                 </x:Array>
             </BindableLayout.ItemsSource>
-
-        </StackLayout>
-
-        <controls:SkeletonView Margin="0,42,0,28"
-                               WidthRequest="104"
-                               HeightRequest="29"
-                               StrokeShape="RoundRectangle 9"
-                               Style="{DynamicResource WhiteGradientStyle_i1}"/>
-
-        <StackLayout Spacing="18">
 
             <BindableLayout.ItemTemplate>
 
                 <DataTemplate>
 
-                    <controls:SkeletonView StrokeShape="RoundRectangle 9"
-                                           Style="{DynamicResource WhiteGradientStyle_i1}"
-                                           WidthRequest="572"
-                                           HeightRequest="114"/>
+                    <controls:SkeletonView
+                        Style="{DynamicResource WhiteGradientStyle_i1}"
+                        Margin="0, 0, 0, 12"
+                        StrokeShape="RoundRectangle 9"
+                        WidthRequest="363"
+                        HeightRequest="51"/>
 
                 </DataTemplate>
 
             </BindableLayout.ItemTemplate>
 
-            <BindableLayout.ItemsSource>
-                        <x:Array Type="{x:Type x:String}">
-                            <x:String>1</x:String>
-                            <x:String>2</x:String>
-                        </x:Array>
-            </BindableLayout.ItemsSource>
+        </VerticalStackLayout>
+        
+        <VerticalStackLayout 
+            Grid.Column="1"
+            Margin="0,16,0,0">
 
-        </StackLayout>
+            <controls:SkeletonView WidthRequest="63"
+                                   HeightRequest="29"
+                                   StrokeShape="RoundRectangle 9"
+                                   Style="{DynamicResource WhiteGradientStyle_i1}"/>
 
-    </VerticalStackLayout>
+            <StackLayout Margin="0,26,0,0"
+                            Spacing="18">
+
+                <BindableLayout.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <controls:SkeletonView StrokeShape="RoundRectangle 9"
+                                               WidthRequest="572"
+                                               HeightRequest="114"
+                                               Style="{DynamicResource WhiteGradientStyle_i1}"/>
+
+                    </DataTemplate>
+
+                </BindableLayout.ItemTemplate>
+
+                <BindableLayout.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>1</x:String>
+                        <x:String>2</x:String>
+                        <x:String>2</x:String>
+                    </x:Array>
+                </BindableLayout.ItemsSource>
+
+            </StackLayout>
+
+            <controls:SkeletonView Margin="0,42,0,28"
+                                   WidthRequest="104"
+                                   HeightRequest="29"
+                                   StrokeShape="RoundRectangle 9"
+                                   Style="{DynamicResource WhiteGradientStyle_i1}"/>
+
+            <StackLayout Spacing="18">
+
+                <BindableLayout.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <controls:SkeletonView StrokeShape="RoundRectangle 9"
+                                               Style="{DynamicResource WhiteGradientStyle_i1}"
+                                               WidthRequest="572"
+                                               HeightRequest="114"/>
+
+                    </DataTemplate>
+
+                </BindableLayout.ItemTemplate>
+
+                <BindableLayout.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>1</x:String>
+                        <x:String>2</x:String>
+                    </x:Array>
+                </BindableLayout.ItemsSource>
+
+            </StackLayout>
+
+        </VerticalStackLayout>
+
+    </Grid>
 
 </ContentView>
 

@@ -48,13 +48,11 @@
                 ColumnDefinitions="0.34*, 0.66*"
                 Margin="0, 40, 0, 0">
 
-                <Grid 
-                    RowDefinitions="auto, *"
-                    Margin="0, 34, 0, 0">
+                <Grid RowDefinitions="auto, *">
 
                     <controls:TabsSelector
                         Grid.Row="0"
-                        Margin="31, 13, 31, 30"
+                        Margin="31, 0, 31, 30"
                         HorizontalOptions="Center"
                         x:Name="tabsSelector"
                         TabWidth="191"
