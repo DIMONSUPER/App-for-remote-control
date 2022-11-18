@@ -7,23 +7,23 @@ namespace SmartMirror.Views.Dialogs;
 
 public partial class ConfirmPopup : Popup
 {
-	public ConfirmPopup(ConfirmPopupViewModel confirmPopupViewModel)
-	{
-		InitializeComponent();
+    public ConfirmPopup(ConfirmPopupViewModel confirmPopupViewModel)
+    {
+        InitializeComponent();
 
-		confirmPopupViewModel.CloseCommand = SingleExecutionCommand.FromFunc(OnCloseCommandAsync);
+        confirmPopupViewModel.CloseCommand = SingleExecutionCommand.FromFunc(OnCloseCommandAsync);
 
         BindingContext = confirmPopupViewModel;
-	}
+    }
 
     #region -- Private helpers --
 
-	private Task OnCloseCommandAsync(object parameters)
-	{
-		Close(parameters);
+    private Task OnCloseCommandAsync(object parameters)
+    {
+        Close(parameters);
 
-		return Task.CompletedTask;
-	}
+        return Task.CompletedTask;
+    }
 
     #endregion
 }
