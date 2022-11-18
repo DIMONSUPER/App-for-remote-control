@@ -19,6 +19,10 @@ public class NotificationsPageViewModel : BaseTabViewModel
     private readonly IDevicesService _devicesService;
     private readonly IRoomsService _roomsService;
 
+    private ObservableCollection<NotificationGroupItemBindableModel> _allNotifications;
+    private ObservableCollection<NotificationSourceBindableModel> _roomsNotificationSource;
+    private ObservableCollection<NotificationSourceBindableModel> _deviceeNotificationSource;
+
     public NotificationsPageViewModel(
         INotificationsService notificationsService,
         IDialogService dialogService,
@@ -39,81 +43,34 @@ public class NotificationsPageViewModel : BaseTabViewModel
         _notificationsService.NotificationReceived += OnNotificationReceived;
         _roomsService.AllRoomsChanged += OnAllRoomsChanged;
 
-        NotificationsSources = new ObservableCollection<NotificationSourceBindableModel>()
+        NotificationCategories = new()
         {
-            new NotificationSourceBindableModel
-            {
-                Name = "All",
-                NotificationsCount = 123,
-                SelectCommand = SelectNotificationSourceCommand,
-            },
-            new NotificationSourceBindableModel
-            {
-                Name = "Dining Room",
-                NotificationsCount = 23,
-                SelectCommand = SelectNotificationSourceCommand,
-            },
-            new NotificationSourceBindableModel
-            {
-                Name = "Front Door",
-                NotificationsCount = 54,
-                SelectCommand = SelectNotificationSourceCommand,
-            },
-            new NotificationSourceBindableModel
-            {
-                Name = "Garage",
-                NotificationsCount = 12,
-                SelectCommand = SelectNotificationSourceCommand,
-            },
-            new NotificationSourceBindableModel
-            {
-                Name = "Half Bath",
-                NotificationsCount = 3,
-                SelectCommand = SelectNotificationSourceCommand,
-            },
-            new NotificationSourceBindableModel
-            {
-                Name = "Living Room",
-                NotificationsCount = 30,
-                SelectCommand = SelectNotificationSourceCommand,
-            },
-            new NotificationSourceBindableModel
-            {
-                Name = "Garage",
-                NotificationsCount = 12,
-                SelectCommand = SelectNotificationSourceCommand,
-            },
-            new NotificationSourceBindableModel
-            {
-                Name = "Half Bath",
-                NotificationsCount = 3,
-                SelectCommand = SelectNotificationSourceCommand,
-            },
-            new NotificationSourceBindableModel
-            {
-                Name = "Living Room",
-                NotificationsCount = 30,
-                SelectCommand = SelectNotificationSourceCommand,
-            },
+            LocalizationResourceManager.Instance["Rooms"] as string,
+            LocalizationResourceManager.Instance["Accessories"] as string,
         };
-
-        SelectNotificationSource(NotificationsSources.FirstOrDefault());
     }
 
     #region -- Public properties --
 
-    private ObservableCollection<string> _notificationsFilters = new() { "Rooms", "Accessories" };
-    public ObservableCollection<string> NotificationsFilters
+    private ObservableCollection<string> _notificationCategories;
+    public ObservableCollection<string> NotificationCategories
     {
-        get => _notificationsFilters;
-        set => SetProperty(ref _notificationsFilters, value);
+        get => _notificationCategories;
+        set => SetProperty(ref _notificationCategories, value);
     }
 
-    private int _selectedNotificationFilterIndex;
-    public int SelectedNotificationFilterIndex
+    private string _selectedNotificationCategory;
+    public string SelectedNotificationCategory
     {
-        get => _selectedNotificationFilterIndex;
-        set => SetProperty(ref _selectedNotificationFilterIndex, value);
+        get => _selectedNotificationCategory;
+        set => SetProperty(ref _selectedNotificationCategory, value);
+    }
+
+    private int _selectedNotificationCategoryIndex;
+    public int SelectedNotificationCategoryIndex
+    {
+        get => _selectedNotificationCategoryIndex;
+        set => SetProperty(ref _selectedNotificationCategoryIndex, value);
     }
 
     private ObservableCollection<NotificationSourceBindableModel> _notificationsSources;
@@ -152,11 +109,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
     public ICommand SelectedNotificationFilterChangedCommand => _selectedNotificationFilterChangedCommand ??=
         SingleExecutionCommand.FromFunc(OnSelectedNotificationFilterChangedCommandAsync);
 
-    private Task OnSelectedNotificationFilterChangedCommandAsync()
-    {
-        return Task.CompletedTask;
-    }
-
     private ICommand _refreshNotificationsCommand;
     public ICommand RefreshNotificationsCommand => _refreshNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnRefreshNotificationsCommandAsync, delayMillisec: 0);
 
@@ -166,6 +118,28 @@ public class NotificationsPageViewModel : BaseTabViewModel
     #endregion
 
     #region -- Overrides --
+
+    public override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        //await LoadAllNotificationsAsync();
+
+        if (_allNotifications.Any())
+        {
+            await LoadRoomsNotificationSources();
+
+            await LoadDevicesNotificationSources();
+
+            FilterNotifications();
+
+            DataState = EPageState.Complete;
+        }
+        else
+        {
+            DataState = EPageState.Empty;
+        }
+    }
 
     public override void Destroy()
     {
@@ -191,22 +165,41 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private async void OnNotificationReceived(object sender, NotificationGroupItemBindableModel notification)
     {
-        await LoadNotificationsAndChangeStateAsync();
+        // skeleton
+
+        //await LoadAllNotificationsAsync();
+
+        // update data
+
+        // complete or empty
     }
 
-    private void OnAllRoomsChanged(object sender, EventArgs e)
+    private async void OnAllRoomsChanged(object sender, EventArgs e)
     {
+        // skeleton
+
+        await LoadAllNotificationsAsync();
+
+        // update data
+
+        // complete or empty
     }
 
     private async void OnAllDevicesChanged(object sender, EventArgs e)
     {
         DataState = EPageState.LoadingSkeleton;
 
-        var devices = await _devicesService.GetAllSupportedDevicesAsync();
+        await LoadAllNotificationsAsync();
 
-        if (devices.Any())
+        if (_allNotifications.Any())
         {
-            await LoadNotificationsAndChangeStateAsync();
+            await LoadRoomsNotificationSources();
+
+            await LoadDevicesNotificationSources();
+
+            FilterNotifications();
+
+            DataState = EPageState.Complete;
         }
         else
         {
@@ -214,9 +207,18 @@ public class NotificationsPageViewModel : BaseTabViewModel
         }
     }
 
+    private Task OnSelectedNotificationFilterChangedCommandAsync()
+    {
+        //ApplyNotificaitonsFilter();
+
+        return Task.CompletedTask;
+    }
+
     private Task OnSelectNotificationSourceCommandAsync(NotificationSourceBindableModel notificationSource)
     {
         SelectNotificationSource(notificationSource);
+
+        FilterNotifications();
 
         return Task.CompletedTask;
     }
@@ -236,6 +238,115 @@ public class NotificationsPageViewModel : BaseTabViewModel
         SelectedNotificationSource = notificationSource;
     }
 
+    private async Task LoadDevicesNotificationSources()
+    {
+        var devicesNotificationSource = new ObservableCollection<NotificationSourceBindableModel>();
+
+        var allDevices = await _devicesService.GetAllSupportedDevicesAsync();
+
+        var notificationsFromDevices = _allNotifications.GroupBy(x => $"{x.Device.DeviceId} {x.Device.EditableResourceId}");
+
+        foreach (var device in allDevices)
+        {
+            var notifications = notificationsFromDevices.FirstOrDefault(x => x.Key == $"{device.DeviceId} {device.EditableResourceId}");
+
+            var notificationSource = new NotificationSourceBindableModel
+            {
+                Id = device.DeviceId,
+                Name = device.Name,
+                NotificationsCount = notifications is null
+                    ? 0
+                    : notifications.Count(),
+                SelectCommand = SelectNotificationSourceCommand,
+            };
+
+            devicesNotificationSource.Add(notificationSource);
+        }
+
+        _deviceeNotificationSource = new(devicesNotificationSource);
+        _deviceeNotificationSource.Insert(0, new NotificationSourceBindableModel
+        {
+            Name = "All",
+            NotificationsCount = _allNotifications.Count(),
+            SelectCommand = SelectNotificationSourceCommand,
+        });
+    }
+
+    private async Task LoadRoomsNotificationSources()
+    {
+        var roomsNotificationSource = new ObservableCollection<NotificationSourceBindableModel>();
+
+        var allRooms = await _roomsService.GetAllRoomsAsync();
+
+        var notificationsFromRooms = _allNotifications.GroupBy(x => x.Device.PositionId);
+
+        foreach (var room in allRooms)
+        {
+            var notifications = notificationsFromRooms.FirstOrDefault(x => x.Key == room.Id);
+
+            var notificationSource = new NotificationSourceBindableModel
+            {
+                Id = room.Id,
+                Name = room.Name,
+                NotificationsCount = notifications is null
+                    ? 0
+                    : notifications.Count(),
+                SelectCommand = SelectNotificationSourceCommand,
+            };
+
+            roomsNotificationSource.Add(notificationSource);
+        }
+
+        _roomsNotificationSource = new(roomsNotificationSource);
+        _roomsNotificationSource.Insert(0, new NotificationSourceBindableModel
+        {
+            Name = "All",
+            NotificationsCount = _allNotifications.Count(),
+            SelectCommand = SelectNotificationSourceCommand,
+        });
+    }
+
+    private void FilterNotifications()
+    {
+        var notifications = Enumerable.Empty<NotificationGroupItemBindableModel>();
+
+        if (SelectedNotificationCategoryIndex == Constants.Filters.BY_ROOMS)
+        {
+            SetAndSelectNotificationSources(_roomsNotificationSource);
+
+            notifications = string.IsNullOrEmpty(SelectedNotificationSource.Id)
+                ? _allNotifications
+                : _allNotifications.Where(x => x.Device.PositionId == SelectedNotificationSource.Id);
+
+            foreach (var notification in notifications)
+            {
+                notification.Device.RoomName = string.Empty;
+            }
+        }
+        else if (SelectedNotificationCategoryIndex == Constants.Filters.BY_ACCESSORIES)
+        {
+            SetAndSelectNotificationSources(_deviceeNotificationSource);
+
+            notifications = string.IsNullOrEmpty(SelectedNotificationSource.Id)
+                ? _allNotifications
+                : _allNotifications.Where(x => x.Device.DeviceId == SelectedNotificationSource.Id);
+            //: _allNotifications.Where(x => $"{x.Device.DeviceId} {x.Device.EditableResourceId}" == SelectedNotificationSource.Id);
+        }
+
+        Notifications = new(GetNotificationGroups(notifications));
+    }
+
+    private void SetAndSelectNotificationSources(IEnumerable<NotificationSourceBindableModel> notificationSources)
+    {
+        NotificationsSources = new(notificationSources);
+
+        var notificationSource = SelectedNotificationSource is null
+            ? NotificationsSources.FirstOrDefault()
+            : NotificationsSources.FirstOrDefault(x => x.Id == SelectedNotificationSource.Id) ?? NotificationsSources.FirstOrDefault();
+
+        SelectNotificationSource(notificationSource);
+    }
+
     private async Task OnTryAgainCommandAsync()
     {
         if (!IsDataLoading)
@@ -244,7 +355,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
             var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
 
-            var isDataLoaded = await TaskRepeater.RepeatAsync(LoadNotificationsAsync, executionTime);
+            var isDataLoaded = await TaskRepeater.RepeatAsync(LoadAllNotificationsAsync, executionTime);
 
             if (IsInternetConnected)
             {
@@ -273,7 +384,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         if (IsInternetConnected)
         {
-            var isDataLoaded = await LoadNotificationsAsync();
+            var isDataLoaded = await LoadAllNotificationsAsync();
 
             if (IsInternetConnected)
             {
@@ -292,7 +403,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
         }
     }
 
-    private async Task<bool> LoadNotificationsAsync()
+    private async Task<bool> LoadAllNotificationsAsync()
     {
         bool isLoaded = false;
 
@@ -323,7 +434,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
             
             result.Sort(Comparer<NotificationGroupItemBindableModel>.Create((item1, item2) => item2.LastActivityTime.CompareTo(item1.LastActivityTime)));
 
-            _ = Task.Run(() => Notifications = new(GetNotificationGroups(result)));
+            _allNotifications = new(result);
 
             isLoaded = result.Any();
         }
