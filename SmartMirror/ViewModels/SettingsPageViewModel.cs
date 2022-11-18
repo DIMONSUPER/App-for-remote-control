@@ -149,9 +149,9 @@ namespace SmartMirror.ViewModels
 
         #region -- Overrides --
 
-        public override void Initialize(INavigationParameters parameters)
+        public override void OnAppearing()
         {
-            base.Initialize(parameters);
+            base.OnAppearing();
 
             Task.Run(async () =>
             {
