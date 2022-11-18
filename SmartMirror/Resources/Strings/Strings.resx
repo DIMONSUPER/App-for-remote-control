@@ -354,4 +354,7 @@
     <data name="Sound" xml:space="preserve">
         <value>Sound</value>
     </data>
+    <data name="All" xml:space="preserve">
+        <value>All</value>
+    </data>
 </root>

@@ -9,6 +9,8 @@
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:templatesSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
     x:Class="SmartMirror.Views.Tabs.Views.NotificationsPageView"
     xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
@@ -52,13 +54,13 @@
 
                     <controls:TabsSelector
                         Grid.Row="0"
-                        Margin="31, 0, 31, 30"
+                        Margin="31, 18, 31, 30"
                         HorizontalOptions="Center"
                         x:Name="tabsSelector"
                         TabWidth="191"
-                        SelectedTabIndex="{Binding SelectedNotificationFilterIndex}"
-                        TabNames="{Binding NotificationsFilters}"
-                        SelectedTabChangedCommand="{Binding SelectedNotificationFilterChangedCommand}"/>
+                        SelectedTabIndex="{Binding SelectedNotificationCategoryIndex}"
+                        TabNames="{Binding NotificationCategories}"
+                        SelectedTabChangedCommand="{Binding SelectedNotificationCategoryChangedCommand}"/>
 
                     <CollectionView 
                         Grid.Row="1"
@@ -75,23 +77,34 @@
                     Command="{Binding RefreshNotificationsCommand}"
                     x:Name="refreshView">
 
-                    <CollectionView
-                        Margin="0, 24, 0, 0"
-                        ItemsSource="{Binding Notifications}"
-                        ItemTemplate="{StaticResource notificationTemplateSelector}"
-                        WidthRequest="571"
-                        VerticalScrollBarVisibility="Always"
-                        HorizontalScrollBarVisibility="Always"
-                        x:Name="scrollViewNotifications">
+                    <RefreshView.Triggers>
+                        <DataTrigger TargetType="RefreshView" Binding="{Binding NotificationsState}" Value="{Static enums:EPageState.Empty}">
+                            <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+                        </DataTrigger>
+                    </RefreshView.Triggers>
 
-                        <CollectionView.Footer>
+                    <controls:CustomStateView 
+                        VerticalOptions="Start"
+                        State="{Binding NotificationsState}"
+                        EmptyTitle="{extensions:Translate NoNotificationsYet}"
+                        ShowDescriptionEmptyStateLabel="True"
+                        DescriptionEmptyState="{extensions:Translate PleaseCheckTheNotificationsSettings}"
+                        EmptyStateImage="notifications_off">
 
-                            <BoxView Color="Red"
-                                     HeightRequest="20"/>
-
-                        </CollectionView.Footer>
-
-                    </CollectionView>
+                        <controls:CustomStateView.CompleteContent>
+                            
+                            <CollectionView
+                                HorizontalOptions="EndAndExpand"
+                                ItemsSource="{Binding Notifications}"
+                                ItemTemplate="{StaticResource notificationTemplateSelector}"
+                                WidthRequest="571"
+                                VerticalScrollBarVisibility="Always"
+                                HorizontalScrollBarVisibility="Always"
+                                x:Name="scrollViewNotifications"/>
+                            
+                        </controls:CustomStateView.CompleteContent>
+                        
+                    </controls:CustomStateView>
 
                 </RefreshView>
                 

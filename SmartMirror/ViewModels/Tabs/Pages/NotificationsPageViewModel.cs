@@ -101,13 +101,19 @@ public class NotificationsPageViewModel : BaseTabViewModel
         set => SetProperty(ref _isNotificationsRefreshing, value);
     }
 
+    private EPageState _notificationsState;
+    public EPageState NotificationsState
+    {
+        get => _notificationsState;
+        set => SetProperty(ref _notificationsState, value);
+    }
+
     private ICommand _selectNotificationSourceCommand;
     public ICommand SelectNotificationSourceCommand => _selectNotificationSourceCommand ??= 
         SingleExecutionCommand.FromFunc<NotificationSourceBindableModel>(OnSelectNotificationSourceCommandAsync, delayMillisec: 0);
 
-    private ICommand _selectedNotificationFilterChangedCommand;
-    public ICommand SelectedNotificationFilterChangedCommand => _selectedNotificationFilterChangedCommand ??=
-        SingleExecutionCommand.FromFunc(OnSelectedNotificationFilterChangedCommandAsync);
+    private ICommand _selectedNotificationCategoryChangedCommand;
+    public ICommand SelectedNotificationCategoryChangedCommand => _selectedNotificationCategoryChangedCommand ??= SingleExecutionCommand.FromFunc(OnSelectedNotificationCategoryChangedCommandAsync);
 
     private ICommand _refreshNotificationsCommand;
     public ICommand RefreshNotificationsCommand => _refreshNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnRefreshNotificationsCommandAsync, delayMillisec: 0);
@@ -119,28 +125,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     #region -- Overrides --
 
-    public override async void OnAppearing()
-    {
-        base.OnAppearing();
-
-        //await LoadAllNotificationsAsync();
-
-        if (_allNotifications.Any())
-        {
-            await LoadRoomsNotificationSources();
-
-            await LoadDevicesNotificationSources();
-
-            FilterNotifications();
-
-            DataState = EPageState.Complete;
-        }
-        else
-        {
-            DataState = EPageState.Empty;
-        }
-    }
-
     public override void Destroy()
     {
         _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
@@ -149,13 +133,15 @@ public class NotificationsPageViewModel : BaseTabViewModel
         base.Destroy();
     }
 
-    protected override void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
         base.OnConnectivityChanged(sender, e);
 
-        if (e.NetworkAccess != NetworkAccess.Internet)
+        IsNotificationsRefreshing = !IsInternetConnected;
+
+        if (!IsDataLoading && DataState != EPageState.Complete)
         {
-            IsNotificationsRefreshing = false;
+            await LoadAllDataAndChangeStateAsync(); 
         }
     }
 
@@ -165,51 +151,55 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private async void OnNotificationReceived(object sender, NotificationGroupItemBindableModel notification)
     {
-        // skeleton
-
-        //await LoadAllNotificationsAsync();
-
-        // update data
-
-        // complete or empty
+        await LoadAllDataAndChangeStateAsync();
     }
 
     private async void OnAllRoomsChanged(object sender, EventArgs e)
     {
-        // skeleton
-
-        await LoadAllNotificationsAsync();
-
-        // update data
-
-        // complete or empty
+        await LoadAllDataAndChangeStateAsync();
     }
 
     private async void OnAllDevicesChanged(object sender, EventArgs e)
     {
-        DataState = EPageState.LoadingSkeleton;
+        await LoadAllDataAndChangeStateAsync();
+    }
 
-        await LoadAllNotificationsAsync();
-
-        if (_allNotifications.Any())
+    private async Task LoadAllDataAndChangeStateAsync()
+    {
+        if (IsInternetConnected)
         {
-            await LoadRoomsNotificationSources();
+            DataState = EPageState.LoadingSkeleton;
 
-            await LoadDevicesNotificationSources();
+            await LoadAllNotificationsAsync();
 
-            FilterNotifications();
+            if (_allNotifications.Any())
+            {
+                await Task.WhenAll(
+                    LoadRoomsNotificationSourcesAsync(), 
+                    LoadDevicesNotificationSourcesAsync());
 
-            DataState = EPageState.Complete;
+                SetAndSelectNotificationSources();
+
+                FilterNotifications();
+
+                DataState = EPageState.Complete;
+            }
+            else
+            {
+                DataState = EPageState.Empty;
+            } 
         }
         else
         {
-            DataState = EPageState.Empty;
+            DataState = EPageState.NoInternet;
         }
     }
 
-    private Task OnSelectedNotificationFilterChangedCommandAsync()
+    private Task OnSelectedNotificationCategoryChangedCommandAsync()
     {
-        //ApplyNotificaitonsFilter();
+        SetAndSelectNotificationSources();
+
+        FilterNotifications();
 
         return Task.CompletedTask;
     }
@@ -238,41 +228,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
         SelectedNotificationSource = notificationSource;
     }
 
-    private async Task LoadDevicesNotificationSources()
-    {
-        var devicesNotificationSource = new ObservableCollection<NotificationSourceBindableModel>();
-
-        var allDevices = await _devicesService.GetAllSupportedDevicesAsync();
-
-        var notificationsFromDevices = _allNotifications.GroupBy(x => $"{x.Device.DeviceId} {x.Device.EditableResourceId}");
-
-        foreach (var device in allDevices)
-        {
-            var notifications = notificationsFromDevices.FirstOrDefault(x => x.Key == $"{device.DeviceId} {device.EditableResourceId}");
-
-            var notificationSource = new NotificationSourceBindableModel
-            {
-                Id = device.DeviceId,
-                Name = device.Name,
-                NotificationsCount = notifications is null
-                    ? 0
-                    : notifications.Count(),
-                SelectCommand = SelectNotificationSourceCommand,
-            };
-
-            devicesNotificationSource.Add(notificationSource);
-        }
-
-        _deviceeNotificationSource = new(devicesNotificationSource);
-        _deviceeNotificationSource.Insert(0, new NotificationSourceBindableModel
-        {
-            Name = "All",
-            NotificationsCount = _allNotifications.Count(),
-            SelectCommand = SelectNotificationSourceCommand,
-        });
-    }
-
-    private async Task LoadRoomsNotificationSources()
+    private async Task LoadRoomsNotificationSourcesAsync()
     {
         var roomsNotificationSource = new ObservableCollection<NotificationSourceBindableModel>();
 
@@ -300,7 +256,41 @@ public class NotificationsPageViewModel : BaseTabViewModel
         _roomsNotificationSource = new(roomsNotificationSource);
         _roomsNotificationSource.Insert(0, new NotificationSourceBindableModel
         {
-            Name = "All",
+            Name = LocalizationResourceManager.Instance["All"] as string,
+            NotificationsCount = _allNotifications.Count(),
+            SelectCommand = SelectNotificationSourceCommand,
+        });
+    }
+
+    private async Task LoadDevicesNotificationSourcesAsync()
+    {
+        var devicesNotificationSource = new ObservableCollection<NotificationSourceBindableModel>();
+
+        var allDevices = await _devicesService.GetAllSupportedDevicesAsync();
+
+        var notificationsFromDevices = _allNotifications.GroupBy(x => x.Device.FullDeviceId);
+
+        foreach (var device in allDevices)
+        {
+            var notifications = notificationsFromDevices.FirstOrDefault(x => x.Key == device.FullDeviceId);
+
+            var notificationSource = new NotificationSourceBindableModel
+            {
+                Id = device.FullDeviceId,
+                Name = device.Name,
+                NotificationsCount = notifications is null
+                    ? 0
+                    : notifications.Count(),
+                SelectCommand = SelectNotificationSourceCommand,
+            };
+
+            devicesNotificationSource.Add(notificationSource);
+        }
+
+        _deviceeNotificationSource = new(devicesNotificationSource);
+        _deviceeNotificationSource.Insert(0, new NotificationSourceBindableModel
+        {
+            Name = LocalizationResourceManager.Instance["All"] as string,
             NotificationsCount = _allNotifications.Count(),
             SelectCommand = SelectNotificationSourceCommand,
         });
@@ -310,41 +300,53 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         var notifications = Enumerable.Empty<NotificationGroupItemBindableModel>();
 
-        if (SelectedNotificationCategoryIndex == Constants.Filters.BY_ROOMS)
+        switch (SelectedNotificationCategoryIndex)
         {
-            SetAndSelectNotificationSources(_roomsNotificationSource);
+            case Constants.Filters.BY_ROOMS:
 
-            notifications = string.IsNullOrEmpty(SelectedNotificationSource.Id)
-                ? _allNotifications
-                : _allNotifications.Where(x => x.Device.PositionId == SelectedNotificationSource.Id);
+                notifications = string.IsNullOrEmpty(SelectedNotificationSource.Id)
+                    ? _allNotifications
+                    : _allNotifications.Where(x => x.Device.PositionId == SelectedNotificationSource.Id);
 
-            foreach (var notification in notifications)
-            {
-                notification.Device.RoomName = string.Empty;
-            }
+                // TO DO: hide room name in other way
+                //foreach (var notification in notifications)
+                //{
+                //    notification.Device.RoomName = string.Empty;
+                //}
+
+                break;
+
+            case Constants.Filters.BY_ACCESSORIES:
+
+                notifications = string.IsNullOrEmpty(SelectedNotificationSource.Id)
+                    ? _allNotifications
+                    : _allNotifications.Where(x => x.Device.FullDeviceId == SelectedNotificationSource.Id);
+
+                break;
         }
-        else if (SelectedNotificationCategoryIndex == Constants.Filters.BY_ACCESSORIES)
+
+        if (notifications.Any())
         {
-            SetAndSelectNotificationSources(_deviceeNotificationSource);
-
-            notifications = string.IsNullOrEmpty(SelectedNotificationSource.Id)
-                ? _allNotifications
-                : _allNotifications.Where(x => x.Device.DeviceId == SelectedNotificationSource.Id);
-            //: _allNotifications.Where(x => $"{x.Device.DeviceId} {x.Device.EditableResourceId}" == SelectedNotificationSource.Id);
+            Notifications = new(GetNotificationGroups(notifications));
+            NotificationsState = EPageState.Complete;
         }
-
-        Notifications = new(GetNotificationGroups(notifications));
+        else
+        {
+            Notifications = new();
+            NotificationsState = EPageState.Empty;
+        }
     }
 
-    private void SetAndSelectNotificationSources(IEnumerable<NotificationSourceBindableModel> notificationSources)
+    private void SetAndSelectNotificationSources()
     {
-        NotificationsSources = new(notificationSources);
+        NotificationsSources = SelectedNotificationCategoryIndex switch
+        {
+            Constants.Filters.BY_ROOMS => new(_roomsNotificationSource),
+            Constants.Filters.BY_ACCESSORIES => new(_deviceeNotificationSource),
+            _ => new(_roomsNotificationSource),
+        };
 
-        var notificationSource = SelectedNotificationSource is null
-            ? NotificationsSources.FirstOrDefault()
-            : NotificationsSources.FirstOrDefault(x => x.Id == SelectedNotificationSource.Id) ?? NotificationsSources.FirstOrDefault();
-
-        SelectNotificationSource(notificationSource);
+        SelectNotificationSource(NotificationsSources.FirstOrDefault());
     }
 
     private async Task OnTryAgainCommandAsync()
@@ -359,9 +361,22 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
             if (IsInternetConnected)
             {
-                DataState = isDataLoaded
-                    ? EPageState.Complete
-                    : EPageState.Empty;
+                if (isDataLoaded)
+                {
+                    await Task.WhenAll(
+                        LoadRoomsNotificationSourcesAsync(),
+                        LoadDevicesNotificationSourcesAsync());
+
+                    SetAndSelectNotificationSources();
+
+                    FilterNotifications();
+
+                    DataState = EPageState.Complete;
+                }
+                else
+                {
+                    DataState = EPageState.Empty;
+                }
             }
             else
             {
