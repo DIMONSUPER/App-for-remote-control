@@ -240,15 +240,13 @@ public class NotificationsPageViewModel : BaseTabViewModel
         {
             var notifications = notificationsFromRooms.FirstOrDefault(x => x.Key == room.Id);
 
-            var notificationSource = new NotificationSourceBindableModel
+            var notificationSource = _mapperService.Map<NotificationSourceBindableModel>(room, (v, vm) =>
             {
-                Id = room.Id,
-                Name = room.Name,
-                NotificationsCount = notifications is null
+                vm.NotificationsCount = notifications is null
                     ? 0
-                    : notifications.Count(),
-                SelectCommand = SelectNotificationSourceCommand,
-            };
+                    : notifications.Count();
+                vm.SelectCommand = SelectNotificationSourceCommand;
+            });
 
             roomsNotificationSource.Add(notificationSource);
         }
@@ -274,15 +272,13 @@ public class NotificationsPageViewModel : BaseTabViewModel
         {
             var notifications = notificationsFromDevices.FirstOrDefault(x => x.Key == device.FullDeviceId);
 
-            var notificationSource = new NotificationSourceBindableModel
+            var notificationSource = _mapperService.Map<NotificationSourceBindableModel>(device, (v, vm) =>
             {
-                Id = device.FullDeviceId,
-                Name = device.Name,
-                NotificationsCount = notifications is null
+                vm.NotificationsCount = notifications is null
                     ? 0
-                    : notifications.Count(),
-                SelectCommand = SelectNotificationSourceCommand,
-            };
+                    : notifications.Count();
+                vm.SelectCommand = SelectNotificationSourceCommand;
+            });
 
             devicesNotificationSource.Add(notificationSource);
         }

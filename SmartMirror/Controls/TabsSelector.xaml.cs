@@ -19,7 +19,7 @@ public partial class TabsSelector : ContentView
 		defaultBindingMode: BindingMode.OneWay,
 		propertyChanged: OnTabNamesPropertyChanged);
 
-    public IList<string> TabNames
+	public IList<string> TabNames
 	{
 		get => (IList<string>)GetValue(TabNamesProperty);
 		set => SetValue(TabNamesProperty, value);
