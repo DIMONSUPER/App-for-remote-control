@@ -62,10 +62,15 @@ namespace SmartMirror.ViewModels.Dialogs
 
         private Task OnConfirmCommandAsync(bool confirm)
         {
-            CloseCommand?.Execute(new DialogParameters()
+            var parameters = new DialogParameters()
             {
                 { Constants.DialogsParameterKeys.RESULT, confirm },
-            });
+            };
+
+            if (CloseCommand is not null && CloseCommand.CanExecute(parameters))
+            {
+                CloseCommand.Execute(parameters);
+            }
 
             return Task.CompletedTask;
         }
