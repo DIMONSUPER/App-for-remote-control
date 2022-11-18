@@ -42,6 +42,7 @@
         <controls:CustomSwitch
             Grid.Column="2"
             InputTransparent="True"
+            Margin="1,0"
             IsVisible="{Binding HasSwitch, Source={x:Reference simpleAccessoryTemplate}}"
             IsToggled="{Binding IsToggled}"/>
 
