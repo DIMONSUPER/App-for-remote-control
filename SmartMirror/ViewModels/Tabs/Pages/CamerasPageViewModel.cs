@@ -212,12 +212,6 @@ public class CamerasPageViewModel : BaseTabViewModel
 
                 Cameras = new(cameras);
 
-                foreach (var cam in Cameras)
-                {
-                    var isConnectedResponse = await _camerasService.CheckCameraConnection(cam);
-                    cam.IsConnected = isConnectedResponse.IsSuccess && isConnectedResponse.Result;
-                }
-
                 var camera = (SelectedCamera is null || !SelectedCamera.IsShown)
                     ? Cameras.FirstOrDefault()
                     : Cameras.FirstOrDefault(x => x.Id == SelectedCamera.Id) ?? Cameras.FirstOrDefault();

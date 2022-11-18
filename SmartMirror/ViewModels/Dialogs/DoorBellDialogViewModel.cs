@@ -13,6 +13,7 @@ using SmartMirror.Views.Dialogs;
 using SmartMirror.Resources.Strings;
 using CommunityToolkit.Maui.Alerts;
 using Plugin.Maui.Audio;
+using CommunityToolkit.Maui.Views;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
@@ -25,6 +26,8 @@ namespace SmartMirror.ViewModels.Dialogs
         private readonly IMapperService _mapperService;
         private readonly IAudioManager _audioManager;
 
+        private readonly ConfirmPopupViewModel _confirmPopupViewModel;
+
         private IAudioPlayer _audioPlayer;
 
         public DoorBellDialogViewModel(
@@ -34,6 +37,7 @@ namespace SmartMirror.ViewModels.Dialogs
             ISettingsManager settingsManager,
             ICamerasService camerasService,
             IAudioManager audioManager,
+            ConfirmPopupViewModel confirmPopupViewModel,
             IMapperService mapperService)
             : base(blurService)
         {
@@ -43,6 +47,8 @@ namespace SmartMirror.ViewModels.Dialogs
             _camerasService = camerasService;
             _mapperService = mapperService;
             _audioManager = audioManager;
+
+            _confirmPopupViewModel = confirmPopupViewModel;
 
             IsVideoOnTop = true;
         }
@@ -182,13 +188,17 @@ namespace SmartMirror.ViewModels.Dialogs
 
                     if (!rationalePermission)
                     {
-                        var dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), new DialogParameters
+                        var confirmPopup = new ConfirmPopup(_confirmPopupViewModel);
+
+                        _confirmPopupViewModel.OnDialogOpened(new DialogParameters
                         {
                             { Constants.DialogsParameterKeys.TITLE, "Permission alert" },
                             { Constants.DialogsParameterKeys.DESCRIPTION, "You need give permissions for microphone, open application settings?" }
                         });
 
-                        if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result) && result)
+                        var dialogResult = await Application.Current?.MainPage?.ShowPopupAsync(confirmPopup);
+
+                        if (dialogResult is IDialogParameters parameters && parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result) && result)
                         {
                             _permissionsService.OpenApplicationSettingsPage();
                         }
@@ -235,7 +245,7 @@ namespace SmartMirror.ViewModels.Dialogs
 
         private async Task<bool> LoadCameraAsync()
         {
-            var result = false;
+            var result = true;
 
             await Task.Delay(1000);
 

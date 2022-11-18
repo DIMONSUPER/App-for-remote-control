@@ -323,6 +323,9 @@
 		<MauiXaml Update="Resources\DataTemplates\SimpleNotificationsHeaderTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\ConfirmPopup.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Update="Resources\Strings\Strings.resx">
