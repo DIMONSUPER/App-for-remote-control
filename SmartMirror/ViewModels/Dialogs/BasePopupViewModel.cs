@@ -3,7 +3,7 @@ using SmartMirror.Services.Blur;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
-	public class BasePopupViewModel : BindableBase
+    public class BasePopupViewModel : BindableBase
     {
         public BasePopupViewModel(IBlurService blurService)
         {

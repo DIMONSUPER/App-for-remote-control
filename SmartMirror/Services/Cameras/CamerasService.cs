@@ -74,8 +74,13 @@ namespace SmartMirror.Services.Cameras
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
+                var cameras = Enumerable.Empty<CameraBindableModel>();
+                
+                var camerasDb = await _repositoryService.GetAllAsync<CameraDTO>();
 
-                return _smartHomeMockService.GetCameras();
+                cameras = _mapperService.MapRange<CameraBindableModel>(camerasDb);
+
+                return cameras;
             });
         }
 

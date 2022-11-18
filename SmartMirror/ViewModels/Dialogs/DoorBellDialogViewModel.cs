@@ -245,7 +245,7 @@ namespace SmartMirror.ViewModels.Dialogs
 
         private async Task<bool> LoadCameraAsync()
         {
-            var result = true;
+            var result = false;
 
             await Task.Delay(1000);
 

@@ -5,7 +5,7 @@ using SmartMirror.Services.Blur;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
-	public class ConfirmPopupViewModel : BasePopupViewModel
+    public class ConfirmPopupViewModel : BasePopupViewModel
     {
         public ConfirmPopupViewModel(
             IBlurService blurService)
