@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Frame xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -8,8 +8,7 @@
        x:Class="SmartMirror.Views.Dialogs.ConfirmDialog"
        Padding="0"
        BackgroundColor="Transparent"
-       prismmaui:DialogLayout.UseMask="True"
-       prismmaui:DialogLayout.MaskStyle="{DynamicResource DialogMaskBoxViewStyle_i1}"
+       prismmaui:DialogLayout.UseMask="False"
        prismmaui:DialogLayout.CloseOnBackgroundTapped="True"
        x:DataType="dialogviewmodels:ConfirmDialogViewModel">
 

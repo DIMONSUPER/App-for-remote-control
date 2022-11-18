@@ -537,24 +537,11 @@ namespace SmartMirror.ViewModels
                 { Constants.DialogsParameterKeys.CAMERA, camera },
             });
 
-            if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool confirm) && confirm)
+            if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool wasDeleted) && wasDeleted)
             {
-                dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), new DialogParameters
-                {
-                    { Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure },
-                    { Constants.DialogsParameterKeys.DESCRIPTION, Strings.TheCameraWillBeRemoved },
-                });
+                await LoadAllCamerasAsync();
 
-                if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool isConfirmed) && isConfirmed)
-                {
-                    var cameraModel = _mapperService.Map<CameraBindableModel>(camera.Model);
-
-                    var removeResponse = await _camerasService.RemoveCameraAsync(cameraModel);
-
-                    await LoadAllCamerasAsync();
-
-                    SetElementsSelectedCategory();
-                }
+                SetElementsSelectedCategory();
             }
         }
 
