@@ -30,6 +30,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
         _dialogService = dialogService;
         _mapperService = mapperService;
         _devicesService = devicesService;
+        DataState = EPageState.LoadingSkeleton;
 
         Title = "Notifications";
         _devicesService.AllDevicesChanged += OnAllDevicesChanged;

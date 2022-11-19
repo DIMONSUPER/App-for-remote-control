@@ -119,12 +119,11 @@ public class AqaraService : BaseAqaraService, IAqaraService
         });
     }
 
-    public Task<AOResult> LogoutFromAqara()
+    public Task<AOResult> LogoutFromAqaraAsync()
     {
         return AOResult.ExecuteTaskAsync(onFailure =>
         {
-            //TODO implement when is needed
-            //SettingsManager.AqaraAccessSettings.Clear();
+            SettingsManager.AqaraAccessSettings.Clear();
 
             return Task.CompletedTask;
         });

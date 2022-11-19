@@ -617,7 +617,9 @@ namespace SmartMirror.ViewModels
 
                 if (dialogResult)
                 {
-                    _aqaraService.LogoutFromAqara();
+                    await _aqaraService.LogoutFromAqaraAsync();
+
+                    await NavigationService.GoBackToRootAsync();
                 }
             }
             else if (IsInternetConnected)

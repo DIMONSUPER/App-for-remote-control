@@ -3,7 +3,6 @@ using Microsoft.Maui.Controls.Compatibility.Hosting;
 using Plugin.Maui.Audio;
 using SmartMirror.Controls;
 using SmartMirror.Handlers;
-using SmartMirror.Platforms.Android.Renderers;
 using SmartMirror.Platforms.Android.Services;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Blur;
