@@ -116,11 +116,11 @@ public static class MauiProgram
 
         if (_isAuthorized)
         {
-            navigationBuilder.AddSegment<MainTabbedPageViewModel>();
+            navigationBuilder.AddNavigationPage().AddSegment<WelcomePageViewModel>().AddSegment<MainTabbedPageViewModel>();
         }
         else
         {
-            navigationBuilder.AddSegment<WelcomePageViewModel>();
+            navigationBuilder.AddNavigationPage().AddSegment<WelcomePageViewModel>();
         }
 
         navigationBuilder.Navigate(HandleErrors);
@@ -135,7 +135,7 @@ public static class MauiProgram
     private static void OnConfigureMauiHandlers(IMauiHandlersCollection handlers)
     {
         handlers.AddHandler(typeof(Video), typeof(VideoHandler));
-        handlers.AddCompatibilityRenderer(typeof(CustomTabbedPage), typeof(CustomTabbedPageRenderer));
+        handlers.AddHandler(typeof(CustomTabbedPage), typeof(CustomTabbedViewHandler));
     }
 
     #endregion
