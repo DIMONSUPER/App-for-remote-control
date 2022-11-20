@@ -105,8 +105,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
     }
 
     private ICommand _selectNotificationSourceCommand;
-    public ICommand SelectNotificationSourceCommand => _selectNotificationSourceCommand ??= 
-        SingleExecutionCommand.FromFunc<NotificationSourceBindableModel>(OnSelectNotificationSourceCommandAsync, delayMillisec: 0);
+    public ICommand SelectNotificationSourceCommand => _selectNotificationSourceCommand ??= SingleExecutionCommand.FromFunc<NotificationSourceBindableModel>(OnSelectNotificationSourceCommandAsync);
 
     private ICommand _selectedNotificationCategoryChangedCommand;
     public ICommand SelectedNotificationCategoryChangedCommand => _selectedNotificationCategoryChangedCommand ??= SingleExecutionCommand.FromFunc(OnSelectedNotificationCategoryChangedCommandAsync);
@@ -137,7 +136,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
         if (!IsDataLoading && DataState != EPageState.Complete)
         {
-            await LoadAllDataAndChangeStateAsync(); 
+            await UpdateAllDataAndChangeStateAsync(); 
         }
     }
 
@@ -147,22 +146,22 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private async void OnNotificationReceived(object sender, NotificationGroupItemBindableModel notification)
     {
-        await LoadAllDataAndChangeStateAsync();
+        await UpdateAllDataAndChangeStateAsync();
     }
 
     private async void OnAllRoomsChanged(object sender, EventArgs e)
     {
-        await LoadAllDataAndChangeStateAsync();
+        await UpdateAllDataAndChangeStateAsync();
     }
 
     private async void OnAllDevicesChanged(object sender, EventArgs e)
     {
-        await LoadAllDataAndChangeStateAsync();
+        await UpdateAllDataAndChangeStateAsync();
     }
 
     private int SelectedNotificationCategoryIndex => NotificationCategories.IndexOf(SelectedNotificationCategory);
 
-    private async Task LoadAllDataAndChangeStateAsync()
+    private async Task UpdateAllDataAndChangeStateAsync()
     {
         if (IsInternetConnected)
         {
@@ -304,11 +303,10 @@ public class NotificationsPageViewModel : BaseTabViewModel
                     ? _allNotifications
                     : _allNotifications.Where(x => x.Device.PositionId == SelectedNotificationSource.Id);
 
-                // TO DO: hide room name in other way
-                //foreach (var notification in notifications)
-                //{
-                //    notification.Device.RoomName = string.Empty;
-                //}
+                foreach (var notification in notifications)
+                {
+                    notification.IsRoomNameVisible = false;
+                }
 
                 break;
 
@@ -317,6 +315,11 @@ public class NotificationsPageViewModel : BaseTabViewModel
                 notifications = string.IsNullOrEmpty(SelectedNotificationSource.Id)
                     ? _allNotifications
                     : _allNotifications.Where(x => x.Device.FullDeviceId == SelectedNotificationSource.Id);
+
+                foreach (var notification in notifications)
+                {
+                    notification.IsRoomNameVisible = true;
+                }
 
                 break;
         }

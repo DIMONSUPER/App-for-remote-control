@@ -48,6 +48,7 @@
                     MaximumWidthRequest="200"
                     MaxLines="2"
                     LineBreakMode="TailTruncation"
+                    IsVisible="{Binding IsRoomNameVisible}"
                     Text="{Binding Device.RoomName}"/>
 
                 <Label
