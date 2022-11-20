@@ -235,21 +235,11 @@ namespace SmartMirror.ViewModels.Dialogs
 
         private async Task<bool> LoadCameraAsync()
         {
-            var result = false;
-
-            var resultOfGettingCameras = await _camerasService.GetCamerasAsync();
-
             await Task.Delay(1000);
 
-            if (resultOfGettingCameras.IsSuccess)
-            {
-                var camera = resultOfGettingCameras.Result.FirstOrDefault();
-                VideoSource = camera.VideoUrl;
+            VideoSource = "https://videos-3.earthcam.com/fecnetwork/15659.flv/chunklist_w999153032.m3u8";
 
-                result = resultOfGettingCameras.IsSuccess;
-            }
-
-            return result;
+            return true;
         }
 
         #endregion

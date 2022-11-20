@@ -1,14 +1,20 @@
 ﻿using SmartMirror.Helpers;
-using SmartMirror.Models;
+using SmartMirror.Models.BindableModels;
 using System.Collections;
 
 namespace SmartMirror.Services.Cameras;
 
 public interface ICamerasService
 {
-    public event EventHandler AllCamerasChanged;
+    event EventHandler AllCamerasChanged;
 
-    Task<AOResult<IEnumerable<CameraModel>>> GetCamerasAsync();
+    Task<AOResult<IEnumerable<CameraBindableModel>>> GetCamerasAsync();
 
-    Task<AOResult> UpdateCameraAsync(CameraModel cameraModel);
+    Task<AOResult> UpdateCameraAsync(CameraBindableModel cameraModel);
+
+    Task<AOResult<bool>> VerifyCameraIPAddressAsync(string ipAddress);
+
+    Task<AOResult<bool>> CheckCameraConnection(CameraBindableModel camera);
+
+    Task<AOResult> RemoveCameraAsync(CameraBindableModel cameraModel);
 }

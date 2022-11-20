@@ -99,6 +99,7 @@
 		<None Remove="Services\Blur\" />
 		<None Remove="Services\Permissions\" />
 		<None Remove="Plugin.Maui.Audio" />
+		<None Remove="RtspClientSharp" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.3" />
@@ -113,6 +114,7 @@
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 		<PackageReference Include="sqlite-net" Version="1.6.292" />
 		<PackageReference Include="Plugin.Maui.Audio" Version="0.1.0-preview2" />
+		<PackageReference Include="RtspClientSharp" Version="1.3.3" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Controls\" />
@@ -324,6 +326,9 @@
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\Skeletons\SettingsPageSkeleton.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\SimpleNotificationsHeaderTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 	</ItemGroup>

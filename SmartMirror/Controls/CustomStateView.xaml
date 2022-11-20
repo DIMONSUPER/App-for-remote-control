@@ -42,7 +42,6 @@
                        Style="{DynamicResource tstyle_i17}"
                        HorizontalTextAlignment="Center"
                        MaximumWidthRequest="609"
-                       IsVisible="{Binding ShowDescriptionEmptyStateLabel, Source={x:Reference stateContanier}}"
                        Text="{Binding DescriptionEmptyState, Source={x:Reference stateContanier}}"/>
 
             </VerticalStackLayout>

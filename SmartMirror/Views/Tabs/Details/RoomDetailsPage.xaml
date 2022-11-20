@@ -80,6 +80,7 @@
                                               State="{Binding RoomDeviceState}"
                                               TryAgainCommand="{Binding TryAgainCommand}"
                                               EmptyStateImage="no_accessories_yet"
+                                              DescriptionEmptyState="{extensions:Translate PleaseCheckTheAccessoriesSettings}"
                                               EmptyTitle="{extensions:Translate NoAccessoriesYet}">
 
                         <controls:CustomStateView.CompleteContent>

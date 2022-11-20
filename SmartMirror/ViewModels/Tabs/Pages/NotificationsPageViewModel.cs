@@ -21,7 +21,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private ObservableCollection<NotificationSourceBindableModel> _roomsNotificationSource;
     private ObservableCollection<NotificationSourceBindableModel> _deviceeNotificationSource;
-    private ObservableCollection<NotificationGroupItemBindableModel> _allNotifications;
+    private ObservableCollection<NotificationGroupItemBindableModel> _allNotifications = new();
 
     public NotificationsPageViewModel(
         INotificationsService notificationsService,
@@ -243,6 +243,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
                 vm.NotificationsCount = notifications is null
                     ? 0
                     : notifications.Count();
+
                 vm.SelectCommand = SelectNotificationSourceCommand;
             });
 
@@ -298,13 +299,15 @@ public class NotificationsPageViewModel : BaseTabViewModel
         {
             case Constants.Filters.BY_ROOMS:
 
-                notifications = string.IsNullOrEmpty(SelectedNotificationSource.Id)
+                bool isAllRoomsSelected = string.IsNullOrEmpty(SelectedNotificationSource.Id);
+
+                notifications = isAllRoomsSelected
                     ? _allNotifications
                     : _allNotifications.Where(x => x.Device.PositionId == SelectedNotificationSource.Id);
 
                 foreach (var notification in notifications)
                 {
-                    notification.IsRoomNameVisible = false;
+                    notification.IsRoomNameVisible = isAllRoomsSelected;
                 }
 
                 break;
@@ -424,34 +427,37 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
         if (IsInternetConnected)
         {
-            List<NotificationGroupItemBindableModel> result = new();
-
-            var devices = await _devicesService.GetAllDevicesAsync();
-
-            var supportedDevices = await _devicesService.GetAllSupportedDevicesAsync();
-
-            foreach (var device in devices)
+            if (_notificationsService.IsAllowNotifications)
             {
-                var resourceIds = supportedDevices
-                    .Where(x => x.IsReceiveNotifications && x.DeviceId == device.DeviceId && x.EditableResourceId is not null)
-                    .Select(x => x.EditableResourceId)
-                    .ToArray();
+                List<NotificationGroupItemBindableModel> result = new();
 
-                if (!resourceIds.Any()) continue;
+                var devices = await _devicesService.GetAllDevicesAsync();
 
-                var resultOfGettingNotifications = await _notificationsService.GetNotificationsForDeviceAsync(device.DeviceId, resourceIds);
+                var supportedDevices = await _devicesService.GetAllSupportedDevicesAsync();
 
-                if (resultOfGettingNotifications.IsSuccess)
+                foreach (var device in devices)
                 {
-                    result.AddRange(resultOfGettingNotifications.Result);
+                    var resourceIds = supportedDevices
+                        .Where(x => x.IsReceiveNotifications && x.DeviceId == device.DeviceId && x.EditableResourceId is not null)
+                        .Select(x => x.EditableResourceId)
+                        .ToArray();
+
+                    if (!resourceIds.Any()) continue;
+
+                    var resultOfGettingNotifications = await _notificationsService.GetNotificationsForDeviceAsync(device.DeviceId, resourceIds);
+
+                    if (resultOfGettingNotifications.IsSuccess)
+                    {
+                        result.AddRange(resultOfGettingNotifications.Result);
+                    }
                 }
+
+                result.Sort(Comparer<NotificationGroupItemBindableModel>.Create((item1, item2) => item2.LastActivityTime.CompareTo(item1.LastActivityTime)));
+
+                _allNotifications = new(result);
+
+                isLoaded = result.Any();
             }
-            
-            result.Sort(Comparer<NotificationGroupItemBindableModel>.Create((item1, item2) => item2.LastActivityTime.CompareTo(item1.LastActivityTime)));
-
-            _allNotifications = new(result);
-
-            isLoaded = result.Any();
         }
 
         return isLoaded;

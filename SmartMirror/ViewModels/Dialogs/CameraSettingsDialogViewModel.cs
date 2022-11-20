@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using SmartMirror.Helpers;
 using SmartMirror.Models;
+using SmartMirror.Resources.Strings;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Blur;
 using SmartMirror.Services.Cameras;
@@ -11,14 +12,17 @@ namespace SmartMirror.ViewModels.Dialogs
     public class CameraSettingsDialogViewModel : BaseDialogViewModel
     {
         private readonly ICamerasService _camerasService;
+        private readonly IDialogService _dialogService;
         private bool _isInitializing = true;
 
         public CameraSettingsDialogViewModel(
             IBlurService blurService,
-            ICamerasService camerasService)
+            ICamerasService camerasService,
+            IDialogService dialogService)
             : base(blurService)
         {
             _camerasService = camerasService;
+            _dialogService = dialogService;
         }
 
         #region -- Public properties --
@@ -44,8 +48,8 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _isReceiveNotifications, value);
         }
 
-        private CameraModel _cameraModel;
-        public CameraModel CameraModel
+        private CameraBindableModel _cameraModel;
+        public CameraBindableModel CameraModel
         {
             get => _cameraModel;
             set => SetProperty(ref _cameraModel, value);
@@ -63,11 +67,13 @@ namespace SmartMirror.ViewModels.Dialogs
 
         public override void OnDialogOpened(IDialogParameters parameters)
         {
+            base.OnDialogOpened(parameters);
+
             if (parameters.TryGetValue(Constants.DialogsParameterKeys.CAMERA, out ImageAndTitleBindableModel camera))
             {
                 Title = camera.Name;
 
-                if (camera.Model is CameraModel cameraModel)
+                if (camera.Model is CameraBindableModel cameraModel)
                 {
                     CameraModel = cameraModel;
                     IsShownInCameras = CameraModel.IsShown;
@@ -94,14 +100,27 @@ namespace SmartMirror.ViewModels.Dialogs
 
         #region -- Private helpers --
 
-        private Task OnRemoveCameraCommandAsync()
+        private async void OnRemoveConfirmed()
         {
-            RequestClose.Invoke(new DialogParameters()
+            await _camerasService.RemoveCameraAsync(CameraModel);
+        }
+
+        private async Task OnRemoveCameraCommandAsync()
+        {
+            var dialogResult = await _dialogService.ShowDialogAsync(nameof(Views.Dialogs.ConfirmDialog), new DialogParameters
             {
-                { Constants.DialogsParameterKeys.RESULT, true },
+                { Constants.DialogsParameterKeys.TITLE, Strings.AreYouSure },
+                { Constants.DialogsParameterKeys.DESCRIPTION, Strings.TheCameraWillBeRemoved },
+                { Constants.DialogsParameterKeys.CONFIRM_ACTION, (Action)OnRemoveConfirmed },
             });
 
-            return Task.CompletedTask;
+            if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool isConfirmed) && isConfirmed)
+            {
+                RequestClose.Invoke(new DialogParameters
+                {
+                    { Constants.DialogsParameterKeys.RESULT, true },
+                });
+            }
         }
 
         private Task OnCloseCommandAsync()

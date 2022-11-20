@@ -4,10 +4,15 @@ namespace SmartMirror.ViewModels.Dialogs;
 
 public class BaseDialogViewModel : BindableBase, IDialogAware
 {
+    protected const int FOCUS_DELAY = 350;
+
     public BaseDialogViewModel(IBlurService blurService)
     {
         BlurService = blurService;
-        BlurService.BlurPopupBackground();
+
+        var blurColor = Color.FromArgb("#80030303");
+
+        BlurService.BlurPopupBackground(blurColor);
     }
 
     #region -- Protected properties --

@@ -66,7 +66,7 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
 
     #region -- Overrides --
 
-    public override void OnDialogOpened(IDialogParameters parameters)
+    public override async void OnDialogOpened(IDialogParameters parameters)
     {
         base.OnDialogOpened(parameters);
 
@@ -80,6 +80,7 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
             AuthType = authType;
         }
 
+        await Task.Delay(FOCUS_DELAY);
         IsEntryFocused = true;
     }
 
@@ -100,9 +101,7 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
         {
             IsLoggingWithCode = true;
 
-            var testEmail = "botheadworks@gmail.com";
-
-            var loginWithCodeResponse = await _aqaraService.LoginWithCodeAsync(testEmail, CodeText);
+            var loginWithCodeResponse = await _aqaraService.LoginWithCodeAsync(Constants.Aqara.TEST_EMAIL, CodeText);
 
             if (loginWithCodeResponse.IsSuccess)
             {

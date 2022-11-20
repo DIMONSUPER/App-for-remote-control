@@ -3,9 +3,12 @@ using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Widget;
 using JP.Wasabeef.BlurryLib;
+using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Microsoft.Maui.Platform;
 using SmartMirror.Services.Blur;
 using static Android.Graphics.Bitmap;
+using Color = Microsoft.Maui.Graphics.Color;
+using AColor = Android.Graphics.Color;
 
 namespace SmartMirror.Platforms.Android.Services;
 
@@ -13,7 +16,7 @@ public class BlurService : IBlurService
 {
     #region -- IBlurService implementation --
 
-    public void BlurPopupBackground(int radius = 20)
+    public void BlurPopupBackground(Color color, int radius = 20)
     {
         var currentPage = GetCurrentPage();
 
@@ -22,13 +25,18 @@ public class BlurService : IBlurService
         if (currentPageNativeView is not null)
         {   
             radius = (int)currentPageNativeView.Context.ToPixels(radius);
+            var androidColor = color.ToAndroid();
 
             if (Build.VERSION.SdkInt >= BuildVersionCodes.S)
             {
                 currentPageNativeView.Post(() =>
                 {
+                    var colorFilter = new PorterDuffColorFilter(androidColor, PorterDuff.Mode.SrcAtop);
+
                     var blurEffect = RenderEffect.CreateBlurEffect(radius, radius, Shader.TileMode.Clamp);
-                    currentPageNativeView.SetRenderEffect(blurEffect);
+                    var colorEffect = RenderEffect.CreateColorFilterEffect(colorFilter, blurEffect);
+
+                    currentPageNativeView.SetRenderEffect(colorEffect);
                 });
             }
             else
@@ -37,7 +45,7 @@ public class BlurService : IBlurService
                 {
                     if (currentPage.Navigation.ModalStack.Any() && currentPage.Navigation.ModalStack[^1] is ContentPage currentPopup)
                     {
-                        var byteArray = GetBlurredBackgroundBytes(currentPageNativeView, radius);
+                        var byteArray = GetBlurredBackgroundBytes(currentPageNativeView, radius, androidColor);
                         currentPopup.BackgroundImageSource = ImageSource.FromStream(() => new MemoryStream(byteArray));
                     }
                 });
@@ -73,7 +81,7 @@ public class BlurService : IBlurService
         return currentPage;
     }
 
-    private byte[] GetBlurredBackgroundBytes(global::Android.Views.View view, int radius)
+    private byte[] GetBlurredBackgroundBytes(global::Android.Views.View view, int radius, AColor color)
     {
         try
         {
@@ -82,6 +90,7 @@ public class BlurService : IBlurService
             Blurry
                 .With(view.Context)
                 .Radius(radius)
+                .Color(color)
                 .Capture(view)
                 .Into(imageView);
 
@@ -103,4 +112,3 @@ public class BlurService : IBlurService
 
     #endregion
 }
-

@@ -2,14 +2,11 @@
 
 public class SettingsManager : ISettingsManager
 {
-    public SettingsManager()
-    {
-        AqaraAccessSettings = new();
-    }
-
     #region -- ISettingsManager implementation --
 
-    public AqaraAccessSettings AqaraAccessSettings { get; }
+    public AqaraAccessSettings AqaraAccessSettings { get; } = new();
+
+    public NotificationsSettings NotificationsSettings { get; } = new();
 
     #endregion
 }

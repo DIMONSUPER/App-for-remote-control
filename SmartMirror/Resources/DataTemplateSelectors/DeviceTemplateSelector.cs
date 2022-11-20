@@ -6,6 +6,8 @@ namespace SmartMirror.Resources.DataTemplateSelectors
 {
     public class DeviceTemplateSelector : DataTemplateSelector
     {
+        #region -- Public properties --
+
         public DataTemplate DisconnectedDataTemplate { get; set; }
 
         public DataTemplate ConnectedDataTemplate { get; set; }
@@ -13,6 +15,8 @@ namespace SmartMirror.Resources.DataTemplateSelectors
         public DataTemplate OnDataTemplate { get; set; }
 
         public DataTemplate OffDataTemplate { get; set; }
+
+        #endregion
 
         #region -- Overrides --
 

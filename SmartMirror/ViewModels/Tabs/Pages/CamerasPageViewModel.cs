@@ -201,8 +201,6 @@ public class CamerasPageViewModel : BaseTabViewModel
 
         if (IsInternetConnected)
         {
-            await Task.Delay(1000);
-
             var resultOfGettingCameras = await _camerasService.GetCamerasAsync();
 
             if (resultOfGettingCameras.IsSuccess)
@@ -213,6 +211,12 @@ public class CamerasPageViewModel : BaseTabViewModel
                 });
 
                 Cameras = new(cameras);
+
+                foreach (var cam in Cameras)
+                {
+                    var isConnectedResponse = await _camerasService.CheckCameraConnection(cam);
+                    cam.IsConnected = isConnectedResponse.IsSuccess && isConnectedResponse.Result;
+                }
 
                 var camera = (SelectedCamera is null || !SelectedCamera.IsShown)
                     ? Cameras.FirstOrDefault()

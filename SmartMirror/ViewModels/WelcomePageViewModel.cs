@@ -1,4 +1,5 @@
-﻿using SmartMirror.Enums;
+﻿using Prism.Services;
+using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Aqara;
@@ -60,9 +61,7 @@ namespace SmartMirror.ViewModels
             }
             else if (IsInternetConnected)
             {
-                var testEmail = "botheadworks@gmail.com";
-
-                var resultOfSendingCodeToMail = await _aqaraService.SendLoginCodeAsync(testEmail);
+                var resultOfSendingCodeToMail = await _aqaraService.SendLoginCodeAsync(Constants.Aqara.TEST_EMAIL);
 
                 IDialogResult dialogResult;
 

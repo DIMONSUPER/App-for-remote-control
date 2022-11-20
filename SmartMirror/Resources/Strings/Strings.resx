@@ -15,6 +15,9 @@
     <data name="WelcomeMirrorHome" xml:space="preserve">
         <value>Welcome to the Mirror Home app!</value>
     </data>
+    <data name="AllowNotifications" xml:space="preserve">
+        <value>Allow Notifications</value>
+    </data>
     <data name="InstallConfigurationApp" xml:space="preserve">
         <value>To continue using the app, please install our Configuration app on your smartphone.</value>
     </data>
@@ -356,5 +359,14 @@
     </data>
     <data name="All" xml:space="preserve">
         <value>All</value>
+    </data>
+     <data name="NoResponseIPAddress" xml:space="preserve">
+        <value>No response from IP Address</value>
+    </data>
+    <data name="EnterLogin" xml:space="preserve">
+        <value>Enter Login</value>
+    </data>
+    <data name="LoginPasswordIncorrect" xml:space="preserve">
+        <value>Login or password is incorrect</value>
     </data>
 </root>

@@ -4,8 +4,8 @@
              xmlns:controls="clr-namespace:SmartMirror.Controls"
              x:Class="SmartMirror.Views.Skeletons.NotificationsTabSkeleton">
 
-    <Grid ColumnDefinitions="0.34*, 0.66*"
-          Margin="0, 40, 0, 0">
+    <Grid ColumnDefinitions="auto, 0.66*"
+          Margin="42, 56, 0, 0">
 
         <VerticalStackLayout Grid.Column="0">
 
@@ -38,7 +38,7 @@
         
         <VerticalStackLayout 
             Grid.Column="1"
-            Margin="0,16,0,0">
+            Margin="0,6,0,0">
 
             <controls:SkeletonView WidthRequest="63"
                                    HeightRequest="29"

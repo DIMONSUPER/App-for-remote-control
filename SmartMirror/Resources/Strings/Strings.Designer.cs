@@ -112,6 +112,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow Notifications.
+        /// </summary>
+        internal static string AllowNotifications {
+            get {
+                return ResourceManager.GetString("AllowNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Amazon.
         /// </summary>
         internal static string Amazon {
@@ -333,6 +342,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string EnterIPAddress {
             get {
                 return ResourceManager.GetString("EnterIPAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter Login.
+        /// </summary>
+        internal static string EnterLogin {
+            get {
+                return ResourceManager.GetString("EnterLogin", resourceCulture);
             }
         }
         
@@ -562,6 +580,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login or password is incorrect.
+        /// </summary>
+        internal static string LoginPasswordIncorrect {
+            get {
+                return ResourceManager.GetString("LoginPasswordIncorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to minute ago.
         /// </summary>
         internal static string MinuteAgo {
@@ -648,6 +675,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string NoNotificationsYet {
             get {
                 return ResourceManager.GetString("NoNotificationsYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No response from IP Address.
+        /// </summary>
+        internal static string NoResponseIPAddress {
+            get {
+                return ResourceManager.GetString("NoResponseIPAddress", resourceCulture);
             }
         }
         
