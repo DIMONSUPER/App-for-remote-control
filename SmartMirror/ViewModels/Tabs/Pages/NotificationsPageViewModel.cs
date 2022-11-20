@@ -36,8 +36,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
         _dialogService = dialogService;
         _mapperService = mapperService;
         _devicesService = devicesService;
-        _roomsService = roomsService;
-
+        _roomsService = roomsService; 
+        
         Title = "Notifications";
         _devicesService.AllDevicesChanged += OnAllDevicesChanged;
         _notificationsService.NotificationReceived += OnNotificationReceived;
@@ -335,6 +335,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private void SetAndSelectNotificationSources()
     {
+        // TO DO: add reset SelectedNotificationCategoryIndex = 0;
+
         NotificationsSources = SelectedNotificationCategoryIndex switch
         {
             Constants.Filters.BY_ROOMS => new(_roomsNotificationSource),

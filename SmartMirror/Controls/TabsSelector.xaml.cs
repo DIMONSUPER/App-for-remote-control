@@ -84,15 +84,19 @@ public partial class TabsSelector : ContentView
 
     private static void OnTabNamesPropertyChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        if (bindable is TabsSelector tabsSelector) 
+        if (bindable is TabsSelector tabsSelector && tabsSelector.TabNames is not null && tabsSelector.TabNames.Any()) 
 		{
-			tabsSelector.SelectedTabName = tabsSelector.TabNames?.FirstOrDefault();
-		}
+			var tabIndex = tabsSelector.SelectedTabIndex;
+
+            tabsSelector.SelectedTabName = tabIndex >= 0 && tabIndex < tabsSelector.TabNames.Count
+				? tabsSelector.TabNames.ElementAt(tabIndex)
+				: tabsSelector.SelectedTabName = tabsSelector.TabNames.FirstOrDefault();	
+        }
     }
 
     private static void OnSelectedTabNamePropertyChanged(BindableObject bindable, object oldValue, object newValue)
 	{
-		if (bindable is TabsSelector tabsSelector && tabsSelector.TabNames is not null)
+		if (bindable is TabsSelector tabsSelector && tabsSelector.TabNames is not null && tabsSelector.TabNames.Any())
 		{
 			tabsSelector.SelectedTabIndex = tabsSelector.TabNames.IndexOf(tabsSelector.SelectedTabName);
 

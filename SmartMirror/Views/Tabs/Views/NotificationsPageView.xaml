@@ -47,7 +47,7 @@
         <controls:CustomStateView.CompleteContent>
 
             <Grid
-                ColumnDefinitions="0.34*, 0.66*"
+                ColumnDefinitions="auto, *"
                 Margin="0, 40, 0, 0">
 
                 <Grid RowDefinitions="auto, *">
@@ -55,7 +55,6 @@
                     <controls:TabsSelector
                         Grid.Row="0"
                         Margin="31, 18, 31, 30"
-                        HorizontalOptions="Center"
                         x:Name="tabsSelector"
                         TabWidth="191"
                         SelectedTabIndex="{Binding SelectedNotificationCategoryIndex}"
