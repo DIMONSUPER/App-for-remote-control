@@ -67,29 +67,29 @@
 
                 </Grid>
 
-                <RefreshView
+                <controls:CustomStateView 
                     Grid.Column="1"
-                    HorizontalOptions="Center"
-                    IsRefreshing="{Binding IsNotificationsRefreshing}"
-                    Command="{Binding RefreshNotificationsCommand}"
-                    x:Name="refreshView">
+                    VerticalOptions="Start"
+                    State="{Binding NotificationsState}"
+                    EmptyTitle="{extensions:Translate NoNotificationsYet}"
+                    ShowDescriptionEmptyStateLabel="True"
+                    DescriptionEmptyState="{extensions:Translate PleaseCheckTheNotificationsSettings}"
+                    EmptyStateImage="notifications_off">
 
-                    <RefreshView.Triggers>
-                        <DataTrigger TargetType="RefreshView" Binding="{Binding NotificationsState}" Value="{Static enums:EPageState.Empty}">
+                    <controls:CustomStateView.Triggers>
+                        <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding NotificationsState}" Value="{Static enums:EPageState.Empty}">
                             <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
                         </DataTrigger>
-                    </RefreshView.Triggers>
+                    </controls:CustomStateView.Triggers>
 
-                    <controls:CustomStateView 
-                        VerticalOptions="Start"
-                        State="{Binding NotificationsState}"
-                        EmptyTitle="{extensions:Translate NoNotificationsYet}"
-                        ShowDescriptionEmptyStateLabel="True"
-                        DescriptionEmptyState="{extensions:Translate PleaseCheckTheNotificationsSettings}"
-                        EmptyStateImage="notifications_off">
+                    <controls:CustomStateView.CompleteContent>
 
-                        <controls:CustomStateView.CompleteContent>
-                            
+                        <RefreshView
+                            HorizontalOptions="Center"
+                            IsRefreshing="{Binding IsNotificationsRefreshing}"
+                            Command="{Binding RefreshNotificationsCommand}"
+                            x:Name="refreshView">
+
                             <CollectionView
                                 HorizontalOptions="EndAndExpand"
                                 ItemsSource="{Binding Notifications}"
@@ -98,13 +98,13 @@
                                 VerticalScrollBarVisibility="Always"
                                 HorizontalScrollBarVisibility="Always"
                                 x:Name="scrollViewNotifications"/>
-                            
-                        </controls:CustomStateView.CompleteContent>
-                        
-                    </controls:CustomStateView>
 
-                </RefreshView>
-                
+                        </RefreshView>
+
+                    </controls:CustomStateView.CompleteContent>
+                        
+                </controls:CustomStateView>
+
             </Grid>
 
         </controls:CustomStateView.CompleteContent>

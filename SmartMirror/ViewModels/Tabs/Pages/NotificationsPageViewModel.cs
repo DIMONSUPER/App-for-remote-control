@@ -6,7 +6,6 @@ using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Notifications;
 using SmartMirror.Services.Rooms;
-using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -20,9 +19,9 @@ public class NotificationsPageViewModel : BaseTabViewModel
     private readonly IDevicesService _devicesService;
     private readonly IRoomsService _roomsService;
 
-    private ObservableCollection<NotificationGroupItemBindableModel> _allNotifications;
     private ObservableCollection<NotificationSourceBindableModel> _roomsNotificationSource;
     private ObservableCollection<NotificationSourceBindableModel> _deviceeNotificationSource;
+    private ObservableCollection<NotificationGroupItemBindableModel> _allNotifications;
 
     public NotificationsPageViewModel(
         INotificationsService notificationsService,
@@ -177,7 +176,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
                 SelectedNotificationCategory = NotificationCategories.FirstOrDefault();
 
-                SetAndSelectNotificationSources();
+                SetNotificationSources();
 
                 FilterNotifications();
 
@@ -196,7 +195,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private Task OnSelectedNotificationCategoryChangedCommandAsync()
     {
-        SetAndSelectNotificationSources();
+        SetNotificationSources();
 
         FilterNotifications();
 
@@ -336,10 +335,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
         }
     }
 
-    private void SetAndSelectNotificationSources()
+    private void SetNotificationSources()
     {
-        // TO DO: add reset SelectedNotificationCategoryIndex = 0;
-
         NotificationsSources = SelectedNotificationCategoryIndex switch
         {
             Constants.Filters.BY_ROOMS => new(_roomsNotificationSource),
@@ -370,7 +367,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
                     SelectedNotificationCategory = NotificationCategories.FirstOrDefault();
 
-                    SetAndSelectNotificationSources();
+                    SetNotificationSources();
 
                     FilterNotifications();
 
@@ -392,7 +389,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         if (!IsDataLoading)
         {
-            await LoadNotificationsAndChangeStateAsync();
+            await UpdateAllDataAndChangeStateAsync();
 
             IsNotificationsRefreshing = false;
         }
