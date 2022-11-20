@@ -48,13 +48,14 @@
 
             <Grid
                 ColumnDefinitions="auto, *"
-                Margin="0, 40, 0, 0">
+                Margin="42, 34, 0, 0">
 
                 <Grid RowDefinitions="auto, *">
 
                     <controls:TabsSelector
                         Grid.Row="0"
-                        Margin="31, 18, 31, 30"
+                        Margin="0, 20, 0, 29"
+                        TabWidth="181"
                         TabNames="{Binding NotificationCategories}"
                         SelectedTabName="{Binding SelectedNotificationCategory}"
                         SelectedTabChangedCommand="{Binding SelectedNotificationCategoryChangedCommand}"/>
@@ -62,6 +63,7 @@
                     <CollectionView 
                         Grid.Row="1"
                         WidthRequest="360"
+                        HorizontalOptions="Center"
                         ItemTemplate="{DynamicResource notificationSourceTemplate}"
                         ItemsSource="{Binding NotificationsSources}"/>
 
