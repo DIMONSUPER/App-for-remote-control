@@ -55,10 +55,8 @@
                     <controls:TabsSelector
                         Grid.Row="0"
                         Margin="31, 18, 31, 30"
-                        x:Name="tabsSelector"
-                        TabWidth="191"
-                        SelectedTabIndex="{Binding SelectedNotificationCategoryIndex}"
                         TabNames="{Binding NotificationCategories}"
+                        SelectedTabName="{Binding SelectedNotificationCategory}"
                         SelectedTabChangedCommand="{Binding SelectedNotificationCategoryChangedCommand}"/>
 
                     <CollectionView 

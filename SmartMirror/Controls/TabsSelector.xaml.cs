@@ -16,8 +16,7 @@ public partial class TabsSelector : ContentView
 		returnType: typeof(IList<string>),
 		defaultValue: Enumerable.Empty<string>(),
 		declaringType: typeof(TabsSelector),
-		defaultBindingMode: BindingMode.OneWay,
-		propertyChanged: OnTabNamesPropertyChanged);
+		defaultBindingMode: BindingMode.OneWay);
 
 	public IList<string> TabNames
 	{
@@ -37,19 +36,6 @@ public partial class TabsSelector : ContentView
 	{
 		get => (string)GetValue(SelectedTabNameProperty);
 		set => SetValue(SelectedTabNameProperty, value);
-	}
-
-	public static readonly BindableProperty SelectedTabIndexProperty = BindableProperty.Create(
-		propertyName: nameof(SelectedTabIndex),
-		returnType: typeof(int),
-		defaultValue: -1,
-		declaringType: typeof(TabsSelector),
-		defaultBindingMode: BindingMode.OneWayToSource);
-
-	public int SelectedTabIndex
-	{
-		get => (int)GetValue(SelectedTabIndexProperty);
-		set => SetValue(SelectedTabIndexProperty, value);
 	}
 
 	public static readonly BindableProperty TabWidthProperty = BindableProperty.Create(
@@ -82,25 +68,11 @@ public partial class TabsSelector : ContentView
 
     #region -- Private helpers --
 
-    private static void OnTabNamesPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-        if (bindable is TabsSelector tabsSelector && tabsSelector.TabNames is not null && tabsSelector.TabNames.Any()) 
-		{
-			var tabIndex = tabsSelector.SelectedTabIndex;
-
-            tabsSelector.SelectedTabName = tabIndex >= 0 && tabIndex < tabsSelector.TabNames.Count
-				? tabsSelector.TabNames.ElementAt(tabIndex)
-				: tabsSelector.SelectedTabName = tabsSelector.TabNames.FirstOrDefault();	
-        }
-    }
-
     private static void OnSelectedTabNamePropertyChanged(BindableObject bindable, object oldValue, object newValue)
 	{
-		if (bindable is TabsSelector tabsSelector && tabsSelector.TabNames is not null && tabsSelector.TabNames.Any())
+		if (bindable is TabsSelector tabsSelector)
 		{
-			tabsSelector.SelectedTabIndex = tabsSelector.TabNames.IndexOf(tabsSelector.SelectedTabName);
-
-			tabsSelector.SelectedTabChangedCommand?.Execute(null);
+            tabsSelector.SelectedTabChangedCommand?.Execute(null);
         }
 	} 
 

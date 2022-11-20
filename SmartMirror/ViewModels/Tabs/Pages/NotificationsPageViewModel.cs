@@ -6,6 +6,7 @@ using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Notifications;
 using SmartMirror.Services.Rooms;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -48,6 +49,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
             LocalizationResourceManager.Instance["Rooms"] as string,
             LocalizationResourceManager.Instance["Accessories"] as string,
         };
+
+        SelectedNotificationCategory = NotificationCategories.FirstOrDefault();
     }
 
     #region -- Public properties --
@@ -64,13 +67,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         get => _selectedNotificationCategory;
         set => SetProperty(ref _selectedNotificationCategory, value);
-    }
-
-    private int _selectedNotificationCategoryIndex;
-    public int SelectedNotificationCategoryIndex
-    {
-        get => _selectedNotificationCategoryIndex;
-        set => SetProperty(ref _selectedNotificationCategoryIndex, value);
     }
 
     private ObservableCollection<NotificationSourceBindableModel> _notificationsSources;
@@ -164,6 +160,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
         await LoadAllDataAndChangeStateAsync();
     }
 
+    private int SelectedNotificationCategoryIndex => NotificationCategories.IndexOf(SelectedNotificationCategory);
+
     private async Task LoadAllDataAndChangeStateAsync()
     {
         if (IsInternetConnected)
@@ -177,6 +175,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
                 await Task.WhenAll(
                     LoadRoomsNotificationSourcesAsync(), 
                     LoadDevicesNotificationSourcesAsync());
+
+                SelectedNotificationCategory = NotificationCategories.FirstOrDefault();
 
                 SetAndSelectNotificationSources();
 
@@ -364,6 +364,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
                     await Task.WhenAll(
                         LoadRoomsNotificationSourcesAsync(),
                         LoadDevicesNotificationSourcesAsync());
+
+                    SelectedNotificationCategory = NotificationCategories.FirstOrDefault();
 
                     SetAndSelectNotificationSources();
 
