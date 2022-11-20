@@ -54,7 +54,7 @@
 
                     <controls:TabsSelector
                         Grid.Row="0"
-                        Margin="0, 20, 0, 29"
+                        Margin="0, 24, 0, 29"
                         TabWidth="181"
                         TabNames="{Binding NotificationCategories}"
                         SelectedTabName="{Binding SelectedNotificationCategory}"

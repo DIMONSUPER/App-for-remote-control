@@ -41,7 +41,7 @@ public partial class TabsSelector : ContentView
     public static readonly BindableProperty TabWidthProperty = BindableProperty.Create(
         propertyName: nameof(TabWidth),
         returnType: typeof(double),
-        defaultValue: 161d,
+        defaultValue: 181d,
         declaringType: typeof(TabsSelector),
         defaultBindingMode: BindingMode.OneWay);
 
