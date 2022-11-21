@@ -28,6 +28,7 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<Configurations>DEV;Debug;Release</Configurations>
 		<TargetFramework>net7.0-android</TargetFramework>
+		<AndroidLinkResources>false</AndroidLinkResources>
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- Splash Screen -->
@@ -394,14 +395,14 @@
 		<IntermediateOutputPath>obj\DEV\net7.0-android</IntermediateOutputPath>
 		<DebugSymbols>true</DebugSymbols>
 		<Optimize>true</Optimize>
-		<DefineConstants>TRACE;DEV;NET;NET6_0;NETCOREAPP</DefineConstants>
+		<DefineConstants>TRACE;DEV;NET;NET7_0;NETCOREAPP</DefineConstants>
 		<WarningLevel>4</WarningLevel>
 		<DocumentationFile>bin\DEV\net7.0-android\SmartMirror.xml</DocumentationFile>
 		<AndroidManagedSymbols>true</AndroidManagedSymbols>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
-		<AotAssemblies>false</AotAssemblies>
-		<AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-		<AndroidLinkMode>None</AndroidLinkMode>
+		<AotAssemblies>true</AotAssemblies>
+		<AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+		<AndroidLinkMode>SdkOnly</AndroidLinkMode>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<WarningLevel>4</WarningLevel>

@@ -62,6 +62,8 @@ namespace SmartMirror.ViewModels
 
             _devicesService.AllDevicesChanged += OnAllDevicesChanged;
             _scenariosService.AllScenariosChanged += OnAllScenariosChanged;
+            LoadCategories();
+            SelectCategory(SelectedCategory ?? Categories.FirstOrDefault());
         }
 
         #region -- Public properties --
@@ -155,9 +157,6 @@ namespace SmartMirror.ViewModels
 
             Task.Run(async () =>
             {
-                LoadCategories();
-                SelectCategory(Categories.FirstOrDefault());
-
                 await LoadAllDataAndChangeStateAsync();
             });
         }

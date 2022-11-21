@@ -71,6 +71,7 @@ public static class MauiProgram
         containerRegistry.RegisterDialog<DoorBellDialog>();
         containerRegistry.RegisterDialog<AddMoreProviderDialog>();
 
+        containerRegistry.RegisterForNavigation<CustomNavigationPage>();
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
         containerRegistry.RegisterForNavigation<WelcomePage>();
         containerRegistry.RegisterForNavigation<MainTabbedPage>();
@@ -109,20 +110,16 @@ public static class MauiProgram
         _isAuthorized = aqaraService.IsAuthorized;
     }
 
-    private static void OnAppStart(INavigationService navigationService)
+    private static async void OnAppStart(INavigationService navigationService)
     {
-        var navigationBuilder = navigationService.CreateBuilder();
-
         if (_isAuthorized)
         {
-            navigationBuilder.AddNavigationPage().AddSegment<WelcomePageViewModel>().AddSegment<MainTabbedPageViewModel>();
+            await navigationService.NavigateAsync($"{nameof(CustomNavigationPage)}/{nameof(WelcomePage)}/{nameof(MainTabbedPage)}");
         }
         else
         {
-            navigationBuilder.AddNavigationPage().AddSegment<WelcomePageViewModel>();
+            await navigationService.NavigateAsync($"{nameof(CustomNavigationPage)}/{nameof(WelcomePage)}");
         }
-
-        navigationBuilder.Navigate(HandleErrors);
     }
 
     private static void HandleErrors(Exception exception)
