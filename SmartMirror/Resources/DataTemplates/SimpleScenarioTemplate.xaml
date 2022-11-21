@@ -27,11 +27,11 @@
                 Grid.Column="0"
                 VerticalOptions="Center"
                 HorizontalOptions="Start"
-                StrokeShape="RoundRectangle 9"
+                StrokeShape="RoundRectangle 6"
                 BackgroundColor="{DynamicResource cbg_i1}"
                 HeightImage="20"
-                HeightRequest="36"
-                WidthRequest="36"
+                HeightRequest="42"
+                WidthRequest="42"
                 Padding="9"
                 Source="{Binding ImageSource}"/>
 
