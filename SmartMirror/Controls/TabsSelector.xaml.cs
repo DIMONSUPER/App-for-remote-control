@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace SmartMirror.Controls;
@@ -29,8 +30,7 @@ public partial class TabsSelector : ContentView
         returnType: typeof(string),
         defaultValue: string.Empty,
         declaringType: typeof(TabsSelector),
-        defaultBindingMode: BindingMode.TwoWay,
-        propertyChanged: OnSelectedTabNamePropertyChanged);
+        defaultBindingMode: BindingMode.TwoWay);
 
     public string SelectedTabName
     {
@@ -66,13 +66,15 @@ public partial class TabsSelector : ContentView
 
     #endregion
 
-    #region -- Private helpers --
+    #region -- Overrides --
 
-    private static void OnSelectedTabNamePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+    protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
-        if (bindable is TabsSelector tabsSelector)
+        base.OnPropertyChanged(propertyName);
+
+        if (propertyName is nameof(SelectedTabName))
         {
-            tabsSelector.SelectedTabChangedCommand?.Execute(null);
+            SelectedTabChangedCommand?.Execute(null);
         }
     }
 

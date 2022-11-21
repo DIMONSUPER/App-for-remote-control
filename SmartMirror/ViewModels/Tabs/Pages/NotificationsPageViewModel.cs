@@ -8,6 +8,7 @@ using SmartMirror.Services.Notifications;
 using SmartMirror.Services.Rooms;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using SmartMirror.Resources.Strings;
 
 namespace SmartMirror.ViewModels.Tabs.Pages;
 
@@ -19,9 +20,9 @@ public class NotificationsPageViewModel : BaseTabViewModel
     private readonly IDevicesService _devicesService;
     private readonly IRoomsService _roomsService;
 
-    private ObservableCollection<NotificationSourceBindableModel> _roomsNotificationSource;
-    private ObservableCollection<NotificationSourceBindableModel> _deviceeNotificationSource;
-    private ObservableCollection<NotificationGroupItemBindableModel> _allNotifications = new();
+    private List<NotificationSourceBindableModel> _roomsNotificationSource;
+    private List<NotificationSourceBindableModel> _deviceNotificationSource;
+    private List<NotificationGroupItemBindableModel> _allNotifications = new();
 
     public NotificationsPageViewModel(
         INotificationsService notificationsService,
@@ -45,8 +46,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
         NotificationCategories = new()
         {
-            LocalizationResourceManager.Instance["Rooms"] as string,
-            LocalizationResourceManager.Instance["Accessories"] as string,
+            Strings.Rooms,
+            Strings.Accessories,
         };
 
         SelectedNotificationCategory = NotificationCategories.FirstOrDefault();
@@ -123,6 +124,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
         _notificationsService.NotificationReceived -= OnNotificationReceived;
+        _roomsService.AllRoomsChanged -= OnAllRoomsChanged;
 
         base.Destroy();
     }
@@ -228,7 +230,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private async Task LoadRoomsNotificationSourcesAsync()
     {
-        var roomsNotificationSource = new ObservableCollection<NotificationSourceBindableModel>();
+        var roomsNotificationSource = new List<NotificationSourceBindableModel>();
 
         var allRooms = await _roomsService.GetAllRoomsAsync();
 
@@ -240,10 +242,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
             var notificationSource = _mapperService.Map<NotificationSourceBindableModel>(room, (v, vm) =>
             {
-                vm.NotificationsCount = notifications is null
-                    ? 0
-                    : notifications.Count();
-
+                vm.NotificationsCount = notifications?.Count() ?? 0;
                 vm.SelectCommand = SelectNotificationSourceCommand;
             });
 
@@ -253,15 +252,15 @@ public class NotificationsPageViewModel : BaseTabViewModel
         _roomsNotificationSource = new(roomsNotificationSource);
         _roomsNotificationSource.Insert(0, new NotificationSourceBindableModel
         {
-            Name = LocalizationResourceManager.Instance["All"] as string,
-            NotificationsCount = _allNotifications.Count(),
+            Name = Strings.All,
+            NotificationsCount = _allNotifications.Count,
             SelectCommand = SelectNotificationSourceCommand,
         });
     }
 
     private async Task LoadDevicesNotificationSourcesAsync()
     {
-        var devicesNotificationSource = new ObservableCollection<NotificationSourceBindableModel>();
+        var devicesNotificationSource = new List<NotificationSourceBindableModel>();
 
         var allDevices = await _devicesService.GetAllSupportedDevicesAsync();
 
@@ -273,20 +272,18 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
             var notificationSource = _mapperService.Map<NotificationSourceBindableModel>(device, (v, vm) =>
             {
-                vm.NotificationsCount = notifications is null
-                    ? 0
-                    : notifications.Count();
+                vm.NotificationsCount = notifications?.Count() ?? 0;
                 vm.SelectCommand = SelectNotificationSourceCommand;
             });
 
             devicesNotificationSource.Add(notificationSource);
         }
 
-        _deviceeNotificationSource = new(devicesNotificationSource);
-        _deviceeNotificationSource.Insert(0, new NotificationSourceBindableModel
+        _deviceNotificationSource = new(devicesNotificationSource);
+        _deviceNotificationSource.Insert(0, new NotificationSourceBindableModel
         {
-            Name = LocalizationResourceManager.Instance["All"] as string,
-            NotificationsCount = _allNotifications.Count(),
+            Name = Strings.All,
+            NotificationsCount = _allNotifications.Count,
             SelectCommand = SelectNotificationSourceCommand,
         });
     }
@@ -295,26 +292,26 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         var notifications = Enumerable.Empty<NotificationGroupItemBindableModel>();
 
-        switch (SelectedNotificationCategoryIndex)
+        bool isAllRoomsOrAccessoriesSelected = string.IsNullOrEmpty(SelectedNotificationSource.Id);
+
+        switch ((ENotificationFilter)SelectedNotificationCategoryIndex)
         {
-            case Constants.Filters.BY_ROOMS:
+            case ENotificationFilter.ByRooms:
 
-                bool isAllRoomsSelected = string.IsNullOrEmpty(SelectedNotificationSource.Id);
-
-                notifications = isAllRoomsSelected
+                notifications = isAllRoomsOrAccessoriesSelected
                     ? _allNotifications
                     : _allNotifications.Where(x => x.Device.PositionId == SelectedNotificationSource.Id);
 
                 foreach (var notification in notifications)
                 {
-                    notification.IsRoomNameVisible = isAllRoomsSelected;
+                    notification.IsRoomNameVisible = isAllRoomsOrAccessoriesSelected;
                 }
 
                 break;
 
-            case Constants.Filters.BY_ACCESSORIES:
+            case ENotificationFilter.ByAccessories:
 
-                notifications = string.IsNullOrEmpty(SelectedNotificationSource.Id)
+                notifications = isAllRoomsOrAccessoriesSelected
                     ? _allNotifications
                     : _allNotifications.Where(x => x.Device.FullDeviceId == SelectedNotificationSource.Id);
 
@@ -340,10 +337,10 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private void SetNotificationSources()
     {
-        NotificationsSources = SelectedNotificationCategoryIndex switch
+        NotificationsSources = (ENotificationFilter)SelectedNotificationCategoryIndex switch
         {
-            Constants.Filters.BY_ROOMS => new(_roomsNotificationSource),
-            Constants.Filters.BY_ACCESSORIES => new(_deviceeNotificationSource),
+            ENotificationFilter.ByRooms => new(_roomsNotificationSource),
+            ENotificationFilter.ByAccessories => new(_deviceNotificationSource),
             _ => new(_roomsNotificationSource),
         };
 
