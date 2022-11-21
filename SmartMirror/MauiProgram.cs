@@ -3,7 +3,6 @@ using Microsoft.Maui.Controls.Compatibility.Hosting;
 using Plugin.Maui.Audio;
 using SmartMirror.Controls;
 using SmartMirror.Handlers;
-using SmartMirror.Platforms.Android.Renderers;
 using SmartMirror.Platforms.Android.Services;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Blur;
@@ -73,6 +72,7 @@ public static class MauiProgram
         containerRegistry.RegisterDialog<DoorBellDialog>();
         containerRegistry.RegisterDialog<AddMoreProviderDialog>();
 
+        containerRegistry.RegisterForNavigation<CustomNavigationPage>();
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
         containerRegistry.RegisterForNavigation<WelcomePage>();
         containerRegistry.RegisterForNavigation<MainTabbedPage>();
@@ -113,20 +113,16 @@ public static class MauiProgram
         _isAuthorized = aqaraService.IsAuthorized;
     }
 
-    private static void OnAppStart(INavigationService navigationService)
+    private static async void OnAppStart(INavigationService navigationService)
     {
-        var navigationBuilder = navigationService.CreateBuilder();
-
         if (_isAuthorized)
         {
-            navigationBuilder.AddSegment<MainTabbedPageViewModel>();
+            await navigationService.NavigateAsync($"{nameof(CustomNavigationPage)}/{nameof(WelcomePage)}/{nameof(MainTabbedPage)}");
         }
         else
         {
-            navigationBuilder.AddSegment<WelcomePageViewModel>();
+            await navigationService.NavigateAsync($"{nameof(CustomNavigationPage)}/{nameof(WelcomePage)}");
         }
-
-        navigationBuilder.Navigate(HandleErrors);
     }
 
     private static void HandleErrors(Exception exception)
@@ -138,7 +134,7 @@ public static class MauiProgram
     private static void OnConfigureMauiHandlers(IMauiHandlersCollection handlers)
     {
         handlers.AddHandler(typeof(Video), typeof(VideoHandler));
-        handlers.AddCompatibilityRenderer(typeof(CustomTabbedPage), typeof(CustomTabbedPageRenderer));
+        handlers.AddHandler(typeof(CustomTabbedPage), typeof(CustomTabbedViewHandler));
     }
 
     #endregion

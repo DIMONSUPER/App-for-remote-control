@@ -4,7 +4,8 @@
              xmlns:controls="clr-namespace:SmartMirror.Controls"
              x:Class="SmartMirror.Views.Skeletons.NotificationsTabSkeleton">
 
-    <VerticalStackLayout Margin="0,48,0,0">
+    <StackLayout Orientation="Vertical"
+                 Margin="0,48,0,0">
 
         <controls:SkeletonView WidthRequest="63"
                                HeightRequest="29"
@@ -12,7 +13,7 @@
                                Style="{DynamicResource WhiteGradientStyle_i1}"/>
 
         <StackLayout Margin="0,26,0,0"
-                        Spacing="18">
+                     Spacing="18">
 
             <BindableLayout.ItemTemplate>
 
@@ -67,7 +68,7 @@
 
         </StackLayout>
 
-    </VerticalStackLayout>
+    </StackLayout>
 
 </ContentView>
 
