@@ -21,7 +21,7 @@
         <StackLayout Margin="30,26,30,0">
 
             <Label Text="{extensions:Translate Doorbell}"
-                    Style="{StaticResource tstyle_i11}"/>
+                   Style="{StaticResource tstyle_i11}"/>
 
             <Frame Margin="0,26,0,0"
                    Padding="1"

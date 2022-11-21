@@ -8,7 +8,7 @@ namespace SmartMirror.Services.Settings
 
         public bool IsAllowNotifications
         {
-            get => Preferences.Default.Get(nameof(IsAllowNotifications), default(bool), nameof(NotificationsSettings));
+            get => Preferences.Default.Get(nameof(IsAllowNotifications), true, nameof(NotificationsSettings));
             set => Preferences.Default.Set(nameof(IsAllowNotifications), value, nameof(NotificationsSettings));
         }
 

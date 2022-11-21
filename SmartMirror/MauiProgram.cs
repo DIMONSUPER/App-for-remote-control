@@ -22,6 +22,7 @@ using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Services.Settings;
 using SmartMirror.ViewModels;
+using SmartMirror.ViewModels.Dialogs;
 using SmartMirror.Views;
 using SmartMirror.Views.Dialogs;
 using SmartMirror.Views.Tabs.Details;
@@ -101,6 +102,8 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IDevicesService, DevicesService>();
         containerRegistry.RegisterSingleton<IRoomsService, RoomsService>();
         containerRegistry.RegisterInstance<IAudioManager>(AudioManager.Current);
+
+        containerRegistry.RegisterSingleton<ConfirmPopupViewModel>();
     }
 
     private static void OnInitialized(IContainerProvider container)
