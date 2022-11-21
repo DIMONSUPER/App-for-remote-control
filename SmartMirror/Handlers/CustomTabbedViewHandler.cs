@@ -106,7 +106,7 @@ public class CustomTabbedViewHandler : TabbedViewHandler
 
     #endregion
 
-    private class Runnable<T> : Java.Lang.Object, IRunnable
+    private class Runnable : Java.Lang.Object, IRunnable
     {
         private readonly Action _action;
 
