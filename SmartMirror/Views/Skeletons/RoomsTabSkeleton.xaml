@@ -44,7 +44,7 @@
                                                StrokeShape="RoundRectangle 12"
                                                StrokeThickness="0">
 
-                            <BoxView MaximumHeightRequest="201"/>
+                            <BoxView HeightRequest="201"/>
 
                         </controls:SkeletonView>
 
@@ -56,7 +56,9 @@
 
         </StackLayout>
 
-        <VerticalStackLayout Grid.Row="1">
+        <StackLayout Grid.Row="1"
+                     VerticalOptions="Fill"
+                     Orientation="Vertical">
 
             <controls:SkeletonView WidthRequest="94"
                                    HeightRequest="38"
@@ -65,8 +67,9 @@
                                    Margin="6,0,0,0"
                                    Style="{DynamicResource WhiteGradientStyle_i1}"/>
 
-            <HorizontalStackLayout Margin="0,16,0,0"
-                                   Spacing="30">
+            <StackLayout Margin="0,16,0,0"
+                         Orientation="Horizontal"
+                         Spacing="30">
 
                 <BindableLayout.ItemsSource>
 
@@ -85,7 +88,7 @@
                     <DataTemplate>
 
                         <Grid WidthRequest="280"
-                              MaximumHeightRequest="157">
+                              HeightRequest="157">
 
                             <controls:SkeletonView StrokeShape="RoundRectangle 9"
                                                    Style="{DynamicResource WhiteGradientStyle_i1}"
@@ -97,9 +100,9 @@
 
                 </BindableLayout.ItemTemplate>
 
-            </HorizontalStackLayout>
+            </StackLayout>
 
-        </VerticalStackLayout>
+        </StackLayout>
 
     </Grid>
 

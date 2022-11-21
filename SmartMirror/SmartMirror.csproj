@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net6.0-android;</TargetFrameworks>
-		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-ios</TargetFrameworks> -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-maccatalyst</TargetFrameworks> -->
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net7.0-android;</TargetFrameworks>
+		<!-- <TargetFrameworks>$(TargetFrameworks);net7.0-ios</TargetFrameworks> -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net7.0-maccatalyst</TargetFrameworks> -->
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net7.0-tizen</TargetFrameworks> -->
 		<OutputType>Exe</OutputType>
 		<RootNamespace>SmartMirror</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -27,6 +27,8 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<Configurations>DEV;Debug;Release</Configurations>
+		<TargetFramework>net7.0-android</TargetFramework>
+		<AndroidLinkResources>false</AndroidLinkResources>
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- Splash Screen -->
@@ -100,17 +102,26 @@
 		<None Remove="Services\Permissions\" />
 		<None Remove="Plugin.Maui.Audio" />
 		<None Remove="RtspClientSharp" />
+		<None Remove="Xamarin.AndroidX.Browser" />
+		<None Remove="Xamarin.AndroidX.Lifecycle.LiveData" />
+		<None Remove="Xamarin.AndroidX.Navigation.Fragment" />
+		<None Remove="Xamarin.AndroidX.Navigation.Common" />
+		<None Remove="Xamarin.AndroidX.Navigation.Runtime" />
+		<None Remove="Xamarin.Google.Android.Material" />
+		<None Remove="Xamarin.AndroidX.Navigation.UI" />
+		<None Remove="Xamarin.Google.Crypto.Tink.Android" />
+		<None Remove="Xamarin.AndroidX.Legacy.Support.V4" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.3" />
-		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.5.3" />
+		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.0-preview.1" />
+		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.0-preview.1" />
 		<PackageReference Include="Prism.DryIoc.Maui" Version="8.1.273-pre" />
 		<PackageReference Include="Prism.Maui" Version="8.1.273-pre" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="1.3.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta2" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="3.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta3" />
 		<PackageReference Include="AutoMapper" Version="12.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.9" />
-		<PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.2" />
+		<PackageReference Include="Microsoft.Extensions.Localization" Version="7.0.0" />
+		<PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.3-pre20221111222311" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 		<PackageReference Include="sqlite-net" Version="1.6.292" />
 		<PackageReference Include="Plugin.Maui.Audio" Version="0.1.0-preview2" />
@@ -331,6 +342,9 @@
 		<MauiXaml Update="Resources\DataTemplates\SimpleNotificationsHeaderTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\ConfirmPopup.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Update="Resources\Strings\Strings.resx">
@@ -395,17 +409,17 @@
 		<AndroidSigningStorePass>1Q2w3e4r5t</AndroidSigningStorePass>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DEV|AnyCPU' ">
-		<IntermediateOutputPath>obj\DEV\net6.0-android</IntermediateOutputPath>
+		<IntermediateOutputPath>obj\DEV\net7.0-android</IntermediateOutputPath>
 		<DebugSymbols>true</DebugSymbols>
 		<Optimize>true</Optimize>
-		<DefineConstants>TRACE;DEV;NET;NET6_0;NETCOREAPP</DefineConstants>
+		<DefineConstants>TRACE;DEV;NET;NET7_0;NETCOREAPP</DefineConstants>
 		<WarningLevel>4</WarningLevel>
-		<DocumentationFile>bin\DEV\net6.0-android\SmartMirror.xml</DocumentationFile>
+		<DocumentationFile>bin\DEV\net7.0-android\SmartMirror.xml</DocumentationFile>
 		<AndroidManagedSymbols>true</AndroidManagedSymbols>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
-		<AotAssemblies>false</AotAssemblies>
-		<AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-		<AndroidLinkMode>None</AndroidLinkMode>
+		<AotAssemblies>true</AotAssemblies>
+		<AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+		<AndroidLinkMode>SdkOnly</AndroidLinkMode>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<WarningLevel>4</WarningLevel>
@@ -417,12 +431,12 @@
 		<AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
-	<ItemGroup Condition="$(TargetFramework.StartsWith('net6.0-android')) != true">
+	<ItemGroup Condition="$(TargetFramework.StartsWith('net7.0-android')) != true">
 		<Compile Remove="**\**\*.Android.cs" />
 		<None Include="**\**\*.Android.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-android'">
-		<PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.0.1" />
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
+		<PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.0.2" />
 		<PackageReference Include="Karamunting.Android.Wasabeef.Blurry" Version="3.0.0" />
 	</ItemGroup>
 </Project>

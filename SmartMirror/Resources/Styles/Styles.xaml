@@ -15,10 +15,10 @@
     <converters:TimeToDaysOfWeekConverter x:Key="timeToDaysOfWeekConverter" />
 
     <!-- TEXT SIZE -->
-    <x:Double x:Key="tsize_i1">32</x:Double> <!-- 48px -->
-    <x:Double x:Key="tsize_i2">21</x:Double> <!-- 28px -->
-    <x:Double x:Key="tsize_i3">18</x:Double> <!-- 24px -->
-    <x:Double x:Key="tsize_i4">15</x:Double> <!-- 20px -->
+    <x:Int32 x:Key="tsize_i1">32</x:Int32> <!-- 48px -->
+    <x:Int32 x:Key="tsize_i2">21</x:Int32> <!-- 28px -->
+    <x:Int32 x:Key="tsize_i3">18</x:Int32> <!-- 24px -->
+    <x:Int32 x:Key="tsize_i4">15</x:Int32> <!-- 20px -->
 
     <!-- CONTENT STYLES INTERMEDIUM-500 FONT-->
     <Style x:Key="InterMedium" TargetType="Label">

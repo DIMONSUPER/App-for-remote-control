@@ -20,7 +20,8 @@ public class BlurService : IBlurService
     {
         var currentPage = GetCurrentPage();
 
-        var currentPageNativeView = currentPage.Handler?.PlatformView as global::Android.Views.View;
+        //var currentPageNativeView = currentPage.Handler?.PlatformView as global::Android.Views.View;
+        var currentPageNativeView = currentPage.Handler.MauiContext.Services.GetRequiredService<NavigationRootManager>().RootView;
 
         if (currentPageNativeView is not null)
         {   
@@ -57,7 +58,8 @@ public class BlurService : IBlurService
     {
         var currentPage = GetCurrentPage();
 
-        var currentPageNativeView = currentPage.Handler?.PlatformView as global::Android.Views.View;
+        //var currentPageNativeView = currentPage.Handler?.PlatformView as global::Android.Views.View;
+        var currentPageNativeView = currentPage.Handler.MauiContext.Services.GetRequiredService<NavigationRootManager>().RootView;
 
         if (currentPageNativeView is not null && Build.VERSION.SdkInt >= BuildVersionCodes.S)
         {
