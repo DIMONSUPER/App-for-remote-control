@@ -4,7 +4,6 @@ using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
-using SmartMirror.Services.Mock;
 using SmartMirror.Services.Rooms;
 using SmartMirror.ViewModels.Tabs.Details;
 using SmartMirror.Views.Dialogs;
@@ -17,7 +16,6 @@ namespace SmartMirror.ViewModels.Tabs.Pages;
 
 public class RoomsPageViewModel : BaseTabViewModel
 {
-    private readonly ISmartHomeMockService _smartHomeMockService;
     private readonly IMapperService _mapperService;
     private readonly IAqaraService _aqaraService;
     private readonly IDialogService _dialogService;
@@ -29,7 +27,6 @@ public class RoomsPageViewModel : BaseTabViewModel
     private object _locker = new();
 
     public RoomsPageViewModel(
-        ISmartHomeMockService smartHomeMockService,
         INavigationService navigationService,
         IMapperService mapperService,
         IAqaraService aqaraService,
@@ -38,7 +35,6 @@ public class RoomsPageViewModel : BaseTabViewModel
         IDevicesService devicesService)
         : base(navigationService)
     {
-        _smartHomeMockService = smartHomeMockService;
         _mapperService = mapperService;
         _aqaraService = aqaraService;
         _dialogService = dialogService;
