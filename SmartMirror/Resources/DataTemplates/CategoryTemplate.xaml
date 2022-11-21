@@ -42,6 +42,7 @@
                 <Label 
                     Style="{DynamicResource tstyle_i6}"
                     HorizontalOptions="EndAndExpand"
+                    Margin="1,0"
                     Text="{Binding Count}"
                     x:Name="categoryCountLabel"/>
 
