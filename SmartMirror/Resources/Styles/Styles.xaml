@@ -180,10 +180,10 @@
     </Style>
 
     <Style x:Key="BasePressedBorderStyle_i1" TargetType="Border">
-        <Setter Property="StrokeShape" Value="RoundRectangle 26"/>
         <Setter Property="Stroke" Value="{x:DynamicResource cbg_i3}"/>
-        <Setter Property="BackgroundColor" Value="{x:DynamicResource cbg_i3}"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 26"/>
         <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="BackgroundColor" Value="{x:DynamicResource cbg_i3}"/>
         <Setter Property="behaviors:TouchBehavior.IsAnimation" Value="True"/>
     </Style>
 
