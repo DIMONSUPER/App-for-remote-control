@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
+    x:DataType="vm:ConfirmPopupViewModel"
+    x:Class="SmartMirror.Views.Dialogs.ConfirmPopup">
+
+    <Frame
+        Padding="0"
+        HasShadow="False"
+        BackgroundColor="{x:DynamicResource cbg_i1}">
+
+        <Border
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            StrokeThickness="0.75"
+            StrokeShape="RoundRectangle 9"
+            Stroke="{DynamicResource tcolor_i1}"
+            Padding="0"
+            BackgroundColor="{StaticResource cbg_i2}">
+
+            <Border.Resources>
+                <sys:Boolean x:Key="falseValue">False</sys:Boolean>
+                <sys:Boolean x:Key="trueValue">True</sys:Boolean>
+            </Border.Resources>
+
+            <VerticalStackLayout
+                Spacing="0"
+                Margin="30, 0">
+
+                <Label
+                    Margin="0,26,0,0"
+                    Style="{x:DynamicResource tstyle_i11}"
+                    Text="{Binding Title}" />
+
+                <Label
+                    Margin="0,6,0,0"
+                    Style="{DynamicResource tstyle_i5}"
+                    Text="{Binding Description}" />
+
+                <Grid
+                    Margin="0,42"
+                    ColumnDefinitions="*,*"
+                    ColumnSpacing="26">
+
+                    <Button
+                        Grid.Column="0"
+                        Style="{DynamicResource ButtonStyle_i1}"
+                        HorizontalOptions="Center"
+                        Text="{extensions:Translate Close}"
+                        BackgroundColor="Transparent"
+                        TextColor="#E9E9E9"
+                        BorderColor="{DynamicResource cbg_i3}"
+                        BorderWidth="0.75"
+                        Command="{Binding ConfirmCommand}"
+                        CommandParameter="{StaticResource falseValue}"
+                        WidthRequest="168"/>
+                
+                    <Button
+                        Grid.Column="1"
+                        Style="{DynamicResource ButtonStyle_i1}"
+                        HorizontalOptions="Center"
+                        Text="{extensions:Translate Confirm}"
+                        Command="{Binding ConfirmCommand}"
+                        CommandParameter="{StaticResource trueValue}"
+                        WidthRequest="168"/>
+
+                </Grid>
+
+            </VerticalStackLayout>
+
+        </Border>
+
+    </Frame>
+
+</toolkit:Popup>
