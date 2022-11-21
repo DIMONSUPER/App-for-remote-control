@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Grid xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      HorizontalOptions="Center"
+      Margin="138, 36, 138, 20"
+      x:Class="SmartMirror.Controls.ButtonLoader"
+      x:Name="buttonLoader">
+
+    <Button
+        Style="{Binding ButtonStyle, Source={x:Reference buttonLoader}}"
+        Text="{Binding ButtonText, Source={x:Reference buttonLoader}}"
+        Command="{Binding Command, Source={x:Reference buttonLoader}}"
+        CommandParameter="{Binding CommandParameter, Source={x:Reference buttonLoader}}">
+
+        <Button.Triggers>
+            <DataTrigger TargetType="Button" Binding="{Binding IsRunning, Source={x:Reference buttonLoader}}" Value="True">
+                <Setter Property="TextColor" Value="Transparent"/>
+            </DataTrigger>
+        </Button.Triggers>
+
+    </Button>
+
+    <ActivityIndicator
+        IsRunning="{Binding IsRunning, Source={x:Reference buttonLoader}}"
+        Color="{DynamicResource cbg_i2}"/>
+</Grid>
+

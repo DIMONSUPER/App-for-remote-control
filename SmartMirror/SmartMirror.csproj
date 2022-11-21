@@ -170,25 +170,22 @@
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Controls\TitleAndSwitchView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Platforms\Windows\App.xaml">
-			<SubType>
-			</SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Controls\CustomTabView.xaml">
-			<SubType>
-			</SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\CategoryTemplate.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\FavoriteScenariosTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\CameraTemplate.xaml">
-			<SubType>
-			</SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\NotificationSourceTemplate.xaml">
 		  <SubType>
@@ -196,13 +193,13 @@
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\SimpleAccessoryTemplate.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\SimpleCameraTemplate.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\SimpleScenarioTemplate.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\NotificationHeaderTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -217,79 +214,67 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\AccessorySettingsDialog.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\AddMoreProviderDialog.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\AddNewCameraDialog.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\CameraSettingsDialog.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\ConfirmDialog.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\EnterCodeDialog.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\ErrorDialog.xaml">
-			<SubType>
-			</SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\ScenarioSettingsDialog.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
-			<SubType>
-			</SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\SettingsPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Details\ScenarioDetailsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Pages\CamerasPage.xaml">
-			<SubType>
-			</SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Pages\NotificationsPage.xaml">
-			<SubType>
-			</SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Pages\RoomsPage.xaml">
-			<SubType>
-			</SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Pages\ScenariosPage.xaml">
-			<SubType>
-			</SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\RoomsTemplate.xaml">
-			<SubType>
-			</SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Controls\CustomStateView.xaml">
-			<SubType>
-			</SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Details\RoomDetailsPage.xaml">
-			<SubType>
-			</SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\RoomsVerticalListTemplate.xaml">
-			<SubType>
-			</SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Controls\CustomSwitch.xaml">
-			<SubType>
-			</SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\DeviceTemplate.xaml">
-			<SubType>
-			</SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Views\CamerasPageView.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -307,43 +292,46 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\ConfirmDialog.xaml">
-		  <SubType></SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Skeletons\RoomsTab.xaml">
-		  <SubType></SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Skeletons\CameraTab.xaml">
-		  <SubType></SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Skeletons\NotificationsTab.xaml">
-		  <SubType></SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Skeletons\ScenariosTab.xaml">
-		  <SubType></SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Skeletons\RoomDetailsPageSkeleton.xaml">
-		  <SubType></SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Skeletons\ScenarioDetailsPageSkeleton.xaml">
-		  <SubType></SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Skeletons\CamerasTabSkeleton.xaml">
-		  <SubType></SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\ProvidersTemplate.xaml">
-		  <SubType></SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\DoorBellDialog.xaml">
-		  <SubType></SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Skeletons\SettingsPageSkeleton.xaml">
-		  <SubType></SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\SimpleNotificationsHeaderTemplate.xaml">
-		  <SubType></SubType>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\ConfirmPopup.xaml">
-		  <SubType></SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Controls\ButtonLoader.xaml">
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
@@ -353,53 +341,56 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
-	  <Compile Update="Controls\TabsSelector.xaml.cs">
-	    <DependentUpon>TabsSelector.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Resources\DataTemplates\CameraTemplate.xaml.cs">
-	    <DependentUpon>CameraTemplate.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Resources\DataTemplates\NotificationSourceTemplate.xaml.cs">
-	    <DependentUpon>NotificationSourceTemplate.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Resources\DataTemplates\SimpleAccessoryTemplate.xaml.cs">
-	    <DependentUpon>SimpleAccessoryTemplate.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Resources\DataTemplates\SimpleScenarioTemplate.xaml.cs">
-	    <DependentUpon>SimpleScenarioTemplate.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Resources\Strings\Strings.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>Strings.resx</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Dialogs\ErrorDialog.xaml.cs">
-	    <DependentUpon>ErrorDialog.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Dialogs\ScenarioSettingsDialog.xaml.cs">
-	    <DependentUpon>ScenarioSettingsDialog.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Tabs\Details\RoomDetailsPage.xaml.cs">
-	    <DependentUpon>RoomDetailsPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Tabs\Details\ScenarioDetailsPage.xaml.cs">
-	    <DependentUpon>ScenarioDetailsPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\NotificationsTab.xaml.cs">
-	    <DependentUpon>NotificationsTabSkeleton.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\NotificationsTabSkeleton.xaml.cs">
-	    <DependentUpon>NotificationsTabSkeleton.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\RoomsTab.xaml.cs">
-	    <DependentUpon>RoomsTabSkeleton.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\RoomsTabSkeleton.xaml.cs">
-	    <DependentUpon>RoomsTabSkeleton.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Dialogs\EnterCodeDialog.xaml.cs">
-		<DependentUpon>EnterCodeDialog.xaml</DependentUpon>
-	  </Compile>
+		<Compile Update="Resources\DataTemplates\NotificationSourceTemplate.xaml.cs">
+			<DependentUpon>NotificationSourceTemplate.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Controls\TabsSelector.xaml.cs">
+			<DependentUpon>TabsSelector.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Resources\DataTemplates\CameraTemplate.xaml.cs">
+			<DependentUpon>CameraTemplate.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Resources\DataTemplates\SimpleAccessoryTemplate.xaml.cs">
+			<DependentUpon>SimpleAccessoryTemplate.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Resources\DataTemplates\SimpleScenarioTemplate.xaml.cs">
+			<DependentUpon>SimpleScenarioTemplate.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Resources\Strings\Strings.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Strings.resx</DependentUpon>
+		</Compile>
+		<Compile Update="Views\Dialogs\ErrorDialog.xaml.cs">
+			<DependentUpon>ErrorDialog.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\Dialogs\ScenarioSettingsDialog.xaml.cs">
+			<DependentUpon>ScenarioSettingsDialog.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\Tabs\Details\RoomDetailsPage.xaml.cs">
+			<DependentUpon>RoomDetailsPage.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\Tabs\Details\ScenarioDetailsPage.xaml.cs">
+			<DependentUpon>ScenarioDetailsPage.xaml</DependentUpon>
+		</Compile>
+		<Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\NotificationsTab.xaml.cs">
+			<DependentUpon>NotificationsTabSkeleton.xaml</DependentUpon>
+		</Compile>
+		<Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\NotificationsTabSkeleton.xaml.cs">
+			<DependentUpon>NotificationsTabSkeleton.xaml</DependentUpon>
+		</Compile>
+		<Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\RoomsTab.xaml.cs">
+			<DependentUpon>RoomsTabSkeleton.xaml</DependentUpon>
+		</Compile>
+		<Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\Skeletons\RoomsTabSkeleton.xaml.cs">
+			<DependentUpon>RoomsTabSkeleton.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\Dialogs\EnterCodeDialog.xaml.cs">
+			<DependentUpon>EnterCodeDialog.xaml</DependentUpon>
+		</Compile>
+		<Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Controls\CustomImageButton.xaml.cs">
+			<DependentUpon>CustomImageButton.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
 		<AndroidKeyStore>True</AndroidKeyStore>

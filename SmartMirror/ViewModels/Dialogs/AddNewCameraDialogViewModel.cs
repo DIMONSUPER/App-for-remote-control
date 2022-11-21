@@ -39,6 +39,13 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _ipAddress, value);
         }
 
+        private bool _isButtonBusy;
+        public bool IsButtonBusy
+        {
+            get => _isButtonBusy;
+            set => SetProperty(ref _isButtonBusy, value);
+        }
+
         private string _login;
         public string Login
         {
@@ -160,6 +167,8 @@ namespace SmartMirror.ViewModels.Dialogs
 
         private async Task OnAddCommandAsync()
         {
+            IsButtonBusy = true;
+
             if (!IsIpAddressCorrect)
             {
                 await HandleContinueButtonPressedAsync();
@@ -168,6 +177,8 @@ namespace SmartMirror.ViewModels.Dialogs
             {
                 await HandleAddButtonPressedAsync();
             }
+
+            IsButtonBusy = false;
         }
 
         #endregion

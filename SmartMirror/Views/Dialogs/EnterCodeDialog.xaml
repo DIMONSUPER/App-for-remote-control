@@ -53,33 +53,11 @@
 
                 </Border>
 
-                <Grid
-                    HorizontalOptions="Center"
-                    Margin="138, 36, 138, 20">
-
-                    <Button
-                        Style="{DynamicResource ButtonStyle_i1}"
-                        Text="{extensions:Translate Continue}"
-                        Command="{Binding ContinueCommand}">
-
-                        <Button.Triggers>
-
-                            <DataTrigger TargetType="Button" Binding="{Binding IsLoggingWithCode}" Value="True">
-
-                                <Setter Property="TextColor" Value="Transparent"/>
-
-                            </DataTrigger>
-
-                        </Button.Triggers>
-
-                    </Button>
-
-                    <ActivityIndicator
-                        IsVisible="{Binding IsLoggingWithCode}"
-                        IsRunning="{Binding IsLoggingWithCode}"
-                        Color="{DynamicResource cbg_i2}"/>
-
-                </Grid>
+                <controls:ButtonLoader
+                    ButtonStyle="{DynamicResource ButtonStyle_i1}"
+                    ButtonText="{extensions:Translate Continue}"
+                    Command="{Binding ContinueCommand}"
+                    IsRunning="{Binding IsLoggingWithCode}"/>
 
             </VerticalStackLayout>
 
