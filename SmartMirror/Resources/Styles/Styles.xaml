@@ -179,6 +179,25 @@
         <Setter Property="behaviors:TouchBehavior.PressedBackgroundColor" Value="{DynamicResource cbg_i13}"/>
     </Style>
 
+    <Style x:Key="BasePressedBorderStyle_i1" TargetType="Border">
+        <Setter Property="StrokeShape" Value="RoundRectangle 26"/>
+        <Setter Property="Stroke" Value="{x:DynamicResource cbg_i3}"/>
+        <Setter Property="BackgroundColor" Value="{x:DynamicResource cbg_i3}"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="behaviors:TouchBehavior.IsAnimation" Value="True"/>
+    </Style>
+
+    <Style x:Key="PressedBorderStyle_i1" TargetType="Border" BasedOn="{StaticResource BasePressedBorderStyle_i1}">
+        <Setter Property="behaviors:TouchBehavior.NormalBackgroundColor" Value="{DynamicResource cbg_i3}"/>
+        <Setter Property="behaviors:TouchBehavior.PressedBackgroundColor" Value="{DynamicResource cbg_i14}"/>
+    </Style>
+
+    <Style x:Key="PressedBorderStyle_i2" TargetType="Border" BasedOn="{StaticResource BasePressedBorderStyle_i1}">
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="behaviors:TouchBehavior.NormalBackgroundColor" Value="{DynamicResource cbg_i2}"/>
+        <Setter Property="behaviors:TouchBehavior.PressedBackgroundColor" Value="{DynamicResource cbg_i19}"/>
+    </Style>
+
     <!-- CUSTOM SWITCH -->
     <Style TargetType="controls:CustomSwitch">
         <Setter Property="WidthRequest" Value="42"/>
