@@ -142,17 +142,10 @@ namespace SmartMirror.ViewModels
         {
             if (response.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool resultAuth) && resultAuth)
             {
-                var dialogResult = await _dialogService.ShowDialogAsync(nameof(AddMoreProviderDialog), new DialogParameters
+                await _dialogService.ShowDialogAsync(nameof(AddMoreProviderDialog), new DialogParameters
                 {
                     { Constants.DialogsParameterKeys.AUTH_TYPE, authType },
                 });
-
-                if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result) && result)
-                {
-                    await NavigationService.CreateBuilder()
-                        .AddSegment<MainTabbedPageViewModel>()
-                        .NavigateAsync();
-                }
             }
         }
 

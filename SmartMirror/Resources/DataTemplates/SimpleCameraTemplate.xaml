@@ -23,7 +23,7 @@
 
         <Grid ColumnDefinitions="Auto, *">
 
-            <controls:CustomImageBotton
+            <controls:CustomImageButton
                 Grid.Column="0"
                 VerticalOptions="Center"
                 HorizontalOptions="Start"
@@ -35,9 +35,9 @@
                 Padding="9"
                 Source="{Binding ImageSource}">
 
-                <controls:CustomImageBotton.Triggers>
+                <controls:CustomImageButton.Triggers>
 
-                    <DataTrigger Binding="{Binding ImageSource}" Value="subtract_plus" TargetType="controls:CustomImageBotton">
+                    <DataTrigger Binding="{Binding ImageSource}" Value="subtract_plus" TargetType="controls:CustomImageButton">
 
                         <Setter Property="Padding" Value="0"/>
                         <Setter Property="HeightImage" Value="36"/>
@@ -45,9 +45,9 @@
 
                     </DataTrigger>
                     
-                </controls:CustomImageBotton.Triggers>
+                </controls:CustomImageButton.Triggers>
 
-            </controls:CustomImageBotton>
+            </controls:CustomImageButton>
 
             <Label
                 Grid.Column="1"

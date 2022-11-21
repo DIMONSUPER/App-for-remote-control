@@ -166,7 +166,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ImageButtonStyle_i1" TargetType="controls:CustomImageBotton">
+    <Style x:Key="ImageButtonStyle_i1" TargetType="controls:CustomImageButton">
         <Setter Property="Padding" Value="24, 30"/>
         <Setter Property="Stroke" Value="{DynamicResource cbg_i4}"/>
         <Setter Property="StrokeThickness" Value="1"/>

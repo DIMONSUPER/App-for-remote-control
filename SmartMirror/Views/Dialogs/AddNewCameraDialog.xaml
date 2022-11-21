@@ -85,22 +85,19 @@
 
                 </Border>
 
-                <Button
-                    Style="{DynamicResource ButtonStyle_i1}"
-                    HorizontalOptions="Center"
-                    Margin="138, 36, 138, 20"
-                    Text="{extensions:Translate Continue}"
-                    Command="{Binding AddCameraCommand}">
+                <controls:ButtonLoader
+                    ButtonStyle="{DynamicResource ButtonStyle_i1}"
+                    ButtonText="{extensions:Translate Continue}"
+                    Command="{Binding AddCameraCommand}"
+                    IsRunning="{Binding IsButtonBusy}">
 
-                    <Button.Triggers>
-
-                        <DataTrigger TargetType="Button" Binding="{Binding IsIpAddressCorrect}" Value="True">
-                            <Setter Property="Text" Value="{extensions:Translate Add}"/>
+                    <controls:ButtonLoader.Triggers>
+                        <DataTrigger TargetType="controls:ButtonLoader" Binding="{Binding IsIpAddressCorrect}" Value="True">
+                            <Setter Property="ButtonText" Value="{extensions:Translate Add}"/>
                         </DataTrigger>
+                    </controls:ButtonLoader.Triggers>
 
-                    </Button.Triggers>
-
-                </Button>
+                </controls:ButtonLoader>
 
             </VerticalStackLayout>
 

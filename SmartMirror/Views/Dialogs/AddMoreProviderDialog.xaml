@@ -30,7 +30,7 @@
                 Margin="0, 0, 0, 12"
                 Text="{extensions:Translate HaveAnotherProvider}"/>
 
-            <controls:CustomImageBotton
+            <controls:CustomImageButton
                 Grid.Row="0"
                 Style="{DynamicResource ImageButtonStyle_i1}"
                 HeightImage="36"
@@ -40,7 +40,7 @@
                 behaviors:TouchBehavior.Command="{Binding LoginWithAqaraCommand}"
                 Source="aqara_logo"/>
 
-            <controls:CustomImageBotton
+            <controls:CustomImageButton
                 Grid.Row="1"
                 Style="{DynamicResource ImageButtonStyle_i1}"
                 HeightImage="36"
@@ -50,7 +50,7 @@
                 behaviors:TouchBehavior.Command="{Binding LoginWithAmazonCommand}"
                 Source="amazon_logo"/>
 
-            <controls:CustomImageBotton
+            <controls:CustomImageButton
                 Grid.Row="2"
                 Style="{DynamicResource ImageButtonStyle_i1}"
                 HeightImage="36"
@@ -60,7 +60,7 @@
                 behaviors:TouchBehavior.Command="{Binding LoginWithAppleCommand}"
                 Source="apple_logo"/>
 
-            <controls:CustomImageBotton
+            <controls:CustomImageButton
                 Grid.Row="3"
                 Style="{DynamicResource ImageButtonStyle_i1}"
                 HeightImage="36"
@@ -70,12 +70,11 @@
                 behaviors:TouchBehavior.Command="{Binding LoginWithGoogleCommand}"
                 Source="google_logo"/>
 
-            <Button 
-                Style="{DynamicResource ButtonStyle_i1}"
-                HorizontalOptions="Center"
-                Margin="138, 12, 138, 0"
-                Text="{extensions:Translate Finish}"
-                Command="{Binding FinishCommand}"/>
+             <controls:ButtonLoader
+                 ButtonStyle="{DynamicResource ButtonStyle_i1}"
+                 ButtonText="{extensions:Translate Finish}"
+                 Command="{Binding FinishCommand}"
+                 IsRunning="{Binding IsFinishButtonBusy}"/>
 
         </VerticalStackLayout>
 
