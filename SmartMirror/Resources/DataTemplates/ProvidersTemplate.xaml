@@ -20,11 +20,8 @@
             <Image Source="{Binding ImageSource}"
                    VerticalOptions="Center"/>
 
-            <Border StrokeShape="RoundRectangle 26"
-                    StrokeThickness="1"
-                    WidthRequest="230"
-                    Stroke="{x:DynamicResource cbg_i4}"
-                    BackgroundColor="{x:DynamicResource cbg_i4}"
+            <Border Style="{DynamicResource PressedBorderStyle_i1}"                    
+                    WidthRequest="230"                    
                     behaviors:TouchBehavior.Command="{Binding TapCommand}"
                     behaviors:TouchBehavior.CommandParameter="{Binding .}">
                                     
@@ -33,7 +30,7 @@
                                  Binding="{Binding IsConnected}"
                                  Value="True">
 
-                        <Setter Property="BackgroundColor" Value="Transparent"/>
+                        <Setter Property="Style" Value="{DynamicResource PressedBorderStyle_i2}"/>
                         <Setter TargetName="titlelabel" Property="Label.Style" Value="{x:DynamicResource tstyle_i15}"/>
                         <Setter TargetName="titlelabel" Property="Label.Text" Value="{extensions:Translate Connected}"/>
 
