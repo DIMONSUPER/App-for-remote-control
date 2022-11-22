@@ -10,7 +10,7 @@ public interface IDevicesService
 
     Task<AOResult<DataAqaraResponse<DeviceAqaraModel>>> GetDevicesAsync(string positionId = null, int pageNum = 1, int pageSize = 100, params string[] deviceIds);
 
-    Task<AOResult> UpdateDeviceAsync(DeviceBindableModel device);
+    Task<AOResult> UpdateDeviceAsync(DeviceBindableModel device, bool needChangeEvent = true);
 
     Task<AOResult<IEnumerable<DeviceAqaraModel>>> GetSubdevicesForDeviceAsync(string deviceId);
 
