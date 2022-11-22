@@ -1,384 +1,393 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-    <resheader name="resmimetype">
-        <value>text/microsoft-resx</value>
-    </resheader>
-    <resheader name="version">
-        <value>2.0</value>
-    </resheader>
-    <resheader name="reader">
-        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
-    <resheader name="writer">
-        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
-    <data name="WelcomeMirrorHome" xml:space="preserve">
-        <value>Welcome to the Mirror Home app!</value>
-    </data>
-    <data name="AllowNotifications" xml:space="preserve">
-        <value>Allow Notifications</value>
-    </data>
-    <data name="InstallConfigurationApp" xml:space="preserve">
-        <value>To continue using the app, please install our Configuration app on your smartphone.</value>
-    </data>
-    <data name="FollowAllInstructions" xml:space="preserve">
-        <value>Follow all instructions and complete your registration</value>
-    </data>
-    <data name="Loading" xml:space="preserve">
-        <value>Loading</value>
-    </data>
-    <data name="PleaseWaitFewSeconds" xml:space="preserve">
-        <value>Please, wait a few seconds</value>
-    </data>
-    <data name="NoInternetConnection" xml:space="preserve">
-        <value>No internet connection</value>
-    </data>
-    <data name="PleaseCheckInternet" xml:space="preserve">
-        <value>Please, check your internet connection and try again</value>
-    </data>
-    <data name="TryAgain" xml:space="preserve">
-        <value>Try Again</value>
-    </data>
-    <data name="Synchronization" xml:space="preserve">
-        <value>Synchronization</value>
-    </data>
-    <data name="StayInSameWiFi" xml:space="preserve">
-        <value>Please, stay in the same Wi-Fi network with your smartphone and mirror to finish synchronozation</value>
-    </data>
-    <data name="Rooms" xml:space="preserve">
-        <value>Rooms</value>
-    </data>
-    <data name="Notifications" xml:space="preserve">
-        <value>Notifications</value>
-    </data>
-    <data name="Cameras" xml:space="preserve">
-        <value>Cameras</value>
-    </data>
-    <data name="Scenarios" xml:space="preserve">
-        <value>Scenarios</value>
-    </data>
-    <data name="PleaseWait" xml:space="preserve">
-        <value>Please, wait</value>
-    </data>
-    <data name="PleaseCheckTheAccessoriesSettings" xml:space="preserve">
-        <value>Please check the accessories settings in your Smart Home system or in the settings of this app</value>
-    </data>
-    <data name="PleaseCheckTheCamerasSettings" xml:space="preserve">
-        <value>Please check the cameras settings in your Smart Home system or in the settings of this app</value>
-    </data>
-    <data name="PleaseCheckTheNotificationsSettings" xml:space="preserve">
-        <value>Please check the notifications settings in your Smart Home system or in the settings of this app</value>
-    </data>
-    <data name="PleaseCheckTheScenariosSettings" xml:space="preserve">
-        <value>Please check the scenarios settings in your Smart Home system or in the settings of this app</value>
-    </data>
-    <data name="SomethingWentWrong" xml:space="preserve">
-        <value>Something went wrong</value>
-    </data>
-    <data name="Error" xml:space="preserve">
-        <value>Error</value>
-    </data>
-    <data name="ErrorDescription" xml:space="preserve">
-        <value>Error description</value>
-    </data>
-    <data name="Close" xml:space="preserve">
-        <value>Close</value>
-    </data>
-    <data name="NoAccessoriesYet" xml:space="preserve">
-        <value>No accessories yet</value>
-    </data>
-    <data name="FavoriteAccessories" xml:space="preserve">
-        <value>Favorite Accessories</value>
-    </data>
-    <data name="Unlocked" xml:space="preserve">
-        <value>Unlocked</value>
-    </data>
-    <data name="On" xml:space="preserve">
-        <value>On</value>
-    </data>
-    <data name="GarageDoor" xml:space="preserve">
-        <value>Garage Door</value>
-    </data>
-    <data name="FrontDoor" xml:space="preserve">
-        <value>Front Door</value>
-    </data>
-    <data name="Fan" xml:space="preserve">
-        <value>Fan</value>
-    </data>
-    <data name="LivingRoom" xml:space="preserve">
-        <value>Living Room</value>
-    </data>
-    <data name="DiningRoom" xml:space="preserve">
-        <value>Dining Room</value>
-    </data>
-    <data name="Accessories" xml:space="preserve">
-        <value>Accessories</value>
-    </data>
-    <data name="Downstairs" xml:space="preserve">
-        <value>Downstairs</value>
-    </data>
-    <data name="Garage" xml:space="preserve">
-        <value>Garage</value>
-    </data>
-    <data name="Back" xml:space="preserve">
-        <value>Back</value>
-    </data>
-    <data name="Paused" xml:space="preserve">
-        <value>Paused</value>
-    </data>
-    <data name="HalfBath" xml:space="preserve">
-        <value>Half Bath</value>
-    </data>
-    <data name="Light" xml:space="preserve">
-        <value>Light</value>
-    </data>
-    <data name="HomePod" xml:space="preserve">
-        <value>HomePod</value>
-    </data>
-    <data name="Shades" xml:space="preserve">
-        <value>Shades</value>
-    </data>
-    <data name="Disconnected" xml:space="preserve">
-        <value>Disconnected</value>
-    </data>
-    <data name="Closed" xml:space="preserve">
-        <value>Closed</value>
-    </data>
-    <data name="NoNotificationsYet" xml:space="preserve">
-        <value>No notifications yet</value>
-    </data>
-    <data name="Today" xml:space="preserve">
-        <value>Today</value>
-    </data>
-    <data name="MinuteAgo" xml:space="preserve">
-        <value>minute ago</value>
-    </data>
-    <data name="MinutesAgo" xml:space="preserve">
-        <value>minutes ago</value>
-    </data>
-    <data name="BalconyDoor" xml:space="preserve">
-        <value>Balcony Door</value>
-    </data>
-    <data name="UpstairsHallwayMovement" xml:space="preserve">
-        <value>Upstairs Hallway Movement</value>
-    </data>
-    <data name="NoMovement" xml:space="preserve">
-        <value>No movement</value>
-    </data>
-    <data name="Unknown" xml:space="preserve">
-        <value>Unknown</value>
-    </data>
-    <data name="Yesterday" xml:space="preserve">
-        <value>Yesterday</value>
-    </data>
-    <data name="NoCamerasYet" xml:space="preserve">
-        <value>No cameras yet</value>
-    </data>
-    <data name="Off" xml:space="preserve">
-        <value>Off</value>
-    </data>
-    <data name="BackDoor" xml:space="preserve">
-        <value>Back Door</value>
-    </data>
-    <data name="CameraIsOff" xml:space="preserve">
-        <value>Camera is off</value>
-    </data>
-    <data name="CannotPlayVideo" xml:space="preserve">
-        <value>Can't play this video</value>
-    </data>
-    <data name="NoScenariosYet" xml:space="preserve">
-        <value>No scenarios yet</value>
-    </data>
-    <data name="FavoriteScenarios" xml:space="preserve">
-        <value>Favorite Scenarios</value>
-    </data>
-    <data name="Active" xml:space="preserve">
-        <value>Active</value>
-    </data>
-    <data name="NotActive" xml:space="preserve">
-        <value>Not Active</value>
-    </data>
-    <data name="GoodMorning" xml:space="preserve">
-        <value>Good Morning</value>
-    </data>
-    <data name="GoodEvening" xml:space="preserve">
-        <value>Good Evening</value>
-    </data>
-    <data name="FridayNight" xml:space="preserve">
-        <value>Friday Night</value>
-    </data>
-    <data name="SetTemperature" xml:space="preserve">
-        <value>Set temperature</value>
-    </data>
-    <data name="TurnOn" xml:space="preserve">
-        <value>Turn On</value>
-    </data>
-    <data name="TurnOff" xml:space="preserve">
-        <value>Turn Off</value>
-    </data>
-    <data name="HourAgo" xml:space="preserve">
-        <value>hour ago</value>
-    </data>
-    <data name="HoursAgo" xml:space="preserve">
-        <value>hours ago</value>
-    </data>
-    <data name="Now" xml:space="preserve">
-        <value>now</value>
-    </data>
-    <data name="Playing" xml:space="preserve">
-        <value>Playing</value>
-    </data>
-    <data name="NeedsTwoTaps" xml:space="preserve">
-        <value>Needs two taps to exit the app.</value>
-    </data>
-    <data name="NoScenarioActionsYet" xml:space="preserve">
-        <value>No scenario actions yet</value>
-    </data>
-    <data name="ScenarioActions" xml:space="preserve">
-        <value>Scenario actions</value>
-    </data>
-    <data name="PleaseSelectYourSmartHomeProvider" xml:space="preserve">
-        <value>Please, select your Smart Home provider</value>
-    </data>
-    <data name="Welcome" xml:space="preserve">
-        <value>Welcome!</value>
-    </data>
-    <data name="Aqara" xml:space="preserve">
-        <value>Aqara</value>
-    </data>
-    <data name="Continue" xml:space="preserve">
-        <value>Continue</value>
-    </data>
-    <data name="EnterCode" xml:space="preserve">
-        <value>Enter Code</value>
-    </data>
-    <data name="Providers" xml:space="preserve">
-        <value>Providers</value>
-    </data>
-    <data name="Settings" xml:space="preserve">
-        <value>Settings</value>
-    </data>
-    <data name="AreYouSure" xml:space="preserve">
-        <value>Are you sure?</value>
-    </data>
-    <data name="WillBeDisconnected" xml:space="preserve">
-        <value>will be disconnected</value>
-    </data>
-    <data name="Apple" xml:space="preserve">
-        <value>Apple</value>
-    </data>
-    <data name="Amazon" xml:space="preserve">
-        <value>Amazon</value>
-    </data>
-    <data name="Google" xml:space="preserve">
-        <value>Google</value>
-    </data>
-    <data name="AddToFavorites" xml:space="preserve">
-        <value>Add to Favorites</value>
-    </data>
-    <data name="ReceiveNotifications" xml:space="preserve">
-        <value>Receive Notifications</value>
-    </data>
-    <data name="ShowInRooms" xml:space="preserve">
-        <value>Show in Rooms</value>
-    </data>
-    <data name="ShowInScenarios" xml:space="preserve">
-        <value>Show in Scenarios</value>
-    </data>
-    <data name="Remove" xml:space="preserve">
-        <value>Remove</value>
-    </data>
-    <data name="ShowInCameras" xml:space="preserve">
-        <value>Show in Cameras</value>
-    </data>
-    <data name="Confirm" xml:space="preserve">
-        <value>Confirm</value>
-    </data>
-    <data name="TheCameraWillBeRemoved" xml:space="preserve">
-        <value>The camera will be removed</value>
-    </data>
-    <data name="EnterIPAddress" xml:space="preserve">
-        <value>Enter IP Address</value>
-    </data>
-    <data name="EnterPassword" xml:space="preserve">
-        <value>Enter Password</value>
-    </data>
-    <data name="AddNewCamera" xml:space="preserve">
-        <value>Add New Camera</value>
-    </data>
-    <data name="Add" xml:space="preserve">
-        <value>Add</value>
-    </data>
-    <data name="NewCamera" xml:space="preserve">
-        <value>New Camera</value>
-    </data>
-    <data name="Connect" xml:space="preserve">
-        <value>Connect</value>
-    </data>
-    <data name="Connected" xml:space="preserve">
-        <value>Connected</value>
-    </data>
-    <data name="Doorbell" xml:space="preserve">
-        <value>Doorbell</value>
-    </data>
-    <data name="End" xml:space="preserve">
-        <value>End</value>
-    </data>
-    <data name="Talk" xml:space="preserve">
-        <value>Talk</value>
-    </data>
-    <data name="Celsius" xml:space="preserve">
-        <value>Celsius</value>
-    </data>
-    <data name="Fahrenheit" xml:space="preserve">
-        <value>Fahrenheit</value>
-    </data>
-    <data name="Finish" xml:space="preserve">
-        <value>Finish</value>
-    </data>
-    <data name="HaveAnotherProvider" xml:space="preserve">
-        <value>Have another provider?</value>
-    </data>
-    <data name="ChangedTo" xml:space="preserve">
-        <value>Changed to</value>
-    </data>
-    <data name="TurnedOn" xml:space="preserve">
-        <value>Turned on</value>
-    </data>
-    <data name="TurnedOff" xml:space="preserve">
-        <value>Turned off</value>
-    </data>
-    <data name="Movement" xml:space="preserve">
-        <value>Movement</value>
-    </data>
-    <data name="UniversalActionStep" xml:space="preserve">
-        <value>Universal action step</value>
-    </data>
-    <data name="Sound" xml:space="preserve">
-        <value>Sound</value>
-    </data>
-    <data name="All" xml:space="preserve">
-        <value>All</value>
-    </data>
-     <data name="NoResponseIPAddress" xml:space="preserve">
-        <value>No response from IP Address</value>
-    </data>
-    <data name="EnterLogin" xml:space="preserve">
-        <value>Enter Login</value>
-    </data>
-    <data name="LoginPasswordIncorrect" xml:space="preserve">
-        <value>Login or password is incorrect</value>
-    </data>
-    <data name="RequestTakesTooMuchTime" xml:space="preserve">
-        <value>The request takes too much time to proceed</value>
-    </data>
-    <data name="YouCanCancelTheRequest" xml:space="preserve">
-        <value>You can cancel the request or wait some more time</value>
-    </data>
-    <data name="Cancel" xml:space="preserve">
-        <value>Cancel</value>
-    </data>
-    <data name="Wait" xml:space="preserve">
-        <value>Wait</value>
-    </data>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeMirrorHome" xml:space="preserve">
+    <value>Welcome to the Mirror Home app!</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Allow Notifications</value>
+  </data>
+  <data name="InstallConfigurationApp" xml:space="preserve">
+    <value>To continue using the app, please install our Configuration app on your smartphone.</value>
+  </data>
+  <data name="FollowAllInstructions" xml:space="preserve">
+    <value>Follow all instructions and complete your registration</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading</value>
+  </data>
+  <data name="PleaseWaitFewSeconds" xml:space="preserve">
+    <value>Please, wait a few seconds</value>
+  </data>
+  <data name="NoInternetConnection" xml:space="preserve">
+    <value>No internet connection</value>
+  </data>
+  <data name="PleaseCheckInternet" xml:space="preserve">
+    <value>Please, check your internet connection and try again</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Try Again</value>
+  </data>
+  <data name="Synchronization" xml:space="preserve">
+    <value>Synchronization</value>
+  </data>
+  <data name="StayInSameWiFi" xml:space="preserve">
+    <value>Please, stay in the same Wi-Fi network with your smartphone and mirror to finish synchronozation</value>
+  </data>
+  <data name="Rooms" xml:space="preserve">
+    <value>Rooms</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="Cameras" xml:space="preserve">
+    <value>Cameras</value>
+  </data>
+  <data name="Scenarios" xml:space="preserve">
+    <value>Scenarios</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Please, wait</value>
+  </data>
+  <data name="PleaseCheckTheAccessoriesSettings" xml:space="preserve">
+    <value>Please check the accessories settings in your Smart Home system or in the settings of this app</value>
+  </data>
+  <data name="PleaseCheckTheCamerasSettings" xml:space="preserve">
+    <value>Please check the cameras settings in your Smart Home system or in the settings of this app</value>
+  </data>
+  <data name="PleaseCheckTheNotificationsSettings" xml:space="preserve">
+    <value>Please check the notifications settings in your Smart Home system or in the settings of this app</value>
+  </data>
+  <data name="PleaseCheckTheScenariosSettings" xml:space="preserve">
+    <value>Please check the scenarios settings in your Smart Home system or in the settings of this app</value>
+  </data>
+  <data name="SomethingWentWrong" xml:space="preserve">
+    <value>Something went wrong</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ErrorDescription" xml:space="preserve">
+    <value>Error description</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="NoAccessoriesYet" xml:space="preserve">
+    <value>No accessories yet</value>
+  </data>
+  <data name="FavoriteAccessories" xml:space="preserve">
+    <value>Favorite Accessories</value>
+  </data>
+  <data name="Unlocked" xml:space="preserve">
+    <value>Unlocked</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="GarageDoor" xml:space="preserve">
+    <value>Garage Door</value>
+  </data>
+  <data name="FrontDoor" xml:space="preserve">
+    <value>Front Door</value>
+  </data>
+  <data name="Fan" xml:space="preserve">
+    <value>Fan</value>
+  </data>
+  <data name="LivingRoom" xml:space="preserve">
+    <value>Living Room</value>
+  </data>
+  <data name="DiningRoom" xml:space="preserve">
+    <value>Dining Room</value>
+  </data>
+  <data name="Accessories" xml:space="preserve">
+    <value>Accessories</value>
+  </data>
+  <data name="Downstairs" xml:space="preserve">
+    <value>Downstairs</value>
+  </data>
+  <data name="Garage" xml:space="preserve">
+    <value>Garage</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Paused" xml:space="preserve">
+    <value>Paused</value>
+  </data>
+  <data name="HalfBath" xml:space="preserve">
+    <value>Half Bath</value>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="HomePod" xml:space="preserve">
+    <value>HomePod</value>
+  </data>
+  <data name="Shades" xml:space="preserve">
+    <value>Shades</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Disconnected</value>
+  </data>
+  <data name="Closed" xml:space="preserve">
+    <value>Closed</value>
+  </data>
+  <data name="NoNotificationsYet" xml:space="preserve">
+    <value>No notifications yet</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="MinuteAgo" xml:space="preserve">
+    <value>minute ago</value>
+  </data>
+  <data name="MinutesAgo" xml:space="preserve">
+    <value>minutes ago</value>
+  </data>
+  <data name="BalconyDoor" xml:space="preserve">
+    <value>Balcony Door</value>
+  </data>
+  <data name="UpstairsHallwayMovement" xml:space="preserve">
+    <value>Upstairs Hallway Movement</value>
+  </data>
+  <data name="NoMovement" xml:space="preserve">
+    <value>No movement</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
+  <data name="NoCamerasYet" xml:space="preserve">
+    <value>No cameras yet</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="BackDoor" xml:space="preserve">
+    <value>Back Door</value>
+  </data>
+  <data name="CameraIsOff" xml:space="preserve">
+    <value>Camera is off</value>
+  </data>
+  <data name="CannotPlayVideo" xml:space="preserve">
+    <value>Can't play this video</value>
+  </data>
+  <data name="NoScenariosYet" xml:space="preserve">
+    <value>No scenarios yet</value>
+  </data>
+  <data name="FavoriteScenarios" xml:space="preserve">
+    <value>Favorite Scenarios</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="NotActive" xml:space="preserve">
+    <value>Not Active</value>
+  </data>
+  <data name="GoodMorning" xml:space="preserve">
+    <value>Good Morning</value>
+  </data>
+  <data name="GoodEvening" xml:space="preserve">
+    <value>Good Evening</value>
+  </data>
+  <data name="FridayNight" xml:space="preserve">
+    <value>Friday Night</value>
+  </data>
+  <data name="SetTemperature" xml:space="preserve">
+    <value>Set temperature</value>
+  </data>
+  <data name="TurnOn" xml:space="preserve">
+    <value>Turn On</value>
+  </data>
+  <data name="TurnOff" xml:space="preserve">
+    <value>Turn Off</value>
+  </data>
+  <data name="HourAgo" xml:space="preserve">
+    <value>hour ago</value>
+  </data>
+  <data name="HoursAgo" xml:space="preserve">
+    <value>hours ago</value>
+  </data>
+  <data name="Now" xml:space="preserve">
+    <value>now</value>
+  </data>
+  <data name="Playing" xml:space="preserve">
+    <value>Playing</value>
+  </data>
+  <data name="NeedsTwoTaps" xml:space="preserve">
+    <value>Needs two taps to exit the app.</value>
+  </data>
+  <data name="NoScenarioActionsYet" xml:space="preserve">
+    <value>No scenario actions yet</value>
+  </data>
+  <data name="ScenarioActions" xml:space="preserve">
+    <value>Scenario actions</value>
+  </data>
+  <data name="PleaseSelectYourSmartHomeProvider" xml:space="preserve">
+    <value>Please, select your Smart Home provider</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Welcome!</value>
+  </data>
+  <data name="Aqara" xml:space="preserve">
+    <value>Aqara</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="EnterCode" xml:space="preserve">
+    <value>Enter Code</value>
+  </data>
+  <data name="Providers" xml:space="preserve">
+    <value>Providers</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Are you sure?</value>
+  </data>
+  <data name="WillBeDisconnected" xml:space="preserve">
+    <value>will be disconnected</value>
+  </data>
+  <data name="Apple" xml:space="preserve">
+    <value>Apple</value>
+  </data>
+  <data name="Amazon" xml:space="preserve">
+    <value>Amazon</value>
+  </data>
+  <data name="Google" xml:space="preserve">
+    <value>Google</value>
+  </data>
+  <data name="AddToFavorites" xml:space="preserve">
+    <value>Add to Favorites</value>
+  </data>
+  <data name="ReceiveNotifications" xml:space="preserve">
+    <value>Receive Notifications</value>
+  </data>
+  <data name="ShowInRooms" xml:space="preserve">
+    <value>Show in Rooms</value>
+  </data>
+  <data name="ShowInScenarios" xml:space="preserve">
+    <value>Show in Scenarios</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="ShowInCameras" xml:space="preserve">
+    <value>Show in Cameras</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="TheCameraWillBeRemoved" xml:space="preserve">
+    <value>The camera will be removed</value>
+  </data>
+  <data name="EnterIPAddress" xml:space="preserve">
+    <value>Enter IP Address</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Enter Password</value>
+  </data>
+  <data name="AddNewCamera" xml:space="preserve">
+    <value>Add New Camera</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="NewCamera" xml:space="preserve">
+    <value>New Camera</value>
+  </data>
+  <data name="Connect" xml:space="preserve">
+    <value>Connect</value>
+  </data>
+  <data name="Connected" xml:space="preserve">
+    <value>Connected</value>
+  </data>
+  <data name="Doorbell" xml:space="preserve">
+    <value>Doorbell</value>
+  </data>
+  <data name="End" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="Talk" xml:space="preserve">
+    <value>Talk</value>
+  </data>
+  <data name="Celsius" xml:space="preserve">
+    <value>Celsius</value>
+  </data>
+  <data name="Fahrenheit" xml:space="preserve">
+    <value>Fahrenheit</value>
+  </data>
+  <data name="Finish" xml:space="preserve">
+    <value>Finish</value>
+  </data>
+  <data name="HaveAnotherProvider" xml:space="preserve">
+    <value>Have another provider?</value>
+  </data>
+  <data name="ChangedTo" xml:space="preserve">
+    <value>Changed to</value>
+  </data>
+  <data name="TurnedOn" xml:space="preserve">
+    <value>Turned on</value>
+  </data>
+  <data name="TurnedOff" xml:space="preserve">
+    <value>Turned off</value>
+  </data>
+  <data name="Movement" xml:space="preserve">
+    <value>Movement</value>
+  </data>
+  <data name="UniversalActionStep" xml:space="preserve">
+    <value>Universal action step</value>
+  </data>
+  <data name="Sound" xml:space="preserve">
+    <value>Sound</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="NoResponseIPAddress" xml:space="preserve">
+    <value>No response from IP Address</value>
+  </data>
+  <data name="EnterLogin" xml:space="preserve">
+    <value>Enter Login</value>
+  </data>
+  <data name="LoginPasswordIncorrect" xml:space="preserve">
+    <value>Login or password is incorrect</value>
+  </data>
+  <data name="RequestTakesTooMuchTime" xml:space="preserve">
+    <value>The request takes too much time to proceed</value>
+  </data>
+  <data name="YouCanCancelTheRequest" xml:space="preserve">
+    <value>You can cancel the request or wait some more time</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Wait" xml:space="preserve">
+    <value>Wait</value>
+  </data>
+  <data name="NoMicrophonePermission" xml:space="preserve">
+    <value>No microphone permission</value>
+  </data>
+  <data name="OpenSettings" xml:space="preserve">
+    <value>Open Settings</value>
+  </data>
+  <data name="PleaseGrantPermissionForMicrophone" xml:space="preserve">
+    <value>Please go to application Settings to grant the permission for microphone</value>
+  </data>
 </root>
