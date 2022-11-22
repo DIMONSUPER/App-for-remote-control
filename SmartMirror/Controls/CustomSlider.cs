@@ -8,13 +8,12 @@ using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using static Android.Media.MediaParser;
 using Paint = Android.Graphics.Paint;
 using Microsoft.Maui.Handlers;
+using Platform = Microsoft.Maui.ApplicationModel.Platform;
 
 namespace SmartMirror.Controls
 {
     public class CustomSlider : Slider
     {
-        private bool _isInit;
-
         public CustomSlider()
         {
             AppendToMapping();
@@ -26,7 +25,7 @@ namespace SmartMirror.Controls
             propertyName: nameof(RadiusLine),
             returnType: typeof(int),
             declaringType: typeof(CustomSlider),
-            defaultValue: 3,
+            defaultValue: 4,
             defaultBindingMode: BindingMode.OneWay);
 
         public int RadiusLine
@@ -68,19 +67,19 @@ namespace SmartMirror.Controls
         {
             if (handler.PlatformView is Android.Widget.SeekBar progressBar && view is CustomSlider slider)
             {
-                if (progressBar.Width > 0 && progressBar.Height > 0)
+                progressBar.Post(() =>
                 {
-                    _isInit = true;
+                    var density = Platform.AppContext.Resources.DisplayMetrics.Density;
 
-                    int radiusLine = slider.RadiusLine;
-                    int cornerRadiusLine = slider.CornerRadiusLine;
+                    int radiusLine = (int)(slider.RadiusLine * density);
+                    int cornerRadiusLine = (int)(slider.CornerRadiusLine * density);
 
-                    var widthThumb = progressBar.Thumb?.Bounds?.Width() ?? 20;
-                    var widthTrack = progressBar.Width - widthThumb * 2;
+                    var widthTrack = progressBar.ProgressDrawable.Bounds.Width();
+                    var padding = (progressBar.Width - widthTrack) / 2;
 
                     var percentValue = (slider.Value - slider.Minimum) / (slider.Maximum - slider.Minimum);
 
-                    var centerY = (int)progressBar.Height / 2;
+                    var centerY = progressBar.Height / 2;
                     var positionX = widthTrack * percentValue;
 
                     var bitmap = Bitmap.CreateBitmap(progressBar.Width, progressBar.Height, Bitmap.Config.Argb8888);
@@ -88,30 +87,19 @@ namespace SmartMirror.Controls
                     var canvas = new Canvas(bitmap);
 
                     var linePaint = new Paint();
+
                     linePaint.Color = slider.MaximumTrackColor.ToAndroid();
 
-                    canvas.DrawRoundRect(widthThumb, centerY - radiusLine, widthThumb + widthTrack, centerY + radiusLine, cornerRadiusLine, cornerRadiusLine, linePaint);
+                    canvas.DrawRoundRect(padding, centerY - radiusLine, padding + widthTrack, centerY + radiusLine, cornerRadiusLine, cornerRadiusLine, linePaint);
 
                     linePaint.Color = slider.MinimumTrackColor.ToAndroid();
 
-                    canvas.DrawRoundRect(widthThumb, centerY - radiusLine, (int)positionX + widthThumb, centerY + radiusLine, cornerRadiusLine, cornerRadiusLine, linePaint);
+                    canvas.DrawRoundRect(padding, centerY - radiusLine, (int)positionX + padding, centerY + radiusLine, cornerRadiusLine, cornerRadiusLine, linePaint);
 
-                    var drawable = new BitmapDrawable(bitmap);
+                    var drawable = new BitmapDrawable(progressBar.Resources, bitmap);
 
                     progressBar.Background = drawable;
-                }
-                else
-                {
-                    slider.Dispatcher.StartTimer(TimeSpan.FromMilliseconds(250), () =>
-                    {
-                        if (!_isInit)
-                        {
-                            UpdateSlider(handler,view);
-                        }
-
-                        return !_isInit;
-                    });
-                }
+                });
             }
         }
 
