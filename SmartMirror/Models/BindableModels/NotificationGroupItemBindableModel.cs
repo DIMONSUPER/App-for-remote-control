@@ -59,6 +59,13 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _lastActivityTime, value);
         }
 
+        private bool _isRoomNameVisible;
+        public bool IsRoomNameVisible
+        {
+            get => _isRoomNameVisible;
+            set => SetProperty(ref _isRoomNameVisible, value);
+        }
+
         #endregion
 
         #region -- Overrides --
