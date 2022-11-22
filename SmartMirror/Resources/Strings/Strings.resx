@@ -357,6 +357,9 @@
     <data name="Sound" xml:space="preserve">
         <value>Sound</value>
     </data>
+    <data name="All" xml:space="preserve">
+        <value>All</value>
+    </data>
      <data name="NoResponseIPAddress" xml:space="preserve">
         <value>No response from IP Address</value>
     </data>

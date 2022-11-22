@@ -6,7 +6,7 @@
     x:DataType="bindableModels:NotificationGroupTitleBindableModel"
     x:Class="SmartMirror.Resources.DataTemplates.NotificationHeaderTemplate">
 
-    <VerticalStackLayout Padding="0, 24, 50, 24">
+    <VerticalStackLayout Padding="0, 24">
 
         <Label
             Text="{Binding Title, Converter={StaticResource timeToDaysOfWeekConverter}}"

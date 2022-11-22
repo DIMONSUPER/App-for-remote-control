@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DataTemplate xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+              xmlns:bindableModels="clr-namespace:SmartMirror.Models.BindableModels"
+              x:Class="SmartMirror.Resources.DataTemplates.NotificationSourceTemplate"
+              x:DataType="{x:Type bindableModels:NotificationSourceBindableModel}">
+
+    <Grid behaviors:TouchBehavior.Command="{Binding SelectCommand}"
+          behaviors:TouchBehavior.CommandParameter="{Binding .}">
+
+        <Border Padding="18, 10"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 9"
+                Margin="0,0,0,12"
+                BackgroundColor="Transparent">
+
+            <Border.Triggers>
+                <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                    <Setter Property="BackgroundColor" Value="{x:DynamicResource cbg_i9}"/>
+                </DataTrigger>
+            </Border.Triggers>
+
+            <Grid ColumnDefinitions="*, Auto"
+                  ColumnSpacing="7">
+
+                <Label Text="{Binding Name}"
+                       HorizontalOptions="Start"
+                       VerticalTextAlignment="Center"
+                       LineBreakMode="TailTruncation"
+                       Style="{x:DynamicResource tstyle_i11}">
+
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                            <Setter Property="TextColor" Value="{x:DynamicResource tcolor_i5}"/>
+                            <Setter TargetName="notificationsCountLabel" Property="Label.Style" Value="{x:DynamicResource tstyle_i7}"/>
+                        </DataTrigger>
+                    </Label.Triggers>
+
+                </Label>
+
+                <Label Grid.Column="1"
+                       Text="{Binding NotificationsCount}"
+                       VerticalTextAlignment="Center"
+                       Style="{x:DynamicResource tstyle_i6}"
+                       x:Name="notificationsCountLabel"/>
+                
+            </Grid>
+
+        </Border>
+
+    </Grid>
+
+</DataTemplate>
+
