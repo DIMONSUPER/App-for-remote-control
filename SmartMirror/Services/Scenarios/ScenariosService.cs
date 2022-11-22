@@ -6,14 +6,12 @@ using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
-using SmartMirror.Services.Mock;
 using SmartMirror.Services.Repository;
 
 namespace SmartMirror.Services.Scenarios
 {
     public class ScenariosService : IScenariosService
     {
-        private readonly ISmartHomeMockService _smartHomeMockService;
         private readonly IAqaraService _aqaraService;
         private readonly IMapperService _mapperService;
         private readonly IDevicesService _devicesService;
@@ -24,14 +22,12 @@ namespace SmartMirror.Services.Scenarios
         private List<ScenarioBindableModel> _allScenarios = new();
 
         public ScenariosService(
-            ISmartHomeMockService smartHomeMockService,
             IAqaraService aqaraService,
             IMapperService mapperService,
             IDevicesService devicesService,
             IRepositoryService repositoryService,
             IAqaraMessanger aqaraMessanger)
         {
-            _smartHomeMockService = smartHomeMockService;
             _aqaraService = aqaraService;
             _mapperService = mapperService;
             _devicesService = devicesService;
@@ -123,15 +119,6 @@ namespace SmartMirror.Services.Scenarios
                         onFailure(resultOfGettingScenaries.Message);
                     }
                 }
-                else
-                {
-                    var mockScenarios = _smartHomeMockService.GetScenarios();
-
-                    if (mockScenarios is not null)
-                    {
-                        scenarios = mockScenarios;
-                    }
-                }
 
                 return scenarios;
             });
@@ -180,27 +167,11 @@ namespace SmartMirror.Services.Scenarios
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
-                var scenariosFromMock = _smartHomeMockService.GetScenarios();
+                var resultOfRunningScene = await _aqaraService.RunSceneByIdAsync(id);
 
-                if (scenariosFromMock is not null)
+                if (!resultOfRunningScene.IsSuccess)
                 {
-                    var scenario = scenariosFromMock.FirstOrDefault(row => row.Id == id);
-
-                    if (scenario is not null)
-                    {
-                        scenario.IsActive = true;
-
-                        await Task.Delay(250);
-                    }
-                    else
-                    {
-                        var resultOfRunningScene = await _aqaraService.RunSceneByIdAsync(id);
-
-                        if (!resultOfRunningScene.IsSuccess)
-                        {
-                            onFailure(resultOfRunningScene.Message);
-                        }
-                    }
+                    onFailure(resultOfRunningScene.Message);
                 }
             });
         }

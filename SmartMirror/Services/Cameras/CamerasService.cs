@@ -1,10 +1,7 @@
-﻿using System.Net.Sockets;
-using SmartMirror.Helpers;
-using SmartMirror.Models;
+﻿using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Models.DTO;
 using SmartMirror.Services.Mapper;
-using SmartMirror.Services.Mock;
 using SmartMirror.Services.Repository;
 using SmartMirror.Services.Rest;
 
@@ -12,18 +9,15 @@ namespace SmartMirror.Services.Cameras
 {
     public class CamerasService : ICamerasService
     {
-        private readonly ISmartHomeMockService _smartHomeMockService;
         private readonly IRepositoryService _repositoryService;
         private readonly IMapperService _mapperService;
         private readonly IRestService _restService;
 
         public CamerasService(
-            ISmartHomeMockService smartHomeMockService,
             IRepositoryService repositoryService,
             IMapperService mapperService,
             IRestService restService)
         {
-            _smartHomeMockService = smartHomeMockService;
             _repositoryService = repositoryService;
             _mapperService = mapperService;
             _restService = restService;

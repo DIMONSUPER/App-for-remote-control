@@ -1,11 +1,9 @@
-﻿using System.Linq;
-using SmartMirror.Helpers;
+﻿using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Models.Aqara;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Devices;
-using SmartMirror.Services.Mock;
 using SmartMirror.Services.Rest;
 using SmartMirror.Services.Settings;
 
