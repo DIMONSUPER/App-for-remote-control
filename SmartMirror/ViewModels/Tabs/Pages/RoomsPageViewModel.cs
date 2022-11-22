@@ -214,7 +214,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
             updateDevice.State = device.State == 0 ? 1 : 0;
 
-            var updateResponse = await _devicesService.UpdateDeviceAsync(updateDevice);
+            var updateResponse = await _devicesService.UpdateDeviceAsync(updateDevice, false);
 
             if (updateResponse.IsSuccess)
             {
