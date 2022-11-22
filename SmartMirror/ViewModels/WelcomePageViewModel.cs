@@ -1,4 +1,5 @@
-﻿using Prism.Services;
+﻿using CommunityToolkit.Maui.Alerts;
+using Prism.Services;
 using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Resources.Strings;
@@ -14,6 +15,7 @@ namespace SmartMirror.ViewModels
         private readonly IAqaraService _aqaraService;
         private readonly IDialogService _dialogService;
         private readonly IGoogleService _googleService;
+        private int _buttonCount;
 
         public WelcomePageViewModel(
             IAqaraService aqaraService,
@@ -37,7 +39,40 @@ namespace SmartMirror.ViewModels
 
         #endregion
 
+        #region -- Overrides --
+
+        public override bool OnBackButtonPressed()
+        {
+            if (_buttonCount < 1)
+            {
+                var interval = TimeSpan.FromMilliseconds(500);
+                Application.Current.Dispatcher.StartTimer(interval, GetCountBackButtonPresses);
+            }
+
+            _buttonCount++;
+
+            return true;
+        }
+
+        #endregion
+
         #region -- Private helpers --
+
+        private bool GetCountBackButtonPresses()
+        {
+            if (_buttonCount > 1)
+            {
+                Application.Current.Quit();
+            }
+            else
+            {
+                Toast.Make(Strings.NeedsTwoTaps).Show();
+            }
+
+            _buttonCount = 0;
+
+            return false;
+        }
 
         private async Task OnLoginWithGoogleCommandAsync(EAuthType authType)
         {
@@ -107,17 +142,10 @@ namespace SmartMirror.ViewModels
         {
             if (response.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool resultAuth) && resultAuth)
             {
-                var dialogResult = await _dialogService.ShowDialogAsync(nameof(AddMoreProviderDialog), new DialogParameters
+                await _dialogService.ShowDialogAsync(nameof(AddMoreProviderDialog), new DialogParameters
                 {
                     { Constants.DialogsParameterKeys.AUTH_TYPE, authType },
                 });
-
-                if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result) && result)
-                {
-                    await NavigationService.CreateBuilder()
-                        .AddSegment<MainTabbedPageViewModel>()
-                        .NavigateAsync();
-                }
             }
         }
 

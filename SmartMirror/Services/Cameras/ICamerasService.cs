@@ -12,7 +12,7 @@ public interface ICamerasService
 
     Task<AOResult> UpdateCameraAsync(CameraBindableModel cameraModel);
 
-    Task<AOResult<bool>> VerifyCameraIPAddressAsync(string ipAddress);
+    Task<AOResult<bool>> VerifyCameraIPAddressAsync(string ipAddress, CancellationToken? cancellationToken = null);
 
     Task<AOResult<bool>> CheckCameraConnection(CameraBindableModel camera);
 

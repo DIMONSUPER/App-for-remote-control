@@ -103,6 +103,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        internal static string All {
+            get {
+                return ResourceManager.GetString("All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow Notifications.
         /// </summary>
         internal static string AllowNotifications {
@@ -189,6 +198,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Cameras {
             get {
                 return ResourceManager.GetString("Cameras", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
             }
         }
         
@@ -859,6 +877,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The request takes too much time to proceed.
+        /// </summary>
+        internal static string RequestTakesTooMuchTime {
+            get {
+                return ResourceManager.GetString("RequestTakesTooMuchTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rooms.
         /// </summary>
         internal static string Rooms {
@@ -1084,6 +1111,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wait.
+        /// </summary>
+        internal static string Wait {
+            get {
+                return ResourceManager.GetString("Wait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Welcome!.
         /// </summary>
         internal static string Welcome {
@@ -1116,6 +1152,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Yesterday {
             get {
                 return ResourceManager.GetString("Yesterday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can cancel the request or wait some more time.
+        /// </summary>
+        internal static string YouCanCancelTheRequest {
+            get {
+                return ResourceManager.GetString("YouCanCancelTheRequest", resourceCulture);
             }
         }
     }

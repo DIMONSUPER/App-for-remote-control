@@ -19,5 +19,5 @@ public interface IAqaraService
     
     Task<AOResult> RunSceneByIdAsync(string sceneId);
 
-    Task<AOResult> LogoutFromAqara();
+    Task<AOResult> LogoutFromAqaraAsync();
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Controls.Shapes;
+using Microsoft.Maui.Handlers;
 using SmartMirror.Behaviors;
 using SmartMirror.Interfaces;
 using System.Windows.Input;
@@ -7,8 +8,8 @@ namespace SmartMirror.Controls;
 
 public class CustomTabbedPage : TabbedPage
 {
-    private List<View> _tabCells = new();
-    private List<View> _selectedTabCells = new();
+    private readonly List<View> _tabCells = new();
+    private readonly List<View> _selectedTabCells = new();
     private HorizontalStackLayout _tabsStackLayout;
 
     public CustomTabbedPage()
@@ -136,11 +137,11 @@ public class CustomTabbedPage : TabbedPage
         var tabBarView = new Grid
         {
             HeightRequest = TabBarHeight,
+            BackgroundColor = Color.FromArgb("#00000000"),
             RowSpacing = 0,
         };
 
-
-        var stackTimeAndTabs = new StackLayout() { Spacing = 0 };
+        var stackTimeAndTabs = new StackLayout() { Spacing = 0, BackgroundColor = Color.FromArgb("#00000000") };
 
         stackTimeAndTabs.Add(CreateTimeLabel());
 

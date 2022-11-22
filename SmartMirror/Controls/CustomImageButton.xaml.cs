@@ -1,8 +1,8 @@
 namespace SmartMirror.Controls;
 
-public partial class CustomImageBotton : Border
+public partial class CustomImageButton : Border
 {
-	public CustomImageBotton()
+	public CustomImageButton()
 	{
 		InitializeComponent();
 	}
@@ -12,7 +12,7 @@ public partial class CustomImageBotton : Border
     public static readonly BindableProperty SourceProperty = BindableProperty.Create(
             propertyName: nameof(Source),
             returnType: typeof(string),
-            declaringType: typeof(CustomImageBotton));
+            declaringType: typeof(CustomImageButton));
 
     public string Source
     {
@@ -23,7 +23,7 @@ public partial class CustomImageBotton : Border
     public static readonly BindableProperty HeightImageProperty = BindableProperty.Create(
             propertyName: nameof(HeightImage),
             returnType: typeof(double),
-            declaringType: typeof(CustomImageBotton));
+            declaringType: typeof(CustomImageButton));
 
     public double HeightImage
     {

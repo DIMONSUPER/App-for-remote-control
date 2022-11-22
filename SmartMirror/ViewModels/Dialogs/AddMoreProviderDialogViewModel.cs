@@ -11,15 +11,18 @@ namespace SmartMirror.ViewModels.Dialogs
     {
         private readonly IDialogService _dialogService;
         private readonly IGoogleService _googleService;
+        private readonly INavigationService _navigationService;
 
         public AddMoreProviderDialogViewModel(
             IDialogService dialogService,
             IGoogleService googleService,
-            IBlurService blurService)
+            IBlurService blurService,
+            INavigationService navigationService)
             : base(blurService)
         {
             _dialogService = dialogService;
             _googleService = googleService;
+            _navigationService = navigationService;
         }
 
         #region -- Public properties --
@@ -29,6 +32,13 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             get => _authType;
             set => SetProperty(ref _authType, value);
+        }
+
+        private bool _isFinishButtonBusy;
+        public bool IsFinishButtonBusy
+        {
+            get => _isFinishButtonBusy;
+            set => SetProperty(ref _isFinishButtonBusy, value);
         }
 
         private ICommand _loginWithAqaraCommand;
@@ -93,14 +103,20 @@ namespace SmartMirror.ViewModels.Dialogs
             }
         }
 
-        private Task OnFinishCommandAsync()
+        private async Task OnFinishCommandAsync()
         {
+            IsFinishButtonBusy = true;
+
+            await _navigationService.CreateBuilder()
+                .AddSegment<MainTabbedPageViewModel>()
+                .NavigateAsync();
+
             RequestClose.Invoke(new DialogParameters
             {
                 { Constants.DialogsParameterKeys.RESULT, true },
             });
 
-            return Task.CompletedTask;
+            IsFinishButtonBusy = false;
         }
 
         private Task DisplayNotImplementedDialogAsync()

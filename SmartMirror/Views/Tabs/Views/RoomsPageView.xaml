@@ -21,7 +21,7 @@
             <Style x:Key="deviceTemplateStyle" TargetType="templates:DeviceTemplate">
                 <Setter Property="DescriptionLabelStyle" Value="{x:DynamicResource tstyle_i4}"/>
                 <Setter Property="WidthRequest" Value="375"/>
-                <Setter Property="MaximumHeightRequest" Value="201"/>
+                <Setter Property="HeightRequest" Value="201"/>
                 <Setter Property="NameFontStyle" Value="{x:DynamicResource tstyle_i16}"/>
             </Style>
 

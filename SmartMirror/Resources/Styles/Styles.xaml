@@ -15,10 +15,10 @@
     <converters:TimeToDaysOfWeekConverter x:Key="timeToDaysOfWeekConverter" />
 
     <!-- TEXT SIZE -->
-    <x:Double x:Key="tsize_i1">32</x:Double> <!-- 48px -->
-    <x:Double x:Key="tsize_i2">21</x:Double> <!-- 28px -->
-    <x:Double x:Key="tsize_i3">18</x:Double> <!-- 24px -->
-    <x:Double x:Key="tsize_i4">15</x:Double> <!-- 20px -->
+    <x:Int32 x:Key="tsize_i1">32</x:Int32> <!-- 48px -->
+    <x:Int32 x:Key="tsize_i2">21</x:Int32> <!-- 28px -->
+    <x:Int32 x:Key="tsize_i3">18</x:Int32> <!-- 24px -->
+    <x:Int32 x:Key="tsize_i4">15</x:Int32> <!-- 20px -->
 
     <!-- CONTENT STYLES INTERMEDIUM-500 FONT-->
     <Style x:Key="InterMedium" TargetType="Label">
@@ -166,7 +166,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ImageButtonStyle_i1" TargetType="controls:CustomImageBotton">
+    <Style x:Key="ImageButtonStyle_i1" TargetType="controls:CustomImageButton">
         <Setter Property="Padding" Value="24, 30"/>
         <Setter Property="Stroke" Value="{DynamicResource cbg_i4}"/>
         <Setter Property="StrokeThickness" Value="1"/>
@@ -177,6 +177,25 @@
         <Setter Property="behaviors:TouchBehavior.IsAnimation" Value="True"/>
         <Setter Property="behaviors:TouchBehavior.NormalBackgroundColor" Value="{DynamicResource cbg_i2}"/>
         <Setter Property="behaviors:TouchBehavior.PressedBackgroundColor" Value="{DynamicResource cbg_i13}"/>
+    </Style>
+
+    <Style x:Key="BasePressedBorderStyle_i1" TargetType="Border">
+        <Setter Property="Stroke" Value="{x:DynamicResource cbg_i3}"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 26"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="BackgroundColor" Value="{x:DynamicResource cbg_i3}"/>
+        <Setter Property="behaviors:TouchBehavior.IsAnimation" Value="True"/>
+    </Style>
+
+    <Style x:Key="PressedBorderStyle_i1" TargetType="Border" BasedOn="{StaticResource BasePressedBorderStyle_i1}">
+        <Setter Property="behaviors:TouchBehavior.NormalBackgroundColor" Value="{DynamicResource cbg_i3}"/>
+        <Setter Property="behaviors:TouchBehavior.PressedBackgroundColor" Value="{DynamicResource cbg_i14}"/>
+    </Style>
+
+    <Style x:Key="PressedBorderStyle_i2" TargetType="Border" BasedOn="{StaticResource BasePressedBorderStyle_i1}">
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="behaviors:TouchBehavior.NormalBackgroundColor" Value="{DynamicResource cbg_i2}"/>
+        <Setter Property="behaviors:TouchBehavior.PressedBackgroundColor" Value="{DynamicResource cbg_i19}"/>
     </Style>
 
     <!-- CUSTOM SWITCH -->

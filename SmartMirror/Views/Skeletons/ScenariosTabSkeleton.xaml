@@ -44,7 +44,7 @@
                                                StrokeShape="RoundRectangle 12"
                                                StrokeThickness="0">
 
-                            <BoxView MaximumHeightRequest="201"/>
+                            <BoxView HeightRequest="201"/>
 
                         </controls:SkeletonView>
 
@@ -85,7 +85,7 @@
                     <DataTemplate>
 
                         <Grid WidthRequest="280"
-                              MaximumHeightRequest="157">
+                              HeightRequest="157">
 
                             <controls:SkeletonView StrokeShape="RoundRectangle 9"
                                                    Style="{DynamicResource WhiteGradientStyle_i1}"

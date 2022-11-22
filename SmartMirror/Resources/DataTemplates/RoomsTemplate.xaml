@@ -7,7 +7,7 @@
               x:DataType="{x:Type bindableModels:RoomBindableModel}">
 
     <Grid WidthRequest="280"
-          MaximumHeightRequest="157">
+          HeightRequest="157">
 
         <!-- BORDER AND ICON -->
         <Border Stroke="{x:DynamicResource cbg_i4}"

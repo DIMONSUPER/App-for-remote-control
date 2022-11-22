@@ -58,28 +58,28 @@
             ColumnDefinitions="0.25*, 0.25*, 0.25*, 0.25*"
             Margin="60, 98, 60, 0">
 
-            <controls:CustomImageBotton
+            <controls:CustomImageButton
                 Grid.Column="0"
                 Style="{DynamicResource ImageButtonStyle_i1}"
                 behaviors:TouchBehavior.Command="{Binding LoginWithAqaraCommand}"
                 behaviors:TouchBehavior.CommandParameter="{x:Static enums:EAuthType.Aqara}"
                 Source="aqara_logo"/>
 
-            <controls:CustomImageBotton
+            <controls:CustomImageButton
                 Grid.Column="1"
                 Style="{DynamicResource ImageButtonStyle_i1}"
                 behaviors:TouchBehavior.Command="{Binding LoginWithAqaraCommand}"
                 behaviors:TouchBehavior.CommandParameter="{x:Static enums:EAuthType.Amazon}"
                 Source="amazon_logo"/>
 
-            <controls:CustomImageBotton
+            <controls:CustomImageButton
                 Grid.Column="2"
                 Style="{DynamicResource ImageButtonStyle_i1}"
                 behaviors:TouchBehavior.Command="{Binding LoginWithAqaraCommand}"
                 behaviors:TouchBehavior.CommandParameter="{x:Static enums:EAuthType.Apple}"
                 Source="apple_logo"/>
 
-            <controls:CustomImageBotton
+            <controls:CustomImageButton
                 Grid.Column="3"
                 Style="{DynamicResource ImageButtonStyle_i1}"
                 behaviors:TouchBehavior.Command="{Binding LoginWithGoogleCommand}"

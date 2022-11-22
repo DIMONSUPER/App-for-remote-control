@@ -177,6 +177,8 @@ public class DeviceBindableModel : BindableBase
         set => SetProperty(ref _tappedCommand, value);
     }
 
+    public string FullDeviceId => $"{DeviceId}{EditableResourceId ?? string.Empty}";
+
     public bool HasEditableResource => !string.IsNullOrWhiteSpace(EditableResourceId);
 
     #endregion

@@ -7,7 +7,10 @@
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
+    xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     xmlns:templatesSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
     x:Class="SmartMirror.Views.Tabs.Views.NotificationsPageView"
     x:DataType="vm:NotificationsPageViewModel">
@@ -15,6 +18,7 @@
     <views:BaseContentView.Resources>
 
         <ResourceDictionary>
+            <templates:NotificationSourceTemplate x:Key="notificationSourceTemplate"/>
             <templatesSelectors:NotificationDataTemplateSelector x:Key="notificationTemplateSelector"/>
         </ResourceDictionary>
 
@@ -40,35 +44,67 @@
 
         <controls:CustomStateView.CompleteContent>
 
-            <RefreshView
-                HorizontalOptions="Center"
-                IsRefreshing="{Binding IsNotificationsRefreshing}"
-                Command="{Binding RefreshNotificationsCommand}"
-                x:Name="refreshView">
+            <Grid
+                ColumnDefinitions="auto, *"
+                Margin="42, 34, 0, 0">
 
-                <CollectionView
-                    Margin="0, 24, 0, 0"
-                    ItemsSource="{Binding Notifications}"
-                    ItemTemplate="{StaticResource notificationTemplateSelector}"
-                    WidthRequest="660"
-                    VerticalScrollBarVisibility="Always"
-                    HorizontalScrollBarVisibility="Always"
-                    x:Name="scrollViewNotifications"/>
+                <Grid RowDefinitions="auto, *">
 
-                <!--<controls:CustomScrollView
-                    Padding="50, 0, 0, 0"
-                    WidthRequest="660"
-                    VerticalScrollBarVisibility="Always"
-                    HorizontalScrollBarVisibility="Always"
-                    x:Name="scrollViewNotifications">
+                    <controls:TabsSelector
+                        Grid.Row="0"
+                        Margin="0, 24, 0, 29"
+                        TabWidth="181"
+                        TabNames="{Binding NotificationCategories}"
+                        SelectedTabName="{Binding SelectedNotificationCategory}"
+                        SelectedTabChangedCommand="{Binding SelectedNotificationCategoryChangedCommand}"/>
 
-                    <VerticalStackLayout
-                        BindableLayout.ItemsSource="{Binding Notifications}"
-                        BindableLayout.ItemTemplateSelector="{StaticResource notificationTemplateSelector}"/>
+                    <CollectionView 
+                        Grid.Row="1"
+                        WidthRequest="360"
+                        HorizontalOptions="Center"
+                        ItemTemplate="{DynamicResource notificationSourceTemplate}"
+                        ItemsSource="{Binding NotificationsSources}"/>
 
-                </controls:CustomScrollView>-->
+                </Grid>
 
-            </RefreshView>
+                <controls:CustomStateView 
+                    Grid.Column="1"
+                    VerticalOptions="Start"
+                    State="{Binding NotificationsState}"
+                    EmptyTitle="{extensions:Translate NoNotificationsYet}"
+                    DescriptionEmptyState="{extensions:Translate PleaseCheckTheNotificationsSettings}"
+                    EmptyStateImage="notifications_off">
+
+                    <controls:CustomStateView.Triggers>
+                        <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding NotificationsState}" Value="{Static enums:EPageState.Empty}">
+                            <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+                        </DataTrigger>
+                    </controls:CustomStateView.Triggers>
+
+                    <controls:CustomStateView.CompleteContent>
+
+                        <RefreshView
+                            HorizontalOptions="Center"
+                            IsRefreshing="{Binding IsNotificationsRefreshing}"
+                            Command="{Binding RefreshNotificationsCommand}"
+                            x:Name="refreshView">
+
+                            <CollectionView
+                                HorizontalOptions="EndAndExpand"
+                                ItemsSource="{Binding Notifications}"
+                                ItemTemplate="{StaticResource notificationTemplateSelector}"
+                                WidthRequest="571"
+                                VerticalScrollBarVisibility="Always"
+                                HorizontalScrollBarVisibility="Always"
+                                x:Name="scrollViewNotifications"/>
+
+                        </RefreshView>
+
+                    </controls:CustomStateView.CompleteContent>
+                        
+                </controls:CustomStateView>
+
+            </Grid>
 
         </controls:CustomStateView.CompleteContent>
 

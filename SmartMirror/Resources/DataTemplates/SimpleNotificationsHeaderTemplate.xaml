@@ -14,7 +14,7 @@
 
     <Grid ColumnDefinitions="Auto, *, Auto">
 
-        <controls:CustomImageBotton
+        <controls:CustomImageButton
             Grid.Column="0"
             VerticalOptions="Center"
             HorizontalOptions="Start"

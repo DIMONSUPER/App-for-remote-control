@@ -1,12 +1,9 @@
 ﻿using SmartMirror.Helpers;
 using SmartMirror.Models;
 using SmartMirror.Models.BindableModels;
-using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Mapper;
-using SmartMirror.Services.Mock;
-
 namespace SmartMirror.Services.Rooms
 {
     public class RoomsService : IRoomsService

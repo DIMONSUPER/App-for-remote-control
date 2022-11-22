@@ -106,7 +106,7 @@
                             Value="{Binding VideoPlayerVolume}"
                             ThumbImageSource="sound_thumb"
                             MinimumTrackColor="{x:DynamicResource cbg_i10}"
-                            MaximumTrackColor="{x:DynamicResource cbg_i19}">
+                            MaximumTrackColor="{x:DynamicResource cbg_i20}">
 
                             <controls:CustomSlider.Triggers>
 
