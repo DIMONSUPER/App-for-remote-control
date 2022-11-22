@@ -82,7 +82,6 @@
 		<None Remove="Microsoft.Extensions.Localization" />
 		<None Remove="Resources\Strings\" />
 		<None Remove="Enums\" />
-		<None Remove="Services\Mock\" />
 		<None Remove="Platforms\Android\Renderers\" />
 		<None Remove="Platforms\Android\Resources\drawable\" />
 		<None Remove="Controls\StateContainer\" />
@@ -146,7 +145,6 @@
 		<Folder Include="ViewModels\Tabs\" />
 		<Folder Include="Resources\DataTemplates\" />
 		<Folder Include="Extensions\" />
-		<Folder Include="Services\Mock\" />
 		<Folder Include="Platforms\Android\Renderers\" />
 		<Folder Include="Controls\StateContainer\" />
 		<Folder Include="Services\Mapper\" />

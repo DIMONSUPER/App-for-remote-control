@@ -12,7 +12,6 @@ using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Google;
 using SmartMirror.Services.Mapper;
-using SmartMirror.Services.Mock;
 using SmartMirror.Services.Notifications;
 using SmartMirror.Services.Permissions;
 using SmartMirror.Services.Repository;
@@ -92,7 +91,6 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IPermissionsService, PermissionsService>();
         //TODO: Remove when companion app is ready
         //containerRegistry.RegisterSingleton<IAmazonService, AmazonService>();
-        containerRegistry.RegisterSingleton<ISmartHomeMockService, SmartHomeMockService>();
         containerRegistry.RegisterSingleton<IAqaraService, AqaraService>();
         containerRegistry.RegisterSingleton<IGoogleService, GoogleService>();
         containerRegistry.RegisterSingleton<IAqaraMessanger, AqaraMessanger>();
