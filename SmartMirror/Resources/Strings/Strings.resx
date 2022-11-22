@@ -369,4 +369,16 @@
     <data name="LoginPasswordIncorrect" xml:space="preserve">
         <value>Login or password is incorrect</value>
     </data>
+    <data name="RequestTakesTooMuchTime" xml:space="preserve">
+        <value>The request takes too much time to proceed</value>
+    </data>
+    <data name="YouCanCancelTheRequest" xml:space="preserve">
+        <value>You can cancel the request or wait some more time</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
+    <data name="Wait" xml:space="preserve">
+        <value>Wait</value>
+    </data>
 </root>

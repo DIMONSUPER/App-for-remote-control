@@ -24,6 +24,8 @@
             public const string PASSWORD = nameof(PASSWORD);
             public const string LOGIN = nameof(LOGIN);
             public const string CONFIRM_ACTION = nameof(CONFIRM_ACTION);
+            public const string CONFIRM_TEXT = nameof(CONFIRM_TEXT);
+            public const string CANCEL_TEXT = nameof(CANCEL_TEXT);
         }
 
         public static class Google

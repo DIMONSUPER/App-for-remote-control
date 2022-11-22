@@ -27,13 +27,16 @@ namespace SmartMirror.Services.Cameras
 
         public event EventHandler AllCamerasChanged;
 
-        public Task<AOResult<bool>> VerifyCameraIPAddressAsync(string ipAddress)
+        public Task<AOResult<bool>> VerifyCameraIPAddressAsync(string ipAddress, CancellationToken? cancellationToken = null)
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
-                using var httpClient = new HttpClient();
+                using var httpClient = new HttpClient
+                {
+                    Timeout = TimeSpan.FromMinutes(5),
+                };
 
-                var response = await httpClient.GetAsync($"http://{ipAddress}");
+                var response = await httpClient.GetAsync($"http://{ipAddress}", cancellationToken ?? CancellationToken.None);
 
                 return response?.StatusCode is System.Net.HttpStatusCode.OK;
             });

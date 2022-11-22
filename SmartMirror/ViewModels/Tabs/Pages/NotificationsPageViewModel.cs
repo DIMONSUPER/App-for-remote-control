@@ -40,6 +40,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
         _roomsService = roomsService; 
         
         Title = "Notifications";
+        DataState = EPageState.LoadingSkeleton;
+
         _devicesService.AllDevicesChanged += OnAllDevicesChanged;
         _notificationsService.NotificationReceived += OnNotificationReceived;
         _roomsService.AllRoomsChanged += OnAllRoomsChanged;

@@ -5,6 +5,8 @@ using SmartMirror.Services.Blur;
 using SmartMirror.Services.Cameras;
 using System.Windows.Input;
 using SmartMirror.Views.Dialogs;
+using Prism.Services;
+using SmartMirror.Enums;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
@@ -12,6 +14,8 @@ namespace SmartMirror.ViewModels.Dialogs
     {
         private readonly IDialogService _dialogService;
         private readonly ICamerasService _camerasService;
+        private CancellationTokenSource _verifyingCancellationTokenSource;
+        private const int TIMEOUT_SECONDS = 30;
 
         public AddNewCameraDialogViewModel(
             IBlurService blurService,
@@ -99,17 +103,68 @@ namespace SmartMirror.ViewModels.Dialogs
             base.OnDialogClosed();
 
             IsIpAddressEntryFocused = false;
+            _verifyingCancellationTokenSource?.Cancel();
+            _verifyingCancellationTokenSource?.Dispose();
         }
 
         #endregion
 
         #region -- Private helpers --
 
-        private async Task<bool> VerifyIpAddressCorrectAsync()
+        private async Task ShowTooLongPopupAsync()
         {
-            var virifyIpAddressResponse = await _camerasService.VerifyCameraIPAddressAsync(IPAddress);
+            await Task.Delay(TimeSpan.FromSeconds(TIMEOUT_SECONDS), _verifyingCancellationTokenSource.Token).ConfigureAwait(false);
 
-            return virifyIpAddressResponse.IsSuccess && virifyIpAddressResponse.Result;
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                if (!_verifyingCancellationTokenSource.IsCancellationRequested)
+                {
+                    var dialogParameters = new DialogParameters
+                    {
+                        { Constants.DialogsParameterKeys.TITLE, Strings.RequestTakesTooMuchTime },
+                        { Constants.DialogsParameterKeys.DESCRIPTION, Strings.YouCanCancelTheRequest },
+                        { Constants.DialogsParameterKeys.CONFIRM_TEXT, Strings.Wait },
+                        { Constants.DialogsParameterKeys.CANCEL_TEXT, Strings.Cancel },
+                    };
+
+                    var dialogResult = await _dialogService.ShowDialogAsync(nameof(ConfirmDialog), dialogParameters);
+
+                    if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool result) && result)
+                    {
+                        _ = ShowTooLongPopupAsync().ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        _verifyingCancellationTokenSource?.Cancel();
+                    }
+                }
+            });
+        }
+
+        private async Task<EResultStatus> VerifyIpAddressCorrectAsync()
+        {
+            EResultStatus result;
+
+            _verifyingCancellationTokenSource = new();
+
+            _ = ShowTooLongPopupAsync().ConfigureAwait(false);
+
+            var virifyIpAddressResponse = await _camerasService.VerifyCameraIPAddressAsync(IPAddress, _verifyingCancellationTokenSource.Token);
+
+            if (_verifyingCancellationTokenSource.IsCancellationRequested)
+            {
+                result = EResultStatus.Canceled;
+            }
+            else
+            {
+                result = (virifyIpAddressResponse.IsSuccess && virifyIpAddressResponse.Result)
+                    ? EResultStatus.Success
+                    : EResultStatus.Failed;
+
+                _verifyingCancellationTokenSource.Cancel();
+            }
+
+            return result;
         }
 
         private async Task<bool> VerifyCameraConnectionAsync()
@@ -126,9 +181,11 @@ namespace SmartMirror.ViewModels.Dialogs
 
         private async Task HandleContinueButtonPressedAsync()
         {
-            IsIpAddressCorrect = await VerifyIpAddressCorrectAsync();
+            var verifyResult = await VerifyIpAddressCorrectAsync();
 
-            if (!IsIpAddressCorrect)
+            IsIpAddressCorrect = verifyResult is EResultStatus.Success;
+
+            if (verifyResult is EResultStatus.Failed)
             {
                 await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
                 {
@@ -136,7 +193,7 @@ namespace SmartMirror.ViewModels.Dialogs
                     { Constants.DialogsParameterKeys.DESCRIPTION, Strings.NoResponseIPAddress },
                 });
             }
-            else
+            else if (verifyResult is EResultStatus.Success)
             {
                 IsIpAddressEntryFocused = true;
             }

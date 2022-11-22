@@ -1,5 +1,6 @@
 using SmartMirror.Helpers;
 using SmartMirror.Services.Blur;
+using SmartMirror.Resources.Strings;
 using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Dialogs
@@ -30,6 +31,20 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _description, value);
         }
 
+        private string _cancelText = Strings.Close;
+        public string CancelText
+        {
+            get => _cancelText;
+            set => SetProperty(ref _cancelText, value);
+        }
+
+        private string _confirmText = Strings.Confirm;
+        public string ConfirmText
+        {
+            get => _confirmText;
+            set => SetProperty(ref _confirmText, value);
+        }
+
         private ICommand _closeCommand;
         public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc<bool>(OnCloseCommandAsync);
 
@@ -54,6 +69,16 @@ namespace SmartMirror.ViewModels.Dialogs
             if (parameters.TryGetValue(Constants.DialogsParameterKeys.CONFIRM_ACTION, out Action action))
             {
                 _confirmAction = action;
+            }
+
+            if (parameters.TryGetValue(Constants.DialogsParameterKeys.CONFIRM_TEXT, out string confirmText))
+            {
+                ConfirmText = confirmText;
+            }
+
+            if (parameters.TryGetValue(Constants.DialogsParameterKeys.CANCEL_TEXT, out string cancelText))
+            {
+                CancelText = cancelText;
             }
         }
 
