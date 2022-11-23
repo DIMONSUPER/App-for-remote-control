@@ -40,13 +40,6 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
         set => SetProperty(ref _codeText, value);
     }
 
-    private bool _isEntryFocused;
-    public bool IsEntryFocused
-    {
-        get => _isEntryFocused;
-        set => SetProperty(ref _isEntryFocused, value);
-    }
-
     private bool _isLoggingWithCode;
     public bool IsLoggingWithCode
     {
@@ -83,14 +76,6 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
         }
 
         await Task.Delay(FOCUS_DELAY);
-        IsEntryFocused = true;
-    }
-
-    public override void OnDialogClosed()
-    {
-        base.OnDialogClosed();
-
-        IsEntryFocused = false;
     }
 
     #endregion
@@ -127,6 +112,13 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
         {
             //ToDo: no state
         }
+    }
+
+    private Task OnCloseCommandAsync()
+    {
+        RequestClose.Invoke();
+
+        return Task.CompletedTask;
     }
 
     #endregion

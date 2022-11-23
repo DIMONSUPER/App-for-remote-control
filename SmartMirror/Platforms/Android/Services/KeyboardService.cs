@@ -46,17 +46,21 @@ public class KeyboardService : IKeyboardService
 
             rootWindow.DecorView.GetWindowVisibleDisplayFrame(rect);
 
-            KeyboardHeight = Platform.AppContext.FromPixels(rootWindow.DecorView.Height - rect.Bottom);
+            var newHeight = Platform.AppContext.FromPixels(rootWindow.DecorView.Height - rect.Bottom);
 
-            KeyboardHeightChanged?.Invoke(this, EventArgs.Empty);
+            if (newHeight != KeyboardHeight)
+            {
+                KeyboardHeight = newHeight;
 
-            System.Diagnostics.Debug.WriteLine($"{nameof(KeyboardHeightChanged)}: {KeyboardHeight}");
+                KeyboardHeightChanged?.Invoke(this, EventArgs.Empty);
+
+                System.Diagnostics.Debug.WriteLine($"{nameof(KeyboardHeightChanged)}: {KeyboardHeight}");
+            }
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"{nameof(OnGlobalLayoutChanged)}: {ex.Message}");
         }
-
     }
 
     #endregion

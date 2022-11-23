@@ -75,13 +75,6 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _password, value);
         }
 
-        private bool _isIpAddressEntryFocused;
-        public bool IsIpAddressEntryFocused
-        {
-            get => _isIpAddressEntryFocused;
-            set => SetProperty(ref _isIpAddressEntryFocused, value);
-        }
-
         private ICommand _addCameraCommand;
         public ICommand AddCameraCommand => _addCameraCommand ??= SingleExecutionCommand.FromFunc(OnAddCommandAsync);
 
@@ -98,7 +91,6 @@ namespace SmartMirror.ViewModels.Dialogs
                 Title = title;
 
                 await Task.Delay(FOCUS_DELAY);
-                IsIpAddressEntryFocused = true;
             }
         }
 
@@ -106,7 +98,6 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             base.OnDialogClosed();
 
-            IsIpAddressEntryFocused = false;
             _verifyingCancellationTokenSource?.Cancel();
             _verifyingCancellationTokenSource?.Dispose();
         }
@@ -196,10 +187,6 @@ namespace SmartMirror.ViewModels.Dialogs
                     { Constants.DialogsParameterKeys.TITLE, "FAIL" },
                     { Constants.DialogsParameterKeys.DESCRIPTION, Strings.NoResponseIPAddress },
                 });
-            }
-            else if (verifyResult is EResultStatus.Success)
-            {
-                IsIpAddressEntryFocused = true;
             }
         }
 

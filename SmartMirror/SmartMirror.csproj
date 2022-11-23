@@ -411,7 +411,7 @@
 		<DocumentationFile>bin\DEV\net7.0-android\SmartMirror.xml</DocumentationFile>
 		<AndroidManagedSymbols>true</AndroidManagedSymbols>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
-		<AotAssemblies>true</AotAssemblies>
+		<RunAOTCompilation>true</RunAOTCompilation>
 		<AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
 		<AndroidLinkMode>SdkOnly</AndroidLinkMode>
 	</PropertyGroup>
@@ -421,7 +421,7 @@
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<DebugSymbols>true</DebugSymbols>
 		<Optimize>true</Optimize>
-		<AotAssemblies>true</AotAssemblies>
+		<RunAOTCompilation>true</RunAOTCompilation>
 		<AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>

@@ -2,8 +2,10 @@
 <dialogs:BaseDialogView xmlns:dialogs="clr-namespace:SmartMirror.Views.Dialogs"
                         xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                        xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                         xmlns:controls="clr-namespace:SmartMirror.Controls"
                         xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+                        xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
                         xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
                         x:Class="SmartMirror.Views.Dialogs.AddNewCameraDialog"
                         x:DataType="vm:AddNewCameraDialogViewModel">
@@ -41,10 +43,13 @@
                         FontSize="{DynamicResource tsize_i2}"
                         FontFamily="InterBold"
                         Text="{Binding IPAddress}"
-                        IsEntryFocused="{Binding IsIpAddressEntryFocused}"
                         TextColor="{DynamicResource tcolor_i1}"
                         Placeholder="{extensions:Translate EnterIPAddress}"
                         PlaceholderColor="{DynamicResource tcolor_i9}">
+
+                        <controls:CustomNoBorderEntry.Behaviors>
+                            <behaviors:FocusEntryBehavior/>
+                        </controls:CustomNoBorderEntry.Behaviors>
 
                         <controls:CustomNoBorderEntry.Triggers>
 

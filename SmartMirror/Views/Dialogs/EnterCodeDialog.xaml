@@ -3,8 +3,10 @@
     xmlns:dialogs="clr-namespace:SmartMirror.Views.Dialogs"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
     x:Class="SmartMirror.Views.Dialogs.EnterCodeDialog"
     x:DataType="vm:EnterCodeDialogViewModel">
@@ -38,7 +40,6 @@
                     BackgroundColor="{StaticResource cbg_i15}">
 
                     <controls:CustomNoBorderEntry
-                        IsEntryFocused="{Binding IsEntryFocused}"
                         WidthRequest="419"
                         Margin="24, 18"
                         BackgroundColor="{DynamicResource cbg_i15}"
@@ -47,11 +48,19 @@
                         Text="{Binding CodeText}"
                         TextColor="{DynamicResource tcolor_i1}"
                         Placeholder="{extensions:Translate EnterCode}"
-                        PlaceholderColor="{DynamicResource tcolor_i9}"/>
+                        PlaceholderColor="{DynamicResource tcolor_i9}"
+                        xct:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference continueButton}">
+
+                        <controls:CustomNoBorderEntry.Behaviors>
+                            <behaviors:FocusEntryBehavior/>
+                        </controls:CustomNoBorderEntry.Behaviors>
+
+                    </controls:CustomNoBorderEntry>
 
                 </Border>
 
                 <controls:ButtonLoader
+                    x:Name="continueButton"
                     ButtonStyle="{DynamicResource ButtonStyle_i1}"
                     ButtonText="{extensions:Translate Continue}"
                     Command="{Binding ContinueCommand}"

@@ -1,14 +1,10 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace SmartMirror.Views.Dialogs;
+﻿namespace SmartMirror.Views.Dialogs;
 
 public partial class BaseDialogView : Grid
 {
     public BaseDialogView()
     {
         InitializeComponent();
-
-        Unloaded += OnUnloaded;
     }
 
     #region -- Overrides --
@@ -21,15 +17,6 @@ public partial class BaseDialogView : Grid
         {
             this.SetBinding(HeightProperty, nameof(vm.ViewHeight), BindingMode.OneWayToSource);
         }
-    }
-
-    #endregion
-
-    #region -- Private helpers --
-
-    private void OnUnloaded(object sender, EventArgs e)
-    {
-        //this.Unfocus();
     }
 
     #endregion
