@@ -1,16 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Grid xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-      xmlns:prismmaui="clr-namespace:Prism.Services.Xaml;assembly=Prism.Maui"
-      xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
-      xmlns:video="clr-namespace:SmartMirror.Controls"
-      xmlns:controls="clr-namespace:SmartMirror.Controls"
-      xmlns:extensions="clr-namespace:SmartMirror.Extensions"
-      prismmaui:DialogLayout.CloseOnBackgroundTapped="False"
-      Unloaded="OnCamerasPageUnloaded"
-      prismmaui:DialogLayout.UseMask="False"
-      x:Class="SmartMirror.Views.Dialogs.DoorBellDialog"
-      x:DataType="vm:DoorBellDialogViewModel">
+<dialogs:BaseDialogView xmlns:dialogs="clr-namespace:SmartMirror.Views.Dialogs"
+                        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                        xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
+                        xmlns:video="clr-namespace:SmartMirror.Controls"
+                        xmlns:controls="clr-namespace:SmartMirror.Controls"
+                        xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+                        Unloaded="OnCamerasPageUnloaded"
+                        x:Class="SmartMirror.Views.Dialogs.DoorBellDialog"
+                        x:DataType="vm:DoorBellDialogViewModel">
 
     <Border WidthRequest="836"
             StrokeThickness="0.75"
@@ -54,7 +52,7 @@
                         </Frame>
 
                     </controls:CustomStateView.CompleteContent>
-                    
+
 
                 </controls:CustomStateView>
 
@@ -142,5 +140,5 @@
 
     </Border>
 
-</Grid>
+</dialogs:BaseDialogView>
 

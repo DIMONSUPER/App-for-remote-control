@@ -81,7 +81,7 @@ public class MainTabbedPageViewModel : BaseViewModel
     private Task OnSettingsCommandAsync()
     {
         return NavigationService.CreateBuilder()
-            .AddSegment<SettingsPage>(true)
+            .AddSegment<SettingsPageViewModel>()
             .NavigateAsync();
     }
 

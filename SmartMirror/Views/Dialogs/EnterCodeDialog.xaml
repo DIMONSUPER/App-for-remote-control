@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Grid
+<dialogs:BaseDialogView
+    xmlns:dialogs="clr-namespace:SmartMirror.Views.Dialogs"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:prismmaui="clr-namespace:Prism.Services.Xaml;assembly=Prism.Maui"
+    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
-    prismmaui:DialogLayout.UseMask="False"
     x:Class="SmartMirror.Views.Dialogs.EnterCodeDialog"
     x:DataType="vm:EnterCodeDialogViewModel">
 
@@ -38,16 +39,22 @@
 
                     <controls:CustomNoBorderEntry
                         VerticalOptions="Center"
-                        IsEntryFocused="{Binding IsEntryFocused}"
                         WidthRequest="370"
-                        BackgroundColor="{DynamicResource cbg_i15}"
                         Margin="24, 18"
+                        BackgroundColor="{DynamicResource cbg_i15}"
                         FontSize="{DynamicResource tsize_i2}"
                         FontFamily="InterBold"
                         Text="{Binding CodeText}"
                         TextColor="{DynamicResource tcolor_i1}"
                         Placeholder="{extensions:Translate EnterCode}"
-                        PlaceholderColor="{DynamicResource tcolor_i9}"/>
+                        PlaceholderColor="{DynamicResource tcolor_i9}"
+                        xct:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference continueButton}">
+
+                        <controls:CustomNoBorderEntry.Behaviors>
+                            <behaviors:FocusEntryBehavior/>
+                        </controls:CustomNoBorderEntry.Behaviors>
+
+                    </controls:CustomNoBorderEntry>
 
                 </Border>
 
@@ -63,11 +70,13 @@
                         Command="{Binding CloseCommand}"/>
 
                    <controls:ButtonLoader
-                        Grid.Column="1"
+                        Grid.Column="1"                    
+
                         ButtonStyle="{DynamicResource ButtonStyle_i1}"
                         ButtonText="{extensions:Translate Continue}"
                         Command="{Binding ContinueCommand}"
-                        IsRunning="{Binding IsLoggingWithCode}"/>
+                        IsRunning="{Binding IsLoggingWithCode}"
+                        x:Name="continueButton"/>
 
                 </Grid>
     
@@ -77,4 +86,4 @@
 
     </Frame>
 
-</Grid>
+</dialogs:BaseDialogView>

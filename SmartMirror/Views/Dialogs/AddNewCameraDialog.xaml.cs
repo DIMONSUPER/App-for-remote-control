@@ -1,6 +1,6 @@
 namespace SmartMirror.Views.Dialogs;
 
-public partial class AddNewCameraDialog : Grid
+public partial class AddNewCameraDialog : BaseDialogView
 {
 	public AddNewCameraDialog()
 	{

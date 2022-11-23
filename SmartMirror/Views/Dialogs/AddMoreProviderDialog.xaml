@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Frame
+<dialogs:BaseDialogView
+    xmlns:dialogs="clr-namespace:SmartMirror.Views.Dialogs"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
@@ -8,77 +9,79 @@
     xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
-    xmlns:prismmaui="clr-namespace:Prism.Services.Xaml;assembly=Prism.Maui"
-    prismmaui:DialogLayout.UseMask="False"
-    Padding="0"
-    BackgroundColor="Transparent"
     x:Class="SmartMirror.Views.Dialogs.AddMoreProviderDialog"
     x:DataType="vm:AddMoreProviderDialogViewModel">
 
-    <Border
-        WidthRequest="479"
-        Padding="30, 24"
-        StrokeThickness="0.75"
-        StrokeShape="RoundRectangle 9"
-        Stroke="{DynamicResource tcolor_i1}"
-        BackgroundColor="{StaticResource cbg_i2}">
+    <Frame
+        Padding="0"
+        BackgroundColor="Transparent">
 
-        <VerticalStackLayout Spacing="24">
+        <Border
+            WidthRequest="479"
+            Padding="30, 24"
+            StrokeThickness="0.75"
+            StrokeShape="RoundRectangle 9"
+            Stroke="{DynamicResource tcolor_i1}"
+            BackgroundColor="{StaticResource cbg_i2}">
 
-            <Label
-                Style="{DynamicResource tstyle_i11}"
-                Margin="0, 0, 0, 12"
-                Text="{extensions:Translate HaveAnotherProvider}"/>
+            <VerticalStackLayout Spacing="24">
 
-            <controls:CustomImageButton
-                Grid.Row="0"
-                Style="{DynamicResource ImageButtonStyle_i1}"
-                HeightImage="36"
-                HeightRequest="90"
-                IsVisible="{Binding AuthType, Converter={xct:IsNotEqualConverter}, ConverterParameter={x:Static enums:EAuthType.Aqara}}"
-                behaviors:TouchBehavior.IsAnimation="True"
-                behaviors:TouchBehavior.Command="{Binding LoginWithAqaraCommand}"
-                Source="aqara_logo"/>
+                <Label
+                    Style="{DynamicResource tstyle_i11}"
+                    Margin="0, 0, 0, 12"
+                    Text="{extensions:Translate HaveAnotherProvider}"/>
 
-            <controls:CustomImageButton
-                Grid.Row="1"
-                Style="{DynamicResource ImageButtonStyle_i1}"
-                HeightImage="36"
-                HeightRequest="90"
-                IsVisible="{Binding AuthType, Converter={xct:IsNotEqualConverter}, ConverterParameter={x:Static enums:EAuthType.Amazon}}"
-                behaviors:TouchBehavior.IsAnimation="True"
-                behaviors:TouchBehavior.Command="{Binding LoginWithAmazonCommand}"
-                Source="amazon_logo"/>
+                <controls:CustomImageButton
+                    Grid.Row="0"
+                    Style="{DynamicResource ImageButtonStyle_i1}"
+                    HeightImage="36"
+                    HeightRequest="90"
+                    IsVisible="{Binding AuthType, Converter={xct:IsNotEqualConverter}, ConverterParameter={x:Static enums:EAuthType.Aqara}}"
+                    behaviors:TouchBehavior.IsAnimation="True"
+                    behaviors:TouchBehavior.Command="{Binding LoginWithAqaraCommand}"
+                    Source="aqara_logo"/>
 
-            <controls:CustomImageButton
-                Grid.Row="2"
-                Style="{DynamicResource ImageButtonStyle_i1}"
-                HeightImage="36"
-                HeightRequest="90"
-                IsVisible="{Binding AuthType, Converter={xct:IsNotEqualConverter}, ConverterParameter={x:Static enums:EAuthType.Apple}}"
-                behaviors:TouchBehavior.IsAnimation="True"
-                behaviors:TouchBehavior.Command="{Binding LoginWithAppleCommand}"
-                Source="apple_logo"/>
+                <controls:CustomImageButton
+                    Grid.Row="1"
+                    Style="{DynamicResource ImageButtonStyle_i1}"
+                    HeightImage="36"
+                    HeightRequest="90"
+                    IsVisible="{Binding AuthType, Converter={xct:IsNotEqualConverter}, ConverterParameter={x:Static enums:EAuthType.Amazon}}"
+                    behaviors:TouchBehavior.IsAnimation="True"
+                    behaviors:TouchBehavior.Command="{Binding LoginWithAmazonCommand}"
+                    Source="amazon_logo"/>
 
-            <controls:CustomImageButton
-                Grid.Row="3"
-                Style="{DynamicResource ImageButtonStyle_i1}"
-                HeightImage="36"
-                HeightRequest="90"
-                IsVisible="{Binding AuthType, Converter={xct:IsNotEqualConverter}, ConverterParameter={x:Static enums:EAuthType.Google}}"
-                behaviors:TouchBehavior.IsAnimation="True"
-                behaviors:TouchBehavior.Command="{Binding LoginWithGoogleCommand}"
-                Source="google_logo"/>
+                <controls:CustomImageButton
+                    Grid.Row="2"
+                    Style="{DynamicResource ImageButtonStyle_i1}"
+                    HeightImage="36"
+                    HeightRequest="90"
+                    IsVisible="{Binding AuthType, Converter={xct:IsNotEqualConverter}, ConverterParameter={x:Static enums:EAuthType.Apple}}"
+                    behaviors:TouchBehavior.IsAnimation="True"
+                    behaviors:TouchBehavior.Command="{Binding LoginWithAppleCommand}"
+                    Source="apple_logo"/>
 
-            <controls:ButtonLoader
-                HorizontalOptions="CenterAndExpand"
-                ButtonStyle="{DynamicResource ButtonStyle_i1}"
-                ButtonText="{extensions:Translate Finish}"
-                Command="{Binding FinishCommand}"
-                IsRunning="{Binding IsFinishButtonBusy}"/>
+                <controls:CustomImageButton
+                    Grid.Row="3"
+                    Style="{DynamicResource ImageButtonStyle_i1}"
+                    HeightImage="36"
+                    HeightRequest="90"
+                    IsVisible="{Binding AuthType, Converter={xct:IsNotEqualConverter}, ConverterParameter={x:Static enums:EAuthType.Google}}"
+                    behaviors:TouchBehavior.IsAnimation="True"
+                    behaviors:TouchBehavior.Command="{Binding LoginWithGoogleCommand}"
+                    Source="google_logo"/>
 
-        </VerticalStackLayout>
+                <controls:ButtonLoader
+                    HorizontalOptions="CenterAndExpand"
+                    ButtonStyle="{DynamicResource ButtonStyle_i1}"
+                    ButtonText="{extensions:Translate Finish}"
+                    Command="{Binding FinishCommand}"
+                    IsRunning="{Binding IsFinishButtonBusy}"/>
 
-    </Border>
+            </VerticalStackLayout>
 
-</Frame>
+        </Border>
+
+    </Frame>
+
+</dialogs:BaseDialogView>

@@ -2,6 +2,7 @@
 using SmartMirror.Helpers;
 using SmartMirror.Services.Blur;
 using SmartMirror.Services.Google;
+using SmartMirror.Services.Keyboard;
 using SmartMirror.Views.Dialogs;
 using System.Windows.Input;
 
@@ -17,8 +18,9 @@ namespace SmartMirror.ViewModels.Dialogs
             IDialogService dialogService,
             IGoogleService googleService,
             IBlurService blurService,
-            INavigationService navigationService)
-            : base(blurService)
+            INavigationService navigationService,
+            IKeyboardService keyboardService)
+            : base(blurService, keyboardService)
         {
             _dialogService = dialogService;
             _googleService = googleService;

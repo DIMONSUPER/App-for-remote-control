@@ -2,6 +2,7 @@
 using SmartMirror.Helpers;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Blur;
+using SmartMirror.Services.Keyboard;
 using SmartMirror.Views.Dialogs;
 using System.Windows.Input;
 
@@ -15,8 +16,9 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
     public EnterCodeDialogViewModel(
         IAqaraService aqaraService,
         IBlurService blurService,
-        IDialogService dialogService)
-        : base(blurService)
+        IDialogService dialogService,
+        IKeyboardService keyboardService)
+        : base(blurService, keyboardService)
     {
         _aqaraService = aqaraService;
         _dialogService = dialogService;
@@ -36,13 +38,6 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
     {
         get => _codeText;
         set => SetProperty(ref _codeText, value);
-    }
-
-    private bool _isEntryFocused;
-    public bool IsEntryFocused
-    {
-        get => _isEntryFocused;
-        set => SetProperty(ref _isEntryFocused, value);
     }
 
     private bool _isLoggingWithCode;
@@ -81,14 +76,6 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
         }
 
         await Task.Delay(FOCUS_DELAY);
-        IsEntryFocused = true;
-    }
-
-    public override void OnDialogClosed()
-    {
-        base.OnDialogClosed();
-
-        IsEntryFocused = false;
     }
 
     public override Task OnCloseCommandAsync()
@@ -137,4 +124,3 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
 
     #endregion
 }
-

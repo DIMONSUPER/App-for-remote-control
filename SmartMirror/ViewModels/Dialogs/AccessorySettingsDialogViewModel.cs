@@ -2,6 +2,7 @@
 using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Blur;
+using SmartMirror.Services.Keyboard;
 using SmartMirror.Services.Devices;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -15,8 +16,9 @@ namespace SmartMirror.ViewModels.Dialogs
 
         public AccessorySettingsDialogViewModel(
             IDevicesService devicesService,
-            IBlurService blurService)
-            : base(blurService)
+            IBlurService blurService,
+            IKeyboardService keyboardService)
+            : base(blurService, keyboardService)
         {
             _devicesService = devicesService;
         }

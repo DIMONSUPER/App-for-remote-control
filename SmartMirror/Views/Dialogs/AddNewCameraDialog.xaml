@@ -1,18 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Grid
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:prismmaui="clr-namespace:Prism.Services.Xaml;assembly=Prism.Maui"
-    xmlns:controls="clr-namespace:SmartMirror.Controls"
-    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
-    xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
-    prismmaui:DialogLayout.CloseOnBackgroundTapped="True"
-    prismmaui:DialogLayout.UseMask="False"
-    x:Class="SmartMirror.Views.Dialogs.AddNewCameraDialog"
-    x:DataType="vm:AddNewCameraDialogViewModel">
+<dialogs:BaseDialogView xmlns:dialogs="clr-namespace:SmartMirror.Views.Dialogs"
+                        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                        xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                        xmlns:controls="clr-namespace:SmartMirror.Controls"
+                        xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+                        xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+                        xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
+                        x:Class="SmartMirror.Views.Dialogs.AddNewCameraDialog"
+                        x:DataType="vm:AddNewCameraDialogViewModel">
 
     <Frame
-        Grid.Row="1"
         Padding="0"
         BackgroundColor="Transparent">
 
@@ -30,7 +28,7 @@
 
                 <Border
                     Padding="1"
-                    Margin="0, 24, 0, 36"
+                    Margin="0, 24, 0, 0"
                     HeightRequest="76"
                     StrokeThickness="1"
                     StrokeShape="RoundRectangle 9"
@@ -45,10 +43,13 @@
                         FontSize="{DynamicResource tsize_i2}"
                         FontFamily="InterBold"
                         Text="{Binding IPAddress}"
-                        IsEntryFocused="{Binding IsIpAddressEntryFocused}"
                         TextColor="{DynamicResource tcolor_i1}"
                         Placeholder="{extensions:Translate EnterIPAddress}"
                         PlaceholderColor="{DynamicResource tcolor_i9}">
+
+                        <controls:CustomNoBorderEntry.Behaviors>
+                            <behaviors:FocusEntryBehavior/>
+                        </controls:CustomNoBorderEntry.Behaviors>
 
                         <controls:CustomNoBorderEntry.Triggers>
 
@@ -64,7 +65,7 @@
                 </Border>
 
                 <Border
-                    Margin="0, 10, 0, 0"
+                    Margin="0, 24, 0, 0"
                     Padding="1"
                     HeightRequest="76"
                     StrokeThickness="1"
@@ -75,6 +76,7 @@
 
                     <controls:CustomNoBorderEntry
                         Margin="24, 18"
+                        VerticalOptions="Center"
                         BackgroundColor="{DynamicResource cbg_i15}"
                         FontSize="{DynamicResource tsize_i2}"
                         FontFamily="InterBold"
@@ -86,6 +88,7 @@
                 </Border>
 
                 <Grid
+                    Margin="0, 36, 0, 0"
                     RowDefinitions="Auto"
                     ColumnSpacing="24"
                     ColumnDefinitions="*, *">
@@ -93,9 +96,8 @@
                    <Button
                         Grid.Column="0"
                         Style="{DynamicResource ButtonStyle_i2}"
-                        Text="{extensions:Translate Close}"
+                        Text="{extensions:Translate Cancel}"
                         Command="{Binding CloseCommand}"/>
-
 
                     <controls:ButtonLoader
                         Grid.Column="1"
@@ -120,4 +122,4 @@
 
     </Frame>
 
-</Grid>
+</dialogs:BaseDialogView>

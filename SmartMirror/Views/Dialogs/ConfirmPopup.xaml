@@ -44,30 +44,26 @@
 
                 <Grid
                     Margin="0,42"
-                    ColumnDefinitions="*,*"
+                    ColumnDefinitions="*, *"
                     ColumnSpacing="26">
 
                     <Button
                         Grid.Column="0"
                         Style="{DynamicResource ButtonStyle_i1}"
-                        HorizontalOptions="Center"
-                        Text="{extensions:Translate Close}"
+                        Text="{Binding CancelText}"
                         BackgroundColor="Transparent"
                         TextColor="#E9E9E9"
                         BorderColor="{DynamicResource cbg_i3}"
                         BorderWidth="0.75"
                         Command="{Binding ConfirmCommand}"
-                        CommandParameter="{StaticResource falseValue}"
-                        WidthRequest="168"/>
+                        CommandParameter="{StaticResource falseValue}"/>
                 
                     <Button
                         Grid.Column="1"
                         Style="{DynamicResource ButtonStyle_i1}"
-                        HorizontalOptions="Center"
-                        Text="{extensions:Translate Confirm}"
+                        Text="{Binding ConfirmText}"
                         Command="{Binding ConfirmCommand}"
-                        CommandParameter="{StaticResource trueValue}"
-                        WidthRequest="168"/>
+                        CommandParameter="{StaticResource trueValue}"/>
 
                 </Grid>
 

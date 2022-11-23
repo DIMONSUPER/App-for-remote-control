@@ -11,6 +11,7 @@ using SmartMirror.Services.Blur;
 using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Google;
+using SmartMirror.Services.Keyboard;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Notifications;
 using SmartMirror.Services.Permissions;
@@ -99,6 +100,7 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IScenariosService, ScenariosService>();
         containerRegistry.RegisterSingleton<IDevicesService, DevicesService>();
         containerRegistry.RegisterSingleton<IRoomsService, RoomsService>();
+        containerRegistry.RegisterSingleton<IKeyboardService, KeyboardService>();
         containerRegistry.RegisterInstance<IAudioManager>(AudioManager.Current);
 
         containerRegistry.RegisterSingleton<ConfirmPopupViewModel>();
