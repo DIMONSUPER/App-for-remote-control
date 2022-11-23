@@ -381,4 +381,13 @@
     <data name="Wait" xml:space="preserve">
         <value>Wait</value>
     </data>
+      <data name="NoMicrophonePermission" xml:space="preserve">
+    <value>No microphone permission</value>
+    </data>
+    <data name="OpenSettings" xml:space="preserve">
+      <value>Open Settings</value>
+    </data>
+    <data name="PleaseGrantPermissionForMicrophone" xml:space="preserve">
+      <value>Please go to application Settings to grant the permission for microphone</value>
+    </data>
 </root>
