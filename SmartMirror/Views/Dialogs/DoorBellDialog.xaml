@@ -40,8 +40,8 @@
                     <controls:CustomStateView.CompleteContent>
 
                         <video:Video IsOnTop="{Binding IsVideoOnTop}"
-									 HeightRequest="346"
 									 HorizontalOptions="Center"
+									 HeightRequest="346"
                                      BackgroundColor="{DynamicResource cbg_i2}"
                                      Action="{Binding VideoAction}"
                                      Source="{Binding VideoSource, TargetNullValue={x:Null}}"
