@@ -22,17 +22,15 @@
             Stroke="{DynamicResource tcolor_i1}"
             BackgroundColor="{StaticResource cbg_i2}">
 
-            <VerticalStackLayout
-                Padding="30, 24"
-                Spacing="6">
+            <VerticalStackLayout Padding="30, 24, 30, 42">
 
                 <Label 
                     Style="{DynamicResource tstyle_i11}"
                     Text="{Binding Title}" />
 
                 <Border
-                    Margin="0, 10, 0, 0"
                     Padding="1"
+                    Margin="0, 24, 0, 36"
                     HeightRequest="76"
                     StrokeThickness="1"
                     StrokeShape="RoundRectangle 9"
@@ -41,6 +39,8 @@
 
                     <controls:CustomNoBorderEntry
                         Margin="24, 18"
+                        VerticalOptions="Center"
+                        WidthRequest="375"
                         BackgroundColor="{DynamicResource cbg_i15}"
                         FontSize="{DynamicResource tsize_i2}"
                         FontFamily="InterBold"
@@ -85,19 +85,34 @@
 
                 </Border>
 
-                <controls:ButtonLoader
-                    ButtonStyle="{DynamicResource ButtonStyle_i1}"
-                    ButtonText="{extensions:Translate Continue}"
-                    Command="{Binding AddCameraCommand}"
-                    IsRunning="{Binding IsButtonBusy}">
+                <Grid
+                    RowDefinitions="Auto"
+                    ColumnSpacing="24"
+                    ColumnDefinitions="*, *">
 
-                    <controls:ButtonLoader.Triggers>
-                        <DataTrigger TargetType="controls:ButtonLoader" Binding="{Binding IsIpAddressCorrect}" Value="True">
-                            <Setter Property="ButtonText" Value="{extensions:Translate Add}"/>
-                        </DataTrigger>
-                    </controls:ButtonLoader.Triggers>
+                   <Button
+                        Grid.Column="0"
+                        Style="{DynamicResource ButtonStyle_i2}"
+                        Text="{extensions:Translate Close}"
+                        Command="{Binding CloseCommand}"/>
 
-                </controls:ButtonLoader>
+
+                    <controls:ButtonLoader
+                        Grid.Column="1"
+                        ButtonStyle="{DynamicResource ButtonStyle_i1}"
+                        ButtonText="{extensions:Translate Continue}"
+                        Command="{Binding AddCameraCommand}"
+                        IsRunning="{Binding IsButtonBusy}">
+
+                        <controls:ButtonLoader.Triggers>
+                            <DataTrigger TargetType="controls:ButtonLoader" Binding="{Binding IsIpAddressCorrect}" Value="True">
+                                <Setter Property="ButtonText" Value="{extensions:Translate Add}"/>
+                            </DataTrigger>
+                        </controls:ButtonLoader.Triggers>
+
+                    </controls:ButtonLoader>
+
+                </Grid>
 
             </VerticalStackLayout>
 

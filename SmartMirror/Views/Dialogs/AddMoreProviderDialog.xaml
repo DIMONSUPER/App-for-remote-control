@@ -12,11 +12,11 @@
     prismmaui:DialogLayout.UseMask="False"
     Padding="0"
     BackgroundColor="Transparent"
-    prismmaui:DialogLayout.CloseOnBackgroundTapped="False"
     x:Class="SmartMirror.Views.Dialogs.AddMoreProviderDialog"
     x:DataType="vm:AddMoreProviderDialogViewModel">
 
     <Border
+        WidthRequest="479"
         Padding="30, 24"
         StrokeThickness="0.75"
         StrokeShape="RoundRectangle 9"
@@ -70,11 +70,12 @@
                 behaviors:TouchBehavior.Command="{Binding LoginWithGoogleCommand}"
                 Source="google_logo"/>
 
-             <controls:ButtonLoader
-                 ButtonStyle="{DynamicResource ButtonStyle_i1}"
-                 ButtonText="{extensions:Translate Finish}"
-                 Command="{Binding FinishCommand}"
-                 IsRunning="{Binding IsFinishButtonBusy}"/>
+            <controls:ButtonLoader
+                HorizontalOptions="CenterAndExpand"
+                ButtonStyle="{DynamicResource ButtonStyle_i1}"
+                ButtonText="{extensions:Translate Finish}"
+                Command="{Binding FinishCommand}"
+                IsRunning="{Binding IsFinishButtonBusy}"/>
 
         </VerticalStackLayout>
 

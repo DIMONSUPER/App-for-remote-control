@@ -1,4 +1,6 @@
-﻿using SmartMirror.Services.Blur;
+﻿using System.Windows.Input;
+using SmartMirror.Helpers;
+using SmartMirror.Services.Blur;
 
 namespace SmartMirror.ViewModels.Dialogs;
 
@@ -19,11 +21,10 @@ public class BaseDialogViewModel : BindableBase, IDialogAware
 
     protected bool IsInternetConnected => Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
 
-    #endregion
-
-    #region -- Protected properties --
-
     IBlurService BlurService { get; }
+
+    private ICommand _closeCommand;
+    public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc(OnCloseCommandAsync);
 
     #endregion
 
@@ -46,5 +47,10 @@ public class BaseDialogViewModel : BindableBase, IDialogAware
     }
 
     #endregion
-}
 
+    #region -- Public helpers --
+
+    public virtual Task OnCloseCommandAsync() => Task.CompletedTask;
+
+    #endregion
+}

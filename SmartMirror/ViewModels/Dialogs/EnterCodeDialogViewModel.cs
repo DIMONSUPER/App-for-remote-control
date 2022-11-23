@@ -62,9 +62,6 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
     private ICommand _continueCommand;
     public ICommand ContinueCommand => _continueCommand ??= SingleExecutionCommand.FromFunc(OnContinueCommandAsync);
 
-    private ICommand _closeCommand;
-    public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc(OnCloseCommandAsync);
-
     #endregion
 
     #region -- Overrides --
@@ -93,6 +90,14 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
 
         IsEntryFocused = false;
     }
+
+    public override Task OnCloseCommandAsync()
+    {
+        RequestClose.Invoke();
+        
+        return Task.CompletedTask;
+    }
+
 
     #endregion
 
@@ -128,12 +133,6 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
         {
             //ToDo: no state
         }
-    }
-
-    private Task OnCloseCommandAsync()
-    {
-        RequestClose.Invoke();
-        return Task.CompletedTask;
     }
 
     #endregion
