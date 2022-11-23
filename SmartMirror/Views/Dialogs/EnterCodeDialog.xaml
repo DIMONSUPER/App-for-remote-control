@@ -22,16 +22,14 @@
             Stroke="{DynamicResource tcolor_i1}"
             BackgroundColor="{StaticResource cbg_i2}">
 
-            <VerticalStackLayout
-                Padding="30, 24"
-                Spacing="6">
+            <VerticalStackLayout Padding="30, 24, 30, 42">
 
-                <Label 
+                <Label
                     Style="{DynamicResource tstyle_i11}"
                     Text="{Binding Title}" />
 
                 <Border
-                    Margin="0, 10, 0, 0"
+                    Margin="0, 24, 0, 36"
                     Padding="1"
                     HeightRequest="76"
                     StrokeThickness="1"
@@ -40,10 +38,11 @@
                     BackgroundColor="{StaticResource cbg_i15}">
 
                     <controls:CustomNoBorderEntry
+                        VerticalOptions="Center"
                         IsEntryFocused="{Binding IsEntryFocused}"
-                        WidthRequest="419"
-                        Margin="24, 18"
+                        WidthRequest="370"
                         BackgroundColor="{DynamicResource cbg_i15}"
+                        Margin="24, 18"
                         FontSize="{DynamicResource tsize_i2}"
                         FontFamily="InterBold"
                         Text="{Binding CodeText}"
@@ -53,12 +52,26 @@
 
                 </Border>
 
-                <controls:ButtonLoader
-                    ButtonStyle="{DynamicResource ButtonStyle_i1}"
-                    ButtonText="{extensions:Translate Continue}"
-                    Command="{Binding ContinueCommand}"
-                    IsRunning="{Binding IsLoggingWithCode}"/>
+                <Grid
+                    RowDefinitions="Auto"
+                    ColumnSpacing="24"
+                    ColumnDefinitions="*, *">
 
+                   <Button
+                        Grid.Column="0"
+                        Style="{DynamicResource ButtonStyle_i2}"
+                        Text="{extensions:Translate Close}"
+                        Command="{Binding CloseCommand}"/>
+
+                   <controls:ButtonLoader
+                        Grid.Column="1"
+                        ButtonStyle="{DynamicResource ButtonStyle_i1}"
+                        ButtonText="{extensions:Translate Continue}"
+                        Command="{Binding ContinueCommand}"
+                        IsRunning="{Binding IsLoggingWithCode}"/>
+
+                </Grid>
+    
             </VerticalStackLayout>
 
         </Border>
