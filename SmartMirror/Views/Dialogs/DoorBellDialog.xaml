@@ -10,7 +10,7 @@
                         x:Class="SmartMirror.Views.Dialogs.DoorBellDialog"
                         x:DataType="vm:DoorBellDialogViewModel">
 
-    <Border WidthRequest="836"
+    <Border Margin="0, 52"
             StrokeThickness="0.75"
             StrokeShape="RoundRectangle 9"
             Stroke="{DynamicResource tcolor_i1}"
@@ -22,11 +22,12 @@
                    Style="{StaticResource tstyle_i11}"/>
 
             <Frame Margin="0,26,0,0"
-                   Padding="1"
+                   Padding="2"
                    HasShadow="False"
+                   HeightRequest="362"
+                   WidthRequest="619"
                    CornerRadius="9"
                    BorderColor="{DynamicResource cbg_i4}"
-                   HeightRequest="449"
                    IsClippedToBounds="True"
                    BackgroundColor="Transparent">
 
@@ -36,20 +37,15 @@
 
                     <controls:CustomStateView.CompleteContent>
 
-                        <Frame Padding="0"
-                               HasShadow="False"
-                               IsClippedToBounds="True"
-                               CornerRadius="9">
-
-                            <video:Video IsOnTop="{Binding IsVideoOnTop}"
-                                         BackgroundColor="{DynamicResource cbg_i2}"
-                                         Action="{Binding VideoAction}"
-                                         Source="{Binding VideoSource, TargetNullValue={x:Null}}"
-                                         VideoPlaybackErrorCommand="{Binding VideoPaybackErrorCommand}"
-                                         PlayerVolume="{Binding Source={Reference soundSlider}, Path=Value}"
-                                         x:Name="video"/>
-
-                        </Frame>
+                        <video:Video IsOnTop="{Binding IsVideoOnTop}"
+                                     HorizontalOptions="Center"
+                                     HeightRequest="346"
+                                     BackgroundColor="{DynamicResource cbg_i2}"
+                                     Action="{Binding VideoAction}"
+                                     Source="{Binding VideoSource, TargetNullValue={x:Null}}"
+                                     VideoPlaybackErrorCommand="{Binding VideoPaybackErrorCommand}"
+                                     PlayerVolume="{Binding Source={Reference soundSlider}, Path=Value}"
+                                     x:Name="video"/>
 
                     </controls:CustomStateView.CompleteContent>
 
