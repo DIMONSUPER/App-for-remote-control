@@ -110,6 +110,7 @@
 		<None Remove="Xamarin.AndroidX.Navigation.UI" />
 		<None Remove="Xamarin.Google.Crypto.Tink.Android" />
 		<None Remove="Xamarin.AndroidX.Legacy.Support.V4" />
+		<None Remove="Services\Keyboard\" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.0-preview.1" />
@@ -156,6 +157,7 @@
 		<Folder Include="Models\DTO\" />
 		<Folder Include="Services\Blur\" />
 		<Folder Include="Services\Permissions\" />
+		<Folder Include="Services\Keyboard\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Controls\BadgeTitleView.xaml">
@@ -331,6 +333,9 @@
 		<MauiXaml Update="Controls\ButtonLoader.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\BaseDialogView.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Update="Resources\Strings\Strings.resx">
@@ -406,7 +411,7 @@
 		<DocumentationFile>bin\DEV\net7.0-android\SmartMirror.xml</DocumentationFile>
 		<AndroidManagedSymbols>true</AndroidManagedSymbols>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
-		<AotAssemblies>true</AotAssemblies>
+		<RunAOTCompilation>true</RunAOTCompilation>
 		<AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
 		<AndroidLinkMode>SdkOnly</AndroidLinkMode>
 	</PropertyGroup>
@@ -416,7 +421,7 @@
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<DebugSymbols>true</DebugSymbols>
 		<Optimize>true</Optimize>
-		<AotAssemblies>true</AotAssemblies>
+		<RunAOTCompilation>true</RunAOTCompilation>
 		<AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>

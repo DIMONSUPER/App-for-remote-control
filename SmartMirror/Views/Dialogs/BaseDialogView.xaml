@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Grid xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
+      xmlns:prismServices="clr-namespace:Prism.Services.Xaml;assembly=Prism.Maui"
+      prismServices:DialogLayout.CloseOnBackgroundTapped="False"
+      prismServices:DialogLayout.UseMask="False"
+      x:Class="SmartMirror.Views.Dialogs.BaseDialogView"
+      Margin="{Binding KeyboardMargin,Mode=OneWay,Converter={x:StaticResource doubleToBottomThiknessConverter}}"
+      x:DataType="vm:BaseDialogViewModel"/>
+

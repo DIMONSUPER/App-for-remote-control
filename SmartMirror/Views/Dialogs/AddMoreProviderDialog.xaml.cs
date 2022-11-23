@@ -1,6 +1,6 @@
 namespace SmartMirror.Views.Dialogs;
 
-public partial class AddMoreProviderDialog : Frame
+public partial class AddMoreProviderDialog : BaseDialogView
 {
 	public AddMoreProviderDialog()
 	{

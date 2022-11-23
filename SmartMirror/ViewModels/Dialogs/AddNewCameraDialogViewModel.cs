@@ -7,21 +7,25 @@ using System.Windows.Input;
 using SmartMirror.Views.Dialogs;
 using Prism.Services;
 using SmartMirror.Enums;
+using SmartMirror.Services.Keyboard;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
     public class AddNewCameraDialogViewModel : BaseDialogViewModel
     {
+        private const int TIMEOUT_SECONDS = 30;
+
         private readonly IDialogService _dialogService;
         private readonly ICamerasService _camerasService;
+
         private CancellationTokenSource _verifyingCancellationTokenSource;
-        private const int TIMEOUT_SECONDS = 30;
 
         public AddNewCameraDialogViewModel(
             IBlurService blurService,
             IDialogService dialogService,
-            ICamerasService camerasService)
-            : base(blurService)
+            ICamerasService camerasService,
+            IKeyboardService keyboardService)
+            : base(blurService, keyboardService)
         {
             _dialogService = dialogService;
             _camerasService = camerasService;
@@ -71,13 +75,6 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _password, value);
         }
 
-        private bool _isIpAddressEntryFocused;
-        public bool IsIpAddressEntryFocused
-        {
-            get => _isIpAddressEntryFocused;
-            set => SetProperty(ref _isIpAddressEntryFocused, value);
-        }
-
         private ICommand _addCameraCommand;
         public ICommand AddCameraCommand => _addCameraCommand ??= SingleExecutionCommand.FromFunc(OnAddCommandAsync);
 
@@ -94,7 +91,6 @@ namespace SmartMirror.ViewModels.Dialogs
                 Title = title;
 
                 await Task.Delay(FOCUS_DELAY);
-                IsIpAddressEntryFocused = true;
             }
         }
 
@@ -102,7 +98,6 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             base.OnDialogClosed();
 
-            IsIpAddressEntryFocused = false;
             _verifyingCancellationTokenSource?.Cancel();
             _verifyingCancellationTokenSource?.Dispose();
         }
@@ -192,10 +187,6 @@ namespace SmartMirror.ViewModels.Dialogs
                     { Constants.DialogsParameterKeys.TITLE, "FAIL" },
                     { Constants.DialogsParameterKeys.DESCRIPTION, Strings.NoResponseIPAddress },
                 });
-            }
-            else if (verifyResult is EResultStatus.Success)
-            {
-                IsIpAddressEntryFocused = true;
             }
         }
 
