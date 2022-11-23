@@ -192,8 +192,10 @@ namespace SmartMirror.ViewModels.Dialogs
 
                         _confirmPopupViewModel.OnDialogOpened(new DialogParameters
                         {
-                            { Constants.DialogsParameterKeys.TITLE, "Permission alert" },
-                            { Constants.DialogsParameterKeys.DESCRIPTION, "You need give permissions for microphone, open application settings?" }
+                            { Constants.DialogsParameterKeys.TITLE, Strings.NoMicrophonePermission },
+                            { Constants.DialogsParameterKeys.DESCRIPTION, Strings.PleaseGrantPermissionForMicrophone },
+                            { Constants.DialogsParameterKeys.CONFIRM_TEXT, Strings.OpenSettings },
+                            { Constants.DialogsParameterKeys.CANCEL_TEXT, Strings.Cancel },
                         });
 
                         var dialogResult = await Application.Current?.MainPage?.ShowPopupAsync(confirmPopup);

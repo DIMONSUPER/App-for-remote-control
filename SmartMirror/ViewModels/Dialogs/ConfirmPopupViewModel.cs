@@ -29,6 +29,20 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _description, value);
         }
 
+        private string _confirmText;
+        public string ConfirmText
+        {
+            get => _confirmText;
+            set => SetProperty(ref _confirmText, value);
+        }
+
+        private string _cancelText;
+        public string CancelText
+        {
+            get => _cancelText;
+            set => SetProperty(ref _cancelText, value);
+        }
+
         private ICommand _closeCommand;
         public ICommand CloseCommand
         {
@@ -53,6 +67,16 @@ namespace SmartMirror.ViewModels.Dialogs
             if (parameters.TryGetValue(Constants.DialogsParameterKeys.DESCRIPTION, out string description))
             {
                 Description = description;
+            }
+
+            if (parameters.TryGetValue(Constants.DialogsParameterKeys.CONFIRM_TEXT, out string confirmText))
+            {
+                ConfirmText = confirmText;
+            }
+
+            if (parameters.TryGetValue(Constants.DialogsParameterKeys.CANCEL_TEXT, out string cancelText))
+            {
+                CancelText = cancelText;
             }
         }
 
