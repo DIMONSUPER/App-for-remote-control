@@ -26,8 +26,8 @@
             <Frame Margin="0,26,0,0"
                    Padding="2"
                    HasShadow="False"
-				   HeightRequest="362"
-				   WidthRequest="619"
+                   HeightRequest="362"
+                   WidthRequest="619"
                    CornerRadius="9"
                    BorderColor="{DynamicResource cbg_i4}"
                    IsClippedToBounds="True"
@@ -40,8 +40,8 @@
                     <controls:CustomStateView.CompleteContent>
 
                         <video:Video IsOnTop="{Binding IsVideoOnTop}"
-									 HorizontalOptions="Center"
-									 HeightRequest="346"
+                                     HorizontalOptions="Center"
+                                     HeightRequest="346"
                                      BackgroundColor="{DynamicResource cbg_i2}"
                                      Action="{Binding VideoAction}"
                                      Source="{Binding VideoSource, TargetNullValue={x:Null}}"
