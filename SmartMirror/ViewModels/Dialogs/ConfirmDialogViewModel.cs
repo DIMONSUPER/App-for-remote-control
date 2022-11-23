@@ -1,5 +1,6 @@
 using SmartMirror.Helpers;
 using SmartMirror.Services.Blur;
+using SmartMirror.Services.Keyboard;
 using SmartMirror.Resources.Strings;
 using System.Windows.Input;
 
@@ -10,8 +11,9 @@ namespace SmartMirror.ViewModels.Dialogs
         private Action _confirmAction;
 
         public ConfirmDialogViewModel(
-            IBlurService blurService)
-            : base(blurService)
+            IBlurService blurService,
+            IKeyboardService keyboardService)
+            : base(blurService, keyboardService)
         {
         }
 

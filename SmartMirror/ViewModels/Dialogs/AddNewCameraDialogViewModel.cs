@@ -7,21 +7,25 @@ using System.Windows.Input;
 using SmartMirror.Views.Dialogs;
 using Prism.Services;
 using SmartMirror.Enums;
+using SmartMirror.Services.Keyboard;
 
 namespace SmartMirror.ViewModels.Dialogs
 {
     public class AddNewCameraDialogViewModel : BaseDialogViewModel
     {
+        private const int TIMEOUT_SECONDS = 30;
+
         private readonly IDialogService _dialogService;
         private readonly ICamerasService _camerasService;
+
         private CancellationTokenSource _verifyingCancellationTokenSource;
-        private const int TIMEOUT_SECONDS = 30;
 
         public AddNewCameraDialogViewModel(
             IBlurService blurService,
             IDialogService dialogService,
-            ICamerasService camerasService)
-            : base(blurService)
+            ICamerasService camerasService,
+            IKeyboardService keyboardService)
+            : base(blurService, keyboardService)
         {
             _dialogService = dialogService;
             _camerasService = camerasService;

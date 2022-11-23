@@ -1,6 +1,6 @@
 namespace SmartMirror.Views.Dialogs;
 
-public partial class EnterCodeDialog : Grid
+public partial class EnterCodeDialog : BaseDialogView
 {
     public EnterCodeDialog()
     {

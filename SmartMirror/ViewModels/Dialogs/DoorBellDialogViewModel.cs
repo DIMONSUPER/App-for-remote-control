@@ -5,6 +5,7 @@ using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Blur;
+using SmartMirror.Services.Keyboard;
 using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Permissions;
@@ -38,8 +39,9 @@ namespace SmartMirror.ViewModels.Dialogs
             ICamerasService camerasService,
             IAudioManager audioManager,
             ConfirmPopupViewModel confirmPopupViewModel,
-            IMapperService mapperService)
-            : base(blurService)
+            IMapperService mapperService,
+            IKeyboardService keyboardService)
+            : base(blurService, keyboardService)
         {
             _dialogService = dialogService;
             _permissionsService = permissionsService;
@@ -51,6 +53,7 @@ namespace SmartMirror.ViewModels.Dialogs
             _confirmPopupViewModel = confirmPopupViewModel;
 
             IsVideoOnTop = true;
+            IsKeyboardSensitive = false;
         }
 
         #region -- Public properties --

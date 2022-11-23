@@ -1,6 +1,6 @@
 namespace SmartMirror.Views.Dialogs;
 
-public partial class ScenarioSettingsDialog : Frame
+public partial class ScenarioSettingsDialog : BaseDialogView
 {
 	public ScenarioSettingsDialog()
 	{

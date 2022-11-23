@@ -1,93 +1,95 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Frame
+<dialogs:BaseDialogView
+    xmlns:dialogs="clr-namespace:SmartMirror.Views.Dialogs"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
-    xmlns:prismmaui="clr-namespace:Prism.Services.Xaml;assembly=Prism.Maui"
-    prismmaui:DialogLayout.UseMask="False"
-    Padding="0"
-    BackgroundColor="Transparent"
     x:Class="SmartMirror.Views.Dialogs.ScenarioSettingsDialog"
     x:DataType="vm:ScenarioSettingsDialogViewModel">
 
-    <Border
-        WidthRequest="479"
-        StrokeThickness="1"
-        StrokeShape="RoundRectangle 9"
-        Stroke="{DynamicResource tcolor_i1}"
-        BackgroundColor="{StaticResource cbg_i2}">
+    <Frame Padding="0"
+           BackgroundColor="Transparent">
 
-        <StackLayout
-            Padding="30, 24"
-            Spacing="6">
+        <Border
+            WidthRequest="479"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 9"
+            Stroke="{DynamicResource tcolor_i1}"
+            BackgroundColor="{StaticResource cbg_i2}">
 
-            <HorizontalStackLayout>
-                
+            <StackLayout
+                Padding="30, 24"
+                Spacing="6">
+
+                <HorizontalStackLayout>
+
+                    <Border
+                        HeightRequest="60"
+                        WidthRequest="60"
+                        Margin="0, 0, 15, 0"
+                        Padding="17"
+                        BackgroundColor="{DynamicResource cbg_i15}"
+                        StrokeShape="RoundRectangle 9">
+
+                        <Image
+                            Source="play_gray"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"/>
+
+                    </Border>
+
+                    <controls:CustomLabel
+                        Style="{DynamicResource tstyle_i11}"
+                        MaxLines="2"
+                        LineBreakMode="TailTruncation"
+                        VerticalTextAlignment="Center"
+                        WidthRequest="340"
+                        Text="{Binding Title}"/>
+
+                </HorizontalStackLayout>
+
                 <Border
-                    HeightRequest="60"
-                    WidthRequest="60"
-                    Margin="0, 0, 15, 0"
-                    Padding="17"
-                    BackgroundColor="{DynamicResource cbg_i15}"
-                    StrokeShape="RoundRectangle 9">
+                    Margin="0, 42, 0, 0"
+                    Padding="1"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 9"
+                    Stroke="{DynamicResource tcolor_i1}"
+                    BackgroundColor="{StaticResource cbg_i15}">
 
-                    <Image
-                        Source="play_gray"
-                        VerticalOptions="Center"
-                        HorizontalOptions="Center"/>
+                    <VerticalStackLayout>
+
+                        <controls:TitleAndSwitchView
+                            Title="{extensions:Translate ShowInScenarios}"
+                            IsToggled="{Binding IsShownInScenarios}"
+                            Padding="24, 18"/>
+
+                        <controls:TitleAndSwitchView
+                            Title="{extensions:Translate ReceiveNotifications}"
+                            IsToggled="{Binding IsReceiveNotifications}"
+                            Padding="24, 18"/>
+
+                        <controls:TitleAndSwitchView
+                            Title="{extensions:Translate AddToFavorites}"
+                            IsToggled="{Binding IsFavorite}"
+                            Padding="24, 18"/>
+
+                    </VerticalStackLayout>
 
                 </Border>
 
-                <controls:CustomLabel
-                    Style="{DynamicResource tstyle_i11}"
-                    MaxLines="2"
-                    LineBreakMode="TailTruncation"
-                    VerticalTextAlignment="Center"
-                    WidthRequest="340"
-                    Text="{Binding Title}"/>
+                <Button 
+                    Style="{DynamicResource ButtonStyle_i1}"
+                    HorizontalOptions="Center"
+                    Margin="0, 36, 0, 20"
+                    Text="{extensions:Translate Close}"
+                    Command="{Binding CloseCommand}"/>
 
-            </HorizontalStackLayout>
+            </StackLayout>
 
-            <Border
-                Margin="0, 42, 0, 0"
-                Padding="1"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 9"
-                Stroke="{DynamicResource tcolor_i1}"
-                BackgroundColor="{StaticResource cbg_i15}">
+        </Border>
 
-                <VerticalStackLayout>
+    </Frame>
 
-                    <controls:TitleAndSwitchView
-                        Title="{extensions:Translate ShowInScenarios}"
-                        IsToggled="{Binding IsShownInScenarios}"
-                        Padding="24, 18"/>
-
-                    <controls:TitleAndSwitchView
-                        Title="{extensions:Translate ReceiveNotifications}"
-                        IsToggled="{Binding IsReceiveNotifications}"
-                        Padding="24, 18"/>
-
-                    <controls:TitleAndSwitchView
-                        Title="{extensions:Translate AddToFavorites}"
-                        IsToggled="{Binding IsFavorite}"
-                        Padding="24, 18"/>
-
-                </VerticalStackLayout>
-
-            </Border>
-
-            <Button 
-                Style="{DynamicResource ButtonStyle_i1}"
-                HorizontalOptions="Center"
-                Margin="0, 36, 0, 20"
-                Text="{extensions:Translate Close}"
-                Command="{Binding CloseCommand}"/>
-
-        </StackLayout>
-
-    </Border>
-
-</Frame>
+</dialogs:BaseDialogView>

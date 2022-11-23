@@ -5,6 +5,7 @@ using SmartMirror.Models;
 using SmartMirror.Resources.Strings;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Blur;
+using SmartMirror.Services.Keyboard;
 using SmartMirror.Services.Cameras;
 
 namespace SmartMirror.ViewModels.Dialogs
@@ -18,8 +19,9 @@ namespace SmartMirror.ViewModels.Dialogs
         public CameraSettingsDialogViewModel(
             IBlurService blurService,
             ICamerasService camerasService,
-            IDialogService dialogService)
-            : base(blurService)
+            IDialogService dialogService,
+            IKeyboardService keyboardService)
+            : base(blurService, keyboardService)
         {
             _camerasService = camerasService;
             _dialogService = dialogService;

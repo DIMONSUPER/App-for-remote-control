@@ -2,6 +2,7 @@
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Blur;
 using SmartMirror.Services.Scenarios;
+using SmartMirror.Services.Keyboard;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -14,8 +15,9 @@ namespace SmartMirror.ViewModels.Dialogs
 
         public ScenarioSettingsDialogViewModel(
             IScenariosService scenariosService,
-            IBlurService blurService)
-            : base(blurService)
+            IBlurService blurService,
+            IKeyboardService keyboardService)
+            : base(blurService, keyboardService)
         {
             _scenariosService = scenariosService;
         }

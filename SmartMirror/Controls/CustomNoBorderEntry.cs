@@ -43,19 +43,8 @@ namespace SmartMirror.Controls
 
             if (propertyName == IsEntryFocusedProperty.PropertyName)
             {
-                var needToDisableFullscreenWhileKeyboardDisplayed = Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.R;
-
                 try
                 {
-                    if (IsEntryFocused && needToDisableFullscreenWhileKeyboardDisplayed)
-                    {
-                        Platform.CurrentActivity.Window.ClearFlags(WindowManagerFlags.Fullscreen);
-                    }
-                    else if (!IsEntryFocused && needToDisableFullscreenWhileKeyboardDisplayed)
-                    {
-                        Platform.CurrentActivity.Window.AddFlags(WindowManagerFlags.Fullscreen);
-                    }
-
                     if (this.Handler is EntryHandler entryHandler)
                     {
                         UpdateFocus(entryHandler);

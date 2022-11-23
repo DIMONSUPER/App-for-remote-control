@@ -2,6 +2,7 @@
 using SmartMirror.Helpers;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Blur;
+using SmartMirror.Services.Keyboard;
 using SmartMirror.Views.Dialogs;
 using System.Windows.Input;
 
@@ -15,8 +16,9 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
     public EnterCodeDialogViewModel(
         IAqaraService aqaraService,
         IBlurService blurService,
-        IDialogService dialogService)
-        : base(blurService)
+        IDialogService dialogService,
+        IKeyboardService keyboardService)
+        : base(blurService, keyboardService)
     {
         _aqaraService = aqaraService;
         _dialogService = dialogService;
