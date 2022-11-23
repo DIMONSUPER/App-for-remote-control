@@ -158,7 +158,7 @@ namespace SmartMirror.Services.Devices
             });
         }
 
-        public Task<AOResult> UpdateDeviceAsync(DeviceBindableModel bindableDevice)
+        public Task<AOResult> UpdateDeviceAsync(DeviceBindableModel bindableDevice, bool needChangeEvent = true)
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
@@ -178,7 +178,10 @@ namespace SmartMirror.Services.Devices
 
                     device = bindableDevice;
 
-                    AllDevicesChanged?.Invoke(this, EventArgs.Empty);
+                    if (needChangeEvent)
+                    {
+                        AllDevicesChanged?.Invoke(this, EventArgs.Empty);
+                    }
                 }
             });
         }

@@ -10,7 +10,7 @@
                         x:Class="SmartMirror.Views.Dialogs.DoorBellDialog"
                         x:DataType="vm:DoorBellDialogViewModel">
 
-    <Border WidthRequest="929"
+    <Border WidthRequest="836"
             StrokeThickness="0.75"
             StrokeShape="RoundRectangle 9"
             Stroke="{DynamicResource tcolor_i1}"
@@ -26,7 +26,7 @@
                    HasShadow="False"
                    CornerRadius="9"
                    BorderColor="{DynamicResource cbg_i4}"
-                   HeightRequest="499"
+                   HeightRequest="449"
                    IsClippedToBounds="True"
                    BackgroundColor="Transparent">
 
@@ -65,6 +65,7 @@
                 <Button Style="{DynamicResource ButtonStyle_i1}"
                         BackgroundColor="{DynamicResource cbg_i18}"
                         Text="{extensions:Translate End}"
+                        TextColor="{x:DynamicResource tcolor_i1}"
                         Command="{Binding OnEndCommand}"/>
 
                 <Button Style="{DynamicResource ButtonStyle_i1}"
@@ -84,29 +85,33 @@
 
                 </Button>
 
-                <Frame HasShadow="False"
-                        Padding="0"
-                        WidthRequest="279"
-                        CornerRadius="35"
-                        BackgroundColor="{DynamicResource cbg_i3}">
+                <Frame
+                    HasShadow="False"
+                    Padding="0"
+                    WidthRequest="279"
+                    CornerRadius="35"
+                    BackgroundColor="{DynamicResource cbg_i3}">
 
-                    <Grid Margin="18,0"
-                            ColumnDefinitions="*, 40"
-                            ColumnSpacing="16">
+                    <Grid
+                        Margin="18,0"
+                        ColumnDefinitions="*, 40"
+                        ColumnSpacing="16">
 
-                        <Slider x:Name="soundSlider"
-                                Grid.Column="0"
-                                Maximum="100"
-                                Value="{Binding VideoPlayerVolume}"
-                                ThumbImageSource="sound_thumb"
-                                MinimumTrackColor="{StaticResource cbg_i10}"
-                                MaximumTrackColor="{StaticResource cbg_i10}">
+                        <controls:CustomSlider
+                            x:Name="soundSlider"
+                            Grid.Column="0"
+                            Maximum="100"
+                            Value="{Binding VideoPlayerVolume}"
+                            ThumbImageSource="sound_thumb"
+                            MinimumTrackColor="{x:DynamicResource cbg_i10}"
+                            MaximumTrackColor="{x:DynamicResource cbg_i20}">
 
-                            <Slider.Triggers>
+                            <controls:CustomSlider.Triggers>
 
-                                <DataTrigger TargetType="Slider"
-                                                Binding="{Binding VideoPlayerVolume}"
-                                                Value="0">
+                                <DataTrigger
+                                    TargetType="controls:CustomSlider"
+                                    Binding="{Binding VideoPlayerVolume}"
+                                    Value="0">
 
                                     <Setter TargetName="soundImage"
                                             Property="Image.Source"
@@ -114,13 +119,16 @@
 
                                 </DataTrigger>
 
-                            </Slider.Triggers>
+                            </controls:CustomSlider.Triggers>
 
-                        </Slider>
+                        </controls:CustomSlider>
 
-                        <Image x:Name="soundImage"
-                                Grid.Column="1"
-                                Source="sound_up"/>
+                        <Image
+                            x:Name="soundImage"
+                            Grid.Column="1"
+                            HeightRequest="28"
+                            WidthRequest="28"
+                            Source="sound_up"/>
 
                     </Grid>
 
