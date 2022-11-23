@@ -70,8 +70,7 @@
                         Command="{Binding CloseCommand}"/>
 
                    <controls:ButtonLoader
-                        Grid.Column="1"                    
-
+                        Grid.Column="1"
                         ButtonStyle="{DynamicResource ButtonStyle_i1}"
                         ButtonText="{extensions:Translate Continue}"
                         Command="{Binding ContinueCommand}"
