@@ -102,13 +102,6 @@ namespace SmartMirror.ViewModels.Dialogs
             _verifyingCancellationTokenSource?.Dispose();
         }
 
-        public override Task OnCloseCommandAsync()
-        {
-            RequestClose.Invoke();
-
-            return Task.CompletedTask;
-        }
-
         #endregion
 
         #region -- Private helpers --

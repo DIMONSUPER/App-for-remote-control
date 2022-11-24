@@ -78,14 +78,6 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
         await Task.Delay(FOCUS_DELAY);
     }
 
-    public override Task OnCloseCommandAsync()
-    {
-        RequestClose.Invoke();
-        
-        return Task.CompletedTask;
-    }
-
-
     #endregion
 
     #region -- Private helpers --
