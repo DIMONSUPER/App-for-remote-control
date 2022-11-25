@@ -76,7 +76,7 @@ namespace SmartMirror.ViewModels.Dialogs
         }
 
         private ICommand _addCameraCommand;
-        public ICommand AddCameraCommand => _addCameraCommand ??= SingleExecutionCommand.FromFunc(OnAddCommandAsync);
+        public ICommand AddCameraCommand => _addCameraCommand ??= SingleExecutionCommand.FromFunc(OnAddCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
         #endregion
 

@@ -6,52 +6,55 @@ public class SingleExecutionCommand : ICommand
 {
     public static bool IsNavigating;
 
+    private static object _locker = new();
+
     private Func<object, Task> _func;
     private bool _isExecuting;
+    private bool _useNavigation;
     private int _delayMillisec;
-
-    private SingleExecutionCommand(object onContinueCommand)
-    {
-
-    }
 
     public SingleExecutionCommand()
     {
     }
 
-    public static SingleExecutionCommand FromFunc(Func<Task> func, int delayMillisec = 400)
+    private SingleExecutionCommand(object onContinueCommand)
     {
-        var ret = new SingleExecutionCommand
+    }
+
+    public static SingleExecutionCommand FromFunc(Func<Task> func, bool useNavigation = false, int delayMillisec = 400)
+    {
+        return new SingleExecutionCommand
         {
             _func = (obj) => func(),
+            _useNavigation = useNavigation,
             _delayMillisec = delayMillisec
         };
-        return ret;
     }
 
-    public static SingleExecutionCommand FromFunc(Func<object, Task> func, int delayMillisec = 400)
+    public static SingleExecutionCommand FromFunc(Func<object, Task> func, bool useNavigation = false, int delayMillisec = 400)
     {
-        var ret = new SingleExecutionCommand
+        return new SingleExecutionCommand
         {
             _func = func,
+            _useNavigation = useNavigation,
             _delayMillisec = delayMillisec
         };
-        return ret;
     }
 
-    public static SingleExecutionCommand FromFunc<T>(Func<T, Task> func, int delayMillisec = 400)
+    public static SingleExecutionCommand FromFunc<T>(Func<T, Task> func, bool useNavigation = false, int delayMillisec = 400)
     {
-        var ret = new SingleExecutionCommand
+        return new SingleExecutionCommand
         {
             _func = (object obj) =>
             {
                 var objT = default(T);
                 objT = (T)obj;
+
                 return func(objT);
             },
+            _useNavigation = useNavigation,
             _delayMillisec = delayMillisec
         };
-        return ret;
     }
 
     internal static ICommand FromFunc(ICommand goBackCommand)
@@ -65,17 +68,35 @@ public class SingleExecutionCommand : ICommand
 
     public bool CanExecute(object parameter)
     {
-        //TODO: improve it
         return true;
     }
 
     public async void Execute(object parameter)
     {
-        if (_isExecuting || IsNavigating) return;
+        lock (_locker)
+        {
+            if (_isExecuting || IsNavigating) return;
 
-        _isExecuting = true;
+            IsNavigating = _useNavigation;
+
+            _isExecuting = true;
+        }
+
+        if (_useNavigation)
+        {
+            await Task.Run(async () =>
+            {
+                if (_delayMillisec > 0)
+                {
+                    await Task.Delay(_delayMillisec);
+
+                    IsNavigating = false;
+                }
+            });
+        }
 
         await _func(parameter);
+
         if (_delayMillisec > 0)
         {
             await Task.Delay(_delayMillisec);

@@ -108,7 +108,7 @@ namespace SmartMirror.ViewModels.Dialogs
         }
 
         private ICommand _onTalkCommand;
-        public ICommand OnTalkCommand => _onTalkCommand ??= SingleExecutionCommand.FromFunc(OnTalkCommandAsync);
+        public ICommand OnTalkCommand => _onTalkCommand ??= SingleExecutionCommand.FromFunc(OnTalkCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
         private ICommand _onEndCommand;
         public ICommand OnEndCommand => _onEndCommand ??= SingleExecutionCommand.FromFunc(OnEndCommandAsync);

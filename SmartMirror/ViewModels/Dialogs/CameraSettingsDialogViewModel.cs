@@ -58,7 +58,7 @@ namespace SmartMirror.ViewModels.Dialogs
         }
 
         private ICommand _removeCameraCommand;
-        public ICommand RemoveCameraCommand => _removeCameraCommand ??= SingleExecutionCommand.FromFunc(OnRemoveCameraCommandAsync);
+        public ICommand RemoveCameraCommand => _removeCameraCommand ??= SingleExecutionCommand.FromFunc(OnRemoveCameraCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
         #endregion
 
