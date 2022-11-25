@@ -133,19 +133,28 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
     {
-        base.OnConnectivityChanged(sender, e);
-
-        IsNotificationsRefreshing = !IsInternetConnected;
-
-        if (!IsDataLoading && DataState != EPageState.Complete)
+        if (IsInternetConnected)
         {
-            await UpdateAllDataAndChangeStateAsync(); 
+            if (!IsDataLoading && DataState != EPageState.Complete)
+            {
+                DataState = EPageState.LoadingSkeleton;
+
+                await UpdateAllDataAndChangeStateAsync();
+            } 
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+
+            IsNotificationsRefreshing = false;
         }
     }
 
     #endregion
 
     #region -- Private helpers --
+
+    private int SelectedNotificationCategoryIndex => NotificationCategories.IndexOf(SelectedNotificationCategory);
 
     private async void OnNotificationReceived(object sender, NotificationGroupItemBindableModel notification)
     {
@@ -162,38 +171,37 @@ public class NotificationsPageViewModel : BaseTabViewModel
         await UpdateAllDataAndChangeStateAsync();
     }
 
-    private int SelectedNotificationCategoryIndex => NotificationCategories.IndexOf(SelectedNotificationCategory);
-
     private async Task UpdateAllDataAndChangeStateAsync()
     {
         if (IsInternetConnected)
         {
-            DataState = EPageState.LoadingSkeleton;
-
             await LoadAllNotificationsAsync();
 
-            if (_allNotifications.Any())
-            {
-                await Task.WhenAll(
-                    LoadRoomsNotificationSourcesAsync(), 
-                    LoadDevicesNotificationSourcesAsync());
-
-                SelectedNotificationCategory = NotificationCategories.FirstOrDefault();
-
-                SetNotificationSources();
-
-                FilterNotifications();
-
-                DataState = EPageState.Complete;
-            }
-            else
-            {
-                DataState = EPageState.Empty;
-            } 
+            await LoadNotificationSourcesAndApplyFilterAsync();
         }
         else
         {
             DataState = EPageState.NoInternet;
+        }
+    }
+
+    private async Task LoadNotificationSourcesAndApplyFilterAsync()
+    {
+        if (_allNotifications.Any())
+        {
+            await Task.WhenAll(
+                LoadRoomsNotificationSourcesAsync(),
+                LoadDevicesNotificationSourcesAsync());
+
+            SetNotificationSources();
+
+            FilterNotifications();
+
+            DataState = EPageState.Complete;
+        }
+        else
+        {
+            DataState = EPageState.Empty;
         }
     }
 
@@ -217,14 +225,9 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private void SelectNotificationSource(NotificationSourceBindableModel notificationSource)
     {
-        if (SelectedNotificationSource is not null)
+        foreach (var source in NotificationsSources)
         {
-            SelectedNotificationSource.IsSelected = false;
-        }
-
-        if (notificationSource is not null)
-        {
-            notificationSource.IsSelected = true;
+            source.IsSelected = source.Id == notificationSource.Id;
         }
 
         SelectedNotificationSource = notificationSource;
@@ -346,7 +349,11 @@ public class NotificationsPageViewModel : BaseTabViewModel
             _ => new(_roomsNotificationSource),
         };
 
-        SelectNotificationSource(NotificationsSources.FirstOrDefault());
+        var notificationSource = (SelectedNotificationSource is null)
+            ? NotificationsSources.FirstOrDefault()
+            : NotificationsSources.FirstOrDefault(x => x.Id == SelectedNotificationSource.Id) ?? NotificationsSources.FirstOrDefault();
+
+        SelectNotificationSource(notificationSource);
     }
 
     private async Task OnTryAgainCommandAsync()
@@ -357,28 +364,11 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
             var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
 
-            var isDataLoaded = await TaskRepeater.RepeatAsync(LoadAllNotificationsAsync, executionTime);
+            await TaskRepeater.RepeatAsync(LoadAllNotificationsAsync, executionTime);
 
             if (IsInternetConnected)
             {
-                if (isDataLoaded)
-                {
-                    await Task.WhenAll(
-                        LoadRoomsNotificationSourcesAsync(),
-                        LoadDevicesNotificationSourcesAsync());
-
-                    SelectedNotificationCategory = NotificationCategories.FirstOrDefault();
-
-                    SetNotificationSources();
-
-                    FilterNotifications();
-
-                    DataState = EPageState.Complete;
-                }
-                else
-                {
-                    DataState = EPageState.Empty;
-                }
+                await LoadNotificationSourcesAndApplyFilterAsync();
             }
             else
             {
@@ -391,32 +381,11 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         if (!IsDataLoading)
         {
-            await UpdateAllDataAndChangeStateAsync();
+            await LoadAllNotificationsAsync();
+
+            await LoadNotificationSourcesAndApplyFilterAsync();
 
             IsNotificationsRefreshing = false;
-        }
-    }
-
-    private async Task LoadNotificationsAndChangeStateAsync()
-    {
-        if (IsInternetConnected)
-        {
-            var isDataLoaded = await LoadAllNotificationsAsync();
-
-            if (IsInternetConnected)
-            {
-                DataState = isDataLoaded
-                    ? EPageState.Complete
-                    : EPageState.Empty;
-            }
-            else
-            {
-                DataState = EPageState.NoInternet;
-            }
-        }
-        else
-        {
-            DataState = EPageState.NoInternet;
         }
     }
 
