@@ -298,7 +298,7 @@
         <value>The camera will be removed</value>
     </data>
     <data name="EnterIPAddress" xml:space="preserve">
-        <value>Enter IP Address</value>
+        <value>Enter IP Address or URL</value>
     </data>
     <data name="EnterPassword" xml:space="preserve">
         <value>Enter Password</value>

@@ -114,13 +114,5 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
         }
     }
 
-    private Task OnCloseCommandAsync()
-    {
-        RequestClose.Invoke();
-
-        return Task.CompletedTask;
-    }
-
     #endregion
 }
-

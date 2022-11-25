@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+using System.Windows.Input;
+using SmartMirror.Helpers;
+using System.ComponentModel;
 using SmartMirror.Services.Blur;
 using SmartMirror.Services.Keyboard;
 
@@ -53,13 +55,12 @@ public class BaseDialogViewModel : BindableBase, IDialogAware
 
     protected bool IsInternetConnected => Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
 
-    #endregion
-
-    #region -- Protected properties --
-
     protected IBlurService BlurService { get; }
 
     protected IKeyboardService KeyboardService { get; }
+
+    private ICommand _closeCommand;
+    public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc(OnCloseCommandAsync);
 
     #endregion
 
@@ -109,6 +110,17 @@ public class BaseDialogViewModel : BindableBase, IDialogAware
 
     #endregion
 
+    #region -- Public helpers --
+
+    public virtual Task OnCloseCommandAsync()
+    {
+        RequestClose.Invoke();
+
+        return Task.CompletedTask;
+    }
+
+    #endregion
+
     #region -- Private helpers --
 
     private void SubscribeToKeyboardChanges()
@@ -153,4 +165,3 @@ public class BaseDialogViewModel : BindableBase, IDialogAware
 
     #endregion
 }
-

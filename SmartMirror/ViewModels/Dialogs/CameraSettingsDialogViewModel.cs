@@ -57,9 +57,6 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _cameraModel, value);
         }
 
-        private ICommand _closeCommand;
-        public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc(OnCloseCommandAsync);
-
         private ICommand _removeCameraCommand;
         public ICommand RemoveCameraCommand => _removeCameraCommand ??= SingleExecutionCommand.FromFunc(OnRemoveCameraCommandAsync);
 
@@ -123,13 +120,6 @@ namespace SmartMirror.ViewModels.Dialogs
                     { Constants.DialogsParameterKeys.RESULT, true },
                 });
             }
-        }
-
-        private Task OnCloseCommandAsync()
-        {
-            RequestClose.Invoke();
-
-            return Task.CompletedTask;
         }
 
         #endregion

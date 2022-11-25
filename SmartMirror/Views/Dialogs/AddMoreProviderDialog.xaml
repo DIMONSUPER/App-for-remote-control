@@ -17,6 +17,7 @@
         BackgroundColor="Transparent">
 
         <Border
+            WidthRequest="479"
             Padding="30, 24"
             StrokeThickness="0.75"
             StrokeShape="RoundRectangle 9"
@@ -71,10 +72,11 @@
                     Source="google_logo"/>
 
                 <controls:ButtonLoader
-                     ButtonStyle="{DynamicResource ButtonStyle_i1}"
-                     ButtonText="{extensions:Translate Finish}"
-                     Command="{Binding FinishCommand}"
-                     IsRunning="{Binding IsFinishButtonBusy}"/>
+                    HorizontalOptions="CenterAndExpand"
+                    ButtonStyle="{DynamicResource ButtonStyle_i1}"
+                    ButtonText="{extensions:Translate Finish}"
+                    Command="{Binding FinishCommand}"
+                    IsRunning="{Binding IsFinishButtonBusy}"/>
 
             </VerticalStackLayout>
 

@@ -67,9 +67,6 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _accessory, value);
         }
 
-        private ICommand _closeCommand;
-        public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc(OnCloseCommandAsync);
-
         private ICommand _changeUnitMeasureCommand;
         public ICommand ChangeUnitMeasureCommand => _changeUnitMeasureCommand ??= SingleExecutionCommand.FromFunc<EUnitMeasure>(OnChangeUnitMeasureCommandAsync);
 
@@ -121,13 +118,6 @@ namespace SmartMirror.ViewModels.Dialogs
             Accessory.UnitMeasure = unitMeasure;
 
             return _devicesService.UpdateDeviceAsync(Accessory);
-        }
-
-        private Task OnCloseCommandAsync()
-        {
-            RequestClose.Invoke();
-
-            return Task.CompletedTask;
         }
 
         #endregion
