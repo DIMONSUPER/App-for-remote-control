@@ -74,7 +74,7 @@ namespace SmartMirror.Platforms.Android.Controls
                     VideoLoadingState = EVideoLoadingState.Preparing;
                 }
             }
-            catch
+            catch(Exception ex)
             {
             }
         }
@@ -143,9 +143,9 @@ namespace SmartMirror.Platforms.Android.Controls
         {
             ResetVideoPlayer();
 
-            if (_video?.VideoPlaybackErrorCommand is not null && _video.VideoPlaybackErrorCommand.CanExecute(null))
+            if (_video?.VideoPlaybackErrorCommand is not null && _video.VideoPlaybackErrorCommand.CanExecute(e?.What))
             {
-                _video.VideoPlaybackErrorCommand.Execute(null);
+                _video.VideoPlaybackErrorCommand.Execute(e?.What.ToString());
             }
         }
 

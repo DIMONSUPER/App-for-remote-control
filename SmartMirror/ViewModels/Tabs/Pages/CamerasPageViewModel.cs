@@ -6,12 +6,16 @@ using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Mapper;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Tabs.Pages;
 
 public class CamerasPageViewModel : BaseTabViewModel
 {
+    private const int CAMERA_TIME_CHECK_SECONDS = 5;
+    private CancellationTokenSource _cameraCancellationTokenSource;
+
     private readonly IMapperService _mapperService;
     private readonly ICamerasService _camerasService;
 
@@ -68,7 +72,7 @@ public class CamerasPageViewModel : BaseTabViewModel
     public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
 
     private ICommand _videoPaybackErrorCommand;
-    public ICommand VideoPaybackErrorCommand => _videoPaybackErrorCommand ??= SingleExecutionCommand.FromFunc(OnVideoPaybackErrorCommandAsync);
+    public ICommand VideoPaybackErrorCommand => _videoPaybackErrorCommand ??= SingleExecutionCommand.FromFunc<string>(OnVideoPaybackErrorCommandAsync);
 
     #endregion
 
@@ -78,17 +82,23 @@ public class CamerasPageViewModel : BaseTabViewModel
     {
         base.OnAppearing();
 
+        _cameraCancellationTokenSource = new();
+
         if (!IsDataLoading)
         {
             DataState = EPageState.LoadingSkeleton;
 
             await LoadCamerasAndChangeStateAsync();
         }
+
+        _ = StartConnectionRunnerForEachCameraAsync().ConfigureAwait(false);
     }
 
     public override void OnDisappearing()
     {
         base.OnDisappearing();
+
+        _cameraCancellationTokenSource?.Cancel();
 
         VideoAction = EVideoAction.Pause;
     }
@@ -121,9 +131,9 @@ public class CamerasPageViewModel : BaseTabViewModel
         await LoadCamerasAndChangeStateAsync();
     }
 
-    private Task OnVideoPaybackErrorCommandAsync()
+    private Task OnVideoPaybackErrorCommandAsync(string error)
     {
-        Toast.Make(Strings.CannotPlayVideo).Show();
+        Toast.Make($"{Strings.CannotPlayVideo}: {error}").Show();
 
         return Task.CompletedTask;
     }
@@ -195,6 +205,35 @@ public class CamerasPageViewModel : BaseTabViewModel
         }
     }
 
+    private Task StartConnectionRunnerForEachCameraAsync()
+    {
+        foreach (var cam in Cameras)
+        {
+            StartRunnerAsync(cam).ConfigureAwait(false);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private async Task StartRunnerAsync(CameraBindableModel camera)
+    {
+        try
+        {
+            while (!_cameraCancellationTokenSource.IsCancellationRequested)
+            {
+                var isConnectedResponse = await _camerasService.CheckCameraConnection(camera, _cameraCancellationTokenSource.Token).ConfigureAwait(false);
+
+                camera.IsConnected = isConnectedResponse.IsSuccess && isConnectedResponse.Result;
+
+                await Task.Delay(TimeSpan.FromSeconds(CAMERA_TIME_CHECK_SECONDS), _cameraCancellationTokenSource.Token);
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"{nameof(StartRunnerAsync)}: {ex.Message}");
+        }
+    }
+
     private async Task<bool> LoadCamerasAsync()
     {
         bool isLoaded = false;
@@ -211,12 +250,6 @@ public class CamerasPageViewModel : BaseTabViewModel
                 });
 
                 Cameras = new(cameras);
-
-                foreach (var cam in Cameras)
-                {
-                    var isConnectedResponse = await _camerasService.CheckCameraConnection(cam);
-                    cam.IsConnected = isConnectedResponse.IsSuccess && isConnectedResponse.Result;
-                }
 
                 var camera = (SelectedCamera is null || !SelectedCamera.IsShown)
                     ? Cameras.FirstOrDefault()
