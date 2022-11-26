@@ -65,7 +65,7 @@
                         Command="{Binding OnEndCommand}"/>
 
                 <Button Style="{DynamicResource ButtonStyle_i1}"
-                        BackgroundColor="{DynamicResource cbg_i3}"
+                        Background="{DynamicResource cbg_i6}"
                         Text="{extensions:Translate Talk}"
                         Command="{Binding OnTalkCommand}">
 
@@ -73,7 +73,7 @@
 
                         <DataTrigger Binding="{Binding IsTalking}" Value="True" TargetType="Button">
 
-                            <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i6}"/>
+                            <Setter Property="Background" Value="{DynamicResource cbg_i3}"/>
 
                         </DataTrigger>
 
