@@ -148,7 +148,7 @@
                     <VisualState Name="Normal">
 
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i3}"/>
+                            <Setter Property="Background" Value="{DynamicResource cbg_i3}"/>
                         </VisualState.Setters>
 
                     </VisualState>
@@ -156,7 +156,7 @@
                     <VisualState Name="Pressed">
 
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i14}"/>
+                            <Setter Property="Background" Value="{DynamicResource cbg_i14}"/>
                         </VisualState.Setters>
 
                     </VisualState>
@@ -177,7 +177,7 @@
                     <VisualState Name="Normal">
 
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i2}"/>
+                            <Setter Property="Background" Value="{DynamicResource cbg_i2}"/>
                         </VisualState.Setters>
 
                     </VisualState>
@@ -185,7 +185,7 @@
                     <VisualState Name="Pressed">
 
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i19}"/>
+                            <Setter Property="Background" Value="{DynamicResource cbg_i19}"/>
                         </VisualState.Setters>
 
                     </VisualState>

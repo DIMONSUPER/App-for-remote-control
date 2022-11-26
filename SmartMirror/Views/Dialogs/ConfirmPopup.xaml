@@ -51,7 +51,7 @@
                         Grid.Column="0"
                         Style="{DynamicResource ButtonStyle_i1}"
                         Text="{Binding CancelText}"
-                        BackgroundColor="Transparent"
+                        Background="Transparent"
                         TextColor="#E9E9E9"
                         BorderColor="{DynamicResource cbg_i3}"
                         BorderWidth="0.75"

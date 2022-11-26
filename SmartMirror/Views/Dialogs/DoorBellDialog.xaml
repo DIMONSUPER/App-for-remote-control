@@ -59,7 +59,7 @@
                                    HorizontalOptions="Center">
 
                 <Button Style="{DynamicResource ButtonStyle_i1}"
-                        BackgroundColor="{DynamicResource cbg_i18}"
+                        Background="{DynamicResource cbg_i18}"
                         Text="{extensions:Translate End}"
                         TextColor="{x:DynamicResource tcolor_i1}"
                         Command="{Binding OnEndCommand}"/>
