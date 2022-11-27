@@ -30,17 +30,10 @@ namespace SmartMirror.Effects
         {
             if (bindable is VisualElement element)
             {
-                if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.S)
-                {
-                    SetBackgroundDithering(element);
+                SetBackgroundDithering(element);
 
-                    element.PropertyChanged -= OnElementPropertyChanged;
-                    element.PropertyChanged += OnElementPropertyChanged; 
-                }
-                else
-                {
-                    // TO DO: make background smoothing for SDK below 31
-                }
+                element.PropertyChanged -= OnElementPropertyChanged;
+                element.PropertyChanged += OnElementPropertyChanged; 
             }
         }
 
@@ -56,13 +49,20 @@ namespace SmartMirror.Effects
         {
             var isBackgroundDithered = GetIsDithered(element);
 
-            element.Dispatcher.Dispatch(() =>
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.S)
             {
-                if (element.Handler?.PlatformView is Android.Views.View view)
+                element.Dispatcher.Dispatch(() =>
                 {
-                    view.Background?.SetDither(isBackgroundDithered);
-                }
-            });
+                    if (element.Handler?.PlatformView is Android.Views.View view)
+                    {
+                        view.Background?.SetDither(isBackgroundDithered);
+                    }
+                });
+            }
+            else
+            {
+                // TO DO: make background smoothing for SDK below 31
+            }
         }
 
         #endregion
