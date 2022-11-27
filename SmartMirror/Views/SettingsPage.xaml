@@ -199,6 +199,7 @@
                                         behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}"/>
 
                                     <CollectionView
+                                        Margin="0, 0, 1, 0"
                                         ItemsSource="{Binding CategoryElements}"
                                         ItemTemplate="{StaticResource elementCategoryTemplateSelector}">
 
