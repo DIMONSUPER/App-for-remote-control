@@ -52,6 +52,25 @@
                                   Text="{Binding Name}"
                                   Style="{Binding NameFontStyle, Source={x:Reference deviceTemplate}}"/>
 
+            <Image Grid.Column="1"
+                   Grid.RowSpan="2"
+                   IsVisible="False"
+                   VerticalOptions="Start"
+                   HorizontalOptions="End"
+                   WidthRequest="140"
+                   Source="mock_camera_stream">
+
+                <Image.Triggers>
+
+                    <DataTrigger TargetType="Image" Binding="{Binding DeviceType}" Value="DoorbellStream">
+                        <Setter Property="IsVisible" Value="True"/>
+                    </DataTrigger>
+
+                </Image.Triggers>
+
+            </Image>
+
+
             <!-- NAME AND DESCRIPTION -->
             <Grid Grid.Row="2"
                   Grid.ColumnSpan="2"   
@@ -130,24 +149,6 @@
                     <Image.Triggers>
 
                         <DataTrigger TargetType="Image" Binding="{Binding Status}" Value="Disconnected">
-                            <Setter Property="IsVisible" Value="True"/>
-                        </DataTrigger>
-
-                    </Image.Triggers>
-
-                </Image>
-
-                <Image Grid.Column="1"
-                       IsVisible="False"
-                       HorizontalOptions="End"
-                       VerticalOptions="End"
-                       WidthRequest="125"
-                       HeightRequest="75"
-                       Source="mock_camera_stream">
-
-                    <Image.Triggers>
-
-                        <DataTrigger TargetType="Image" Binding="{Binding DeviceType}" Value="DoorbellStream">
                             <Setter Property="IsVisible" Value="True"/>
                         </DataTrigger>
 
