@@ -29,7 +29,7 @@
                 HorizontalOptions="Start"
                 StrokeShape="RoundRectangle 6"
                 BackgroundColor="{DynamicResource cbg_i1}"
-                HeightImage="20"
+                HeightImage="32"
                 HeightRequest="42"
                 WidthRequest="42"
                 Padding="9"

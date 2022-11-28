@@ -351,7 +351,7 @@ namespace SmartMirror.ViewModels
             {
                 vm.Model = m;
                 vm.Type = ECategoryType.Scenarios;
-                vm.ImageSource = "play_gray";
+                vm.ImageSource = Resources.IconsNames.clarity_pause_solid;
                 vm.TapCommand = ShowScenarioSettingsCommand;
             });
 
