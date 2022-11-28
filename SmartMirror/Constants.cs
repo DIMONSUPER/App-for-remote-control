@@ -103,7 +103,7 @@
         public static class Limits
         {
             public const int TIME_TO_ATTEMPT_UPDATE_IN_SECONDS = 15;
-            public const int DELAY_MILLISEC_NAVIGATION_COMMAND = 1200;
+            public const int DELAY_MILLISEC_NAVIGATION_COMMAND = 500;
         }
 
         public static class Analytics

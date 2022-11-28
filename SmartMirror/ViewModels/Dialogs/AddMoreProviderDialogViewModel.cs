@@ -44,19 +44,19 @@ namespace SmartMirror.ViewModels.Dialogs
         }
 
         private ICommand _loginWithAqaraCommand;
-        public ICommand LoginWithAqaraCommand => _loginWithAqaraCommand ??= SingleExecutionCommand.FromFunc(OnLoginWithAqaraCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
+        public ICommand LoginWithAqaraCommand => _loginWithAqaraCommand ??= SingleExecutionCommand.FromFunc(OnLoginWithAqaraCommandAsync);
 
         private ICommand _loginWithAmazonCommand;
-        public ICommand LoginWithAmazonCommand => _loginWithAmazonCommand ??= SingleExecutionCommand.FromFunc(OnLoginWithAmazonCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
+        public ICommand LoginWithAmazonCommand => _loginWithAmazonCommand ??= SingleExecutionCommand.FromFunc(OnLoginWithAmazonCommandAsync);
 
         private ICommand _loginWithAppleCommand;
-        public ICommand LoginWithAppleCommand => _loginWithAppleCommand ??= SingleExecutionCommand.FromFunc(OnLoginWithAppleCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
+        public ICommand LoginWithAppleCommand => _loginWithAppleCommand ??= SingleExecutionCommand.FromFunc(OnLoginWithAppleCommandAsync);
 
         private ICommand _loginWithGoogleCommand;
-        public ICommand LoginWithGoogleCommand => _loginWithGoogleCommand ??= SingleExecutionCommand.FromFunc(OnLoginWithGoogleCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
+        public ICommand LoginWithGoogleCommand => _loginWithGoogleCommand ??= SingleExecutionCommand.FromFunc(OnLoginWithGoogleCommandAsync);
 
         private ICommand _finishCommand;
-        public ICommand FinishCommand => _finishCommand ??= SingleExecutionCommand.FromFunc(OnFinishCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
+        public ICommand FinishCommand => _finishCommand ??= SingleExecutionCommand.FromFunc(OnFinishCommandAsync);
 
         #endregion
 

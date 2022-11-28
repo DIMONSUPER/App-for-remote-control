@@ -55,7 +55,7 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
     }
 
     private ICommand _continueCommand;
-    public ICommand ContinueCommand => _continueCommand ??= SingleExecutionCommand.FromFunc(OnContinueCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
+    public ICommand ContinueCommand => _continueCommand ??= SingleExecutionCommand.FromFunc(OnContinueCommandAsync);
 
     #endregion
 

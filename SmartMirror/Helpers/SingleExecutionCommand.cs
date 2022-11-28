@@ -75,24 +75,11 @@ public class SingleExecutionCommand : ICommand
     {
         lock (_locker)
         {
-            if (_isExecuting || IsNavigating) return;
+            if (_isExecuting || (IsNavigating && _useNavigation)) return;
 
             IsNavigating = _useNavigation;
 
             _isExecuting = true;
-        }
-
-        if (_useNavigation)
-        {
-            await Task.Run(async () =>
-            {
-                if (_delayMillisec > 0)
-                {
-                    await Task.Delay(_delayMillisec);
-
-                    IsNavigating = false;
-                }
-            });
         }
 
         await _func(parameter);
@@ -103,6 +90,11 @@ public class SingleExecutionCommand : ICommand
         }
 
         _isExecuting = false;
+
+        if (_useNavigation)
+        {
+            IsNavigating = false;
+        }
     }
 
     #endregion
