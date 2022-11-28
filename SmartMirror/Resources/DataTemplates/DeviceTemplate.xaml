@@ -58,6 +58,7 @@
                    VerticalOptions="Start"
                    HorizontalOptions="End"
                    WidthRequest="140"
+                   Margin="1"
                    Source="mock_camera_stream">
 
                 <Image.Triggers>
@@ -104,10 +105,10 @@
                 </Label>
 
                 <Label Grid.Column="1"
+                       Grid.RowSpan="2"
                        Text="{Binding AdditionalInfoFormatted}"
                        HorizontalTextAlignment="End"
                        VerticalTextAlignment="End"
-                       VerticalOptions="End"
                        Style="{Binding DescriptionLabelStyle,Source={x:Reference deviceTemplate}}">
 
                     <Label.Triggers>
@@ -141,7 +142,6 @@
                 <Image Grid.Column="1"
                        IsVisible="False"
                        HorizontalOptions="End"
-                       VerticalOptions="End"
                        WidthRequest="{Binding ActivityIndicatorSize, Source={x:Reference deviceTemplate}}"
                        HeightRequest="{Binding ActivityIndicatorSize, Source={x:Reference deviceTemplate}}"
                        Source="orange_triangle">
