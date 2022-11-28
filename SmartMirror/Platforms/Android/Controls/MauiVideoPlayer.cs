@@ -107,7 +107,8 @@ namespace SmartMirror.Platforms.Android.Controls
         public void UpdatePlayerVolume()
         {
             var volume = (float)Math.Min(100, Math.Max(0, _video.PlayerVolume)) / 100;
-            _mediaPlayer.SetVolume(volume, volume);
+
+            _mediaPlayer?.SetVolume(volume, volume);
         }
 
         #endregion
