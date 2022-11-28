@@ -6,7 +6,7 @@ public class SingleExecutionCommand : ICommand
 {
     public static bool IsNavigating;
 
-    private static object _locker = new();
+    private static readonly object _locker = new();
 
     private Func<object, Task> _func;
     private bool _isExecuting;
