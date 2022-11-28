@@ -13,6 +13,7 @@ using SmartMirror.Services.Scenarios;
 using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using SmartMirror.Services.Automation;
 
 namespace SmartMirror.ViewModels
 {
@@ -26,6 +27,7 @@ namespace SmartMirror.ViewModels
         private readonly ICamerasService _camerasService;
         private readonly IGoogleService _googleService;
         private readonly INotificationsService _notificationsService;
+        private readonly IAutomationService _automationService;
 
         private IEnumerable<ImageAndTitleBindableModel> _allAccessories = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios = Enumerable.Empty<ImageAndTitleBindableModel>();
@@ -46,6 +48,7 @@ namespace SmartMirror.ViewModels
             ICamerasService camerasService,
             IAqaraService aqaraService,
             INotificationsService notificationsService,
+            IAutomationService automationService,
             IGoogleService googleService)
             : base(navigationService)
         {
@@ -57,6 +60,7 @@ namespace SmartMirror.ViewModels
             _camerasService = camerasService;
             _googleService = googleService;
             _notificationsService = notificationsService;
+            _automationService = automationService;
 
             PageState = EPageState.LoadingSkeleton;
 
@@ -318,6 +322,7 @@ namespace SmartMirror.ViewModels
                 isLoaded &= await LoadAllScenariosAsync();
                 isLoaded &= await LoadAllCamerasAsync();
                 isLoaded &= await LoadAllNotificationsAsync();
+                isLoaded &= await LoadAllAutomations();
 
                 CreateProviders();
             }
@@ -358,6 +363,13 @@ namespace SmartMirror.ViewModels
             var scenarioCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Scenarios);
 
             scenarioCategory.Count = _allScenarios.Count().ToString();
+
+            return true;
+        }
+
+        private async Task<bool> LoadAllAutomations()
+        {
+            var automations = await _automationService.GetAllAutomationsAsync();
 
             return true;
         }

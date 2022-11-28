@@ -5,6 +5,7 @@ using SmartMirror.Controls;
 using SmartMirror.Handlers;
 using SmartMirror.Platforms.Android.Services;
 using SmartMirror.Services.Aqara;
+using SmartMirror.Services.Automation;
 using SmartMirror.Services.Blur;
 //using SmartMirror.Platforms.Services;
 //using SmartMirror.Services.Amazon;
@@ -101,6 +102,7 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IDevicesService, DevicesService>();
         containerRegistry.RegisterSingleton<IRoomsService, RoomsService>();
         containerRegistry.RegisterSingleton<IKeyboardService, KeyboardService>();
+        containerRegistry.RegisterSingleton<IAutomationService, AutomationService>();
         containerRegistry.RegisterInstance<IAudioManager>(AudioManager.Current);
 
         containerRegistry.RegisterSingleton<ConfirmPopupViewModel>();

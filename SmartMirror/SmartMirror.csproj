@@ -112,6 +112,7 @@
 		<None Remove="Xamarin.Google.Crypto.Tink.Android" />
 		<None Remove="Xamarin.AndroidX.Legacy.Support.V4" />
 		<None Remove="Services\Keyboard\" />
+		<None Remove="Services\Automation\" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.0-preview.1" />
@@ -159,6 +160,7 @@
 		<Folder Include="Services\Blur\" />
 		<Folder Include="Services\Permissions\" />
 		<Folder Include="Services\Keyboard\" />
+		<Folder Include="Services\Automation\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Controls\BadgeTitleView.xaml">
