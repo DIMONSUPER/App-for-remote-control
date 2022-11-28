@@ -59,13 +59,13 @@
                                    HorizontalOptions="Center">
 
                 <Button Style="{DynamicResource ButtonStyle_i1}"
-                        BackgroundColor="{DynamicResource cbg_i18}"
+                        Background="{DynamicResource cbg_i18}"
                         Text="{extensions:Translate End}"
                         TextColor="{x:DynamicResource tcolor_i1}"
                         Command="{Binding OnEndCommand}"/>
 
                 <Button Style="{DynamicResource ButtonStyle_i1}"
-                        BackgroundColor="{DynamicResource cbg_i3}"
+                        Background="{DynamicResource cbg_i6}"
                         Text="{extensions:Translate Talk}"
                         Command="{Binding OnTalkCommand}">
 
@@ -73,7 +73,7 @@
 
                         <DataTrigger Binding="{Binding IsTalking}" Value="True" TargetType="Button">
 
-                            <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i6}"/>
+                            <Setter Property="Background" Value="{DynamicResource cbg_i3}"/>
 
                         </DataTrigger>
 
