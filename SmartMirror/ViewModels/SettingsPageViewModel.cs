@@ -67,6 +67,7 @@ namespace SmartMirror.ViewModels
 
             _devicesService.AllDevicesChanged += OnAllDevicesChanged;
             _scenariosService.AllScenariosChanged += OnAllScenariosChanged;
+            _automationService.AllAutomationsChanged += OnAllAutomationsChanged;
 
             LoadCategories();
             SelectCategory(SelectedCategory ?? Categories.FirstOrDefault());
@@ -157,9 +158,9 @@ namespace SmartMirror.ViewModels
 
         #region -- Overrides --
 
-        public override void OnAppearing()
+        public override void OnNavigatedTo(INavigationParameters parameters)
         {
-            base.OnAppearing();
+            base.OnNavigatedTo(parameters);
 
             Task.Run(async () =>
             {
@@ -171,6 +172,7 @@ namespace SmartMirror.ViewModels
         {
             _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
             _scenariosService.AllScenariosChanged -= OnAllScenariosChanged;
+            _automationService.AllAutomationsChanged -= OnAllAutomationsChanged;
 
             base.Destroy();
         }
@@ -201,6 +203,11 @@ namespace SmartMirror.ViewModels
         private async void OnAllDevicesChanged(object sender, EventArgs e)
         {
             await LoadAllDevicesAsync();
+        }
+
+        private async void OnAllAutomationsChanged(object sender, EventArgs e)
+        {
+            await LoadAllAutomationsAsync();
         }
 
         private void LoadCategories()
@@ -331,7 +338,7 @@ namespace SmartMirror.ViewModels
                 isLoaded &= await LoadAllScenariosAsync();
                 isLoaded &= await LoadAllCamerasAsync();
                 isLoaded &= await LoadAllNotificationsAsync();
-                isLoaded &= await LoadAllAutomations();
+                isLoaded &= await LoadAllAutomationsAsync();
 
                 CreateProviders();
             }
@@ -376,7 +383,7 @@ namespace SmartMirror.ViewModels
             return true;
         }
 
-        private async Task<bool> LoadAllAutomations()
+        private async Task<bool> LoadAllAutomationsAsync()
         {
             var automations = await _automationService.GetAllAutomationsAsync();
 
