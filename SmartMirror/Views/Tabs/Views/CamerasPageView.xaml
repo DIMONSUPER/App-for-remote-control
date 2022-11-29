@@ -2,19 +2,13 @@
 <views:BaseContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"        
-    xmlns:bindables="clr-namespace:SmartMirror.Models.BindableModels"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
-    xmlns:sc="clr-namespace:SmartMirror.Controls.StateContainer"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs.Pages"
     xmlns:views="clr-namespace:SmartMirror.Views.Tabs.Views"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
-    xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
-    xmlns:video="clr-namespace:SmartMirror.Controls"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
-    Unloaded="OnCamerasPageUnloaded"
     x:DataType="vm:CamerasPageViewModel"
     x:Class="SmartMirror.Views.Tabs.Views.CamerasPageView">
 
@@ -57,7 +51,6 @@
                     Command="{Binding RefreshCamerasCommand}">
 
                     <CollectionView 
-                        ItemSizingStrategy="MeasureFirstItem"
                         ItemsSource="{Binding Cameras}"
                         ItemTemplate="{StaticResource cameraTemplate}"
                         x:Name="collectionViewCameras"/>
@@ -123,12 +116,18 @@
                             IsClippedToBounds="True"
                             CornerRadius="9">
 
-                            <video:Video 
+                            <controls:VideoView
                                 BackgroundColor="{DynamicResource cbg_i2}"
-                                Action="{Binding VideoAction}"
-                                Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"
-                                VideoPlaybackErrorCommand="{Binding VideoPaybackErrorCommand}"
-                                x:Name="video"/>
+                                MediaPlayer="{Binding MediaPlayer}"
+                                x:Name="video">
+
+                                <controls:VideoView.Triggers>
+                                    <DataTrigger TargetType="controls:VideoView" Binding="{Binding VideoState}" Value="Playing">
+                                        <Setter Property="BackgroundColor" Value="Transparent"/>
+                                    </DataTrigger>
+                                </controls:VideoView.Triggers>
+
+                            </controls:VideoView>
 
                         </Frame>
 
@@ -136,9 +135,21 @@
 
                     <ActivityIndicator 
                         WidthRequest="90"
-                        IsRunning="{Binding LoadingState, Source={Reference video},
-                            Converter={xct:IsEqualConverter}, 
-                            ConverterParameter={Static enums:EVideoLoadingState.Preparing}}"/>
+                        IsRunning="False">
+
+                        <ActivityIndicator.Triggers>
+
+                            <MultiTrigger TargetType="ActivityIndicator">
+                                <MultiTrigger.Conditions>
+                                    <BindingCondition Binding="{Binding SelectedCamera.IsConnected}" Value="True" />
+                                    <BindingCondition Binding="{Binding VideoState}" Value="Opening" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="IsRunning" Value="True"/>
+                            </MultiTrigger>
+
+                        </ActivityIndicator.Triggers>
+
+                    </ActivityIndicator>
 
                 </Grid>
 
@@ -153,5 +164,5 @@
         </controls:CustomStateView.LoadingSkeletonContent>
 
     </controls:CustomStateView>
-    
+
 </views:BaseContentView>

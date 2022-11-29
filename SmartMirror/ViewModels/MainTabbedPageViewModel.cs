@@ -15,6 +15,7 @@ public class MainTabbedPageViewModel : BaseViewModel
     private readonly IRoomsService _roomsService;
     private readonly IScenariosService _scenariosService;
     private int _buttonCount;
+    private bool _isFirstTime = true;
 
     public MainTabbedPageViewModel(
         INavigationService navigationService,
@@ -37,11 +38,15 @@ public class MainTabbedPageViewModel : BaseViewModel
 
     #region -- Overrides --
 
-    public override void OnNavigatedTo(INavigationParameters parameters)
+    public override async void OnNavigatedTo(INavigationParameters parameters)
     {
         base.OnNavigatedTo(parameters);
 
-        Task.Run(UpdateAllAqaraDataAsync);
+        if (_isFirstTime)
+        {
+            _isFirstTime = false;
+            await UpdateAllAqaraDataAsync();
+        }
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
