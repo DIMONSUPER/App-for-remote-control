@@ -31,7 +31,7 @@ public class MainTabbedPageViewModel : BaseViewModel
     #region -- Public properties --
 
     private ICommand _settingsCommand;
-    public ICommand SettingsCommand => _settingsCommand ??= SingleExecutionCommand.FromFunc(OnSettingsCommandAsync);
+    public ICommand SettingsCommand => _settingsCommand ??= SingleExecutionCommand.FromFunc(OnSettingsCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
     #endregion
 
