@@ -403,7 +403,7 @@ namespace SmartMirror.ViewModels
 
             var automationCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Automation);
 
-            automationCategory.Count = (_allAutomations.Count()).ToString();
+            automationCategory.Count = _allAutomations.Count().ToString();
 
             return true;
         }
