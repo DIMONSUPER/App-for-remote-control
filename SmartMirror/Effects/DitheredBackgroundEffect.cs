@@ -1,4 +1,7 @@
-﻿namespace SmartMirror.Effects
+﻿using Microsoft.Maui.Controls.PlatformConfiguration;
+using System.ComponentModel;
+
+namespace SmartMirror.Effects
 {
     public static class DitheredBackgroundEffect
     {
@@ -27,9 +30,28 @@
         {
             if (bindable is VisualElement element)
             {
-                var isBackgroundDithered = GetIsDithered(bindable);
+                SetBackgroundDithering(element);
 
-                bindable.Dispatcher.Dispatch(() =>
+                element.PropertyChanged -= OnElementPropertyChanged;
+                element.PropertyChanged += OnElementPropertyChanged; 
+            }
+        }
+
+        private static void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (sender is VisualElement element && e.PropertyName is nameof(element.Background))
+            {
+                SetBackgroundDithering(element);
+            }
+        }
+
+        private static void SetBackgroundDithering(VisualElement element)
+        {
+            var isBackgroundDithered = GetIsDithered(element);
+
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.S)
+            {
+                element.Dispatcher.Dispatch(() =>
                 {
                     if (element.Handler?.PlatformView is Android.Views.View view)
                     {
@@ -37,7 +59,11 @@
                     }
                 });
             }
-        } 
+            else
+            {
+                // TO DO: make background smoothing for SDK below 31
+            }
+        }
 
         #endregion
     }
