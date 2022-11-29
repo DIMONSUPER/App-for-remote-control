@@ -112,7 +112,8 @@
                        Grid.RowSpan="2"
                        Text="{Binding AdditionalInfoFormatted}"
                        HorizontalTextAlignment="End"
-                       VerticalTextAlignment="End"
+                       VerticalOptions="End"
+                       Margin="0, 2, 0, 0"
                        FontSize="22"
                        Style="{Binding DescriptionLabelStyle,Source={x:Reference deviceTemplate}}">
 
