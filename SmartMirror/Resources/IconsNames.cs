@@ -2,6 +2,7 @@
 
 public static class IconsNames
 {
+    public const string pic_automation = nameof(pic_automation);
     public const string pic_humidity = nameof(pic_humidity);
     public const string pic_pressure = nameof(pic_pressure);
     public const string pic_temperature = nameof(pic_temperature);
@@ -18,5 +19,6 @@ public static class IconsNames
     public const string pic_wall_switch_double = nameof(pic_wall_switch_double);
     public const string pic_hub = nameof(pic_hub);
     public const string pic_bell = nameof(pic_bell);
-    public const string clarity_pause_solid = nameof(clarity_pause_solid);
+    public const string pic_play = nameof(pic_play);
+    public const string pic_play_single = nameof(pic_play_single);
 }

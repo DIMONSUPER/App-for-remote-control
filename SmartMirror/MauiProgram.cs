@@ -13,6 +13,7 @@ using SmartMirror.Services.Devices;
 using SmartMirror.Services.Google;
 using SmartMirror.Services.Keyboard;
 using SmartMirror.Services.Mapper;
+using SmartMirror.Services.Mock;
 using SmartMirror.Services.Notifications;
 using SmartMirror.Services.Permissions;
 using SmartMirror.Services.Repository;
@@ -87,6 +88,7 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IMapperService, MapperService>();
         containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
         containerRegistry.RegisterSingleton<IRestService, RestService>();
+        containerRegistry.RegisterSingleton<IMockService, MockService>();
         containerRegistry.RegisterSingleton<IRepositoryService, RepositoryService>();
         containerRegistry.RegisterSingleton<IBlurService, BlurService>();
         containerRegistry.RegisterSingleton<IPermissionsService, PermissionsService>();

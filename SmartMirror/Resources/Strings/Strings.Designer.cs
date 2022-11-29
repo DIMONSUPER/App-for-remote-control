@@ -157,6 +157,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automation.
+        /// </summary>
+        internal static string Automation {
+            get {
+                return ResourceManager.GetString("Automation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         internal static string Back {

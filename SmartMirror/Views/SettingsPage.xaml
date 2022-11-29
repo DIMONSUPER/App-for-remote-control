@@ -45,10 +45,7 @@
             <templates:SimpleScenarioTemplate x:Key="simpleScenarioTemplate"/>
             <templates:SimpleCameraTemplate x:Key="simpleCameraTemplate"/>
             <templates:ProvidersTemplate x:Key="simpleProviderTemplate"/>
-
-            <DataTemplate x:Key="simpleNotificationTemplate">
-                <templates:SimpleAccessoryTemplate HasSwitch="True"/>
-            </DataTemplate>
+            <templates:NotificationSettingsGroupTemplate x:Key="notificationSettingsGroupTemplate"/>
 
             <templateSelectors:CategoryElementTemplateSelector
                 x:Key="elementCategoryTemplateSelector"
@@ -56,7 +53,7 @@
                 ScenariosDataTemplate="{StaticResource simpleScenarioTemplate}"
                 CamerasDataTemplate="{StaticResource simpleCameraTemplate}"
                 ProvidersDataTemplate="{StaticResource simpleProviderTemplate}"
-                NotificationsDataTemplate="{StaticResource simpleNotificationTemplate}"/>
+                NotificationsDataTemplate="{StaticResource notificationSettingsGroupTemplate}"/>
 
         </ResourceDictionary>
 
@@ -196,13 +193,47 @@
                                         behaviors:TouchBehavior.IsAnimation="True"
                                         behaviors:TouchBehavior.Command="{Binding ChangeAllowNotificationsCommand}"
                                         behaviors:TouchBehavior.NormalBackgroundColor="{DynamicResource cbg_i2}"
-                                        behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}"/>
+                                        behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}">
+
+                                        <templates:SimpleNotificationsHeaderTemplate.Triggers>
+                                            <DataTrigger 
+                                                TargetType="templates:SimpleNotificationsHeaderTemplate"
+                                                Binding="{Binding SelectedCategory.Type}" 
+                                                Value="{Static enums:ECategoryType.Notifications}">
+                                                
+                                                <Setter Property="Margin" Value="0"/>
+                                                
+                                            </DataTrigger>
+                                        </templates:SimpleNotificationsHeaderTemplate.Triggers>
+                                        
+                                    </templates:SimpleNotificationsHeaderTemplate>
 
                                     <CollectionView
                                         Margin="0, 0, 1, 0"
                                         ItemsSource="{Binding CategoryElements}"
                                         ItemTemplate="{StaticResource elementCategoryTemplateSelector}">
 
+                                        <CollectionView.Footer>
+                                            <BoxView HeightRequest="20"/>
+                                        </CollectionView.Footer>
+                                        
+                                        <CollectionView.Triggers>
+                                            <DataTrigger
+                                                TargetType="CollectionView" 
+                                                Binding="{Binding SelectedCategory.Type}"
+                                                Value="{Static enums:ECategoryType.Notifications}">
+                                                
+                                                <Setter Property="ItemsLayout">
+                                                    <Setter.Value>
+                                                        
+                                                        <LinearItemsLayout Orientation="Vertical"/>
+                                                        
+                                                    </Setter.Value>
+                                                </Setter>
+                                                
+                                            </DataTrigger>
+                                        </CollectionView.Triggers>
+                                        
                                         <CollectionView.ItemsLayout>
 
                                             <GridItemsLayout

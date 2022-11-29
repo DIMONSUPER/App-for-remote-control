@@ -13,6 +13,8 @@ using SmartMirror.Services.Scenarios;
 using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using SmartMirror.Services.Mock;
+using SmartMirror.Resources;
 
 namespace SmartMirror.ViewModels
 {
@@ -26,12 +28,13 @@ namespace SmartMirror.ViewModels
         private readonly ICamerasService _camerasService;
         private readonly IGoogleService _googleService;
         private readonly INotificationsService _notificationsService;
+        private readonly IMockService _mockService;
 
         private IEnumerable<ImageAndTitleBindableModel> _allAccessories = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allCameras = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<SettingsProvidersBindableModel> _allProviders = Enumerable.Empty<SettingsProvidersBindableModel>();
-        private IEnumerable<ImageAndTitleBindableModel> _allNotifications = Enumerable.Empty<ImageAndTitleBindableModel>();
+        private IEnumerable<NotificationSettingsGroupBindableModel> _allNotifications = Enumerable.Empty<NotificationSettingsGroupBindableModel>();
 
         private CategoryBindableModel _providersCategory;
         private CategoryBindableModel _notificationsCategory;
@@ -46,7 +49,8 @@ namespace SmartMirror.ViewModels
             ICamerasService camerasService,
             IAqaraService aqaraService,
             INotificationsService notificationsService,
-            IGoogleService googleService)
+            IGoogleService googleService,
+            IMockService mockService)
             : base(navigationService)
         {
             _aqaraService = aqaraService;
@@ -57,6 +61,7 @@ namespace SmartMirror.ViewModels
             _camerasService = camerasService;
             _googleService = googleService;
             _notificationsService = notificationsService;
+            _mockService = mockService;
 
             PageState = EPageState.LoadingSkeleton;
 
@@ -203,6 +208,13 @@ namespace SmartMirror.ViewModels
             {
                 new()
                 {
+                    Type = ECategoryType.Notifications,
+                    Name = Strings.Notifications,
+                    HasImage = false,
+                    TapCommand = SelectCategoryCommand,
+                },
+                new()
+                {
                     Type = ECategoryType.Accessories,
                     Name = Strings.Accessories,
                     TapCommand = SelectCategoryCommand,
@@ -223,13 +235,6 @@ namespace SmartMirror.ViewModels
                 {
                     Type = ECategoryType.Providers,
                     Name = Strings.Providers,
-                    TapCommand = SelectCategoryCommand,
-                },
-                new()
-                {
-                    Type = ECategoryType.Notifications,
-                    Name = Strings.Notifications,
-                    HasImage = false,
                     TapCommand = SelectCategoryCommand,
                 },
             };
@@ -351,7 +356,7 @@ namespace SmartMirror.ViewModels
             {
                 vm.Model = m;
                 vm.Type = ECategoryType.Scenarios;
-                vm.ImageSource = Resources.IconsNames.clarity_pause_solid;
+                vm.ImageSource = Resources.IconsNames.pic_play_single;
                 vm.TapCommand = ShowScenarioSettingsCommand;
             });
 
@@ -448,15 +453,72 @@ namespace SmartMirror.ViewModels
 
         private async Task<bool> LoadAllNotificationsAsync()
         {
-            var devices = await _devicesService.GetAllSupportedDevicesAsync();
+            var devices = Enumerable.Empty<DeviceBindableModel>();
+            var scenarios = Enumerable.Empty<ScenarioBindableModel>();
 
-            _allNotifications = _mapperService.MapRange<ImageAndTitleBindableModel>(devices, (m, vm) =>
+            await Task.WhenAll(
+                Task.Run(async () => devices = await _devicesService.GetAllSupportedDevicesAsync()),                
+                Task.Run(async () => scenarios = await _scenariosService.GetAllScenariosAsync()));
+
+            var automation = _mockService.GetAutomation();
+
+            var notificationSettingsGroups = new List<NotificationSettingsGroupBindableModel>();
+
+            if (devices.Any())
             {
-                vm.Model = m;
-                vm.Type = ECategoryType.Notifications;
-                vm.IsToggled = m is DeviceBindableModel device && device.IsReceiveNotifications;
-                vm.TapCommand = ChangeStatusReceivingNotificationCommand;
-            });
+                var notificationSettingsGroup = new NotificationSettingsGroupBindableModel()
+                {
+                    Type = ECategoryType.Notifications,
+                    GroupName = Strings.Accessories,
+                    NotificationSettings = new(_mapperService.MapRange<ImageAndTitleBindableModel>(devices, (m, vm) =>
+                    {
+                        vm.Model = m;
+                        vm.IsToggled = m is DeviceBindableModel device && device.IsReceiveNotifications;
+                        vm.TapCommand = ChangeStatusReceivingNotificationCommand;
+                    })),
+                };
+
+                notificationSettingsGroups.Add(notificationSettingsGroup); 
+            }
+
+            if (scenarios.Any())
+            {
+                var notificationSettingsGroup = new NotificationSettingsGroupBindableModel()
+                {
+                    Type = ECategoryType.Notifications,
+                    GroupName = Strings.Scenarios,
+                    NotificationSettings = new(_mapperService.MapRange<ImageAndTitleBindableModel>(scenarios, (m, vm) =>
+                    {
+                        vm.ImageSource = IconsNames.pic_play;
+                        vm.Model = m;
+                        vm.IsToggled = (m as ScenarioBindableModel).IsReceiveNotifications;
+                        vm.TapCommand = ChangeStatusReceivingNotificationCommand;
+                    })),
+                };
+
+                notificationSettingsGroups.Add(notificationSettingsGroup);
+            }
+
+
+            if (automation.Any())
+            {
+                var notificationSettingsGroup = new NotificationSettingsGroupBindableModel()
+                {
+                    Type = ECategoryType.Notifications,
+                    GroupName = Strings.Automation,
+                    NotificationSettings = new(_mapperService.MapRange<ImageAndTitleBindableModel>(automation, (m, vm) =>
+                    {
+                        vm.ImageSource = IconsNames.pic_automation;
+                        vm.Model = m;
+                        vm.IsToggled = (m as AutomationBindableModel).IsReceiveNotifications;
+                        vm.TapCommand = ChangeStatusReceivingNotificationCommand;
+                    })),
+                };
+
+                notificationSettingsGroups.Add(notificationSettingsGroup);
+            }
+
+            _allNotifications = notificationSettingsGroups;
 
             IsAllowNotifications = _notificationsService.IsAllowNotifications;
 
@@ -490,14 +552,19 @@ namespace SmartMirror.ViewModels
             }
         }
 
-        private Task OnChangeStatusReceivingNotificationCommandAsync(ImageAndTitleBindableModel accessory)
+        private Task OnChangeStatusReceivingNotificationCommandAsync(ImageAndTitleBindableModel notificationSettings)
         {
-            var device = accessory.Model as DeviceBindableModel;
+            notificationSettings.IsToggled = !notificationSettings.IsToggled;
 
-            accessory.IsToggled = !accessory.IsToggled;
-            device.IsReceiveNotifications = !device.IsReceiveNotifications;
+            Task task = Task.CompletedTask;
 
-            return _devicesService.UpdateDeviceAsync(device);
+            if (notificationSettings.Model is DeviceBindableModel device)
+            {
+                device.IsReceiveNotifications = !device.IsReceiveNotifications;
+                task = _devicesService.UpdateDeviceAsync(device);
+            }
+
+            return task;
         }
 
         private Task OnChangeAllowNotificationsCommandAsync()
