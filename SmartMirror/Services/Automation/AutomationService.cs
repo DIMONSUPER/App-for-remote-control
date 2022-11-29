@@ -16,8 +16,9 @@ public class AutomationService : IAutomationService
     private readonly IAqaraMessanger _aqaraMessanger;
     private readonly IRepositoryService _repositoryService;
 
+    private List<AutomationBindableModel> _allAutomations = new();
+
     private TaskCompletionSource<object> _automationsTaskCompletionSource = new();
-    private List<AutomationDTO> _allAutomations = new();
 
     public AutomationService(
         IAqaraService aqaraService,
@@ -37,7 +38,7 @@ public class AutomationService : IAutomationService
 
     public event EventHandler AllAutomationsChanged;
 
-    public async Task<IEnumerable<AutomationDTO>> GetAllAutomationsAsync()
+    public async Task<IEnumerable<AutomationBindableModel>> GetAllAutomationsAsync()
     {
         await _automationsTaskCompletionSource.Task;
 
@@ -63,11 +64,13 @@ public class AutomationService : IAutomationService
 
             if (resultOfGettingAutomations.IsSuccess)
             {
-                var automations = _mapperService.MapRange<AutomationDTO>(resultOfGettingAutomations.Result.Data).ToList();
+                var automations = _mapperService.MapRange<AutomationBindableModel>(resultOfGettingAutomations.Result.Data).ToList();
 
                 await GetSettingsAutomationsAsync(automations);
 
-                await _repositoryService.SaveOrUpdateRangeAsync(automations);
+                var dbModels = _mapperService.MapRange<AutomationDTO>(automations);
+
+                await _repositoryService.SaveOrUpdateRangeAsync(dbModels);
 
                 //This is required! After first adding automation id = 0, it is required to update to the real
                 await GetSettingsAutomationsAsync(automations);
@@ -92,11 +95,36 @@ public class AutomationService : IAutomationService
         return result;
     }
 
+    public Task<AOResult> UpdateAutomationAsync(AutomationBindableModel bindableAutomation)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var updateAutomation = _mapperService.Map<AutomationDTO>(bindableAutomation);
+
+            var response = await _repositoryService.SaveOrUpdateAsync(updateAutomation);
+
+            if (response == -1)
+            {
+                onFailure("Update failed");
+            }
+            else
+            {
+                var bindableAutomationId = bindableAutomation.Id;
+
+                var automation = _allAutomations.FirstOrDefault(row => row.Id == bindableAutomationId);
+
+                automation = bindableAutomation;
+
+                AllAutomationsChanged?.Invoke(this, EventArgs.Empty);
+            }
+        });
+    }
+
     #endregion
 
     #region -- Private helpers --
 
-    private async Task GetSettingsAutomationsAsync(IEnumerable<AutomationDTO> automations)
+    private async Task GetSettingsAutomationsAsync(IEnumerable<AutomationBindableModel> automations)
     {
         foreach (var automation in automations)
         {

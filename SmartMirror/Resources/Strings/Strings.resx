@@ -21,6 +21,9 @@
     <data name="Automation" xml:space="preserve">
         <value>Automation</value>
     </data>
+    <data name="DisplayNotificationsAsPopUpWhileTheAppIsActive" xml:space="preserve">
+        <value>Display notifications as a pop-up while the app is active</value>
+    </data>
     <data name="InstallConfigurationApp" xml:space="preserve">
         <value>To continue using the app, please install our Configuration app on your smartphone.</value>
     </data>
@@ -86,6 +89,9 @@
     </data>
     <data name="ErrorDescription" xml:space="preserve">
         <value>Error description</value>
+    </data>
+    <data name="EmergencyNotification" xml:space="preserve">
+        <value>Emergency Notification</value>
     </data>
     <data name="Close" xml:space="preserve">
         <value>Close</value>
@@ -299,6 +305,9 @@
     </data>
     <data name="ShowInCameras" xml:space="preserve">
         <value>Show in Cameras</value>
+    </data>
+    <data name="ShowInAutomations" xml:space="preserve">
+        <value>Show in Automations</value>
     </data>
     <data name="Confirm" xml:space="preserve">
         <value>Confirm</value>

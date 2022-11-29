@@ -319,6 +319,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Display notifications as a pop-up while the app is active.
+        /// </summary>
+        internal static string DisplayNotificationsAsPopUpWhileTheAppIsActive {
+            get {
+                return ResourceManager.GetString("DisplayNotificationsAsPopUpWhileTheAppIsActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Doorbell.
         /// </summary>
         internal static string Doorbell {
@@ -333,6 +342,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Downstairs {
             get {
                 return ResourceManager.GetString("Downstairs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emergency Notification.
+        /// </summary>
+        internal static string EmergencyNotification {
+            get {
+                return ResourceManager.GetString("EmergencyNotification", resourceCulture);
             }
         }
         
@@ -990,6 +1008,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Shades {
             get {
                 return ResourceManager.GetString("Shades", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show in Automations.
+        /// </summary>
+        internal static string ShowInAutomations {
+            get {
+                return ResourceManager.GetString("ShowInAutomations", resourceCulture);
             }
         }
         

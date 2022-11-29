@@ -136,6 +136,9 @@ namespace SmartMirror.ViewModels
         private ICommand _showCameraSettingsCommand;
         public ICommand ShowCameraSettingsCommand => _showCameraSettingsCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowCameraSettingsCommandAsync);
 
+        private ICommand _showAutomationSettingsCommand;
+        public ICommand ShowAutomationSettingsCommand => _showAutomationSettingsCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowAutomationSettingsCommandAsync);
+
         private ICommand _addNewCameraCommand;
         public ICommand AddNewCameraCommand => _addNewCameraCommand ??= SingleExecutionCommand.FromFunc(OnAddNewCameraCommandAsync);
 
@@ -394,7 +397,7 @@ namespace SmartMirror.ViewModels
                     vm.Model = m;
                     vm.Type = ECategoryType.Automation;
                     vm.ImageSource = "subtract_play_automation_small";
-                    vm.TapCommand = ShowCameraSettingsCommand;
+                    vm.TapCommand = ShowAutomationSettingsCommand;
                 });
             }
 
@@ -585,6 +588,14 @@ namespace SmartMirror.ViewModels
 
                 SetElementsSelectedCategory();
             }
+        }
+
+        private Task OnShowAutomationSettingsCommandAsync(ImageAndTitleBindableModel automation)
+        {
+            return _dialogService.ShowDialogAsync(nameof(AutomationSettingsDialog), new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.AUTOMATION, automation },
+            });
         }
 
         private async Task OnAddNewCameraCommandAsync()

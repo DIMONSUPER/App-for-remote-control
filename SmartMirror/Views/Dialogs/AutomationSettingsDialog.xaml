@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dialogs:BaseDialogView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dialogs="clr-namespace:SmartMirror.Views.Dialogs"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
+    x:Class="SmartMirror.Views.Dialogs.AutomationSettingsDialog"
+    x:DataType="vm:AutomationSettingsDialogViewModel">
+
+    <Frame
+        Padding="0"
+        BackgroundColor="Transparent">
+
+        <Border
+            WidthRequest="479"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 9"
+            Stroke="{DynamicResource tcolor_i1}"
+            BackgroundColor="{StaticResource cbg_i2}">
+
+            <StackLayout
+                Padding="30, 24"
+                Spacing="6">
+
+                <HorizontalStackLayout>
+
+                    <Border
+                        HeightRequest="60"
+                        WidthRequest="60"
+                        Margin="0, 0, 15, 0"
+                        Padding="17"
+                        BackgroundColor="{DynamicResource cbg_i15}"
+                        StrokeShape="RoundRectangle 9">
+
+                        <Image
+                            Source="subtract_play_automation_small"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"/>
+
+                    </Border>
+
+                    <controls:CustomLabel
+                        Style="{DynamicResource tstyle_i11}"
+                        MaxLines="2"
+                        LineBreakMode="TailTruncation"
+                        VerticalTextAlignment="Center"
+                        WidthRequest="340"
+                        Text="{Binding Title}"/>
+
+                </HorizontalStackLayout>
+
+                <Border
+                    Margin="0, 42, 0, 0"
+                    Padding="1"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 9"
+                    Stroke="{DynamicResource tcolor_i1}"
+                    BackgroundColor="{StaticResource cbg_i15}">
+
+                    <VerticalStackLayout>
+
+                        <controls:TitleAndSwitchView
+                            Title="{extensions:Translate ShowInAutomations}"
+                            IsToggled="{Binding IsShownInAutomations}"
+                            Padding="24, 18"/>
+
+                        <controls:TitleAndSwitchView
+                            Title="{extensions:Translate ReceiveNotifications}"
+                            IsToggled="{Binding IsReceiveNotifications}"
+                            Padding="24, 18"/>
+
+                        <controls:TitleAndSwitchView
+                            Title="{extensions:Translate AddToFavorites}"
+                            IsToggled="{Binding IsFavorite}"
+                            Padding="24, 18"/>
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+                <Border
+                    Margin="0, 42, 0, 0"
+                    Padding="1"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 9"
+                    Stroke="{DynamicResource tcolor_i1}"
+                    BackgroundColor="{StaticResource cbg_i15}">
+
+                    <VerticalStackLayout>
+
+                        <controls:TitleAndSwitchView
+                            Title="{extensions:Translate EmergencyNotification}"
+                            IsToggled="{Binding IsEmergencyNotification}"
+                            Padding="24, 18"/>
+
+                        <Label
+                            Style="{x:DynamicResource tstyle_i5}"
+                            Padding="24, 0, 24, 18"
+                            Text="{extensions:Translate DisplayNotificationsAsPopUpWhileTheAppIsActive}"/>
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+                <Button 
+                    Style="{DynamicResource ButtonStyle_i1}"
+                    HorizontalOptions="Center"
+                    Margin="0, 36, 0, 20"
+                    Text="{extensions:Translate Close}"
+                    Command="{Binding CloseCommand}"/>
+
+            </StackLayout>
+
+        </Border>
+
+    </Frame>
+
+</dialogs:BaseDialogView>
