@@ -134,6 +134,7 @@ public static class MauiProgram
     private static void OnConfigureMauiHandlers(IMauiHandlersCollection handlers)
     {
         handlers.AddHandler(typeof(Video), typeof(VideoHandler));
+        handlers.AddHandler(typeof(VideoView), typeof(VideoViewHandler));
         handlers.AddHandler(typeof(CustomTabbedPage), typeof(CustomTabbedViewHandler));
     }
 

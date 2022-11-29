@@ -9,7 +9,6 @@
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
-    Unloaded="OnCamerasPageUnloaded"
     x:DataType="vm:CamerasPageViewModel"
     x:Class="SmartMirror.Views.Tabs.Views.CamerasPageView">
 
@@ -117,12 +116,18 @@
                             IsClippedToBounds="True"
                             CornerRadius="9">
 
-                            <controls:Video 
+                            <controls:VideoView
                                 BackgroundColor="{DynamicResource cbg_i2}"
-                                Action="{Binding VideoAction}"
-                                Source="{Binding SelectedCamera.VideoUrl, TargetNullValue={x:Null}}"
-                                VideoPlaybackErrorCommand="{Binding VideoPaybackErrorCommand}"
-                                x:Name="video"/>
+                                MediaPlayer="{Binding MediaPlayer}"
+                                x:Name="video">
+
+                                <controls:VideoView.Triggers>
+                                    <DataTrigger TargetType="controls:VideoView" Binding="{Binding VideoState}" Value="Playing">
+                                        <Setter Property="BackgroundColor" Value="Transparent"/>
+                                    </DataTrigger>
+                                </controls:VideoView.Triggers>
+
+                            </controls:VideoView>
 
                         </Frame>
 
@@ -136,8 +141,8 @@
 
                             <MultiTrigger TargetType="ActivityIndicator">
                                 <MultiTrigger.Conditions>
-                                    <BindingCondition Binding="{Binding LoadingState, Source={Reference video}}" Value="Preparing" />
                                     <BindingCondition Binding="{Binding SelectedCamera.IsConnected}" Value="True" />
+                                    <BindingCondition Binding="{Binding VideoState}" Value="Opening" />
                                 </MultiTrigger.Conditions>
                                 <Setter Property="IsRunning" Value="True"/>
                             </MultiTrigger>

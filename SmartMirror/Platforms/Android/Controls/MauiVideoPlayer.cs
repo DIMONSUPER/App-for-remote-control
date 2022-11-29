@@ -15,7 +15,7 @@ namespace SmartMirror.Platforms.Android.Controls
     public class MauiVideoPlayer : CoordinatorLayout
     {
         private readonly Context _context;
-        private VideoView _videoView;
+        private global::Android.Widget.VideoView _videoView;
         private Video _video;
         private RelativeLayout _relativeLayout;
         private MediaPlayer _mediaPlayer;
@@ -159,7 +159,7 @@ namespace SmartMirror.Platforms.Android.Controls
 
         private void InitVideoPlayer()
         {
-            _videoView = new VideoView(_context)
+            _videoView = new global::Android.Widget.VideoView(_context)
             {
                 LayoutParameters = new RelativeLayout.LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent),
             };

@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Alerts;
+using LibVLCSharp.Shared;
 using SmartMirror.Enums;
 using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
@@ -6,6 +7,7 @@ using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Mapper;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Input;
 
@@ -15,6 +17,7 @@ public class CamerasPageViewModel : BaseTabViewModel
 {
     private const int CAMERA_TIME_CHECK_SECONDS = 5;
     private CancellationTokenSource _cameraCancellationTokenSource;
+    private readonly LibVLC _libVLC = new(enableDebugLogs: false);
 
     private readonly IMapperService _mapperService;
     private readonly ICamerasService _camerasService;
@@ -27,12 +30,20 @@ public class CamerasPageViewModel : BaseTabViewModel
     {
         _mapperService = mapperService;
         _camerasService = camerasService;
+        DataState = EPageState.LoadingSkeleton;
 
         Title = "Cameras";
         _camerasService.AllCamerasChanged += OnAllCamerasChanged;
     }
 
     #region -- Public properties --
+
+    private MediaPlayer _mediaPlayer;
+    public MediaPlayer MediaPlayer
+    {
+        get => _mediaPlayer;
+        set => SetProperty(ref _mediaPlayer, value);
+    }
 
     private ObservableCollection<CameraBindableModel> _cameras;
     public ObservableCollection<CameraBindableModel> Cameras
@@ -55,11 +66,11 @@ public class CamerasPageViewModel : BaseTabViewModel
         set => SetProperty(ref _isCamerasRefreshing, value);
     }
 
-    private EVideoAction _videoAction;
-    public EVideoAction VideoAction
+    private VLCState _videoState = VLCState.NothingSpecial;
+    public VLCState VideoState
     {
-        get => _videoAction;
-        set => SetProperty(ref _videoAction, value);
+        get => _videoState;
+        set => SetProperty(ref _videoState, value);
     }
 
     private ICommand _selectCameraCommand;
@@ -71,9 +82,6 @@ public class CamerasPageViewModel : BaseTabViewModel
     private ICommand _tryAgainCommand;
     public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
 
-    private ICommand _videoPaybackErrorCommand;
-    public ICommand VideoPaybackErrorCommand => _videoPaybackErrorCommand ??= SingleExecutionCommand.FromFunc<string>(OnVideoPaybackErrorCommandAsync);
-
     #endregion
 
     #region -- Overrides --
@@ -84,14 +92,112 @@ public class CamerasPageViewModel : BaseTabViewModel
 
         _cameraCancellationTokenSource = new();
 
-        if (!IsDataLoading)
-        {
-            DataState = EPageState.LoadingSkeleton;
-
-            await LoadCamerasAndChangeStateAsync();
-        }
+        await LoadCamerasAndChangeStateAsync();
 
         _ = StartConnectionRunnerForEachCameraAsync().ConfigureAwait(false);
+    }
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs args)
+    {
+        base.OnPropertyChanged(args);
+
+        if (args.PropertyName is nameof(SelectedCamera))
+        {
+            PlayCurrentVideoAsync().ConfigureAwait(false);
+        }
+    }
+
+    private Task PlayCurrentVideoAsync()
+    {
+        Task.Run(() =>
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(SelectedCamera?.VideoUrl) || !SelectedCamera.IsConnected)
+                {
+                    StopVideo();
+                }
+                else
+                {
+                    if (MediaPlayer is null)
+                    {
+                        MediaPlayer = new(_libVLC) { EnableHardwareDecoding = true };
+                        MediaPlayer.EncounteredError += OnMediaPlayerEncounteredError;
+                        MediaPlayer.Opening += OnMediaPlayerStateChanged;
+                        MediaPlayer.EndReached += OnMediaPlayerStateChanged;
+                        MediaPlayer.Playing += OnMediaPlayerStateChanged;
+                        MediaPlayer.NothingSpecial += OnMediaPlayerStateChanged;
+                        MediaPlayer.Stopped += OnMediaPlayerStateChanged;
+                        MediaPlayer.PositionChanged += OnMediaPlayerPositionChanged;
+                    }
+
+                    using var media = new Media(_libVLC, SelectedCamera.VideoUrl, FromType.FromLocation);
+
+                    MediaPlayer?.Play(media);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"{nameof(PlayCurrentVideoAsync)}: {ex.Message}");
+            }
+        });
+
+        return Task.CompletedTask;
+    }
+
+    private void OnMediaPlayerPositionChanged(object sender, MediaPlayerPositionChangedEventArgs e)
+    {
+        VideoState = VLCState.Playing;
+    }
+
+    private void OnMediaPlayerStateChanged(object sender, EventArgs e)
+    {
+        if (MediaPlayer.State is VLCState.Playing)
+        {
+            VideoState = VLCState.Opening;
+        }
+        else
+        {
+            VideoState = MediaPlayer.State;
+        }
+    }
+
+    private void StopVideo()
+    {
+        if (MediaPlayer is not null)
+        {
+            MediaPlayer.EncounteredError -= OnMediaPlayerEncounteredError;
+            MediaPlayer.Opening -= OnMediaPlayerStateChanged;
+            MediaPlayer.EndReached -= OnMediaPlayerStateChanged;
+            MediaPlayer.Playing -= OnMediaPlayerStateChanged;
+            MediaPlayer.NothingSpecial -= OnMediaPlayerStateChanged;
+            MediaPlayer.Stopped -= OnMediaPlayerStateChanged;
+            MediaPlayer.PositionChanged -= OnMediaPlayerPositionChanged;
+            MediaPlayer.Pause();
+            MediaPlayer.Stop();
+            MediaPlayer.Dispose();
+            MediaPlayer = null;
+            VideoState = VLCState.NothingSpecial;
+        }
+    }
+
+    private void OnMediaPlayerEncounteredError(object sender, EventArgs e)
+    {
+        MainThread.BeginInvokeOnMainThread(() => Toast.Make($"{Strings.CannotPlayVideo}").Show());
+    }
+
+    public override void OnResume()
+    {
+        base.OnResume();
+
+        OnAppearing();
+    }
+
+    public override void OnSleep()
+    {
+        base.OnSleep();
+
+        OnDisappearing();
     }
 
     public override void OnDisappearing()
@@ -100,7 +206,7 @@ public class CamerasPageViewModel : BaseTabViewModel
 
         _cameraCancellationTokenSource?.Cancel();
 
-        VideoAction = EVideoAction.Pause;
+        StopVideo();
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
@@ -117,7 +223,7 @@ public class CamerasPageViewModel : BaseTabViewModel
         else
         {
             IsCamerasRefreshing = false;
-            VideoAction = EVideoAction.Pause;
+            StopVideo();
             DataState = EPageState.NoInternet;
         }
     }
@@ -129,13 +235,6 @@ public class CamerasPageViewModel : BaseTabViewModel
     private async void OnAllCamerasChanged(object sender, EventArgs e)
     {
         await LoadCamerasAndChangeStateAsync();
-    }
-
-    private Task OnVideoPaybackErrorCommandAsync(string error)
-    {
-        Toast.Make($"{Strings.CannotPlayVideo}: {error}").Show();
-
-        return Task.CompletedTask;
     }
 
     private async Task OnTryAgainCommandAsync()
@@ -150,9 +249,16 @@ public class CamerasPageViewModel : BaseTabViewModel
 
             if (IsInternetConnected)
             {
-                (DataState, VideoAction) = isDataLoaded
-                    ? (EPageState.Complete, EVideoAction.Play)
-                    : (EPageState.Empty, EVideoAction.Pause);
+                DataState = isDataLoaded ? EPageState.Complete : EPageState.Empty;
+
+                if (isDataLoaded)
+                {
+                    _ = PlayCurrentVideoAsync().ConfigureAwait(false);
+                }
+                else
+                {
+                    StopVideo();
+                }
             }
             else
             {
@@ -186,9 +292,16 @@ public class CamerasPageViewModel : BaseTabViewModel
 
             if (IsInternetConnected)
             {
-                (DataState, VideoAction) = isDataLoaded
-                    ? (EPageState.Complete, EVideoAction.Play)
-                    : (EPageState.Empty, EVideoAction.Pause);
+                DataState = isDataLoaded ? EPageState.Complete : EPageState.Empty;
+
+                if (isDataLoaded)
+                {
+                    _ = PlayCurrentVideoAsync().ConfigureAwait(false);
+                }
+                else
+                {
+                    StopVideo();
+                }
 
                 DataState = Cameras.Any()
                     ? EPageState.Complete
@@ -223,9 +336,29 @@ public class CamerasPageViewModel : BaseTabViewModel
             {
                 var isConnectedResponse = await _camerasService.CheckCameraConnection(camera, _cameraCancellationTokenSource.Token).ConfigureAwait(false);
 
-                camera.IsConnected = isConnectedResponse.IsSuccess && isConnectedResponse.Result;
+                if (!_cameraCancellationTokenSource.IsCancellationRequested)
+                {
+                    if (isConnectedResponse.IsSuccess && isConnectedResponse.Result)
+                    {
+                        if (SelectedCamera == camera && !camera.IsConnected)
+                        {
+                            _ = PlayCurrentVideoAsync().ConfigureAwait(false);
+                        }
 
-                await Task.Delay(TimeSpan.FromSeconds(CAMERA_TIME_CHECK_SECONDS), _cameraCancellationTokenSource.Token);
+                        camera.IsConnected = true;
+                    }
+                    else if (camera.IsConnected)
+                    {
+                        if (SelectedCamera == camera && camera.IsConnected)
+                        {
+                            StopVideo();
+                        }
+
+                        camera.IsConnected = false;
+                    }
+
+                    await Task.Delay(TimeSpan.FromSeconds(CAMERA_TIME_CHECK_SECONDS), _cameraCancellationTokenSource.Token);
+                }
             }
         }
         catch (Exception ex)
@@ -247,6 +380,12 @@ public class CamerasPageViewModel : BaseTabViewModel
                 var cameras = _mapperService.MapRange<CameraBindableModel>(resultOfGettingCameras.Result.Where(x => x.IsShown), (m, vm) =>
                 {
                     vm.TapCommand = SelectCameraCommand;
+
+                    if (Cameras is not null && Cameras.Any() && Cameras.Any(x => x.VideoUrl == vm.VideoUrl))
+                    {
+                        var cam = Cameras.FirstOrDefault(x => x.VideoUrl == vm.VideoUrl);
+                        vm.IsConnected = cam.IsConnected;
+                    }
                 });
 
                 Cameras = new(cameras);
