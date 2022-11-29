@@ -80,7 +80,7 @@
 
                                     <Button.Triggers>
                                         <DataTrigger Binding="{Binding Accessory.UnitMeasure}" Value="{x:Static enums:EUnitMeasure.Celsius}" TargetType="Button">
-                                            <Setter Property="BackgroundColor" Value="Transparent"/>
+                                            <Setter Property="Background" Value="Transparent"/>
                                             <Setter Property="TextColor" Value="{DynamicResource tcolor_i3}"/>
                                         </DataTrigger>
                                     </Button.Triggers>
@@ -97,7 +97,7 @@
 
                                     <Button.Triggers>
                                         <DataTrigger Binding="{Binding Accessory.UnitMeasure}" Value="{x:Static enums:EUnitMeasure.Fahrenheit}" TargetType="Button">
-                                            <Setter Property="BackgroundColor" Value="Transparent"/>
+                                            <Setter Property="Background" Value="Transparent"/>
                                             <Setter Property="TextColor" Value="{DynamicResource tcolor_i3}"/>
                                         </DataTrigger>
                                     </Button.Triggers>

@@ -52,10 +52,10 @@ public class ScenariosPageViewModel : BaseTabViewModel
     }
 
     private ICommand _runScenarioCommand;
-    public ICommand RunScenarioCommand => _runScenarioCommand ??= SingleExecutionCommand.FromFunc<ScenarioBindableModel>(OnRunScenarioCommandAsync);
+    public ICommand RunScenarioCommand => _runScenarioCommand ??= SingleExecutionCommand.FromFunc<ScenarioBindableModel>(OnRunScenarioCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
     private ICommand _goToScenarioDetailsCommand;
-    public ICommand GoToScenarioDetailsCommand => _goToScenarioDetailsCommand ??= SingleExecutionCommand.FromFunc<ScenarioBindableModel>(OnGoToScenarioDetailsCommandAsync);
+    public ICommand GoToScenarioDetailsCommand => _goToScenarioDetailsCommand ??= SingleExecutionCommand.FromFunc<ScenarioBindableModel>(OnGoToScenarioDetailsCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
     #endregion
 

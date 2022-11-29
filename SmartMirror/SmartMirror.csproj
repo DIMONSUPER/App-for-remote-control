@@ -50,6 +50,7 @@
 		<None Remove="Resources\Images\apple_logo.svg" />
 		<None Remove="Resources\Images\aqara_logo.svg" />
 		<None Remove="Resources\Images\ci_close_big.svg" />
+		<None Remove="Resources\Images\clarity_pause_solid.svg" />
 		<None Remove="Resources\Images\delete.svg" />
 		<None Remove="Resources\Images\google_logo.svg" />
 		<None Remove="Resources\Images\mock_camera_stream.png" />

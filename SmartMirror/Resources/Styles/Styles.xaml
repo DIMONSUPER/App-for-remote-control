@@ -148,7 +148,7 @@
                     <VisualState Name="Normal">
 
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i3}"/>
+                            <Setter Property="Background" Value="{DynamicResource cbg_i3}"/>
                         </VisualState.Setters>
 
                     </VisualState>
@@ -156,7 +156,36 @@
                     <VisualState Name="Pressed">
 
                         <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i14}"/>
+                            <Setter Property="Background" Value="{DynamicResource cbg_i14}"/>
+                        </VisualState.Setters>
+
+                    </VisualState>
+
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonStyle_i2" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle_i1}">
+        <Setter Property="BorderColor" Value="{DynamicResource cbg_i4}"/>
+        <Setter Property="BorderWidth" Value="2"/>
+        <Setter Property="TextColor" Value="{DynamicResource tcolor_i10}"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup Name="CommonStates">
+
+                    <VisualState Name="Normal">
+
+                        <VisualState.Setters>
+                            <Setter Property="Background" Value="{DynamicResource cbg_i2}"/>
+                        </VisualState.Setters>
+
+                    </VisualState>
+
+                    <VisualState Name="Pressed">
+
+                        <VisualState.Setters>
+                            <Setter Property="Background" Value="{DynamicResource cbg_i19}"/>
                         </VisualState.Setters>
 
                     </VisualState>

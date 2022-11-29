@@ -59,9 +59,6 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _scenario, value);
         }
 
-        private ICommand _closeCommand;
-        public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc(OnCloseCommandAsync);
-
         #endregion
 
         #region -- Overrides --
@@ -98,17 +95,6 @@ namespace SmartMirror.ViewModels.Dialogs
 
                 await _scenariosService.UpdateScenarioAsync(Scenario);
             }
-        }
-
-        #endregion
-
-        #region -- Private helpers --
-
-        private Task OnCloseCommandAsync()
-        {
-            RequestClose.Invoke();
-
-            return Task.CompletedTask;
         }
 
         #endregion

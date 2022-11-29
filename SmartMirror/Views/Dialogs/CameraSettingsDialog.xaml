@@ -7,7 +7,6 @@
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
     xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
-    xmlns:prismmaui="clr-namespace:Prism.Services.Xaml;assembly=Prism.Maui"
     x:Class="SmartMirror.Views.Dialogs.CameraSettingsDialog"
     x:DataType="vm:CameraSettingsDialogViewModel">
 
