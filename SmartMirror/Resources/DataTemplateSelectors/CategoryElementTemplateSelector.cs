@@ -18,6 +18,8 @@ namespace SmartMirror.Resources.DataTemplateSelectors
 
         public DataTemplate NotificationsDataTemplate { get; set; }
 
+        public DataTemplate AutomationDataTemplate { get; set; }
+
         #endregion
 
         #region -- Overrides --
@@ -35,6 +37,7 @@ namespace SmartMirror.Resources.DataTemplateSelectors
                     ECategoryType.Cameras => CamerasDataTemplate,
                     ECategoryType.Providers => ProvidersDataTemplate,
                     ECategoryType.Notifications => NotificationsDataTemplate,
+                    ECategoryType.Automation => AutomationDataTemplate,
                 };
             }
 

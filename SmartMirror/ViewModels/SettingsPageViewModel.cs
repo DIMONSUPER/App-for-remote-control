@@ -34,6 +34,7 @@ namespace SmartMirror.ViewModels
         private IEnumerable<ImageAndTitleBindableModel> _allCameras = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<SettingsProvidersBindableModel> _allProviders = Enumerable.Empty<SettingsProvidersBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allNotifications = Enumerable.Empty<ImageAndTitleBindableModel>();
+        private IEnumerable<ImageAndTitleBindableModel> _allAutomations = Enumerable.Empty<ImageAndTitleBindableModel>();
 
         private CategoryBindableModel _providersCategory;
         private CategoryBindableModel _notificationsCategory;
@@ -66,6 +67,7 @@ namespace SmartMirror.ViewModels
 
             _devicesService.AllDevicesChanged += OnAllDevicesChanged;
             _scenariosService.AllScenariosChanged += OnAllScenariosChanged;
+
             LoadCategories();
             SelectCategory(SelectedCategory ?? Categories.FirstOrDefault());
         }
@@ -207,6 +209,13 @@ namespace SmartMirror.ViewModels
             {
                 new()
                 {
+                    Type = ECategoryType.Notifications,
+                    Name = Strings.Notifications,
+                    HasImage = false,
+                    TapCommand = SelectCategoryCommand,
+                },
+                new()
+                {
                     Type = ECategoryType.Accessories,
                     Name = Strings.Accessories,
                     TapCommand = SelectCategoryCommand,
@@ -231,9 +240,8 @@ namespace SmartMirror.ViewModels
                 },
                 new()
                 {
-                    Type = ECategoryType.Notifications,
-                    Name = Strings.Notifications,
-                    HasImage = false,
+                    Type = ECategoryType.Automation,
+                    Name = Strings.Automation,
                     TapCommand = SelectCategoryCommand,
                 },
             };
@@ -273,6 +281,7 @@ namespace SmartMirror.ViewModels
                     ECategoryType.Cameras => new(_allCameras),
                     ECategoryType.Providers => new(_allProviders),
                     ECategoryType.Notifications => IsAllowNotifications ? new(_allNotifications) : new(),
+                    ECategoryType.Automation => new(_allAutomations),
                     _ => throw new NotImplementedException(),
                 };
 
@@ -371,6 +380,21 @@ namespace SmartMirror.ViewModels
         {
             var automations = await _automationService.GetAllAutomationsAsync();
 
+            if (automations.Any())
+            {
+                _allAutomations = _mapperService.MapRange<ImageAndTitleBindableModel>(automations, (m, vm) =>
+                {
+                    vm.Model = m;
+                    vm.Type = ECategoryType.Automation;
+                    vm.ImageSource = "subtract_play_automation_small";
+                    vm.TapCommand = ShowCameraSettingsCommand;
+                });
+            }
+
+            var automationCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Automation);
+
+            automationCategory.Count = (_allAutomations.Count()).ToString();
+
             return true;
         }
 
@@ -387,23 +411,23 @@ namespace SmartMirror.ViewModels
                     vm.ImageSource = "video_fill_dark";
                     vm.TapCommand = ShowCameraSettingsCommand;
                 });
-
-                var addCameraItem = new ImageAndTitleBindableModel()
-                {
-                    Name = Strings.AddNewCamera,
-                    Type = ECategoryType.Cameras,
-                    ImageSource = "subtract_plus",
-                    TapCommand = AddNewCameraCommand,
-                };
-
-                var firstItems = new[] { addCameraItem };
-
-                _allCameras = firstItems.Concat(_allCameras);
-
-                var cameraCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Cameras);
-
-                cameraCategory.Count = (_allCameras.Count() - 1).ToString();
             }
+
+            var addCameraItem = new ImageAndTitleBindableModel()
+            {
+                Name = Strings.AddNewCamera,
+                Type = ECategoryType.Cameras,
+                ImageSource = "subtract_plus",
+                TapCommand = AddNewCameraCommand,
+            };
+
+            var firstItems = new[] { addCameraItem };
+
+            _allCameras = firstItems.Concat(_allCameras);
+
+            var cameraCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Cameras);
+
+            cameraCategory.Count = (_allCameras.Count() - 1).ToString();
 
             return resultOfGettingCameras.IsSuccess;
         }

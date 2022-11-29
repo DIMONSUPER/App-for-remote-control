@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using SmartMirror.Helpers;
 using SmartMirror.Resources.Strings;
+using SmartMirror.Services.Automation;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
@@ -14,18 +15,21 @@ public class MainTabbedPageViewModel : BaseViewModel
     private readonly IDevicesService _devicesService;
     private readonly IRoomsService _roomsService;
     private readonly IScenariosService _scenariosService;
+    private readonly IAutomationService _automationService;
     private int _buttonCount;
 
     public MainTabbedPageViewModel(
         INavigationService navigationService,
         IDevicesService devicesService,
         IRoomsService roomsService,
+        IAutomationService automationService,
         IScenariosService scenariosService)
         : base(navigationService)
     {
         _devicesService = devicesService;
         _roomsService = roomsService;
         _scenariosService = scenariosService;
+        _automationService = automationService;
     }
 
     #region -- Public properties --
@@ -76,6 +80,7 @@ public class MainTabbedPageViewModel : BaseViewModel
         await _devicesService.DownloadAllDevicesWithSubInfoAsync();
         await _roomsService.DownloadAllRoomsAsync();
         await _scenariosService.DownloadAllScenariosAsync();
+        await _automationService.DownloadAllAutomationsAsync();
     }
 
     private Task OnSettingsCommandAsync()

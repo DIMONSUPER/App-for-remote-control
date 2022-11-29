@@ -45,6 +45,7 @@
             <templates:SimpleScenarioTemplate x:Key="simpleScenarioTemplate"/>
             <templates:SimpleCameraTemplate x:Key="simpleCameraTemplate"/>
             <templates:ProvidersTemplate x:Key="simpleProviderTemplate"/>
+            <templates:SimpleAutomationTemplate x:Key="simpleAutomationTemplate"/>
 
             <DataTemplate x:Key="simpleNotificationTemplate">
                 <templates:SimpleAccessoryTemplate HasSwitch="True"/>
@@ -56,7 +57,8 @@
                 ScenariosDataTemplate="{StaticResource simpleScenarioTemplate}"
                 CamerasDataTemplate="{StaticResource simpleCameraTemplate}"
                 ProvidersDataTemplate="{StaticResource simpleProviderTemplate}"
-                NotificationsDataTemplate="{StaticResource simpleNotificationTemplate}"/>
+                NotificationsDataTemplate="{StaticResource simpleNotificationTemplate}"
+                AutomationDataTemplate="{StaticResource simpleAutomationTemplate}"/>
 
         </ResourceDictionary>
 
@@ -161,6 +163,13 @@
                                 <Setter Property="EmptyStateImage" Value="notifications_off"/>
                                 <Setter Property="LoadingTitle" Value="{extensions:Translate Notifications}"/>
                                 <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheNotificationsSettings}"/>
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Automation}">
+                                <Setter Property="EmptyTitle" Value="{extensions:Translate NoAutomationYet}"/>
+                                <Setter Property="EmptyStateImage" Value="pic_no_automation"/>
+                                <Setter Property="LoadingTitle" Value="{extensions:Translate Automation}"/>
+                                <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheAutomationSettings}"/>
                             </DataTrigger>
 
                         </controls:CustomStateView.Triggers>

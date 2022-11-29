@@ -339,6 +339,9 @@
 		<MauiXaml Update="Views\Dialogs\BaseDialogView.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\SimpleAutomationTemplate.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Update="Resources\Strings\Strings.resx">

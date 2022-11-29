@@ -2,6 +2,7 @@
 using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Models.DTO;
+using SmartMirror.Models;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Repository;
@@ -12,6 +13,7 @@ public class AutomationService : IAutomationService
 {
     private readonly IAqaraService _aqaraService;
     private readonly IMapperService _mapperService;
+    private readonly IAqaraMessanger _aqaraMessanger;
     private readonly IRepositoryService _repositoryService;
 
     private TaskCompletionSource<object> _automationsTaskCompletionSource = new();
@@ -20,13 +22,15 @@ public class AutomationService : IAutomationService
     public AutomationService(
         IAqaraService aqaraService,
         IMapperService mapperService,
+        IAqaraMessanger aqaraMessanger,
         IRepositoryService repositoryService)
     {
         _aqaraService = aqaraService;
         _mapperService = mapperService;
+        _aqaraMessanger = aqaraMessanger;
         _repositoryService = repositoryService;
 
-        Task.Run(DownloadAllAutomationsAsync);
+        _aqaraMessanger.MessageReceived += OnMessageReceived;
     }
 
     #region -- IAutomationService implementation --
@@ -108,6 +112,14 @@ public class AutomationService : IAutomationService
                 automation.IsFavorite = dbAutomation.IsFavorite;
                 automation.IsEmergencyNotification = dbAutomation.IsEmergencyNotification;
             }
+        }
+    }
+
+    private void OnMessageReceived(object sender, AqaraMessageEventArgs e)
+    {
+        if (e.EventType is Constants.Aqara.EventTypes.linkage_created or Constants.Aqara.EventTypes.linkage_deleted)
+        {
+            AllAutomationsChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
