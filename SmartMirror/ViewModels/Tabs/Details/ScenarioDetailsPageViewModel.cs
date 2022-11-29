@@ -46,7 +46,7 @@ namespace SmartMirror.ViewModels.Tabs.Details
         }
 
         private ICommand _goBackCommand;
-        public ICommand GoBackCommand => _goBackCommand ??= SingleExecutionCommand.FromFunc(OnGoBackCommandAsync);
+        public ICommand GoBackCommand => _goBackCommand ??= SingleExecutionCommand.FromFunc(OnGoBackCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
         private ICommand _tryAgainCommand;
         public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);

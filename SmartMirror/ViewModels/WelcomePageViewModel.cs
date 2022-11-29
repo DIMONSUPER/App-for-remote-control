@@ -32,10 +32,10 @@ namespace SmartMirror.ViewModels
         #region -- Public properties --
 
         private ICommand _loginWithAqaraCommand;
-        public ICommand LoginWithAqaraCommand => _loginWithAqaraCommand ??= SingleExecutionCommand.FromFunc<EAuthType>(OnLoginWithAqaraCommandAsync);
+        public ICommand LoginWithAqaraCommand => _loginWithAqaraCommand ??= SingleExecutionCommand.FromFunc<EAuthType>(OnLoginWithAqaraCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
         private ICommand _loginWithGoogleCommand;
-        public ICommand LoginWithGoogleCommand => _loginWithGoogleCommand ??= SingleExecutionCommand.FromFunc<EAuthType>(OnLoginWithGoogleCommandAsync);
+        public ICommand LoginWithGoogleCommand => _loginWithGoogleCommand ??= SingleExecutionCommand.FromFunc<EAuthType>(OnLoginWithGoogleCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
         #endregion
 

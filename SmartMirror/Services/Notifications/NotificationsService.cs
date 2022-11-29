@@ -56,6 +56,7 @@ namespace SmartMirror.Services.Notifications
                     subjectId = deviceId,
                     resourceIds = resourceIds,
                     startTime = DateTimeHelper.ConvertToMilliseconds(DateTime.UtcNow.AddDays(-7)),
+                    size = 300,
                 };
 
                 var response = await MakeRequestAsync<DataAqaraResponse<ResourceResponse>>("fetch.resource.history", data, onFailure);

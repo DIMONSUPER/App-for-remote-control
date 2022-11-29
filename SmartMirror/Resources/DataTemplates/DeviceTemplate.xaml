@@ -44,13 +44,15 @@
 
             </Border>
 
-            <controls:CustomLabel Grid.Row="1"
-                                  Grid.ColumnSpan="2"
-                                  Margin="0, 14, 0, 0"
-                                  MaxLines="1"
-                                  LineBreakMode="TailTruncation"
-                                  Text="{Binding Name}"
-                                  Style="{Binding NameFontStyle, Source={x:Reference deviceTemplate}}"/>
+            <!-- TO DO: when the mirror appears, change the font size to 28*0.75 -->
+            <Label Grid.Row="1"
+                Grid.ColumnSpan="2"
+                Margin="0, 10, 0, 0"
+                MaxLines="1"
+                LineBreakMode="TailTruncation"
+                Text="{Binding Name}"
+                FontSize="16"
+                Style="{Binding NameFontStyle, Source={x:Reference deviceTemplate}}"/>
 
             <Image Grid.Column="1"
                    Grid.RowSpan="2"
@@ -71,7 +73,6 @@
 
             </Image>
 
-
             <!-- NAME AND DESCRIPTION -->
             <Grid Grid.Row="2"
                   Grid.ColumnSpan="2"   
@@ -80,6 +81,7 @@
                   RowDefinitions="*"
                   ColumnDefinitions="*, Auto">
 
+                <!-- TO DO: when the mirror appears, change the font size to 24*0.75 -->
                 <Label 
                     Grid.Column="0"
                     Margin="0,2,0,0"
@@ -88,6 +90,7 @@
                     MaxLines="1"
                     LineBreakMode="TailTruncation"
                     Text="{Binding RoomName}"
+                    FontSize="14"
                     Style="{x:DynamicResource tstyle_i5}">
 
                     <Label.Triggers>
@@ -104,11 +107,14 @@
 
                 </Label>
 
+                <!-- TO DO: when the mirror appears, change the font size to 40*0.75 -->
                 <Label Grid.Column="1"
                        Grid.RowSpan="2"
                        Text="{Binding AdditionalInfoFormatted}"
                        HorizontalTextAlignment="End"
-                       VerticalTextAlignment="End"
+                       VerticalOptions="End"
+                       Margin="0, 2, 0, 0"
+                       FontSize="22"
                        Style="{Binding DescriptionLabelStyle,Source={x:Reference deviceTemplate}}">
 
                     <Label.Triggers>

@@ -17,6 +17,7 @@ public class MainTabbedPageViewModel : BaseViewModel
     private readonly IScenariosService _scenariosService;
     private readonly IAutomationService _automationService;
     private int _buttonCount;
+    private bool _isFirstTime = true;
 
     public MainTabbedPageViewModel(
         INavigationService navigationService,
@@ -35,17 +36,21 @@ public class MainTabbedPageViewModel : BaseViewModel
     #region -- Public properties --
 
     private ICommand _settingsCommand;
-    public ICommand SettingsCommand => _settingsCommand ??= SingleExecutionCommand.FromFunc(OnSettingsCommandAsync);
+    public ICommand SettingsCommand => _settingsCommand ??= SingleExecutionCommand.FromFunc(OnSettingsCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
     #endregion
 
     #region -- Overrides --
 
-    public override void OnNavigatedTo(INavigationParameters parameters)
+    public override async void OnNavigatedTo(INavigationParameters parameters)
     {
         base.OnNavigatedTo(parameters);
 
-        Task.Run(UpdateAllAqaraDataAsync);
+        if (_isFirstTime)
+        {
+            _isFirstTime = false;
+            await UpdateAllAqaraDataAsync();
+        }
     }
 
     protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
