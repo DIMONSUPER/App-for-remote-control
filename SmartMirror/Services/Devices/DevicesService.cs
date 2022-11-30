@@ -35,8 +35,9 @@ namespace SmartMirror.Services.Devices
             IRestService restService,
             ISettingsManager settingsManager,
             IRepositoryService repositoryService,
-            IAqaraMessanger aqaraMessanger)
-            : base(restService, settingsManager)
+            IAqaraMessanger aqaraMessanger,
+            INavigationService navigationService)
+            : base(restService, settingsManager, navigationService)
         {
             _mapperService = mapperService;
             _repositoryService = repositoryService;
@@ -609,7 +610,7 @@ namespace SmartMirror.Services.Devices
             Action<AqaraMessageEventArgs> action = e.EventType switch
             {
                 Constants.Aqara.EventTypes.resource_alias_changed => OnResourceAliasChanged,
-                Constants.Aqara.EventTypes.resource_report => OnReousrceReported,
+                Constants.Aqara.EventTypes.resource_report => OnResourceReported,
                 Constants.Aqara.EventTypes.dev_name_change => OnDeviceNameChanged,
                 Constants.Aqara.EventTypes.gateway_online => OnGatewayOnline,
                 Constants.Aqara.EventTypes.gateway_offline => OnGatewayOffline,
@@ -809,7 +810,7 @@ namespace SmartMirror.Services.Devices
             }
         }
 
-        private void OnReousrceReported(AqaraMessageEventArgs aqaraMessage)
+        private void OnResourceReported(AqaraMessageEventArgs aqaraMessage)
         {
             var device = _allSupportedDevices.Where(x => x.DeviceId == aqaraMessage.DeviceId).FirstOrDefault(x => x.EditableResourceId == aqaraMessage.ResourceId);
 

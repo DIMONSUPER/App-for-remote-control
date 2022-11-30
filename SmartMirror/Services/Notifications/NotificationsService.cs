@@ -19,8 +19,9 @@ namespace SmartMirror.Services.Notifications
             IRestService restService,
             ISettingsManager settingsManager,
             IDevicesService devicesService,
-            IAqaraMessanger aqaraMessanger)
-            : base(restService, settingsManager)
+            IAqaraMessanger aqaraMessanger,
+            INavigationService navigationService)
+            : base(restService, settingsManager, navigationService)
         {
             _devicesService = devicesService;
             _aqaraMessanger = aqaraMessanger;
