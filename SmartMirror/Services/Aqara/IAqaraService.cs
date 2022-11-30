@@ -13,7 +13,7 @@ public interface IAqaraService
     
     Task<AOResult<DataAqaraResponse<PositionAqaraModel>>> GetPositionsAsync(string positionId = null, int pageNum = 1, int pageSize = 100);
 
-    Task<AOResult<DataAqaraResponse<LinkageAqaraModel>>> GetLinkageAsync(string positionId = null, int pageNum = 1, int pageSize = 100);
+    Task<AOResult<DataAqaraResponse<LinkageAqaraModel>>> GetLinkagesAsync(string positionId = null, int pageNum = 1, int pageSize = 100);
 
     Task<AOResult<DataAqaraResponse<SimpleSceneAqaraModel>>> GetScenesAsync(int pageNumber = 1, int pageSize = 100, string positionId = null);
     

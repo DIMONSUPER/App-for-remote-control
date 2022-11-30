@@ -52,7 +52,7 @@ public class AqaraService : BaseAqaraService, IAqaraService
         });
     }
 
-    public Task<AOResult<DataAqaraResponse<LinkageAqaraModel>>> GetLinkageAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
+    public Task<AOResult<DataAqaraResponse<LinkageAqaraModel>>> GetLinkagesAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>
         {

@@ -165,7 +165,7 @@
                                 <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheNotificationsSettings}"/>
                             </DataTrigger>
 
-                            <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Automation}">
+                            <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Automations}">
                                 <Setter Property="EmptyTitle" Value="{extensions:Translate NoAutomationYet}"/>
                                 <Setter Property="EmptyStateImage" Value="pic_no_automation"/>
                                 <Setter Property="LoadingTitle" Value="{extensions:Translate Automation}"/>

@@ -37,7 +37,7 @@ namespace SmartMirror.Resources.DataTemplateSelectors
                     ECategoryType.Cameras => CamerasDataTemplate,
                     ECategoryType.Providers => ProvidersDataTemplate,
                     ECategoryType.Notifications => NotificationsDataTemplate,
-                    ECategoryType.Automation => AutomationDataTemplate,
+                    ECategoryType.Automations => AutomationDataTemplate,
                 };
             }
 

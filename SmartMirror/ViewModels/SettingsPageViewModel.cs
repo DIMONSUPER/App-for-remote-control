@@ -247,7 +247,7 @@ namespace SmartMirror.ViewModels
                 },
                 new()
                 {
-                    Type = ECategoryType.Automation,
+                    Type = ECategoryType.Automations,
                     Name = Strings.Automation,
                     TapCommand = SelectCategoryCommand,
                 },
@@ -288,7 +288,7 @@ namespace SmartMirror.ViewModels
                     ECategoryType.Cameras => new(_allCameras),
                     ECategoryType.Providers => new(_allProviders),
                     ECategoryType.Notifications => IsAllowNotifications ? new(_allNotifications) : new(),
-                    ECategoryType.Automation => new(_allAutomations),
+                    ECategoryType.Automations => new(_allAutomations),
                     _ => throw new NotImplementedException(),
                 };
 
@@ -392,13 +392,13 @@ namespace SmartMirror.ViewModels
                 _allAutomations = _mapperService.MapRange<ImageAndTitleBindableModel>(automations, (m, vm) =>
                 {
                     vm.Model = m;
-                    vm.Type = ECategoryType.Automation;
+                    vm.Type = ECategoryType.Automations;
                     vm.ImageSource = "subtract_play_automation_small";
                     vm.TapCommand = ShowAutomationSettingsCommand;
                 });
             }
 
-            var automationCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Automation);
+            var automationCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Automations);
 
             automationCategory.Count = _allAutomations.Count().ToString();
 

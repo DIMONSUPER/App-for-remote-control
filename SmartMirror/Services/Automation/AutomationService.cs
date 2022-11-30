@@ -60,7 +60,7 @@ public class AutomationService : IAutomationService
 
         result = await AOResult.ExecuteTaskAsync(async onFailure =>
         {
-            var resultOfGettingAutomations = await _aqaraService.GetLinkageAsync();
+            var resultOfGettingAutomations = await _aqaraService.GetLinkagesAsync();
 
             if (resultOfGettingAutomations.IsSuccess)
             {
