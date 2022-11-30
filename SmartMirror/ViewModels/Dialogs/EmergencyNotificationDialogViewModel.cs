@@ -28,13 +28,6 @@ public class EmergencyNotificationDialogViewModel : BaseDialogViewModel
         set => SetProperty(ref _notifications, value);
     }
 
-    private INotificationGroupItemModel _currentItem;
-    public INotificationGroupItemModel CurrentItem
-    {
-        get => _currentItem;
-        set => SetProperty(ref _currentItem, value);
-    }
-
     private int _currentIndex = 1;
     public int CurrentIndex
     {
@@ -42,8 +35,22 @@ public class EmergencyNotificationDialogViewModel : BaseDialogViewModel
         set => SetProperty(ref _currentIndex, value);
     }
 
-    private ICommand _closeCommand;
-    public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc(OnCloseCommandAsync);
+    private int _itemIndex;
+    public int ItemIndex
+    {
+        get => _itemIndex;
+        set => SetProperty(ref _itemIndex, value);
+    }
+
+    private INotificationGroupItemModel _currentItem;
+    public INotificationGroupItemModel CurrentItem
+    {
+        get => _currentItem;
+        set => SetProperty(ref _currentItem, value);
+    }
+
+    private ICommand _nextCommand;
+    public ICommand NextCommand => _nextCommand ??= SingleExecutionCommand.FromFunc(OnNextCommandAsync);
 
     #endregion
 
@@ -53,9 +60,9 @@ public class EmergencyNotificationDialogViewModel : BaseDialogViewModel
     {
         base.OnPropertyChanged(args);
 
-        if (args.PropertyName == nameof(CurrentItem))
+        if (args.PropertyName == nameof(ItemIndex))
         {
-            CurrentIndex = Notifications.IndexOf(CurrentItem) + 1;
+            CurrentIndex = ItemIndex + 1;
         }
     }
 
@@ -73,9 +80,15 @@ public class EmergencyNotificationDialogViewModel : BaseDialogViewModel
 
     #region -- Private helpers --
 
-    private Task OnCloseCommandAsync()
+    private Task OnNextCommandAsync()
     {
-        RequestClose.Invoke();
+        if (Notifications.Count > CurrentIndex)
+        {
+            CurrentItem = null;
+            CurrentItem = Notifications[ItemIndex + 1];
+
+            CurrentIndex++;
+        }
 
         return Task.CompletedTask;
     }

@@ -5,9 +5,11 @@
     xmlns:dialogs="clr-namespace:SmartMirror.Views.Dialogs"
     xmlns:dialogviewmodels="clr-namespace:SmartMirror.ViewModels.Dialogs"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
     x:Class="SmartMirror.Views.Dialogs.EmergencyNotificationDialog"
-    x:DataType="dialogviewmodels:EmergencyNotificationDialogViewModel">
+    x:DataType="dialogviewmodels:EmergencyNotificationDialogViewModel"
+    x:Name="emergencyNotificationDialog">
 
     <dialogs:BaseDialogView.Resources>
 
@@ -36,7 +38,7 @@
 
                 <StackLayout
                     Orientation="Horizontal"
-                    Margin="0, 26, 0, 0">
+                    Margin="0, 24, 0, 0">
 
                     <Label
                         Style="{DynamicResource tstyle_i11}"
@@ -60,16 +62,31 @@
 
                     <Image
                         Source="ic_notifications"
+                        VerticalOptions="Start"
+                        Margin="6, 0, 0, 0"
                         WidthRequest="24"
                         HeightRequest="24"/>
 
                 </StackLayout>
 
                 <CollectionView
-                    Margin="0, 26, 0, 0"
+                    Margin="0, 42, 0, 0"
                     WidthRequest="570"
                     ItemTemplate="{StaticResource notificationTemplate}"
                     ItemsSource="{Binding Notifications}">
+
+                    <CollectionView.Behaviors>
+
+                        <behaviors:IndexFirstVisibleItemByScrollBehavior
+                            BindingContext="{Binding BindingContext, Source={Reference emergencyNotificationDialog}}"
+                            ItemIndex="{Binding ItemIndex}"/>
+
+                        <behaviors:ScrollToSelectedItemBehavior 
+                            BindingContext="{Binding BindingContext, Source={Reference emergencyNotificationDialog}}"
+                            SelectedItem="{Binding CurrentItem}"
+                            ScrollToPosition="Start"/>
+
+                    </CollectionView.Behaviors>
 
                     <CollectionView.ItemsLayout>
 
@@ -84,7 +101,7 @@
                 </CollectionView>
 
                 <Grid
-                    Margin="0, 18, 0, 42"
+                    Margin="0, 24, 0, 42"
                     ColumnDefinitions="*, *"
                     ColumnSpacing="26">
 
@@ -102,7 +119,7 @@
                         Grid.Column="1"
                         Style="{DynamicResource ButtonStyle_i1}"
                         Text="Next"
-                        Command="{Binding CloseCommand}"/>
+                        Command="{Binding NextCommand}"/>
 
                 </Grid>
 
