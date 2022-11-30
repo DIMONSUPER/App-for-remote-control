@@ -1,73 +1,67 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<DataTemplate
+<Border
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:bindableModels="clr-namespace:SmartMirror.Models.BindableModels"
+    StrokeThickness="1"
+    StrokeShape="RoundRectangle 12"
+    Stroke="{DynamicResource tcolor_i1}"
+    Background="{DynamicResource cbg_i2}"
+    Padding="22"
+    Margin="0, 0, 0, 18"
     x:DataType="bindableModels:NotificationGroupItemBindableModel"
     x:Class="SmartMirror.Resources.DataTemplates.NotificationTemplate">
 
-    <Border
-        StrokeThickness="1"
-        StrokeShape="RoundRectangle 12"
-        Stroke="{DynamicResource tcolor_i1}"
-        Background="{DynamicResource cbg_i2}"
-        Padding="22"
-        WidthRequest="512"
-        HeightRequest="136"
-        Margin="0, 0, 0, 18">
+    <StackLayout Orientation="Horizontal">
 
-        <StackLayout Orientation="Horizontal">
+        <Border
+            HeightRequest="65"
+            WidthRequest="65"
+            Padding="11"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 12"
+            Stroke="{DynamicResource cbg_i1}"
+            VerticalOptions="Start"
+            BackgroundColor="{DynamicResource cbg_i1}">
 
-            <Border
-                HeightRequest="65"
-                WidthRequest="65"
-                Padding="11"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 12"
-                Stroke="{DynamicResource cbg_i1}"
-                VerticalOptions="Start"
-                BackgroundColor="{DynamicResource cbg_i1}">
+            <Image
+                Source="{Binding Device.IconSource}"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"/>
 
-                <Image
-                    Source="{Binding Device.IconSource}"
-                    VerticalOptions="Center"
-                    HorizontalOptions="Center"/>
+        </Border>
 
-            </Border>
-
-            <VerticalStackLayout
-                Margin="20, 0, 24, 0"
-                MaximumWidthRequest="267">
-
-                <Label
-                    Text="{Binding Device.Name}"
-                    Style="{DynamicResource tstyle_i11}"/>
-
-                <controls:CustomLabel
-                    Style="{DynamicResource tstyle_i3}"
-                    VerticalOptions="Center"
-                    MaximumWidthRequest="200"
-                    MaxLines="2"
-                    LineBreakMode="TailTruncation"
-                    IsVisible="{Binding IsRoomNameVisible}"
-                    Text="{Binding Device.RoomName}"/>
-
-                <Label
-                    Text="{Binding LastActivityTime, Converter={StaticResource timeToTimeAgoConverter}}"
-                    Style="{DynamicResource tstyle_i5}"/>
-
-            </VerticalStackLayout>
+        <VerticalStackLayout
+            Margin="20, 0, 24, 0"
+            MaximumWidthRequest="267">
 
             <Label
-                Text="{Binding StatusFormatted}"
-                Style="{DynamicResource tstyle_i8}"
-                VerticalOptions="Start"
-                HorizontalOptions="EndAndExpand"
-                HorizontalTextAlignment="End"/>
+                Text="{Binding Device.Name}"
+                Style="{DynamicResource tstyle_i11}"/>
 
-        </StackLayout>
+            <controls:CustomLabel
+                Style="{DynamicResource tstyle_i3}"
+                VerticalOptions="Center"
+                MaximumWidthRequest="200"
+                MaxLines="2"
+                LineBreakMode="TailTruncation"
+                IsVisible="{Binding IsRoomNameVisible}"
+                Text="{Binding Device.RoomName}"/>
 
-    </Border>
+            <Label
+                Text="{Binding LastActivityTime, Converter={StaticResource timeToTimeAgoConverter}}"
+                Style="{DynamicResource tstyle_i5}"/>
 
-</DataTemplate>
+        </VerticalStackLayout>
+
+        <Label
+            Text="{Binding StatusFormatted}"
+            Style="{DynamicResource tstyle_i8}"
+            VerticalOptions="Start"
+            HorizontalOptions="EndAndExpand"
+            HorizontalTextAlignment="End"/>
+
+    </StackLayout>
+
+</Border>

@@ -15,7 +15,13 @@
     <dialogs:BaseDialogView.Resources>
 
         <ResourceDictionary>
-            <templates:NotificationTemplate x:Key="notificationTemplate"/>
+            <DataTemplate x:Key="notificationTemplate">
+
+                <templates:NotificationTemplate
+                    WidthRequest="512"
+                    HeightRequest="152"/>
+
+            </DataTemplate>
         </ResourceDictionary>
 
     </dialogs:BaseDialogView.Resources>
@@ -93,6 +99,16 @@
                     WidthRequest="570"
                     ItemTemplate="{StaticResource notificationTemplate}"
                     ItemsSource="{Binding Notifications}">
+
+                    <CollectionView.Triggers>
+
+                        <DataTrigger TargetType="CollectionView" Binding="{Binding Notifications.Count}" Value="1">
+
+                            <Setter Property="WidthRequest" Value="512"/>
+
+                        </DataTrigger>
+
+                    </CollectionView.Triggers>
 
                     <CollectionView.Behaviors>
 

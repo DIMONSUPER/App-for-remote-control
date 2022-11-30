@@ -1,6 +1,6 @@
 namespace SmartMirror.Resources.DataTemplates;
 
-public partial class NotificationTemplate : DataTemplate
+public partial class NotificationTemplate : Border
 {
 	public NotificationTemplate()
 	{
