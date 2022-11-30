@@ -21,4 +21,5 @@ public static class IconsNames
     public const string pic_bell = nameof(pic_bell);
     public const string pic_play = nameof(pic_play);
     public const string pic_play_single = nameof(pic_play_single);
+    public const string pic_video = nameof(pic_video);
 }

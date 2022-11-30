@@ -55,6 +55,7 @@
 		<None Remove="Resources\Images\mock_camera_stream.png" />
 		<None Remove="Resources\Images\pic_automation.svg" />
 		<None Remove="Resources\Images\pic_bell.svg" />
+		<None Remove="Resources\Images\pic_video.svg" />
 		<None Remove="Resources\Images\pic_gears.svg" />
 		<None Remove="Resources\Images\pic_play.svg" />
 		<None Remove="Resources\Images\pic_play_single.svg" />

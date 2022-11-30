@@ -454,19 +454,21 @@ namespace SmartMirror.ViewModels
         private async Task<bool> LoadAllNotificationsAsync()
         {
             var devices = Enumerable.Empty<DeviceBindableModel>();
+            var cameras = Enumerable.Empty<CameraBindableModel>();
             var scenarios = Enumerable.Empty<ScenarioBindableModel>();
+            var automation = Enumerable.Empty<AutomationBindableModel>();
 
             await Task.WhenAll(
-                Task.Run(async () => devices = await _devicesService.GetAllSupportedDevicesAsync()),                
-                Task.Run(async () => scenarios = await _scenariosService.GetAllScenariosAsync()));
-
-            var automation = _mockService.GetAutomation();
+                Task.Run(async () => devices = await _devicesService.GetAllSupportedDevicesAsync()),           
+                Task.Run(async () => cameras = (await _camerasService.GetCamerasAsync()).Result),           
+                Task.Run(async () => scenarios = await _scenariosService.GetAllScenariosAsync()),
+                Task.Run(() => automation = _mockService.GetAutomation()));
 
             var notificationSettingsGroups = new List<NotificationSettingsGroupBindableModel>();
 
             if (devices.Any())
             {
-                var notificationSettingsGroup = new NotificationSettingsGroupBindableModel()
+                var notificationSettingsGroup = new NotificationSettingsGroupBindableModel
                 {
                     Type = ECategoryType.Notifications,
                     GroupName = Strings.Accessories,
@@ -481,9 +483,25 @@ namespace SmartMirror.ViewModels
                 notificationSettingsGroups.Add(notificationSettingsGroup); 
             }
 
+            if (cameras.Any())
+            {
+                var notificationSettingsGroup = new NotificationSettingsGroupBindableModel
+                {
+                    Type = ECategoryType.Notifications,
+                    GroupName = Strings.Cameras,
+                    NotificationSettings = new(_mapperService.MapRange<ImageAndTitleBindableModel>(scenarios, (m, vm) =>
+                    {
+                        vm.ImageSource = IconsNames.pic_video;
+                        vm.Model = m;
+                        vm.IsToggled = (m as CameraBindableModel).IsReceiveNotifications;
+                        vm.TapCommand = ChangeStatusReceivingNotificationCommand;
+                    })),
+                };
+            }
+
             if (scenarios.Any())
             {
-                var notificationSettingsGroup = new NotificationSettingsGroupBindableModel()
+                var notificationSettingsGroup = new NotificationSettingsGroupBindableModel
                 {
                     Type = ECategoryType.Notifications,
                     GroupName = Strings.Scenarios,

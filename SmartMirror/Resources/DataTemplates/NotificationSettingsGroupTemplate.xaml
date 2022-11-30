@@ -15,7 +15,9 @@
             Margin="0, 42"
             Text="{Binding GroupName}"/>
 
-        <CollectionView ItemsSource="{Binding NotificationSettings}">
+        <CollectionView
+            ItemSizingStrategy="MeasureFirstItem"
+            ItemsSource="{Binding NotificationSettings}">
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
