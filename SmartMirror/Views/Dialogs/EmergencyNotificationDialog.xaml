@@ -2,6 +2,7 @@
 <dialogs:BaseDialogView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:dialogs="clr-namespace:SmartMirror.Views.Dialogs"
     xmlns:dialogviewmodels="clr-namespace:SmartMirror.ViewModels.Dialogs"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
@@ -58,6 +59,14 @@
 
                         </Label.Text>
 
+                        <Label.Triggers>
+
+                            <DataTrigger TargetType="Label" Binding="{Binding Notifications.Count}" Value="1">
+                                <Setter Property="IsVisible" Value="False"/>
+                            </DataTrigger>
+
+                        </Label.Triggers>
+
                     </Label>
 
                     <Image
@@ -65,7 +74,17 @@
                         VerticalOptions="Start"
                         Margin="6, 0, 0, 0"
                         WidthRequest="24"
-                        HeightRequest="24"/>
+                        HeightRequest="24">
+
+                        <Image.Triggers>
+
+                            <DataTrigger TargetType="Image" Binding="{Binding Notifications.Count}" Value="1">
+                                <Setter Property="IsVisible" Value="False"/>
+                            </DataTrigger>
+
+                        </Image.Triggers>
+
+                    </Image>
 
                 </StackLayout>
 
@@ -100,25 +119,73 @@
 
                 </CollectionView>
 
+                <Button
+                    Style="{DynamicResource ButtonStyle_i1}"
+                    IsVisible="False"
+                    Margin="0, 24, 0, 42"
+                    HorizontalOptions="Center"
+                    Text="{extensions:Translate Close}"
+                    Command="{Binding CloseCommand}">
+
+                    <Button.Triggers>
+
+                        <DataTrigger TargetType="Button" Value="0">
+
+                            <DataTrigger.Binding>
+
+                                <MultiBinding Converter="{xct:MultiMathExpressionConverter}" ConverterParameter="x0 - x1">
+                                    <Binding Path="CurrentIndex" />
+                                    <Binding Path="Notifications.Count" />
+                                </MultiBinding>
+
+                            </DataTrigger.Binding>
+
+                            <Setter Property="IsVisible" Value="True"/>
+
+                        </DataTrigger>
+
+                    </Button.Triggers>
+
+                </Button>
+
                 <Grid
                     Margin="0, 24, 0, 42"
                     ColumnDefinitions="*, *"
                     ColumnSpacing="26">
 
+                    <Grid.Triggers>
+
+                        <DataTrigger TargetType="Grid" Value="0">
+
+                            <DataTrigger.Binding>
+
+                                <MultiBinding Converter="{xct:MultiMathExpressionConverter}" ConverterParameter="x0 - x1">
+                                    <Binding Path="CurrentIndex" />
+                                    <Binding Path="Notifications.Count" />
+                                </MultiBinding>
+
+                            </DataTrigger.Binding>
+
+                            <Setter Property="IsVisible" Value="False"/>
+
+                        </DataTrigger>
+
+                    </Grid.Triggers>
+
                     <Button
                         Grid.Column="0"
-                        Style="{DynamicResource ButtonStyle_i1}"
-                        Text="Close"
+                        Style="{x:DynamicResource ButtonStyle_i1}"
+                        Text="{extensions:Translate Close}"
                         Background="Transparent"
-                        TextColor="#E9E9E9"
-                        BorderColor="{DynamicResource cbg_i3}"
+                        TextColor="{x:DynamicResource cbg_i3}"
+                        BorderColor="{x:DynamicResource cbg_i3}"
                         BorderWidth="0.75"
                         Command="{Binding CloseCommand}"/>
 
                     <Button
                         Grid.Column="1"
                         Style="{DynamicResource ButtonStyle_i1}"
-                        Text="Next"
+                        Text="{extensions:Translate Next}"
                         Command="{Binding NextCommand}"/>
 
                 </Grid>

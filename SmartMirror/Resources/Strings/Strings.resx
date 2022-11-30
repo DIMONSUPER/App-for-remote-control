@@ -87,6 +87,9 @@
     <data name="Close" xml:space="preserve">
         <value>Close</value>
     </data>
+    <data name="Next" xml:space="preserve">
+        <value>Next</value>
+    </data>
     <data name="NoAccessoriesYet" xml:space="preserve">
         <value>No accessories yet</value>
     </data>
