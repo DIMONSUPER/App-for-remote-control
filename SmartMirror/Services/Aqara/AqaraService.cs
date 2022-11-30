@@ -9,8 +9,9 @@ public class AqaraService : BaseAqaraService, IAqaraService
 {
     public AqaraService(
         IRestService restService,
-        ISettingsManager settingsManager)
-        : base(restService, settingsManager)
+        ISettingsManager settingsManager,
+        INavigationService navigationService)
+        : base(restService, settingsManager, navigationService)
     {
     }
 
