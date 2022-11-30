@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dialogs:BaseDialogView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dialogs="clr-namespace:SmartMirror.Views.Dialogs"
+    xmlns:dialogviewmodels="clr-namespace:SmartMirror.ViewModels.Dialogs"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+    x:Class="SmartMirror.Views.Dialogs.EmergencyNotificationDialog"
+    x:DataType="dialogviewmodels:EmergencyNotificationDialogViewModel">
+
+    <dialogs:BaseDialogView.Resources>
+
+        <ResourceDictionary>
+            <templates:NotificationTemplate x:Key="notificationTemplate"/>
+        </ResourceDictionary>
+
+    </dialogs:BaseDialogView.Resources>
+
+    <Frame
+        Padding="0"
+        BackgroundColor="Transparent">
+
+        <Border
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            StrokeThickness="0.75"
+            StrokeShape="RoundRectangle 9"
+            Stroke="{DynamicResource tcolor_i1}"
+            Padding="0"
+            BackgroundColor="{StaticResource cbg_i2}">
+
+            <VerticalStackLayout
+                Spacing="0"
+                Margin="30, 0">
+
+                <StackLayout
+                    Orientation="Horizontal"
+                    Margin="0, 26, 0, 0">
+
+                    <Label
+                        Style="{DynamicResource tstyle_i11}"
+                        HorizontalOptions="Start"
+                        Text="{extensions:Translate EmergencyNotification}" />
+
+                    <Label
+                        Style="{DynamicResource tstyle_i5}"
+                        HorizontalOptions="EndAndExpand">
+
+                        <Label.Text>
+
+                            <MultiBinding StringFormat="{}{0}/{1}">
+                                <Binding Path="CurrentIndex" />
+                                <Binding Path="Notifications.Count" />
+                            </MultiBinding>
+
+                        </Label.Text>
+
+                    </Label>
+
+                    <Image
+                        Source="ic_notifications"
+                        WidthRequest="24"
+                        HeightRequest="24"/>
+
+                </StackLayout>
+
+                <CollectionView
+                    Margin="0, 26, 0, 0"
+                    WidthRequest="570"
+                    ItemTemplate="{StaticResource notificationTemplate}"
+                    ItemsSource="{Binding Notifications}">
+
+                    <CollectionView.ItemsLayout>
+
+                        <LinearItemsLayout
+                            Orientation="Horizontal"
+                            ItemSpacing="18"
+                            SnapPointsAlignment="Start"
+                            SnapPointsType="Mandatory"/>
+
+                    </CollectionView.ItemsLayout>
+
+                </CollectionView>
+
+                <Grid
+                    Margin="0, 18, 0, 42"
+                    ColumnDefinitions="*, *"
+                    ColumnSpacing="26">
+
+                    <Button
+                        Grid.Column="0"
+                        Style="{DynamicResource ButtonStyle_i1}"
+                        Text="Close"
+                        Background="Transparent"
+                        TextColor="#E9E9E9"
+                        BorderColor="{DynamicResource cbg_i3}"
+                        BorderWidth="0.75"
+                        Command="{Binding CloseCommand}"/>
+
+                    <Button
+                        Grid.Column="1"
+                        Style="{DynamicResource ButtonStyle_i1}"
+                        Text="Next"
+                        Command="{Binding CloseCommand}"/>
+
+                </Grid>
+
+            </VerticalStackLayout>
+
+        </Border>
+
+    </Frame>
+
+</dialogs:BaseDialogView>

@@ -156,6 +156,14 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private int SelectedNotificationCategoryIndex => NotificationCategories.IndexOf(SelectedNotificationCategory);
 
+    private async void OnShowEmergencyNotificationDialogAsync(object sender, NotificationGroupItemBindableModel e)
+    {
+        var result = await _dialogService.ShowDialogAsync(nameof(Views.Dialogs.EmergencyNotificationDialog), new DialogParameters
+        {
+            { Constants.DialogsParameterKeys.ACCESSORY, Notifications },
+        });
+    }
+
     private async void OnNotificationReceived(object sender, NotificationGroupItemBindableModel notification)
     {
         await UpdateAllDataAndChangeStateAsync();
@@ -219,6 +227,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
         SelectNotificationSource(notificationSource);
 
         FilterNotifications();
+
+        OnShowEmergencyNotificationDialogAsync(null, null);
 
         return Task.CompletedTask;
     }

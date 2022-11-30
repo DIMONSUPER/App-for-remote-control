@@ -13,6 +13,7 @@
         Stroke="{DynamicResource tcolor_i1}"
         Background="{DynamicResource cbg_i2}"
         Padding="22"
+        WidthRequest="512"
         Margin="0, 0, 0, 18">
 
         <StackLayout Orientation="Horizontal">

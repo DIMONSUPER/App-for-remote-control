@@ -4,29 +4,41 @@ using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
+using SmartMirror.Services.Notifications;
 using SmartMirror.Views;
+using SmartMirror.Models.BindableModels;
 using System.Windows.Input;
+using SmartMirror.Views.Dialogs;
 
 namespace SmartMirror.ViewModels;
 
 public class MainTabbedPageViewModel : BaseViewModel
 {
     private readonly IDevicesService _devicesService;
+    private readonly IDialogService _dialogService;
     private readonly IRoomsService _roomsService;
     private readonly IScenariosService _scenariosService;
+    private readonly INotificationsService _notificationsService;
+
     private int _buttonCount;
     private bool _isFirstTime = true;
 
     public MainTabbedPageViewModel(
         INavigationService navigationService,
         IDevicesService devicesService,
+        IDialogService dialogService,
         IRoomsService roomsService,
+        INotificationsService notificationsService,
         IScenariosService scenariosService)
         : base(navigationService)
     {
         _devicesService = devicesService;
+        _dialogService = dialogService;
         _roomsService = roomsService;
         _scenariosService = scenariosService;
+        _notificationsService = notificationsService;
+
+        _notificationsService.NotificationReceived += OnShowEmergencyNotificationDialogAsync;
     }
 
     #region -- Public properties --
@@ -88,6 +100,14 @@ public class MainTabbedPageViewModel : BaseViewModel
         return NavigationService.CreateBuilder()
             .AddSegment<SettingsPageViewModel>()
             .NavigateAsync();
+    }
+
+    private async void OnShowEmergencyNotificationDialogAsync(object sender, NotificationGroupItemBindableModel e)
+    {
+        var result = await _dialogService.ShowDialogAsync(nameof(EmergencyNotificationDialog), new DialogParameters
+        {
+            { Constants.DialogsParameterKeys.SCENARIO, "j" },
+        });
     }
 
     private bool GetCountBackButtonPresses()
