@@ -142,10 +142,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
         if (_selectedRoom is not null)
         {
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                SelectRoom(_selectedRoom);
-            });
+            MainThread.BeginInvokeOnMainThread(() => SelectRoom(_selectedRoom));
         }
     }
 

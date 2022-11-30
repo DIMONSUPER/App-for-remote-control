@@ -10,10 +10,12 @@ namespace SmartMirror.Services.Aqara
     {
         public BaseAqaraService(
             IRestService restService,
-            ISettingsManager settingsManager)
+            ISettingsManager settingsManager,
+            INavigationService navigationService)
         {
             RestService = restService;
             SettingsManager = settingsManager;
+            NavigationService = navigationService;
         }
 
         #region -- Protected properties --
@@ -21,6 +23,8 @@ namespace SmartMirror.Services.Aqara
         protected IRestService RestService { get; }
 
         protected ISettingsManager SettingsManager { get; }
+
+        protected INavigationService NavigationService { get; }
 
         #endregion
 
@@ -68,18 +72,26 @@ namespace SmartMirror.Services.Aqara
 
         #region -- Private helpers --
 
-        private async Task<T> MakeAqaraPostAsync<T>(string intent, object data)
+        private async Task<T> MakeAqaraPostAsync<T>(string intent, object data) where T : BaseAqaraResponse
         {
             if (SettingsManager.AqaraAccessSettings.ExpiresAt < DateTime.UtcNow && !string.IsNullOrWhiteSpace(SettingsManager.AqaraAccessSettings.RefreshToken))
             {
                 await RefreshAndSetTokenAsync();
             }
 
-            return await RestService.PostAsync<T>(Constants.Aqara.API_URL, new
+            var result = await RestService.PostAsync<T>(Constants.Aqara.API_URL, new
             {
                 intent = intent,
                 data = data,
             }, GetHeaders());
+
+            if (result.Code is 108 && !string.IsNullOrWhiteSpace(SettingsManager.AqaraAccessSettings.AccessToken))
+            {
+                SettingsManager.AqaraAccessSettings.Clear();
+                await NavigationService.GoBackToRootAsync();
+            }
+
+            return result;
         }
 
         private Task<AOResult<AccessResponse>> RefreshTokenAsync()
@@ -120,6 +132,7 @@ namespace SmartMirror.Services.Aqara
             else
             {
                 System.Diagnostics.Debug.WriteLine($"Can't refresh token {refreshResponse.Message}");
+
                 SettingsManager.AqaraAccessSettings.Clear();
             }
         }

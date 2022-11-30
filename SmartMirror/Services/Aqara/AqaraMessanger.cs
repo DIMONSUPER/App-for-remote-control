@@ -15,7 +15,6 @@ public class AqaraMessanger : IAqaraMessanger
 
     public AqaraMessanger()
     {
-        StartListening();
     }
 
     #region -- IAqaraMessanger implementation --

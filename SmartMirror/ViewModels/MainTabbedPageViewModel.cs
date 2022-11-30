@@ -4,6 +4,7 @@ using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
+using SmartMirror.Services.Aqara;
 using SmartMirror.Views;
 using System.Windows.Input;
 
@@ -14,6 +15,7 @@ public class MainTabbedPageViewModel : BaseViewModel
     private readonly IDevicesService _devicesService;
     private readonly IRoomsService _roomsService;
     private readonly IScenariosService _scenariosService;
+    private readonly IAqaraMessanger _aqaraMessanger;
     private int _buttonCount;
     private bool _isFirstTime = true;
 
@@ -21,12 +23,15 @@ public class MainTabbedPageViewModel : BaseViewModel
         INavigationService navigationService,
         IDevicesService devicesService,
         IRoomsService roomsService,
-        IScenariosService scenariosService)
+        IScenariosService scenariosService,
+        IAqaraMessanger aqaraMessanger)
         : base(navigationService)
     {
         _devicesService = devicesService;
         _roomsService = roomsService;
         _scenariosService = scenariosService;
+        _aqaraMessanger = aqaraMessanger;
+        _aqaraMessanger.StartListening();
     }
 
     #region -- Public properties --
@@ -37,6 +42,13 @@ public class MainTabbedPageViewModel : BaseViewModel
     #endregion
 
     #region -- Overrides --
+
+    public override void Destroy()
+    {
+        _aqaraMessanger.StopListening();
+
+        base.Destroy();
+    }
 
     public override async void OnNavigatedTo(INavigationParameters parameters)
     {
