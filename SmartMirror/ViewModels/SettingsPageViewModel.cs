@@ -254,8 +254,18 @@ namespace SmartMirror.ViewModels
 
         private Task OnSelectCategoryCommandAsync(CategoryBindableModel category)
         {
+            _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
+            {
+                PageState = EPageState.LoadingSkeleton;
+            }));
+
             SelectCategory(category);
             SetElementsSelectedCategory();
+
+            _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
+            {
+                PageState = EPageState.Complete;
+            }));
 
             return Task.CompletedTask;
         }
