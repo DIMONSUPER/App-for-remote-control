@@ -1,9 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using SmartMirror.Interfaces;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace SmartMirror.Models.BindableModels
 {
-    public class ScenarioBindableModel : BindableBase
+    public class ScenarioBindableModel : BindableBase, INotifiable
     {
         private int _id;
         public int Id

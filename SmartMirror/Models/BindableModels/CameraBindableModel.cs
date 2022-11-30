@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace SmartMirror.Models.BindableModels
 {
-    public class CameraBindableModel : BindableBase, ITappable
+    public class CameraBindableModel : BindableBase, ITappable, INotifiable
     {
         #region -- Public properties --
 

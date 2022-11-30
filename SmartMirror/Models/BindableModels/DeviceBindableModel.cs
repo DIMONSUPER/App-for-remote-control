@@ -1,11 +1,12 @@
 ﻿using SmartMirror.Enums;
+using SmartMirror.Interfaces;
 using SmartMirror.Resources;
 using System.ComponentModel;
 using System.Windows.Input;
 
 namespace SmartMirror.Models.BindableModels;
 
-public class DeviceBindableModel : BindableBase
+public class DeviceBindableModel : BindableBase, INotifiable
 {
     #region -- Public properties --
 

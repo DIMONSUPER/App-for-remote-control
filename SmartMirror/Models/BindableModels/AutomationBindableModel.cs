@@ -1,6 +1,8 @@
-﻿namespace SmartMirror.Models.BindableModels
+﻿using SmartMirror.Interfaces;
+
+namespace SmartMirror.Models.BindableModels
 {
-    public class AutomationBindableModel : BindableBase
+    public class AutomationBindableModel : BindableBase, INotifiable
     {
         private int _id;
         public int Id
