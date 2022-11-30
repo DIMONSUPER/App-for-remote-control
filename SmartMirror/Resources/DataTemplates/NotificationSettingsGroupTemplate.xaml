@@ -9,22 +9,24 @@
         
     <StackLayout>
 
+        <StackLayout.Resources>
+            <ResourceDictionary>
+                <DataTemplate x:Key="simpleAccessoryTemplate">
+                    <templates:SimpleAccessoryTemplate HasSwitch="True"/>
+                </DataTemplate>                
+            </ResourceDictionary>
+        </StackLayout.Resources>
+        
         <Label
             Style="{x:DynamicResource tstyle_i11}"
             HorizontalTextAlignment="Center"
             Margin="0, 42"
             Text="{Binding GroupName}"/>
 
-        <CollectionView ItemsSource="{Binding NotificationSettings}">
+        <CollectionView 
+            ItemTemplate="{x:StaticResource simpleAccessoryTemplate}"
+            ItemsSource="{Binding NotificationSettings}">
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    
-                    <templates:SimpleAccessoryTemplate HasSwitch="True"/>
-                    
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-            
             <CollectionView.ItemsLayout>
                 
                 <GridItemsLayout

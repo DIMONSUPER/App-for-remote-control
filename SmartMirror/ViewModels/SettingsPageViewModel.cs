@@ -15,7 +15,6 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using SmartMirror.Services.Mock;
 using SmartMirror.Resources;
-using System.IO.IsolatedStorage;
 
 namespace SmartMirror.ViewModels
 {
