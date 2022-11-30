@@ -14,7 +14,7 @@ public interface ICamerasService
 
     Task<AOResult<bool>> VerifyCameraIPAddressAsync(string ipAddress, CancellationToken? cancellationToken = null);
 
-    Task<AOResult<bool>> CheckCameraConnection(CameraBindableModel camera);
+    Task<AOResult<bool>> CheckCameraConnection(CameraBindableModel camera, CancellationToken? cancellationToken = null);
 
     Task<AOResult> RemoveCameraAsync(CameraBindableModel cameraModel);
 }

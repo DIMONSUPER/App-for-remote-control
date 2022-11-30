@@ -19,8 +19,9 @@ namespace SmartMirror.Services.Notifications
             IRestService restService,
             ISettingsManager settingsManager,
             IDevicesService devicesService,
-            IAqaraMessanger aqaraMessanger)
-            : base(restService, settingsManager)
+            IAqaraMessanger aqaraMessanger,
+            INavigationService navigationService)
+            : base(restService, settingsManager, navigationService)
         {
             _devicesService = devicesService;
             _aqaraMessanger = aqaraMessanger;
@@ -56,6 +57,7 @@ namespace SmartMirror.Services.Notifications
                     subjectId = deviceId,
                     resourceIds = resourceIds,
                     startTime = DateTimeHelper.ConvertToMilliseconds(DateTime.UtcNow.AddDays(-7)),
+                    size = 300,
                 };
 
                 var response = await MakeRequestAsync<DataAqaraResponse<ResourceResponse>>("fetch.resource.history", data, onFailure);

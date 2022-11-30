@@ -75,7 +75,7 @@
                     HorizontalOptions="CenterAndExpand"
                     ButtonStyle="{DynamicResource ButtonStyle_i1}"
                     ButtonText="{extensions:Translate Finish}"
-                    Command="{Binding FinishCommand}"
+                    Command="{Binding CloseCommand}"
                     IsRunning="{Binding IsFinishButtonBusy}"/>
 
             </VerticalStackLayout>

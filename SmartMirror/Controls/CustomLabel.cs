@@ -23,7 +23,7 @@ namespace SmartMirror.Controls
 
             if (label is Label controlsLabel && controlsLabel.MaxLines > -1 && textView is not null && textView.Ellipsize == Android.Text.TextUtils.TruncateAt.End)
             {
-                textView.SetMaxLines(controlsLabel.MaxLines);
+                textView.Post(() => textView.SetMaxLines(controlsLabel.MaxLines));
             }
         }
 

@@ -42,7 +42,7 @@ namespace SmartMirror.Services.Cameras
             });
         }
 
-        public Task<AOResult<bool>> CheckCameraConnection(CameraBindableModel camera)
+        public Task<AOResult<bool>> CheckCameraConnection(CameraBindableModel camera, CancellationToken? cancellationToken = null)
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
@@ -52,11 +52,7 @@ namespace SmartMirror.Services.Cameras
 
                 try
                 {
-                    using var tokenSource = new CancellationTokenSource();
-
-                    await rtspClient.ConnectAsync(tokenSource.Token);
-
-                    tokenSource.Cancel();
+                    await rtspClient.ConnectAsync(cancellationToken ?? CancellationToken.None);
                 }
                 catch (OperationCanceledException ex)
                 {

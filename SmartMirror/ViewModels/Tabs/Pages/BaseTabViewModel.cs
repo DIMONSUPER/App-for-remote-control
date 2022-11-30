@@ -3,7 +3,7 @@ using SmartMirror.Interfaces;
 
 namespace SmartMirror.ViewModels.Tabs.Pages;
 
-public class BaseTabViewModel : BindableBase, IPageLifecycleAware, INavigationAware, IDestructible, ISelectable
+public class BaseTabViewModel : BindableBase, IPageLifecycleAware, INavigationAware, IDestructible, ISelectable, IApplicationLifecycleAware
 {
     public BaseTabViewModel(INavigationService navigationService)
     {
@@ -99,6 +99,18 @@ public class BaseTabViewModel : BindableBase, IPageLifecycleAware, INavigationAw
     {
         get => _isSelected;
         set => SetProperty(ref _isSelected, value);
+    }
+
+    #endregion
+
+    #region -- IApplicationLifecycleAware implementation --
+
+    public virtual void OnResume()
+    {
+    }
+
+    public virtual void OnSleep()
+    {
     }
 
     #endregion
