@@ -55,12 +55,25 @@ namespace SmartMirror.ViewModels.Dialogs
         private ICommand _loginWithGoogleCommand;
         public ICommand LoginWithGoogleCommand => _loginWithGoogleCommand ??= SingleExecutionCommand.FromFunc(OnLoginWithGoogleCommandAsync);
 
-        private ICommand _finishCommand;
-        public ICommand FinishCommand => _finishCommand ??= SingleExecutionCommand.FromFunc(OnFinishCommandAsync);
-
         #endregion
 
         #region -- Overrides --
+
+        public override async Task OnCloseCommandAsync()
+        {
+            IsFinishButtonBusy = true;
+
+            await _navigationService.CreateBuilder()
+                .AddSegment<MainTabbedPageViewModel>()
+                .NavigateAsync();
+
+            RequestClose.Invoke(new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.RESULT, true },
+            });
+
+            IsFinishButtonBusy = false;
+        }
 
         public override void OnDialogOpened(IDialogParameters parameters)
         {
@@ -103,22 +116,6 @@ namespace SmartMirror.ViewModels.Dialogs
             {
                 //TODO: implement if needed
             }
-        }
-
-        private async Task OnFinishCommandAsync()
-        {
-            IsFinishButtonBusy = true;
-
-            await _navigationService.CreateBuilder()
-                .AddSegment<MainTabbedPageViewModel>()
-                .NavigateAsync();
-
-            RequestClose.Invoke(new DialogParameters
-            {
-                { Constants.DialogsParameterKeys.RESULT, true },
-            });
-
-            IsFinishButtonBusy = false;
         }
 
         private Task DisplayNotImplementedDialogAsync()
