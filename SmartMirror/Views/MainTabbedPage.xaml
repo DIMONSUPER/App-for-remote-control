@@ -79,4 +79,10 @@
         </x:Arguments>
     </NavigationPage>
 
+    <NavigationPage Title="Automation">
+        <x:Arguments>
+            <pages:AutomationPage/>
+        </x:Arguments>
+    </NavigationPage>
+
 </controls:CustomTabbedPage>

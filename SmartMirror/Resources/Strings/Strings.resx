@@ -207,6 +207,9 @@
     <data name="FavoriteScenarios" xml:space="preserve">
         <value>Favorite Scenarios</value>
     </data>
+    <data name="FavoriteAutomation" xml:space="preserve">
+        <value>Favorite Automation</value>
+    </data>
     <data name="Active" xml:space="preserve">
         <value>Active</value>
     </data>

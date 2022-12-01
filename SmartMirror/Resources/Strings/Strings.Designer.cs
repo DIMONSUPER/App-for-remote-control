@@ -445,6 +445,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Favorite Automation.
+        /// </summary>
+        internal static string FavoriteAutomation {
+            get {
+                return ResourceManager.GetString("FavoriteAutomation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Favorite Scenarios.
         /// </summary>
         internal static string FavoriteScenarios {

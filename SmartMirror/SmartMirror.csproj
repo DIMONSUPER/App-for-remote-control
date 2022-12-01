@@ -349,6 +349,15 @@
 		<MauiXaml Update="Views\Dialogs\AutomationSettingsDialog.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Views\Tabs\Pages\AutomationPage.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Tabs\Views\AutomationPageView.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\AutomationCardTemplate.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Update="Resources\Strings\Strings.resx">

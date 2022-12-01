@@ -78,6 +78,13 @@ public class AutomationBindableModel : BindableBase, ITappable
         set => SetProperty(ref _isEmergencyNotification, value);
     }
 
+    private ICommand _changeActiveStatusCommand;
+    public ICommand ChangeActiveStatusCommand
+    {
+        get => _changeActiveStatusCommand;
+        set => SetProperty(ref _changeActiveStatusCommand, value);
+    }
+
     #endregion
 
     #region -- ITappable implementation --

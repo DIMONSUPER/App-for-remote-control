@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<views:BaseContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:SmartMirror.Views.Tabs.Views"
+    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs.Pages"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
+    xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
+    x:Class="SmartMirror.Views.Tabs.Views.AutomationPageView"
+    x:DataType="vm:AutomationPageViewModel">
+
+    <views:BaseContentView.Resources>
+
+        <ResourceDictionary>
+
+            <templates:AutomationCardTemplate x:Key="favoriteAutomationsTemplate"/>
+            <templates:AutomationCardTemplate x:Key="automationsTemplate"/>
+
+        </ResourceDictionary>
+
+    </views:BaseContentView.Resources>
+
+    <views:BaseContentView.Triggers>
+
+        <EventTrigger Event="Appearing">
+
+            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewCompleteState}" IntervalMilliseconds="250"/>
+            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewFavoriteAutomations}" IntervalMilliseconds="250"/>
+
+        </EventTrigger>
+
+    </views:BaseContentView.Triggers>
+
+    <controls:CustomStateView
+        State="{Binding DataState}"
+        LoadingTitle="{extensions:Translate Automation}"
+        EmptyTitle="{extensions:Translate NoAutomationYet}"
+        DescriptionEmptyState="{extensions:Translate PleaseCheckTheAutomationSettings}"
+        EmptyStateImage="pic_no_automation">
+        
+        <controls:CustomStateView.CompleteContent>
+
+            <controls:CustomScrollView
+                VerticalScrollBarVisibility="Never"
+                HorizontalScrollBarVisibility="Never"
+                Padding="0, 0, 0, 30"
+                x:Name="scrollViewCompleteState">
+
+                <VerticalStackLayout
+                    Padding="0, 42, 0, 0"
+                    Spacing="0">
+
+                    <!-- FAVORITE AUTOMATIONS -->
+                    <controls:BadgeTitleView
+                        HorizontalOptions="Start"
+                        Margin="60, 0"
+                        Spacing="12"
+                        IsVisible="{Binding FavoriteAutomations.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
+                        Title="{extensions:Translate FavoriteAutomation}"
+                        Number="{Binding FavoriteAutomations.Count}"/>
+
+                    <!-- FAVORITE AUTOMATIONS COLLECTION -->
+                    <controls:CustomScrollView
+                        Margin="0, 16, 0, 0"
+                        Orientation="Horizontal"
+                        HorizontalScrollBarVisibility="Never"
+                        IsVisible="{Binding FavoriteAutomations.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
+                        x:Name="scrollViewFavoriteAutomations">
+
+                        <HorizontalStackLayout
+                            Spacing="30"
+                            Padding="60, 0"
+                            BindableLayout.ItemTemplate="{StaticResource favoriteAutomationsTemplate}"
+                            BindableLayout.ItemsSource="{Binding FavoriteAutomations}"/>
+
+                    </controls:CustomScrollView>
+
+                    <!-- AUTOMATIONS -->
+                    <controls:BadgeTitleView
+                        HorizontalOptions="Start"
+                        Margin="60, 54, 60, 0"
+                        Spacing="12"
+                        Title="{extensions:Translate Automation}"
+                        Number="{Binding Automations.Count}">
+
+                        <controls:BadgeTitleView.Triggers>
+                            <DataTrigger
+                                TargetType="controls:BadgeTitleView"
+                                Binding="{Binding FavoriteAutomations.Count, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
+                                Value="False">
+
+                                <Setter Property="Margin" Value="60, 0"/>
+
+                            </DataTrigger>
+                        </controls:BadgeTitleView.Triggers>
+
+                    </controls:BadgeTitleView>
+
+                    <!-- AUTOMATIONS COLLECTION -->
+                    <CollectionView
+                        Margin="60, 16, 60, 0"
+                        ItemsSource="{Binding Automations}"
+                        ItemTemplate="{StaticResource automationsTemplate}"
+                        VerticalScrollBarVisibility="Never"
+                        HorizontalScrollBarVisibility="Never">
+
+                        <CollectionView.ItemsLayout>
+
+                            <GridItemsLayout
+                                Orientation="Vertical"
+                                VerticalItemSpacing="30"
+                                HorizontalItemSpacing="30"
+                                Span="4"/>
+
+                        </CollectionView.ItemsLayout>
+
+                    </CollectionView>
+
+                </VerticalStackLayout>
+
+            </controls:CustomScrollView>
+
+        </controls:CustomStateView.CompleteContent>
+
+         <controls:CustomStateView.LoadingSkeletonContent>
+
+            <skeleton:ScenariosTabSkeleton/>
+
+        </controls:CustomStateView.LoadingSkeletonContent>
+
+    </controls:CustomStateView>
+    
+</views:BaseContentView>
