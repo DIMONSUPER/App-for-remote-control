@@ -546,13 +546,13 @@ namespace SmartMirror.ViewModels
             return true;
         }
 
-        NotificationSettingsGroupBindableModel GetNotificationGroup(IEnumerable<IEntity> notifications, string groupName, string imageSource = null)
+        NotificationSettingsGroupBindableModel GetNotificationGroup(IEnumerable<INotifiable> notifications, string groupName, string imageSource = null)
         {
             return new NotificationSettingsGroupBindableModel
             {
                 Type = ECategoryType.Notifications,
                 GroupName = groupName,
-                NotificationSettings = new(_mapperService.MapRange<IEntity, ImageAndTitleBindableModel>(notifications, (m, vm) =>
+                NotificationSettings = new(_mapperService.MapRange<INotifiable, ImageAndTitleBindableModel>(notifications, (m, vm) =>
                 {
                     vm.ImageSource ??= imageSource;
                     vm.Model = m;
