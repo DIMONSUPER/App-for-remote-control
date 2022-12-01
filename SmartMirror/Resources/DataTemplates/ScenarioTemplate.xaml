@@ -31,6 +31,16 @@
                     Orientation="Horizontal"
                     VerticalOptions="Start">
 
+                    <StackLayout.Triggers>
+
+                        <DataTrigger TargetType="StackLayout" Binding="{Binding IsActive}" Value="True">
+                            <Setter TargetName="scenarioStatusLabel" Property="Label.Text" Value="{extensions:Translate Active}"/>
+                            <Setter TargetName="scenarioStatusLabel" Property="Label.Style" Value="{DynamicResource tstyle_i12}"/>
+                            <Setter TargetName="scenarioStatusImage" Property="Image.Source" Value="play_small_blue"/>
+                        </DataTrigger>
+
+                    </StackLayout.Triggers>
+
                     <Border
                         BackgroundColor="{DynamicResource cbg_i1}"
                         StrokeShape="RoundRectangle 12"
@@ -46,7 +56,8 @@
                             WidthRequest="30"
                             HeightRequest="30"
                             VerticalOptions="Center"
-                            HorizontalOptions="Center"/>
+                            HorizontalOptions="Center"
+                            x:Name="scenarioStatusImage"/>
 
                     </Border>
 
@@ -54,18 +65,8 @@
                         Text="{extensions:Translate NotActive}"
                         HorizontalOptions="EndAndExpand"
                         HorizontalTextAlignment="End"
-                        Style="{DynamicResource tstyle_i10}">
-
-                        <Label.Triggers>
-
-                            <DataTrigger Binding="{Binding IsActive}" Value="True" TargetType="Label">
-                                <Setter Property="Text" Value="{extensions:Translate Active}"/>
-                                <Setter Property="Style" Value="{DynamicResource tstyle_i12}"/>
-                            </DataTrigger>
-
-                        </Label.Triggers>
-
-                    </Label>
+                        Style="{DynamicResource tstyle_i10}"
+                        x:Name="scenarioStatusLabel"/>
 
                 </StackLayout>
 
@@ -78,11 +79,6 @@
                     Text="{Binding Name}"
                     VerticalOptions="EndAndExpand"
                     Style="{DynamicResource tstyle_i11}"/>
-
-                <Label
-                    Text="{Binding ActivationTime, StringFormat={x:Static app:Constants+Formats.TIME_FORMAT_2}}"
-                    VerticalOptions="End"
-                    Style="{DynamicResource tstyle_i5}"/>
 
             </StackLayout>
 
