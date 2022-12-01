@@ -20,7 +20,7 @@
 
             <templates:FavoriteScenarioTemplate x:Key="favoriteScenarioTemplate"/>
 
-            <templates:ScenariosTemplate x:Key="scenariosTemplate"/>
+            <templates:ScenarioTemplate x:Key="scenarioTemplate"/>
 
         </ResourceDictionary>
 
@@ -106,7 +106,7 @@
                     <CollectionView
                         Margin="60, 16, 60, 0"
                         ItemsSource="{Binding Scenarios}"
-                        ItemTemplate="{StaticResource scenariosTemplate}"
+                        ItemTemplate="{StaticResource scenarioTemplate}"
                         VerticalScrollBarVisibility="Never"
                         HorizontalScrollBarVisibility="Never">
 
