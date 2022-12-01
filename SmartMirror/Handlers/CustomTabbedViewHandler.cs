@@ -17,8 +17,6 @@ public class CustomTabbedViewHandler : TabbedViewHandler
     private Android.Views.View _tabBar;
     protected Android.Views.View TabBar => _tabBar ??= CreateTabBarView();
 
-    private Fragment _tabBarFragment;
-
     private AndroidX.ViewPager2.Widget.ViewPager2 _viewPager2;
     protected AndroidX.ViewPager2.Widget.ViewPager2 ViewPager2 => _viewPager2 ??= PlatformView as AndroidX.ViewPager2.Widget.ViewPager2;
 
@@ -56,15 +54,14 @@ public class CustomTabbedViewHandler : TabbedViewHandler
 
     private global::Android.Views.View CreateTabBarView()
     {
-        var renderer = Microsoft.Maui.Controls.Compatibility.Platform.Android.Platform.GetRenderer(this.CustomTabbedPage.TabBarView);
+        var handler = this.CustomTabbedPage.TabBarView.Handler;
 
-        if (renderer is null)
+        if (handler is null)
         {
-            renderer = Microsoft.Maui.Controls.Compatibility.Platform.Android.Platform.CreateRendererWithContext(CustomTabbedPage.TabBarView, Context);
-            Microsoft.Maui.Controls.Compatibility.Platform.Android.Platform.SetRenderer(CustomTabbedPage.TabBarView, renderer);
+            handler = this.CustomTabbedPage.TabBarView.ToHandler(this.MauiContext);
         }
 
-        return renderer?.View;
+        return handler.PlatformView as global::Android.Views.View;
     }
 
     private void AddTabBar()

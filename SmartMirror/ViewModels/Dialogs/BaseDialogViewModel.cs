@@ -60,7 +60,7 @@ public class BaseDialogViewModel : BindableBase, IDialogAware
     protected IKeyboardService KeyboardService { get; }
 
     private ICommand _closeCommand;
-    public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc(OnCloseCommandAsync);
+    public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc<object>(OnCloseCommandAsync);
 
     #endregion
 
@@ -112,7 +112,7 @@ public class BaseDialogViewModel : BindableBase, IDialogAware
 
     #region -- Public helpers --
 
-    public virtual Task OnCloseCommandAsync()
+    public virtual Task OnCloseCommandAsync(object parameter = null)
     {
         RequestClose.Invoke();
 

@@ -121,7 +121,7 @@ public class CamerasPageViewModel : BaseTabViewModel
                 {
                     if (MediaPlayer is null)
                     {
-                        MediaPlayer = new(_libVLC) { EnableHardwareDecoding = true };
+                        MediaPlayer = new(_libVLC) { EnableHardwareDecoding = true, NetworkCaching = 0, Volume = 0, };
                         MediaPlayer.EncounteredError += OnMediaPlayerEncounteredError;
                         MediaPlayer.Opening += OnMediaPlayerStateChanged;
                         MediaPlayer.EndReached += OnMediaPlayerStateChanged;

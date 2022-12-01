@@ -38,6 +38,7 @@ namespace SmartMirror.Resources.DataTemplateSelectors
                     ECategoryType.Providers => ProvidersDataTemplate,
                     ECategoryType.Notifications => NotificationsDataTemplate,
                     ECategoryType.Automations => AutomationDataTemplate,
+                    _ => null,
                 };
             }
 

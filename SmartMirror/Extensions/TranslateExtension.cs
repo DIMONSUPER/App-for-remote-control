@@ -7,9 +7,9 @@ namespace SmartMirror.Extensions
     {
         #region -- Public properties --
 
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
-        public string? StringFormat { get; set; }
+        public string StringFormat { get; set; }
 
         #endregion
 
@@ -52,6 +52,7 @@ namespace SmartMirror.Extensions
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"{nameof(TryFormat)}: {ex.Message}");
             }
 
             return result;
