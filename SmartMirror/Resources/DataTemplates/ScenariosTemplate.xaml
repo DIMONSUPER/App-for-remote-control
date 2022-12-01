@@ -7,7 +7,7 @@
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:bindablemodels="clr-namespace:SmartMirror.Models.BindableModels"
-    x:Class="SmartMirror.Resources.DataTemplates.ScenariosTemplate"
+    x:Class="SmartMirror.Resources.DataTemplates.ScenarioTemplate"
     x:DataType="{x:Type bindablemodels:ScenarioBindableModel}">
 
     <Border

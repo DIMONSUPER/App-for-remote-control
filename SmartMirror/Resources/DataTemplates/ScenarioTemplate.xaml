@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <DataTemplate
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -7,25 +7,23 @@
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:bindablemodels="clr-namespace:SmartMirror.Models.BindableModels"
-    x:Class="SmartMirror.Resources.DataTemplates.FavoriteScenarioTemplate"
+    x:Class="SmartMirror.Resources.DataTemplates.ScenariosTemplate"
     x:DataType="{x:Type bindablemodels:ScenarioBindableModel}">
 
-    <Grid>
+    <Border
+        HeightRequest="157"
+        Stroke="{DynamicResource cbg_i4}"
+        StrokeThickness="1"
+        StrokeShape="RoundRectangle 9"
+        BackgroundColor="{DynamicResource cbg_i2}"
+        Padding="22, 17, 22, 15"
+        behaviors:TouchBehavior.Command="{Binding TappedCommand}"
+        behaviors:TouchBehavior.CommandParameter="{Binding .}"
+        behaviors:TouchBehavior.IsAnimation="True"
+        behaviors:TouchBehavior.NormalBackgroundColor="{x:DynamicResource cbg_i2}"
+        behaviors:TouchBehavior.PressedBackgroundColor="{x:DynamicResource cbg_i13}">
 
-        <Border
-            WidthRequest="368"
-            HeightRequest="201"
-            Stroke="{DynamicResource cbg_i4}"
-            StrokeThickness="1"
-            StrokeShape="RoundRectangle 9"
-            BackgroundColor="{DynamicResource cbg_i2}"
-            Padding="29, 23, 29, 20"
-            behaviors:TouchBehavior.Command="{Binding TappedCommand}"
-            behaviors:TouchBehavior.CommandParameter="{Binding .}"
-            behaviors:TouchBehavior.IsAnimation="True"
-            behaviors:TouchBehavior.NormalBackgroundColor="{x:DynamicResource cbg_i2}"
-            behaviors:TouchBehavior.PressedBackgroundColor="{x:DynamicResource cbg_i13}">
-
+        <Grid>
             <StackLayout>
 
                 <StackLayout
@@ -37,15 +35,15 @@
                         BackgroundColor="{DynamicResource cbg_i1}"
                         StrokeShape="RoundRectangle 12"
                         StrokeThickness="0"
-                        WidthRequest="80"
-                        HeightRequest="80"
+                        WidthRequest="51"
+                        HeightRequest="51"
                         HorizontalOptions="Start"
                         behaviors:TouchBehavior.Command="{Binding ChangeActiveStatusCommand}"
                         behaviors:TouchBehavior.CommandParameter="{Binding .}">
 
                         <Image
                             Source="play_gray"
-                            Scale="0.75"
+                            Scale="0.48"
                             VerticalOptions="Center"
                             HorizontalOptions="Center"/>
 
@@ -71,11 +69,14 @@
                 </StackLayout>
 
                 <Label
+                    HorizontalTextAlignment="Start"
+                    HorizontalOptions="Start"
+                    WidthRequest="180"
+                    MaxLines="1"
+                    LineBreakMode="TailTruncation"
                     Text="{Binding Name}"
                     VerticalOptions="EndAndExpand"
-                    LineBreakMode="TailTruncation"
-                    MaxLines="2"
-                    Style="{DynamicResource tstyle_i16}"/>
+                    Style="{DynamicResource tstyle_i11}"/>
 
                 <Label
                     Text="{Binding ActivationTime, StringFormat={x:Static app:Constants+Formats.TIME_FORMAT_2}}"
@@ -84,16 +85,15 @@
 
             </StackLayout>
 
-        </Border>
+            <ActivityIndicator 
+                VerticalOptions="End"
+                HorizontalOptions="End"
+                WidthRequest="32"
+                HeightRequest="32"
+                IsRunning="{Binding IsUpdating}"/>
 
-        <ActivityIndicator 
-            Margin="29, 23, 29, 20"
-            VerticalOptions="End"
-            HorizontalOptions="End"
-            WidthRequest="32"
-            HeightRequest="32"
-            IsRunning="{Binding IsUpdating}"/>
+        </Grid>
 
-    </Grid>
+    </Border>
 
 </DataTemplate>
