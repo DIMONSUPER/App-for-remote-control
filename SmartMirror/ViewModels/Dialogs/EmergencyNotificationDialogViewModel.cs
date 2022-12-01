@@ -7,22 +7,29 @@ using System.Windows.Input;
 using System.Collections.ObjectModel;
 using SmartMirror.Interfaces;
 using System.ComponentModel;
+using SmartMirror.Services.Notifications;
 
 namespace SmartMirror.ViewModels.Dialogs;
 
 public class EmergencyNotificationDialogViewModel : BaseDialogViewModel
 {
+    private readonly INotificationsService _notificationsService;
+
     public EmergencyNotificationDialogViewModel(
         IBlurService blurService,
+        INotificationsService notificationsService,
         IKeyboardService keyboardService)
         : base(blurService, keyboardService)
     {
+        _notificationsService = notificationsService;
+
+        _notificationsService.AllNotificationsChanged += OnNotificationReceived;
     }
 
     #region -- Public properties --
 
-    private ObservableCollection<INotificationGroupItemModel> _notifications;
-    public ObservableCollection<INotificationGroupItemModel> Notifications
+    private ObservableCollection<NotificationGroupItemBindableModel> _notifications = new();
+    public ObservableCollection<NotificationGroupItemBindableModel> Notifications
     {
         get => _notifications;
         set => SetProperty(ref _notifications, value);
@@ -70,9 +77,9 @@ public class EmergencyNotificationDialogViewModel : BaseDialogViewModel
     {
         base.OnDialogOpened(parameters);
 
-        if (parameters.TryGetValue(Constants.DialogsParameterKeys.ACCESSORY, out ObservableCollection<INotificationGroupItemModel> notifications))
+        if (parameters.TryGetValue(Constants.DialogsParameterKeys.NOTIFICATION, out NotificationGroupItemBindableModel notification))
         {
-            Notifications = new(notifications.Skip(1).Take(10));
+            Notifications.Add(notification);
         }
     }
 
@@ -91,6 +98,14 @@ public class EmergencyNotificationDialogViewModel : BaseDialogViewModel
         }
 
         return Task.CompletedTask;
+    }
+
+    private void OnNotificationReceived(object sender, NotificationGroupItemBindableModel notification)
+    {
+        if (notification is not null && notification.IsEmergencyNotification)
+        {
+            Notifications.Add(notification);
+        }
     }
 
     #endregion

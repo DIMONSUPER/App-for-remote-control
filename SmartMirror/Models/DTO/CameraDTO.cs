@@ -29,6 +29,8 @@ public class CameraDTO : IDTO
 
     public bool IsReceiveNotifications { get; set; }
 
+    public bool IsEmergencyNotification { get; set; }
+
     public DateTime CreateTime { get; set; }
 
     public string VideoUrl { get; set; }

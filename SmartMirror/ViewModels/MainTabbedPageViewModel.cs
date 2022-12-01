@@ -48,7 +48,7 @@ public class MainTabbedPageViewModel : BaseViewModel
 
         _aqaraMessanger.StartListening();
         
-        _notificationsService.NotificationReceived += OnShowEmergencyNotificationDialogAsync;
+        _notificationsService.AllNotificationsChanged += OnShowEmergencyNotificationDialogAsync;
     }
 
     #region -- Public properties --
@@ -111,6 +111,7 @@ public class MainTabbedPageViewModel : BaseViewModel
         await _roomsService.DownloadAllRoomsAsync();
         await _scenariosService.DownloadAllScenariosAsync();
         await _automationService.DownloadAllAutomationsAsync();
+        await _notificationsService.DownloadAllNotificationsAsync();
     }
 
     private Task OnSettingsCommandAsync()
@@ -120,12 +121,19 @@ public class MainTabbedPageViewModel : BaseViewModel
             .NavigateAsync();
     }
 
-    private async void OnShowEmergencyNotificationDialogAsync(object sender, NotificationGroupItemBindableModel e)
+    private async void OnShowEmergencyNotificationDialogAsync(object sender, NotificationGroupItemBindableModel notification)
     {
-        var result = await _dialogService.ShowDialogAsync(nameof(EmergencyNotificationDialog), new DialogParameters
+        if (notification is not null && notification.IsEmergencyNotification)
         {
-            { Constants.DialogsParameterKeys.SCENARIO, "j" },
-        });
+            _notificationsService.AllNotificationsChanged -= OnShowEmergencyNotificationDialogAsync;
+
+            var result = await _dialogService.ShowDialogAsync(nameof(EmergencyNotificationDialog), new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.NOTIFICATION, notification },
+            });
+
+            _notificationsService.AllNotificationsChanged += OnShowEmergencyNotificationDialogAsync;
+        }
     }
 
     private bool GetCountBackButtonPresses()

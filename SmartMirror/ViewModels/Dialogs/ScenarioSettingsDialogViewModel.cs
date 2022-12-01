@@ -52,6 +52,13 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _isFavorite, value);
         }
 
+        private bool _isEmergencyNotification;
+        public bool IsEmergencyNotification
+        {
+            get => _isEmergencyNotification;
+            set => SetProperty(ref _isEmergencyNotification, value);
+        }
+
         private ScenarioBindableModel _scenario;
         public ScenarioBindableModel Scenario
         {
@@ -76,6 +83,7 @@ namespace SmartMirror.ViewModels.Dialogs
                 IsShownInScenarios = Scenario.IsShownInScenarios;
                 IsReceiveNotifications = Scenario.IsReceiveNotifications;
                 IsFavorite = Scenario.IsFavorite;
+                IsEmergencyNotification = Scenario.IsEmergencyNotification;
             }
 
             _isInitializing = false;
@@ -85,13 +93,16 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             base.OnPropertyChanged(args);
 
-            if (!_isInitializing && args.PropertyName is nameof(IsFavorite) or nameof(IsShownInScenarios) or nameof(IsReceiveNotifications))
+            if (!_isInitializing
+                && args.PropertyName is nameof(IsFavorite)
+                or nameof(IsShownInScenarios)
+                or nameof(IsReceiveNotifications)
+                or nameof(IsEmergencyNotification))
             {
-                Scenario.IsFavorite = args.PropertyName is nameof(IsFavorite) ? _isFavorite : Scenario.IsFavorite;
-
-                Scenario.IsShownInScenarios = args.PropertyName is nameof(IsShownInScenarios) ? _isShownInScenarios : Scenario.IsShownInScenarios;
-
-                Scenario.IsReceiveNotifications = args.PropertyName is nameof(IsReceiveNotifications) ? _isReceiveNotifications : Scenario.IsReceiveNotifications;
+                Scenario.IsFavorite = _isFavorite;
+                Scenario.IsShownInScenarios = _isShownInScenarios;
+                Scenario.IsReceiveNotifications = _isReceiveNotifications;
+                Scenario.IsEmergencyNotification = _isEmergencyNotification;
 
                 await _scenariosService.UpdateScenarioAsync(Scenario);
             }

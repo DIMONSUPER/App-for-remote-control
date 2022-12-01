@@ -82,7 +82,14 @@ namespace SmartMirror.Models.BindableModels
         {
             get => _isReceiveNotifications;
             set => SetProperty(ref _isReceiveNotifications, value);
-        } 
+        }
+
+        private bool _isEmergencyNotification = true;
+        public bool IsEmergencyNotification
+        {
+            get => _isEmergencyNotification;
+            set => SetProperty(ref _isEmergencyNotification, value);
+        }
 
         #endregion
 
