@@ -59,7 +59,7 @@ namespace SmartMirror.ViewModels.Dialogs
 
         #region -- Overrides --
 
-        public override async Task OnCloseCommandAsync()
+        public override async Task OnCloseCommandAsync(object parameter)
         {
             IsFinishButtonBusy = true;
 

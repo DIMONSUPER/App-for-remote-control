@@ -34,7 +34,7 @@
         public string DelayTimeUnit
         {
             get => _delayTimeUnit;
-            set => SetProperty(ref _delayTime, value);
+            set => SetProperty(ref _delayTimeUnit, value);
         }
 
         private string _subjectId;

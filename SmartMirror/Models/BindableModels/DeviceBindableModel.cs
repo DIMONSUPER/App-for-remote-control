@@ -6,16 +6,9 @@ using System.Windows.Input;
 
 namespace SmartMirror.Models.BindableModels;
 
-public class DeviceBindableModel : BindableBase, INotifiable
+public class DeviceBindableModel : BindableBase, IEntity, INotifiable
 {
     #region -- Public properties --
-
-    private int _id;
-    public int Id
-    {
-        get => _id;
-        set => SetProperty(ref _id, value);
-    }
 
     private string _deviceId;
     public string DeviceId
@@ -29,13 +22,6 @@ public class DeviceBindableModel : BindableBase, INotifiable
     {
         get => _positionId;
         set => SetProperty(ref _positionId, value);
-    }
-
-    private string _name;
-    public string Name
-    {
-        get => _name;
-        set => SetProperty(ref _name, value);
     }
 
     private EDeviceStatus _status;
@@ -157,13 +143,6 @@ public class DeviceBindableModel : BindableBase, INotifiable
         set => SetProperty(ref _isShownInRooms, value);
     }
 
-    private bool _isReceiveNotifications = true;
-    public bool IsReceiveNotifications
-    {
-        get => _isReceiveNotifications;
-        set => SetProperty(ref _isReceiveNotifications, value);
-    }
-
     private bool _isFavorite;
     public bool IsFavorite
     {
@@ -181,6 +160,35 @@ public class DeviceBindableModel : BindableBase, INotifiable
     public string FullDeviceId => $"{DeviceId}{EditableResourceId ?? string.Empty}";
 
     public bool HasEditableResource => !string.IsNullOrWhiteSpace(EditableResourceId);
+
+    #endregion
+
+    #region -- IEntity implementation --
+
+    private int _id;
+    public int Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
+
+    private string _name;
+    public string Name
+    {
+        get => _name;
+        set => SetProperty(ref _name, value);
+    }
+
+    #endregion
+
+    #region -- INotifiable implementation
+
+    private bool _isReceiveNotifications = true;
+    public bool IsReceiveNotifications
+    {
+        get => _isReceiveNotifications;
+        set => SetProperty(ref _isReceiveNotifications, value);
+    }
 
     #endregion
 

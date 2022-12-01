@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using SmartMirror.Helpers;
 using SmartMirror.Resources.Strings;
+using SmartMirror.Services.Automation;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
@@ -15,6 +16,7 @@ public class MainTabbedPageViewModel : BaseViewModel
     private readonly IDevicesService _devicesService;
     private readonly IRoomsService _roomsService;
     private readonly IScenariosService _scenariosService;
+    private readonly IAutomationService _automationService;
     private readonly IAqaraMessanger _aqaraMessanger;
     private int _buttonCount;
     private bool _isFirstTime = true;
@@ -23,6 +25,7 @@ public class MainTabbedPageViewModel : BaseViewModel
         INavigationService navigationService,
         IDevicesService devicesService,
         IRoomsService roomsService,
+        IAutomationService automationService,
         IScenariosService scenariosService,
         IAqaraMessanger aqaraMessanger)
         : base(navigationService)
@@ -30,6 +33,7 @@ public class MainTabbedPageViewModel : BaseViewModel
         _devicesService = devicesService;
         _roomsService = roomsService;
         _scenariosService = scenariosService;
+        _automationService = automationService;
         _aqaraMessanger = aqaraMessanger;
         _aqaraMessanger.StartListening();
     }
@@ -93,6 +97,7 @@ public class MainTabbedPageViewModel : BaseViewModel
         await _devicesService.DownloadAllDevicesWithSubInfoAsync();
         await _roomsService.DownloadAllRoomsAsync();
         await _scenariosService.DownloadAllScenariosAsync();
+        await _automationService.DownloadAllAutomationsAsync();
     }
 
     private Task OnSettingsCommandAsync()

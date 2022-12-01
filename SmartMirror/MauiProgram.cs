@@ -5,6 +5,7 @@ using SmartMirror.Controls;
 using SmartMirror.Handlers;
 using SmartMirror.Platforms.Android.Services;
 using SmartMirror.Services.Aqara;
+using SmartMirror.Services.Automation;
 using SmartMirror.Services.Blur;
 //using SmartMirror.Platforms.Services;
 //using SmartMirror.Services.Amazon;
@@ -13,7 +14,6 @@ using SmartMirror.Services.Devices;
 using SmartMirror.Services.Google;
 using SmartMirror.Services.Keyboard;
 using SmartMirror.Services.Mapper;
-using SmartMirror.Services.Mock;
 using SmartMirror.Services.Notifications;
 using SmartMirror.Services.Permissions;
 using SmartMirror.Services.Repository;
@@ -21,7 +21,6 @@ using SmartMirror.Services.Rest;
 using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Services.Settings;
-using SmartMirror.ViewModels;
 using SmartMirror.ViewModels.Dialogs;
 using SmartMirror.Views;
 using SmartMirror.Views.Dialogs;
@@ -72,6 +71,7 @@ public static class MauiProgram
         containerRegistry.RegisterDialog<AddNewCameraDialog>();
         containerRegistry.RegisterDialog<DoorBellDialog>();
         containerRegistry.RegisterDialog<AddMoreProviderDialog>();
+        containerRegistry.RegisterDialog<AutomationSettingsDialog>();
 
         containerRegistry.RegisterForNavigation<CustomNavigationPage>();
         containerRegistry.RegisterForNavigation<SplashScreenPage>();
@@ -88,7 +88,6 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IMapperService, MapperService>();
         containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
         containerRegistry.RegisterSingleton<IRestService, RestService>();
-        containerRegistry.RegisterSingleton<IMockService, MockService>();
         containerRegistry.RegisterSingleton<IRepositoryService, RepositoryService>();
         containerRegistry.RegisterSingleton<IBlurService, BlurService>();
         containerRegistry.RegisterSingleton<IPermissionsService, PermissionsService>();
@@ -103,6 +102,7 @@ public static class MauiProgram
         containerRegistry.RegisterSingleton<IDevicesService, DevicesService>();
         containerRegistry.RegisterSingleton<IRoomsService, RoomsService>();
         containerRegistry.RegisterSingleton<IKeyboardService, KeyboardService>();
+        containerRegistry.RegisterSingleton<IAutomationService, AutomationService>();
         containerRegistry.RegisterInstance<IAudioManager>(AudioManager.Current);
 
         containerRegistry.RegisterSingleton<ConfirmPopupViewModel>();

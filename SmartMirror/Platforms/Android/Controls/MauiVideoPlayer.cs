@@ -76,6 +76,7 @@ namespace SmartMirror.Platforms.Android.Controls
             }
             catch(Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"{nameof(TryUpdateSource)}: {ex.Message}");
             }
         }
 

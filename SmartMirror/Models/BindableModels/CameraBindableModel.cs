@@ -3,23 +3,9 @@ using System.Windows.Input;
 
 namespace SmartMirror.Models.BindableModels
 {
-    public class CameraBindableModel : BindableBase, ITappable, INotifiable
+    public class CameraBindableModel : BindableBase, ITappable, IEntity, INotifiable
     {
         #region -- Public properties --
-
-        private int _id;
-        public int Id
-        {
-            get => _id;
-            set => SetProperty(ref _id, value);
-        }
-
-        private string _name;
-        public string Name
-        {
-            get => _name;
-            set => SetProperty(ref _name, value);
-        }
 
         private string _ipAddress;
         public string IpAddress
@@ -77,22 +63,44 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _isSelected, value);
         }
 
-        private bool _isReceiveNotifications;
-        public bool IsReceiveNotifications
-        {
-            get => _isReceiveNotifications;
-            set => SetProperty(ref _isReceiveNotifications, value);
-        } 
-
         #endregion
 
-        #region -- ITappable implementation
+        #region -- ITappable implementation --
 
         private ICommand _tapCommand;
         public ICommand TapCommand
         {
             get => _tapCommand;
             set => SetProperty(ref _tapCommand, value);
+        }
+
+        #endregion
+
+        #region -- IEntity implementation --
+
+        private int _id;
+        public int Id
+        {
+            get => _id;
+            set => SetProperty(ref _id, value);
+        }
+
+        private string _name;
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
+
+        #endregion
+
+        #region -- INotifiable implementation
+
+        private bool _isReceiveNotifications = true;
+        public bool IsReceiveNotifications
+        {
+            get => _isReceiveNotifications;
+            set => SetProperty(ref _isReceiveNotifications, value);
         }
 
         #endregion

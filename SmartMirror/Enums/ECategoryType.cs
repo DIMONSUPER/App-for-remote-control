@@ -7,5 +7,6 @@
         Cameras,
         Providers,
         Notifications,
+        Automations,
     }
 }
