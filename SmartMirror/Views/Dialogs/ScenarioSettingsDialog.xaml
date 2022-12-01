@@ -80,7 +80,7 @@
                 </Border>
 
                 <Border
-                    Margin="0, 42, 0, 0"
+                    Margin="0, 36, 0, 0"
                     Padding="1"
                     StrokeThickness="1"
                     StrokeShape="RoundRectangle 9"
