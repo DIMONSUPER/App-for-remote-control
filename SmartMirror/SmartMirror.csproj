@@ -254,6 +254,9 @@
 		<MauiXaml Update="Views\SettingsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\SettingsElementsSkeleton.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Details\ScenarioDetailsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

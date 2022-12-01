@@ -256,7 +256,7 @@ namespace SmartMirror.ViewModels
         {
             _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
             {
-                PageState = EPageState.LoadingSkeleton;
+                DataState = EPageState.LoadingSkeleton;
             }));
 
             SelectCategory(category);
@@ -264,7 +264,7 @@ namespace SmartMirror.ViewModels
 
             _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
             {
-                PageState = EPageState.Complete;
+                DataState = EPageState.Complete;
             }));
 
             return Task.CompletedTask;

@@ -130,6 +130,10 @@
                         Margin="0, 60, 0, 0"
                         State="{Binding DataState}">
 
+                        <controls:CustomStateView.LoadingSkeletonContent>
+                            <skeletons:SettingsElementsSkeleton/>
+                        </controls:CustomStateView.LoadingSkeletonContent>
+
                         <controls:CustomStateView.Triggers>
 
                             <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Accessories}">
