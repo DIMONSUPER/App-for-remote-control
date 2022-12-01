@@ -13,6 +13,7 @@ using SmartMirror.Services.Scenarios;
 using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using SmartMirror.Services.Automation;
 
 namespace SmartMirror.ViewModels
 {
@@ -26,12 +27,14 @@ namespace SmartMirror.ViewModels
         private readonly ICamerasService _camerasService;
         private readonly IGoogleService _googleService;
         private readonly INotificationsService _notificationsService;
+        private readonly IAutomationService _automationService;
 
         private IEnumerable<ImageAndTitleBindableModel> _allAccessories = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allCameras = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<SettingsProvidersBindableModel> _allProviders = Enumerable.Empty<SettingsProvidersBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allNotifications = Enumerable.Empty<ImageAndTitleBindableModel>();
+        private IEnumerable<ImageAndTitleBindableModel> _allAutomations = Enumerable.Empty<ImageAndTitleBindableModel>();
 
         private CategoryBindableModel _providersCategory;
         private CategoryBindableModel _notificationsCategory;
@@ -46,6 +49,7 @@ namespace SmartMirror.ViewModels
             ICamerasService camerasService,
             IAqaraService aqaraService,
             INotificationsService notificationsService,
+            IAutomationService automationService,
             IGoogleService googleService)
             : base(navigationService)
         {
@@ -57,11 +61,14 @@ namespace SmartMirror.ViewModels
             _camerasService = camerasService;
             _googleService = googleService;
             _notificationsService = notificationsService;
+            _automationService = automationService;
 
             PageState = EPageState.LoadingSkeleton;
 
             _devicesService.AllDevicesChanged += OnAllDevicesChanged;
             _scenariosService.AllScenariosChanged += OnAllScenariosChanged;
+            _automationService.AllAutomationsChanged += OnAllAutomationsChanged;
+
             LoadCategories();
             SelectCategory(SelectedCategory ?? Categories.FirstOrDefault());
         }
@@ -129,6 +136,9 @@ namespace SmartMirror.ViewModels
         private ICommand _showCameraSettingsCommand;
         public ICommand ShowCameraSettingsCommand => _showCameraSettingsCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowCameraSettingsCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
+        private ICommand _showAutomationSettingsCommand;
+        public ICommand ShowAutomationSettingsCommand => _showAutomationSettingsCommand ??= SingleExecutionCommand.FromFunc<ImageAndTitleBindableModel>(OnShowAutomationSettingsCommandAsync);
+
         private ICommand _addNewCameraCommand;
         public ICommand AddNewCameraCommand => _addNewCameraCommand ??= SingleExecutionCommand.FromFunc(OnAddNewCameraCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
@@ -162,6 +172,7 @@ namespace SmartMirror.ViewModels
         {
             _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
             _scenariosService.AllScenariosChanged -= OnAllScenariosChanged;
+            _automationService.AllAutomationsChanged -= OnAllAutomationsChanged;
 
             base.Destroy();
         }
@@ -194,10 +205,22 @@ namespace SmartMirror.ViewModels
             await LoadAllDevicesAsync();
         }
 
+        private async void OnAllAutomationsChanged(object sender, EventArgs e)
+        {
+            await LoadAllAutomationsAsync();
+        }
+
         private void LoadCategories()
         {
             Categories = new()
             {
+                new()
+                {
+                    Type = ECategoryType.Notifications,
+                    Name = Strings.Notifications,
+                    HasImage = false,
+                    TapCommand = SelectCategoryCommand,
+                },
                 new()
                 {
                     Type = ECategoryType.Accessories,
@@ -224,9 +247,8 @@ namespace SmartMirror.ViewModels
                 },
                 new()
                 {
-                    Type = ECategoryType.Notifications,
-                    Name = Strings.Notifications,
-                    HasImage = false,
+                    Type = ECategoryType.Automations,
+                    Name = Strings.Automation,
                     TapCommand = SelectCategoryCommand,
                 },
             };
@@ -266,6 +288,7 @@ namespace SmartMirror.ViewModels
                     ECategoryType.Cameras => new(_allCameras),
                     ECategoryType.Providers => new(_allProviders),
                     ECategoryType.Notifications => IsAllowNotifications ? new(_allNotifications) : new(),
+                    ECategoryType.Automations => new(_allAutomations),
                     _ => throw new NotImplementedException(),
                 };
 
@@ -315,6 +338,7 @@ namespace SmartMirror.ViewModels
                 isLoaded &= await LoadAllScenariosAsync();
                 isLoaded &= await LoadAllCamerasAsync();
                 isLoaded &= await LoadAllNotificationsAsync();
+                isLoaded &= await LoadAllAutomationsAsync();
 
                 CreateProviders();
             }
@@ -359,6 +383,28 @@ namespace SmartMirror.ViewModels
             return true;
         }
 
+        private async Task<bool> LoadAllAutomationsAsync()
+        {
+            var automations = await _automationService.GetAllAutomationsAsync();
+
+            if (automations.Any())
+            {
+                _allAutomations = _mapperService.MapRange<ImageAndTitleBindableModel>(automations, (m, vm) =>
+                {
+                    vm.Model = m;
+                    vm.Type = ECategoryType.Automations;
+                    vm.ImageSource = "subtract_play_automation_small";
+                    vm.TapCommand = ShowAutomationSettingsCommand;
+                });
+            }
+
+            var automationCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Automations);
+
+            automationCategory.Count = _allAutomations.Count().ToString();
+
+            return true;
+        }
+
         private async Task<bool> LoadAllCamerasAsync()
         {
             var resultOfGettingCameras = await _camerasService.GetCamerasAsync();
@@ -372,23 +418,23 @@ namespace SmartMirror.ViewModels
                     vm.ImageSource = "video_fill_dark";
                     vm.TapCommand = ShowCameraSettingsCommand;
                 });
-
-                var addCameraItem = new ImageAndTitleBindableModel()
-                {
-                    Name = Strings.AddNewCamera,
-                    Type = ECategoryType.Cameras,
-                    ImageSource = "subtract_plus",
-                    TapCommand = AddNewCameraCommand,
-                };
-
-                var firstItems = new[] { addCameraItem };
-
-                _allCameras = firstItems.Concat(_allCameras);
-
-                var cameraCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Cameras);
-
-                cameraCategory.Count = (_allCameras.Count() - 1).ToString();
             }
+
+            var addCameraItem = new ImageAndTitleBindableModel()
+            {
+                Name = Strings.AddNewCamera,
+                Type = ECategoryType.Cameras,
+                ImageSource = "subtract_plus",
+                TapCommand = AddNewCameraCommand,
+            };
+
+            var firstItems = new[] { addCameraItem };
+
+            _allCameras = firstItems.Concat(_allCameras);
+
+            var cameraCategory = Categories.FirstOrDefault(category => category.Type == ECategoryType.Cameras);
+
+            cameraCategory.Count = (_allCameras.Count() - 1).ToString();
 
             return resultOfGettingCameras.IsSuccess;
         }
@@ -539,6 +585,14 @@ namespace SmartMirror.ViewModels
 
                 SetElementsSelectedCategory();
             }
+        }
+
+        private Task OnShowAutomationSettingsCommandAsync(ImageAndTitleBindableModel automation)
+        {
+            return _dialogService.ShowDialogAsync(nameof(AutomationSettingsDialog), new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.AUTOMATION, automation },
+            });
         }
 
         private async Task OnAddNewCameraCommandAsync()

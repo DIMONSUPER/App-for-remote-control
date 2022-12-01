@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DataTemplate
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:vm="clr-namespace:SmartMirror.Models.BindableModels"
+    x:Class="SmartMirror.Resources.DataTemplates.SimpleAutomationTemplate"
+    x:DataType="vm:ImageAndTitleBindableModel">
+
+    <Border
+        Padding="24, 0"
+        BackgroundColor="{DynamicResource cbg_i2}"
+        Stroke="{DynamicResource cbg_i4}"
+        StrokeThickness="0.75"
+        StrokeShape="RoundRectangle 9"
+        HeightRequest="78"
+        behaviors:TouchBehavior.IsAnimation="True"
+        behaviors:TouchBehavior.Command="{Binding TapCommand}"
+        behaviors:TouchBehavior.CommandParameter="{Binding .}"
+        behaviors:TouchBehavior.NormalBackgroundColor="{DynamicResource cbg_i2}"
+        behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}">
+
+        <Grid ColumnDefinitions="Auto, *">
+
+            <controls:CustomImageButton
+                Grid.Column="0"
+                VerticalOptions="Center"
+                HorizontalOptions="Start"
+                StrokeShape="RoundRectangle 9"
+                BackgroundColor="{DynamicResource cbg_i1}"
+                HeightImage="18"
+                HeightRequest="36"
+                WidthRequest="36"
+                Padding="9"
+                Source="{Binding ImageSource}"/>
+
+            <Label
+                Grid.Column="1"
+                Style="{DynamicResource tstyle_i11}"
+                Text="{Binding Name}"
+                LineBreakMode="TailTruncation"
+                Margin="12, 0"
+                HorizontalOptions="Start"
+                VerticalOptions="Center"
+                VerticalTextAlignment="Center"/>
+
+        </Grid>
+
+    </Border>
+
+</DataTemplate>

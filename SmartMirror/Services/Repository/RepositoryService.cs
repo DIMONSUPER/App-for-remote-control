@@ -152,6 +152,7 @@ public class RepositoryService : IRepositoryService
             database.CreateTableAsync<CameraDTO>().Wait();
             database.CreateTableAsync<NotificationDTO>().Wait();
             database.CreateTableAsync<AttributeAqaraDTO>().Wait();
+            database.CreateTableAsync<AutomationDTO>().Wait();
 
             return database;
         });

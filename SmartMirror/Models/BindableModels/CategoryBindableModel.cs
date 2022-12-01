@@ -45,7 +45,7 @@ namespace SmartMirror.Models.BindableModels
 
         #endregion
 
-        #region -- ITappable implementation
+        #region -- ITappable implementation --
 
         private ICommand _tapCommand;
         public ICommand TapCommand
