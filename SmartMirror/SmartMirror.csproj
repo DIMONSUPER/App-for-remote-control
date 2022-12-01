@@ -50,12 +50,15 @@
 		<None Remove="Resources\Images\apple_logo.svg" />
 		<None Remove="Resources\Images\aqara_logo.svg" />
 		<None Remove="Resources\Images\ci_close_big.svg" />
-		<None Remove="Resources\Images\clarity_pause_solid.svg" />
 		<None Remove="Resources\Images\delete.svg" />
 		<None Remove="Resources\Images\google_logo.svg" />
 		<None Remove="Resources\Images\mock_camera_stream.png" />
 		<None Remove="Resources\Images\pic_bell.svg" />
 		<None Remove="Resources\Images\pic_gears.svg" />
+		<None Remove="Resources\Images\play_big_blue.svg" />
+		<None Remove="Resources\Images\play_big_gray.svg" />
+		<None Remove="Resources\Images\play_small_blue.svg" />
+		<None Remove="Resources\Images\play_small_gray.svg" />
 		<None Remove="Resources\Images\subtract_plus.svg" />
 		<None Remove="Views\" />
 		<None Remove="ViewModels\" />

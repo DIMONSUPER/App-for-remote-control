@@ -34,7 +34,9 @@
                         StrokeShape="RoundRectangle 9">
 
                         <Image
-                            Source="play_gray"
+                            HeightRequest="30"
+                            WidthRequest="30"
+                            Source="play_small_gray"                           
                             VerticalOptions="Center"
                             HorizontalOptions="Center"/>
 

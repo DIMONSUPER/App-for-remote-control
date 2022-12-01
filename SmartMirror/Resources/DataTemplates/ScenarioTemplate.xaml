@@ -42,8 +42,9 @@
                         behaviors:TouchBehavior.CommandParameter="{Binding .}">
 
                         <Image
-                            Source="play_gray"
-                            Scale="0.48"
+                            Source="play_small_gray"
+                            WidthRequest="30"
+                            HeightRequest="30"
                             VerticalOptions="Center"
                             HorizontalOptions="Center"/>
 
