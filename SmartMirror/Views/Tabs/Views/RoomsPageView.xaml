@@ -107,21 +107,20 @@
                     </StackLayout>
 
                     <!-- FAVORITE ACCESSORIES COLLECTION -->
-                    <controls:CustomCollectionView
-                        x:Name="collectionViewFavoriteAccessories"
-                        Margin="0,16,0,0"
-                        Padding="60,0"
+                    <controls:CustomScrollView
                         HorizontalScrollBarVisibility="Never"
-                        ItemTemplate="{StaticResource deviceTemplateSelector}"
-                        ItemsSource="{Binding FavoriteAccessories}">
-
-                        <controls:CustomCollectionView.ItemsLayout>
-
-                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="30"/>
-
-                        </controls:CustomCollectionView.ItemsLayout>
-
-                    </controls:CustomCollectionView>
+                        Orientation="Horizontal"
+                        x:Name="collectionViewFavoriteAccessories">
+                        
+                        <StackLayout
+                            Margin="0,16,0,0"
+                            Padding="60,0"
+                            Spacing="30"
+                            Orientation="Horizontal"
+                            BindableLayout.ItemsSource="{Binding FavoriteAccessories}"
+                            BindableLayout.ItemTemplateSelector="{StaticResource deviceTemplateSelector}"/>
+                        
+                    </controls:CustomScrollView>
 
                 </StackLayout>
 

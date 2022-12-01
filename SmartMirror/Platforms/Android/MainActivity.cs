@@ -4,6 +4,7 @@ using Android.Graphics;
 using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.View;
+using SmartMirror.ViewModels.Dialogs;
 //using Com.Amazon.Identity.Auth.Device.Api.Authorization;
 //using Com.Amazon.Identity.Auth.Device.Api.Workflow;
 
@@ -35,6 +36,27 @@ public class MainActivity : MauiAppCompatActivity
         base.OnAttachedToWindow();
 
         Window.SetFormat(Format.Rgba8888);
+    }
+
+    public override void OnBackPressed()
+    {
+        var modalStack = App.Current?.MainPage?.Navigation?.ModalStack;
+
+        if (modalStack is not null && modalStack.Any())
+        {
+            if (modalStack[^1] is DialogContainerPage dialogContainerPage && dialogContainerPage?.DialogView?.BindingContext is BaseDialogViewModel baseDialogViewModel)
+            {
+                if (baseDialogViewModel.CloseCommand is not null && baseDialogViewModel.CloseCommand.CanExecute(null))
+                {
+                    System.Diagnostics.Debug.WriteLine($"OnBackPressed {dialogContainerPage.Title}");
+                    baseDialogViewModel.CloseCommand.Execute(null);
+                }
+            }
+        }
+        else
+        {
+            base.OnBackPressed();
+        }
     }
 
     #endregion

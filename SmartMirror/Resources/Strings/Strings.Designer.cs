@@ -157,6 +157,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automation.
+        /// </summary>
+        internal static string Automation {
+            get {
+                return ResourceManager.GetString("Automation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         internal static string Back {
@@ -306,6 +315,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Disconnected {
             get {
                 return ResourceManager.GetString("Disconnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display notifications as a pop-up while the app is active.
+        /// </summary>
+        internal static string DisplayNotificationsAsPopUpWhileTheAppIsActive {
+            get {
+                return ResourceManager.GetString("DisplayNotificationsAsPopUpWhileTheAppIsActive", resourceCulture);
             }
         }
         
@@ -670,6 +688,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No automation yet.
+        /// </summary>
+        internal static string NoAutomationYet {
+            get {
+                return ResourceManager.GetString("NoAutomationYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No cameras yet.
         /// </summary>
         internal static string NoCamerasYet {
@@ -832,6 +859,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please check the automation settings in your Smart Home system or in the settings of this app.
+        /// </summary>
+        internal static string PleaseCheckTheAutomationSettings {
+            get {
+                return ResourceManager.GetString("PleaseCheckTheAutomationSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please check the cameras settings in your Smart Home system or in the settings of this app.
         /// </summary>
         internal static string PleaseCheckTheCamerasSettings {
@@ -981,6 +1017,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Shades {
             get {
                 return ResourceManager.GetString("Shades", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show in Automations.
+        /// </summary>
+        internal static string ShowInAutomations {
+            get {
+                return ResourceManager.GetString("ShowInAutomations", resourceCulture);
             }
         }
         

@@ -32,6 +32,7 @@ namespace SmartMirror.Resources.DataTemplateSelectors
                     EDeviceStatus.Connected => ConnectedDataTemplate,
                     EDeviceStatus.On => OnDataTemplate,
                     EDeviceStatus.Off => OffDataTemplate,
+                    _ => null,
                 };
             }
             else

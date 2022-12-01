@@ -85,8 +85,9 @@ namespace SmartMirror.Services.Mapper
                 cfg.CreateMap<CameraBindableModel, ImageAndTitleBindableModel>().ReverseMap();
                 cfg.CreateMap<ScenarioBindableModel, ScenarioDTO>().ReverseMap();
                 cfg.CreateMap<RoomBindableModel, NotificationSourceBindableModel>().ReverseMap();
-                cfg.CreateMap<DeviceBindableModel, NotificationSourceBindableModel>()
-                    .ForMember(nameof(NotificationSourceBindableModel.Id), opt => opt.MapFrom(src => src.FullDeviceId)).ReverseMap();
+                cfg.CreateMap<LinkageAqaraModel, AutomationBindableModel>().ReverseMap();
+                cfg.CreateMap<AutomationBindableModel, AutomationDTO>().ReverseMap();
+                cfg.CreateMap<AutomationBindableModel, ImageAndTitleBindableModel>().ReverseMap();
             });
 
             return mapperConfiguration.CreateMapper();
@@ -113,6 +114,10 @@ namespace SmartMirror.Services.Mapper
             cfg.CreateMap<ScenarioModel, ScenarioBindableModel>()
                 .ForMember(nameof(ScenarioBindableModel.Id), opt => opt.MapFrom(src => 0))
                 .ForMember(nameof(ScenarioBindableModel.SceneId), opt => opt.MapFrom(src => src.Id))
+                .ReverseMap();
+
+            cfg.CreateMap<DeviceBindableModel, NotificationSourceBindableModel>()
+                .ForMember(nameof(NotificationSourceBindableModel.Id), opt => opt.MapFrom(src => src.FullDeviceId))
                 .ReverseMap();
         }
 

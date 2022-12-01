@@ -4,7 +4,7 @@ namespace SmartMirror.Helpers;
 
 public class SingleExecutionCommand : ICommand
 {
-    public static bool IsNavigating;
+    public static bool IsNavigating { get; set; }
 
     private static readonly object _locker = new();
 

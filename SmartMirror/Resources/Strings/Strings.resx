@@ -21,6 +21,12 @@
     <data name="EmergencyNotification" xml:space="preserve">
         <value>Emergency Notification</value>
     </data>
+    <data name="Automation" xml:space="preserve">
+        <value>Automation</value>
+    </data>
+    <data name="DisplayNotificationsAsPopUpWhileTheAppIsActive" xml:space="preserve">
+        <value>Display notifications as a pop-up while the app is active</value>
+    </data>
     <data name="InstallConfigurationApp" xml:space="preserve">
         <value>To continue using the app, please install our Configuration app on your smartphone.</value>
     </data>
@@ -75,6 +81,9 @@
     <data name="PleaseCheckTheScenariosSettings" xml:space="preserve">
         <value>Please check the scenarios settings in your Smart Home system or in the settings of this app</value>
     </data>
+    <data name="PleaseCheckTheAutomationSettings" xml:space="preserve">
+        <value>Please check the automation settings in your Smart Home system or in the settings of this app</value>
+    </data>
     <data name="SomethingWentWrong" xml:space="preserve">
         <value>Something went wrong</value>
     </data>
@@ -92,6 +101,9 @@
     </data>
     <data name="NoAccessoriesYet" xml:space="preserve">
         <value>No accessories yet</value>
+    </data>
+    <data name="NoAutomationYet" xml:space="preserve">
+        <value>No automation yet</value>
     </data>
     <data name="FavoriteAccessories" xml:space="preserve">
         <value>Favorite Accessories</value>
@@ -296,6 +308,9 @@
     </data>
     <data name="ShowInCameras" xml:space="preserve">
         <value>Show in Cameras</value>
+    </data>
+    <data name="ShowInAutomations" xml:space="preserve">
+        <value>Show in Automations</value>
     </data>
     <data name="Confirm" xml:space="preserve">
         <value>Confirm</value>

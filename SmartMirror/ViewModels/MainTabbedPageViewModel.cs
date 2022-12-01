@@ -1,12 +1,14 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using SmartMirror.Helpers;
 using SmartMirror.Resources.Strings;
+using SmartMirror.Services.Automation;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Services.Notifications;
 using SmartMirror.Views;
 using SmartMirror.Models.BindableModels;
+using SmartMirror.Services.Aqara;
 using System.Windows.Input;
 using SmartMirror.Views.Dialogs;
 
@@ -19,7 +21,9 @@ public class MainTabbedPageViewModel : BaseViewModel
     private readonly IRoomsService _roomsService;
     private readonly IScenariosService _scenariosService;
     private readonly INotificationsService _notificationsService;
-
+    private readonly IAutomationService _automationService;
+    private readonly IAqaraMessanger _aqaraMessanger;
+    
     private int _buttonCount;
     private bool _isFirstTime = true;
 
@@ -29,7 +33,9 @@ public class MainTabbedPageViewModel : BaseViewModel
         IDialogService dialogService,
         IRoomsService roomsService,
         INotificationsService notificationsService,
-        IScenariosService scenariosService)
+        IAutomationService automationService,
+        IScenariosService scenariosService,
+        IAqaraMessanger aqaraMessanger)
         : base(navigationService)
     {
         _devicesService = devicesService;
@@ -37,7 +43,11 @@ public class MainTabbedPageViewModel : BaseViewModel
         _roomsService = roomsService;
         _scenariosService = scenariosService;
         _notificationsService = notificationsService;
+        _automationService = automationService;
+        _aqaraMessanger = aqaraMessanger;
 
+        _aqaraMessanger.StartListening();
+        
         _notificationsService.NotificationReceived += OnShowEmergencyNotificationDialogAsync;
     }
 
@@ -49,6 +59,13 @@ public class MainTabbedPageViewModel : BaseViewModel
     #endregion
 
     #region -- Overrides --
+
+    public override void Destroy()
+    {
+        _aqaraMessanger.StopListening();
+
+        base.Destroy();
+    }
 
     public override async void OnNavigatedTo(INavigationParameters parameters)
     {
@@ -93,6 +110,7 @@ public class MainTabbedPageViewModel : BaseViewModel
         await _devicesService.DownloadAllDevicesWithSubInfoAsync();
         await _roomsService.DownloadAllRoomsAsync();
         await _scenariosService.DownloadAllScenariosAsync();
+        await _automationService.DownloadAllAutomationsAsync();
     }
 
     private Task OnSettingsCommandAsync()

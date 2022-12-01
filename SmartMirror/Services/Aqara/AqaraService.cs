@@ -9,8 +9,9 @@ public class AqaraService : BaseAqaraService, IAqaraService
 {
     public AqaraService(
         IRestService restService,
-        ISettingsManager settingsManager)
-        : base(restService, settingsManager)
+        ISettingsManager settingsManager,
+        INavigationService navigationService)
+        : base(restService, settingsManager, navigationService)
     {
     }
 
@@ -47,6 +48,23 @@ public class AqaraService : BaseAqaraService, IAqaraService
             };
 
             var response = await MakeRequestAsync<DataAqaraResponse<PositionAqaraModel>>("query.position.info", requestData, onFailure);
+
+            return response.Result;
+        });
+    }
+
+    public Task<AOResult<DataAqaraResponse<LinkageAqaraModel>>> GetLinkagesAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var requestData = new
+            {
+                PositionId = positionId,
+                pageNum = pageNum,
+                pageSize = pageSize,
+            };
+
+            var response = await MakeRequestAsync<DataAqaraResponse<LinkageAqaraModel>>("query.linkage.listByPositionId", requestData, onFailure);
 
             return response.Result;
         });

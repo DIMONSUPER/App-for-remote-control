@@ -47,9 +47,6 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _confirmText, value);
         }
 
-        private ICommand _closeCommand;
-        public ICommand CloseCommand => _closeCommand ??= SingleExecutionCommand.FromFunc<bool>(OnCloseCommandAsync);
-
         #endregion
 
         #region -- Overrides --
@@ -84,20 +81,18 @@ namespace SmartMirror.ViewModels.Dialogs
             }
         }
 
-        #endregion
-
-        #region -- Private helpers --
-
-        private Task OnCloseCommandAsync(bool confirm)
+        public override Task OnCloseCommandAsync(object parameter)
         {
-            if (confirm)
+            var isConfrimed = parameter is bool confirm ? confirm : false;
+
+            if (isConfrimed)
             {
                 _confirmAction?.Invoke();
             }
 
             RequestClose.Invoke(new DialogParameters()
             {
-                { Constants.DialogsParameterKeys.RESULT, confirm },
+                { Constants.DialogsParameterKeys.RESULT, isConfrimed },
             });
 
             return Task.CompletedTask;

@@ -112,6 +112,7 @@
 		<None Remove="Xamarin.Google.Crypto.Tink.Android" />
 		<None Remove="Xamarin.AndroidX.Legacy.Support.V4" />
 		<None Remove="Services\Keyboard\" />
+		<None Remove="Services\Automation\" />
 		<None Remove="VideoLAN.LibVLC.Android" />
 		<None Remove="LibVLCSharp" />
 	</ItemGroup>
@@ -163,6 +164,7 @@
 		<Folder Include="Services\Blur\" />
 		<Folder Include="Services\Permissions\" />
 		<Folder Include="Services\Keyboard\" />
+		<Folder Include="Services\Automation\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Controls\BadgeTitleView.xaml">
@@ -342,6 +344,12 @@
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\EmergencyNotificationDialog.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\SimpleAutomationTemplate.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\AutomationSettingsDialog.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 	</ItemGroup>
