@@ -4,7 +4,7 @@ using SmartMirror.Interfaces;
 
 namespace SmartMirror.Models.BindableModels;
 
-public class AutomationBindableModel : BindableBase, ITappable, IEntity, INotifiable
+public class AutomationBindableModel : BindableBase, ITappable, INotifiable
 {
     #region -- Public properties --
 
@@ -70,7 +70,7 @@ public class AutomationBindableModel : BindableBase, ITappable, IEntity, INotifi
 
     #endregion
 
-    #region -- IEntity implementation --
+    #region -- INotifiable implementation --
 
     private int _id;
     public int Id
@@ -85,10 +85,6 @@ public class AutomationBindableModel : BindableBase, ITappable, IEntity, INotifi
         get => _name;
         set => SetProperty(ref _name, value);
     }
-
-    #endregion
-
-    #region -- INotifiable implementation
 
     private bool _isReceiveNotifications = true;
     public bool IsReceiveNotifications

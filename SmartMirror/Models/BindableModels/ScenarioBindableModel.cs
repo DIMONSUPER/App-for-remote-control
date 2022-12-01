@@ -4,8 +4,10 @@ using System.Windows.Input;
 
 namespace SmartMirror.Models.BindableModels
 {
-    public class ScenarioBindableModel : BindableBase, IEntity, INotifiable
+    public class ScenarioBindableModel : BindableBase, INotifiable
     {
+        #region -- Public properties --
+
         private string _sceneId;
         public string SceneId
         {
@@ -67,9 +69,11 @@ namespace SmartMirror.Models.BindableModels
         {
             get => _changeActiveStatusCommand;
             set => SetProperty(ref _changeActiveStatusCommand, value);
-        }
+        } 
 
-        #region -- IEntity implementation --
+        #endregion
+
+        #region -- INotifiable implementation --
 
         private int _id;
         public int Id
@@ -84,10 +88,6 @@ namespace SmartMirror.Models.BindableModels
             get => _name;
             set => SetProperty(ref _name, value);
         }
-
-        #endregion
-
-        #region -- INotifiable implementation
 
         private bool _isReceiveNotifications = true;
         public bool IsReceiveNotifications

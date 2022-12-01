@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace SmartMirror.Models.BindableModels;
 
-public class DeviceBindableModel : BindableBase, IEntity, INotifiable
+public class DeviceBindableModel : BindableBase, INotifiable
 {
     #region -- Public properties --
 
@@ -163,7 +163,7 @@ public class DeviceBindableModel : BindableBase, IEntity, INotifiable
 
     #endregion
 
-    #region -- IEntity implementation --
+    #region -- INotifiable implementation --
 
     private int _id;
     public int Id
@@ -178,10 +178,6 @@ public class DeviceBindableModel : BindableBase, IEntity, INotifiable
         get => _name;
         set => SetProperty(ref _name, value);
     }
-
-    #endregion
-
-    #region -- INotifiable implementation
 
     private bool _isReceiveNotifications = true;
     public bool IsReceiveNotifications
