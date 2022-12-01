@@ -217,7 +217,7 @@
 		<MauiXaml Update="Resources\DataTemplates\ScenariosTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Resources\DataTemplates\ScenarioTemplate.xaml">
+		<MauiXaml Update="Resources\DataTemplates\ScenarioActionTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\AccessorySettingsDialog.xaml">
@@ -365,6 +365,9 @@
 		</Compile>
 		<Compile Update="Resources\DataTemplates\CameraTemplate.xaml.cs">
 			<DependentUpon>CameraTemplate.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Resources\DataTemplates\ScenarioActionTemplate.xaml.cs">
+		  <DependentUpon>ScenarioActionTemplate.xaml</DependentUpon>
 		</Compile>
 		<Compile Update="Resources\DataTemplates\SimpleAccessoryTemplate.xaml.cs">
 			<DependentUpon>SimpleAccessoryTemplate.xaml</DependentUpon>
