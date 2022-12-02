@@ -83,6 +83,13 @@ public class EmergencyNotificationDialogViewModel : BaseDialogViewModel
         }
     }
 
+    public override void OnDialogClosed()
+    {
+        base.OnDialogClosed();
+
+        _notificationsService.AllNotificationsChanged -= OnNotificationReceived;
+    }
+
     #endregion
 
     #region -- Private helpers --
