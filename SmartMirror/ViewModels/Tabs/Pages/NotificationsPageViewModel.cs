@@ -381,6 +381,9 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         if (!IsDataLoading)
         {
+            // TODO delete when the subscription starts working properly
+            await _notificationsService.DownloadAllNotificationsAsync();
+
             await LoadAllNotificationsAsync();
 
             await LoadNotificationSourcesAndApplyFilterAsync();
