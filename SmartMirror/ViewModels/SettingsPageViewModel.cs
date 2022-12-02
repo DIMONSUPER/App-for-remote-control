@@ -272,16 +272,12 @@ namespace SmartMirror.ViewModels
 
         private Task OnSelectCategoryCommandAsync(CategoryBindableModel category)
         {
-            _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
-            {
-                DataState = EPageState.LoadingSkeleton;
-            }));
-
+            DataState = EPageState.LoadingSkeleton;
             SelectCategory(category);
-            SetElementsSelectedCategory();
 
             _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
             {
+                SetElementsSelectedCategory();
                 DataState = EPageState.Complete;
             }));
 
@@ -508,8 +504,8 @@ namespace SmartMirror.ViewModels
             var automations = Enumerable.Empty<AutomationBindableModel>();
 
             await Task.WhenAll(
-                Task.Run(async () => devices = await _devicesService.GetAllSupportedDevicesAsync()),           
-                Task.Run(async () => cameras = (await _camerasService.GetCamerasAsync()).Result),           
+                Task.Run(async () => devices = await _devicesService.GetAllSupportedDevicesAsync()),
+                Task.Run(async () => cameras = (await _camerasService.GetCamerasAsync()).Result),
                 Task.Run(async () => scenarios = await _scenariosService.GetAllScenariosAsync()),
                 Task.Run(async () => automations = await _automationService.GetAllAutomationsAsync()));
 
@@ -517,7 +513,7 @@ namespace SmartMirror.ViewModels
 
             if (devices.Any())
             {
-                notificationSettingsGroups.Add(GetNotificationGroup(devices, Strings.Accessories)); 
+                notificationSettingsGroups.Add(GetNotificationGroup(devices, Strings.Accessories));
             }
 
             if (cameras.Any())
