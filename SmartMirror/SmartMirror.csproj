@@ -50,12 +50,15 @@
 		<None Remove="Resources\Images\apple_logo.svg" />
 		<None Remove="Resources\Images\aqara_logo.svg" />
 		<None Remove="Resources\Images\ci_close_big.svg" />
-		<None Remove="Resources\Images\clarity_pause_solid.svg" />
 		<None Remove="Resources\Images\delete.svg" />
 		<None Remove="Resources\Images\google_logo.svg" />
 		<None Remove="Resources\Images\mock_camera_stream.png" />
+		<None Remove="Resources\Images\pic_automation.svg" />
 		<None Remove="Resources\Images\pic_bell.svg" />
+		<None Remove="Resources\Images\pic_video.svg" />
 		<None Remove="Resources\Images\pic_gears.svg" />
+		<None Remove="Resources\Images\pic_play.svg" />
+		<None Remove="Resources\Images\pic_play_single.svg" />
 		<None Remove="Resources\Images\subtract_plus.svg" />
 		<None Remove="Views\" />
 		<None Remove="ViewModels\" />
@@ -194,6 +197,9 @@
 		<MauiXaml Update="Resources\DataTemplates\CameraTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\NotificationSettingsGroupTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\NotificationSourceTemplate.xaml">
 		  <SubType>
 			</SubType>
@@ -249,6 +255,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Views\SettingsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\SettingsElementsSkeleton.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Details\ScenarioDetailsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -360,6 +369,9 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
+		<Compile Update="Resources\DataTemplates\NotificationSettingsGroupTemplate.xaml.cs">
+		  <DependentUpon>NotificationSettingsGroupTemplate.xaml</DependentUpon>
+		</Compile>
 		<Compile Update="Resources\DataTemplates\NotificationSourceTemplate.xaml.cs">
 			<DependentUpon>NotificationSourceTemplate.xaml</DependentUpon>
 		</Compile>

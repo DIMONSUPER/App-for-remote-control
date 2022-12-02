@@ -1,19 +1,12 @@
-﻿using System.Windows.Input;
+﻿﻿using System.Windows.Input;
 using SmartMirror.Enums;
 using SmartMirror.Interfaces;
 
 namespace SmartMirror.Models.BindableModels;
 
-public class AutomationBindableModel : BindableBase, ITappable
+public class AutomationBindableModel : BindableBase, ITappable, INotifiable
 {
     #region -- Public properties --
-
-    private int _id;
-    public int Id
-    {
-        get => _id;
-        set => SetProperty(ref _id, value);
-    }
 
     private string _linkageId;
     public string LinkageId
@@ -27,13 +20,6 @@ public class AutomationBindableModel : BindableBase, ITappable
     {
         get => _model;
         set => SetProperty(ref _model, value);
-    }
-
-    private string _name;
-    public string Name
-    {
-        get => _name;
-        set => SetProperty(ref _name, value);
     }
 
     private ELocalizeAqara _localize;
@@ -55,13 +41,6 @@ public class AutomationBindableModel : BindableBase, ITappable
     {
         get => _isShownInAutomations;
         set => SetProperty(ref _isShownInAutomations, value);
-    }
-
-    private bool _isReceiveNotifications = true;
-    public bool IsReceiveNotifications
-    {
-        get => _isReceiveNotifications;
-        set => SetProperty(ref _isReceiveNotifications, value);
     }
 
     private bool _isFavorite;
@@ -87,6 +66,31 @@ public class AutomationBindableModel : BindableBase, ITappable
     {
         get => _tapCommand;
         set => SetProperty(ref _tapCommand, value);
+    }
+
+    #endregion
+
+    #region -- INotifiable implementation --
+
+    private int _id;
+    public int Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
+
+    private string _name;
+    public string Name
+    {
+        get => _name;
+        set => SetProperty(ref _name, value);
+    }
+
+    private bool _isReceiveNotifications = true;
+    public bool IsReceiveNotifications
+    {
+        get => _isReceiveNotifications;
+        set => SetProperty(ref _isReceiveNotifications, value);
     }
 
     #endregion
