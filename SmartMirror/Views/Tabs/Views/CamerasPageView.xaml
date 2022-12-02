@@ -62,8 +62,7 @@
                 <Grid 
                     RowDefinitions="386, *"
                     RowSpacing="24"
-                    Grid.Column="1"
-                    Margin="0, 0, 0, 120">
+                    Grid.Column="1">
 
                     <Border
                         StrokeThickness="0.75"
@@ -210,29 +209,22 @@
                             Grid.Row="1"
                             Grid.Column="1"
                             WidthRequest="160"
-                            Mode="{Static enums:EButtonMode.Hint}"
                             IconSource="photo_camera_outline"
-                            ToggledIconSource="check_circle_outline"
                             Text="{extensions:Translate Contrast}"/>
 
                         <controls:CustomButton
                             Grid.Row="1"
                             Grid.Column="2"
                             WidthRequest="160"
-                            Mode="{Static enums:EButtonMode.Toggle}"
                             IconSource="sound_mute_light"
-                            ToggledIconSource="sound_mute_dark"
                             Text="{extensions:Translate Hue}"/>
 
                         <controls:CustomButton
                             Grid.Row="1"
                             Grid.Column="3"
                             WidthRequest="160"
-                            Mode="{Static enums:EButtonMode.Toggle}"
                             IconSource="high_quality_outline_light"
-                            ToggledIconSource="high_quality_outline_dark"
                             Text="{extensions:Translate Saturation}"/>
-
 
                     </Grid>
                     
