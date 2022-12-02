@@ -52,6 +52,7 @@
 		<None Remove="Resources\Images\aqara_logo.svg" />
 		<None Remove="Resources\Images\check_circle_outline.svg" />
 		<None Remove="Resources\Images\ci_close_big.svg" />
+		<None Remove="Resources\Images\ci_close_big_black.svg" />
 		<None Remove="Resources\Images\clarity_pause_solid.svg" />
 		<None Remove="Resources\Images\contrast.svg" />
 		<None Remove="Resources\Images\delete.svg" />
@@ -186,6 +187,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Controls\CustomImageBotton.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Controls\ExpandedSlider.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Controls\TabsSelector.xaml">
 		  <Generator>MSBuild:Compile</Generator>
@@ -371,6 +375,9 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
+		<Compile Update="Controls\ExpandedSlider.xaml.cs">
+		  <DependentUpon>ExpandedSlider.xaml</DependentUpon>
+		</Compile>
 		<Compile Update="Resources\DataTemplates\NotificationSourceTemplate.xaml.cs">
 			<DependentUpon>NotificationSourceTemplate.xaml</DependentUpon>
 		</Compile>

@@ -228,12 +228,22 @@
     </Style>
 
     <Style TargetType="controls:CustomButton">
-        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="VerticalOptions" Value="Center"/>
         <Setter Property="StrokeThickness" Value="0"/>
         <Setter Property="StrokeShape" Value="RoundRectangle 26"/>
         <Setter Property="IconColor" Value="{DynamicResource cbg_i21}"/>
         <Setter Property="ToggledIconColor" Value="{DynamicResource cbg_i6}"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i3}"/>
+        <Setter Property="TextStyle" Value="{DynamicResource tstyle_i9}"/>
+    </Style>    
+
+    <Style TargetType="controls:ExpandedSlider">
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="StrokeThickness" Value="0"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 26"/>
+        <Setter Property="IconColor" Value="{DynamicResource cbg_i21}"/>
         <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i3}"/>
         <Setter Property="TextStyle" Value="{DynamicResource tstyle_i9}"/>
     </Style>    

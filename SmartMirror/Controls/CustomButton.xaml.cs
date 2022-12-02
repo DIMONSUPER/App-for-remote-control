@@ -14,6 +14,43 @@ public partial class CustomButton : Border
 
     #region -- Public properties --
 
+    public static readonly BindableProperty ModeProperty = BindableProperty.Create(
+        propertyName: nameof(Mode),
+        returnType: typeof(EButtonMode),
+        declaringType: typeof(CustomButton),
+        defaultBindingMode: BindingMode.OneWay);
+
+    public EButtonMode Mode
+    {
+        get => (EButtonMode)GetValue(ModeProperty);
+        set => SetValue(ModeProperty, value);
+    }
+
+    public static readonly BindableProperty IsToggledProperty = BindableProperty.Create(
+        propertyName: nameof(IsToggled),
+        returnType: typeof(bool),
+        declaringType: typeof(CustomButton),
+        defaultBindingMode: BindingMode.OneWay);
+
+    public bool IsToggled
+    {
+        get => (bool)GetValue(IsToggledProperty);
+        set => SetValue(IsToggledProperty, value);
+    }
+
+    public static readonly BindableProperty HintDelayMilisecondsProperty = BindableProperty.Create(
+        propertyName: nameof(HintDelayMilliseconds),
+        returnType: typeof(float),
+        defaultValue: 1500f,
+        declaringType: typeof(CustomButton),
+        defaultBindingMode: BindingMode.OneWay);
+
+    public float HintDelayMilliseconds
+    {
+        get => (float)GetValue(HintDelayMilisecondsProperty);
+        set => SetValue(HintDelayMilisecondsProperty, value);
+    }
+
     public static readonly BindableProperty IconSizesProperty = BindableProperty.Create(
         propertyName: nameof(IconSizes),
         returnType: typeof(Size),
@@ -53,55 +90,6 @@ public partial class CustomButton : Border
         set => SetValue(ToggledIconColorProperty, value);
     }
 
-    public static readonly BindableProperty TextStyleProperty = BindableProperty.Create(
-        propertyName: nameof(TextStyle),
-        returnType: typeof(Style),
-        declaringType: typeof(CustomButton),
-        defaultBindingMode: BindingMode.OneWay);
-
-    public Style TextStyle
-    {
-        get => (Style)GetValue(TextStyleProperty);
-        set => SetValue(TextStyleProperty, value);
-    }
-
-    public static readonly BindableProperty ModeProperty = BindableProperty.Create(
-        propertyName: nameof(Mode),
-        returnType: typeof(EButtonMode),
-        declaringType: typeof(CustomButton),
-        defaultBindingMode: BindingMode.OneWay);
-
-    public EButtonMode Mode
-    {
-        get => (EButtonMode)GetValue(ModeProperty);
-        set => SetValue(ModeProperty, value);
-    }
-
-    public static readonly BindableProperty HintDelayMilisecondsProperty = BindableProperty.Create(
-        propertyName: nameof(HintDelayMilliseconds),
-        returnType: typeof(float),
-        defaultValue: 1500f,
-        declaringType: typeof(CustomButton),
-        defaultBindingMode: BindingMode.OneWay);
-
-    public float HintDelayMilliseconds
-    {
-        get => (float)GetValue(HintDelayMilisecondsProperty);
-        set => SetValue(HintDelayMilisecondsProperty, value);
-    }
-
-    public static readonly BindableProperty IsToggledProperty = BindableProperty.Create(
-        propertyName: nameof(IsToggled),
-        returnType: typeof(bool),
-        declaringType: typeof(CustomButton),
-        defaultBindingMode: BindingMode.OneWay);
-
-    public bool IsToggled
-    {
-        get => (bool)GetValue(IsToggledProperty);
-        set => SetValue(IsToggledProperty, value);
-    }
-
     public static readonly BindableProperty IconSourceProperty = BindableProperty.Create(
         propertyName: nameof(IconSource),
         returnType: typeof(string),
@@ -126,6 +114,18 @@ public partial class CustomButton : Border
     {
         get => (string)GetValue(ToggledIconSourceProperty);
         set => SetValue(ToggledIconSourceProperty, value);
+    }
+
+    public static readonly BindableProperty TextStyleProperty = BindableProperty.Create(
+        propertyName: nameof(TextStyle),
+        returnType: typeof(Style),
+        declaringType: typeof(CustomButton),
+        defaultBindingMode: BindingMode.OneWay);
+
+    public Style TextStyle
+    {
+        get => (Style)GetValue(TextStyleProperty);
+        set => SetValue(TextStyleProperty, value);
     }
 
     public static readonly BindableProperty TextProperty = BindableProperty.Create(

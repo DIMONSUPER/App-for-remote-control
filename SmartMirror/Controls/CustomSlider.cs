@@ -65,7 +65,7 @@ namespace SmartMirror.Controls
 
         private void UpdateSlider(IViewHandler handler, IView view)
         {
-            if (handler.PlatformView is Android.Widget.SeekBar progressBar && view is CustomSlider slider)
+            if (handler.PlatformView is Android.Widget.SeekBar progressBar && view is CustomSlider slider && progressBar.Height > 0 && progressBar.Width > 0)
             {
                 progressBar.Post(() =>
                 {

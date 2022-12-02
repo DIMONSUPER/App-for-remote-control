@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Border
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SmartMirror.Controls"
+    x:Class="SmartMirror.Controls.ExpandedSlider"
+    x:DataType="local:ExpandedSlider"
+    x:Name="expandedSlider">
+
+    <Border.GestureRecognizers>
+        <TapGestureRecognizer Tapped="OnOpenTapped"/>
+    </Border.GestureRecognizers>
+
+    <Grid 
+        ColumnDefinitions="Auto, *"
+        ColumnSpacing="12"
+        Margin="6, 5, 18, 6">
+
+        <Grid.Triggers>
+            <DataTrigger TargetType="Grid" Binding="{Binding IsOpened, Source={Reference expandedSlider}}" Value="True">
+                <Setter Property="ColumnDefinitions" Value="Auto, Auto, *, Auto"/>
+            </DataTrigger>
+        </Grid.Triggers>
+
+        <Border 
+            Grid.Column="0"
+            StrokeThickness="0"
+            StrokeShape="RoundRectangle 75"
+            BackgroundColor="{Binding IconColor, Source={Reference expandedSlider}}"
+            x:Name="border">
+
+            <Image 
+                Margin="12"
+                HeightRequest="{Binding IconSizes.Height, Source={Reference expandedSlider}}"
+                WidthRequest="{Binding IconSizes.Width, Source={Reference expandedSlider}}"
+                Source="{Binding IconSource, Source={Reference expandedSlider}}"
+                x:Name="image"/>
+
+        </Border>
+
+        <Label 
+            Grid.Column="1"
+            Style="{Binding TextStyle, Source={Reference expandedSlider}}"
+            VerticalOptions="Center"
+            HorizontalOptions="Start"
+            HorizontalTextAlignment="Start"
+            LineBreakMode="TailTruncation"
+            Text="{Binding Text, Source={Reference expandedSlider}}"
+            x:Name="label"/>
+
+        <local:CustomSlider
+            Grid.Column="2"
+            IsVisible="{Binding IsOpened, Source={Reference expandedSlider}}"
+            ThumbImageSource="sound_thumb"
+            MinimumTrackColor="{x:DynamicResource cbg_i15}"
+            MaximumTrackColor="{x:DynamicResource cbg_i20}"
+            Minimum="{Binding Minimum, Source={Reference expandedSlider}}"
+            Maximum="{Binding Maximum, Source={Reference expandedSlider}}"
+            Value="{Binding Value, Source={Reference expandedSlider}}"/>
+
+        <Image
+            IsVisible="{Binding IsOpened, Source={Reference expandedSlider}}"
+            Grid.Column="3"
+            HeightRequest="30"
+            WidthRequest="30"
+            Source="ci_close_big_black"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
+
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnCloseTapped"/>
+            </Image.GestureRecognizers>
+
+        </Image>
+
+    </Grid>
+
+</Border>

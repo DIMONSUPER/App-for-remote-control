@@ -159,19 +159,19 @@
                         RowDefinitions="Auto, Auto"
                         RowSpacing="20"
                         ColumnDefinitions="*, *, *, *" 
-                        ColumnSpacing="20">
+                        ColumnSpacing="20"
+                        x:Name="buttonsGrid"
+                        >
 
                         <controls:CustomButton
                             Grid.Row="0"
                             Grid.Column="0"
-                            WidthRequest="160"
                             IconSource="full_screen"
                             Text="{extensions:Translate FullScreen}"/>
 
                         <controls:CustomButton
                             Grid.Row="0"
                             Grid.Column="1"
-                            WidthRequest="160"
                             Mode="{Static enums:EButtonMode.Hint}"
                             IconSource="photo_camera_outline"
                             ToggledIconSource="check_circle_outline"
@@ -181,7 +181,6 @@
                         <controls:CustomButton
                             Grid.Row="0"
                             Grid.Column="2"
-                            WidthRequest="160"
                             Mode="{Static enums:EButtonMode.Toggle}"
                             IconSource="sound_mute_light"
                             ToggledIconSource="sound_mute_dark"
@@ -191,40 +190,73 @@
                         <controls:CustomButton
                             Grid.Row="0"
                             Grid.Column="3"
-                            WidthRequest="160"
                             Mode="{Static enums:EButtonMode.Toggle}"
                             IconSource="high_quality_outline_light"
                             ToggledIconSource="high_quality_outline_dark"
                             Text="{extensions:Translate SD}"
                             ToggledText="{extensions:Translate HQ}"/>
 
-                        <controls:CustomButton
+                        <controls:ExpandedSlider
                             Grid.Row="1"
                             Grid.Column="0"
-                            WidthRequest="160"
-                            IconSource="full_screen"
-                            Text="{extensions:Translate Brightness}"/>
+                            Style="{DynamicResource expanderSliderStyle_i1}"
+                            IconSource="high_quality_outline_light"
+                            Text="{extensions:Translate Brightness}">
 
-                        <controls:CustomButton
+                            <controls:ExpandedSlider.Triggers>
+                                <Trigger TargetType="controls:ExpandedSlider" Property="IsOpened" Value="True">
+                                    <Setter Property="Grid.Column" Value="0"/>
+                                    <Setter Property="Grid.ColumnSpan" Value="4"/>
+                                </Trigger>
+                            </controls:ExpandedSlider.Triggers>
+
+                        </controls:ExpandedSlider>
+
+                        <!--<controls:ExpandedSlider
                             Grid.Row="1"
                             Grid.Column="1"
-                            WidthRequest="160"
+                            Style="{DynamicResource expanderSliderStyle_i1}"
                             IconSource="photo_camera_outline"
-                            Text="{extensions:Translate Contrast}"/>
+                            Text="{extensions:Translate Contrast}">
 
-                        <controls:CustomButton
+                            <controls:ExpandedSlider.Triggers>
+                                <Trigger TargetType="controls:ExpandedSlider" Property="IsOpened" Value="True">
+                                    <Setter Property="Grid.Column" Value="0"/>
+                                    <Setter Property="Grid.ColumnSpan" Value="3"/>
+                                </Trigger>
+                            </controls:ExpandedSlider.Triggers>
+
+                        </controls:ExpandedSlider>
+
+                        <controls:ExpandedSlider
                             Grid.Row="1"
                             Grid.Column="2"
-                            WidthRequest="160"
                             IconSource="sound_mute_light"
-                            Text="{extensions:Translate Hue}"/>
+                            Text="{extensions:Translate Hue}">
 
-                        <controls:CustomButton
+                            <controls:ExpandedSlider.Triggers>
+                                <Trigger TargetType="controls:ExpandedSlider" Property="IsOpened" Value="True">
+                                    <Setter Property="Grid.Column" Value="0"/>
+                                    <Setter Property="Grid.ColumnSpan" Value="3"/>
+                                </Trigger>
+                            </controls:ExpandedSlider.Triggers>
+
+                        </controls:ExpandedSlider>
+
+                        <controls:ExpandedSlider
                             Grid.Row="1"
                             Grid.Column="3"
-                            WidthRequest="160"
                             IconSource="high_quality_outline_light"
-                            Text="{extensions:Translate Saturation}"/>
+                            Text="{extensions:Translate Saturation}">
+
+                            <controls:ExpandedSlider.Triggers>
+                                <Trigger TargetType="controls:ExpandedSlider" Property="IsOpened" Value="True">
+                                    <Setter Property="Grid.Column" Value="0"/>
+                                    <Setter Property="Grid.ColumnSpan" Value="3"/>
+                                </Trigger>
+                            </controls:ExpandedSlider.Triggers>
+
+                        </controls:ExpandedSlider>-->
 
                     </Grid>
                     
