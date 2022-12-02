@@ -19,7 +19,6 @@ public static class IconsNames
     public const string pic_wall_switch_double = nameof(pic_wall_switch_double);
     public const string pic_hub = nameof(pic_hub);
     public const string pic_bell = nameof(pic_bell);
-    public const string pic_play = nameof(pic_play);
-    public const string pic_play_single = nameof(pic_play_single);
+    public const string play_small_gray = nameof(play_small_gray);
     public const string pic_video = nameof(pic_video);
 }

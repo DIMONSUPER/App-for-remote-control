@@ -383,7 +383,7 @@ namespace SmartMirror.ViewModels
             {
                 vm.Model = m;
                 vm.Type = ECategoryType.Scenarios;
-                vm.ImageSource = Resources.IconsNames.pic_play_single;
+                vm.ImageSource = Resources.IconsNames.play_small_gray;
                 vm.TapCommand = ShowScenarioSettingsCommand;
             });
 
@@ -527,7 +527,7 @@ namespace SmartMirror.ViewModels
 
             if (scenarios.Any())
             {
-                notificationSettingsGroups.Add(GetNotificationGroup(scenarios, Strings.Scenarios, IconsNames.pic_play));
+                notificationSettingsGroups.Add(GetNotificationGroup(scenarios, Strings.Scenarios, IconsNames.play_small_gray));
             }
 
             if (automations.Any())

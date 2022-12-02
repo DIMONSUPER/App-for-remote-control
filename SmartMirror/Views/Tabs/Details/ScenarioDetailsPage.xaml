@@ -13,8 +13,8 @@
     x:DataType="{x:Type vm:ScenarioDetailsPageViewModel}">
 
     <views:BaseContentPage.Resources>
-        
-        <templates:ScenarioTemplate x:Key="scenarioTemplate"/>
+
+        <templates:ScenarioActionTemplate x:Key="scenarioActionTemplate"/>
         
     </views:BaseContentPage.Resources>
 
@@ -67,7 +67,7 @@
 
                         <CollectionView
                             VerticalScrollBarVisibility="Never"
-                            ItemTemplate="{x:StaticResource scenarioTemplate}"
+                            ItemTemplate="{x:StaticResource scenarioActionTemplate}"
                             ItemsSource="{Binding ScenarioActions}"/>
 
                     </controls:CustomStateView.CompleteContent>

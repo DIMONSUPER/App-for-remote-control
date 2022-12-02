@@ -1,73 +1,96 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <DataTemplate
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:app="clr-namespace:SmartMirror"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:bindablemodels="clr-namespace:SmartMirror.Models.BindableModels"
-    x:DataType="bindablemodels:ScenarioActionBindableModel"
-    x:Class="SmartMirror.Resources.DataTemplates.ScenarioTemplate">
-        
-    <Grid>
-        
-        <Border 
-            Padding="24"
-            Margin="0, 0, 0, 18"
-            Stroke="{DynamicResource cbg_i4}"
-            StrokeShape="RoundRectangle 9"
-            BackgroundColor="{DynamicResource cbg_i2}">
+    x:Class="SmartMirror.Resources.DataTemplates.ScenarioTemplate"
+    x:DataType="{x:Type bindablemodels:ScenarioBindableModel}">
 
-            <StackLayout Orientation="Horizontal">
+    <Border
+        HeightRequest="157"
+        Stroke="{DynamicResource cbg_i4}"
+        StrokeThickness="1"
+        StrokeShape="RoundRectangle 9"
+        BackgroundColor="{DynamicResource cbg_i2}"
+        Padding="22, 17, 22, 15"
+        behaviors:TouchBehavior.Command="{Binding TappedCommand}"
+        behaviors:TouchBehavior.CommandParameter="{Binding .}"
+        behaviors:TouchBehavior.IsAnimation="True"
+        behaviors:TouchBehavior.NormalBackgroundColor="{x:DynamicResource cbg_i2}"
+        behaviors:TouchBehavior.PressedBackgroundColor="{x:DynamicResource cbg_i13}">
 
-                <!-- ICON -->
-                <Border
-                    VerticalOptions="Start"
-                    StrokeThickness="0"
-                    StrokeShape="RoundRectangle 12"
-                    BackgroundColor="{DynamicResource cbg_i1}">
+        <Grid>
+            <StackLayout>
 
-                    <Image 
-                        Margin="12"
-                        WidthRequest="42"
-                        HeightRequest="42"
-                        Source="{Binding Device.IconSource}"/>
+                <StackLayout
+                    Spacing="0"
+                    Orientation="Horizontal"
+                    VerticalOptions="Start">
 
-                </Border>
+                    <StackLayout.Triggers>
 
-                <StackLayout Margin="24, 0">
-                    
-                    <controls:CustomLabel
-                        Style="{DynamicResource tstyle_i11}"
-                        VerticalOptions="Center"
-                        MaximumWidthRequest="200"
-                        MaxLines="2"
-                        LineBreakMode="TailTruncation"
-                        Text="{Binding Device.Name}"/>
+                        <DataTrigger TargetType="StackLayout" Binding="{Binding IsActive}" Value="True">
+                            <Setter TargetName="scenarioStatusLabel" Property="Label.Text" Value="{extensions:Translate Active}"/>
+                            <Setter TargetName="scenarioStatusLabel" Property="Label.Style" Value="{DynamicResource tstyle_i12}"/>
+                            <Setter TargetName="scenarioStatusImage" Property="Image.Source" Value="play_small_blue"/>
+                        </DataTrigger>
 
-                    <controls:CustomLabel
-                        Style="{DynamicResource tstyle_i3}"
-                        VerticalOptions="Center"
-                        MaximumWidthRequest="200"
-                        MaxLines="2"
-                        LineBreakMode="TailTruncation"
-                        Text="{Binding Device.RoomName}"/>
-                    
+                    </StackLayout.Triggers>
+
+                    <Border
+                        BackgroundColor="{DynamicResource cbg_i1}"
+                        StrokeShape="RoundRectangle 12"
+                        StrokeThickness="0"
+                        WidthRequest="51"
+                        HeightRequest="51"
+                        HorizontalOptions="Start"
+                        behaviors:TouchBehavior.Command="{Binding ChangeActiveStatusCommand}"
+                        behaviors:TouchBehavior.CommandParameter="{Binding .}">
+
+                        <Image
+                            Source="play_small_gray"
+                            WidthRequest="30"
+                            HeightRequest="30"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            x:Name="scenarioStatusImage"/>
+
+                    </Border>
+
+                    <Label
+                        Text="{extensions:Translate NotActive}"
+                        HorizontalOptions="EndAndExpand"
+                        HorizontalTextAlignment="End"
+                        Style="{DynamicResource tstyle_i10}"
+                        x:Name="scenarioStatusLabel"/>
+
                 </StackLayout>
 
-                <controls:CustomLabel
-                    Style="{DynamicResource tstyle_i8}"
-                    HorizontalOptions="EndAndExpand"
-                    VerticalOptions="Start"
-                    MaximumWidthRequest="225"
-                    MaxLines="2"
+                <Label
+                    HorizontalTextAlignment="Start"
+                    HorizontalOptions="Start"
+                    WidthRequest="180"
+                    MaxLines="1"
                     LineBreakMode="TailTruncation"
-                    HorizontalTextAlignment="End"
-                    Text="{Binding ActionName}"/>
+                    Text="{Binding Name}"
+                    VerticalOptions="EndAndExpand"
+                    Style="{DynamicResource tstyle_i11}"/>
 
             </StackLayout>
 
-        </Border>
+            <ActivityIndicator 
+                VerticalOptions="End"
+                HorizontalOptions="End"
+                WidthRequest="32"
+                HeightRequest="32"
+                IsRunning="{Binding IsUpdating}"/>
 
-    </Grid>
-    
+        </Grid>
+
+    </Border>
+
 </DataTemplate>

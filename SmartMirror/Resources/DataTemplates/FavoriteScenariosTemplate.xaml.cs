@@ -1,8 +1,8 @@
 namespace SmartMirror.Resources.DataTemplates;
 
-public partial class FavoriteScenariosTemplate : DataTemplate
+public partial class FavoriteScenarioTemplate : DataTemplate
 {
-    public FavoriteScenariosTemplate()
+    public FavoriteScenarioTemplate()
     {
         InitializeComponent();
     }
