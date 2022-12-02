@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Border 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SmartMirror.Controls"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+    x:Class="SmartMirror.Controls.CustomButton"
+    x:DataType="local:CustomButton"
+    x:Name="customButton">
+
+    <Border.GestureRecognizers>
+        <TapGestureRecognizer Tapped="OnTapped"/>
+    </Border.GestureRecognizers>
+
+    <Border.Triggers>
+        <DataTrigger TargetType="Border" Binding="{Binding IsToggled, Source={Reference customButton}}" Value="True">
+
+            <Setter TargetName="border" Property="Border.BackgroundColor" Value="{Binding ToggledIconColor, Source={Reference customButton}}"/>
+            <Setter TargetName="image" Property="Image.Source" Value="{Binding ToggledIconSource, Source={Reference customButton}}"/>
+            <Setter TargetName="label" Property="Label.Text" Value="{Binding ToggledText, Source={Reference customButton}}"/>
+
+        </DataTrigger>
+    </Border.Triggers>
+
+    <Grid 
+        ColumnDefinitions="Auto, *"
+        Margin="6, 5">
+
+        <Border 
+            Grid.Column="0"
+            StrokeThickness="0"
+            StrokeShape="RoundRectangle 75"
+            BackgroundColor="{Binding IconColor, Source={Reference customButton}}"
+            x:Name="border">
+
+            <Image 
+                Margin="12"
+                HeightRequest="{Binding IconSizes.Height, Source={Reference customButton}}"
+                WidthRequest="{Binding IconSizes.Width, Source={Reference customButton}}"
+                Source="{Binding IconSource, Source={Reference customButton}}"
+                x:Name="image"/>
+
+        </Border>
+
+        <Label 
+            Grid.Column="1"
+            Margin="12, 0, 22, 0"
+            Style="{Binding TextStyle, Source={Reference customButton}}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            LineBreakMode="TailTruncation"
+            Text="{Binding Text, Source={Reference customButton}}"
+            x:Name="label"/>
+
+    </Grid>
+    
+</Border>

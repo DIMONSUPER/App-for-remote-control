@@ -7,6 +7,7 @@
     xmlns:views="clr-namespace:SmartMirror.Views.Tabs.Views"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
     x:DataType="vm:CamerasPageViewModel"
@@ -43,6 +44,7 @@
             <Grid
                 ColumnDefinitions="390, *"
                 ColumnSpacing="105"
+                RowSpacing="24"
                 Margin="42, 70, 60, 0">
 
                 <RefreshView 
@@ -58,6 +60,8 @@
                 </RefreshView>
 
                 <Grid 
+                    RowDefinitions="386, *"
+                    RowSpacing="24"
                     Grid.Column="1"
                     Margin="0, 0, 0, 120">
 
@@ -151,6 +155,87 @@
 
                     </ActivityIndicator>
 
+                    <Grid 
+                        Grid.Row="1"
+                        RowDefinitions="Auto, Auto"
+                        RowSpacing="20"
+                        ColumnDefinitions="*, *, *, *" 
+                        ColumnSpacing="20">
+
+                        <controls:CustomButton
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            WidthRequest="160"
+                            IconSource="full_screen"
+                            Text="{extensions:Translate FullScreen}"/>
+
+                        <controls:CustomButton
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            WidthRequest="160"
+                            Mode="{Static enums:EButtonMode.Hint}"
+                            IconSource="photo_camera_outline"
+                            ToggledIconSource="check_circle_outline"
+                            Text="{extensions:Translate Snapshot}"
+                            ToggledText="{extensions:Translate Saved}"/>
+
+                        <controls:CustomButton
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            WidthRequest="160"
+                            Mode="{Static enums:EButtonMode.Toggle}"
+                            IconSource="sound_mute_light"
+                            ToggledIconSource="sound_mute_dark"
+                            Text="{extensions:Translate Mute}"
+                            ToggledText="{extensions:Translate Unmute}"/>
+
+                        <controls:CustomButton
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            WidthRequest="160"
+                            Mode="{Static enums:EButtonMode.Toggle}"
+                            IconSource="high_quality_outline_light"
+                            ToggledIconSource="high_quality_outline_dark"
+                            Text="{extensions:Translate SD}"
+                            ToggledText="{extensions:Translate HQ}"/>
+
+                        <controls:CustomButton
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            WidthRequest="160"
+                            IconSource="full_screen"
+                            Text="{extensions:Translate Brightness}"/>
+
+                        <controls:CustomButton
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            WidthRequest="160"
+                            Mode="{Static enums:EButtonMode.Hint}"
+                            IconSource="photo_camera_outline"
+                            ToggledIconSource="check_circle_outline"
+                            Text="{extensions:Translate Contrast}"/>
+
+                        <controls:CustomButton
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            WidthRequest="160"
+                            Mode="{Static enums:EButtonMode.Toggle}"
+                            IconSource="sound_mute_light"
+                            ToggledIconSource="sound_mute_dark"
+                            Text="{extensions:Translate Hue}"/>
+
+                        <controls:CustomButton
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            WidthRequest="160"
+                            Mode="{Static enums:EButtonMode.Toggle}"
+                            IconSource="high_quality_outline_light"
+                            ToggledIconSource="high_quality_outline_dark"
+                            Text="{extensions:Translate Saturation}"/>
+
+
+                    </Grid>
+                    
                 </Grid>
 
             </Grid>
