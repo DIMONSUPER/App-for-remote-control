@@ -63,7 +63,7 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _isSelected, value);
         }
 
-	private bool _isEmergencyNotification = true;
+	    private bool _isEmergencyNotification = true;
         public bool IsEmergencyNotification
         {
             get => _isEmergencyNotification;
