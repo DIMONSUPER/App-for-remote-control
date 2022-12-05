@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+
 namespace SmartMirror.Controls.StateContainer
 {
     [ContentProperty("Conditions")]
@@ -16,9 +18,11 @@ namespace SmartMirror.Controls.StateContainer
             set => SetValue(StateProperty, value);
         }
 
+        private readonly Grid _currentContentGrid = new();
+
         #region -- Public properties --
 
-        public List<StateCondition> Conditions { get; set; } = new List<StateCondition>();
+        public List<StateCondition> Conditions { get; set; } = new();
 
         #endregion
 
@@ -26,19 +30,33 @@ namespace SmartMirror.Controls.StateContainer
 
         private static void OnStatePropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            if (bindable is StateContainer parent)
+            if (bindable is StateContainer view)
             {
-                parent.ChooseStateAsync(newValue);
+                view.ChooseStateAsync(oldValue, newValue);
             }
         }
 
-        private Task ChooseStateAsync(object newValue)
+        private Task ChooseStateAsync(object oldValue, object newValue)
         {
-            var currentCondition = Conditions?.FirstOrDefault(condition => condition?.State?.ToString() == newValue?.ToString());
+            if (Content is null)
+            {
+                this.Content = _currentContentGrid;
+            }
 
-            var view = currentCondition?.Content;
+            if (Conditions is not null)
+            {
+                var tasks = new List<Task>();
 
-            Content = view;
+                var newView = Conditions?.FirstOrDefault(condition => condition?.State?.ToString() == newValue?.ToString())?.Content;
+
+                if (newView is not null)
+                {
+                    _currentContentGrid.Children.Clear();
+                    (newView.Parent as Layout)?.Remove(newView);
+
+                    _currentContentGrid.Add(newView);
+                }
+            }
 
             return Task.CompletedTask;
         }

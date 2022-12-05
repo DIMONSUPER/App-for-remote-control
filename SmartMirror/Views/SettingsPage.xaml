@@ -177,23 +177,10 @@
 
                         <controls:CustomStateView.CompleteContent>
 
-                            <controls:CustomScrollView
+                            <ScrollView
                                 Margin="105, 0, 60, 0"
-                                BindingForInvalidateMeasure="{Binding SelectedCategory.Type}"
                                 VerticalScrollBarVisibility="Never"
                                 HorizontalScrollBarVisibility="Never">
-
-                                <controls:CustomScrollView.Behaviors>
-
-                                    <behaviors:InvalidateMeasureBehavior
-                                        BindingContext="{Binding BindingContext, Source={Reference settingsPage}}"
-                                        TrackedValue="{Binding DataState}"/>
-
-                                    <behaviors:InvalidateMeasureBehavior 
-                                        BindingContext="{Binding BindingContext, Source={Reference settingsPage}}"
-                                        TrackedValue="{Binding PageState}"/>
-
-                                </controls:CustomScrollView.Behaviors>
 
                                 <StackLayout>
 
@@ -261,7 +248,7 @@
 
                                 </StackLayout>
 
-                            </controls:CustomScrollView>
+                            </ScrollView>
                             
                         </controls:CustomStateView.CompleteContent>
 
