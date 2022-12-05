@@ -64,7 +64,7 @@
         </Border>
         
         <Grid
-           Grid.Row="2"
+            Grid.Row="2"
             Margin="42, 36, 60, 52">
 
             <Border

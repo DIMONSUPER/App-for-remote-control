@@ -43,9 +43,8 @@
 
     </views:BaseContentView.Triggers>
 
-        <!--State="{Binding DataState}"-->
     <controls:CustomStateView
-        State="{Static enums:EPageState.Complete}"
+        State="{Binding DataState}"
         TryAgainCommand="{Binding TryAgainCommand}"
         LoadingTitle="{extensions:Translate Cameras}"
         EmptyTitle="{extensions:Translate NoCamerasYet}"

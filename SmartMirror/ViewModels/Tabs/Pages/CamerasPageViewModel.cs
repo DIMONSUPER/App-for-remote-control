@@ -493,15 +493,11 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private Task OnMuteVideoCommandAsync()
     {
-        IsMuted = !IsMuted;
-
         return Task.CompletedTask;
     }
 
     private Task OnSwitchVideoQualityCommandAsync()
     {
-        IsHighQualityOn = !IsHighQualityOn;
-
         return Task.CompletedTask;
     }
 
