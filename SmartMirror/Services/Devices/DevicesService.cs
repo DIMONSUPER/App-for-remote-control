@@ -350,6 +350,7 @@ namespace SmartMirror.Services.Devices
                     device.IsShownInRooms = dbDevice.IsShownInRooms;
                     device.IsReceiveNotifications = dbDevice.IsReceiveNotifications;
                     device.IsFavorite = dbDevice.IsFavorite;
+                    device.IsEmergencyNotification = dbDevice.IsEmergencyNotification;
                 }
             }
         }

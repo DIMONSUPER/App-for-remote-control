@@ -43,7 +43,7 @@
                             HorizontalOptions="Center"
                             Text="{Binding CancelText}"
                             Background="Transparent"
-                            TextColor="#E9E9E9"
+                            TextColor="{x:DynamicResource cbg_i3}"
                             BorderColor="{DynamicResource cbg_i3}"
                             BorderWidth="0.75"
                             Command="{Binding CloseCommand}"

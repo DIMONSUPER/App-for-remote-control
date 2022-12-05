@@ -60,6 +60,13 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _isFavorite, value);
         }
 
+        private bool _isEmergencyNotification;
+        public bool IsEmergencyNotification
+        {
+            get => _isEmergencyNotification;
+            set => SetProperty(ref _isEmergencyNotification, value);
+        }
+
         private DeviceBindableModel _accessory;
         public DeviceBindableModel Accessory
         {
@@ -88,6 +95,7 @@ namespace SmartMirror.ViewModels.Dialogs
                 IsFavorite = Accessory.IsFavorite;
                 IsShownInRooms = Accessory.IsShownInRooms;
                 IsReceiveNotifications = Accessory.IsReceiveNotifications;
+                IsEmergencyNotification = Accessory.IsEmergencyNotification;
             }
 
             _isInitializing = false;
@@ -97,13 +105,16 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             base.OnPropertyChanged(args);
 
-            if (!_isInitializing && args.PropertyName is nameof(IsFavorite) or nameof(IsShownInRooms) or nameof(IsReceiveNotifications))
+            if (!_isInitializing
+                && args.PropertyName is nameof(IsFavorite)
+                or nameof(IsShownInRooms)
+                or nameof(IsReceiveNotifications)
+                or nameof(IsEmergencyNotification))
             {
-                Accessory.IsFavorite = args.PropertyName is nameof(IsFavorite) ? _isFavorite : Accessory.IsFavorite;
-
-                Accessory.IsShownInRooms = args.PropertyName is nameof(IsShownInRooms) ? _isShownInRooms : Accessory.IsShownInRooms;
-
-                Accessory.IsReceiveNotifications = args.PropertyName is nameof(IsReceiveNotifications) ? _isReceiveNotifications : Accessory.IsReceiveNotifications;
+                Accessory.IsFavorite = _isFavorite;
+                Accessory.IsShownInRooms = _isShownInRooms;
+                Accessory.IsReceiveNotifications = _isReceiveNotifications;
+                Accessory.IsEmergencyNotification = _isEmergencyNotification;
 
                 await _devicesService.UpdateDeviceAsync(Accessory);
             }

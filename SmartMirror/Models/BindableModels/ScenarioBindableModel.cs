@@ -36,6 +36,13 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _isFavorite, value);
         }
 
+        private bool _isEmergencyNotification = true;
+        public bool IsEmergencyNotification
+        {
+            get => _isEmergencyNotification;
+            set => SetProperty(ref _isEmergencyNotification, value);
+        }
+
         private DateTime _activationTime;
         public DateTime ActivationTime
         {

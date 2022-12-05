@@ -50,6 +50,13 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _isReceiveNotifications, value);
         }
 
+        private bool _isEmergencyNotification;
+        public bool IsEmergencyNotification
+        {
+            get => _isEmergencyNotification;
+            set => SetProperty(ref _isEmergencyNotification, value);
+        }
+
         private CameraBindableModel _cameraModel;
         public CameraBindableModel CameraModel
         {
@@ -77,6 +84,7 @@ namespace SmartMirror.ViewModels.Dialogs
                     CameraModel = cameraModel;
                     IsShownInCameras = CameraModel.IsShown;
                     IsReceiveNotifications = CameraModel.IsReceiveNotifications;
+                    IsEmergencyNotification = CameraModel.IsEmergencyNotification;
                 }
             }
 
@@ -87,10 +95,15 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             base.OnPropertyChanged(args);
 
-            if (!_isInitializing && args.PropertyName is nameof(IsShownInCameras) or nameof(IsReceiveNotifications))
+            if (!_isInitializing
+                && args.PropertyName is nameof(IsShownInCameras)
+                or nameof(IsReceiveNotifications)
+                or nameof(IsEmergencyNotification))
             {
-                CameraModel.IsShown = IsShownInCameras;
-                CameraModel.IsReceiveNotifications = IsReceiveNotifications;
+                CameraModel.IsShown = _isShownInCameras;
+                CameraModel.IsReceiveNotifications = _isReceiveNotifications;
+                CameraModel.IsEmergencyNotification = _isEmergencyNotification;
+
                 await _camerasService.UpdateCameraAsync(CameraModel);
             }
         }

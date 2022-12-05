@@ -5,19 +5,27 @@ namespace SmartMirror.Resources.DataTemplateSelectors
 {
     public class NotificationDataTemplateSelector : DataTemplateSelector
     {
-        private readonly Dictionary<Type, DataTemplate> _dataTemplatesDictionary = new()
-        {
-            { typeof(NotificationGroupItemBindableModel), new NotificationTemplate() },
-            { typeof(NotificationGroupTitleBindableModel), new NotificationHeaderTemplate() },
-        };
+        #region -- Public properties --
+
+        public DataTemplate NotificationDataTemplate { get; set; }
+
+        public DataTemplate NotificationHeaderDataTemplate { get; set; }
+
+        #endregion
 
         #region -- Overrides --
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            var key = item.GetType();
+            DataTemplate result = null;
 
-            return _dataTemplatesDictionary[key];
+            result = item.GetType().Name switch
+            {
+                nameof(NotificationGroupTitleBindableModel) => NotificationHeaderDataTemplate,
+                nameof(NotificationGroupItemBindableModel) => NotificationDataTemplate,
+            };
+
+            return result;
         }
 
         #endregion
