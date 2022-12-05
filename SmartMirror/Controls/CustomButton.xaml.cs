@@ -1,3 +1,4 @@
+using SmartMirror.Behaviors;
 using SmartMirror.Enums;
 using System.Windows.Input;
 
@@ -181,9 +182,18 @@ public partial class CustomButton : Border
                     break;
 
                 case EButtonMode.Hint:
-                    IsToggled = true;
 
-                    Dispatcher.StartTimer(TimeSpan.FromMilliseconds(HintDelayMilliseconds), () => IsToggled = _isHintShown = false);
+                    _isHintShown = IsToggled = true;
+
+                    TouchBehavior.SetAnimation(this, false);
+
+                    Dispatcher.StartTimer(TimeSpan.FromMilliseconds(HintDelayMilliseconds), () =>
+                    {
+                        TouchBehavior.SetAnimation(this, true);
+
+                        return IsToggled = _isHintShown = false;
+                    });
+
                     break;
             }
 

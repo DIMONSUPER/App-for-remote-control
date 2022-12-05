@@ -227,7 +227,7 @@
         <Setter Property="behaviors:TouchBehavior.PressedBackgroundColor" Value="{DynamicResource cbg_i19}"/>
     </Style>
 
-    <Style TargetType="controls:CustomButton">
+    <Style TargetType="controls:CustomButton" BasedOn="{StaticResource PressedBorderStyle_i1}">
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="VerticalOptions" Value="Center"/>
         <Setter Property="StrokeThickness" Value="0"/>
@@ -236,7 +236,7 @@
         <Setter Property="ToggledIconColor" Value="{DynamicResource cbg_i6}"/>
         <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i3}"/>
         <Setter Property="TextStyle" Value="{DynamicResource tstyle_i9}"/>
-    </Style>    
+    </Style>
 
     <Style TargetType="controls:ExpandedSlider">
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>

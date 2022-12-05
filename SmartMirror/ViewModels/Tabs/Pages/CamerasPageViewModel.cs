@@ -73,6 +73,48 @@ public class CamerasPageViewModel : BaseTabViewModel
         set => SetProperty(ref _videoState, value);
     }
 
+    private bool _isMuted;
+    public bool IsMuted
+    {
+        get => _isMuted;
+        set => SetProperty(ref _isMuted, value);
+    }
+
+    private bool _isHighQualityOn;
+    public bool IsHighQualityOn
+    {
+        get => _isHighQualityOn;
+        set => SetProperty(ref _isHighQualityOn, value);
+    }
+
+    private double _brightness;
+    public double Brightness
+    {
+        get => _brightness;
+        set => SetProperty(ref _brightness, value);
+    }
+    
+    private double _contrast;
+    public double Contrast
+    {
+        get => _contrast;
+        set => SetProperty(ref _contrast, value);
+    }
+
+    private double _hue;
+    public double Hue
+    {
+        get => _hue;
+        set => SetProperty(ref _hue, value);
+    }
+
+    private double _saturation;
+    public double Saturation
+    {
+        get => _saturation;
+        set => SetProperty(ref _saturation, value);
+    }
+
     private ICommand _selectCameraCommand;
     public ICommand SelectCameraCommand => _selectCameraCommand ??= SingleExecutionCommand.FromFunc<CameraBindableModel>(OnSelectCameraCommandAsync);
 
@@ -81,6 +123,18 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private ICommand _tryAgainCommand;
     public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
+    
+    private ICommand _openVideoInFullScreenCommand;
+    public ICommand OpenVideoInFullScreenCommand => _openVideoInFullScreenCommand ??= SingleExecutionCommand.FromFunc(OnOpenVideoInFullScreenCommandAsync);
+
+    private ICommand _takeSnapshotCommand;
+    public ICommand TakeSnapshotCommand => _takeSnapshotCommand ??= SingleExecutionCommand.FromFunc(OnTakeSnapshotCommandAsync);
+
+    private ICommand _muteVideoCommand;
+    public ICommand MuteVideoCommand => _muteVideoCommand ??= SingleExecutionCommand.FromFunc(OnMuteVideoCommandAsync);
+
+    private ICommand _switchVideoQualityCommand;
+    public ICommand SwitchVideoQualityCommand => _switchVideoQualityCommand ??= SingleExecutionCommand.FromFunc(OnSwitchVideoQualityCommandAsync);
 
     #endregion
 
@@ -417,6 +471,31 @@ public class CamerasPageViewModel : BaseTabViewModel
 
         SelectedCamera = selectedCamera;
     }
+
+    private Task OnOpenVideoInFullScreenCommandAsync()
+    {
+        return Task.CompletedTask;
+    }
+
+    private Task OnTakeSnapshotCommandAsync()
+    {
+        return Task.CompletedTask;
+    }
+
+    private Task OnMuteVideoCommandAsync()
+    {
+        IsMuted = !IsMuted;
+
+        return Task.CompletedTask;
+    }
+
+    private Task OnSwitchVideoQualityCommandAsync()
+    {
+        IsHighQualityOn = !IsHighQualityOn;
+
+        return Task.CompletedTask;
+    }
+
 
     #endregion
 }

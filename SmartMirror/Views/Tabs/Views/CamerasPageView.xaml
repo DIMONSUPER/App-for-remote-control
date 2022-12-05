@@ -17,6 +17,15 @@
 
         <ResourceDictionary>
             <templates:CameraTemplate x:Key="cameraTemplate"/>
+            <Style x:Key="ExpandedSliderStyle_i1" TargetType="controls:ExpandedSlider">
+                <Style.Triggers>
+                    <Trigger TargetType="controls:ExpandedSlider" Property="IsOpened" Value="True">
+                        <Setter Property="Grid.Column" Value="0"/>
+                        <Setter Property="Grid.ColumnSpan" Value="4"/>
+                        <Setter Property="ZIndex" Value="1"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
 
     </views:BaseContentView.Resources>
@@ -31,8 +40,9 @@
 
     </views:BaseContentView.Triggers>
 
+        <!--State="{Binding DataState}"-->
     <controls:CustomStateView
-        State="{Binding DataState}"
+        State="{Static enums:EPageState.Complete}"
         TryAgainCommand="{Binding TryAgainCommand}"
         LoadingTitle="{extensions:Translate Cameras}"
         EmptyTitle="{extensions:Translate NoCamerasYet}"
@@ -157,17 +167,16 @@
                     <Grid 
                         Grid.Row="1"
                         RowDefinitions="Auto, Auto"
-                        RowSpacing="20"
                         ColumnDefinitions="*, *, *, *" 
-                        ColumnSpacing="20"
-                        x:Name="buttonsGrid"
-                        >
+                        RowSpacing="20"
+                        ColumnSpacing="20">
 
                         <controls:CustomButton
                             Grid.Row="0"
                             Grid.Column="0"
                             IconSource="full_screen"
-                            Text="{extensions:Translate FullScreen}"/>
+                            Text="{extensions:Translate FullScreen}"
+                            Command="{Binding OpenVideoInFullScreenCommand}"/>
 
                         <controls:CustomButton
                             Grid.Row="0"
@@ -176,7 +185,8 @@
                             IconSource="photo_camera_outline"
                             ToggledIconSource="check_circle_outline"
                             Text="{extensions:Translate Snapshot}"
-                            ToggledText="{extensions:Translate Saved}"/>
+                            ToggledText="{extensions:Translate Saved}"
+                            Command="{Binding TakeSnapshotCommand}"/>
 
                         <controls:CustomButton
                             Grid.Row="0"
@@ -185,7 +195,8 @@
                             IconSource="sound_mute_light"
                             ToggledIconSource="sound_mute_dark"
                             Text="{extensions:Translate Mute}"
-                            ToggledText="{extensions:Translate Unmute}"/>
+                            ToggledText="{extensions:Translate Unmute}"
+                            Command="{Binding MuteVideoCommand}"/>
 
                         <controls:CustomButton
                             Grid.Row="0"
@@ -194,69 +205,40 @@
                             IconSource="high_quality_outline_light"
                             ToggledIconSource="high_quality_outline_dark"
                             Text="{extensions:Translate SD}"
-                            ToggledText="{extensions:Translate HQ}"/>
+                            ToggledText="{extensions:Translate HQ}"
+                            Command="{Binding SwitchVideoQualityCommand}"/>
 
                         <controls:ExpandedSlider
                             Grid.Row="1"
                             Grid.Column="0"
-                            Style="{DynamicResource expanderSliderStyle_i1}"
+                            Style="{StaticResource ExpandedSliderStyle_i1}"
                             IconSource="high_quality_outline_light"
-                            Text="{extensions:Translate Brightness}">
+                            Text="{extensions:Translate Brightness}"
+                            Value="{Binding Brightness}"/>
 
-                            <controls:ExpandedSlider.Triggers>
-                                <Trigger TargetType="controls:ExpandedSlider" Property="IsOpened" Value="True">
-                                    <Setter Property="Grid.Column" Value="0"/>
-                                    <Setter Property="Grid.ColumnSpan" Value="4"/>
-                                </Trigger>
-                            </controls:ExpandedSlider.Triggers>
-
-                        </controls:ExpandedSlider>
-
-                        <!--<controls:ExpandedSlider
+                        <controls:ExpandedSlider
                             Grid.Row="1"
                             Grid.Column="1"
-                            Style="{DynamicResource expanderSliderStyle_i1}"
+                            Style="{StaticResource ExpandedSliderStyle_i1}"
                             IconSource="photo_camera_outline"
-                            Text="{extensions:Translate Contrast}">
-
-                            <controls:ExpandedSlider.Triggers>
-                                <Trigger TargetType="controls:ExpandedSlider" Property="IsOpened" Value="True">
-                                    <Setter Property="Grid.Column" Value="0"/>
-                                    <Setter Property="Grid.ColumnSpan" Value="3"/>
-                                </Trigger>
-                            </controls:ExpandedSlider.Triggers>
-
-                        </controls:ExpandedSlider>
+                            Text="{extensions:Translate Contrast}"
+                            Value="{Binding Contrast}"/>
 
                         <controls:ExpandedSlider
                             Grid.Row="1"
                             Grid.Column="2"
+                            Style="{StaticResource ExpandedSliderStyle_i1}"
                             IconSource="sound_mute_light"
-                            Text="{extensions:Translate Hue}">
-
-                            <controls:ExpandedSlider.Triggers>
-                                <Trigger TargetType="controls:ExpandedSlider" Property="IsOpened" Value="True">
-                                    <Setter Property="Grid.Column" Value="0"/>
-                                    <Setter Property="Grid.ColumnSpan" Value="3"/>
-                                </Trigger>
-                            </controls:ExpandedSlider.Triggers>
-
-                        </controls:ExpandedSlider>
+                            Text="{extensions:Translate Hue}"
+                            Value="{Binding Hue}"/>
 
                         <controls:ExpandedSlider
                             Grid.Row="1"
                             Grid.Column="3"
+                            Style="{StaticResource ExpandedSliderStyle_i1}"
                             IconSource="high_quality_outline_light"
-                            Text="{extensions:Translate Saturation}">
-
-                            <controls:ExpandedSlider.Triggers>
-                                <Trigger TargetType="controls:ExpandedSlider" Property="IsOpened" Value="True">
-                                    <Setter Property="Grid.Column" Value="0"/>
-                                    <Setter Property="Grid.ColumnSpan" Value="3"/>
-                                </Trigger>
-                            </controls:ExpandedSlider.Triggers>
-
-                        </controls:ExpandedSlider>-->
+                            Text="{extensions:Translate Saturation}"
+                            Value="{Binding Saturation}"/>
 
                     </Grid>
                     

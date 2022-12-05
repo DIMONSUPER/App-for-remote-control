@@ -13,7 +13,6 @@
 
     <Grid 
         ColumnDefinitions="Auto, *"
-        ColumnSpacing="12"
         Margin="6, 5, 18, 6">
 
         <Grid.Triggers>
@@ -42,7 +41,8 @@
             Grid.Column="1"
             Style="{Binding TextStyle, Source={Reference expandedSlider}}"
             VerticalOptions="Center"
-            HorizontalOptions="Start"
+            HorizontalOptions="Center"
+            Margin="12, 0, 2, 0"
             HorizontalTextAlignment="Start"
             LineBreakMode="TailTruncation"
             Text="{Binding Text, Source={Reference expandedSlider}}"
