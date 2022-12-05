@@ -135,7 +135,6 @@
                             <controls:VideoView
                                 BackgroundColor="{DynamicResource cbg_i2}"
                                 MediaPlayer="{Binding MediaPlayer}"
-                                behaviors:TouchBehavior.Command="{Binding OpenVideoInFullScreenCommand}"
                                 x:Name="video">
 
                                 <controls:VideoView.Triggers>
@@ -173,8 +172,7 @@
                         RowDefinitions="Auto, Auto"
                         ColumnDefinitions="*, *, *, *" 
                         RowSpacing="20"
-                        ColumnSpacing="20"
-                        IsVisible="{Binding VideoState, Converter={toolkit:IsEqualConverter}, ConverterParameter={Static vlc:VLCState.Opening}}">
+                        ColumnSpacing="20">
 
                         <controls:CustomButton
                             Grid.Row="0"
@@ -217,7 +215,7 @@
                             Grid.Row="1"
                             Grid.Column="0"
                             Style="{StaticResource ExpandedSliderStyle_i1}"
-                            IconSource="high_quality_outline_light"
+                            IconSource="brightness"
                             Text="{extensions:Translate Brightness}"
                             Value="{Binding Brightness}"/>
 
@@ -225,7 +223,7 @@
                             Grid.Row="1"
                             Grid.Column="1"
                             Style="{StaticResource ExpandedSliderStyle_i1}"
-                            IconSource="photo_camera_outline"
+                            IconSource="contrast"
                             Text="{extensions:Translate Contrast}"
                             Value="{Binding Contrast}"/>
 
@@ -233,7 +231,7 @@
                             Grid.Row="1"
                             Grid.Column="2"
                             Style="{StaticResource ExpandedSliderStyle_i1}"
-                            IconSource="sound_mute_light"
+                            IconSource="ic_outline_color_lens"
                             Text="{extensions:Translate Hue}"
                             Value="{Binding Hue}"/>
 
@@ -241,7 +239,7 @@
                             Grid.Row="1"
                             Grid.Column="3"
                             Style="{StaticResource ExpandedSliderStyle_i1}"
-                            IconSource="high_quality_outline_light"
+                            IconSource="invert_colors_outline"
                             Text="{extensions:Translate Saturation}"
                             Value="{Binding Saturation}"/>
 

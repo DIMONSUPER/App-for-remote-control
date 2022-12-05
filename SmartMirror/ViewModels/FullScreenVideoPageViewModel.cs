@@ -15,19 +15,14 @@ namespace SmartMirror.ViewModels
 {
     public class FullScreenVideoPageViewModel : BaseViewModel
     {
-        private readonly IEventAggregator _eventAggregator;
-
-        public FullScreenVideoPageViewModel(
-            INavigationService navigationService,
-            IEventAggregator eventAggregator) 
+        public FullScreenVideoPageViewModel(INavigationService navigationService) 
             : base(navigationService)
         {
-            _eventAggregator = eventAggregator;
         }
 
         #region -- Public properties --
 
-        private CameraBindableModel _camera = new() { Name = "Default" };
+        private CameraBindableModel _camera;
         public CameraBindableModel Camera
         {
             get => _camera;
@@ -55,9 +50,9 @@ namespace SmartMirror.ViewModels
 
         #region -- Overrides --
 
-        public override void OnNavigatedFrom(INavigationParameters parameters)
+        public override void Initialize(INavigationParameters parameters)
         {
-            base.OnNavigatedFrom(parameters);
+            base.Initialize(parameters);
 
             if (parameters.TryGetValue(Constants.DialogsParameterKeys.CAMERA, out CameraBindableModel camera))
             {
@@ -71,9 +66,7 @@ namespace SmartMirror.ViewModels
 
         private Task OnCloseFullScreenCommandAsync()
         {
-            _eventAggregator.GetEvent<CloseFullScreenVideoEvent>().Publish();
-
-            return Task.CompletedTask;
+            return NavigationService.GoBackAsync();
         }
 
         #endregion

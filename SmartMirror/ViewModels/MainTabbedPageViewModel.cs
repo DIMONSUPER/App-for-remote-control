@@ -1,15 +1,14 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using SmartMirror.Helpers;
+using SmartMirror.Helpers.Events;
+using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
+using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Automation;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
-using SmartMirror.Services.Aqara;
-using SmartMirror.Views;
 using System.Windows.Input;
-using SmartMirror.Helpers.Events;
-using SmartMirror.Models.BindableModels;
 
 namespace SmartMirror.ViewModels;
 
@@ -23,7 +22,6 @@ public class MainTabbedPageViewModel : BaseViewModel
     private readonly IAqaraMessanger _aqaraMessanger;
 
     private OpenFullScreenVideoEvent _openFullScreenVideoEvent;
-    private CloseFullScreenVideoEvent _closeFullScreenVideoEvent;
 
     private int _buttonCount;
     private bool _isFirstTime = true;
@@ -47,10 +45,7 @@ public class MainTabbedPageViewModel : BaseViewModel
         _aqaraMessanger.StartListening();
 
         _openFullScreenVideoEvent = _eventAggregator.GetEvent<OpenFullScreenVideoEvent>();
-        _closeFullScreenVideoEvent = _eventAggregator.GetEvent<CloseFullScreenVideoEvent>();
-        
         _openFullScreenVideoEvent.Subscribe(OpenFullscreenVideoEventHandler);
-        _closeFullScreenVideoEvent.Subscribe(CloseFullscreenVideoEventHandler);
     }
 
     #region -- Public properties --
@@ -66,7 +61,6 @@ public class MainTabbedPageViewModel : BaseViewModel
     {
         _aqaraMessanger.StopListening();
         _openFullScreenVideoEvent.Unsubscribe(OpenFullscreenVideoEventHandler);
-        _closeFullScreenVideoEvent.Unsubscribe(CloseFullscreenVideoEventHandler);
 
         base.Destroy();
     }
@@ -145,12 +139,7 @@ public class MainTabbedPageViewModel : BaseViewModel
         NavigationService.CreateBuilder()
             .AddSegment<FullScreenVideoPageViewModel>()
             .AddParameter(Constants.DialogsParameterKeys.CAMERA, camera)
-            .NavigateAsync();
-    }
-
-    private void CloseFullscreenVideoEventHandler()
-    {
-        NavigationService.GoBackAsync();
+            .Navigate();
     }
 
     #endregion
