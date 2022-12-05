@@ -30,13 +30,6 @@ public class AutomationBindableModel : BindableBase, ITappable, INotifiable
         set => SetProperty(ref _model, value);
     }
 
-    private string _name;
-    public string Name
-    {
-        get => _name;
-        set => SetProperty(ref _name, value);
-    }
-
     private string _description;
     public string Description
     {

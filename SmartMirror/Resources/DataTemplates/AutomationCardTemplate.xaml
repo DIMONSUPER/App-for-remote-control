@@ -38,7 +38,7 @@
                     VerticalOptions="Start"
                     HorizontalOptions="Start">
 
-                <Image Source="pic_automation"
+                <Image Source="pic_automation_simple"
                        VerticalOptions="Center"
                        HorizontalOptions="Center"/>
 
