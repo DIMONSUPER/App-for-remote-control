@@ -6,6 +6,7 @@ using SmartMirror.Models;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Repository;
+using System.Linq;
 
 namespace SmartMirror.Services.Automation;
 
@@ -66,6 +67,7 @@ public class AutomationService : IAutomationService
             {
                 var automations = _mapperService.MapRange<AutomationBindableModel>(resultOfGettingAutomations.Result.Data).ToList();
 
+                await GetDetailAutomationsAsync(automations);
                 await GetSettingsAutomationsAsync(automations);
 
                 var dbModels = _mapperService.MapRange<AutomationDTO>(automations);
@@ -123,6 +125,22 @@ public class AutomationService : IAutomationService
     #endregion
 
     #region -- Private helpers --
+
+    private async Task GetDetailAutomationsAsync(IEnumerable<AutomationBindableModel> automations)
+    {
+        foreach (var automation in automations)
+        {
+            var linkageDetail = await _aqaraService.GetLinkageDetailAsync(automation.LinkageId);
+
+            if (linkageDetail.IsSuccess)
+            {
+                automation.Conditions = linkageDetail.Result.Conditions;
+                automation.Actions = linkageDetail.Result.Actions;
+
+                automation.Description = automation.Conditions.Condition.Select(row => row.TriggerName).Aggregate((i, j) => i + ", " + j);
+            }
+        }
+    }
 
     private async Task GetSettingsAutomationsAsync(IEnumerable<AutomationBindableModel> automations)
     {

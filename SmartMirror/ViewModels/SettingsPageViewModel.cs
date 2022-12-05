@@ -588,10 +588,9 @@ namespace SmartMirror.ViewModels
             return notificationSettings.Model switch
             {
                 _ when notificationSettings.Model is DeviceBindableModel device => _devicesService.UpdateDeviceAsync(device),
-                // TODO Implement camera, scenario and automation updates
-                _ when notificationSettings.Model is CameraBindableModel camera => Task.CompletedTask,
-                _ when notificationSettings.Model is ScenarioBindableModel scenario => Task.CompletedTask,
-                _ when notificationSettings.Model is AutomationBindableModel automation => Task.CompletedTask,
+                _ when notificationSettings.Model is CameraBindableModel camera => _camerasService.UpdateCameraAsync(camera),
+                _ when notificationSettings.Model is ScenarioBindableModel scenario => _scenariosService.UpdateScenarioAsync(scenario),
+                _ when notificationSettings.Model is AutomationBindableModel automation => _automationService.UpdateAutomationAsync(automation),
                 _ => Task.CompletedTask,
             };
         }
