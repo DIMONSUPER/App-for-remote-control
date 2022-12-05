@@ -36,6 +36,12 @@
     <data name="Loading" xml:space="preserve">
         <value>Loading</value>
     </data>
+    <data name="Enabled" xml:space="preserve">
+        <value>Enabled</value>
+    </data>
+    <data name="Disabled" xml:space="preserve">
+        <value>Disabled</value>
+    </data>
     <data name="PleaseWaitFewSeconds" xml:space="preserve">
         <value>Please, wait a few seconds</value>
     </data>

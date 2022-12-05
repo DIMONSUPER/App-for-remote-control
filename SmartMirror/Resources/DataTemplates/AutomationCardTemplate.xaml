@@ -99,11 +99,11 @@
                     <Label.Triggers>
 
                         <DataTrigger TargetType="Label" Binding="{Binding Enable}" Value="True">
-                            <Setter Property="Text" Value="Enabled"/>
+                            <Setter Property="Text" Value="{extensions:Translate Enabled}"/>
                         </DataTrigger>
 
                         <DataTrigger TargetType="Label" Binding="{Binding Enable}" Value="False">
-                            <Setter Property="Text" Value="Disabled"/>
+                            <Setter Property="Text" Value="{extensions:Translate Disabled}"/>
                         </DataTrigger>
 
                     </Label.Triggers>
