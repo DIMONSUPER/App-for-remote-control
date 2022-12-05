@@ -4,10 +4,10 @@ namespace SmartMirror.Controls;
 
 public partial class ExpandedSlider : Border
 {
-	public ExpandedSlider()
-	{
-		InitializeComponent();
-	}
+    public ExpandedSlider()
+    {
+        InitializeComponent();
+    }
 
     #region -- Public properties --
 
@@ -136,18 +136,6 @@ public partial class ExpandedSlider : Border
     {
         get => (ICommand)GetValue(OpenCommandProperty);
         set => SetValue(OpenCommandProperty, value);
-    }
-
-    public static readonly BindableProperty ValueChangedCommandProperty = BindableProperty.Create(
-        propertyName: nameof(ValueChangedCommand),
-        returnType: typeof(ICommand),
-        declaringType: typeof(ExpandedSlider),
-        defaultBindingMode: BindingMode.OneWay);
-
-    public ICommand ValueChangedCommand
-    {
-        get => (ICommand)GetValue(ValueChangedCommandProperty);
-        set => SetValue(ValueChangedCommandProperty, value);
     }
 
     public static readonly BindableProperty CloseCommandProperty = BindableProperty.Create(

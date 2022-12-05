@@ -63,6 +63,7 @@
 		<None Remove="Resources\Images\ic_outline_color_lens.svg" />
 		<None Remove="Resources\Images\invert_colors_outline.svg" />
 		<None Remove="Resources\Images\mock_camera_stream.png" />
+		<None Remove="Resources\Images\mock_camera_stream_big.png" />
 		<None Remove="Resources\Images\photo_camera_outline.svg" />
 		<None Remove="Resources\Images\pic_bell.svg" />
 		<None Remove="Resources\Images\pic_gears.svg" />
@@ -265,6 +266,9 @@
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\FullScreenVideoPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\SettingsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
@@ -403,6 +407,9 @@
 		</Compile>
 		<Compile Update="Views\Dialogs\ScenarioSettingsDialog.xaml.cs">
 			<DependentUpon>ScenarioSettingsDialog.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\FullScreenVideoPage.xaml.cs">
+		  <DependentUpon>FullScreenVideoPage.xaml</DependentUpon>
 		</Compile>
 		<Compile Update="Views\Tabs\Details\RoomDetailsPage.xaml.cs">
 			<DependentUpon>RoomDetailsPage.xaml</DependentUpon>

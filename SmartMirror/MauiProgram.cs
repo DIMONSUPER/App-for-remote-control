@@ -21,7 +21,6 @@ using SmartMirror.Services.Rest;
 using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Services.Settings;
-using SmartMirror.ViewModels;
 using SmartMirror.ViewModels.Dialogs;
 using SmartMirror.Views;
 using SmartMirror.Views.Dialogs;
@@ -85,8 +84,10 @@ public static class MauiProgram
         containerRegistry.RegisterForNavigation<RoomDetailsPage>();
         containerRegistry.RegisterForNavigation<ScenarioDetailsPage>();
         containerRegistry.RegisterForNavigation<SettingsPage>();
+        containerRegistry.RegisterForNavigation<FullScreenVideoPage>();
 
         containerRegistry.RegisterSingleton<IMapperService, MapperService>();
+        containerRegistry.RegisterSingleton<IEventAggregator, EventAggregator>();
         containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
         containerRegistry.RegisterSingleton<IRestService, RestService>();
         containerRegistry.RegisterSingleton<IRepositoryService, RepositoryService>();

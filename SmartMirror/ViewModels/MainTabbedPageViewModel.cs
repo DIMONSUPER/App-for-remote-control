@@ -8,21 +8,29 @@ using SmartMirror.Services.Scenarios;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Views;
 using System.Windows.Input;
+using SmartMirror.Helpers.Events;
+using SmartMirror.Models.BindableModels;
 
 namespace SmartMirror.ViewModels;
 
 public class MainTabbedPageViewModel : BaseViewModel
 {
+    private readonly IEventAggregator _eventAggregator;
     private readonly IDevicesService _devicesService;
     private readonly IRoomsService _roomsService;
     private readonly IScenariosService _scenariosService;
     private readonly IAutomationService _automationService;
     private readonly IAqaraMessanger _aqaraMessanger;
+
+    private OpenFullScreenVideoEvent _openFullScreenVideoEvent;
+    private CloseFullScreenVideoEvent _closeFullScreenVideoEvent;
+
     private int _buttonCount;
     private bool _isFirstTime = true;
 
     public MainTabbedPageViewModel(
         INavigationService navigationService,
+        IEventAggregator eventAggregator,
         IDevicesService devicesService,
         IRoomsService roomsService,
         IAutomationService automationService,
@@ -30,12 +38,19 @@ public class MainTabbedPageViewModel : BaseViewModel
         IAqaraMessanger aqaraMessanger)
         : base(navigationService)
     {
+        _eventAggregator = eventAggregator;
         _devicesService = devicesService;
         _roomsService = roomsService;
         _scenariosService = scenariosService;
         _automationService = automationService;
         _aqaraMessanger = aqaraMessanger;
         _aqaraMessanger.StartListening();
+
+        _openFullScreenVideoEvent = _eventAggregator.GetEvent<OpenFullScreenVideoEvent>();
+        _closeFullScreenVideoEvent = _eventAggregator.GetEvent<CloseFullScreenVideoEvent>();
+        
+        _openFullScreenVideoEvent.Subscribe(OpenFullscreenVideoEventHandler);
+        _closeFullScreenVideoEvent.Subscribe(CloseFullscreenVideoEventHandler);
     }
 
     #region -- Public properties --
@@ -50,6 +65,8 @@ public class MainTabbedPageViewModel : BaseViewModel
     public override void Destroy()
     {
         _aqaraMessanger.StopListening();
+        _openFullScreenVideoEvent.Unsubscribe(OpenFullscreenVideoEventHandler);
+        _closeFullScreenVideoEvent.Unsubscribe(CloseFullscreenVideoEventHandler);
 
         base.Destroy();
     }
@@ -121,6 +138,19 @@ public class MainTabbedPageViewModel : BaseViewModel
         _buttonCount = 0;
 
         return false;
+    }
+
+    private void OpenFullscreenVideoEventHandler(CameraBindableModel camera)
+    {
+        NavigationService.CreateBuilder()
+            .AddSegment<FullScreenVideoPageViewModel>()
+            .AddParameter(Constants.DialogsParameterKeys.CAMERA, camera)
+            .NavigateAsync();
+    }
+
+    private void CloseFullscreenVideoEventHandler()
+    {
+        NavigationService.GoBackAsync();
     }
 
     #endregion

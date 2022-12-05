@@ -2,6 +2,7 @@ using CommunityToolkit.Maui.Alerts;
 using LibVLCSharp.Shared;
 using SmartMirror.Enums;
 using SmartMirror.Helpers;
+using SmartMirror.Helpers.Events;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Cameras;
@@ -19,15 +20,18 @@ public class CamerasPageViewModel : BaseTabViewModel
     private CancellationTokenSource _cameraCancellationTokenSource;
     private readonly LibVLC _libVLC = new(enableDebugLogs: false);
 
+    private readonly IEventAggregator _eventAggregator;
     private readonly IMapperService _mapperService;
     private readonly ICamerasService _camerasService;
 
     public CamerasPageViewModel(
         INavigationService navigationService,
+        IEventAggregator eventAggregator,
         IMapperService mapperService,
         ICamerasService camerasService)
         : base(navigationService)
     {
+        _eventAggregator = eventAggregator;
         _mapperService = mapperService;
         _camerasService = camerasService;
         DataState = EPageState.LoadingSkeleton;
@@ -87,28 +91,28 @@ public class CamerasPageViewModel : BaseTabViewModel
         set => SetProperty(ref _isHighQualityOn, value);
     }
 
-    private double _brightness;
+    private double _brightness = 50;
     public double Brightness
     {
         get => _brightness;
         set => SetProperty(ref _brightness, value);
     }
     
-    private double _contrast;
+    private double _contrast = 50;
     public double Contrast
     {
         get => _contrast;
         set => SetProperty(ref _contrast, value);
     }
 
-    private double _hue;
+    private double _hue = 50;
     public double Hue
     {
         get => _hue;
         set => SetProperty(ref _hue, value);
     }
 
-    private double _saturation;
+    private double _saturation = 50;
     public double Saturation
     {
         get => _saturation;
@@ -474,6 +478,11 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private Task OnOpenVideoInFullScreenCommandAsync()
     {
+        if (SelectedCamera is not null || !SelectedCamera.IsConnected)
+        {
+            _eventAggregator.GetEvent<OpenFullScreenVideoEvent>().Publish(SelectedCamera);
+        }
+
         return Task.CompletedTask;
     }
 

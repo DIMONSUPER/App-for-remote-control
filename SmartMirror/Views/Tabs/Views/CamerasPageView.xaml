@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs.Pages"
     xmlns:views="clr-namespace:SmartMirror.Views.Tabs.Views"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
@@ -10,6 +11,8 @@
     xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+    xmlns:vlc="clr-namespace:LibVLCSharp.Shared;assembly=LibVLCSharp"
     x:DataType="vm:CamerasPageViewModel"
     x:Class="SmartMirror.Views.Tabs.Views.CamerasPageView">
 
@@ -132,6 +135,7 @@
                             <controls:VideoView
                                 BackgroundColor="{DynamicResource cbg_i2}"
                                 MediaPlayer="{Binding MediaPlayer}"
+                                behaviors:TouchBehavior.Command="{Binding OpenVideoInFullScreenCommand}"
                                 x:Name="video">
 
                                 <controls:VideoView.Triggers>
@@ -169,7 +173,8 @@
                         RowDefinitions="Auto, Auto"
                         ColumnDefinitions="*, *, *, *" 
                         RowSpacing="20"
-                        ColumnSpacing="20">
+                        ColumnSpacing="20"
+                        IsVisible="{Binding VideoState, Converter={toolkit:IsEqualConverter}, ConverterParameter={Static vlc:VLCState.Opening}}">
 
                         <controls:CustomButton
                             Grid.Row="0"

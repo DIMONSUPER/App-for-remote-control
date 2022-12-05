@@ -8,10 +8,10 @@ public partial class CustomButton : Border
 {
     private bool _isHintShown;
 
-	public CustomButton()
-	{
-		InitializeComponent();
-	}
+    public CustomButton()
+    {
+        InitializeComponent();
+    }
 
     #region -- Public properties --
 
