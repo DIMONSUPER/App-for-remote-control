@@ -219,6 +219,7 @@ namespace SmartMirror.Services.Scenarios
                     scenario.IsShownInScenarios = dbScenario.IsShownInScenarios;
                     scenario.IsReceiveNotifications = dbScenario.IsReceiveNotifications;
                     scenario.IsFavorite = dbScenario.IsFavorite;
+                    scenario.IsEmergencyNotification = dbScenario.IsEmergencyNotification;
                 }
             }
         }

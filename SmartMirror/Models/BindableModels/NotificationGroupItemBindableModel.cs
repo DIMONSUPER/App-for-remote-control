@@ -38,6 +38,13 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _isReceiveNotifications, value);
         }
 
+        private bool _isEmergencyNotification;
+        public bool IsEmergencyNotification
+        {
+            get => _isEmergencyNotification;
+            set => SetProperty(ref _isEmergencyNotification, value);
+        }
+
         private string _status;
         public string Status
         {

@@ -104,13 +104,10 @@ public class AutomationSettingsDialogViewModel : BaseDialogViewModel
             or nameof(IsReceiveNotifications)
             or nameof(IsEmergencyNotification))
         {
-            Automation.IsFavorite = args.PropertyName is nameof(IsFavorite) ? _isFavorite : Automation.IsFavorite;
-
-            Automation.IsShownInAutomations = args.PropertyName is nameof(IsShownInAutomations) ? _isShownInAutomations : Automation.IsShownInAutomations;
-
-            Automation.IsReceiveNotifications = args.PropertyName is nameof(IsReceiveNotifications) ? _isReceiveNotifications : Automation.IsReceiveNotifications;
-
-            Automation.IsEmergencyNotification = args.PropertyName is nameof(IsEmergencyNotification) ? _isEmergencyNotification : Automation.IsEmergencyNotification;
+            Automation.IsFavorite = _isFavorite;
+            Automation.IsShownInAutomations = _isShownInAutomations;
+            Automation.IsReceiveNotifications = _isReceiveNotifications;
+            Automation.IsEmergencyNotification = _isEmergencyNotification;
 
             await _automationService.UpdateAutomationAsync(Automation);
         }

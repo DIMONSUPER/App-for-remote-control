@@ -27,6 +27,8 @@ public class ScenarioDTO : IDTO
 
     public bool IsFavorite { get; set; }
 
+    public bool IsEmergencyNotification { get; set; }
+
     public DateTime ActivationTime { get; set; }
 
     #endregion

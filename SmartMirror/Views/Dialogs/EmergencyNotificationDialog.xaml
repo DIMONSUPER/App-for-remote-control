@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dialogs:BaseDialogView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:dialogs="clr-namespace:SmartMirror.Views.Dialogs"
+    xmlns:dialogviewmodels="clr-namespace:SmartMirror.ViewModels.Dialogs"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+    xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+    x:Class="SmartMirror.Views.Dialogs.EmergencyNotificationDialog"
+    x:DataType="dialogviewmodels:EmergencyNotificationDialogViewModel"
+    x:Name="emergencyNotificationDialog">
+
+    <dialogs:BaseDialogView.Resources>
+
+        <ResourceDictionary>
+            <DataTemplate x:Key="notificationTemplate">
+
+                <templates:NotificationTemplate
+                    WidthRequest="512"
+                    HeightRequest="152"/>
+
+            </DataTemplate>
+        </ResourceDictionary>
+
+    </dialogs:BaseDialogView.Resources>
+
+    <Frame
+        Padding="0"
+        BackgroundColor="Transparent">
+
+        <Border
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            StrokeThickness="0.75"
+            StrokeShape="RoundRectangle 9"
+            Stroke="{DynamicResource tcolor_i1}"
+            Padding="0"
+            BackgroundColor="{StaticResource cbg_i2}">
+
+            <VerticalStackLayout
+                Spacing="0"
+                Margin="30, 0">
+
+                <StackLayout
+                    Orientation="Horizontal"
+                    Margin="0, 24, 0, 0">
+
+                    <Label
+                        Style="{DynamicResource tstyle_i11}"
+                        HorizontalOptions="Start"
+                        Text="{extensions:Translate EmergencyNotification}" />
+
+                    <Label
+                        Style="{DynamicResource tstyle_i5}"
+                        HorizontalOptions="EndAndExpand">
+
+                        <Label.Text>
+
+                            <MultiBinding StringFormat="{}{0}/{1}">
+                                <Binding Path="CurrentIndex" />
+                                <Binding Path="Notifications.Count" />
+                            </MultiBinding>
+
+                        </Label.Text>
+
+                        <Label.Triggers>
+
+                            <DataTrigger TargetType="Label" Binding="{Binding Notifications.Count}" Value="1">
+                                <Setter Property="IsVisible" Value="False"/>
+                            </DataTrigger>
+
+                        </Label.Triggers>
+
+                    </Label>
+
+                    <Image
+                        Source="ic_notifications"
+                        VerticalOptions="Start"
+                        Margin="6, 0, 0, 0"
+                        WidthRequest="24"
+                        HeightRequest="24">
+
+                        <Image.Triggers>
+
+                            <DataTrigger TargetType="Image" Binding="{Binding Notifications.Count}" Value="1">
+                                <Setter Property="IsVisible" Value="False"/>
+                            </DataTrigger>
+
+                        </Image.Triggers>
+
+                    </Image>
+
+                </StackLayout>
+
+                <CollectionView
+                    Margin="0, 42, 0, 0"
+                    WidthRequest="570"
+                    ItemTemplate="{StaticResource notificationTemplate}"
+                    ItemsSource="{Binding Notifications}">
+
+                    <CollectionView.Triggers>
+
+                        <DataTrigger TargetType="CollectionView" Binding="{Binding Notifications.Count}" Value="1">
+
+                            <Setter Property="WidthRequest" Value="512"/>
+
+                        </DataTrigger>
+
+                    </CollectionView.Triggers>
+
+                    <CollectionView.Behaviors>
+
+                        <behaviors:IndexFirstVisibleItemByScrollBehavior
+                            BindingContext="{Binding BindingContext, Source={Reference emergencyNotificationDialog}}"
+                            ItemIndex="{Binding ItemIndex}"/>
+
+                        <behaviors:ScrollToSelectedItemBehavior 
+                            BindingContext="{Binding BindingContext, Source={Reference emergencyNotificationDialog}}"
+                            SelectedItem="{Binding CurrentItem}"
+                            ScrollToPosition="Start"/>
+
+                    </CollectionView.Behaviors>
+
+                    <CollectionView.ItemsLayout>
+
+                        <LinearItemsLayout
+                            Orientation="Horizontal"
+                            ItemSpacing="18"
+                            SnapPointsAlignment="Start"
+                            SnapPointsType="Mandatory"/>
+
+                    </CollectionView.ItemsLayout>
+
+                </CollectionView>
+
+                <Button
+                    Style="{DynamicResource ButtonStyle_i1}"
+                    IsVisible="False"
+                    Margin="0, 24, 0, 42"
+                    HorizontalOptions="Center"
+                    Text="{extensions:Translate Close}"
+                    Command="{Binding CloseCommand}">
+
+                    <Button.Triggers>
+
+                        <DataTrigger TargetType="Button" Value="0">
+
+                            <DataTrigger.Binding>
+
+                                <MultiBinding Converter="{xct:MultiMathExpressionConverter}" ConverterParameter="x0 - x1">
+                                    <Binding Path="CurrentIndex" />
+                                    <Binding Path="Notifications.Count" />
+                                </MultiBinding>
+
+                            </DataTrigger.Binding>
+
+                            <Setter Property="IsVisible" Value="True"/>
+
+                        </DataTrigger>
+
+                    </Button.Triggers>
+
+                </Button>
+
+                <Grid
+                    Margin="0, 24, 0, 42"
+                    ColumnDefinitions="*, *"
+                    ColumnSpacing="26">
+
+                    <Grid.Triggers>
+
+                        <DataTrigger TargetType="Grid" Value="0">
+
+                            <DataTrigger.Binding>
+
+                                <MultiBinding Converter="{xct:MultiMathExpressionConverter}" ConverterParameter="x0 - x1">
+                                    <Binding Path="CurrentIndex" />
+                                    <Binding Path="Notifications.Count" />
+                                </MultiBinding>
+
+                            </DataTrigger.Binding>
+
+                            <Setter Property="IsVisible" Value="False"/>
+
+                        </DataTrigger>
+
+                    </Grid.Triggers>
+
+                    <Button
+                        Grid.Column="0"
+                        Style="{x:DynamicResource ButtonStyle_i1}"
+                        Text="{extensions:Translate Close}"
+                        Background="Transparent"
+                        TextColor="{x:DynamicResource cbg_i3}"
+                        BorderColor="{x:DynamicResource cbg_i3}"
+                        BorderWidth="0.75"
+                        Command="{Binding CloseCommand}"/>
+
+                    <Button
+                        Grid.Column="1"
+                        Style="{DynamicResource ButtonStyle_i1}"
+                        Text="{extensions:Translate Next}"
+                        Command="{Binding NextCommand}"/>
+
+                </Grid>
+
+            </VerticalStackLayout>
+
+        </Border>
+
+    </Frame>
+
+</dialogs:BaseDialogView>

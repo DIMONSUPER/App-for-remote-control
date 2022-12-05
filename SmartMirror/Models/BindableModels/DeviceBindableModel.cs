@@ -150,6 +150,13 @@ public class DeviceBindableModel : BindableBase, INotifiable
         set => SetProperty(ref _isFavorite, value);
     }
 
+    private bool _isEmergencyNotification = true;
+    public bool IsEmergencyNotification
+    {
+        get => _isEmergencyNotification;
+        set => SetProperty(ref _isEmergencyNotification, value);
+    }
+
     private ICommand _tappedCommand;
     public ICommand TappedCommand
     {

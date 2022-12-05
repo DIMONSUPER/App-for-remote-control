@@ -1,4 +1,4 @@
-﻿using SmartMirror.Interfaces;
+using SmartMirror.Interfaces;
 using System.Windows.Input;
 
 namespace SmartMirror.Models.BindableModels
@@ -61,6 +61,13 @@ namespace SmartMirror.Models.BindableModels
         {
             get => _isSelected;
             set => SetProperty(ref _isSelected, value);
+        }
+
+	    private bool _isEmergencyNotification = true;
+        public bool IsEmergencyNotification
+        {
+            get => _isEmergencyNotification;
+            set => SetProperty(ref _isEmergencyNotification, value);
         }
 
         #endregion

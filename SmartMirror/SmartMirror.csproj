@@ -354,10 +354,28 @@
 		<MauiXaml Update="Views\Dialogs\BaseDialogView.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\EmergencyNotificationDialog.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\SimpleAutomationTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\AutomationSettingsDialog.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Tabs\Pages\AutomationPage.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Tabs\Views\AutomationPageView.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\AutomationCardTemplate.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Tabs\Details\AutomationDetailsPage.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\AutomationDetailCardTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 	</ItemGroup>

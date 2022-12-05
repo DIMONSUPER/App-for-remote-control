@@ -18,6 +18,9 @@
     <data name="AllowNotifications" xml:space="preserve">
         <value>Allow Notifications</value>
     </data>
+    <data name="EmergencyNotification" xml:space="preserve">
+        <value>Emergency Notification</value>
+    </data>
     <data name="Automation" xml:space="preserve">
         <value>Automation</value>
     </data>
@@ -32,6 +35,12 @@
     </data>
     <data name="Loading" xml:space="preserve">
         <value>Loading</value>
+    </data>
+    <data name="Enabled" xml:space="preserve">
+        <value>Enabled</value>
+    </data>
+    <data name="Disabled" xml:space="preserve">
+        <value>Disabled</value>
     </data>
     <data name="PleaseWaitFewSeconds" xml:space="preserve">
         <value>Please, wait a few seconds</value>
@@ -90,11 +99,11 @@
     <data name="ErrorDescription" xml:space="preserve">
         <value>Error description</value>
     </data>
-    <data name="EmergencyNotification" xml:space="preserve">
-        <value>Emergency Notification</value>
-    </data>
     <data name="Close" xml:space="preserve">
         <value>Close</value>
+    </data>
+    <data name="Next" xml:space="preserve">
+        <value>Next</value>
     </data>
     <data name="NoAccessoriesYet" xml:space="preserve">
         <value>No accessories yet</value>
@@ -206,6 +215,9 @@
     </data>
     <data name="FavoriteScenarios" xml:space="preserve">
         <value>Favorite Scenarios</value>
+    </data>
+    <data name="FavoriteAutomation" xml:space="preserve">
+        <value>Favorite Automation</value>
     </data>
     <data name="Active" xml:space="preserve">
         <value>Active</value>

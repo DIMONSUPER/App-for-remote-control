@@ -18,6 +18,7 @@
             public const string SCENARIO = nameof(SCENARIO);
             public const string CAMERA = nameof(CAMERA);
             public const string AUTOMATION = nameof(AUTOMATION);
+            public const string NOTIFICATION = nameof(NOTIFICATION);
             public const string AUTH_TYPE = nameof(AUTH_TYPE);
             public const string TITLE = nameof(TITLE);
             public const string DESCRIPTION = nameof(DESCRIPTION);
