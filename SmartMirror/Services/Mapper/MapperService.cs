@@ -119,6 +119,18 @@ namespace SmartMirror.Services.Mapper
             cfg.CreateMap<DeviceBindableModel, NotificationSourceBindableModel>()
                 .ForMember(nameof(NotificationSourceBindableModel.Id), opt => opt.MapFrom(src => src.FullDeviceId))
                 .ReverseMap();
+
+            // TODO temporally
+            cfg.CreateMap<LinkageActionAqaraModel, AutomationDetailCardBindableModel>()
+                .ForMember(nameof(AutomationDetailCardBindableModel.Name), opt => opt.MapFrom(src => "Action"))
+                .ForMember(nameof(AutomationDetailCardBindableModel.Description), opt => opt.MapFrom(src => src.ActionName))
+                .ReverseMap();
+
+            // TODO temporally
+            cfg.CreateMap<ConditionAqaraModel, AutomationDetailCardBindableModel>()
+                .ForMember(nameof(AutomationDetailCardBindableModel.Name), opt => opt.MapFrom(src => "Trigger"))
+                .ForMember(nameof(AutomationDetailCardBindableModel.Description), opt => opt.MapFrom(src => src.TriggerName))
+                .ReverseMap();
         }
 
         #endregion

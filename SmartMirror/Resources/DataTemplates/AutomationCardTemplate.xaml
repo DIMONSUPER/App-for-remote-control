@@ -1,62 +1,126 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<DataTemplate
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:app="clr-namespace:SmartMirror"
-    xmlns:controls="clr-namespace:SmartMirror.Controls"
-    xmlns:bindablemodels="clr-namespace:SmartMirror.Models.BindableModels"
-    x:DataType="bindablemodels:AutomationBindableModel"
-    x:Class="SmartMirror.Resources.DataTemplates.AutomationCardTemplate">
-        
-    <Grid>
-        
-        <Border 
-            Padding="24"
-            Margin="0, 0, 0, 18"
-            Stroke="{DynamicResource cbg_i4}"
+<Grid xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+      xmlns:enums="clr-namespace:SmartMirror.Enums"
+      xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+      xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+      xmlns:controls="clr-namespace:SmartMirror.Controls"
+      xmlns:vm="clr-namespace:SmartMirror.Models.BindableModels"
+      behaviors:TouchBehavior.Command="{Binding TapCommand}"
+      behaviors:TouchBehavior.CommandParameter="{Binding .}"
+      x:DataType="vm:AutomationBindableModel"
+      x:Class="SmartMirror.Resources.DataTemplates.AutomationCardTemplate"
+      x:Name="automationTemplate">
+
+    <!-- BORDER AND ICON -->
+    <Border Stroke="{x:DynamicResource cbg_i4}"
+            StrokeThickness="1"
             StrokeShape="RoundRectangle 9"
-            BackgroundColor="{DynamicResource cbg_i2}">
+            BackgroundColor="{StaticResource cbg_i2}"
+            Margin="0,0,0,3"
+            Padding="{Binding InnerPadding, Source={x:Reference automationTemplate}}">
 
-            <StackLayout Orientation="Horizontal">
+        <Grid RowDefinitions="Auto, *"
+              RowSpacing="0"
+              ColumnSpacing="0"
+              VerticalOptions="Fill"
+              ColumnDefinitions="Auto, *">
 
-                <!-- ICON -->
-                <Border
-                    VerticalOptions="Start"
-                    StrokeThickness="0"
+            <Border Grid.Row="0"
+                    Grid.Column="0"
+                    BackgroundColor="{StaticResource cbg_i1}"
                     StrokeShape="RoundRectangle 12"
-                    BackgroundColor="{DynamicResource cbg_i1}">
-
-                    <Image 
-                        Margin="12"
-                        WidthRequest="42"
-                        HeightRequest="42"
-                        Source="pic_automation"/>
-
-                </Border>
-
-                <controls:CustomLabel
-                    Style="{DynamicResource tstyle_i11}"
-                    Margin="24, 0"
-                    VerticalOptions="Center"
-                    MaximumWidthRequest="200"
-                    MaxLines="2"
-                    LineBreakMode="TailTruncation"
-                    Text="{Binding Name}"/>
-
-                <controls:CustomLabel
-                    Style="{DynamicResource tstyle_i8}"
-                    HorizontalOptions="EndAndExpand"
+                    StrokeThickness="0"
+                    WidthRequest="{Binding IconSize, Source={x:Reference automationTemplate}}"
+                    HeightRequest="{Binding IconSize, Source={x:Reference automationTemplate}}"
+                    Padding="12"
                     VerticalOptions="Start"
-                    MaximumWidthRequest="225"
-                    MaxLines="2"
-                    LineBreakMode="TailTruncation"
-                    HorizontalTextAlignment="End"
-                    Text="12:00"/>
+                    HorizontalOptions="Start">
+
+                <Image Source="pic_automation"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
+
+            </Border>
+
+            <!-- NAME AND DESCRIPTION -->
+            <Grid Grid.Row="1"
+                  Grid.ColumnSpan="2"
+                  HorizontalOptions="Fill"
+                  VerticalOptions="EndAndExpand"
+                  RowDefinitions="Auto, Auto"
+                  RowSpacing="0"
+                  ColumnDefinitions="Auto, *">
+
+                <Label Grid.Row="0"
+                       Grid.ColumnSpan="2"
+                       Style="{DynamicResource tstyle_i11}"
+                       Text="{Binding Name}"
+                       MaxLines="1"
+                       VerticalOptions="End"
+                       LineBreakMode="TailTruncation"/>
+
+                <Label Grid.Row="1"
+                       Grid.Column="0"
+                       Style="{x:DynamicResource tstyle_i5}"
+                       MaxLines="1"
+                       VerticalOptions="End"
+                       LineBreakMode="TailTruncation"
+                       Text="{Binding Description}"/>
+
+                <ActivityIndicator Grid.Row="1"
+                                   Grid.Column="1"
+                                   IsRunning="{Binding IsExecuting}"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="End"
+                                   WidthRequest="32"
+                                   HeightRequest="32"/>
+
+            </Grid>
+
+            <!-- SWITCH -->
+            <StackLayout Grid.Row="0"
+                         Grid.Column="1"
+                         behaviors:TouchBehavior.Command="{Binding ChangeActiveStatusCommand}"
+                         behaviors:TouchBehavior.CommandParameter="{Binding .}"
+                         Orientation="Horizontal"
+                         VerticalOptions="Start"
+                         HorizontalOptions="End">
+
+                <Label Style="{DynamicResource tstyle_i10}"
+                       Text="{extensions:Translate Unlocked}"
+                       VerticalTextAlignment="Start"
+                       HorizontalOptions="FillAndExpand"
+                       HorizontalTextAlignment="End"
+                       Margin="0"
+                       x:Name="statusLabel">
+
+                    <Label.Triggers>
+
+                        <DataTrigger TargetType="Label" Binding="{Binding Enable}" Value="True">
+                            <Setter Property="Text" Value="Enabled"/>
+                        </DataTrigger>
+
+                        <DataTrigger TargetType="Label" Binding="{Binding Enable}" Value="False">
+                            <Setter Property="Text" Value="Disabled"/>
+                        </DataTrigger>
+
+                    </Label.Triggers>
+
+                </Label>
+
+                <controls:CustomSwitch IsToggled="{Binding Enable}"
+                                       InputTransparent="True"
+                                       VerticalOptions="Start"
+                                       HorizontalOptions="End"
+                                       Margin="12, 3, 3, 0"/>
 
             </StackLayout>
 
-        </Border>
+        </Grid>
 
-    </Grid>
-    
-</DataTemplate>
+    </Border>
+
+</Grid>
+

@@ -358,6 +358,12 @@
 		<MauiXaml Update="Resources\DataTemplates\AutomationCardTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Views\Tabs\Details\AutomationDetailsPage.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\AutomationDetailCardTemplate.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Update="Resources\Strings\Strings.resx">

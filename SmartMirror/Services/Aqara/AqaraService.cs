@@ -70,6 +70,21 @@ public class AqaraService : BaseAqaraService, IAqaraService
         });
     }
 
+    public Task<AOResult<LinkageDetailAqaraModel>> GetLinkageDetailAsync(string linkageId)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var requestData = new
+            {
+                linkageId = linkageId,
+            };
+
+            var response = await MakeRequestAsync<LinkageDetailAqaraModel>("query.linkage.detail", requestData, onFailure);
+
+            return response.Result;
+        });
+    }
+
     public Task<AOResult<BaseAqaraResponse>> LoginWithCodeAsync(string email, string code)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>

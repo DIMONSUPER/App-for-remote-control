@@ -108,11 +108,15 @@ public class AutomationPageViewModel : BaseTabViewModel
         }
     }
 
-    private Task OnRunAutomationCommandAsync(AutomationBindableModel selectedAutomation)
+    private async Task OnRunAutomationCommandAsync(AutomationBindableModel selectedAutomation)
     {
-        // TODO Run Automation
+        // TODO Run Automation temporally
+        selectedAutomation.IsExecuting = true;
 
-        return Task.CompletedTask;
+        await Task.Delay(500);
+
+        selectedAutomation.IsExecuting = false;
+        selectedAutomation.Enable = !selectedAutomation.Enable;
     }
 
     private Task OnGoToAutomationDetailsCommandAsync(AutomationBindableModel automation)
@@ -120,7 +124,7 @@ public class AutomationPageViewModel : BaseTabViewModel
         IsNeedReloadData = false;
 
         return NavigationService.CreateBuilder()
-            .AddSegment<ScenarioDetailsPageViewModel>()
+            .AddSegment<AutomationDetailsPageViewModel>()
             .AddParameter(KnownNavigationParameters.Animated, true)
             .AddParameter(nameof(AutomationBindableModel), automation)
             .NavigateAsync();
