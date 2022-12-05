@@ -18,6 +18,9 @@
     <data name="AllowNotifications" xml:space="preserve">
         <value>Allow Notifications</value>
     </data>
+    <data name="EmergencyNotification" xml:space="preserve">
+        <value>Emergency Notification</value>
+    </data>
     <data name="Automation" xml:space="preserve">
         <value>Automation</value>
     </data>
@@ -90,11 +93,11 @@
     <data name="ErrorDescription" xml:space="preserve">
         <value>Error description</value>
     </data>
-    <data name="EmergencyNotification" xml:space="preserve">
-        <value>Emergency Notification</value>
-    </data>
     <data name="Close" xml:space="preserve">
         <value>Close</value>
+    </data>
+    <data name="Next" xml:space="preserve">
+        <value>Next</value>
     </data>
     <data name="NoAccessoriesYet" xml:space="preserve">
         <value>No accessories yet</value>

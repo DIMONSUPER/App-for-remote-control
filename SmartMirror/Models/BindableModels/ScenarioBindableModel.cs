@@ -1,29 +1,18 @@
-﻿using System.Collections.ObjectModel;
+﻿using SmartMirror.Interfaces;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace SmartMirror.Models.BindableModels
 {
-    public class ScenarioBindableModel : BindableBase
+    public class ScenarioBindableModel : BindableBase, INotifiable
     {
-        private int _id;
-        public int Id
-        {
-            get => _id;
-            set => SetProperty(ref _id, value);
-        }
+        #region -- Public properties --
 
         private string _sceneId;
         public string SceneId
         {
             get => _sceneId;
             set => SetProperty(ref _sceneId, value);
-        }
-
-        private string _name;
-        public string Name
-        {
-            get => _name;
-            set => SetProperty(ref _name, value);
         }
 
         private bool _isActive;
@@ -40,18 +29,18 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _isShownInScenarios, value);
         }
 
-        private bool _isReceiveNotifications = true;
-        public bool IsReceiveNotifications
-        {
-            get => _isReceiveNotifications;
-            set => SetProperty(ref _isReceiveNotifications, value);
-        }
-
         private bool _isFavorite;
         public bool IsFavorite
         {
             get => _isFavorite;
             set => SetProperty(ref _isFavorite, value);
+        }
+
+        private bool _isEmergencyNotification = true;
+        public bool IsEmergencyNotification
+        {
+            get => _isEmergencyNotification;
+            set => SetProperty(ref _isEmergencyNotification, value);
         }
 
         private DateTime _activationTime;
@@ -87,6 +76,33 @@ namespace SmartMirror.Models.BindableModels
         {
             get => _changeActiveStatusCommand;
             set => SetProperty(ref _changeActiveStatusCommand, value);
+        } 
+
+        #endregion
+
+        #region -- INotifiable implementation --
+
+        private int _id;
+        public int Id
+        {
+            get => _id;
+            set => SetProperty(ref _id, value);
         }
+
+        private string _name;
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
+
+        private bool _isReceiveNotifications = true;
+        public bool IsReceiveNotifications
+        {
+            get => _isReceiveNotifications;
+            set => SetProperty(ref _isReceiveNotifications, value);
+        }
+
+        #endregion
     }
 }

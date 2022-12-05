@@ -18,9 +18,9 @@
 
         <ResourceDictionary>
 
-            <templates:FavoriteScenariosTemplate x:Key="favoriteScenariosTemplate"/>
+            <templates:FavoriteScenarioTemplate x:Key="favoriteScenarioTemplate"/>
 
-            <templates:ScenariosTemplate x:Key="scenariosTemplate"/>
+            <templates:ScenarioTemplate x:Key="scenarioTemplate"/>
 
         </ResourceDictionary>
 
@@ -76,7 +76,7 @@
                         <HorizontalStackLayout
                             Spacing="30"
                             Padding="60, 0"
-                            BindableLayout.ItemTemplate="{StaticResource favoriteScenariosTemplate}"
+                            BindableLayout.ItemTemplate="{StaticResource favoriteScenarioTemplate}"
                             BindableLayout.ItemsSource="{Binding FavoriteScenarios}"/>
 
                     </controls:CustomScrollView>
@@ -106,7 +106,7 @@
                     <CollectionView
                         Margin="60, 16, 60, 0"
                         ItemsSource="{Binding Scenarios}"
-                        ItemTemplate="{StaticResource scenariosTemplate}"
+                        ItemTemplate="{StaticResource scenarioTemplate}"
                         VerticalScrollBarVisibility="Never"
                         HorizontalScrollBarVisibility="Never">
 

@@ -24,7 +24,7 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     //TODO Delete when doorbell is implemented
     private bool _displayDoorbellDialog = true;
-    private object _locker = new();
+    private readonly object _locker = new();
 
     public RoomsPageViewModel(
         INavigationService navigationService,

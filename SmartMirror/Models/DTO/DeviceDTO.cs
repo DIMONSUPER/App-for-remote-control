@@ -56,6 +56,8 @@ public class DeviceDTO : IDTO
 
     public bool IsFavorite { get; set; }
 
+    public bool IsEmergencyNotification { get; set; }
+
     #endregion
 }
 

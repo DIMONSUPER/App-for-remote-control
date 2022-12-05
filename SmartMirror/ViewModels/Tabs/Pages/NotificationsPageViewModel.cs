@@ -43,7 +43,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
         DataState = EPageState.LoadingSkeleton;
 
         _devicesService.AllDevicesChanged += OnAllDevicesChanged;
-        _notificationsService.NotificationReceived += OnNotificationReceived;
+        _notificationsService.AllNotificationsChanged += OnNotificationReceived;
         _roomsService.AllRoomsChanged += OnAllRoomsChanged;
 
         NotificationCategories = new()
@@ -125,7 +125,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
     public override void Destroy()
     {
         _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
-        _notificationsService.NotificationReceived -= OnNotificationReceived;
+        _notificationsService.AllNotificationsChanged -= OnNotificationReceived;
         _roomsService.AllRoomsChanged -= OnAllRoomsChanged;
 
         base.Destroy();
@@ -381,6 +381,9 @@ public class NotificationsPageViewModel : BaseTabViewModel
     {
         if (!IsDataLoading)
         {
+            // TODO delete when the subscription starts working properly
+            await _notificationsService.DownloadAllNotificationsAsync();
+
             await LoadAllNotificationsAsync();
 
             await LoadNotificationSourcesAndApplyFilterAsync();
@@ -397,34 +400,11 @@ public class NotificationsPageViewModel : BaseTabViewModel
         {
             if (_notificationsService.IsAllowNotifications)
             {
-                List<NotificationGroupItemBindableModel> result = new();
+                var notifications = await _notificationsService.GetAllNotificationsAsync();
 
-                var devices = await _devicesService.GetAllDevicesAsync();
+                _allNotifications = new(notifications);
 
-                var supportedDevices = await _devicesService.GetAllSupportedDevicesAsync();
-
-                foreach (var device in devices)
-                {
-                    var resourceIds = supportedDevices
-                        .Where(x => x.IsReceiveNotifications && x.DeviceId == device.DeviceId && x.EditableResourceId is not null)
-                        .Select(x => x.EditableResourceId)
-                        .ToArray();
-
-                    if (!resourceIds.Any()) continue;
-
-                    var resultOfGettingNotifications = await _notificationsService.GetNotificationsForDeviceAsync(device.DeviceId, resourceIds);
-
-                    if (resultOfGettingNotifications.IsSuccess)
-                    {
-                        result.AddRange(resultOfGettingNotifications.Result);
-                    }
-                }
-
-                result.Sort(Comparer<NotificationGroupItemBindableModel>.Create((item1, item2) => item2.LastActivityTime.CompareTo(item1.LastActivityTime)));
-
-                _allNotifications = new(result);
-
-                isLoaded = result.Any();
+                isLoaded = notifications.Any();
             }
         }
 

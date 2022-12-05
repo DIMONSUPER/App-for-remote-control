@@ -15,6 +15,9 @@ namespace SmartMirror.Services.Notifications
         private readonly IAqaraMessanger _aqaraMessanger;
         private readonly ISettingsManager _settingsManager;
 
+        private TaskCompletionSource<object> _notificationsTaskCompletionSource = new();
+        private List<NotificationGroupItemBindableModel> _allNotifications = new();
+
         public NotificationsService(
             IRestService restService,
             ISettingsManager settingsManager,
@@ -32,9 +35,16 @@ namespace SmartMirror.Services.Notifications
 
         #region -- INotificationsService implementation --
 
-        public event EventHandler<NotificationGroupItemBindableModel> NotificationReceived;
+        public event EventHandler<NotificationGroupItemBindableModel> AllNotificationsChanged;
 
         public bool IsAllowNotifications => _settingsManager.NotificationsSettings.IsAllowNotifications;
+
+        public async Task<IEnumerable<NotificationGroupItemBindableModel>> GetAllNotificationsAsync()
+        {
+            await _notificationsTaskCompletionSource.Task;
+
+            return _allNotifications;
+        }
 
         public Task<AOResult> ChangeAllowNotificationsAsync(bool state)
         {
@@ -44,6 +54,64 @@ namespace SmartMirror.Services.Notifications
 
                 return Task.CompletedTask;
             });
+        }
+
+        public async Task<AOResult> DownloadAllNotificationsAsync()
+        {
+            var result = new AOResult();
+            result.SetFailure("Task is already running");
+
+            if (_notificationsTaskCompletionSource.Task.Status is not TaskStatus.RanToCompletion and not TaskStatus.WaitingForActivation and not TaskStatus.Canceled and not TaskStatus.Faulted)
+            {
+                return result;
+            }
+
+            _notificationsTaskCompletionSource = new();
+
+            result = await AOResult.ExecuteTaskAsync(async onFailure =>
+            {
+                List<NotificationGroupItemBindableModel> notifications = new();
+
+                var devices = await _devicesService.GetAllDevicesAsync();
+
+                var supportedDevices = await _devicesService.GetAllSupportedDevicesAsync();
+
+                foreach (var device in devices)
+                {
+                    var resourceIds = supportedDevices
+                        .Where(x => x.IsReceiveNotifications && x.DeviceId == device.DeviceId && x.EditableResourceId is not null)
+                        .Select(x => x.EditableResourceId)
+                        .ToArray();
+
+                    if (!resourceIds.Any()) continue;
+
+                    var resultOfGettingNotifications = await GetNotificationsForDeviceAsync(device.DeviceId, resourceIds);
+
+                    if (resultOfGettingNotifications.IsSuccess)
+                    {
+                        notifications.AddRange(resultOfGettingNotifications.Result);
+                    }
+                    else
+                    {
+                        onFailure("Request failed");
+                    }
+                }
+
+                notifications.Sort(Comparer<NotificationGroupItemBindableModel>.Create((item1, item2) => item2.LastActivityTime.CompareTo(item1.LastActivityTime)));
+
+                _allNotifications = new(notifications);
+            });
+
+            if (!result.IsSuccess)
+            {
+                _allNotifications = new();
+            }
+
+            AllNotificationsChanged?.Invoke(this, null);
+
+            _notificationsTaskCompletionSource.TrySetResult(null);
+
+            return result;
         }
 
         public Task<AOResult<IEnumerable<NotificationGroupItemBindableModel>>> GetNotificationsForDeviceAsync(string deviceId, params string[] resourceIds)
@@ -110,13 +178,18 @@ namespace SmartMirror.Services.Notifications
 
                 if (device is not null)
                 {
-                    NotificationReceived?.Invoke(this, new NotificationGroupItemBindableModel
+                    var notification = new NotificationGroupItemBindableModel
                     {
                         Device = device,
                         IsShown = device.IsReceiveNotifications,
+                        IsEmergencyNotification = device.IsEmergencyNotification,
                         LastActivityTime = DateTime.Now,
                         Status = aqaraMessage.Value,
-                    });
+                    };
+
+                    _allNotifications.Add(notification);
+
+                    AllNotificationsChanged?.Invoke(this, notification);
                 }
             }
         }
