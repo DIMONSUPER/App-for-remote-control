@@ -49,7 +49,7 @@
             <ScrollView
                 VerticalScrollBarVisibility="Never"
                 HorizontalScrollBarVisibility="Never"
-                Padding="0, 0, 0, 30"
+                Padding="0, 0, 0, 0"
                 x:Name="scrollViewCompleteState">
 
                 <VerticalStackLayout
@@ -120,6 +120,13 @@
 
                         </CollectionView.ItemsLayout>
 
+                        <CollectionView.Footer>
+
+                            <BoxView Color="Transparent"
+                                     HeightRequest="14"/>
+
+                        </CollectionView.Footer>
+                        
                     </CollectionView>
 
                 </VerticalStackLayout>

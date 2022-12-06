@@ -214,7 +214,7 @@
                                         ItemTemplate="{StaticResource elementCategoryTemplateSelector}">
 
                                         <CollectionView.Footer>
-                                            <BoxView HeightRequest="20"/>
+                                            <BoxView HeightRequest="44"/>
                                         </CollectionView.Footer>
                                         
                                         <CollectionView.Triggers>

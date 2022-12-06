@@ -117,8 +117,17 @@
                                 WidthRequest="571"
                                 VerticalScrollBarVisibility="Always"
                                 HorizontalScrollBarVisibility="Always"
-                                x:Name="scrollViewNotifications"/>
+                                x:Name="scrollViewNotifications">
 
+                                <CollectionView.Footer>
+
+                                    <BoxView Color="Transparent"
+                                             HeightRequest="28"/>
+
+                                </CollectionView.Footer>
+                                
+                            </CollectionView>                            
+                            
                         </RefreshView>
 
                     </controls:CustomStateView.CompleteContent>

@@ -68,7 +68,16 @@
                         <CollectionView
                             VerticalScrollBarVisibility="Never"
                             ItemTemplate="{x:StaticResource scenarioActionTemplate}"
-                            ItemsSource="{Binding ScenarioActions}"/>
+                            ItemsSource="{Binding ScenarioActions}">
+
+                            <CollectionView.Footer>
+
+                                <BoxView Color="Transparent"
+                                         HeightRequest="26"/>
+
+                            </CollectionView.Footer>
+
+                        </CollectionView>
 
                     </controls:CustomStateView.CompleteContent>
             
