@@ -69,7 +69,7 @@ namespace SmartMirror.ViewModels
 
             _cameraCancellationTokenSource = new();
 
-            _ = StartRunnerAsync(Camera).ConfigureAwait(false);
+            _ = StartRunnerAsync().ConfigureAwait(false);
         }
 
         public override void OnDisappearing()
@@ -156,33 +156,30 @@ namespace SmartMirror.ViewModels
             }
         }
 
-        private async Task StartRunnerAsync(CameraBindableModel camera)
+        private async Task StartRunnerAsync()
         {
             try
             {
                 while (!_cameraCancellationTokenSource.IsCancellationRequested)
                 {
-                    var isConnectedResponse = await _camerasService.CheckCameraConnection(camera, _cameraCancellationTokenSource.Token).ConfigureAwait(false);
+                    var isConnectedResponse = await _camerasService.CheckCameraConnection(Camera, _cameraCancellationTokenSource.Token).ConfigureAwait(false);
 
                     if (!_cameraCancellationTokenSource.IsCancellationRequested)
                     {
                         if (isConnectedResponse.IsSuccess && isConnectedResponse.Result)
                         {
-                            if (Camera == camera && !camera.IsConnected)
+                            if (!Camera.IsConnected)
                             {
                                 _ = PlayCurrentVideoAsync().ConfigureAwait(false);
                             }
 
-                            camera.IsConnected = true;  
+                            Camera.IsConnected = true;  
                         }
-                        else if (camera.IsConnected)
-                        {
-                            if (Camera == camera && camera.IsConnected)
-                            {
-                                StopVideo();
-                            }
+                        else if (Camera.IsConnected)
+                        {   
+                            StopVideo();
 
-                            camera.IsConnected = false;
+                            Camera.IsConnected = false;
                         }
 
                         await Task.Delay(TimeSpan.FromSeconds(Constants.Limits.CAMERA_TIME_CHECK_SECONDS), _cameraCancellationTokenSource.Token);

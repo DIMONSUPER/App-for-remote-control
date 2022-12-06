@@ -480,6 +480,10 @@ public class CamerasPageViewModel : BaseTabViewModel
     {
         if (SelectedCamera is not null && SelectedCamera.IsConnected)
         {
+            StopVideo();
+
+            SelectedCamera.IsConnected = false;
+
             _openFullScreenCameraEvent.Publish(SelectedCamera);
         }
 
