@@ -13,9 +13,9 @@ using System.Windows.Input;
 
 namespace SmartMirror.ViewModels
 {
-    public class FullScreenVideoPageViewModel : BaseViewModel
+    public class FullScreenCameraPageViewModel : BaseViewModel
     {
-        public FullScreenVideoPageViewModel(INavigationService navigationService) 
+        public FullScreenCameraPageViewModel(INavigationService navigationService) 
             : base(navigationService)
         {
         }

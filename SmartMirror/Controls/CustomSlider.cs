@@ -1,13 +1,8 @@
-﻿using System;
-using Android.Widget;
+﻿using Android.Graphics;
 using Android.Graphics.Drawables;
-using Android.Graphics;
-using ShapeDrawable = Android.Graphics.Drawables.ShapeDrawable;
-using Android.Graphics.Drawables.Shapes;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
-using static Android.Media.MediaParser;
-using Paint = Android.Graphics.Paint;
 using Microsoft.Maui.Handlers;
+using Paint = Android.Graphics.Paint;
 using Platform = Microsoft.Maui.ApplicationModel.Platform;
 
 namespace SmartMirror.Controls
@@ -65,7 +60,7 @@ namespace SmartMirror.Controls
 
         private void UpdateSlider(IViewHandler handler, IView view)
         {
-            if (handler.PlatformView is Android.Widget.SeekBar progressBar && view is CustomSlider slider && progressBar.Width > 0)
+            if (handler.PlatformView is Android.Widget.SeekBar progressBar && view is CustomSlider slider && slider.IsVisible)
             {
                 progressBar.Post(() =>
                 {

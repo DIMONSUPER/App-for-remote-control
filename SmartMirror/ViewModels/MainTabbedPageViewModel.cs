@@ -21,7 +21,7 @@ public class MainTabbedPageViewModel : BaseViewModel
     private readonly IAutomationService _automationService;
     private readonly IAqaraMessanger _aqaraMessanger;
 
-    private OpenFullScreenVideoEvent _openFullScreenVideoEvent;
+    private OpenFullScreenCameraEvent _openFullScreenVideoEvent;
 
     private int _buttonCount;
     private bool _isFirstTime = true;
@@ -44,7 +44,7 @@ public class MainTabbedPageViewModel : BaseViewModel
         _aqaraMessanger = aqaraMessanger;
         _aqaraMessanger.StartListening();
 
-        _openFullScreenVideoEvent = _eventAggregator.GetEvent<OpenFullScreenVideoEvent>();
+        _openFullScreenVideoEvent = _eventAggregator.GetEvent<OpenFullScreenCameraEvent>();
         _openFullScreenVideoEvent.Subscribe(OpenFullscreenVideoEventHandler);
     }
 
@@ -137,7 +137,7 @@ public class MainTabbedPageViewModel : BaseViewModel
     private void OpenFullscreenVideoEventHandler(CameraBindableModel camera)
     {
         NavigationService.CreateBuilder()
-            .AddSegment<FullScreenVideoPageViewModel>()
+            .AddSegment<FullScreenCameraPageViewModel>()
             .AddParameter(Constants.DialogsParameterKeys.CAMERA, camera)
             .Navigate();
     }

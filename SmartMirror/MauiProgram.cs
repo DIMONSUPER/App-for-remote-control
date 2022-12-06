@@ -84,7 +84,7 @@ public static class MauiProgram
         containerRegistry.RegisterForNavigation<RoomDetailsPage>();
         containerRegistry.RegisterForNavigation<ScenarioDetailsPage>();
         containerRegistry.RegisterForNavigation<SettingsPage>();
-        containerRegistry.RegisterForNavigation<FullScreenVideoPage>();
+        containerRegistry.RegisterForNavigation<FullScreenCameraPage>();
 
         containerRegistry.RegisterSingleton<IMapperService, MapperService>();
         containerRegistry.RegisterSingleton<IEventAggregator, EventAggregator>();

@@ -266,7 +266,7 @@
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\FullScreenVideoPage.xaml">
+		<MauiXaml Update="Views\FullScreenCameraPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\SettingsPage.xaml">
@@ -408,8 +408,8 @@
 		<Compile Update="Views\Dialogs\ScenarioSettingsDialog.xaml.cs">
 			<DependentUpon>ScenarioSettingsDialog.xaml</DependentUpon>
 		</Compile>
-		<Compile Update="Views\FullScreenVideoPage.xaml.cs">
-		  <DependentUpon>FullScreenVideoPage.xaml</DependentUpon>
+		<Compile Update="Views\FullScreenCameraPage.xaml.cs">
+		  <DependentUpon>FullScreenCameraPage.xaml</DependentUpon>
 		</Compile>
 		<Compile Update="Views\Tabs\Details\RoomDetailsPage.xaml.cs">
 			<DependentUpon>RoomDetailsPage.xaml</DependentUpon>

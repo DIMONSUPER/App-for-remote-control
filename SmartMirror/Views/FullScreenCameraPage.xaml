@@ -2,19 +2,14 @@
 <views:BaseContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"  
-    xmlns:views="clr-namespace:SmartMirror.Views"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
-    xmlns:enums="clr-namespace:SmartMirror.Enums"
-    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
-    xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
-    xmlns:templateSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
-    xmlns:skeletons="clr-namespace:SmartMirror.Views.Skeletons"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels"
+    xmlns:views="clr-namespace:SmartMirror.Views"
     Style="{DynamicResource GrayGradientStyle_i1}"
-    x:Class="SmartMirror.Views.FullScreenVideoPage"
-    x:DataType="vm:FullScreenVideoPageViewModel">
+    x:Class="SmartMirror.Views.FullScreenCameraPage"
+    x:DataType="vm:FullScreenCameraPageViewModel">
 
     <Grid RowDefinitions="Auto, Auto, *">
         

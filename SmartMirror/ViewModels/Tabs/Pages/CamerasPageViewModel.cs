@@ -9,7 +9,6 @@ using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Mapper;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Tabs.Pages;
@@ -19,6 +18,7 @@ public class CamerasPageViewModel : BaseTabViewModel
     private const int CAMERA_TIME_CHECK_SECONDS = 5;
     private CancellationTokenSource _cameraCancellationTokenSource;
     private readonly LibVLC _libVLC = new(enableDebugLogs: false);
+    private OpenFullScreenCameraEvent _openFullScreenCameraEvent;
 
     private readonly IEventAggregator _eventAggregator;
     private readonly IMapperService _mapperService;
@@ -38,6 +38,7 @@ public class CamerasPageViewModel : BaseTabViewModel
 
         Title = "Cameras";
         _camerasService.AllCamerasChanged += OnAllCamerasChanged;
+        _openFullScreenCameraEvent = _eventAggregator.GetEvent<OpenFullScreenCameraEvent>();
     }
 
     #region -- Public properties --
@@ -478,9 +479,9 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private Task OnOpenVideoInFullScreenCommandAsync()
     {
-        if (SelectedCamera is not null || !SelectedCamera.IsConnected)
+        if (SelectedCamera is not null && SelectedCamera.IsConnected)
         {
-            _eventAggregator.GetEvent<OpenFullScreenVideoEvent>().Publish(SelectedCamera);
+            _openFullScreenCameraEvent.Publish(SelectedCamera);
         }
 
         return Task.CompletedTask;
