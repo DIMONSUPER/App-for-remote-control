@@ -34,7 +34,9 @@
                         StrokeShape="RoundRectangle 9">
 
                         <Image
-                            Source="play_gray"
+                            HeightRequest="30"
+                            WidthRequest="30"
+                            Source="play_small_gray"                           
                             VerticalOptions="Center"
                             HorizontalOptions="Center"/>
 
@@ -74,6 +76,30 @@
                             Title="{extensions:Translate AddToFavorites}"
                             IsToggled="{Binding IsFavorite}"
                             Padding="24, 18"/>
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+                <Border
+                    Margin="0, 36, 0, 0"
+                    Padding="1"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 9"
+                    Stroke="{DynamicResource tcolor_i1}"
+                    BackgroundColor="{StaticResource cbg_i15}">
+
+                    <VerticalStackLayout>
+
+                        <controls:TitleAndSwitchView
+                            Title="{extensions:Translate EmergencyNotification}"
+                            IsToggled="{Binding IsEmergencyNotification}"
+                            Padding="24, 18"/>
+
+                        <Label
+                            Style="{x:DynamicResource tstyle_i5}"
+                            Padding="24, 0, 24, 18"
+                            Text="{extensions:Translate DisplayNotificationsAsPopUpWhileTheAppIsActive}"/>
 
                     </VerticalStackLayout>
 

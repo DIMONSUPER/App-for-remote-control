@@ -328,6 +328,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disabled.
+        /// </summary>
+        internal static string Disabled {
+            get {
+                return ResourceManager.GetString("Disabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disconnected.
         /// </summary>
         internal static string Disconnected {
@@ -369,6 +378,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string EmergencyNotification {
             get {
                 return ResourceManager.GetString("EmergencyNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabled.
+        /// </summary>
+        internal static string Enabled {
+            get {
+                return ResourceManager.GetString("Enabled", resourceCulture);
             }
         }
         
@@ -459,6 +477,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string FavoriteAccessories {
             get {
                 return ResourceManager.GetString("FavoriteAccessories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Favorite Automation.
+        /// </summary>
+        internal static string FavoriteAutomation {
+            get {
+                return ResourceManager.GetString("FavoriteAutomation", resourceCulture);
             }
         }
         
@@ -720,6 +747,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string NewCamera {
             get {
                 return ResourceManager.GetString("NewCamera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next.
+        /// </summary>
+        internal static string Next {
+            get {
+                return ResourceManager.GetString("Next", resourceCulture);
             }
         }
         

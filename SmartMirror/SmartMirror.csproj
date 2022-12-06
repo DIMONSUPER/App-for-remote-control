@@ -65,10 +65,16 @@
 		<None Remove="Resources\Images\mock_camera_stream.png" />
 		<None Remove="Resources\Images\mock_camera_stream_big.png" />
 		<None Remove="Resources\Images\photo_camera_outline.svg" />
+		<None Remove="Resources\Images\pic_automation.svg" />
 		<None Remove="Resources\Images\pic_bell.svg" />
+		<None Remove="Resources\Images\pic_video.svg" />
 		<None Remove="Resources\Images\pic_gears.svg" />
 		<None Remove="Resources\Images\sound_mute_dark.svg" />
 		<None Remove="Resources\Images\sound_mute_light.svg" />
+		<None Remove="Resources\Images\play_big_blue.svg" />
+		<None Remove="Resources\Images\play_big_gray.svg" />
+		<None Remove="Resources\Images\play_small_blue.svg" />
+		<None Remove="Resources\Images\play_small_gray.svg" />
 		<None Remove="Resources\Images\subtract_plus.svg" />
 		<None Remove="Views\" />
 		<None Remove="ViewModels\" />
@@ -207,11 +213,14 @@
 		<MauiXaml Update="Resources\DataTemplates\CategoryTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Resources\DataTemplates\FavoriteScenariosTemplate.xaml">
+		<MauiXaml Update="Resources\DataTemplates\FavoriteScenarioTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\CameraTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\NotificationSettingsGroupTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\NotificationSourceTemplate.xaml">
 		  <SubType>
@@ -233,10 +242,10 @@
 		<MauiXaml Update="Resources\DataTemplates\NotificationTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Resources\DataTemplates\ScenariosTemplate.xaml">
+		<MauiXaml Update="Resources\DataTemplates\ScenarioTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Resources\DataTemplates\ScenarioTemplate.xaml">
+		<MauiXaml Update="Resources\DataTemplates\ScenarioActionTemplate.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\AccessorySettingsDialog.xaml">
@@ -271,6 +280,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Views\SettingsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Skeletons\SettingsElementsSkeleton.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Tabs\Details\ScenarioDetailsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -365,10 +377,28 @@
 		<MauiXaml Update="Views\Dialogs\BaseDialogView.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Views\Dialogs\EmergencyNotificationDialog.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 		<MauiXaml Update="Resources\DataTemplates\SimpleAutomationTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\AutomationSettingsDialog.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Tabs\Pages\AutomationPage.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Tabs\Views\AutomationPageView.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\AutomationCardTemplate.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\Tabs\Details\AutomationDetailsPage.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\AutomationDetailCardTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 	</ItemGroup>
@@ -382,6 +412,9 @@
 		<Compile Update="Controls\ExpandedSlider.xaml.cs">
 		  <DependentUpon>ExpandedSlider.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="Resources\DataTemplates\NotificationSettingsGroupTemplate.xaml.cs">
+		  <DependentUpon>NotificationSettingsGroupTemplate.xaml</DependentUpon>
+		</Compile>
 		<Compile Update="Resources\DataTemplates\NotificationSourceTemplate.xaml.cs">
 			<DependentUpon>NotificationSourceTemplate.xaml</DependentUpon>
 		</Compile>
@@ -390,6 +423,9 @@
 		</Compile>
 		<Compile Update="Resources\DataTemplates\CameraTemplate.xaml.cs">
 			<DependentUpon>CameraTemplate.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Resources\DataTemplates\ScenarioActionTemplate.xaml.cs">
+		  <DependentUpon>ScenarioActionTemplate.xaml</DependentUpon>
 		</Compile>
 		<Compile Update="Resources\DataTemplates\SimpleAccessoryTemplate.xaml.cs">
 			<DependentUpon>SimpleAccessoryTemplate.xaml</DependentUpon>

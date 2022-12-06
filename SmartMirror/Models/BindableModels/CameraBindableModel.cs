@@ -1,25 +1,11 @@
-﻿using SmartMirror.Interfaces;
+using SmartMirror.Interfaces;
 using System.Windows.Input;
 
 namespace SmartMirror.Models.BindableModels
 {
-    public class CameraBindableModel : BindableBase, ITappable
+    public class CameraBindableModel : BindableBase, ITappable, INotifiable
     {
         #region -- Public properties --
-
-        private int _id;
-        public int Id
-        {
-            get => _id;
-            set => SetProperty(ref _id, value);
-        }
-
-        private string _name;
-        public string Name
-        {
-            get => _name;
-            set => SetProperty(ref _name, value);
-        }
 
         private string _ipAddress;
         public string IpAddress
@@ -77,12 +63,12 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _isSelected, value);
         }
 
-        private bool _isReceiveNotifications;
-        public bool IsReceiveNotifications
+	    private bool _isEmergencyNotification = true;
+        public bool IsEmergencyNotification
         {
-            get => _isReceiveNotifications;
-            set => SetProperty(ref _isReceiveNotifications, value);
-        } 
+            get => _isEmergencyNotification;
+            set => SetProperty(ref _isEmergencyNotification, value);
+        }
 
         #endregion
 
@@ -93,6 +79,31 @@ namespace SmartMirror.Models.BindableModels
         {
             get => _tapCommand;
             set => SetProperty(ref _tapCommand, value);
+        }
+
+        #endregion
+        
+        #region -- INotifiable implementation --
+
+        private int _id;
+        public int Id
+        {
+            get => _id;
+            set => SetProperty(ref _id, value);
+        }
+
+        private string _name;
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
+
+        private bool _isReceiveNotifications = true;
+        public bool IsReceiveNotifications
+        {
+            get => _isReceiveNotifications;
+            set => SetProperty(ref _isReceiveNotifications, value);
         }
 
         #endregion

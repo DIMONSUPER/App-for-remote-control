@@ -107,7 +107,7 @@
                     </StackLayout>
 
                     <!-- FAVORITE ACCESSORIES COLLECTION -->
-                    <controls:CustomScrollView
+                    <ScrollView
                         HorizontalScrollBarVisibility="Never"
                         Orientation="Horizontal"
                         x:Name="collectionViewFavoriteAccessories">
@@ -120,7 +120,7 @@
                             BindableLayout.ItemsSource="{Binding FavoriteAccessories}"
                             BindableLayout.ItemTemplateSelector="{StaticResource deviceTemplateSelector}"/>
                         
-                    </controls:CustomScrollView>
+                    </ScrollView>
 
                 </StackLayout>
 

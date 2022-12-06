@@ -20,8 +20,19 @@
     <views:BaseContentView.Resources>
 
         <ResourceDictionary>
+            <DataTemplate x:Key="notificationTemplate">
+                <templates:NotificationTemplate />
+            </DataTemplate>
+
+            <templates:NotificationHeaderTemplate x:Key="notificationHeaderTemplate"/>
+
             <templates:NotificationSourceTemplate x:Key="notificationSourceTemplate"/>
-            <templatesSelectors:NotificationDataTemplateSelector x:Key="notificationTemplateSelector"/>
+
+            <templatesSelectors:NotificationDataTemplateSelector
+                x:Key="notificationTemplateSelector"
+                NotificationHeaderDataTemplate="{x:StaticResource notificationHeaderTemplate}"
+                NotificationDataTemplate="{x:StaticResource notificationTemplate}"/>
+
         </ResourceDictionary>
 
     </views:BaseContentView.Resources>

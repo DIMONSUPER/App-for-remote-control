@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<views:BaseContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs.Details"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:views="clr-namespace:SmartMirror.Views"
+    xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+    xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
+    x:Class="SmartMirror.Views.Tabs.Details.AutomationDetailsPage"
+    x:DataType="{x:Type vm:AutomationDetailsPageViewModel}">
+
+    <views:BaseContentPage.Resources>
+        
+        <templates:AutomationDetailCardTemplate x:Key="automationDetailCardTemplate"/>
+        
+    </views:BaseContentPage.Resources>
+
+    <controls:CustomStateView State="{Binding DataState}">
+
+        <controls:CustomStateView.CompleteContent>
+
+            <Grid RowDefinitions="Auto, *"
+                  Margin="42, 36, 42, 0">
+
+                <!-- BACK BUTTON -->
+                <HorizontalStackLayout 
+                    Grid.Row="0"
+                    Padding="18, 12"
+                    Spacing="12"
+                    behaviors:TouchBehavior.Command="{Binding GoBackCommand}">
+
+                    <Image 
+                        VerticalOptions="Center"
+                        HeightRequest="24"
+                        WidthRequest="24"
+                        Source="arrow_left_aqua"/>
+
+                    <Label 
+                        Style="{x:DynamicResource tstyle_i12}"
+                        VerticalOptions="Center"
+                        TextTransform="Uppercase"
+                        Text="{extensions:Translate Back}"/>
+
+                </HorizontalStackLayout>
+
+                <Label
+                    Grid.Row="0"
+                    Style="{DynamicResource tstyle_i11}"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Text="{Binding AutomationName}"/>
+
+                <!-- SCENARIO ACTIONS COLLECTION -->
+                <controls:CustomStateView
+                    Grid.Row="1"
+                    WidthRequest="571"
+                    State="{Binding DataState}"
+                    TryAgainCommand="{Binding TryAgainCommand}"
+                    EmptyTitle="{extensions:Translate NoAutomationActionsYet}"
+                    DescriptionEmptyState="{extensions:Translate PleaseCheckTheAutomationSettings}"
+                    EmptyStateImage="empty_scenarios">
+
+                    <controls:CustomStateView.CompleteContent>
+
+                        <CollectionView
+                            VerticalScrollBarVisibility="Never"
+                            ItemTemplate="{x:StaticResource automationDetailCardTemplate}"
+                            ItemsSource="{Binding AutomationActions}"/>
+
+                    </controls:CustomStateView.CompleteContent>
+            
+                </controls:CustomStateView>
+
+            </Grid>
+
+        </controls:CustomStateView.CompleteContent>
+
+        <controls:CustomStateView.LoadingSkeletonContent>
+
+           <skeleton:ScenarioDetailsPageSkeleton/>
+
+        </controls:CustomStateView.LoadingSkeletonContent>
+
+    </controls:CustomStateView>
+    
+</views:BaseContentPage>

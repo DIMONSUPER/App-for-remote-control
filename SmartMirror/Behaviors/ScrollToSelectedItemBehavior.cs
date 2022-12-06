@@ -18,7 +18,9 @@ namespace SmartMirror.Behaviors
         {
             get => GetValue(SelectedItemProperty);
             set => SetValue(SelectedItemProperty, value);
-        } 
+        }
+
+        public ScrollToPosition ScrollToPosition { get; set; } = ScrollToPosition.Center;
 
         #endregion
 
@@ -44,7 +46,7 @@ namespace SmartMirror.Behaviors
 
             if (propertyName is nameof(SelectedItem) && SelectedItem is not null)
             {
-                _collectionView.ScrollTo(SelectedItem, null, ScrollToPosition.Center, false);
+                _collectionView.ScrollTo(SelectedItem, null, ScrollToPosition, false);
             }
         } 
 

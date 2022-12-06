@@ -18,9 +18,9 @@
 
         <ResourceDictionary>
 
-            <templates:FavoriteScenariosTemplate x:Key="favoriteScenariosTemplate"/>
+            <templates:FavoriteScenarioTemplate x:Key="favoriteScenarioTemplate"/>
 
-            <templates:ScenariosTemplate x:Key="scenariosTemplate"/>
+            <templates:ScenarioTemplate x:Key="scenarioTemplate"/>
 
         </ResourceDictionary>
 
@@ -46,7 +46,7 @@
         
         <controls:CustomStateView.CompleteContent>
 
-            <controls:CustomScrollView
+            <ScrollView
                 VerticalScrollBarVisibility="Never"
                 HorizontalScrollBarVisibility="Never"
                 Padding="0, 0, 0, 30"
@@ -66,7 +66,7 @@
                         Number="{Binding FavoriteScenarios.Count}"/>
 
                     <!-- FAVORITE SCENARIOS COLLECTION -->
-                    <controls:CustomScrollView
+                    <ScrollView
                         Margin="0, 16, 0, 0"
                         Orientation="Horizontal"
                         HorizontalScrollBarVisibility="Never"
@@ -76,10 +76,10 @@
                         <HorizontalStackLayout
                             Spacing="30"
                             Padding="60, 0"
-                            BindableLayout.ItemTemplate="{StaticResource favoriteScenariosTemplate}"
+                            BindableLayout.ItemTemplate="{StaticResource favoriteScenarioTemplate}"
                             BindableLayout.ItemsSource="{Binding FavoriteScenarios}"/>
 
-                    </controls:CustomScrollView>
+                    </ScrollView>
 
                     <!-- SCENARIOS -->
                     <controls:BadgeTitleView
@@ -106,7 +106,7 @@
                     <CollectionView
                         Margin="60, 16, 60, 0"
                         ItemsSource="{Binding Scenarios}"
-                        ItemTemplate="{StaticResource scenariosTemplate}"
+                        ItemTemplate="{StaticResource scenarioTemplate}"
                         VerticalScrollBarVisibility="Never"
                         HorizontalScrollBarVisibility="Never">
 
@@ -124,7 +124,7 @@
 
                 </VerticalStackLayout>
 
-            </controls:CustomScrollView>
+            </ScrollView>
 
         </controls:CustomStateView.CompleteContent>
 

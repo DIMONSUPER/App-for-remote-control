@@ -103,18 +103,4 @@ public partial class CustomStateView : ContentView
     }
 
     #endregion
-
-    #region -- Overrides --
-
-    protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        base.OnPropertyChanged(propertyName);
-
-        if (propertyName == nameof(State))
-        {
-            (stateContanier as IView)?.InvalidateMeasure();
-        }
-    }
-
-    #endregion
 }

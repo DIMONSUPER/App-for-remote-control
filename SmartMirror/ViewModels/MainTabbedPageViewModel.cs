@@ -8,7 +8,12 @@ using SmartMirror.Services.Automation;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
+using SmartMirror.Services.Notifications;
+using SmartMirror.Views;
+using SmartMirror.Models.BindableModels;
+using SmartMirror.Services.Aqara;
 using System.Windows.Input;
+using SmartMirror.Views.Dialogs;
 
 namespace SmartMirror.ViewModels;
 
@@ -16,13 +21,14 @@ public class MainTabbedPageViewModel : BaseViewModel
 {
     private readonly IEventAggregator _eventAggregator;
     private readonly IDevicesService _devicesService;
+    private readonly IDialogService _dialogService;
     private readonly IRoomsService _roomsService;
     private readonly IScenariosService _scenariosService;
+    private readonly INotificationsService _notificationsService;
     private readonly IAutomationService _automationService;
     private readonly IAqaraMessanger _aqaraMessanger;
 
-    private OpenFullScreenCameraEvent _openFullScreenVideoEvent;
-
+    private OpenFullScreenCameraEvent _openFullScreenVideoEvent;    
     private int _buttonCount;
     private bool _isFirstTime = true;
 
@@ -30,7 +36,9 @@ public class MainTabbedPageViewModel : BaseViewModel
         INavigationService navigationService,
         IEventAggregator eventAggregator,
         IDevicesService devicesService,
+        IDialogService dialogService,
         IRoomsService roomsService,
+        INotificationsService notificationsService,
         IAutomationService automationService,
         IScenariosService scenariosService,
         IAqaraMessanger aqaraMessanger)
@@ -38,14 +46,19 @@ public class MainTabbedPageViewModel : BaseViewModel
     {
         _eventAggregator = eventAggregator;
         _devicesService = devicesService;
+        _dialogService = dialogService;
         _roomsService = roomsService;
         _scenariosService = scenariosService;
+        _notificationsService = notificationsService;
         _automationService = automationService;
         _aqaraMessanger = aqaraMessanger;
+
         _aqaraMessanger.StartListening();
 
         _openFullScreenVideoEvent = _eventAggregator.GetEvent<OpenFullScreenCameraEvent>();
         _openFullScreenVideoEvent.Subscribe(OpenFullscreenVideoEventHandler);
+        
+        _notificationsService.AllNotificationsChanged += OnShowEmergencyNotificationDialogAsync;
     }
 
     #region -- Public properties --
@@ -109,6 +122,7 @@ public class MainTabbedPageViewModel : BaseViewModel
         await _roomsService.DownloadAllRoomsAsync();
         await _scenariosService.DownloadAllScenariosAsync();
         await _automationService.DownloadAllAutomationsAsync();
+        await _notificationsService.DownloadAllNotificationsAsync();
     }
 
     private Task OnSettingsCommandAsync()
@@ -116,6 +130,21 @@ public class MainTabbedPageViewModel : BaseViewModel
         return NavigationService.CreateBuilder()
             .AddSegment<SettingsPageViewModel>()
             .NavigateAsync();
+    }
+
+    private async void OnShowEmergencyNotificationDialogAsync(object sender, NotificationGroupItemBindableModel notification)
+    {
+        if (notification is not null && notification.IsEmergencyNotification)
+        {
+            _notificationsService.AllNotificationsChanged -= OnShowEmergencyNotificationDialogAsync;
+
+            var result = await _dialogService.ShowDialogAsync(nameof(EmergencyNotificationDialog), new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.NOTIFICATION, notification },
+            });
+
+            _notificationsService.AllNotificationsChanged += OnShowEmergencyNotificationDialogAsync;
+        }
     }
 
     private bool GetCountBackButtonPresses()

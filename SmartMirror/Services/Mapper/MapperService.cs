@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SmartMirror.Helpers;
+using SmartMirror.Interfaces;
 using SmartMirror.Models;
 using SmartMirror.Models.Aqara;
 using SmartMirror.Models.BindableModels;
@@ -83,6 +84,8 @@ namespace SmartMirror.Services.Mapper
                 cfg.CreateMap<ActionAqaraModel, ScenarioActionBindableModel>().ReverseMap();
                 cfg.CreateMap<ScenarioBindableModel, ImageAndTitleBindableModel>().ReverseMap();
                 cfg.CreateMap<CameraBindableModel, ImageAndTitleBindableModel>().ReverseMap();
+                cfg.CreateMap<AutomationBindableModel, ImageAndTitleBindableModel>().ReverseMap();
+                cfg.CreateMap<INotifiable, ImageAndTitleBindableModel>().ReverseMap();
                 cfg.CreateMap<ScenarioBindableModel, ScenarioDTO>().ReverseMap();
                 cfg.CreateMap<RoomBindableModel, NotificationSourceBindableModel>().ReverseMap();
                 cfg.CreateMap<LinkageAqaraModel, AutomationBindableModel>().ReverseMap();
@@ -118,6 +121,18 @@ namespace SmartMirror.Services.Mapper
 
             cfg.CreateMap<DeviceBindableModel, NotificationSourceBindableModel>()
                 .ForMember(nameof(NotificationSourceBindableModel.Id), opt => opt.MapFrom(src => src.FullDeviceId))
+                .ReverseMap();
+
+            // TODO temporally
+            cfg.CreateMap<LinkageActionAqaraModel, AutomationDetailCardBindableModel>()
+                .ForMember(nameof(AutomationDetailCardBindableModel.Name), opt => opt.MapFrom(src => "Action"))
+                .ForMember(nameof(AutomationDetailCardBindableModel.Description), opt => opt.MapFrom(src => src.ActionName))
+                .ReverseMap();
+
+            // TODO temporally
+            cfg.CreateMap<ConditionAqaraModel, AutomationDetailCardBindableModel>()
+                .ForMember(nameof(AutomationDetailCardBindableModel.Name), opt => opt.MapFrom(src => "Trigger"))
+                .ForMember(nameof(AutomationDetailCardBindableModel.Description), opt => opt.MapFrom(src => src.TriggerName))
                 .ReverseMap();
         }
 
