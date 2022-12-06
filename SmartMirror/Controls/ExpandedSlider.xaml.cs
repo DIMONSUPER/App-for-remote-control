@@ -69,6 +69,19 @@ public partial class ExpandedSlider : Border
         declaringType: typeof(ExpandedSlider),
         defaultBindingMode: BindingMode.OneWay);
 
+    public static readonly BindableProperty StepProperty = BindableProperty.Create(
+        propertyName: nameof(Step),
+        returnType: typeof(int),
+        declaringType: typeof(ExpandedSlider),
+        defaultValue: 10,
+        defaultBindingMode: BindingMode.OneWay);
+
+    public int Step
+    {
+        get => (int)GetValue(StepProperty);
+        set => SetValue(StepProperty, value);
+    }
+
     public Size IconSizes
     {
         get => (Size)GetValue(IconSizesProperty);

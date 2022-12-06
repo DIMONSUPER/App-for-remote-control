@@ -56,6 +56,7 @@
             MaximumTrackColor="{x:DynamicResource cbg_i20}"
             Minimum="{Binding Minimum, Source={Reference expandedSlider}}"
             Maximum="{Binding Maximum, Source={Reference expandedSlider}}"
+            Step="{Binding Step, Source={Reference expandedSlider}}"
             Value="{Binding Value, Source={Reference expandedSlider}}"/>
 
         <Image

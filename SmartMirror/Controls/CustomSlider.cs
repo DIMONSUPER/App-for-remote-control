@@ -12,6 +12,8 @@ namespace SmartMirror.Controls
         public CustomSlider()
         {
             AppendToMapping();
+
+            ValueChanged += OnValueChanged;
         }
 
         #region -- Public properties --
@@ -42,9 +44,24 @@ namespace SmartMirror.Controls
             set => SetValue(CornerRadiusLineProperty, value);
         }
 
+        public static readonly BindableProperty StepProperty = BindableProperty.Create(
+            propertyName: nameof(Step),
+            returnType: typeof(int),
+            declaringType: typeof(CustomSlider),
+            defaultValue: 1,
+            defaultBindingMode: BindingMode.OneWay);
+
+        public int Step
+        {
+            get => (int)GetValue(StepProperty);
+            set => SetValue(StepProperty, value);
+        }
+
         #endregion
 
         #region -- Private helpers --
+
+        private void OnValueChanged(object sender, ValueChangedEventArgs e) => Value -= Value % Step;
 
         private void AppendToMapping()
         {
