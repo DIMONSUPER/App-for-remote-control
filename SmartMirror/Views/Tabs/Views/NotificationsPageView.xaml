@@ -110,24 +110,16 @@
                             Command="{Binding RefreshNotificationsCommand}"
                             x:Name="refreshView">
 
-                            <CollectionView
+                            <controls:CustomCollectionView
                                 HorizontalOptions="EndAndExpand"
+                                Padding="0, 0, 0, 28"
                                 ItemsSource="{Binding Notifications}"
                                 ItemTemplate="{StaticResource notificationTemplateSelector}"
                                 WidthRequest="571"
                                 VerticalScrollBarVisibility="Always"
                                 HorizontalScrollBarVisibility="Always"
-                                x:Name="scrollViewNotifications">
+                                x:Name="scrollViewNotifications"/>
 
-                                <CollectionView.Footer>
-
-                                    <BoxView Color="Transparent"
-                                             HeightRequest="28"/>
-
-                                </CollectionView.Footer>
-                                
-                            </CollectionView>                            
-                            
                         </RefreshView>
 
                     </controls:CustomStateView.CompleteContent>
