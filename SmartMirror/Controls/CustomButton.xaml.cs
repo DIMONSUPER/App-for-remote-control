@@ -175,26 +175,22 @@ public partial class CustomButton : Border
     {
         if (!_isHintShown)
         {
-            switch (Mode)
+            if (Mode == EButtonMode.Toggle)
             {
-                case EButtonMode.Toggle:
-                    IsToggled = !IsToggled;
-                    break;
+                IsToggled = !IsToggled;
+            }
+            else if (Mode == EButtonMode.Hint)
+            {
+                _isHintShown = IsToggled = true;
 
-                case EButtonMode.Hint:
+                TouchBehavior.SetAnimation(this, false);
 
-                    _isHintShown = IsToggled = true;
+                Dispatcher.StartTimer(TimeSpan.FromMilliseconds(HintDelayMilliseconds), () =>
+                {
+                    TouchBehavior.SetAnimation(this, true);
 
-                    TouchBehavior.SetAnimation(this, false);
-
-                    Dispatcher.StartTimer(TimeSpan.FromMilliseconds(HintDelayMilliseconds), () =>
-                    {
-                        TouchBehavior.SetAnimation(this, true);
-
-                        return IsToggled = _isHintShown = false;
-                    });
-
-                    break;
+                    return IsToggled = _isHintShown = false;
+                });
             }
 
             Command?.Execute(null); 

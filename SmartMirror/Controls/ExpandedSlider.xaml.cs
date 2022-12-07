@@ -167,18 +167,9 @@ public partial class ExpandedSlider : Border
 
     #region -- Private helpers --
 
-    private void OnOpenTapped(object sender, TappedEventArgs e)
-    {
-        if (!IsOpened)
-        {
-            IsOpened = true;
-        }
-    }
+    private void OnOpenTapped(object sender, TappedEventArgs e) => IsOpened = true;
 
-    private void OnCloseTapped(object sender, TappedEventArgs e)
-    {
-        IsOpened = false;
-    }
+    private void OnCloseTapped(object sender, TappedEventArgs e) => IsOpened = false;
 
     #endregion
 }
