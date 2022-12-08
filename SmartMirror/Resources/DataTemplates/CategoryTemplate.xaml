@@ -34,7 +34,6 @@
                 <Label 
                     Style="{DynamicResource tstyle_i11}"
                     MaxLines="1"
-                    MaximumWidthRequest="265"
                     LineBreakMode="TailTruncation"
                     Text="{Binding Name}"    
                     x:Name="categoryNameLabel"/>
@@ -43,7 +42,7 @@
                     Style="{DynamicResource tstyle_i6}"
                     HorizontalOptions="EndAndExpand"
                     HorizontalTextAlignment="End"
-                    WidthRequest="32"
+                    MaxLines="1"
                     Text="{Binding Count}"
                     x:Name="categoryCountLabel"/>
 
