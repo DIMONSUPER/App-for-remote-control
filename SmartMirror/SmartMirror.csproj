@@ -120,6 +120,7 @@
 		<None Remove="Services\Automation\" />
 		<None Remove="VideoLAN.LibVLC.Android" />
 		<None Remove="LibVLCSharp" />
+		<None Remove="Helpers\Events\" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.0-preview.1" />
@@ -170,6 +171,7 @@
 		<Folder Include="Services\Permissions\" />
 		<Folder Include="Services\Keyboard\" />
 		<Folder Include="Services\Automation\" />
+		<Folder Include="Helpers\Events\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Controls\BadgeTitleView.xaml">

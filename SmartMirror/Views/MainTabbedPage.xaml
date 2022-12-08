@@ -12,6 +12,7 @@
                            Style="{DynamicResource GrayGradientStyle_i1}"
                            SettingsCommand="{Binding SettingsCommand}"
                            Title="MainTabbedPage"
+                           IsVisibleTabs="{Binding IsVisibleTabs}"
                            x:Class="SmartMirror.Views.MainTabbedPage"
                            x:DataType="vm:MainTabbedPageViewModel"
                            x:Name="tabbedPage">

@@ -11,6 +11,8 @@ using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Aqara;
 using System.Windows.Input;
 using SmartMirror.Views.Dialogs;
+using SmartMirror.Helpers.Events;
+using System.ComponentModel;
 
 namespace SmartMirror.ViewModels;
 
@@ -23,9 +25,12 @@ public class MainTabbedPageViewModel : BaseViewModel
     private readonly INotificationsService _notificationsService;
     private readonly IAutomationService _automationService;
     private readonly IAqaraMessanger _aqaraMessanger;
-    
+    private readonly IEventAggregator _eventAggregator;
+
     private int _buttonCount;
     private bool _isFirstTime = true;
+
+    private HideTabsTabbedViewEvent _hideTabsTabbedViewEvent;
 
     public MainTabbedPageViewModel(
         INavigationService navigationService,
@@ -35,6 +40,7 @@ public class MainTabbedPageViewModel : BaseViewModel
         INotificationsService notificationsService,
         IAutomationService automationService,
         IScenariosService scenariosService,
+        IEventAggregator eventAggregator,
         IAqaraMessanger aqaraMessanger)
         : base(navigationService)
     {
@@ -45,6 +51,10 @@ public class MainTabbedPageViewModel : BaseViewModel
         _notificationsService = notificationsService;
         _automationService = automationService;
         _aqaraMessanger = aqaraMessanger;
+        _eventAggregator = eventAggregator;
+
+        _hideTabsTabbedViewEvent = _eventAggregator.GetEvent<HideTabsTabbedViewEvent>();
+        _hideTabsTabbedViewEvent.Subscribe(OnHideTabsTabbedView);
 
         _aqaraMessanger.StartListening();
         
@@ -52,6 +62,13 @@ public class MainTabbedPageViewModel : BaseViewModel
     }
 
     #region -- Public properties --
+
+    private object _isVisibleTabs;
+    public object IsVisibleTabs
+    {
+        get => _isVisibleTabs;
+        set => SetProperty(ref _isVisibleTabs, value);
+    }
 
     private ICommand _settingsCommand;
     public ICommand SettingsCommand => _settingsCommand ??= SingleExecutionCommand.FromFunc(OnSettingsCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
@@ -74,7 +91,10 @@ public class MainTabbedPageViewModel : BaseViewModel
         if (_isFirstTime)
         {
             _isFirstTime = false;
+
             await UpdateAllAqaraDataAsync();
+
+            await DisplayDoorbellDialogAsync();
         }
     }
 
@@ -105,6 +125,11 @@ public class MainTabbedPageViewModel : BaseViewModel
 
     #region -- Private helpers --
 
+    private void OnHideTabsTabbedView()
+    {
+        IsVisibleTabs = new();
+    }
+
     private async Task UpdateAllAqaraDataAsync()
     {
         await _devicesService.DownloadAllDevicesWithSubInfoAsync();
@@ -134,6 +159,19 @@ public class MainTabbedPageViewModel : BaseViewModel
 
             _notificationsService.AllNotificationsChanged += OnShowEmergencyNotificationDialogAsync;
         }
+    }
+
+    private async Task DisplayDoorbellDialogAsync()
+    {
+        var allDevices = await _devicesService.GetAllSupportedDevicesAsync();
+
+        var mockDoorbell = allDevices.FirstOrDefault(row => row.DeviceId == "5000");
+
+        //TODO Delete when doorbell is implemented
+        await MainThread.InvokeOnMainThreadAsync(async ()=> await _dialogService.ShowDialogAsync(nameof(DoorBellDialog), new DialogParameters()
+        {
+            { Constants.DialogsParameterKeys.ACCESSORY, mockDoorbell },
+        }));
     }
 
     private bool GetCountBackButtonPresses()
