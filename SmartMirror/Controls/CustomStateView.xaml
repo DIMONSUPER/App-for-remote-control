@@ -104,10 +104,10 @@
                        HorizontalOptions="Center"/>
 
                 <Button Style="{DynamicResource ButtonStyle_i1}"
+                        HorizontalOptions="Center"
                         Margin="0,37,0,0"
                         Text="{extensions:Translate TryAgain}"
-                        Command="{Binding TryAgainCommand, Source={x:Reference stateContanier}}"
-                        WidthRequest="183"/>
+                        Command="{Binding TryAgainCommand, Source={x:Reference stateContanier}}"/>
 
             </VerticalStackLayout>
                 

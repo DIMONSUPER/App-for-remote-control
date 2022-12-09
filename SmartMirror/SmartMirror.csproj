@@ -45,18 +45,32 @@
 		<None Remove="Platforms\Android\Resources\drawable\splash_screen_icon.png" />
 		<None Remove="Prism.DryIoc.Maui" />
 		<None Remove="Prism.Maui" />
+		<None Remove="Resources\Images\brightness.svg" />
 		<None Remove="Resources\Images\carbon_settings.svg" />
 		<None Remove="Resources\Images\amazon_logo.svg" />
 		<None Remove="Resources\Images\apple_logo.svg" />
 		<None Remove="Resources\Images\aqara_logo.svg" />
+		<None Remove="Resources\Images\check_circle_outline.svg" />
 		<None Remove="Resources\Images\ci_close_big.svg" />
+		<None Remove="Resources\Images\ci_close_big_black.svg" />
+		<None Remove="Resources\Images\clarity_pause_solid.svg" />
+		<None Remove="Resources\Images\contrast.svg" />
 		<None Remove="Resources\Images\delete.svg" />
+		<None Remove="Resources\Images\full_screen.svg" />
 		<None Remove="Resources\Images\google_logo.svg" />
+		<None Remove="Resources\Images\high_quality_outline_dark.svg" />
+		<None Remove="Resources\Images\high_quality_outline_light.svg" />
+		<None Remove="Resources\Images\ic_outline_color_lens.svg" />
+		<None Remove="Resources\Images\invert_colors_outline.svg" />
 		<None Remove="Resources\Images\mock_camera_stream.png" />
+		<None Remove="Resources\Images\mock_camera_stream_big.png" />
+		<None Remove="Resources\Images\photo_camera_outline.svg" />
 		<None Remove="Resources\Images\pic_automation.svg" />
 		<None Remove="Resources\Images\pic_bell.svg" />
 		<None Remove="Resources\Images\pic_video.svg" />
 		<None Remove="Resources\Images\pic_gears.svg" />
+		<None Remove="Resources\Images\sound_mute_dark.svg" />
+		<None Remove="Resources\Images\sound_mute_light.svg" />
 		<None Remove="Resources\Images\play_big_blue.svg" />
 		<None Remove="Resources\Images\play_big_gray.svg" />
 		<None Remove="Resources\Images\play_small_blue.svg" />
@@ -177,8 +191,14 @@
 		<MauiXaml Update="Controls\BadgeTitleView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Controls\CustomButton.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Controls\CustomImageBotton.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Controls\ExpandedSlider.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Controls\TabsSelector.xaml">
 		  <Generator>MSBuild:Compile</Generator>
@@ -256,6 +276,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\FullScreenCameraPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\SettingsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -388,6 +411,9 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
+		<Compile Update="Controls\ExpandedSlider.xaml.cs">
+		  <DependentUpon>ExpandedSlider.xaml</DependentUpon>
+		</Compile>
 		<Compile Update="Resources\DataTemplates\NotificationSettingsGroupTemplate.xaml.cs">
 		  <DependentUpon>NotificationSettingsGroupTemplate.xaml</DependentUpon>
 		</Compile>
@@ -419,6 +445,9 @@
 		</Compile>
 		<Compile Update="Views\Dialogs\ScenarioSettingsDialog.xaml.cs">
 			<DependentUpon>ScenarioSettingsDialog.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\FullScreenCameraPage.xaml.cs">
+		  <DependentUpon>FullScreenCameraPage.xaml</DependentUpon>
 		</Compile>
 		<Compile Update="Views\Tabs\Details\RoomDetailsPage.xaml.cs">
 			<DependentUpon>RoomDetailsPage.xaml</DependentUpon>

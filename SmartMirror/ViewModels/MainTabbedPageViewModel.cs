@@ -1,6 +1,9 @@
-﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Alerts;
 using SmartMirror.Helpers;
+using SmartMirror.Helpers.Events;
+using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
+using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Automation;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Rooms;
@@ -18,6 +21,7 @@ namespace SmartMirror.ViewModels;
 
 public class MainTabbedPageViewModel : BaseViewModel
 {
+    private readonly IEventAggregator _eventAggregator;
     private readonly IDevicesService _devicesService;
     private readonly IDialogService _dialogService;
     private readonly IRoomsService _roomsService;
@@ -25,7 +29,8 @@ public class MainTabbedPageViewModel : BaseViewModel
     private readonly INotificationsService _notificationsService;
     private readonly IAutomationService _automationService;
     private readonly IAqaraMessanger _aqaraMessanger;
-    private readonly IEventAggregator _eventAggregator;
+
+    private OpenFullScreenCameraEvent _openFullScreenVideoEvent;    
 
     private int _buttonCount;
     private bool _isFirstTime = true;
@@ -34,6 +39,7 @@ public class MainTabbedPageViewModel : BaseViewModel
 
     public MainTabbedPageViewModel(
         INavigationService navigationService,
+        IEventAggregator eventAggregator,
         IDevicesService devicesService,
         IDialogService dialogService,
         IRoomsService roomsService,
@@ -44,6 +50,7 @@ public class MainTabbedPageViewModel : BaseViewModel
         IAqaraMessanger aqaraMessanger)
         : base(navigationService)
     {
+        _eventAggregator = eventAggregator;
         _devicesService = devicesService;
         _dialogService = dialogService;
         _roomsService = roomsService;
@@ -57,6 +64,9 @@ public class MainTabbedPageViewModel : BaseViewModel
         _hideTabsTabbedViewEvent.Subscribe(OnHideTabsTabbedView);
 
         _aqaraMessanger.StartListening();
+
+        _openFullScreenVideoEvent = _eventAggregator.GetEvent<OpenFullScreenCameraEvent>();
+        _openFullScreenVideoEvent.Subscribe(OpenFullscreenVideoEventHandler);
         
         _notificationsService.AllNotificationsChanged += OnShowEmergencyNotificationDialogAsync;
     }
@@ -80,6 +90,7 @@ public class MainTabbedPageViewModel : BaseViewModel
     public override void Destroy()
     {
         _aqaraMessanger.StopListening();
+        _openFullScreenVideoEvent.Unsubscribe(OpenFullscreenVideoEventHandler);
 
         base.Destroy();
     }
@@ -188,6 +199,14 @@ public class MainTabbedPageViewModel : BaseViewModel
         _buttonCount = 0;
 
         return false;
+    }
+
+    private void OpenFullscreenVideoEventHandler(CameraBindableModel camera)
+    {
+        NavigationService.CreateBuilder()
+            .AddSegment<FullScreenCameraPageViewModel>()
+            .AddParameter(Constants.DialogsParameterKeys.CAMERA, camera)
+            .Navigate();
     }
 
     #endregion

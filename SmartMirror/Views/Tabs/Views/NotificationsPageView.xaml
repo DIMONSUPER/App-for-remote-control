@@ -110,8 +110,9 @@
                             Command="{Binding RefreshNotificationsCommand}"
                             x:Name="refreshView">
 
-                            <CollectionView
+                            <controls:CustomCollectionView
                                 HorizontalOptions="EndAndExpand"
+                                Padding="0, 0, 0, 28"
                                 ItemsSource="{Binding Notifications}"
                                 ItemTemplate="{StaticResource notificationTemplateSelector}"
                                 WidthRequest="571"

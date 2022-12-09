@@ -29,6 +29,7 @@
     <Color x:Key="cbg_i18">#E05252</Color> <!-- #E05252 -->
     <Color x:Key="cbg_i19">#4A4A4C</Color>
     <Color x:Key="cbg_i20">#BFBFBF</Color>
+    <Color x:Key="cbg_i21">#2D2D2E</Color>
 
     <!-- TEXT COLORS -->
     <Color x:Key="tcolor_i1">#FFFFFF</Color>    <!-- White -->

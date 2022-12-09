@@ -2,38 +2,42 @@ using CommunityToolkit.Maui.Alerts;
 using LibVLCSharp.Shared;
 using SmartMirror.Enums;
 using SmartMirror.Helpers;
+using SmartMirror.Helpers.Events;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Mapper;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Tabs.Pages;
 
 public class CamerasPageViewModel : BaseTabViewModel
 {
-    private const int CAMERA_TIME_CHECK_SECONDS = 5;
     private CancellationTokenSource _cameraCancellationTokenSource;
     private readonly LibVLC _libVLC = new(enableDebugLogs: false);
+    private OpenFullScreenCameraEvent _openFullScreenCameraEvent;
 
+    private readonly IEventAggregator _eventAggregator;
     private readonly IMapperService _mapperService;
     private readonly ICamerasService _camerasService;
 
     public CamerasPageViewModel(
         INavigationService navigationService,
+        IEventAggregator eventAggregator,
         IMapperService mapperService,
         ICamerasService camerasService)
         : base(navigationService)
     {
+        _eventAggregator = eventAggregator;
         _mapperService = mapperService;
         _camerasService = camerasService;
         DataState = EPageState.LoadingSkeleton;
 
         Title = "Cameras";
         _camerasService.AllCamerasChanged += OnAllCamerasChanged;
+        _openFullScreenCameraEvent = _eventAggregator.GetEvent<OpenFullScreenCameraEvent>();
     }
 
     #region -- Public properties --
@@ -73,6 +77,48 @@ public class CamerasPageViewModel : BaseTabViewModel
         set => SetProperty(ref _videoState, value);
     }
 
+    private bool _isMuted;
+    public bool IsMuted
+    {
+        get => _isMuted;
+        set => SetProperty(ref _isMuted, value);
+    }
+
+    private bool _isHighQualityOn;
+    public bool IsHighQualityOn
+    {
+        get => _isHighQualityOn;
+        set => SetProperty(ref _isHighQualityOn, value);
+    }
+
+    private double _brightness = 50;
+    public double Brightness
+    {
+        get => _brightness;
+        set => SetProperty(ref _brightness, value);
+    }
+    
+    private double _contrast = 50;
+    public double Contrast
+    {
+        get => _contrast;
+        set => SetProperty(ref _contrast, value);
+    }
+
+    private double _hue = 50;
+    public double Hue
+    {
+        get => _hue;
+        set => SetProperty(ref _hue, value);
+    }
+
+    private double _saturation = 50;
+    public double Saturation
+    {
+        get => _saturation;
+        set => SetProperty(ref _saturation, value);
+    }
+
     private ICommand _selectCameraCommand;
     public ICommand SelectCameraCommand => _selectCameraCommand ??= SingleExecutionCommand.FromFunc<CameraBindableModel>(OnSelectCameraCommandAsync);
 
@@ -81,6 +127,18 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private ICommand _tryAgainCommand;
     public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
+    
+    private ICommand _openVideoInFullScreenCommand;
+    public ICommand OpenVideoInFullScreenCommand => _openVideoInFullScreenCommand ??= SingleExecutionCommand.FromFunc(OnOpenVideoInFullScreenCommandAsync);
+
+    private ICommand _takeSnapshotCommand;
+    public ICommand TakeSnapshotCommand => _takeSnapshotCommand ??= SingleExecutionCommand.FromFunc(OnTakeSnapshotCommandAsync);
+
+    private ICommand _muteVideoCommand;
+    public ICommand MuteVideoCommand => _muteVideoCommand ??= SingleExecutionCommand.FromFunc(OnMuteVideoCommandAsync);
+
+    private ICommand _switchVideoQualityCommand;
+    public ICommand SwitchVideoQualityCommand => _switchVideoQualityCommand ??= SingleExecutionCommand.FromFunc(OnSwitchVideoQualityCommandAsync);
 
     #endregion
 
@@ -105,85 +163,6 @@ public class CamerasPageViewModel : BaseTabViewModel
         {
             PlayCurrentVideoAsync().ConfigureAwait(false);
         }
-    }
-
-    private Task PlayCurrentVideoAsync()
-    {
-        Task.Run(() =>
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(SelectedCamera?.VideoUrl) || !SelectedCamera.IsConnected)
-                {
-                    StopVideo();
-                }
-                else
-                {
-                    if (MediaPlayer is null)
-                    {
-                        MediaPlayer = new(_libVLC) { EnableHardwareDecoding = true, NetworkCaching = 0, Volume = 0, };
-                        MediaPlayer.EncounteredError += OnMediaPlayerEncounteredError;
-                        MediaPlayer.Opening += OnMediaPlayerStateChanged;
-                        MediaPlayer.EndReached += OnMediaPlayerStateChanged;
-                        MediaPlayer.Playing += OnMediaPlayerStateChanged;
-                        MediaPlayer.NothingSpecial += OnMediaPlayerStateChanged;
-                        MediaPlayer.Stopped += OnMediaPlayerStateChanged;
-                        MediaPlayer.PositionChanged += OnMediaPlayerPositionChanged;
-                    }
-
-                    using var media = new Media(_libVLC, SelectedCamera.VideoUrl, FromType.FromLocation);
-
-                    MediaPlayer?.Play(media);
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"{nameof(PlayCurrentVideoAsync)}: {ex.Message}");
-            }
-        });
-
-        return Task.CompletedTask;
-    }
-
-    private void OnMediaPlayerPositionChanged(object sender, MediaPlayerPositionChangedEventArgs e)
-    {
-        VideoState = VLCState.Playing;
-    }
-
-    private void OnMediaPlayerStateChanged(object sender, EventArgs e)
-    {
-        if (MediaPlayer.State is VLCState.Playing)
-        {
-            VideoState = VLCState.Opening;
-        }
-        else
-        {
-            VideoState = MediaPlayer.State;
-        }
-    }
-
-    private void StopVideo()
-    {
-        if (MediaPlayer is not null)
-        {
-            MediaPlayer.EncounteredError -= OnMediaPlayerEncounteredError;
-            MediaPlayer.Opening -= OnMediaPlayerStateChanged;
-            MediaPlayer.EndReached -= OnMediaPlayerStateChanged;
-            MediaPlayer.Playing -= OnMediaPlayerStateChanged;
-            MediaPlayer.NothingSpecial -= OnMediaPlayerStateChanged;
-            MediaPlayer.Stopped -= OnMediaPlayerStateChanged;
-            MediaPlayer.PositionChanged -= OnMediaPlayerPositionChanged;
-            MediaPlayer.Pause();
-            MediaPlayer.Stop();
-            MediaPlayer.Dispose();
-            MediaPlayer = null;
-            VideoState = VLCState.NothingSpecial;
-        }
-    }
-
-    private void OnMediaPlayerEncounteredError(object sender, EventArgs e)
-    {
-        MainThread.BeginInvokeOnMainThread(() => Toast.Make($"{Strings.CannotPlayVideo}").Show());
     }
 
     public override void OnResume()
@@ -328,6 +307,85 @@ public class CamerasPageViewModel : BaseTabViewModel
         return Task.CompletedTask;
     }
 
+    private Task PlayCurrentVideoAsync()
+    {
+        Task.Run(() =>
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(SelectedCamera?.VideoUrl) || !SelectedCamera.IsConnected)
+                {
+                    StopVideo();
+                }
+                else
+                {
+                    if (MediaPlayer is null)
+                    {
+                        MediaPlayer = new(_libVLC) { EnableHardwareDecoding = true, NetworkCaching = 0, Volume = 0, };
+                        MediaPlayer.EncounteredError += OnMediaPlayerEncounteredError;
+                        MediaPlayer.Opening += OnMediaPlayerStateChanged;
+                        MediaPlayer.EndReached += OnMediaPlayerStateChanged;
+                        MediaPlayer.Playing += OnMediaPlayerStateChanged;
+                        MediaPlayer.NothingSpecial += OnMediaPlayerStateChanged;
+                        MediaPlayer.Stopped += OnMediaPlayerStateChanged;
+                        MediaPlayer.PositionChanged += OnMediaPlayerPositionChanged;
+                    }
+
+                    using var media = new Media(_libVLC, SelectedCamera.VideoUrl, FromType.FromLocation);
+
+                    MediaPlayer?.Play(media);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"{nameof(PlayCurrentVideoAsync)}: {ex.Message}");
+            }
+        });
+
+        return Task.CompletedTask;
+    }
+
+    private void OnMediaPlayerPositionChanged(object sender, MediaPlayerPositionChangedEventArgs e)
+    {
+        VideoState = VLCState.Playing;
+    }
+
+    private void OnMediaPlayerStateChanged(object sender, EventArgs e)
+    {
+        if (MediaPlayer.State is VLCState.Playing)
+        {
+            VideoState = VLCState.Opening;
+        }
+        else
+        {
+            VideoState = MediaPlayer.State;
+        }
+    }
+
+    private void StopVideo()
+    {
+        if (MediaPlayer is not null)
+        {
+            MediaPlayer.EncounteredError -= OnMediaPlayerEncounteredError;
+            MediaPlayer.Opening -= OnMediaPlayerStateChanged;
+            MediaPlayer.EndReached -= OnMediaPlayerStateChanged;
+            MediaPlayer.Playing -= OnMediaPlayerStateChanged;
+            MediaPlayer.NothingSpecial -= OnMediaPlayerStateChanged;
+            MediaPlayer.Stopped -= OnMediaPlayerStateChanged;
+            MediaPlayer.PositionChanged -= OnMediaPlayerPositionChanged;
+            MediaPlayer.Pause();
+            MediaPlayer.Stop();
+            MediaPlayer.Dispose();
+            MediaPlayer = null;
+            VideoState = VLCState.NothingSpecial;
+        }
+    }
+
+    private void OnMediaPlayerEncounteredError(object sender, EventArgs e)
+    {
+        MainThread.BeginInvokeOnMainThread(() => Toast.Make($"{Strings.CannotPlayVideo}").Show());
+    }
+
     private async Task StartRunnerAsync(CameraBindableModel camera)
     {
         try
@@ -357,7 +415,7 @@ public class CamerasPageViewModel : BaseTabViewModel
                         camera.IsConnected = false;
                     }
 
-                    await Task.Delay(TimeSpan.FromSeconds(CAMERA_TIME_CHECK_SECONDS), _cameraCancellationTokenSource.Token);
+                    await Task.Delay(TimeSpan.FromSeconds(Constants.Limits.CAMERA_TIME_CHECK_SECONDS), _cameraCancellationTokenSource.Token);
                 }
             }
         }
@@ -416,6 +474,35 @@ public class CamerasPageViewModel : BaseTabViewModel
         }
 
         SelectedCamera = selectedCamera;
+    }
+
+    private Task OnOpenVideoInFullScreenCommandAsync()
+    {
+        if (SelectedCamera is not null && SelectedCamera.IsConnected)
+        {
+            StopVideo();
+
+            SelectedCamera.IsConnected = false;
+
+            _openFullScreenCameraEvent.Publish(SelectedCamera);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private Task OnTakeSnapshotCommandAsync()
+    {
+        return Task.CompletedTask;
+    }
+
+    private Task OnMuteVideoCommandAsync()
+    {
+        return Task.CompletedTask;
+    }
+
+    private Task OnSwitchVideoQualityCommandAsync()
+    {
+        return Task.CompletedTask;
     }
 
     #endregion
