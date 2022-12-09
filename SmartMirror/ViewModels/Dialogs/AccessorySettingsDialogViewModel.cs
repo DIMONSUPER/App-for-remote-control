@@ -75,7 +75,7 @@ namespace SmartMirror.ViewModels.Dialogs
         }
 
         private ICommand _changeUnitMeasureCommand;
-        public ICommand ChangeUnitMeasureCommand => _changeUnitMeasureCommand ??= SingleExecutionCommand.FromFunc<EUnitMeasure>(OnChangeUnitMeasureCommandAsync);
+        public ICommand ChangeUnitMeasureCommand => _changeUnitMeasureCommand ??= SingleExecutionCommand.FromFunc<EUnitMeasure>(OnChangeUnitMeasureCommandAsync, false, 0);
 
         #endregion
 
