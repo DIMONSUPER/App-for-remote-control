@@ -358,7 +358,7 @@ public class CamerasPageViewModel : BaseTabViewModel
         }
         else
         {
-            VideoState = MediaPlayer.State;
+            VideoState = MediaPlayer?.State ?? VLCState.Ended;
         }
     }
 
