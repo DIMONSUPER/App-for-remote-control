@@ -66,8 +66,6 @@ namespace SmartMirror.Services.Notifications
                 return result;
             }
 
-            _notificationsTaskCompletionSource = new();
-
             result = await AOResult.ExecuteTaskAsync(async onFailure =>
             {
                 List<NotificationGroupItemBindableModel> notifications = new();

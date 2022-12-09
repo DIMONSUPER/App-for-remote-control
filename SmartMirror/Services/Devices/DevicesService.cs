@@ -75,8 +75,6 @@ namespace SmartMirror.Services.Devices
                 return result;
             }
 
-            _devicesTaskCompletionSource = new();
-
             System.Diagnostics.Debug.WriteLine($"{nameof(DownloadAllDevicesWithSubInfoAsync)} STARTED");
 
             result = await AOResult.ExecuteTaskAsync(async onFailure =>

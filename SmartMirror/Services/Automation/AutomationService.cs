@@ -57,8 +57,6 @@ public class AutomationService : IAutomationService
             return result;
         }
 
-        _automationsTaskCompletionSource = new();
-
         result = await AOResult.ExecuteTaskAsync(async onFailure =>
         {
             var resultOfGettingAutomations = await _aqaraService.GetLinkagesAsync();
