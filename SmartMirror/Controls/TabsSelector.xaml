@@ -6,19 +6,25 @@
     x:Class="SmartMirror.Controls.TabsSelector"
     x:DataType="local:TabsSelector"
     x:Name="tabsSelector">
-    
-    <Border
-        VerticalOptions="End"
-        StrokeThickness="0.75"
-        StrokeShape="RoundRectangle 40"
-        Stroke="{DynamicResource tcolor_i1}"
-        BackgroundColor="{DynamicResource cbg_i2}">
+
+    <Grid RowDefinitions="Auto">
+
+        <Border
+            VerticalOptions="End"
+            StrokeThickness="0.75"
+            StrokeShape="RoundRectangle 40"
+            Stroke="{DynamicResource tcolor_i1}"
+            BackgroundColor="{DynamicResource cbg_i2}">
+
+            <BoxView Color="Transparent"/>
+
+        </Border>
 
         <CollectionView 
             SelectionMode="Single"
             SelectedItem="{Binding SelectedTabName, Source={Reference tabsSelector}}"
             ItemsSource="{Binding TabNames, Source={Reference tabsSelector}}">
-            
+
             <CollectionView.ItemsLayout>
 
                 <LinearItemsLayout Orientation="Horizontal" ItemSpacing="0"/>
@@ -27,7 +33,7 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    
+
                     <Border
                         HeightRequest="52"
                         StrokeThickness="0"
@@ -80,6 +86,6 @@
 
         </CollectionView>
         
-    </Border>
-
+    </Grid>
+    
 </ContentView>
