@@ -65,7 +65,8 @@
 
                     <controls:CustomStateView.CompleteContent>
 
-                        <CollectionView
+                        <controls:CustomCollectionView
+                            Padding="0, 0, 0, 26"
                             VerticalScrollBarVisibility="Never"
                             ItemTemplate="{x:StaticResource scenarioActionTemplate}"
                             ItemsSource="{Binding ScenarioActions}"/>

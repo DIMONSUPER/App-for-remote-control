@@ -208,14 +208,11 @@
                                         
                                     </templates:SimpleNotificationsHeaderTemplate>
 
-                                    <CollectionView
+                                    <controls:CustomCollectionView
                                         Margin="0, 0, 1, 0"
+                                        Padding="0, 0, 0, 44"
                                         ItemsSource="{Binding CategoryElements}"
                                         ItemTemplate="{StaticResource elementCategoryTemplateSelector}">
-
-                                        <CollectionView.Footer>
-                                            <BoxView HeightRequest="20"/>
-                                        </CollectionView.Footer>
                                         
                                         <CollectionView.Triggers>
                                             <DataTrigger
@@ -244,7 +241,7 @@
 
                                         </CollectionView.ItemsLayout>
 
-                                    </CollectionView>
+                                    </controls:CustomCollectionView>
 
                                 </StackLayout>
 
