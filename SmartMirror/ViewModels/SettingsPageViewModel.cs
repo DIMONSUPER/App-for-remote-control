@@ -43,8 +43,6 @@ namespace SmartMirror.ViewModels
         private CategoryBindableModel _providersCategory;
         private CategoryBindableModel _notificationsCategory;
 
-        private HideTabsTabbedViewEvent _hideTabsTabbedViewEvent;
-
         private IDialogResult _dialogResult;
 
         public SettingsPageViewModel(
@@ -73,8 +71,6 @@ namespace SmartMirror.ViewModels
             _eventAggregator = eventAggregator;
 
             PageState = EPageState.LoadingSkeleton;
-
-            _hideTabsTabbedViewEvent = _eventAggregator.GetEvent<HideTabsTabbedViewEvent>();
 
             _devicesService.AllDevicesChanged += OnAllDevicesChanged;
             _scenariosService.AllScenariosChanged += OnAllScenariosChanged;
@@ -177,7 +173,7 @@ namespace SmartMirror.ViewModels
         {
             base.OnAppearing();
 
-            _hideTabsTabbedViewEvent.Publish(true);
+            _eventAggregator.GetEvent<HideTabsTabbedViewEvent>().Publish(true);
         }
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
