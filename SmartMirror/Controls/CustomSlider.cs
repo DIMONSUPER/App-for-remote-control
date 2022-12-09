@@ -1,13 +1,8 @@
-﻿using System;
-using Android.Widget;
+﻿using Android.Graphics;
 using Android.Graphics.Drawables;
-using Android.Graphics;
-using ShapeDrawable = Android.Graphics.Drawables.ShapeDrawable;
-using Android.Graphics.Drawables.Shapes;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
-using static Android.Media.MediaParser;
-using Paint = Android.Graphics.Paint;
 using Microsoft.Maui.Handlers;
+using Paint = Android.Graphics.Paint;
 using Platform = Microsoft.Maui.ApplicationModel.Platform;
 
 namespace SmartMirror.Controls
@@ -17,6 +12,8 @@ namespace SmartMirror.Controls
         public CustomSlider()
         {
             AppendToMapping();
+
+            ValueChanged += OnValueChanged;
         }
 
         #region -- Public properties --
@@ -47,9 +44,24 @@ namespace SmartMirror.Controls
             set => SetValue(CornerRadiusLineProperty, value);
         }
 
+        public static readonly BindableProperty StepProperty = BindableProperty.Create(
+            propertyName: nameof(Step),
+            returnType: typeof(int),
+            declaringType: typeof(CustomSlider),
+            defaultValue: 1,
+            defaultBindingMode: BindingMode.OneWay);
+
+        public int Step
+        {
+            get => (int)GetValue(StepProperty);
+            set => SetValue(StepProperty, value);
+        }
+
         #endregion
 
         #region -- Private helpers --
+
+        private void OnValueChanged(object sender, ValueChangedEventArgs e) => Value -= Value % Step;
 
         private void AppendToMapping()
         {
@@ -65,7 +77,7 @@ namespace SmartMirror.Controls
 
         private void UpdateSlider(IViewHandler handler, IView view)
         {
-            if (handler.PlatformView is Android.Widget.SeekBar progressBar && view is CustomSlider slider)
+            if (handler.PlatformView is Android.Widget.SeekBar progressBar && view is CustomSlider slider && slider.IsVisible)
             {
                 progressBar.Post(() =>
                 {

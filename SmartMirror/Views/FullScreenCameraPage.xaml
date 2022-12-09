@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<views:BaseContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:extensions="clr-namespace:SmartMirror.Extensions"
+    xmlns:vm="clr-namespace:SmartMirror.ViewModels"
+    xmlns:views="clr-namespace:SmartMirror.Views"
+    Style="{DynamicResource GrayGradientStyle_i1}"
+    x:Class="SmartMirror.Views.FullScreenCameraPage"
+    x:DataType="vm:FullScreenCameraPageViewModel">
+
+    <Grid RowDefinitions="Auto, Auto, *">
+        
+        <controls:CurrentTimeControl
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            VerticalOptions="Start"
+            HorizontalOptions="Start"
+            Margin="60, 9, 0, 9"
+            TextColor="{DynamicResource tcolor_i1}"
+            FontFamily="InterSemiBold"/>
+
+        <Label
+            Grid.Row="1"
+            Grid.Column="0"
+            VerticalOptions="Start"
+            Grid.ColumnSpan="2"
+            Style="{DynamicResource tstyle_i1}"
+            Margin="0, 21, 0, 0"
+            HorizontalOptions="CenterAndExpand"
+            Text="{Binding Camera.Name}"/>
+
+        <Border
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            VerticalOptions="Start"
+            HeightRequest="68"
+            WidthRequest="68"
+            Margin="0, 5, 60, 0"
+            Padding="17"
+            HorizontalOptions="End"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 9"
+            Stroke="{DynamicResource cbg_i4}"
+            behaviors:TouchBehavior.IsAnimation="True"
+            behaviors:TouchBehavior.NormalBackgroundColor="{DynamicResource cbg_i2}"
+            behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}"
+            behaviors:TouchBehavior.Command="{Binding CloseFullScreenCommand}">
+
+            <Image
+                Source="ci_close_big"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"/>
+
+        </Border>
+        
+        <Grid
+            Grid.Row="2"
+            Margin="42, 36, 60, 52">
+
+            <Border
+                StrokeThickness="0.75"
+                StrokeShape="RoundRectangle 9"
+                BackgroundColor="{DynamicResource cbg_i2}"
+                Stroke="{DynamicResource cbg_i4}">
+
+                <StackLayout VerticalOptions="CenterAndExpand">
+
+                    <Frame 
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        HeightRequest="90"
+                        WidthRequest="90"
+                        CornerRadius="9"
+                        HasShadow="False"
+                        BackgroundColor="{DynamicResource cbg_i1}">
+
+                        <Image 
+                            HorizontalOptions="Center"
+                            Source="video_off"/>
+
+                    </Frame>
+
+                    <Label 
+                        Style="{DynamicResource tstyle_i4}"
+                        Margin="0, 30, 0, 6"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        MaximumWidthRequest="600"
+                        LineBreakMode="TailTruncation"
+                        Text="{Binding Camera.Name}"/>
+
+                    <Label 
+                        Style="{DynamicResource tstyle_i6}"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="{extensions:Translate CameraIsOff}"/>
+
+                </StackLayout>
+
+            </Border>
+
+            <Frame 
+                Padding="1"
+                HasShadow="False"
+                CornerRadius="9"
+                BorderColor="{DynamicResource cbg_i7}"
+                IsVisible="{Binding Camera.IsConnected}">
+
+                <Frame
+                    Padding="0"
+                    HasShadow="False"
+                    IsClippedToBounds="True"
+                    CornerRadius="9">
+
+                    <controls:VideoView
+                        BackgroundColor="{DynamicResource cbg_i2}"
+                        MediaPlayer="{Binding MediaPlayer}">
+
+                        <controls:VideoView.Triggers>
+                            <DataTrigger TargetType="controls:VideoView" Binding="{Binding VideoState}" Value="Playing">
+                                <Setter Property="BackgroundColor" Value="Transparent"/>
+                            </DataTrigger>
+                        </controls:VideoView.Triggers>
+
+                    </controls:VideoView>
+
+                </Frame>
+
+            </Frame>
+
+            <ActivityIndicator 
+                WidthRequest="90"
+                IsRunning="False">
+
+                <ActivityIndicator.Triggers>
+
+                    <MultiTrigger TargetType="ActivityIndicator">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Camera.IsConnected}" Value="True" />
+                            <BindingCondition Binding="{Binding VideoState}" Value="Opening" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="IsRunning" Value="True"/>
+                    </MultiTrigger>
+
+                </ActivityIndicator.Triggers>
+
+            </ActivityIndicator>
+
+        </Grid>
+
+    </Grid>
+
+</views:BaseContentPage>
