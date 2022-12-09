@@ -141,18 +141,7 @@ public class CustomTabbedPage : TabbedPage
             BackgroundColor = Color.FromArgb("#00000000"),
         };
 
-        var grid = new Grid()
-        {
-            //Background = Color.FromRgb(255, 0, 0),
-        };
-
-        //grid.Children.Add(new Border()
-        //{
-        //    HorizontalOptions = LayoutOptions.Center,
-        //    WidthRequest = 1100,
-        //    Background = Color.FromRgb(0, 255, 0),
-        //    Padding = new Thickness(5, 0, 132, 0),
-        //});
+        var grid = new Grid();
 
         grid.Children.Add(CreateBorder());
 
@@ -219,7 +208,7 @@ public class CustomTabbedPage : TabbedPage
             StrokeShape = new RoundRectangle() { CornerRadius = BorderRadius },
             Stroke = BorderColor,
             BackgroundColor = Color.FromArgb("#801F1F1F"),
-            //Margin = new Thickness(5, 0, 132, 0),
+            Margin = new Thickness(132, 0),
             Content = CreateTabsStackLayout(),
         };
     }
