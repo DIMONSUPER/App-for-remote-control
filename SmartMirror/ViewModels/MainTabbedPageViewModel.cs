@@ -10,8 +10,6 @@ using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Services.Notifications;
 using SmartMirror.Views;
-using SmartMirror.Models.BindableModels;
-using SmartMirror.Services.Aqara;
 using System.Windows.Input;
 using SmartMirror.Views.Dialogs;
 

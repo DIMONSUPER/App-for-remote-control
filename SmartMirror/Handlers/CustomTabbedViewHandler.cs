@@ -54,6 +54,8 @@ public class CustomTabbedViewHandler : TabbedViewHandler
 
     private global::Android.Views.View CreateTabBarView()
     {
+        ViewPager2.OffscreenPageLimit = 5;
+
         var handler = this.CustomTabbedPage.TabBarView.Handler;
 
         if (handler is null)

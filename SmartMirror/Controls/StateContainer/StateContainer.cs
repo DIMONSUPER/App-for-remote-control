@@ -3,9 +3,13 @@ using System.Runtime.CompilerServices;
 
 namespace SmartMirror.Controls.StateContainer
 {
-    [ContentProperty("Conditions")]
+    [ContentProperty(nameof(Conditions))]
     public class StateContainer : ContentView
     {
+        private readonly Grid _currentContentGrid = new();
+
+        #region -- Public properties --
+
         public static readonly BindableProperty StateProperty = BindableProperty.Create(
             propertyName: nameof(State),
             returnType: typeof(object),
@@ -17,10 +21,6 @@ namespace SmartMirror.Controls.StateContainer
             get => GetValue(StateProperty);
             set => SetValue(StateProperty, value);
         }
-
-        private readonly Grid _currentContentGrid = new();
-
-        #region -- Public properties --
 
         public List<StateCondition> Conditions { get; set; } = new();
 
@@ -45,8 +45,6 @@ namespace SmartMirror.Controls.StateContainer
 
             if (Conditions is not null)
             {
-                var tasks = new List<Task>();
-
                 var newView = Conditions?.FirstOrDefault(condition => condition?.State?.ToString() == newValue?.ToString())?.Content;
 
                 if (newView is not null)

@@ -8,6 +8,7 @@
                            android:TabbedPage.IsSwipePagingEnabled="True"
                            android:TabbedPage.IsSmoothScrollEnabled="True"
                            android:TabbedPage.ToolbarPlacement="Top"
+                           android:TabbedPage.OffscreenPageLimit="5"
                            NavigationPage.HasNavigationBar="False"
                            Style="{DynamicResource GrayGradientStyle_i1}"
                            SettingsCommand="{Binding SettingsCommand}"
