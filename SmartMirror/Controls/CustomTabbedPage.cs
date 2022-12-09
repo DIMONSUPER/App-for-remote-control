@@ -230,7 +230,7 @@ public class CustomTabbedPage : TabbedPage
         {
             Spacing = 0,
             Margin = 0,
-            Padding = new(30, 0),
+            Padding = new(25, 0),
         };
 
         var tabTappedGestureRecognizer = new TapGestureRecognizer();
