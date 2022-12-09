@@ -15,6 +15,8 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using SmartMirror.Services.Automation;
 using SmartMirror.Resources;
+using System.Threading;
+using SmartMirror.Helpers.Events;
 
 namespace SmartMirror.ViewModels
 {
@@ -29,6 +31,7 @@ namespace SmartMirror.ViewModels
         private readonly IGoogleService _googleService;
         private readonly INotificationsService _notificationsService;
         private readonly IAutomationService _automationService;
+        private readonly IEventAggregator _eventAggregator;
 
         private IEnumerable<ImageAndTitleBindableModel> _allAccessories = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios = Enumerable.Empty<ImageAndTitleBindableModel>();
@@ -39,6 +42,7 @@ namespace SmartMirror.ViewModels
 
         private CategoryBindableModel _providersCategory;
         private CategoryBindableModel _notificationsCategory;
+
         private IDialogResult _dialogResult;
 
         public SettingsPageViewModel(
@@ -51,6 +55,7 @@ namespace SmartMirror.ViewModels
             IAqaraService aqaraService,
             INotificationsService notificationsService,
             IAutomationService automationService,
+            IEventAggregator eventAggregator,
             IGoogleService googleService)
             : base(navigationService)
         {
@@ -63,6 +68,7 @@ namespace SmartMirror.ViewModels
             _googleService = googleService;
             _notificationsService = notificationsService;
             _automationService = automationService;
+            _eventAggregator = eventAggregator;
 
             PageState = EPageState.LoadingSkeleton;
 
@@ -71,6 +77,7 @@ namespace SmartMirror.ViewModels
             _automationService.AllAutomationsChanged += OnAllAutomationsChanged;
 
             LoadCategories();
+
             SelectCategory(SelectedCategory ?? Categories.FirstOrDefault());
         }
 
@@ -161,6 +168,13 @@ namespace SmartMirror.ViewModels
         #endregion
 
         #region -- Overrides --
+
+        public override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            _eventAggregator.GetEvent<HideTabsTabbedViewEvent>().Publish(true);
+        }
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
@@ -273,6 +287,7 @@ namespace SmartMirror.ViewModels
         private Task OnSelectCategoryCommandAsync(CategoryBindableModel category)
         {
             DataState = EPageState.LoadingSkeleton;
+
             SelectCategory(category);
 
             _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
