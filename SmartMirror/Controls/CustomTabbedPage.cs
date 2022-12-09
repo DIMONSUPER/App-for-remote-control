@@ -99,8 +99,8 @@ public class CustomTabbedPage : TabbedPage
         set => SetValue(SettingsCommandProperty, value);
     }
 
-    private Grid _tabBarView;
-    public Grid TabBarView => _tabBarView ??= CreateTabBar();
+    private StackLayout _tabBarView;
+    public StackLayout TabBarView => _tabBarView ??= CreateTabBar();
 
     #endregion
 
@@ -132,32 +132,39 @@ public class CustomTabbedPage : TabbedPage
 
     #region -- Private helpers --
 
-    private Grid CreateTabBar()
+    private StackLayout CreateTabBar()
     {
-        var tabBarView = new Grid
+        var stackTimeAndTabs = new StackLayout()
         {
             HeightRequest = TabBarHeight,
+            Spacing = 0,
             BackgroundColor = Color.FromArgb("#00000000"),
-            RowSpacing = 0,
         };
 
-        var stackTimeAndTabs = new StackLayout() { Spacing = 0, BackgroundColor = Color.FromArgb("#00000000") };
+        var grid = new Grid()
+        {
+            //Background = Color.FromRgb(255, 0, 0),
+        };
 
-        stackTimeAndTabs.Add(CreateTimeLabel());
-
-        var grid = new Grid();
+        //grid.Children.Add(new Border()
+        //{
+        //    HorizontalOptions = LayoutOptions.Center,
+        //    WidthRequest = 1100,
+        //    Background = Color.FromRgb(0, 255, 0),
+        //    Padding = new Thickness(5, 0, 132, 0),
+        //});
 
         grid.Children.Add(CreateBorder());
 
         grid.Children.Add(CreateSettingsButton());
 
-        stackTimeAndTabs.Add(grid);
+        stackTimeAndTabs.Add(CreateTimeLabel());
 
-        tabBarView.Add(stackTimeAndTabs);
+        stackTimeAndTabs.Add(grid);
 
         OnCurrentPageChanged();
 
-        return tabBarView;
+        return stackTimeAndTabs;
     }
 
     private Border CreateSettingsButton()
@@ -193,7 +200,7 @@ public class CustomTabbedPage : TabbedPage
 
     private CurrentTimeControl CreateTimeLabel()
     {
-        var currentTime = new CurrentTimeControl
+        return new CurrentTimeControl
         {
             VerticalOptions = LayoutOptions.Start,
             HorizontalOptions = LayoutOptions.Start,
@@ -201,24 +208,20 @@ public class CustomTabbedPage : TabbedPage
             TextColor = Color.FromArgb("#FFFFFF"),
             FontFamily = "InterSemiBold",
         };
-
-        return currentTime;
     }
 
     private Border CreateBorder()
     {
-        var border = new Border
+        return new Border
         {
             HorizontalOptions = LayoutOptions.Center,
             StrokeThickness = BorderWidth,
             StrokeShape = new RoundRectangle() { CornerRadius = BorderRadius },
             Stroke = BorderColor,
             BackgroundColor = Color.FromArgb("#801F1F1F"),
+            //Margin = new Thickness(5, 0, 132, 0),
+            Content = CreateTabsStackLayout(),
         };
-
-        border.Content = CreateTabsStackLayout();
-
-        return border;
     }
 
     private HorizontalStackLayout CreateTabsStackLayout()
@@ -230,7 +233,7 @@ public class CustomTabbedPage : TabbedPage
         {
             Spacing = 0,
             Margin = 0,
-            Padding = new(25, 0),
+            Padding = new(30, 0),
         };
 
         var tabTappedGestureRecognizer = new TapGestureRecognizer();
