@@ -97,7 +97,7 @@ public class CustomTabbedViewHandler : TabbedViewHandler
 
     private void OnCustomTabbedPagePropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(CustomTabbedPage.IsVisibleTabs))
+        if (e.PropertyName == nameof(CustomTabbedPage.HideTabs))
         {
             // Hack: If modal navigation - we don't need to remove tab bar
             if (!CustomTabbedPage.Navigation.ModalStack.Any() && TabBar.Parent is not null)
@@ -109,7 +109,7 @@ public class CustomTabbedViewHandler : TabbedViewHandler
 
     private void OnCustomTabbedPageDisappearing(object sender, EventArgs e)
     {
-        CustomTabbedPage.IsVisibleTabs = new();
+        CustomTabbedPage.HideTabs = new();
     }
 
     #endregion

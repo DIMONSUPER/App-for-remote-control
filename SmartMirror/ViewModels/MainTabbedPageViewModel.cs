@@ -10,11 +10,8 @@ using SmartMirror.Services.Rooms;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.Services.Notifications;
 using SmartMirror.Views;
-using SmartMirror.Models.BindableModels;
-using SmartMirror.Services.Aqara;
 using System.Windows.Input;
 using SmartMirror.Views.Dialogs;
-using SmartMirror.Helpers.Events;
 using System.ComponentModel;
 
 namespace SmartMirror.ViewModels;
@@ -46,7 +43,6 @@ public class MainTabbedPageViewModel : BaseViewModel
         INotificationsService notificationsService,
         IAutomationService automationService,
         IScenariosService scenariosService,
-        IEventAggregator eventAggregator,
         IAqaraMessanger aqaraMessanger)
         : base(navigationService)
     {
@@ -58,7 +54,6 @@ public class MainTabbedPageViewModel : BaseViewModel
         _notificationsService = notificationsService;
         _automationService = automationService;
         _aqaraMessanger = aqaraMessanger;
-        _eventAggregator = eventAggregator;
 
         _hideTabsTabbedViewEvent = _eventAggregator.GetEvent<HideTabsTabbedViewEvent>();
         _hideTabsTabbedViewEvent.Subscribe(OnHideTabsTabbedView);
@@ -73,11 +68,11 @@ public class MainTabbedPageViewModel : BaseViewModel
 
     #region -- Public properties --
 
-    private object _isVisibleTabs;
-    public object IsVisibleTabs
+    private object _hideTabs;
+    public object HideTabs
     {
-        get => _isVisibleTabs;
-        set => SetProperty(ref _isVisibleTabs, value);
+        get => _hideTabs;
+        set => SetProperty(ref _hideTabs, value);
     }
 
     private ICommand _settingsCommand;
@@ -138,7 +133,7 @@ public class MainTabbedPageViewModel : BaseViewModel
 
     private void OnHideTabsTabbedView()
     {
-        IsVisibleTabs = new();
+        HideTabs = new();
     }
 
     private async Task UpdateAllAqaraDataAsync()

@@ -76,16 +76,16 @@ public class CustomTabbedPage : TabbedPage
         set => SetValue(BorderRadiusProperty, value);
     }
 
-    public static readonly BindableProperty IsVisibleTabsProperty = BindableProperty.Create(
-        propertyName: nameof(IsVisibleTabs),
+    public static readonly BindableProperty HideTabsProperty = BindableProperty.Create(
+        propertyName: nameof(HideTabs),
         returnType: typeof(object),
         declaringType: typeof(CustomTabbedPage),
         defaultBindingMode: BindingMode.TwoWay);
 
-    public object IsVisibleTabs
+    public object HideTabs
     {
-        get => GetValue(IsVisibleTabsProperty);
-        set => SetValue(IsVisibleTabsProperty, value);
+        get => GetValue(HideTabsProperty);
+        set => SetValue(HideTabsProperty, value);
     }
 
     public static readonly BindableProperty BorderColorProperty = BindableProperty.Create(
