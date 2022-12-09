@@ -2,6 +2,6 @@
 
 namespace SmartMirror.Helpers.Events;
 
-public class HideTabsTabbedViewEvent : PubSubEvent
+public class HideTabsTabbedViewEvent : PubSubEvent<bool>
 {
 }

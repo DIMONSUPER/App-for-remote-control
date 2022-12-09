@@ -32,8 +32,6 @@ public class MainTabbedPageViewModel : BaseViewModel
     private int _buttonCount;
     private bool _isFirstTime = true;
 
-    private HideTabsTabbedViewEvent _hideTabsTabbedViewEvent;
-
     public MainTabbedPageViewModel(
         INavigationService navigationService,
         IEventAggregator eventAggregator,
@@ -55,9 +53,6 @@ public class MainTabbedPageViewModel : BaseViewModel
         _automationService = automationService;
         _aqaraMessanger = aqaraMessanger;
 
-        _hideTabsTabbedViewEvent = _eventAggregator.GetEvent<HideTabsTabbedViewEvent>();
-        _hideTabsTabbedViewEvent.Subscribe(OnHideTabsTabbedView);
-
         _aqaraMessanger.StartListening();
 
         _openFullScreenVideoEvent = _eventAggregator.GetEvent<OpenFullScreenCameraEvent>();
@@ -67,13 +62,6 @@ public class MainTabbedPageViewModel : BaseViewModel
     }
 
     #region -- Public properties --
-
-    private object _hideTabs;
-    public object HideTabs
-    {
-        get => _hideTabs;
-        set => SetProperty(ref _hideTabs, value);
-    }
 
     private ICommand _settingsCommand;
     public ICommand SettingsCommand => _settingsCommand ??= SingleExecutionCommand.FromFunc(OnSettingsCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
@@ -130,11 +118,6 @@ public class MainTabbedPageViewModel : BaseViewModel
     #endregion
 
     #region -- Private helpers --
-
-    private void OnHideTabsTabbedView()
-    {
-        HideTabs = new();
-    }
 
     private async Task UpdateAllAqaraDataAsync()
     {

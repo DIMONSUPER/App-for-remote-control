@@ -12,7 +12,6 @@
                            Style="{DynamicResource GrayGradientStyle_i1}"
                            SettingsCommand="{Binding SettingsCommand}"
                            Title="MainTabbedPage"
-                           HideTabs="{Binding HideTabs}"
                            x:Class="SmartMirror.Views.MainTabbedPage"
                            x:DataType="vm:MainTabbedPageViewModel"
                            x:Name="tabbedPage">

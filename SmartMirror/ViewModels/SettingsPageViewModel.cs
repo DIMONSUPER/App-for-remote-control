@@ -177,7 +177,7 @@ namespace SmartMirror.ViewModels
         {
             base.OnAppearing();
 
-            _hideTabsTabbedViewEvent.Publish();
+            _hideTabsTabbedViewEvent.Publish(true);
         }
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
