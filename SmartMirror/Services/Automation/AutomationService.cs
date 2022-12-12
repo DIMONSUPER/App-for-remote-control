@@ -1,36 +1,50 @@
-﻿using Android.App;
-using SmartMirror.Helpers;
+﻿using SmartMirror.Helpers;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Models.DTO;
 using SmartMirror.Models;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Repository;
+using SmartMirror.Models.Aqara;
 using System.Linq;
+using SmartMirror.Services.Rest;
+using SmartMirror.Services.Settings;
+using SmartMirror.Services.Devices;
+using SmartMirror.Services.Rooms;
 
 namespace SmartMirror.Services.Automation;
 
-public class AutomationService : IAutomationService
+public class AutomationService : BaseAqaraService, IAutomationService
 {
     private readonly IAqaraService _aqaraService;
     private readonly IMapperService _mapperService;
     private readonly IAqaraMessanger _aqaraMessanger;
     private readonly IRepositoryService _repositoryService;
+    private readonly IDevicesService _devicesService;
+    private readonly IRoomsService _roomsService;
 
     private List<AutomationBindableModel> _allAutomations = new();
 
     private TaskCompletionSource<object> _automationsTaskCompletionSource = new();
 
     public AutomationService(
+        IRestService restService,
+        ISettingsManager settingsManager,
+        INavigationService navigationService,
         IAqaraService aqaraService,
         IMapperService mapperService,
         IAqaraMessanger aqaraMessanger,
-        IRepositoryService repositoryService)
+        IRepositoryService repositoryService,
+        IDevicesService devicesService,
+        IRoomsService roomsService)
+        : base(restService, settingsManager, navigationService)
     {
         _aqaraService = aqaraService;
         _mapperService = mapperService;
         _aqaraMessanger = aqaraMessanger;
         _repositoryService = repositoryService;
+        _devicesService = devicesService;
+        _roomsService = roomsService;
 
         _aqaraMessanger.MessageReceived += OnMessageReceived;
     }
@@ -38,6 +52,54 @@ public class AutomationService : IAutomationService
     #region -- IAutomationService implementation --
 
     public event EventHandler AllAutomationsChanged;
+
+    public Task<AOResult<DataAqaraResponse<LinkageAqaraModel>>> GetLinkagesAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var requestData = new
+            {
+                PositionId = positionId,
+                pageNum = pageNum,
+                pageSize = pageSize,
+            };
+
+            var response = await MakeRequestAsync<DataAqaraResponse<LinkageAqaraModel>>("query.linkage.listByPositionId", requestData, onFailure);
+
+            return response.Result;
+        });
+    }
+
+    public Task<AOResult<BaseAqaraResponse>> ChangeLinkageStateAsync(string linkageId, bool isEnabled)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var data = new
+            {
+                linkageId = linkageId,
+                enable = isEnabled ? 1 : 0,
+            };
+
+            var response = await MakeRequestAsync("config.linkage.enable", data, onFailure);
+
+            return response;
+        });
+    }
+
+    public Task<AOResult<LinkageDetailAqaraModel>> GetLinkageDetailAsync(string linkageId)
+    {
+        return AOResult.ExecuteTaskAsync(async onFailure =>
+        {
+            var requestData = new
+            {
+                linkageId = linkageId,
+            };
+
+            var response = await MakeRequestAsync<LinkageDetailAqaraModel>("query.linkage.detail", requestData, onFailure);
+
+            return response.Result;
+        });
+    }
 
     public async Task<IEnumerable<AutomationBindableModel>> GetAllAutomationsAsync()
     {
@@ -59,7 +121,7 @@ public class AutomationService : IAutomationService
 
         result = await AOResult.ExecuteTaskAsync(async onFailure =>
         {
-            var resultOfGettingAutomations = await _aqaraService.GetLinkagesAsync();
+            var resultOfGettingAutomations = await GetLinkagesAsync();
 
             if (resultOfGettingAutomations.IsSuccess)
             {
@@ -128,14 +190,35 @@ public class AutomationService : IAutomationService
     {
         foreach (var automation in automations)
         {
-            var linkageDetail = await _aqaraService.GetLinkageDetailAsync(automation.LinkageId);
+            var linkageDetail = await GetLinkageDetailAsync(automation.LinkageId);
+            var devices = await _devicesService.GetAllDevicesAsync();
+            var rooms = await _roomsService.GetAllRoomsAsync();
 
             if (linkageDetail.IsSuccess)
             {
-                automation.Conditions = linkageDetail.Result.Conditions;
-                automation.Actions = linkageDetail.Result.Actions;
+                var bindableConditions = _mapperService.MapRange<ConditionBindableModel>(linkageDetail.Result.Conditions.Condition, (m, vm) =>
+                {
+                    vm.Device = devices?.FirstOrDefault(x => x.DeviceId == vm.SubjectId);
 
-                automation.Description = automation.Conditions.Condition.Select(row => row.TriggerName).Aggregate((i, j) => i + ", " + j);
+                    if (vm.Device is not null)
+                    {
+                        vm.Device.RoomName = rooms.FirstOrDefault(x => x.Id == vm.Device.PositionId)?.Name;
+                    }
+                });
+
+                var bindableActions = _mapperService.MapRange<ActionBindableModel>(linkageDetail.Result.Actions.Action, (m, vm) =>
+                {
+                    vm.Device = devices?.FirstOrDefault(x => x.DeviceId == vm.SubjectId);
+
+                    if (vm.Device is not null)
+                    {
+                        vm.Device.RoomName = rooms.FirstOrDefault(x => x.Id == vm.Device.PositionId)?.Name;
+                    }
+                });
+                
+                automation.Conditions = new(bindableConditions);
+                automation.Actions = new(bindableActions);
+                automation.Description = automation.Conditions.Select(row => row.TriggerName).Aggregate((i, j) => i + ", " + j);
             }
         }
     }
