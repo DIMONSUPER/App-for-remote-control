@@ -1,10 +1,12 @@
 ﻿
+using System.ComponentModel;
 using Android.OS;
 using Android.Views;
 using AndroidX.Fragment.App;
 using Java.Lang;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
+using SmartMirror.Helpers.Events;
 
 namespace SmartMirror.Handlers;
 
@@ -26,6 +28,9 @@ public class CustomTabbedViewHandler : TabbedViewHandler
     private NavigationRootManager _rootManager;
     protected NavigationRootManager RootManager => _rootManager ??= MauiContext?.Services?.GetRequiredService<NavigationRootManager>();
 
+    private IEventAggregator _eventAggregator;
+    protected IEventAggregator EventAggregator => _eventAggregator ??= MauiContext?.Services?.GetRequiredService<IEventAggregator>();
+
     #endregion
 
     #region -- Overrides --
@@ -34,18 +39,18 @@ public class CustomTabbedViewHandler : TabbedViewHandler
     {
         base.DisconnectHandler(platformView);
 
-        CustomTabbedPage.Disappearing -= OnCustomTabbedPageDisappearing;
-
         FragmentManager.FragmentOnAttach -= OnAttached;
+
+        EventAggregator.GetEvent<HideTabsTabbedViewEvent>().Unsubscribe(OnHideTabsEvent);
     }
 
     public override void SetVirtualView(IView view)
     {
         base.SetVirtualView(view);
 
-        CustomTabbedPage.Disappearing += OnCustomTabbedPageDisappearing;
-
         FragmentManager.FragmentOnAttach += OnAttached;
+
+        EventAggregator.GetEvent<HideTabsTabbedViewEvent>().Subscribe(OnHideTabsEvent);
     }
 
     #endregion
@@ -94,7 +99,7 @@ public class CustomTabbedViewHandler : TabbedViewHandler
         }
     }
 
-    private void OnCustomTabbedPageDisappearing(object sender, EventArgs e)
+    private void OnHideTabsEvent(bool state)
     {
         //Hack: If modal navigation - we don't need to remove tab bar
         if (!CustomTabbedPage.Navigation.ModalStack.Any() && TabBar.Parent is not null)

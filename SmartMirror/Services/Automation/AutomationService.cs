@@ -119,8 +119,6 @@ public class AutomationService : BaseAqaraService, IAutomationService
             return result;
         }
 
-        _automationsTaskCompletionSource = new();
-
         result = await AOResult.ExecuteTaskAsync(async onFailure =>
         {
             var resultOfGettingAutomations = await GetLinkagesAsync();

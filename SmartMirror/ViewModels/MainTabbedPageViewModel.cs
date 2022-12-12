@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Alerts;
 using SmartMirror.Helpers;
 using SmartMirror.Helpers.Events;
 using SmartMirror.Models.BindableModels;
@@ -12,6 +12,7 @@ using SmartMirror.Services.Notifications;
 using SmartMirror.Views;
 using System.Windows.Input;
 using SmartMirror.Views.Dialogs;
+using System.ComponentModel;
 
 namespace SmartMirror.ViewModels;
 
@@ -27,6 +28,7 @@ public class MainTabbedPageViewModel : BaseViewModel
     private readonly IAqaraMessanger _aqaraMessanger;
 
     private OpenFullScreenCameraEvent _openFullScreenVideoEvent;    
+
     private int _buttonCount;
     private bool _isFirstTime = true;
 
@@ -83,7 +85,10 @@ public class MainTabbedPageViewModel : BaseViewModel
         if (_isFirstTime)
         {
             _isFirstTime = false;
+
             await UpdateAllAqaraDataAsync();
+
+            await DisplayDoorbellDialogAsync();
         }
     }
 
@@ -143,6 +148,19 @@ public class MainTabbedPageViewModel : BaseViewModel
 
             _notificationsService.AllNotificationsChanged += OnShowEmergencyNotificationDialogAsync;
         }
+    }
+
+    private async Task DisplayDoorbellDialogAsync()
+    {
+        var allDevices = await _devicesService.GetAllSupportedDevicesAsync();
+
+        var mockDoorbell = allDevices.FirstOrDefault(row => row.DeviceId == "5000");
+
+        //TODO Delete when doorbell is implemented
+        await MainThread.InvokeOnMainThreadAsync(async ()=> await _dialogService.ShowDialogAsync(nameof(DoorBellDialog), new DialogParameters()
+        {
+            { Constants.DialogsParameterKeys.ACCESSORY, mockDoorbell },
+        }));
     }
 
     private bool GetCountBackButtonPresses()

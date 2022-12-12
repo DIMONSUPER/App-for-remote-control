@@ -58,8 +58,6 @@ namespace SmartMirror.Services.Scenarios
                 return result;
             }
 
-            _scenariosTaskCompletionSource = new();
-
             System.Diagnostics.Debug.WriteLine($"{nameof(DownloadAllScenariosAsync)} STARTED");
 
             result = await AOResult.ExecuteTaskAsync(async onFailure =>
