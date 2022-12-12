@@ -13,7 +13,6 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
-    xmlns:bindablemodels="clr-namespace:SmartMirror.Models.BindableModels"
     x:Class="SmartMirror.Views.Tabs.Views.NotificationsPageView"
     x:DataType="vm:NotificationsPageViewModel"
     x:Name="notificationsPageView">
@@ -119,7 +118,7 @@
                                 ItemsSource="{Binding Notifications}"
                                 ItemTemplate="{StaticResource notificationTemplate}"
                                 GroupHeaderTemplate="{StaticResource notificationHeaderTemplate}">
-
+                               
                                 <controls:StickyHeaderCollectionView.ItemsLayout>
                                     <LinearItemsLayout 
                                         Orientation="Vertical"
