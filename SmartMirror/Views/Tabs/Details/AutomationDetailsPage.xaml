@@ -51,7 +51,7 @@
                     Style="{DynamicResource tstyle_i11}"
                     VerticalOptions="Center"
                     HorizontalOptions="Center"
-                    Text="{Binding AutomationName}"/>
+                    Text="{Binding AutomationBindableModel.Name}"/>
 
                 <!-- SCENARIO ACTIONS COLLECTION -->
                 <controls:CustomStateView
