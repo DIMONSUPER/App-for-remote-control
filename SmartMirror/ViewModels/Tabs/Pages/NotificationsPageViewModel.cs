@@ -398,14 +398,11 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
         if (IsInternetConnected)
         {
-            if (_notificationsService.IsAllowNotifications)
-            {
-                var notifications = await _notificationsService.GetAllNotificationsAsync();
+            var notifications = await _notificationsService.GetAllNotificationsAsync();
 
-                _allNotifications = new(notifications);
+            _allNotifications = new(notifications);
 
-                isLoaded = notifications.Any();
-            }
+            isLoaded = notifications.Any();
         }
 
         return isLoaded;
