@@ -53,38 +53,6 @@ public class AqaraService : BaseAqaraService, IAqaraService
         });
     }
 
-    public Task<AOResult<DataAqaraResponse<LinkageAqaraModel>>> GetLinkagesAsync(string positionId = null, int pageNum = 1, int pageSize = 100)
-    {
-        return AOResult.ExecuteTaskAsync(async onFailure =>
-        {
-            var requestData = new
-            {
-                PositionId = positionId,
-                pageNum = pageNum,
-                pageSize = pageSize,
-            };
-
-            var response = await MakeRequestAsync<DataAqaraResponse<LinkageAqaraModel>>("query.linkage.listByPositionId", requestData, onFailure);
-
-            return response.Result;
-        });
-    }
-
-    public Task<AOResult<LinkageDetailAqaraModel>> GetLinkageDetailAsync(string linkageId)
-    {
-        return AOResult.ExecuteTaskAsync(async onFailure =>
-        {
-            var requestData = new
-            {
-                linkageId = linkageId,
-            };
-
-            var response = await MakeRequestAsync<LinkageDetailAqaraModel>("query.linkage.detail", requestData, onFailure);
-
-            return response.Result;
-        });
-    }
-
     public Task<AOResult<BaseAqaraResponse>> LoginWithCodeAsync(string email, string code)
     {
         return AOResult.ExecuteTaskAsync(async onFailure =>

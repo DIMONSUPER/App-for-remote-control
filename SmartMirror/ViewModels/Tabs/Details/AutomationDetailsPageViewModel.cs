@@ -6,21 +6,23 @@ using SmartMirror.Helpers;
 using SmartMirror.Enums;
 using SmartMirror.Models.Aqara;
 using SmartMirror.Services.Mapper;
+using SmartMirror.Services.Devices;
 
 namespace SmartMirror.ViewModels.Tabs.Details;
 
 public class AutomationDetailsPageViewModel : BaseViewModel
 {
     private readonly IMapperService _mapperService;
-
-    private AutomationBindableModel _automationBindableModel;
+    private readonly IDevicesService _devicesService;
 
     public AutomationDetailsPageViewModel(
         IMapperService mapperService,
-        INavigationService navigationService)
+        INavigationService navigationService,
+        IDevicesService devicesService)
         : base(navigationService)
     {
         _mapperService = mapperService;
+        _devicesService = devicesService;
     }
 
     #region -- Public properties --
@@ -37,6 +39,13 @@ public class AutomationDetailsPageViewModel : BaseViewModel
     {
         get => _automationActions;
         set => SetProperty(ref _automationActions, value);
+    }
+
+    private AutomationBindableModel _automationBindableModel;
+    public AutomationBindableModel AutomationBindableModel
+    {
+        get => _automationBindableModel;
+        set => SetProperty(ref _automationBindableModel, value);
     }
 
     private ICommand _goBackCommand;
@@ -57,7 +66,7 @@ public class AutomationDetailsPageViewModel : BaseViewModel
         {
             DataState = EPageState.LoadingSkeleton;
 
-            _automationBindableModel = automation;
+            AutomationBindableModel = automation;
 
             LoadAutomationInformationAsync();
         }
@@ -83,8 +92,12 @@ public class AutomationDetailsPageViewModel : BaseViewModel
 
     private Task LoadAutomationInformationAsync()
     {
-        var automationActions = _mapperService.MapRange<AutomationDetailCardBindableModel>(_automationBindableModel.Actions.Action);
-        var automationConditions = _mapperService.MapRange<AutomationDetailCardBindableModel>(_automationBindableModel.Conditions.Condition);
+        var automationActions = _mapperService.MapRange<ActionBindableModel, AutomationDetailCardBindableModel>(_automationBindableModel.Actions, (m, vm) =>
+        {
+            vm.TriggerName = m.ActionName;
+        });
+
+        var automationConditions = _mapperService.MapRange<AutomationDetailCardBindableModel>(_automationBindableModel.Conditions);
 
         AutomationActions = new(automationConditions.Concat(automationActions));
 

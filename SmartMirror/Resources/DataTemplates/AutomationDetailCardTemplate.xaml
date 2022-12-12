@@ -29,7 +29,7 @@
                         Margin="12"
                         WidthRequest="42"
                         HeightRequest="42"
-                        Source="{Binding IconSource}"/>
+                        Source="{Binding Device.IconSource}"/>
 
                 </Border>
 
@@ -41,7 +41,7 @@
                         MaximumWidthRequest="200"
                         MaxLines="2"
                         LineBreakMode="TailTruncation"
-                        Text="{Binding Name}"/>
+                        Text="{Binding Device.Name}"/>
 
                     <controls:CustomLabel
                         Style="{DynamicResource tstyle_i3}"
@@ -49,15 +49,15 @@
                         MaximumWidthRequest="200"
                         MaxLines="2"
                         LineBreakMode="TailTruncation"
-                        Text="{Binding RoomName}"/>
+                        Text="{Binding Device.RoomName}"/>
 
-                    <controls:CustomLabel
+                    <!--<controls:CustomLabel
                         Style="{DynamicResource tstyle_i3}"
                         VerticalOptions="Center"
                         MaximumWidthRequest="200"
                         MaxLines="2"
                         LineBreakMode="TailTruncation"
-                        Text="{Binding Description}"/>
+                        Text="{Binding TriggerName}"/>-->
                     
                 </StackLayout>
 
@@ -69,7 +69,7 @@
                     MaxLines="2"
                     LineBreakMode="TailTruncation"
                     HorizontalTextAlignment="End"
-                    Text="{Binding Status}"/>
+                    Text="{Binding TriggerName}"/>
 
             </StackLayout>
 

@@ -91,6 +91,11 @@ namespace SmartMirror.Services.Mapper
                 cfg.CreateMap<LinkageAqaraModel, AutomationBindableModel>().ReverseMap();
                 cfg.CreateMap<AutomationBindableModel, AutomationDTO>().ReverseMap();
                 cfg.CreateMap<AutomationBindableModel, ImageAndTitleBindableModel>().ReverseMap();
+                cfg.CreateMap<ConditionAqaraModel, ConditionBindableModel>().ReverseMap();
+                cfg.CreateMap<ActionAqaraModel, ActionBindableModel>().ReverseMap();
+                cfg.CreateMap<LinkageActionAqaraModel, ActionBindableModel>().ReverseMap();
+                cfg.CreateMap<ActionBindableModel, AutomationDetailCardBindableModel>().ReverseMap();
+                cfg.CreateMap<ConditionBindableModel, AutomationDetailCardBindableModel>().ReverseMap();
             });
 
             return mapperConfiguration.CreateMapper();
@@ -121,18 +126,6 @@ namespace SmartMirror.Services.Mapper
 
             cfg.CreateMap<DeviceBindableModel, NotificationSourceBindableModel>()
                 .ForMember(nameof(NotificationSourceBindableModel.Id), opt => opt.MapFrom(src => src.FullDeviceId))
-                .ReverseMap();
-
-            // TODO temporally
-            cfg.CreateMap<LinkageActionAqaraModel, AutomationDetailCardBindableModel>()
-                .ForMember(nameof(AutomationDetailCardBindableModel.Name), opt => opt.MapFrom(src => "Action"))
-                .ForMember(nameof(AutomationDetailCardBindableModel.Description), opt => opt.MapFrom(src => src.ActionName))
-                .ReverseMap();
-
-            // TODO temporally
-            cfg.CreateMap<ConditionAqaraModel, AutomationDetailCardBindableModel>()
-                .ForMember(nameof(AutomationDetailCardBindableModel.Name), opt => opt.MapFrom(src => "Trigger"))
-                .ForMember(nameof(AutomationDetailCardBindableModel.Description), opt => opt.MapFrom(src => src.TriggerName))
                 .ReverseMap();
         }
 

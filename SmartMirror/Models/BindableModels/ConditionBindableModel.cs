@@ -1,0 +1,64 @@
+﻿using System.Collections.ObjectModel;
+using SmartMirror.Models.Aqara;
+
+namespace SmartMirror.Models.BindableModels;
+
+public class ConditionBindableModel : BindableBase
+{
+    private string _triggerDefinitionId;
+    public string TriggerDefinitionId
+    {
+        get => _triggerDefinitionId;
+        set => SetProperty(ref _triggerDefinitionId, value);
+    }
+
+    private string _triggerName;
+    public string TriggerName
+    {
+        get => _triggerName;
+        set => SetProperty(ref _triggerName, value);
+    }
+
+    private string _subjectId;
+    public string SubjectId
+    {
+        get => _subjectId;
+        set => SetProperty(ref _subjectId, value);
+    }
+
+    private string _model;
+    public string Model
+    {
+        get => _model;
+        set => SetProperty(ref _model, value);
+    }
+
+    private string _beginTime;
+    public string BeginTime
+    {
+        get => _beginTime;
+        set => SetProperty(ref _beginTime, value);
+    }
+
+    private string _endTime;
+    public string EndTime
+    {
+        get => _endTime;
+        set => SetProperty(ref _endTime, value);
+    }
+
+    private ObservableCollection<ParamAqaraModel> _params;
+    public ObservableCollection<ParamAqaraModel> Params
+    {
+        get => _params;
+        set => SetProperty(ref _params, value);
+    }
+
+    private DeviceBindableModel _device;
+    public DeviceBindableModel Device
+    {
+        get => _device;
+        set => SetProperty(ref _device, value);
+    }
+}
+

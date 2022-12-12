@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 
 namespace SmartMirror.Models.BindableModels;
 
@@ -11,21 +12,6 @@ public class AutomationDetailCardBindableModel : BindableBase
         set => SetProperty(ref _name, value);
     }
 
-    private string _iconSource = "pic_gears";
-    public string IconSource
-    {
-        get => _iconSource;
-        set => SetProperty(ref _iconSource, value);
-    }
-
-    // TODO temporally
-    private string _roomName = "Main room";
-    public string RoomName
-    {
-        get => _roomName;
-        set => SetProperty(ref _roomName, value);
-    }
-
     private string _description;
     public string Description
     {
@@ -33,11 +19,24 @@ public class AutomationDetailCardBindableModel : BindableBase
         set => SetProperty(ref _description, value);
     }
 
-    // TODO temporally
-    private string _status = "Turn Off";
-    public string Status
+    private string _triggerName;
+    public string TriggerName
     {
-        get => _status;
-        set => SetProperty(ref _status, value);
+        get => _triggerName;
+        set => SetProperty(ref _triggerName, value);
+    }
+
+    private ObservableCollection<ConditionBindableModel> _conditions;
+    public ObservableCollection<ConditionBindableModel> Conditions
+    {
+        get => _conditions;
+        set => SetProperty(ref _conditions, value);
+    }
+
+    private DeviceBindableModel _device;
+    public DeviceBindableModel Device
+    {
+        get => _device;
+        set => SetProperty(ref _device, value);
     }
 }
