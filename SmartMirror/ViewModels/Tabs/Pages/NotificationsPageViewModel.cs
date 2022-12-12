@@ -85,8 +85,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
         set => SetProperty(ref _selectedNotificationSource, value);
     }
 
-    private ObservableCollection<INotificationGroupItemModel> _notifications;
-    public ObservableCollection<INotificationGroupItemModel> Notifications
+    private ObservableCollection<NotificationGroupBindableModel> _notifications;
+    public ObservableCollection<NotificationGroupBindableModel> Notifications
     {
         get => _notifications;
         set => SetProperty(ref _notifications, value);
@@ -411,30 +411,13 @@ public class NotificationsPageViewModel : BaseTabViewModel
         return isLoaded;
     }
 
-    private ObservableCollection<INotificationGroupItemModel> GetNotificationGroups(IEnumerable<NotificationGroupItemBindableModel> notifications)
+    private ObservableCollection<NotificationGroupBindableModel> GetNotificationGroups(IEnumerable<NotificationGroupItemBindableModel> notifications)
     {
-        var lastTitleGroup = string.Empty;
+        var notificationGroups = notifications
+            .GroupBy(x => x.LastActivityTime.ToString(Constants.Formats.DATE_FORMAT))
+            .Select(x => new NotificationGroupBindableModel(x.Key, x.ToList()));
 
-        var notificationGrouped = new ObservableCollection<INotificationGroupItemModel>();
-
-        foreach (var notificafication in notifications)
-        {
-            var titleGroup = notificafication.LastActivityTime.ToString(Constants.Formats.DATE_FORMAT);
-
-            if (lastTitleGroup != titleGroup)
-            {
-                notificationGrouped.Add(new NotificationGroupTitleBindableModel()
-                {
-                    Title = titleGroup,
-                });
-
-                lastTitleGroup = titleGroup;
-            }
-
-            notificationGrouped.Add(notificafication);
-        }
-
-        return notificationGrouped;
+        return new ObservableCollection<NotificationGroupBindableModel>(notificationGroups);
     }
 
     #endregion

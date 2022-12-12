@@ -13,6 +13,7 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
+    xmlns:bindablemodels="clr-namespace:SmartMirror.Models.BindableModels"
     x:Class="SmartMirror.Views.Tabs.Views.NotificationsPageView"
     x:DataType="vm:NotificationsPageViewModel"
     x:Name="notificationsPageView">
@@ -59,13 +60,13 @@
 
             <Grid
                 ColumnDefinitions="auto, *"
-                Margin="42, 34, 0, 0">
+                Margin="42, 64, 0, 0">
 
                 <Grid RowDefinitions="auto, *">
 
                     <controls:TabsSelector
                         Grid.Row="0"
-                        Margin="0, 24, 0, 29"
+                        Margin="0, 0, 0, 29"
                         TabWidth="181"
                         TabNames="{Binding NotificationCategories}"
                         SelectedTabName="{Binding SelectedNotificationCategory}"
@@ -110,14 +111,22 @@
                             Command="{Binding RefreshNotificationsCommand}"
                             x:Name="refreshView">
 
-                            <CollectionView
+                            <controls:StickyHeaderCollectionView
                                 HorizontalOptions="EndAndExpand"
-                                ItemsSource="{Binding Notifications}"
-                                ItemTemplate="{StaticResource notificationTemplateSelector}"
                                 WidthRequest="571"
-                                VerticalScrollBarVisibility="Always"
-                                HorizontalScrollBarVisibility="Always"
-                                x:Name="scrollViewNotifications"/>
+                                SelectionMode="Single"
+                                IsGrouped="True"
+                                ItemsSource="{Binding Notifications}"
+                                ItemTemplate="{StaticResource notificationTemplate}"
+                                GroupHeaderTemplate="{StaticResource notificationHeaderTemplate}">
+
+                                <controls:StickyHeaderCollectionView.ItemsLayout>
+                                    <LinearItemsLayout 
+                                        Orientation="Vertical"
+                                        ItemSpacing="18"/>
+                                </controls:StickyHeaderCollectionView.ItemsLayout>
+                                
+                            </controls:StickyHeaderCollectionView>
 
                         </RefreshView>
 

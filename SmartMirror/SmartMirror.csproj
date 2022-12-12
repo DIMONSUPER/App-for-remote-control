@@ -252,6 +252,9 @@
 		<MauiXaml Update="Views\Dialogs\ScenarioSettingsDialog.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\ItemsPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
