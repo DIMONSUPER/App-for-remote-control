@@ -115,9 +115,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
     private ICommand _refreshNotificationsCommand;
     public ICommand RefreshNotificationsCommand => _refreshNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnRefreshNotificationsCommandAsync, delayMillisec: 0);
 
-    private ICommand _tryAgainCommand;
-    public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
-
     #endregion
 
     #region -- Overrides --
@@ -354,27 +351,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
             : NotificationsSources.FirstOrDefault(x => x.Id == SelectedNotificationSource.Id) ?? NotificationsSources.FirstOrDefault();
 
         SelectNotificationSource(notificationSource);
-    }
-
-    private async Task OnTryAgainCommandAsync()
-    {
-        if (!IsDataLoading)
-        {
-            DataState = EPageState.NoInternetLoader;
-
-            var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
-
-            await TaskRepeater.RepeatAsync(LoadAllNotificationsAsync, executionTime);
-
-            if (IsInternetConnected)
-            {
-                await LoadNotificationSourcesAndApplyFilterAsync();
-            }
-            else
-            {
-                DataState = EPageState.NoInternet;
-            }
-        }
     }
 
     private async Task OnRefreshNotificationsCommandAsync()

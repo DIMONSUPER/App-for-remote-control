@@ -70,7 +70,6 @@
 
     <controls:CustomStateView
         State="{Binding DataState}"
-        TryAgainCommand="{Binding TryAgainCommand}"
         LoadingTitle="{extensions:Translate Rooms}"
         EmptyTitle="{extensions:Translate NoAccessoriesYet}"
         DescriptionEmptyState="{extensions:Translate PleaseCheckTheAccessoriesSettings}"

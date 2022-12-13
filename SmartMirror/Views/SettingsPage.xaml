@@ -109,8 +109,7 @@
 
         <controls:CustomStateView
             Grid.Row="2"
-            State="{Binding PageState}"
-            TryAgainCommand="{Binding TryAgainCommand}">
+            State="{Binding PageState}">
 
             <controls:CustomStateView.LoadingSkeletonContent>
                 <skeletons:SettingsPageSkeleton/>

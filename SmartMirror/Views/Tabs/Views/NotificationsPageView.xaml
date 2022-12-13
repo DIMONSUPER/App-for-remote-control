@@ -49,7 +49,6 @@
 
     <controls:CustomStateView
         State="{Binding DataState}"
-        TryAgainCommand="{Binding TryAgainCommand}"
         LoadingTitle="{extensions:Translate Notifications}"
         EmptyTitle="{extensions:Translate NoNotificationsYet}"
         DescriptionEmptyState="{extensions:Translate PleaseCheckTheNotificationsSettings}"

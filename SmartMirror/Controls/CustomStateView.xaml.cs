@@ -80,17 +80,6 @@ public partial class CustomStateView : ContentView
         set => SetValue(EmptyStateImageProperty, value);
     }
 
-    public static readonly BindableProperty TryAgainCommandProperty = BindableProperty.Create(
-        propertyName: nameof(TryAgainCommand),
-        returnType: typeof(ICommand),
-        declaringType: typeof(CustomStateView));
-
-    public ICommand TryAgainCommand
-    {
-        get => (ICommand)GetValue(TryAgainCommandProperty);
-        set => SetValue(TryAgainCommandProperty, value);
-    }
-
     public static readonly BindableProperty DescriptionEmptyStateProperty = BindableProperty.Create(
         propertyName: nameof(DescriptionEmptyState),
         returnType: typeof(string),
