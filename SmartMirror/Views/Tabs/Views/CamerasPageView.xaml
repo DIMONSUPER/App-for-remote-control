@@ -45,7 +45,6 @@
 
     <controls:CustomStateView
         State="{Binding DataState}"
-        TryAgainCommand="{Binding TryAgainCommand}"
         LoadingTitle="{extensions:Translate Cameras}"
         EmptyTitle="{extensions:Translate NoCamerasYet}"
         DescriptionEmptyState="{extensions:Translate PleaseCheckTheCamerasSettings}"

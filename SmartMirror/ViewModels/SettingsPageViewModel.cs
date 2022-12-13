@@ -92,7 +92,6 @@ namespace SmartMirror.ViewModels
 
         public bool IsDataLoading => PageState
             is EPageState.Loading
-            or EPageState.NoInternetLoader
             or EPageState.LoadingSkeleton;
 
         private CategoryBindableModel _selectedCategory;
@@ -149,9 +148,6 @@ namespace SmartMirror.ViewModels
 
         private ICommand _addNewCameraCommand;
         public ICommand AddNewCameraCommand => _addNewCameraCommand ??= SingleExecutionCommand.FromFunc(OnAddNewCameraCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
-
-        private ICommand _tryAgainCommand;
-        public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
 
         private ICommand _closeSettingsCommand;
         public ICommand CloseSettingsCommand => _closeSettingsCommand ??= SingleExecutionCommand.FromFunc(OnCloseSettingsCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
@@ -571,29 +567,6 @@ namespace SmartMirror.ViewModels
                     vm.TapCommand = ChangeStatusReceivingNotificationCommand;
                 }))
             };
-        }
-
-        private async Task OnTryAgainCommandAsync()
-        {
-            if (!IsDataLoading)
-            {
-                PageState = EPageState.NoInternetLoader;
-
-                var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
-
-                var isDataLoaded = await TaskRepeater.RepeatAsync(LoadAllDataAsync, executionTime);
-
-                if (IsInternetConnected)
-                {
-                    PageState = EPageState.Complete;
-
-                    SetElementsSelectedCategory();
-                }
-                else
-                {
-                    PageState = EPageState.NoInternet;
-                }
-            }
         }
 
         private Task OnChangeStatusReceivingNotificationCommandAsync(ImageAndTitleBindableModel notificationSettings)

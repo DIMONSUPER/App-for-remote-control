@@ -53,9 +53,6 @@ public class RoomsPageViewModel : BaseTabViewModel
     private ICommand _accessorieTappedCommand;
     public ICommand AccessorieTappedCommand => _accessorieTappedCommand ??= SingleExecutionCommand.FromFunc<DeviceBindableModel>(OnAccessorieTappedCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
-    private ICommand _tryAgainCommand;
-    public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
-
     private ObservableCollection<DeviceBindableModel> _favoriteAccessories = new();
     public ObservableCollection<DeviceBindableModel> FavoriteAccessories
     {
@@ -89,18 +86,6 @@ public class RoomsPageViewModel : BaseTabViewModel
     private async void OnAllRoomsOrDevicesChanged(object sender, EventArgs e)
     {
         await LoadRoomsAndDevicesAndChangeStateAsync();
-    }
-
-    private async Task OnTryAgainCommandAsync()
-    {
-        if (!IsDataLoading)
-        {
-            DataState = EPageState.NoInternetLoader;
-
-            var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
-
-            var isDataLoaded = await TaskRepeater.RepeatAsync(LoadRoomsAndDevicesAndChangeStateAsync, executionTime);
-        }
     }
 
     private async Task<bool> LoadRoomsAndDevicesAndChangeStateAsync()

@@ -48,9 +48,6 @@ public class RoomDetailsPageViewModel : BaseViewModel
     private ICommand _roomSelectedCommand;
     public ICommand RoomSelectedCommand => _roomSelectedCommand ??= SingleExecutionCommand.FromFunc<RoomBindableModel>(OnRoomSelectedCommandAsync, delayMillisec: 0);
 
-    private ICommand _tryAgainCommand;
-    public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
-
     private ObservableCollection<RoomBindableModel> _rooms;
     public ObservableCollection<RoomBindableModel> Rooms
     {
@@ -198,16 +195,6 @@ public class RoomDetailsPageViewModel : BaseViewModel
     private Task OnRoomSelectedCommandAsync(RoomBindableModel room)
     {
         SelectRoom(room);
-
-        return Task.CompletedTask;
-    }
-
-    private Task OnTryAgainCommandAsync()
-    {
-        DataState = EPageState.Complete;
-        RoomDeviceState = EPageState.NoInternetLoader;
-
-        SelectRoom(_selectedRoom);
 
         return Task.CompletedTask;
     }

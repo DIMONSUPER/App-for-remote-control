@@ -58,7 +58,6 @@
                     Grid.Row="1"
                     WidthRequest="571"
                     State="{Binding DataState}"
-                    TryAgainCommand="{Binding TryAgainCommand}"
                     EmptyTitle="{extensions:Translate NoAutomationActionsYet}"
                     DescriptionEmptyState="{extensions:Translate PleaseCheckTheAutomationSettings}"
                     EmptyStateImage="empty_scenarios">

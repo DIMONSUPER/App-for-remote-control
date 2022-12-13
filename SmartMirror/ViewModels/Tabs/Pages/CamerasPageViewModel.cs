@@ -124,9 +124,6 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private ICommand _refreshCamerasCommand;
     public ICommand RefreshCamerasCommand => _refreshCamerasCommand ??= SingleExecutionCommand.FromFunc(OnRefreshCamerasCommandAsync);
-
-    private ICommand _tryAgainCommand;
-    public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
     
     private ICommand _openVideoInFullScreenCommand;
     public ICommand OpenVideoInFullScreenCommand => _openVideoInFullScreenCommand ??= SingleExecutionCommand.FromFunc(OnOpenVideoInFullScreenCommandAsync);
@@ -214,36 +211,6 @@ public class CamerasPageViewModel : BaseTabViewModel
     private async void OnAllCamerasChanged(object sender, EventArgs e)
     {
         await LoadCamerasAndChangeStateAsync();
-    }
-
-    private async Task OnTryAgainCommandAsync()
-    {
-        if (!IsDataLoading)
-        {
-            DataState = EPageState.NoInternetLoader;
-
-            var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
-
-            var isDataLoaded = await TaskRepeater.RepeatAsync(LoadCamerasAsync, executionTime);
-
-            if (IsInternetConnected)
-            {
-                DataState = isDataLoaded ? EPageState.Complete : EPageState.Empty;
-
-                if (isDataLoaded)
-                {
-                    _ = PlayCurrentVideoAsync().ConfigureAwait(false);
-                }
-                else
-                {
-                    StopVideo();
-                }
-            }
-            else
-            {
-                DataState = EPageState.NoInternet;
-            }
-        }
     }
 
     private Task OnSelectCameraCommandAsync(CameraBindableModel selectedCamera)
