@@ -208,7 +208,7 @@ public class CustomTabbedPage : TabbedPage
             StrokeShape = new RoundRectangle() { CornerRadius = BorderRadius },
             Stroke = BorderColor,
             BackgroundColor = Color.FromArgb("#801F1F1F"),
-            Margin = new Thickness(132, 0),
+            Margin = new Thickness(135, 0),
             Content = CreateTabsStackLayout(),
         };
     }

@@ -46,7 +46,7 @@
                          CornerRadius="35"/>
 
                 <Label Text="{Binding Title}"
-                       Padding="42,12"
+                       Padding="35, 12"
                        VerticalOptions="Center"
                        Style="{x:DynamicResource tstyle_i9}"/>
 
