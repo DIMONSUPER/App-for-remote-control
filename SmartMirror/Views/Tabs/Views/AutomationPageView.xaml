@@ -56,7 +56,8 @@
         
         <controls:CustomStateView.CompleteContent>
 
-            <ScrollView
+            <controls:CustomScrollView
+                BindingForInvalidateMeasure="{Binding Automations}"
                 VerticalScrollBarVisibility="Never"
                 HorizontalScrollBarVisibility="Never"
                 Padding="0, 0, 0, 30"
@@ -76,7 +77,7 @@
                         Number="{Binding FavoriteAutomations.Count}"/>
 
                     <!-- FAVORITE AUTOMATIONS COLLECTION -->
-                    <ScrollView
+                    <controls:CustomScrollView
                         Margin="0, 16, 0, 0"
                         Orientation="Horizontal"
                         HorizontalScrollBarVisibility="Never"
@@ -89,7 +90,7 @@
                             BindableLayout.ItemTemplate="{StaticResource favoriteAutomationsTemplate}"
                             BindableLayout.ItemsSource="{Binding FavoriteAutomations}"/>
 
-                    </ScrollView>
+                    </controls:CustomScrollView>
 
                     <!-- AUTOMATIONS -->
                     <controls:BadgeTitleView
@@ -134,7 +135,7 @@
 
                 </VerticalStackLayout>
 
-            </ScrollView>
+            </controls:CustomScrollView>
 
         </controls:CustomStateView.CompleteContent>
 
