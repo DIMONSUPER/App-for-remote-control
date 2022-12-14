@@ -289,7 +289,6 @@ namespace SmartMirror.ViewModels
             _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
             {
                 SetElementsSelectedCategory();
-                DataState = EPageState.Complete;
             }));
 
             return Task.CompletedTask;
