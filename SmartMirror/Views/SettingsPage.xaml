@@ -183,6 +183,10 @@
 
                                 <StackLayout>
 
+                                    <controls:Chip
+                                        Style="{DynamicResource ChipStyle_i1}"
+                                        Text="Living Room"/>
+
                                     <templates:SimpleNotificationsHeaderTemplate
                                         Margin="0, 0, 0, 25"
                                         IsVisible="{Binding SelectedCategory.Type, Converter={xct:IsEqualConverter}, ConverterParameter={x:Static enums:ECategoryType.Notifications}}"

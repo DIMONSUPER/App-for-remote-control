@@ -238,6 +238,18 @@
         <Setter Property="TextStyle" Value="{DynamicResource tstyle_i9}"/>
     </Style>
 
+    <Style x:Key="ChipStyle_i1" TargetType="controls:Chip">
+        <Setter Property="HorizontalOptions" Value="Start"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 35"/>
+        <Setter Property="Stroke" Value="{DynamicResource cbg_i3}"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="CheckedBackgroundColor" Value="{DynamicResource cbg_i3}"/>
+        <Setter Property="IconColor" Value="{DynamicResource cbg_i12}"/>
+        <Setter Property="TextStyle" Value="{DynamicResource tstyle_i11}"/>
+        <Setter Property="CheckedTextStyle" Value="{DynamicResource tstyle_i13}"/>
+    </Style>
+
     <Style TargetType="controls:ExpandedSlider">
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="VerticalOptions" Value="Center"/>
