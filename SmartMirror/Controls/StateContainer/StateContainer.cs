@@ -32,11 +32,14 @@ namespace SmartMirror.Controls.StateContainer
         {
             if (bindable is StateContainer view)
             {
-                view.ChooseStateAsync(oldValue, newValue);
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    view?.ChooseState(oldValue, newValue);
+                });
             }
         }
 
-        private Task ChooseStateAsync(object oldValue, object newValue)
+        private void ChooseState(object oldValue, object newValue)
         {
             if (Content is null)
             {
@@ -55,8 +58,6 @@ namespace SmartMirror.Controls.StateContainer
                     _currentContentGrid.Add(newView);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
         #endregion

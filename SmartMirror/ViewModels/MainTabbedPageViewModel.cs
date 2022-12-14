@@ -152,15 +152,21 @@ public class MainTabbedPageViewModel : BaseViewModel
 
     private async Task DisplayDoorbellDialogAsync()
     {
+        //TODO Delete when doorbell is implemented
+
         var allDevices = await _devicesService.GetAllSupportedDevicesAsync();
 
         var mockDoorbell = allDevices.FirstOrDefault(row => row.DeviceId == "5000");
 
-        //TODO Delete when doorbell is implemented
-        await MainThread.InvokeOnMainThreadAsync(async ()=> await _dialogService.ShowDialogAsync(nameof(DoorBellDialog), new DialogParameters()
+        // mockDoorbell is null if the token has expired or allDevices.Count == 0
+
+        if (mockDoorbell is not null)
         {
-            { Constants.DialogsParameterKeys.ACCESSORY, mockDoorbell },
-        }));
+            await MainThread.InvokeOnMainThreadAsync(async () => await _dialogService.ShowDialogAsync(nameof(DoorBellDialog), new DialogParameters()
+            {
+                { Constants.DialogsParameterKeys.ACCESSORY, mockDoorbell },
+            }));
+        }
     }
 
     private bool GetCountBackButtonPresses()
