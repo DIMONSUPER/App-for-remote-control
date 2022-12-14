@@ -37,16 +37,10 @@
                     BackgroundColor="{StaticResource cbg_i15}">
 
                     <controls:CustomNoBorderEntry
-                        Margin="24, 18"
-                        VerticalOptions="Center"
+                        Style="{StaticResource CustomNoBorderEntryStyle_i1}"
                         WidthRequest="375"
-                        BackgroundColor="{DynamicResource cbg_i15}"
-                        FontSize="{DynamicResource tsize_i2}"
-                        FontFamily="InterBold"
-                        Text="{Binding IPAddress}"
-                        TextColor="{DynamicResource tcolor_i1}"
                         Placeholder="{extensions:Translate EnterIPAddress}"
-                        PlaceholderColor="{DynamicResource tcolor_i9}">
+                        Text="{Binding IPAddress}">
 
                         <controls:CustomNoBorderEntry.Behaviors>
                             <behaviors:FocusEntryBehavior/>
@@ -76,17 +70,11 @@
                     IsVisible="{Binding IsIpAddressCorrect, Converter={xct:InvertedBoolConverter}}">
 
                     <controls:CustomNoBorderEntry
-                        Margin="24, 18"
-                        VerticalOptions="Center"
+                        Style="{StaticResource CustomNoBorderEntryStyle_i1}"
                         WidthRequest="375"
-                        BackgroundColor="{DynamicResource cbg_i15}"
-                        FontSize="{DynamicResource tsize_i2}"
-                        FontFamily="InterBold"
                         MaxLength="{x:Static app:Constants+Limits.CAMERA_NAME_MAX_LENGTH}"
-                        Text="{Binding CameraName}"
-                        TextColor="{DynamicResource tcolor_i1}"
                         Placeholder="{extensions:Translate EnterNameOptional}"
-                        PlaceholderColor="{DynamicResource tcolor_i9}"/>
+                        Text="{Binding CameraName}"/>
 
                 </Border>
 
@@ -101,15 +89,9 @@
                     BackgroundColor="{StaticResource cbg_i15}">
 
                     <controls:CustomNoBorderEntry
-                        Margin="24, 18"
-                        VerticalOptions="Center"
-                        BackgroundColor="{DynamicResource cbg_i15}"
-                        FontSize="{DynamicResource tsize_i2}"
-                        FontFamily="InterBold"
+                        Style="{StaticResource CustomNoBorderEntryStyle_i1}"
                         Text="{Binding Password}"
-                        TextColor="{DynamicResource tcolor_i1}"
-                        Placeholder="{extensions:Translate EnterPassword}"
-                        PlaceholderColor="{DynamicResource tcolor_i9}"/>
+                        Placeholder="{extensions:Translate EnterPassword}"/>
 
                 </Border>
 

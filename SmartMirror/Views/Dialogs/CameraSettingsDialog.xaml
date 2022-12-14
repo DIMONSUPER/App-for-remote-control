@@ -62,17 +62,11 @@
                     BackgroundColor="{StaticResource cbg_i15}">
 
                     <controls:CustomNoBorderEntry
-                        Margin="24, 18"
-                        VerticalOptions="Center"
+                        Style="{StaticResource CustomNoBorderEntryStyle_i1}"
                         WidthRequest="375"
-                        BackgroundColor="{DynamicResource cbg_i15}"
-                        FontSize="{DynamicResource tsize_i2}"
-                        FontFamily="InterBold"
                         MaxLength="{x:Static app:Constants+Limits.CAMERA_NAME_MAX_LENGTH}"
-                        Text="{Binding CameraModel.Name}"
-                        TextColor="{DynamicResource tcolor_i1}"
                         Placeholder="{extensions:Translate EnterNewName}"
-                        PlaceholderColor="{DynamicResource tcolor_i9}"
+                        Text="{Binding CameraModel.Name}"
                         x:Name="cameraNameCustomNoBorderEntry">
 
                         <controls:CustomNoBorderEntry.Triggers>
