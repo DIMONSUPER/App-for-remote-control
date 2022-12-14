@@ -124,7 +124,7 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             base.OnDialogOpened(parameters);
 
-            if (parameters.TryGetValue(Constants.DialogsParameterKeys.ACCESSORY, out DeviceBindableModel device))
+            if (parameters.TryGetValue(Constants.DialogsParameterKeys.ACCESSORY, out DeviceBindableModel device) && device is not null)
             {
                 Device = device;
 
