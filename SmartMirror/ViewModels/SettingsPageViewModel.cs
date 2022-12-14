@@ -75,6 +75,7 @@ namespace SmartMirror.ViewModels
             _devicesService.AllDevicesChanged += OnAllDevicesChanged;
             _scenariosService.AllScenariosChanged += OnAllScenariosChanged;
             _automationService.AllAutomationsChanged += OnAllAutomationsChanged;
+            _camerasService.AllCamerasChanged += OnAllCamerasChanged;
 
             LoadCategories();
 
@@ -184,6 +185,7 @@ namespace SmartMirror.ViewModels
             _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
             _scenariosService.AllScenariosChanged -= OnAllScenariosChanged;
             _automationService.AllAutomationsChanged -= OnAllAutomationsChanged;
+            _camerasService.AllCamerasChanged -= OnAllCamerasChanged;
 
             base.Destroy();
         }
@@ -219,6 +221,13 @@ namespace SmartMirror.ViewModels
         private async void OnAllAutomationsChanged(object sender, EventArgs e)
         {
             await LoadAllAutomationsAsync();
+        }
+
+        private async void OnAllCamerasChanged(object sender, EventArgs e)
+        {
+            await LoadAllCamerasAsync();
+
+            SetElementsSelectedCategory();
         }
 
         private void LoadCategories()
@@ -429,10 +438,13 @@ namespace SmartMirror.ViewModels
 
             if (resultOfGettingCameras.IsSuccess)
             {
-                _allCameras = _mapperService.MapRange<ImageAndTitleBindableModel>(resultOfGettingCameras.Result, (m, vm) =>
+                _allCameras = _mapperService.MapRange<CameraBindableModel, ImageAndTitleBindableModel>(resultOfGettingCameras.Result, (m, vm) =>
                 {
                     vm.Model = m;
                     vm.Type = ECategoryType.Cameras;
+                    vm.Name = string.IsNullOrEmpty(m.Name)
+                        ? m.IpAddress
+                        : m.Name;
                     vm.ImageSource = "video_fill_dark";
                     vm.TapCommand = ShowCameraSettingsCommand;
                 });
@@ -612,19 +624,12 @@ namespace SmartMirror.ViewModels
             });
         }
 
-        private async Task OnShowCameraSettingsCommandAsync(ImageAndTitleBindableModel camera)
+        private Task OnShowCameraSettingsCommandAsync(ImageAndTitleBindableModel camera)
         {
-            var dialogResult = await _dialogService.ShowDialogAsync(nameof(CameraSettingsDialog), new DialogParameters
+            return _dialogService.ShowDialogAsync(nameof(CameraSettingsDialog), new DialogParameters
             {
                 { Constants.DialogsParameterKeys.CAMERA, camera },
             });
-
-            if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool wasDeleted) && wasDeleted)
-            {
-                await LoadAllCamerasAsync();
-
-                SetElementsSelectedCategory();
-            }
         }
 
         private Task OnShowAutomationSettingsCommandAsync(ImageAndTitleBindableModel automation)
@@ -643,6 +648,7 @@ namespace SmartMirror.ViewModels
             });
 
             if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.IP_ADDRESS, out string ipAddress)
+                && dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.NAME, out string name)
                 && dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.LOGIN, out string login)
                 && dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.PASSWORD, out string password))
             {
@@ -652,16 +658,12 @@ namespace SmartMirror.ViewModels
                     Login = login,
                     Password = password,
                     CreateTime = DateTime.UtcNow,
-                    Name = ipAddress,
+                    Name = name,
                     IsShown = true,
                     VideoUrl = $"rtsp://{login}:{password}@{ipAddress}/live"
                 };
 
                 await _camerasService.UpdateCameraAsync(camera);
-
-                await LoadAllCamerasAsync();
-
-                SetElementsSelectedCategory();
             }
         }
 

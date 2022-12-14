@@ -3,6 +3,7 @@
                         xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                         xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                        xmlns:app="clr-namespace:SmartMirror"
                         xmlns:controls="clr-namespace:SmartMirror.Controls"
                         xmlns:extensions="clr-namespace:SmartMirror.Extensions"
                         xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
@@ -61,6 +62,31 @@
                         </controls:CustomNoBorderEntry.Triggers>
 
                     </controls:CustomNoBorderEntry>
+
+                </Border>
+                
+                <Border
+                    Padding="1"
+                    Margin="0, 24, 0, 0"
+                    HeightRequest="76"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 9"
+                    Stroke="{DynamicResource tcolor_i1}"
+                    BackgroundColor="{StaticResource cbg_i15}"
+                    IsVisible="{Binding IsIpAddressCorrect, Converter={xct:InvertedBoolConverter}}">
+
+                    <controls:CustomNoBorderEntry
+                        Margin="24, 18"
+                        VerticalOptions="Center"
+                        WidthRequest="375"
+                        BackgroundColor="{DynamicResource cbg_i15}"
+                        FontSize="{DynamicResource tsize_i2}"
+                        FontFamily="InterBold"
+                        MaxLength="{x:Static app:Constants+Limits.CAMERA_NAME_MAX_LENGTH}"
+                        Text="{Binding CameraName}"
+                        TextColor="{DynamicResource tcolor_i1}"
+                        Placeholder="{extensions:Translate EnterNameOptional}"
+                        PlaceholderColor="{DynamicResource tcolor_i9}"/>
 
                 </Border>
 
