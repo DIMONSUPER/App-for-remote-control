@@ -248,6 +248,16 @@
         <Setter Property="TextStyle" Value="{DynamicResource tstyle_i9}"/>
     </Style>    
 
+    <Style x:Key="CustomNoBorderEntryStyle_i1" TargetType="controls:CustomNoBorderEntry">
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="Margin" Value="24, 18"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource cbg_i15}"/>
+        <Setter Property="TextColor" Value="{DynamicResource tcolor_i1}"/>
+        <Setter Property="PlaceholderColor" Value="{DynamicResource tcolor_i9}"/>
+        <Setter Property="FontSize" Value="{DynamicResource tsize_i2}"/>
+        <Setter Property="FontFamily" Value="InterBold"/>
+    </Style>
+
     <!-- CUSTOM SWITCH -->
     <Style TargetType="controls:CustomSwitch">
         <Setter Property="WidthRequest" Value="42"/>

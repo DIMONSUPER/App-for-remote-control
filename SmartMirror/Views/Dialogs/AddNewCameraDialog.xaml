@@ -2,6 +2,8 @@
 <dialogs:BaseDialogView xmlns:dialogs="clr-namespace:SmartMirror.Views.Dialogs"
                         xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                        xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                        xmlns:app="clr-namespace:SmartMirror"
                         xmlns:triggeractions="clr-namespace:SmartMirror.TriggerActions"
                         xmlns:controls="clr-namespace:SmartMirror.Controls"
                         xmlns:extensions="clr-namespace:SmartMirror.Extensions"
@@ -36,15 +38,10 @@
                     BackgroundColor="{StaticResource cbg_i15}">
 
                     <controls:CustomNoBorderEntry
-                        Margin="24, 18"
-                        VerticalOptions="Center"
+                        Style="{StaticResource CustomNoBorderEntryStyle_i1}"
                         WidthRequest="375"
-                        BackgroundColor="{DynamicResource cbg_i15}"
-                        FontSize="{DynamicResource tsize_i2}"
-                        FontFamily="InterBold"
-                        Text="{Binding IPAddress}"
-                        TextColor="{DynamicResource tcolor_i1}"
                         Placeholder="{extensions:Translate EnterIPAddress}"
+                        Text="{Binding IPAddress}">
                         PlaceholderColor="{DynamicResource tcolor_i9}"
                         x:Name="ipAddressCustomNoBorderEntry">
 
@@ -64,6 +61,25 @@
                     </controls:CustomNoBorderEntry>
 
                 </Border>
+                
+                <Border
+                    Padding="1"
+                    Margin="0, 24, 0, 0"
+                    HeightRequest="76"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 9"
+                    Stroke="{DynamicResource tcolor_i1}"
+                    BackgroundColor="{StaticResource cbg_i15}"
+                    IsVisible="{Binding IsIpAddressCorrect, Converter={xct:InvertedBoolConverter}}">
+
+                    <controls:CustomNoBorderEntry
+                        Style="{StaticResource CustomNoBorderEntryStyle_i1}"
+                        WidthRequest="375"
+                        MaxLength="{x:Static app:Constants+Limits.CAMERA_NAME_MAX_LENGTH}"
+                        Placeholder="{extensions:Translate EnterNameOptional}"
+                        Text="{Binding CameraName}"/>
+
+                </Border>
 
                 <Border
                     Margin="0, 24, 0, 0"
@@ -76,11 +92,7 @@
                     BackgroundColor="{StaticResource cbg_i15}">
 
                     <controls:CustomNoBorderEntry
-                        Margin="24, 18"
-                        VerticalOptions="Center"
-                        BackgroundColor="{DynamicResource cbg_i15}"
-                        FontSize="{DynamicResource tsize_i2}"
-                        FontFamily="InterBold"
+                        Style="{StaticResource CustomNoBorderEntryStyle_i1}"
                         Text="{Binding Password}"
                         TextColor="{DynamicResource tcolor_i1}"
                         Placeholder="{extensions:Translate EnterPassword}"

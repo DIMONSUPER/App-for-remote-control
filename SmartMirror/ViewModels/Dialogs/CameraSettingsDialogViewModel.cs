@@ -108,6 +108,13 @@ namespace SmartMirror.ViewModels.Dialogs
             }
         }
 
+        public override async Task OnCloseCommandAsync(object parameter = null)
+        {
+            await _camerasService.UpdateCameraAsync(CameraModel);
+
+            RequestClose.Invoke();
+        }
+
         #endregion
 
         #region -- Private helpers --
@@ -128,10 +135,7 @@ namespace SmartMirror.ViewModels.Dialogs
 
             if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool isConfirmed) && isConfirmed)
             {
-                RequestClose.Invoke(new DialogParameters
-                {
-                    { Constants.DialogsParameterKeys.RESULT, true },
-                });
+                RequestClose.Invoke();
             }
         }
 

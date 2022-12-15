@@ -25,6 +25,7 @@
             public const string IP_ADDRESS = nameof(IP_ADDRESS);
             public const string PASSWORD = nameof(PASSWORD);
             public const string LOGIN = nameof(LOGIN);
+            public const string NAME = nameof(NAME);
             public const string CONFIRM_ACTION = nameof(CONFIRM_ACTION);
             public const string CONFIRM_TEXT = nameof(CONFIRM_TEXT);
             public const string CANCEL_TEXT = nameof(CANCEL_TEXT);
@@ -107,6 +108,7 @@
             public const int TIME_TO_ATTEMPT_UPDATE_IN_SECONDS = 15;
             public const int DELAY_MILLISEC_NAVIGATION_COMMAND = 500;
             public const int CAMERA_TIME_CHECK_SECONDS = 5;
+            public const int CAMERA_NAME_MAX_LENGTH = 32;
         }
 
         public static class Analytics
