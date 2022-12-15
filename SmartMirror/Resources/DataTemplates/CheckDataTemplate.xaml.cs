@@ -1,6 +1,6 @@
 ﻿namespace SmartMirror.Resources.DataTemplates;
 
-public partial class CheckDataTemplate : ContentView
+public partial class CheckDataTemplate : DataTemplate
 {
 	public CheckDataTemplate()
 	{

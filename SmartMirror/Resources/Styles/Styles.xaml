@@ -238,7 +238,7 @@
         <Setter Property="TextStyle" Value="{DynamicResource tstyle_i9}"/>
     </Style>
 
-    <Style x:Key="ChipStyle_i1" TargetType="controls:Chip" BasedOn="{StaticResource PressedBorderStyle_i1}">
+    <Style TargetType="controls:Chip">
         <Setter Property="HorizontalOptions" Value="Start"/>
         <Setter Property="StrokeThickness" Value="1"/>
         <Setter Property="StrokeShape" Value="RoundRectangle 35"/>

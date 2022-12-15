@@ -1,6 +1,6 @@
 ﻿namespace SmartMirror.Resources.DataTemplates;
 
-public partial class RoomSourceDataTemplate : ContentView
+public partial class RoomSourceDataTemplate : DataTemplate
 {
 	public RoomSourceDataTemplate()
 	{

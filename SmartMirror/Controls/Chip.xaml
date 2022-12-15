@@ -16,13 +16,13 @@
 
             <Setter Property="Border.BackgroundColor" Value="{Binding CheckedBackgroundColor, Source={Reference chip}}"/>
             <Setter TargetName="label" Property="Label.Style" Value="{Binding CheckedTextStyle, Source={Reference chip}}"/>
-            <Setter TargetName="stackLayout" Property="StackLayout.Padding" Value="42, 12, 11, 12"/>
+            <Setter TargetName="stackLayout" Property="StackLayout.Padding" Value="42, 10, 11, 10"/>
 
         </DataTrigger>
     </Border.Triggers>
 
     <HorizontalStackLayout
-        Padding="42, 12"
+        Padding="42, 10"
         Spacing="24"
         x:Name="stackLayout"> 
 

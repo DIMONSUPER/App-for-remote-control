@@ -57,6 +57,14 @@
                 NotificationsDataTemplate="{StaticResource notificationSettingsGroupTemplate}"
                 AutomationDataTemplate="{StaticResource simpleAutomationTemplate}"/>
 
+            <templates:RoomSourceDataTemplate x:Key="roomSourceDataTemplate"/>
+            <templates:CheckDataTemplate x:Key="expandAccessoriesSourcesTemplate"/>
+
+            <templateSelectors:ChipDataSelector
+                x:Key="accessoriesSourcesSelector"
+                CheckDataTemplate="{StaticResource expandAccessoriesSourcesTemplate}"
+                RoomSourceDataTemplate="{StaticResource roomSourceDataTemplate}"/>
+
         </ResourceDictionary>
 
     </views:BaseContentPage.Resources>
@@ -183,11 +191,15 @@
 
                                 <StackLayout>
 
-                                    <controls:Chip
-                                        Style="{DynamicResource ChipStyle_i1}"
-                                        Text="Living Room"/>
-
-                                    <controls:IconCheckBox />
+                                    <FlexLayout
+                                        Margin="0, 0, 0, 30"
+                                        JustifyContent="Start"
+                                        AlignItems="Start"
+                                        Direction="Row"
+                                        Wrap="Wrap"
+                                        BindableLayout.ItemsSource="{Binding AccessoriesSources}"
+                                        BindableLayout.ItemTemplateSelector="{StaticResource accessoriesSourcesSelector}"
+                                        IsVisible="{Binding SelectedCategory.Type, Converter={xct:IsEqualConverter}, ConverterParameter={Static enums:ECategoryType.Accessories}}"/>
 
                                     <templates:SimpleNotificationsHeaderTemplate
                                         Margin="0, 0, 0, 25"
