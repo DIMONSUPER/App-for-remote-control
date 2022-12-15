@@ -36,6 +36,7 @@ public class CamerasPageViewModel : BaseTabViewModel
         DataState = EPageState.LoadingSkeleton;
 
         Title = "Cameras";
+
         _camerasService.AllCamerasChanged += OnAllCamerasChanged;
         _openFullScreenCameraEvent = _eventAggregator.GetEvent<OpenFullScreenCameraEvent>();
     }
@@ -319,7 +320,7 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private void OnMediaPlayerStateChanged(object sender, EventArgs e)
     {
-        if (MediaPlayer.State is VLCState.Playing)
+        if (MediaPlayer?.State is VLCState.Playing)
         {
             VideoState = VLCState.Opening;
         }

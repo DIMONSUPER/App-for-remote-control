@@ -1,4 +1,6 @@
-﻿namespace SmartMirror.TriggerActions
+using System;
+
+namespace SmartMirror.TriggerActions
 {
     public class UnfocusTriggerAction : TriggerAction<VisualElement>
     {
