@@ -4,17 +4,17 @@ public static class ModelsNames
 {
     private static Dictionary<string, string> _models { get; set; } = new()
     {
-        { "app.timer.v1", "Timer" },
-        { "app.ifttt.v1", "If" },
-        { "app.ifttt.position_user_alert", "If alert" },
-        { "app.geofence.trigger", "Geofence" },
-        { "app.weather.humidity", "Weather humidity" },
-        { "app.weather.sun", "Weather sun" },
-        { "app.weather.temperature", "Weather temperature" },
-        { "app.weather.phenomenon", "Weather phenomenon" },
-        { "app.geofence.forecast", "Geofence forecast" },
-        { "app.scene.v1", "Scene" },
-        { "app.mobilepush.v1", "Push notification" },
+        { Constants.Aqara.Models.APP_TIMER_V1, "Timer" },
+        { Constants.Aqara.Models.APP_IFTTT_V1, "If" },
+        { Constants.Aqara.Models.APP_IFTTT_POSITION_USER_ALERT, "If alert" },
+        { Constants.Aqara.Models.APP_GEOFENCE_TRIGGER, "Geofence" },
+        { Constants.Aqara.Models.APP_WEATHER_HUMIDITY, "Weather humidity" },
+        { Constants.Aqara.Models.APP_WEATHER_SUN, "Weather sun" },
+        { Constants.Aqara.Models.APP_WEATHER_TEMPERATURE, "Weather temperature" },
+        { Constants.Aqara.Models.APP_WEATHER_PHENOMENON, "Weather phenomenon" },
+        { Constants.Aqara.Models.APP_GEOFENCE_FORECAST, "Geofence forecast" },
+        { Constants.Aqara.Models.APP_SCENE_V1, "Scene" },
+        { Constants.Aqara.Models.APP_MOBILEPUSH_V1, "Push notification" },
     };
 
     public static string GetName(string model)
