@@ -238,7 +238,7 @@
         <Setter Property="TextStyle" Value="{DynamicResource tstyle_i9}"/>
     </Style>
 
-    <Style x:Key="ChipStyle_i1" TargetType="controls:Chip">
+    <Style x:Key="ChipStyle_i1" TargetType="controls:Chip" BasedOn="{StaticResource PressedBorderStyle_i1}">
         <Setter Property="HorizontalOptions" Value="Start"/>
         <Setter Property="StrokeThickness" Value="1"/>
         <Setter Property="StrokeShape" Value="RoundRectangle 35"/>
@@ -280,6 +280,16 @@
         <Setter Property="OffColor" Value="{StaticResource cbg_i7}" />
         <Setter Property="OnThumbColor" Value="{StaticResource cbg_i1}" />                       
         <Setter Property="OffThumbColor" Value="{StaticResource cbg_i1}" />                           
+    </Style>
+
+    <Style TargetType="controls:IconCheckBox">
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="HeightRequest" Value="52"/>
+        <Setter Property="WidthRequest" Value="52"/>
+        <Setter Property="Stroke" Value="{DynamicResource cbg_i6}"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 35"/>
     </Style>
 
     <Style x:Key="DitheredBackgroundStyle" TargetType="VisualElement">
