@@ -82,9 +82,11 @@
                 public const string APP_WEATHER_SUN = "app.weather.sun";
                 public const string APP_WEATHER_TEMPERATURE = "app.weather.temperature";
                 public const string APP_WEATHER_PHENOMENON = "app.weather.phenomenon";
+                public const string APP_WEATHER_FORECAST = "app.weather.forecast";
                 public const string APP_GEOFENCE_FORECAST = "app.geofence.forecast";
                 public const string APP_SCENE_V1 = "app.scene.v1";
                 public const string APP_MOBILEPUSH_V1 = "app.mobilepush.v1";
+                public const string LUMI_WEATHER_V1 = "lumi.weather.v1";
             }
 
             public static class EventTypes

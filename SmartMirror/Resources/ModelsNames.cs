@@ -12,6 +12,7 @@ public static class ModelsNames
         { Constants.Aqara.Models.APP_WEATHER_SUN, "Weather sun" },
         { Constants.Aqara.Models.APP_WEATHER_TEMPERATURE, "Weather temperature" },
         { Constants.Aqara.Models.APP_WEATHER_PHENOMENON, "Weather phenomenon" },
+        { Constants.Aqara.Models.APP_WEATHER_FORECAST, "Weather forecast" },
         { Constants.Aqara.Models.APP_GEOFENCE_FORECAST, "Geofence forecast" },
         { Constants.Aqara.Models.APP_SCENE_V1, "Scene" },
         { Constants.Aqara.Models.APP_MOBILEPUSH_V1, "Push notification" },
