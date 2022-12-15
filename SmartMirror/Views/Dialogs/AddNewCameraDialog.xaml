@@ -41,7 +41,7 @@
                         Style="{StaticResource CustomNoBorderEntryStyle_i1}"
                         WidthRequest="375"
                         Placeholder="{extensions:Translate EnterIPAddress}"
-                        Text="{Binding IPAddress}">
+                        Text="{Binding IPAddress}"
                         PlaceholderColor="{DynamicResource tcolor_i9}"
                         x:Name="ipAddressCustomNoBorderEntry">
 
