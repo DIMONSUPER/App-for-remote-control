@@ -163,7 +163,7 @@ public class RoomsPageViewModel : BaseTabViewModel
             {
                 await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
                 {
-                    { Constants.DialogsParameterKeys.TITLE, updateResponse.Result?.Message },
+                    { Constants.DialogsParameterKeys.TITLE, updateResponse.Message },
                     { Constants.DialogsParameterKeys.DESCRIPTION, updateResponse.Result?.MsgDetails },
                 });
             }
