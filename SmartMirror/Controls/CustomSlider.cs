@@ -81,36 +81,46 @@ namespace SmartMirror.Controls
             {
                 progressBar.Post(() =>
                 {
-                    var density = Platform.AppContext.Resources.DisplayMetrics.Density;
+                    try
+                    {
+                        if (progressBar.Width > 0 && progressBar.Height > 0)
+                        {
+                            var density = Platform.AppContext.Resources.DisplayMetrics.Density;
 
-                    int radiusLine = (int)(slider.RadiusLine * density);
-                    int cornerRadiusLine = (int)(slider.CornerRadiusLine * density);
+                            int radiusLine = (int)(slider.RadiusLine * density);
+                            int cornerRadiusLine = (int)(slider.CornerRadiusLine * density);
 
-                    var widthTrack = progressBar.ProgressDrawable.Bounds.Width();
-                    var padding = (progressBar.Width - widthTrack) / 2;
+                            var widthTrack = progressBar.ProgressDrawable.Bounds.Width();
+                            var padding = (progressBar.Width - widthTrack) / 2;
 
-                    var percentValue = (slider.Value - slider.Minimum) / (slider.Maximum - slider.Minimum);
+                            var percentValue = (slider.Value - slider.Minimum) / (slider.Maximum - slider.Minimum);
 
-                    var centerY = progressBar.Height / 2;
-                    var positionX = widthTrack * percentValue;
+                            var centerY = progressBar.Height / 2;
+                            var positionX = widthTrack * percentValue;
 
-                    var bitmap = Bitmap.CreateBitmap(progressBar.Width, progressBar.Height, Bitmap.Config.Argb8888);
+                            var bitmap = Bitmap.CreateBitmap(progressBar.Width, progressBar.Height, Bitmap.Config.Argb8888);
 
-                    var canvas = new Canvas(bitmap);
+                            var canvas = new Canvas(bitmap);
 
-                    var linePaint = new Paint();
+                            var linePaint = new Paint();
 
-                    linePaint.Color = slider.MaximumTrackColor.ToAndroid();
+                            linePaint.Color = slider.MaximumTrackColor.ToAndroid();
 
-                    canvas.DrawRoundRect(padding, centerY - radiusLine, padding + widthTrack, centerY + radiusLine, cornerRadiusLine, cornerRadiusLine, linePaint);
+                            canvas.DrawRoundRect(padding, centerY - radiusLine, padding + widthTrack, centerY + radiusLine, cornerRadiusLine, cornerRadiusLine, linePaint);
 
-                    linePaint.Color = slider.MinimumTrackColor.ToAndroid();
+                            linePaint.Color = slider.MinimumTrackColor.ToAndroid();
 
-                    canvas.DrawRoundRect(padding, centerY - radiusLine, (int)positionX + padding, centerY + radiusLine, cornerRadiusLine, cornerRadiusLine, linePaint);
+                            canvas.DrawRoundRect(padding, centerY - radiusLine, (int)positionX + padding, centerY + radiusLine, cornerRadiusLine, cornerRadiusLine, linePaint);
 
-                    var drawable = new BitmapDrawable(progressBar.Resources, bitmap);
+                            var drawable = new BitmapDrawable(progressBar.Resources, bitmap);
 
-                    progressBar.Background = drawable;
+                            progressBar.Background = drawable;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"{nameof(CustomSlider)} {nameof(UpdateSlider)} {ex.Message}");
+                    }
                 });
             }
         }
