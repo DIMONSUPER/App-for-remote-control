@@ -135,6 +135,8 @@
 		<None Remove="VideoLAN.LibVLC.Android" />
 		<None Remove="LibVLCSharp" />
 		<None Remove="Helpers\Events\" />
+		<None Remove="Models\Dahua\" />
+		<None Remove="System.Reactive.Linq" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.0-preview.1" />
@@ -152,6 +154,7 @@
 		<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.0" />
 		<PackageReference Include="VideoLAN.LibVLC.Android" Version="3.2.0.1" />
 		<PackageReference Include="LibVLCSharp" Version="3.6.7" />
+		<PackageReference Include="System.Reactive.Linq" Version="5.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Controls\" />
@@ -186,6 +189,7 @@
 		<Folder Include="Services\Keyboard\" />
 		<Folder Include="Services\Automation\" />
 		<Folder Include="Helpers\Events\" />
+		<Folder Include="Models\Dahua\" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Controls\BadgeTitleView.xaml">

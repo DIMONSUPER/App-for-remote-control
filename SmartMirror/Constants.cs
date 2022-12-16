@@ -137,5 +137,26 @@
         {
             public const string DOORBELL = "doorbell.mp3";
         }
+
+        public static class DahuaParametersNames
+        {
+            public const string USERNAME = "userName";
+            public const string PASSWORD = "password";
+            public const string CLIENT_TYPE = "clientType";
+            public const string DAHUA_3_WEB_3 = "Dahua3.0-Web3.0";
+            public const string AUTHORITY_TYPE = "authorityType";
+            public const string PASSWORD_TYPE = "passwordType";
+            public const string DEFAULT = "Default";
+            public const string ID = "id";
+            public const string SESSION = "session";
+            public const string NAME = "name";
+            public const string VIDEO_COLOR = "VideoColor";
+            public const string ONLY_LOCAL = "onlyLocal";
+            public const string CHANNEL = "channel";
+            public const string TABLE = "table";
+            public const string OPTIONS = "options";
+            public const string ENCODE = "Encode";
+            public const string PARAMS = "params";
+        }
     }
 }

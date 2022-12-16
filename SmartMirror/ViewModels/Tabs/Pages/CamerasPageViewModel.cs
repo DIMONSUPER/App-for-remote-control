@@ -1,3 +1,8 @@
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Reactive.Linq;
+using System.Windows.Input;
 using CommunityToolkit.Maui.Alerts;
 using LibVLCSharp.Shared;
 using SmartMirror.Enums;
@@ -7,17 +12,16 @@ using SmartMirror.Models.BindableModels;
 using SmartMirror.Resources.Strings;
 using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Mapper;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Input;
 
 namespace SmartMirror.ViewModels.Tabs.Pages;
 
 public class CamerasPageViewModel : BaseTabViewModel
 {
+    private const int COLOR_PROPERTY_CHANGED_THROTTLE = 400;
+
     private CancellationTokenSource _cameraCancellationTokenSource;
     private readonly LibVLC _libVLC = new(enableDebugLogs: false);
-    private OpenFullScreenCameraEvent _openFullScreenCameraEvent;
+    private event EventHandler<double> _videoColorPropertyChanged;
 
     private readonly IEventAggregator _eventAggregator;
     private readonly IMapperService _mapperService;
@@ -38,7 +42,7 @@ public class CamerasPageViewModel : BaseTabViewModel
         Title = "Cameras";
 
         _camerasService.AllCamerasChanged += OnAllCamerasChanged;
-        _openFullScreenCameraEvent = _eventAggregator.GetEvent<OpenFullScreenCameraEvent>();
+        SubscribeToVideoColorPropertyChanged();
     }
 
     #region -- Public properties --
@@ -98,7 +102,7 @@ public class CamerasPageViewModel : BaseTabViewModel
         get => _brightness;
         set => SetProperty(ref _brightness, value);
     }
-    
+
     private double _contrast = 50;
     public double Contrast
     {
@@ -125,7 +129,7 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private ICommand _refreshCamerasCommand;
     public ICommand RefreshCamerasCommand => _refreshCamerasCommand ??= SingleExecutionCommand.FromFunc(OnRefreshCamerasCommandAsync);
-    
+
     private ICommand _openVideoInFullScreenCommand;
     public ICommand OpenVideoInFullScreenCommand => _openVideoInFullScreenCommand ??= SingleExecutionCommand.FromFunc(OnOpenVideoInFullScreenCommandAsync);
 
@@ -153,13 +157,54 @@ public class CamerasPageViewModel : BaseTabViewModel
         _ = StartConnectionRunnerForEachCameraAsync().ConfigureAwait(false);
     }
 
-    protected override void OnPropertyChanged(PropertyChangedEventArgs args)
+    protected override async void OnPropertyChanged(PropertyChangedEventArgs args)
     {
         base.OnPropertyChanged(args);
 
         if (args.PropertyName is nameof(SelectedCamera))
         {
-            PlayCurrentVideoAsync().ConfigureAwait(false);
+            _ = PlayCurrentVideoAsync().ConfigureAwait(false);
+
+            await SetCameraSettingsAsync();
+        }
+        else if (args.PropertyName is nameof(Brightness))
+        {
+            _videoColorPropertyChanged?.Invoke(this, Brightness);
+        }
+        else if (args.PropertyName is nameof(Contrast))
+        {
+            _videoColorPropertyChanged?.Invoke(this, Contrast);
+        }
+        else if (args.PropertyName is nameof(Hue))
+        {
+            _videoColorPropertyChanged?.Invoke(this, Hue);
+        }
+        else if (args.PropertyName is nameof(Saturation))
+        {
+            _videoColorPropertyChanged?.Invoke(this, Saturation);
+        }
+    }
+
+    private async Task SetCameraSettingsAsync()
+    {
+        if (SelectedCamera is not null && SelectedCamera.IsConnected)
+        {
+            var videoColorResponse = await _camerasService.GetVideoColorConfigsAsync(SelectedCamera);
+
+            if (videoColorResponse.IsSuccess)
+            {
+                Brightness = videoColorResponse.Result.Params.Table[0].Brightness;
+                Contrast = videoColorResponse.Result.Params.Table[0].Contrast;
+                Hue = videoColorResponse.Result.Params.Table[0].Hue;
+                Saturation = videoColorResponse.Result.Params.Table[0].Saturation;
+            }
+
+            var cameraConfigsResponse = await _camerasService.GetCameraConfigsAsync(SelectedCamera);
+
+            if (cameraConfigsResponse.IsSuccess)
+            {
+                SelectedCamera.IsMuted = !cameraConfigsResponse.Result.Params.Table.MainFormat[0].AudioEnable;
+            }
         }
     }
 
@@ -244,6 +289,8 @@ public class CamerasPageViewModel : BaseTabViewModel
                 if (isDataLoaded)
                 {
                     _ = PlayCurrentVideoAsync().ConfigureAwait(false);
+
+                    await SetCameraSettingsAsync();
                 }
                 else
                 {
@@ -269,7 +316,7 @@ public class CamerasPageViewModel : BaseTabViewModel
     {
         foreach (var cam in Cameras)
         {
-            StartRunnerAsync(cam).ConfigureAwait(false);
+            //StartRunnerAsync(cam).ConfigureAwait(false);
         }
 
         return Task.CompletedTask;
@@ -369,6 +416,7 @@ public class CamerasPageViewModel : BaseTabViewModel
                         if (SelectedCamera == camera && !camera.IsConnected)
                         {
                             _ = PlayCurrentVideoAsync().ConfigureAwait(false);
+                            await SetCameraSettingsAsync();
                         }
 
                         camera.IsConnected = true;
@@ -456,25 +504,89 @@ public class CamerasPageViewModel : BaseTabViewModel
 
             SelectedCamera.IsConnected = false;
 
-            _openFullScreenCameraEvent.Publish(SelectedCamera);
+            _eventAggregator.GetEvent<OpenFullScreenCameraEvent>().Publish(SelectedCamera);
         }
 
         return Task.CompletedTask;
     }
 
+    private void SubscribeToVideoColorPropertyChanged()
+    {
+        var _subscription = Observable.FromEventPattern<double>(
+            handler => _videoColorPropertyChanged += handler,
+            handler => _videoColorPropertyChanged -= handler)
+            .Throttle(TimeSpan.FromMilliseconds(COLOR_PROPERTY_CHANGED_THROTTLE))
+            .ObserveOn(SynchronizationContext.Current)
+            .Select(eventPattern => eventPattern)
+            .DistinctUntilChanged()
+            .Subscribe(async query => await SetVideoColorPropertyAsync());
+    }
+
     private Task OnTakeSnapshotCommandAsync()
     {
+        var storagePath = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDcim);
+
+        string path = Path.Combine(storagePath.ToString(), $"Snapshot-{DateTime.Now:yyyy-MM-dd_HH:mm:ss}.jpeg");
+
+        var isSnapshotTaken = MediaPlayer.TakeSnapshot(0, path, 0, 0);
+
         return Task.CompletedTask;
     }
 
-    private Task OnMuteVideoCommandAsync()
+    private async Task SetVideoColorPropertyAsync()
     {
-        return Task.CompletedTask;
+        if (SelectedCamera is null || !SelectedCamera.IsConnected) return;
+
+        var videoColorResponse = await _camerasService.GetVideoColorConfigsAsync(SelectedCamera);
+
+        if (videoColorResponse.IsSuccess)
+        {
+            var table = videoColorResponse.Result.Params.Table;
+
+            var needsEditing = table[0].Brightness != (int)Brightness;
+            table[0].Brightness = (int)Brightness;
+
+            needsEditing |= table[0].Contrast != (int)Contrast;
+            table[0].Contrast = (int)Contrast;
+
+            needsEditing |= table[0].Hue != (int)Hue;
+            table[0].Hue = (int)Hue;
+
+            needsEditing |= table[0].Saturation != (int)Saturation;
+            table[0].Saturation = (int)Saturation;
+
+            if (needsEditing)
+            {
+                var setVideoColorResponse = await _camerasService.SetVideoColorConfigsAsync(SelectedCamera, table);
+            }
+        }
     }
 
-    private Task OnSwitchVideoQualityCommandAsync()
+    private async Task OnMuteVideoCommandAsync()
     {
-        return Task.CompletedTask;
+        var cameraConfigsResponse = await _camerasService.GetCameraConfigsAsync(SelectedCamera);
+
+        if (cameraConfigsResponse.IsSuccess)
+        {
+            cameraConfigsResponse.Result.Params.Table.MainFormat[0].AudioEnable = SelectedCamera.IsMuted;
+
+            var setCameraConfigsResponse = await _camerasService.SetCameraConfigsAsync(SelectedCamera, cameraConfigsResponse.Result.Params.Table);
+
+            if (setCameraConfigsResponse.IsSuccess)
+            {
+                SelectedCamera.IsMuted = !SelectedCamera.IsMuted;
+            }
+        }
+    }
+
+    private async Task OnSwitchVideoQualityCommandAsync()
+    {
+        if (SelectedCamera is not null)
+        {
+            SelectedCamera.SubType = SelectedCamera.SubType is 0 ? 1 : 0;
+
+            await _camerasService.UpdateCameraAsync(SelectedCamera);
+        }
     }
 
     #endregion

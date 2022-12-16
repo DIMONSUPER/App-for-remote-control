@@ -1,4 +1,5 @@
 using SmartMirror.Interfaces;
+using System.ComponentModel;
 using System.Windows.Input;
 
 namespace SmartMirror.Models.BindableModels
@@ -53,7 +54,7 @@ namespace SmartMirror.Models.BindableModels
         public string VideoUrl
         {
             get => _videoUrl;
-            set => SetProperty(ref _videoUrl, value);
+            private set => SetProperty(ref _videoUrl, value);
         }
 
         private bool _isSelected;
@@ -63,11 +64,46 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _isSelected, value);
         }
 
-	    private bool _isEmergencyNotification = true;
+        private bool _isEmergencyNotification = true;
         public bool IsEmergencyNotification
         {
             get => _isEmergencyNotification;
             set => SetProperty(ref _isEmergencyNotification, value);
+        }
+
+        private bool _isMuted;
+        public bool IsMuted
+        {
+            get => _isMuted;
+            set => SetProperty(ref _isMuted, value);
+        }
+
+        private int _channel;
+        public int Channel
+        {
+            get => _channel;
+            set => SetProperty(ref _channel, value);
+        }
+
+        private string _sessionId;
+        public string SessionId
+        {
+            get => _sessionId;
+            set => SetProperty(ref _sessionId, value);
+        }
+
+        private int _requestId;
+        public int RequestId
+        {
+            get => _requestId;
+            set => SetProperty(ref _requestId, value);
+        }
+
+        private int _subType;
+        public int SubType
+        {
+            get => _subType;
+            set => SetProperty(ref _subType, value);
         }
 
         #endregion
@@ -82,7 +118,7 @@ namespace SmartMirror.Models.BindableModels
         }
 
         #endregion
-        
+
         #region -- INotifiable implementation --
 
         private int _id;
@@ -104,6 +140,20 @@ namespace SmartMirror.Models.BindableModels
         {
             get => _isReceiveNotifications;
             set => SetProperty(ref _isReceiveNotifications, value);
+        }
+
+        #endregion
+
+        #region -- Overrides --
+
+        protected override void OnPropertyChanged(PropertyChangedEventArgs args)
+        {
+            base.OnPropertyChanged(args);
+
+            if (args.PropertyName is nameof(Login) or nameof(Password) or nameof(IpAddress) or nameof(SubType))
+            {
+                VideoUrl = $"rtsp://{Login}:{Password}@{IpAddress}:80/cam/realmonitor?channel=1&subtype={SubType}";
+            }
         }
 
         #endregion
