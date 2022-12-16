@@ -3,10 +3,12 @@
     xmlns:dialogs="clr-namespace:SmartMirror.Views.Dialogs"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:app="clr-namespace:SmartMirror"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Dialogs"
     xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
+    xmlns:triggeractions="clr-namespace:SmartMirror.TriggerActions"
     x:Class="SmartMirror.Views.Dialogs.CameraSettingsDialog"
     x:DataType="vm:CameraSettingsDialogViewModel">
 
@@ -21,9 +23,7 @@
             Stroke="{DynamicResource tcolor_i1}"
             BackgroundColor="{StaticResource cbg_i2}">
 
-            <StackLayout
-                Padding="30, 24"
-                Spacing="6">
+            <StackLayout Padding="30, 24, 30, 0">
 
                 <HorizontalStackLayout>
 
@@ -53,8 +53,37 @@
                 </HorizontalStackLayout>
 
                 <Border
-                    Margin="0, 42, 0, 0"
                     Padding="1"
+                    Margin="0, 44, 0, 0"
+                    HeightRequest="76"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 9"
+                    Stroke="{DynamicResource tcolor_i1}"
+                    BackgroundColor="{StaticResource cbg_i15}">
+
+                    <controls:CustomNoBorderEntry
+                        Style="{StaticResource CustomNoBorderEntryStyle_i1}"
+                        WidthRequest="375"
+                        MaxLength="{x:Static app:Constants+Limits.CAMERA_NAME_MAX_LENGTH}"
+                        Placeholder="{extensions:Translate EnterNewName}"
+                        Text="{Binding CameraModel.Name}"
+                        x:Name="cameraNameCustomNoBorderEntry">
+
+                        <controls:CustomNoBorderEntry.Triggers>
+                            <EventTrigger Event="Completed">
+
+                                <triggeractions:UnfocusTriggerAction View="{Reference cameraNameCustomNoBorderEntry}"/>
+
+                            </EventTrigger>
+                        </controls:CustomNoBorderEntry.Triggers>
+
+                    </controls:CustomNoBorderEntry>
+
+                </Border>
+
+                <Border
+                    Margin="0, 24"
+                    Padding="0"
                     StrokeThickness="1"
                     StrokeShape="RoundRectangle 9"
                     Stroke="{DynamicResource tcolor_i1}"
@@ -95,7 +124,7 @@
                 </Border>
 
                 <Border
-                    Margin="0, 42, 0, 0"
+                    Margin="0"
                     Padding="1"
                     StrokeThickness="1"
                     StrokeShape="RoundRectangle 9"
@@ -121,7 +150,7 @@
                 <Button 
                     Style="{DynamicResource ButtonStyle_i1}"
                     HorizontalOptions="Center"
-                    Margin="0, 36, 0, 20"
+                    Margin="0, 42"
                     Text="{extensions:Translate Close}"
                     Command="{Binding CloseCommand}"/>
 

@@ -9,13 +9,26 @@ public static class DeviceHelper
 
     public static string GetImageSourceForWeather(DeviceBindableModel device)
     {
-        var result = device.EditableResourceId switch
+        var result = IconsNames.grey_question_mark;
+
+        if (device.EditableResourceId is not null)
         {
-            Constants.Aqara.AttibutesId.HUMIDITY_STATUS => IconsNames.pic_humidity,
-            Constants.Aqara.AttibutesId.TEMPERATURE_STATUS => IconsNames.pic_temperature,
-            Constants.Aqara.AttibutesId.AIR_PRESSURE_STATUS => IconsNames.pic_pressure,
-            _ => IconsNames.grey_question_mark,
-        };
+            result = device.EditableResourceId switch
+            {
+                Constants.Aqara.AttibutesId.HUMIDITY_STATUS => IconsNames.pic_humidity,
+                Constants.Aqara.AttibutesId.TEMPERATURE_STATUS => IconsNames.pic_temperature,
+                Constants.Aqara.AttibutesId.AIR_PRESSURE_STATUS => IconsNames.pic_pressure,
+                _ => IconsNames.grey_question_mark,
+            };
+        }
+        else
+        {
+            result = device.Model switch
+            {
+                Constants.Aqara.Models.LUMI_WEATHER_V1 => IconsNames.pic_temperature,
+                _ => IconsNames.grey_question_mark,
+            };
+        }
 
         return result;
     }

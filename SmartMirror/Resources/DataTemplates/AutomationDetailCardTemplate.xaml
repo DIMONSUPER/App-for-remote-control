@@ -29,7 +29,7 @@
                         Margin="12"
                         WidthRequest="42"
                         HeightRequest="42"
-                        Source="{Binding Device.IconSource}"/>
+                        Source="{Binding IconSource}"/>
 
                 </Border>
 
@@ -41,7 +41,7 @@
                         MaximumWidthRequest="200"
                         MaxLines="2"
                         LineBreakMode="TailTruncation"
-                        Text="{Binding Device.Name}"/>
+                        Text="{Binding DeviceName}"/>
 
                     <controls:CustomLabel
                         Style="{DynamicResource tstyle_i3}"
@@ -49,7 +49,7 @@
                         MaximumWidthRequest="200"
                         MaxLines="2"
                         LineBreakMode="TailTruncation"
-                        Text="{Binding Device.RoomName}"/>
+                        Text="{Binding RoomName}"/>
 
                     <!--<controls:CustomLabel
                         Style="{DynamicResource tstyle_i3}"

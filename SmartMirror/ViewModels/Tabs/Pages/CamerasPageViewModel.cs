@@ -40,6 +40,7 @@ public class CamerasPageViewModel : BaseTabViewModel
         DataState = EPageState.LoadingSkeleton;
 
         Title = "Cameras";
+
         _camerasService.AllCamerasChanged += OnAllCamerasChanged;
         SubscribeToVideoColorPropertyChanged();
     }
@@ -366,7 +367,7 @@ public class CamerasPageViewModel : BaseTabViewModel
 
     private void OnMediaPlayerStateChanged(object sender, EventArgs e)
     {
-        if (MediaPlayer.State is VLCState.Playing)
+        if (MediaPlayer?.State is VLCState.Playing)
         {
             VideoState = VLCState.Opening;
         }
@@ -450,8 +451,12 @@ public class CamerasPageViewModel : BaseTabViewModel
 
             if (resultOfGettingCameras.IsSuccess)
             {
-                var cameras = _mapperService.MapRange<CameraBindableModel>(resultOfGettingCameras.Result.Where(x => x.IsShown), (m, vm) =>
+                var cameras = _mapperService.MapRange<CameraBindableModel, CameraBindableModel>(resultOfGettingCameras.Result.Where(x => x.IsShown), (m, vm) =>
                 {
+                    vm.Name = string.IsNullOrEmpty(m.Name)
+                        ? m.IpAddress
+                        : m.Name;
+
                     vm.TapCommand = SelectCameraCommand;
 
                     if (Cameras is not null && Cameras.Any() && Cameras.Any(x => x.VideoUrl == vm.VideoUrl))

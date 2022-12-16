@@ -17,6 +17,19 @@
 
         </stateContanier:StateCondition>
 
+        <!-- TODO Never should be shown -->
+        <!-- NONE STATE -->
+        <stateContanier:StateCondition State="None">
+
+            <Label
+                Text="None state"
+                TextColor="White"
+                FontSize="40"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"/>
+
+        </stateContanier:StateCondition>
+
         <!-- EMPTY STATE -->
         <stateContanier:StateCondition State="Empty">
 
@@ -74,6 +87,7 @@
                 
         </stateContanier:StateCondition>
 
+        <!-- LOADING SKELETON STATE -->
         <stateContanier:StateCondition State="LoadingSkeleton">
 
             <ContentView Background="Transparent"

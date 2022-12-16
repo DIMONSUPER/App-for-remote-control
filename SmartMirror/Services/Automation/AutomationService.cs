@@ -11,6 +11,7 @@ using SmartMirror.Services.Rest;
 using SmartMirror.Services.Settings;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Rooms;
+using SmartMirror.Resources;
 
 namespace SmartMirror.Services.Automation;
 
@@ -204,6 +205,8 @@ public class AutomationService : BaseAqaraService, IAutomationService
                     {
                         vm.Device.RoomName = rooms.FirstOrDefault(x => x.Id == vm.Device.PositionId)?.Name;
                     }
+
+                    SetAdditionalInfoForCondition(vm);
                 });
 
                 var bindableActions = _mapperService.MapRange<ActionBindableModel>(linkageDetail.Result.Actions.Action, (m, vm) =>
@@ -214,12 +217,44 @@ public class AutomationService : BaseAqaraService, IAutomationService
                     {
                         vm.Device.RoomName = rooms.FirstOrDefault(x => x.Id == vm.Device.PositionId)?.Name;
                     }
+
+                    SetAdditionalInfoForAction(vm);
                 });
                 
                 automation.Conditions = new(bindableConditions);
                 automation.Actions = new(bindableActions);
                 automation.Description = automation.Conditions.Select(row => row.TriggerName).Aggregate((i, j) => i + ", " + j);
             }
+        }
+    }
+
+    private void SetAdditionalInfoForCondition(ConditionBindableModel condition)
+    {
+        if (condition.Device is null)
+        {
+            condition.IconSource = IconsNames.pic_gears;
+            condition.DeviceName = ModelsNames.GetName(condition.Model);
+        }
+        else
+        {
+            condition.IconSource = condition.Device.IconSource;
+            condition.DeviceName = condition.Device.Name;
+            condition.RoomName = condition.Device.RoomName;
+        }
+    }
+
+    private void SetAdditionalInfoForAction(ActionBindableModel action)
+    {
+        if (action.Device is null)
+        {
+            action.IconSource = IconsNames.pic_gears;
+            action.DeviceName = ModelsNames.GetName(action.Model);
+        }
+        else
+        {
+            action.IconSource = action.Device.IconSource;
+            action.DeviceName = action.Device.Name;
+            action.RoomName = action.Device.RoomName;
         }
     }
 

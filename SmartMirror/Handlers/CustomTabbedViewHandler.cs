@@ -102,7 +102,7 @@ public class CustomTabbedViewHandler : TabbedViewHandler
     private void OnHideTabsEvent(bool state)
     {
         //Hack: If modal navigation - we don't need to remove tab bar
-        if (!CustomTabbedPage.Navigation.ModalStack.Any() && TabBar.Parent is not null)
+        if (TabBar.Parent is not null)
         {
             FragmentManager.BeginTransaction().RunOnCommit(new Runnable(() => TabBar?.Post(() => TabBar?.RemoveFromParent()))).Commit();
         }

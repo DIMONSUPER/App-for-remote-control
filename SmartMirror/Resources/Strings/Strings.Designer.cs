@@ -427,6 +427,24 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter Name (Optional).
+        /// </summary>
+        internal static string EnterNameOptional {
+            get {
+                return ResourceManager.GetString("EnterNameOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter New Name.
+        /// </summary>
+        internal static string EnterNewName {
+            get {
+                return ResourceManager.GetString("EnterNewName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter Password.
         /// </summary>
         internal static string EnterPassword {

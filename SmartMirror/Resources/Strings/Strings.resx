@@ -450,4 +450,10 @@
     <data name="Unmute" xml:space="preserve">
         <value>Unmute</value>
     </data>
+    <data name="EnterNameOptional" xml:space="preserve">
+        <value>Enter Name (Optional)</value>
+    </data>
+    <data name="EnterNewName" xml:space="preserve">
+        <value>Enter New Name</value>
+    </data>
 </root>
