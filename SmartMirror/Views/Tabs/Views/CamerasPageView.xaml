@@ -168,12 +168,12 @@
                         RowDefinitions="Auto, Auto"
                         ColumnDefinitions="*, *, *, *" 
                         RowSpacing="20"
-                        IsVisible="False"
+                        IsEnabled="False"
                         ColumnSpacing="20">
 
                         <Grid.Triggers>
                             <DataTrigger TargetType="Grid" Binding="{Binding VideoState}" Value="Playing">
-                                <Setter Property="IsVisible" Value="True"/>
+                                <Setter Property="IsEnabled" Value="True"/>
                             </DataTrigger>
                         </Grid.Triggers>
 

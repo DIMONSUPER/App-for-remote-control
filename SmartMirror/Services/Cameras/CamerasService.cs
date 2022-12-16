@@ -48,8 +48,7 @@ namespace SmartMirror.Services.Cameras
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
-                //var url = new Uri($"rtsp://{camera.Login}:{camera.Password}@{camera.IpAddress}/live");
-                var url = new Uri($"rtsp://{camera.Login}:{camera.Password}@{camera.IpAddress}:80/cam/realmonitor?channel=1&subtype=0");
+                var url = new Uri($"rtsp://{camera.Login}:{camera.Password}@{camera.IpAddress}/live");
 
                 using var rtspClient = new RtspClientSharp.RtspClient(new RtspClientSharp.ConnectionParameters(url));
 
