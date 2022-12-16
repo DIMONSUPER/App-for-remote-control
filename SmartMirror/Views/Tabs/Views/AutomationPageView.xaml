@@ -19,8 +19,8 @@
 
             <DataTemplate x:Key="favoriteAutomationsTemplate">
                 <templates:AutomationCardTemplate
-                    WidthRequest="375"
-                    HeightRequest="201"
+                    WidthRequest="368"
+                    HeightRequest="266"
                     InnerPadding="29, 23, 29, 20"/>
 
             </DataTemplate>
@@ -28,6 +28,7 @@
             <DataTemplate x:Key="automationsTemplate">
                 <templates:AutomationCardTemplate
                     IconSize="54"
+                    HeightRequest="231"
                     InnerPadding="22, 17, 22, 15"/>
 
             </DataTemplate>
