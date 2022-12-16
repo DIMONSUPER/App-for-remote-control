@@ -18,13 +18,17 @@ public interface ICamerasService
 
     Task<AOResult> RemoveCameraAsync(CameraBindableModel cameraModel);
 
-    Task<AOResult<DahuaResponse<AuthorizationParams>>> AuthorizeAsync(CameraBindableModel camera);
+    Task<AOResult<DahuaResponse>> AuthorizeAsync(CameraBindableModel camera);
 
-    Task<AOResult<DahuaResponse<ParamsTable<List<VideoColorConfig>>>>> GetVideoColorConfigsAsync(int channel = 0);
+    Task<AOResult<DahuaResponse<ParamsTable<List<VideoColorConfig>>>>> GetVideoColorConfigsAsync(CameraBindableModel camera);
 
-    Task<AOResult<DahuaResponse<ParamsTable<List<VideoColorConfig>>>>> SetVideoColorConfigsAsync(List<VideoColorConfig> configs, int channel = 0);
+    Task<AOResult<DahuaResponse>> SetVideoColorConfigsAsync(CameraBindableModel camera, List<VideoColorConfig> configs);
 
-    Task<AOResult<DahuaResponse<ParamsTable<CameraConfig>>>> GetCameraConfigsAsync(int channel = 0);
+    Task<AOResult<DahuaResponse<ParamsTable<CameraConfig>>>> GetCameraConfigsAsync(CameraBindableModel camera);
 
-    Task<AOResult<DahuaResponse<ParamsTable<CameraConfig>>>> SetCameraConfigsAsync(CameraConfig cameraConfig, int channel = 0);
+    Task<AOResult<DahuaResponse>> SetCameraConfigsAsync(CameraBindableModel camera,CameraConfig cameraConfig);
+
+    Task<AOResult<DahuaResponse>> KeepAliveAsync(CameraBindableModel camera);
+
+    void LogoutFromDahua(CameraBindableModel camera);
 }

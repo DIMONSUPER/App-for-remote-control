@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
-    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs.Pages"
     xmlns:views="clr-namespace:SmartMirror.Views.Tabs.Views"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
@@ -11,8 +11,6 @@
     xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
-    xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
-    xmlns:vlc="clr-namespace:LibVLCSharp.Shared;assembly=LibVLCSharp"
     x:DataType="vm:CamerasPageViewModel"
     x:Class="SmartMirror.Views.Tabs.Views.CamerasPageView">
 
@@ -170,7 +168,14 @@
                         RowDefinitions="Auto, Auto"
                         ColumnDefinitions="*, *, *, *" 
                         RowSpacing="20"
+                        IsVisible="False"
                         ColumnSpacing="20">
+
+                        <Grid.Triggers>
+                            <DataTrigger TargetType="Grid" Binding="{Binding VideoState}" Value="Playing">
+                                <Setter Property="IsVisible" Value="True"/>
+                            </DataTrigger>
+                        </Grid.Triggers>
 
                         <controls:CustomButton
                             Grid.Row="0"
@@ -192,6 +197,7 @@
                         <controls:CustomButton
                             Grid.Row="0"
                             Grid.Column="2"
+                            IsToggled="{Binding SelectedCamera.IsMuted}"
                             Mode="{Static enums:EButtonMode.Toggle}"
                             IconSource="sound_mute_light"
                             ToggledIconSource="sound_mute_dark"
@@ -203,6 +209,7 @@
                             Grid.Row="0"
                             Grid.Column="3"
                             Mode="{Static enums:EButtonMode.Toggle}"
+                            IsToggled="{Binding SelectedCamera.SubType, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
                             IconSource="high_quality_outline_light"
                             ToggledIconSource="high_quality_outline_dark"
                             Text="{extensions:Translate SD}"
@@ -242,7 +249,7 @@
                             Value="{Binding Saturation}"/>
 
                     </Grid>
-                    
+
                 </Grid>
 
             </Grid>

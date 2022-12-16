@@ -654,7 +654,6 @@ namespace SmartMirror.ViewModels
                     CreateTime = DateTime.UtcNow,
                     Name = ipAddress,
                     IsShown = true,
-                    VideoUrl = $"rtsp://{login}:{password}@{ipAddress}/live"
                 };
 
                 await _camerasService.UpdateCameraAsync(camera);

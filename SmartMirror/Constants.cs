@@ -137,6 +137,7 @@
             public const string TABLE = "table";
             public const string OPTIONS = "options";
             public const string ENCODE = "Encode";
+            public const string PARAMS = "params";
         }
     }
 }
