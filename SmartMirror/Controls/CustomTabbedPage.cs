@@ -221,8 +221,7 @@ public class CustomTabbedPage : TabbedPage
         var tabsStackLayout = new HorizontalStackLayout
         {
             Spacing = 0,
-            Margin = 0,
-            Padding = new(30, 0),
+            Margin = new(30, 0),
         };
 
         var tabTappedGestureRecognizer = new TapGestureRecognizer();
