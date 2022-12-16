@@ -5,18 +5,25 @@ namespace SmartMirror.Models.BindableModels;
 
 public class AutomationDetailCardBindableModel : BindableBase
 {
-    private string _name;
-    public string Name
+    private string _deviceName;
+    public string DeviceName
     {
-        get => _name;
-        set => SetProperty(ref _name, value);
+        get => _deviceName;
+        set => SetProperty(ref _deviceName, value);
     }
 
-    private string _description;
-    public string Description
+    private string _roomName;
+    public string RoomName
     {
-        get => _description;
-        set => SetProperty(ref _description, value);
+        get => _roomName;
+        set => SetProperty(ref _roomName, value);
+    }
+
+    private string _iconSource;
+    public string IconSource
+    {
+        get => _iconSource;
+        set => SetProperty(ref _iconSource, value);
     }
 
     private string _triggerName;

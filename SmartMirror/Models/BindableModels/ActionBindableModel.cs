@@ -19,6 +19,27 @@ public class ActionBindableModel : BindableBase
         set => SetProperty(ref _actionName, value);
     }
 
+    private string _deviceName;
+    public string DeviceName
+    {
+        get => _deviceName;
+        set => SetProperty(ref _deviceName, value);
+    }
+
+    private string _roomName;
+    public string RoomName
+    {
+        get => _roomName;
+        set => SetProperty(ref _roomName, value);
+    }
+
+    private string _iconSource;
+    public string IconSource
+    {
+        get => _iconSource;
+        set => SetProperty(ref _iconSource, value);
+    }
+
     private string _model;
     public string Model
     {
