@@ -6,8 +6,8 @@ public static class ModelsNames
     {
         { Constants.Aqara.Models.APP_TIMER_V1, "Timer" },
         { Constants.Aqara.Models.APP_IFTTT_V1, "If" },
-        { Constants.Aqara.Models.APP_IFTTT_POSITION_USER_ALERT, "If alert" },
-        { Constants.Aqara.Models.APP_GEOFENCE_TRIGGER, "Geofence" },
+        { Constants.Aqara.Models.APP_IFTTT_POSITION_USER_ALERT, "When the alarm sounds" },
+        { Constants.Aqara.Models.APP_GEOFENCE_TRIGGER, "Arrive at a position" },
         { Constants.Aqara.Models.APP_WEATHER_HUMIDITY, "Weather humidity" },
         { Constants.Aqara.Models.APP_WEATHER_SUN, "Weather sun" },
         { Constants.Aqara.Models.APP_WEATHER_TEMPERATURE, "Weather temperature" },

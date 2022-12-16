@@ -203,9 +203,16 @@ public class AutomationService : BaseAqaraService, IAutomationService
                     if (vm.Device is not null)
                     {
                         vm.Device.RoomName = rooms.FirstOrDefault(x => x.Id == vm.Device.PositionId)?.Name;
-                    }
 
-                    vm.Condition = $"Action: {vm.TriggerDefinitionId}, {vm.TriggerName}, {vm.SubjectId}, {vm.Model}, {vm.BeginTime}, {vm.EndTime}, Params: {GetConditions(m.Params ?? new())}";
+                        if (m.Params is not null)
+                        {
+                            vm.Condition = $"Condition: {vm.TriggerDefinitionId}, {vm.TriggerName}, {vm.SubjectId}, {vm.Model}, {vm.BeginTime}, {vm.EndTime}, {GetConditions(m.Params ?? new())}";
+                        }
+                    }
+                    else
+                    {
+                        vm.Condition = $"Condition: {vm.TriggerDefinitionId}, {vm.TriggerName}, {vm.SubjectId}, {vm.Model}, {vm.BeginTime}, {vm.EndTime}, {GetConditions(m.Params ?? new())}";
+                    }
 
                     SetAdditionalInfoForCondition(vm);
                 });
@@ -217,9 +224,16 @@ public class AutomationService : BaseAqaraService, IAutomationService
                     if (vm.Device is not null)
                     {
                         vm.Device.RoomName = rooms.FirstOrDefault(x => x.Id == vm.Device.PositionId)?.Name;
-                    }
 
-                    vm.Condition = $"Action: {vm.ActionDefinitionId}, {vm.ActionName}, {vm.SubjectId}, {vm.Model}, {vm.DelayTime}, {vm.DelayTimeUnit}, Params: {GetConditions(m.Params ?? new())}";
+                        if (m.Params is not null)
+                        {
+                            vm.Condition = $"Action: {vm.ActionDefinitionId}, {vm.ActionName}, {vm.SubjectId}, {vm.Model}, {vm.DelayTime}, {vm.DelayTimeUnit}, {GetConditions(m.Params ?? new())}";
+                        }
+                    }
+                    else
+                    {
+                        vm.Condition = $"Action: {vm.ActionDefinitionId}, {vm.ActionName}, {vm.SubjectId}, {vm.Model}, {vm.DelayTime}, {vm.DelayTimeUnit}, {GetConditions(m.Params ?? new())}";
+                    }
 
                     SetAdditionalInfoForAction(vm);
                 });
@@ -236,9 +250,14 @@ public class AutomationService : BaseAqaraService, IAutomationService
     {
         var result = string.Empty;
 
-        foreach (var param in parameters)
+        if (parameters is not null)
         {
-            result += $"{param.ParamId} {param.ParamType} {param.ParamUnit} {param.Value}";
+            result = "Params: ";
+
+            foreach (var param in parameters)
+            {
+                result += $"{param.ParamId} {param.ParamType} {param.ParamUnit} {param.Value}";
+            }
         }
 
         return result;
