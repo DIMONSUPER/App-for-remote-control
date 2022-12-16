@@ -1,28 +1,21 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Helpers;
 using SmartMirror.Enums;
-using SmartMirror.Models.Aqara;
 using SmartMirror.Services.Mapper;
-using SmartMirror.Services.Devices;
 
 namespace SmartMirror.ViewModels.Tabs.Details;
 
 public class AutomationDetailsPageViewModel : BaseViewModel
 {
     private readonly IMapperService _mapperService;
-    private readonly IDevicesService _devicesService;
 
     public AutomationDetailsPageViewModel(
         IMapperService mapperService,
-        INavigationService navigationService,
-        IDevicesService devicesService)
+        INavigationService navigationService)
         : base(navigationService)
     {
         _mapperService = mapperService;
-        _devicesService = devicesService;
     }
 
     #region -- Public properties --
@@ -34,8 +27,22 @@ public class AutomationDetailsPageViewModel : BaseViewModel
         set => SetProperty(ref _automationName, value);
     }
 
-    private ObservableCollection<AutomationDetailCardBindableModel> _automationActions;
-    public ObservableCollection<AutomationDetailCardBindableModel> AutomationActions
+    private bool _relation;
+    public bool Relation
+    {
+        get => _relation;
+        set => SetProperty(ref _relation, value);
+    }
+
+    private List<AutomationDetailCardBindableModel> _automationConditions;
+    public List<AutomationDetailCardBindableModel> AutomationConditions
+    {
+        get => _automationConditions;
+        set => SetProperty(ref _automationConditions, value);
+    }
+
+    private List<AutomationDetailCardBindableModel> _automationActions;
+    public List<AutomationDetailCardBindableModel> AutomationActions
     {
         get => _automationActions;
         set => SetProperty(ref _automationActions, value);
@@ -64,6 +71,8 @@ public class AutomationDetailsPageViewModel : BaseViewModel
             DataState = EPageState.LoadingSkeleton;
 
             AutomationBindableModel = automation;
+
+            Relation = automation.Relation;
 
             LoadAutomationInformationAsync();
         }
@@ -94,11 +103,13 @@ public class AutomationDetailsPageViewModel : BaseViewModel
             vm.TriggerName = m.ActionName;
         });
 
+        AutomationActions = new(automationActions);
+
         var automationConditions = _mapperService.MapRange<AutomationDetailCardBindableModel>(_automationBindableModel.Conditions);
 
-        AutomationActions = new(automationConditions.Concat(automationActions));
+        AutomationConditions = new(automationConditions);
 
-        DataState = AutomationActions?.Count > 0
+        DataState = AutomationActions?.Count > 0 && AutomationConditions?.Count > 0
                 ? EPageState.Complete
                 : EPageState.Empty;
 

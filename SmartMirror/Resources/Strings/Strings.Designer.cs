@@ -112,6 +112,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All conditions are met.
+        /// </summary>
+        internal static string AllConditionsAreMet {
+            get {
+                return ResourceManager.GetString("AllConditionsAreMet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow Notifications.
         /// </summary>
         internal static string AllowNotifications {
@@ -126,6 +135,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Amazon {
             get {
                 return ResourceManager.GetString("Amazon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Any condition is met.
+        /// </summary>
+        internal static string AnyConditionIsMet {
+            get {
+                return ResourceManager.GetString("AnyConditionIsMet", resourceCulture);
             }
         }
         
@@ -666,6 +684,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Hue {
             get {
                 return ResourceManager.GetString("Hue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IF.
+        /// </summary>
+        internal static string IF {
+            get {
+                return ResourceManager.GetString("IF", resourceCulture);
             }
         }
         
@@ -1242,6 +1269,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string TheCameraWillBeRemoved {
             get {
                 return ResourceManager.GetString("TheCameraWillBeRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to THEN.
+        /// </summary>
+        internal static string THEN {
+            get {
+                return ResourceManager.GetString("THEN", resourceCulture);
             }
         }
         

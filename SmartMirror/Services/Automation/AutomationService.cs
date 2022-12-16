@@ -6,7 +6,6 @@ using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Repository;
 using SmartMirror.Models.Aqara;
-using System.Linq;
 using SmartMirror.Services.Rest;
 using SmartMirror.Services.Settings;
 using SmartMirror.Services.Devices;
@@ -197,7 +196,7 @@ public class AutomationService : BaseAqaraService, IAutomationService
 
             if (linkageDetail.IsSuccess)
             {
-                var bindableConditions = _mapperService.MapRange<ConditionBindableModel>(linkageDetail.Result.Conditions.Condition, (m, vm) =>
+                var bindableConditions = _mapperService.MapRange<ConditionAqaraModel ,ConditionBindableModel>(linkageDetail.Result.Conditions.Condition, (m, vm) =>
                 {
                     vm.Device = devices?.FirstOrDefault(x => x.DeviceId == vm.SubjectId);
 
@@ -205,11 +204,13 @@ public class AutomationService : BaseAqaraService, IAutomationService
                     {
                         vm.Device.RoomName = rooms.FirstOrDefault(x => x.Id == vm.Device.PositionId)?.Name;
                     }
+
+                    vm.Condition = $"Action: {vm.TriggerDefinitionId}, {vm.TriggerName}, {vm.SubjectId}, {vm.Model}, {vm.BeginTime}, {vm.EndTime}, Params: {GetConditions(m.Params ?? new())}";
 
                     SetAdditionalInfoForCondition(vm);
                 });
 
-                var bindableActions = _mapperService.MapRange<ActionBindableModel>(linkageDetail.Result.Actions.Action, (m, vm) =>
+                var bindableActions = _mapperService.MapRange<ActionAqaraModel, ActionBindableModel>(linkageDetail.Result.Actions.Action, (m, vm) =>
                 {
                     vm.Device = devices?.FirstOrDefault(x => x.DeviceId == vm.SubjectId);
 
@@ -218,14 +219,29 @@ public class AutomationService : BaseAqaraService, IAutomationService
                         vm.Device.RoomName = rooms.FirstOrDefault(x => x.Id == vm.Device.PositionId)?.Name;
                     }
 
+                    vm.Condition = $"Action: {vm.ActionDefinitionId}, {vm.ActionName}, {vm.SubjectId}, {vm.Model}, {vm.DelayTime}, {vm.DelayTimeUnit}, Params: {GetConditions(m.Params ?? new())}";
+
                     SetAdditionalInfoForAction(vm);
                 });
-                
+
+                automation.Relation = linkageDetail.Result.Conditions.Relation;
                 automation.Conditions = new(bindableConditions);
                 automation.Actions = new(bindableActions);
                 automation.Description = automation.Conditions.Select(row => row.TriggerName).Aggregate((i, j) => i + ", " + j);
             }
         }
+    }
+
+    private string GetConditions(List<ParamAqaraModel> parameters)
+    {
+        var result = string.Empty;
+
+        foreach (var param in parameters)
+        {
+            result += $"{param.ParamId} {param.ParamType} {param.ParamUnit} {param.Value}";
+        }
+
+        return result;
     }
 
     private void SetAdditionalInfoForCondition(ConditionBindableModel condition)

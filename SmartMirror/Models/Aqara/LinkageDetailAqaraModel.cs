@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SmartMirror.Models.Aqara
+﻿namespace SmartMirror.Models.Aqara
 {
     public class LinkageDetailAqaraModel
     {

@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using SmartMirror.Models.Aqara;
+﻿using SmartMirror.Models.Aqara;
 
 namespace SmartMirror.Models.BindableModels;
 
@@ -68,11 +67,18 @@ public class ConditionBindableModel : BindableBase
         set => SetProperty(ref _endTime, value);
     }
 
-    private ObservableCollection<ParamAqaraModel> _params;
-    public ObservableCollection<ParamAqaraModel> Params
+    private List<ParamAqaraModel> _params;
+    public List<ParamAqaraModel> Params
     {
         get => _params;
         set => SetProperty(ref _params, value);
+    }
+
+    private string _condition;
+    public string Condition
+    {
+        get => _condition;
+        set => SetProperty(ref _condition, value);
     }
 
     private DeviceBindableModel _device;

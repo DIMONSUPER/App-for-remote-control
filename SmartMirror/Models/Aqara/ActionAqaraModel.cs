@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace SmartMirror.Models.Aqara
+﻿namespace SmartMirror.Models.Aqara
 {
     public class ActionAqaraModel
     {
@@ -16,7 +14,6 @@ namespace SmartMirror.Models.Aqara
 
         public string DelayTimeUnit { get; set; }
 
-        [JsonProperty("params")]
-        public IEnumerable<ActionParameterAqaraModel> ActionParameters { get; set; }
+        public List<ParamAqaraModel> Params { get; set; }
     }
 }

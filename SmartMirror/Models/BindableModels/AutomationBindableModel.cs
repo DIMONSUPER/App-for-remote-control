@@ -45,15 +45,22 @@ public class AutomationBindableModel : BindableBase, ITappable, INotifiable
         set => SetProperty(ref _localize, value);
     }
 
-    private ObservableCollection<ConditionBindableModel> _conditions;
-    public ObservableCollection<ConditionBindableModel> Conditions
+    private List<ConditionBindableModel> _conditions;
+    public List<ConditionBindableModel> Conditions
     {
         get => _conditions;
         set => SetProperty(ref _conditions, value);
     }
 
-    private ObservableCollection<ActionBindableModel> _actions;
-    public ObservableCollection<ActionBindableModel> Actions
+    private bool _relation;
+    public bool Relation
+    {
+        get => _relation;
+        set => SetProperty(ref _relation, value);
+    }
+
+    private List<ActionBindableModel> _actions;
+    public List<ActionBindableModel> Actions
     {
         get => _actions;
         set => SetProperty(ref _actions, value);
