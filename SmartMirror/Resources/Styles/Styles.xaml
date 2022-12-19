@@ -13,7 +13,7 @@
     <converters:TimeToTimeAgoConverter x:Key="timeToTimeAgoConverter" />
     <converters:TimeToDaysOfWeekConverter x:Key="timeToDaysOfWeekConverter" />
     <converters:DoubleToBottomThiknessConverter x:Key="doubleToBottomThiknessConverter" />
-
+    
     <!-- TEXT SIZE -->
     <x:Int32 x:Key="tsize_i1">32</x:Int32> <!-- 48px -->
     <x:Int32 x:Key="tsize_i2">21</x:Int32> <!-- 28px -->
@@ -240,7 +240,7 @@
 
     <Style TargetType="controls:Chip">
         <Setter Property="HorizontalOptions" Value="Start"/>
-        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="StrokeThickness" Value="1.5"/>
         <Setter Property="StrokeShape" Value="RoundRectangle 35"/>
         <Setter Property="Stroke" Value="{DynamicResource cbg_i3}"/>
         <Setter Property="BackgroundColor" Value="Transparent"/>

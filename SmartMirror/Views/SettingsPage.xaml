@@ -12,6 +12,7 @@
     xmlns:templateSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
     xmlns:skeletons="clr-namespace:SmartMirror.Views.Skeletons"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels"
+    xmlns:bindablemodels="clr-namespace:SmartMirror.Models.BindableModels"
     Title="Settings"
     Style="{DynamicResource GrayGradientStyle_i1}"
     x:Class="SmartMirror.Views.SettingsPage"
@@ -57,8 +58,32 @@
                 NotificationsDataTemplate="{StaticResource notificationSettingsGroupTemplate}"
                 AutomationDataTemplate="{StaticResource simpleAutomationTemplate}"/>
 
-            <templates:RoomSourceDataTemplate x:Key="roomSourceDataTemplate"/>
-            <templates:CheckDataTemplate x:Key="expandAccessoriesSourcesTemplate"/>
+            <DataTemplate
+                x:Key="expandAccessoriesSourcesTemplate"
+                x:DataType="bindablemodels:CheckBindableModel">
+
+                <controls:IconCheckBox IsChecked="{Binding IsSelected}">
+
+                    <controls:IconCheckBox.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}"/>
+                    </controls:IconCheckBox.GestureRecognizers>
+
+                </controls:IconCheckBox>
+
+            </DataTemplate>
+
+            <DataTemplate
+                x:Key="roomSourceDataTemplate"
+                x:DataType="bindablemodels:RoomSourceBindableModel">
+
+                <controls:Chip
+                    Margin="0, 0, 9, 12"
+                    IsChecked="{Binding IsSelected}"
+                    Text="{Binding Text}"
+                    behaviors:TouchBehavior.Command="{Binding TapCommand}"
+                    behaviors:TouchBehavior.CommandParameter="{Binding .}"/>
+
+            </DataTemplate>
 
             <templateSelectors:ChipDataSelector
                 x:Key="accessoriesSourcesSelector"
@@ -191,15 +216,13 @@
 
                                 <StackLayout>
 
-                                    <FlexLayout
+                                    <controls:ExpandedMultipleChipSelector
                                         Margin="0, 0, 0, 30"
-                                        JustifyContent="Start"
-                                        AlignItems="Start"
-                                        Direction="Row"
-                                        Wrap="Wrap"
-                                        BindableLayout.ItemsSource="{Binding AccessoriesSources}"
-                                        BindableLayout.ItemTemplateSelector="{StaticResource accessoriesSourcesSelector}"
-                                        IsVisible="{Binding SelectedCategory.Type, Converter={xct:IsEqualConverter}, ConverterParameter={Static enums:ECategoryType.Accessories}}"/>
+                                        ChipDataTemplateSelector="{StaticResource accessoriesSourcesSelector}"
+                                        AllItemsSource="{Binding AccessoriesSources}"
+                                        IsVisible="{Binding SelectedCategory.Type,
+                                            Converter={xct:IsEqualConverter},
+                                            ConverterParameter={Static enums:ECategoryType.Accessories}}"/>
 
                                     <templates:SimpleNotificationsHeaderTemplate
                                         Margin="0, 0, 0, 25"

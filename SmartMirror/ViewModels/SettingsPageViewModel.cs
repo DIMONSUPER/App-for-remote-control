@@ -260,16 +260,11 @@ namespace SmartMirror.ViewModels
             {
                 var accessoriesSources = _mapperService.MapRange<RoomSourceBindableModel>(resultOfGettingAllRooms, (v, vm) =>
                 {
+                    vm.FontSize = 21;
+                    vm.FontFamily = "InterBold";
                     vm.TapCommand = SelectAccessorySourceCommand;
                 }).ToList<IChipModel>();
-
-                AccessoriesSources = new(accessoriesSources);
-
-                AccessoriesSources.Add(new CheckBindableModel
-                {
-                    IsSelected = false,
-                    TapCommand = null,
-                });
+                AccessoriesSources = new (accessoriesSources);
             }
         }
 

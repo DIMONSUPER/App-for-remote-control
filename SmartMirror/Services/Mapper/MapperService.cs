@@ -96,7 +96,9 @@ namespace SmartMirror.Services.Mapper
                 cfg.CreateMap<LinkageActionAqaraModel, ActionBindableModel>().ReverseMap();
                 cfg.CreateMap<ActionBindableModel, AutomationDetailCardBindableModel>().ReverseMap();
                 cfg.CreateMap<ConditionBindableModel, AutomationDetailCardBindableModel>().ReverseMap();
-                cfg.CreateMap<RoomBindableModel, RoomSourceBindableModel>().ReverseMap();
+                cfg.CreateMap<RoomBindableModel, RoomSourceBindableModel>()
+                    .ForMember(nameof(IChipModel.Text), opt => opt.MapFrom(src => src.Name))
+                    .ReverseMap();
             });
 
             return mapperConfiguration.CreateMapper();

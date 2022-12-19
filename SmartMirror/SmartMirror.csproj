@@ -409,10 +409,7 @@
 		<MauiXaml Update="Controls\IconCheckBox.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
-		<MauiXaml Update="Resources\DataTemplates\RoomSourceDataTemplate.xaml">
-		  <SubType></SubType>
-		</MauiXaml>
-		<MauiXaml Update="Resources\DataTemplates\CheckDataTemplate.xaml">
+		<MauiXaml Update="Controls\ExpandedMultipleChipSelector.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
 	</ItemGroup>

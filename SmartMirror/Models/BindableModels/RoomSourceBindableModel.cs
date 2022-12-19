@@ -15,16 +15,30 @@ namespace SmartMirror.Models.BindableModels
             set => SetProperty(ref _id, value);
         }
 
-        private string _name;
-        public string Name
-        {
-            get => _name;
-            set => SetProperty(ref _name, value);
-        }
-
         #endregion
 
         #region -- IChipModel implementation --
+
+        private string _text;
+        public string Text
+        {
+            get => _text;
+            set => SetProperty(ref _text, value);
+        }
+
+        private string _fontFamily;
+        public string FontFamily
+        {
+            get => _fontFamily;
+            set => SetProperty(ref _fontFamily, value);
+        }
+
+        private float _fontSize;
+        public float FontSize
+        {
+            get => _fontSize;
+            set => SetProperty(ref _fontSize, value);
+        }
 
         private bool _isSelected;
         public bool IsSelected

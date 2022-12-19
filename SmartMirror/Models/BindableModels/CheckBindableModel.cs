@@ -4,7 +4,7 @@ using SmartMirror.Interfaces;
 
 namespace SmartMirror.Models.BindableModels
 {
-	public class CheckBindableModel : BindableBase, IChipModel
+	public class CheckBindableModel : BindableBase, IBaseChipModel
 	{
         #region -- IChipModel implementation --
 
