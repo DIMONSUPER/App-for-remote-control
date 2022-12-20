@@ -97,7 +97,7 @@
                 public const string PD_CITY_ID = "PD.cityId";
                 public const string PD_RES_INDEX = "PD.resIndex";
 
-                //Processing
+                //Processed
                 public const string PD_PHONE_MODEL = "PD.phoneModel";
                 public const string PD_MAP_INFO = "PD.mapInfo";
                 public const string PD_NICK_NAME = "PD.nickName";

@@ -1,7 +1,4 @@
-﻿using Android.App;
-using static Android.InputMethodServices.Keyboard;
-
-namespace SmartMirror.Helpers;
+﻿namespace SmartMirror.Helpers;
 
 public static class DateTimeHelper
 {
