@@ -227,7 +227,7 @@
                                     <controls:ExpandedMultipleChipSelector
                                         IsVisible="False"
                                         ChipDataTemplateSelector="{StaticResource accessoriesSourcesSelector}"
-                                        AllItemsSource="{Binding AccessoriesSources}"
+                                        ItemsSource="{Binding AccessoriesSources}"
                                         ItemSelectedCommand="{Binding SelectAccessorySourceCommand}">
 
                                         <controls:ExpandedMultipleChipSelector.Triggers>
