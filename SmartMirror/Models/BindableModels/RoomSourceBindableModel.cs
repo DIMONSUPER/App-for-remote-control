@@ -4,8 +4,8 @@ using SmartMirror.Interfaces;
 
 namespace SmartMirror.Models.BindableModels
 {
-	public class RoomSourceBindableModel : BindableBase, IChipModel
-	{
+	public class RoomSourceBindableModel : BindableBase, ISelectableTextModel
+    {
         #region -- Public properties --
 
         private string _id;
@@ -17,7 +17,7 @@ namespace SmartMirror.Models.BindableModels
 
         #endregion
 
-        #region -- IChipModel implementation --
+        #region -- ISelectableTextModel implementation --
 
         private string _text;
         public string Text

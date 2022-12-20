@@ -128,8 +128,8 @@ namespace SmartMirror.ViewModels
             set => SetProperty(ref _categoryElements, value);
         }
 
-        private ObservableCollection<IChipModel> _accessoriesSources = new();
-        public ObservableCollection<IChipModel> AccessoriesSources
+        private ObservableCollection<ISelectableTextModel> _accessoriesSources = new();
+        public ObservableCollection<ISelectableTextModel> AccessoriesSources
         {
             get => _accessoriesSources;
             set => SetProperty(ref _accessoriesSources, value);
@@ -174,8 +174,8 @@ namespace SmartMirror.ViewModels
         private ICommand _changeAllowNotificationsCommand;
         public ICommand ChangeAllowNotificationsCommand => _changeAllowNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnChangeAllowNotificationsCommandAsync);
 
-        private ICommand _selectAccessorySourceCommand;
-        public ICommand SelectAccessorySourceCommand => _selectAccessorySourceCommand ??= SingleExecutionCommand.FromFunc<object>(OnSelectAccessorySourceCommandAsync);
+        private ICommand _accessorySourceSelectedCommand;
+        public ICommand AccessorySourceSelectedCommand => _accessorySourceSelectedCommand ??= SingleExecutionCommand.FromFunc<object>(OnAccessorySourceSelectedCommandAsync);
 
         #endregion
 
@@ -262,15 +262,21 @@ namespace SmartMirror.ViewModels
                 {
                     vm.FontSize = 21;
                     vm.FontFamily = "InterBold";
-                    vm.TapCommand = SelectAccessorySourceCommand;
-                }).ToList<IChipModel>();
+                    vm.TapCommand = AccessorySourceSelectedCommand;
+                }).ToList<ISelectableTextModel>();
 
                 AccessoriesSources = new (accessoriesSources);
             }
         }
 
-        private Task OnSelectAccessorySourceCommandAsync(object parameter)
+        private Task OnAccessorySourceSelectedCommandAsync(object parameter)
         {
+            // TODO: filter accessories
+
+            if (parameter is ISelectableTextModel chipModel)
+            {
+
+            }
 
             return Task.CompletedTask;
         }

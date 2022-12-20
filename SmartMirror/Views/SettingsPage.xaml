@@ -12,7 +12,6 @@
     xmlns:templateSelectors="clr-namespace:SmartMirror.Resources.DataTemplateSelectors"
     xmlns:skeletons="clr-namespace:SmartMirror.Views.Skeletons"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels"
-    xmlns:bindablemodels="clr-namespace:SmartMirror.Models.BindableModels"
     Title="Settings"
     Style="{DynamicResource GrayGradientStyle_i1}"
     x:Class="SmartMirror.Views.SettingsPage"
@@ -58,45 +57,13 @@
                 NotificationsDataTemplate="{StaticResource notificationSettingsGroupTemplate}"
                 AutomationDataTemplate="{StaticResource simpleAutomationTemplate}"/>
 
-            <DataTemplate
-                x:Key="expandAccessoriesSourcesTemplate"
-                x:DataType="bindablemodels:CheckBindableModel">
+            <templates:AccessoryRoomSourceTemplate x:Key="accessoryRoomSourceTemplate"/>
+            <templates:ExpandButtonTemplate x:Key="expandButtonTemplate"/>
 
-                <controls:IconCheckBox IsChecked="{Binding IsSelected}">
-
-                    <controls:IconCheckBox.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding TapCommand}"/>
-                    </controls:IconCheckBox.GestureRecognizers>
-
-                </controls:IconCheckBox>
-
-            </DataTemplate>
-
-            <DataTemplate
-                x:Key="roomSourceDataTemplate"
-                x:DataType="bindablemodels:RoomSourceBindableModel">
-
-                <controls:Chip
-                    Margin="0, 0, 9, 12"
-                    IsChecked="{Binding IsSelected}"
-                    Text="{Binding Text}">
-
-                    <controls:Chip.GestureRecognizers>
-
-                        <TapGestureRecognizer
-                            Command="{Binding TapCommand}"
-                            CommandParameter="{Binding .}"/>
-
-                    </controls:Chip.GestureRecognizers>
-
-                </controls:Chip>
-
-            </DataTemplate>
-
-            <templateSelectors:ChipDataSelector
+            <templateSelectors:ChipTemplateSelector
                 x:Key="accessoriesSourcesSelector"
-                CheckDataTemplate="{StaticResource expandAccessoriesSourcesTemplate}"
-                RoomSourceDataTemplate="{StaticResource roomSourceDataTemplate}"/>
+                RoomSourceDataTemplate="{StaticResource accessoryRoomSourceTemplate}"
+                ExpandButtonDataTemplate="{StaticResource expandButtonTemplate}"/>
 
         </ResourceDictionary>
 
@@ -226,9 +193,9 @@
 
                                     <controls:ExpandedMultipleChipSelector
                                         IsVisible="False"
-                                        ChipDataTemplateSelector="{StaticResource accessoriesSourcesSelector}"
+                                        ItemTemplateSelector="{StaticResource accessoriesSourcesSelector}"
                                         ItemsSource="{Binding AccessoriesSources}"
-                                        ItemSelectedCommand="{Binding SelectAccessorySourceCommand}">
+                                        ItemSelectedCommand="{Binding AccessorySourceSelectedCommand}">
 
                                         <controls:ExpandedMultipleChipSelector.Triggers>
 

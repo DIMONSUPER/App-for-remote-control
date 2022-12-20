@@ -14,7 +14,7 @@ using System.ComponentModel;
 
 namespace SmartMirror.Controls;
 
-public partial class ExpandedMultipleChipSelector : ContentView
+public partial class ExpandedMultipleChipSelector : Grid
 {
     private const float EMPTY_CHIP_WIDTH = 107;
     private const float WRAP_BUTTON_WIDTH = 61;
@@ -41,41 +41,41 @@ public partial class ExpandedMultipleChipSelector : ContentView
         set => SetValue(IsExpandedProperty, value);
     }
 
-    public static readonly BindableProperty ChipDataTemplateSelectorProperty = BindableProperty.Create(
-        propertyName: nameof(ChipDataTemplateSelector),
+    public static readonly BindableProperty ItemTemplateSelectorProperty = BindableProperty.Create(
+        propertyName: nameof(ItemTemplateSelector),
         returnType: typeof(DataTemplateSelector),
         declaringType: typeof(ExpandedMultipleChipSelector),
         defaultBindingMode: BindingMode.OneWay);
 
-    public DataTemplateSelector ChipDataTemplateSelector
+    public DataTemplateSelector ItemTemplateSelector
     {
-        get => (DataTemplateSelector)GetValue(ChipDataTemplateSelectorProperty);
-        set => SetValue(ChipDataTemplateSelectorProperty, value);
+        get => (DataTemplateSelector)GetValue(ItemTemplateSelectorProperty);
+        set => SetValue(ItemTemplateSelectorProperty, value);
     }
 
     public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(
         propertyName: nameof(ItemsSource),
-        returnType: typeof(ObservableCollection<IChipModel>),
-        defaultValue: new ObservableCollection<IChipModel>(),
+        returnType: typeof(ObservableCollection<ISelectableTextModel>),
+        defaultValue: new ObservableCollection<ISelectableTextModel>(),
         declaringType: typeof(ExpandedMultipleChipSelector),
         defaultBindingMode: BindingMode.OneWay);
 
-    public ObservableCollection<IChipModel> ItemsSource
+    public ObservableCollection<ISelectableTextModel> ItemsSource
     {
-        get => (ObservableCollection<IChipModel>)GetValue(ItemsSourceProperty);
+        get => (ObservableCollection<ISelectableTextModel>)GetValue(ItemsSourceProperty);
         set => SetValue(ItemsSourceProperty, value);
     }
 
     public static readonly BindableProperty DisplayedItemsSourceProperty = BindableProperty.Create(
         propertyName: nameof(DisplayedItemsSource),
-        returnType: typeof(ObservableCollection<IBaseChipModel>),
-        defaultValue: new ObservableCollection<IBaseChipModel>(),
+        returnType: typeof(ObservableCollection<IBaseSelectableModel>),
+        defaultValue: new ObservableCollection<IBaseSelectableModel>(),
         declaringType: typeof(ExpandedMultipleChipSelector),
         defaultBindingMode: BindingMode.OneWayToSource);
 
-    public ObservableCollection<IBaseChipModel> DisplayedItemsSource
+    public ObservableCollection<IBaseSelectableModel> DisplayedItemsSource
     {
-        get => (ObservableCollection<IBaseChipModel>)GetValue(DisplayedItemsSourceProperty);
+        get => (ObservableCollection<IBaseSelectableModel>)GetValue(DisplayedItemsSourceProperty);
         set => SetValue(DisplayedItemsSourceProperty, value);
     }
 
@@ -129,7 +129,7 @@ public partial class ExpandedMultipleChipSelector : ContentView
 
     private Task OnSelectItemCommandAsync(object parameter)
     {
-        if (parameter is IChipModel model)
+        if (parameter is ISelectableTextModel model)
         {
             model.IsSelected = !model.IsSelected;
         }
@@ -165,7 +165,7 @@ public partial class ExpandedMultipleChipSelector : ContentView
                     ? new(ItemsSource)
                     : new(ItemsSource.Take(_visibleChipsCountInFirstRow));
 
-                DisplayedItemsSource.Add(new CheckBindableModel
+                DisplayedItemsSource.Add(new SelectedBindableModel
                 {
                     IsSelected = IsExpanded,
                     TapCommand = ExpandCommand,

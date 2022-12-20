@@ -3,13 +3,13 @@ using SmartMirror.Models.BindableModels;
 
 namespace SmartMirror.Resources.DataTemplateSelectors
 {
-	public class ChipDataSelector : DataTemplateSelector
+	public class ChipTemplateSelector : DataTemplateSelector
 	{
         #region -- Public properties --
 
         public DataTemplate RoomSourceDataTemplate { get; set; }
 
-        public DataTemplate CheckDataTemplate { get; set; }
+        public DataTemplate ExpandButtonDataTemplate { get; set; }
 
         #endregion
 
@@ -22,7 +22,7 @@ namespace SmartMirror.Resources.DataTemplateSelectors
             result = item.GetType().Name switch
             {
                 nameof(RoomSourceBindableModel) => RoomSourceDataTemplate,
-                nameof(CheckBindableModel) => CheckDataTemplate,
+                nameof(SelectedBindableModel) => ExpandButtonDataTemplate,
                 _ => null,
             };
 

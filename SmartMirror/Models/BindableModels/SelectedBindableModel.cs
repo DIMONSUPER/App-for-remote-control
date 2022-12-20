@@ -4,9 +4,9 @@ using SmartMirror.Interfaces;
 
 namespace SmartMirror.Models.BindableModels
 {
-	public class CheckBindableModel : BindableBase, IBaseChipModel
-	{
-        #region -- IChipModel implementation --
+	public class SelectedBindableModel : BindableBase, IBaseSelectableModel
+    {
+        #region -- IBaseSelectableModel implementation --
 
         private bool _isSelected;
         public bool IsSelected
@@ -25,4 +25,3 @@ namespace SmartMirror.Models.BindableModels
         #endregion
     }
 }
-

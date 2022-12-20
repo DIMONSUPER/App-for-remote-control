@@ -3,8 +3,8 @@ using System.Windows.Input;
 
 namespace SmartMirror.Interfaces
 {
-	public interface IChipModel : IBaseChipModel
-	{
+	public interface ISelectableTextModel : IBaseSelectableModel
+    {
 		public string Text { get; set; }
 
 		public string FontFamily { get; set; }

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DataTemplate
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bindablemodels="clr-namespace:SmartMirror.Models.BindableModels"
+    xmlns:controls="clr-namespace:SmartMirror.Controls"
+    x:Class="SmartMirror.Resources.DataTemplates.AccessoryRoomSourceTemplate"
+    x:DataType="bindablemodels:RoomSourceBindableModel">
+
+    <controls:Chip
+        Margin="0, 0, 9, 12"
+        IsChecked="{Binding IsSelected}"
+        Text="{Binding Text}">
+
+        <controls:Chip.GestureRecognizers>
+
+            <TapGestureRecognizer
+                Command="{Binding TapCommand}"
+                CommandParameter="{Binding .}"/>
+
+        </controls:Chip.GestureRecognizers>
+
+    </controls:Chip>
+
+</DataTemplate>
