@@ -12,6 +12,7 @@ using SmartMirror.Services.Devices;
 using SmartMirror.Services.Rooms;
 using SmartMirror.Resources;
 using Android.App;
+using SmartMirror.Services.Scenarios;
 
 namespace SmartMirror.Services.Automation;
 
@@ -23,6 +24,7 @@ public class AutomationService : BaseAqaraService, IAutomationService
     private readonly IRepositoryService _repositoryService;
     private readonly IDevicesService _devicesService;
     private readonly IRoomsService _roomsService;
+    private readonly IScenariosService _scenariosService;
 
     private List<AutomationBindableModel> _allAutomations = new();
 
@@ -37,6 +39,7 @@ public class AutomationService : BaseAqaraService, IAutomationService
         IAqaraMessanger aqaraMessanger,
         IRepositoryService repositoryService,
         IDevicesService devicesService,
+        IScenariosService scenariosService,
         IRoomsService roomsService)
         : base(restService, settingsManager, navigationService)
     {
@@ -46,6 +49,7 @@ public class AutomationService : BaseAqaraService, IAutomationService
         _repositoryService = repositoryService;
         _devicesService = devicesService;
         _roomsService = roomsService;
+        _scenariosService = scenariosService;
 
         _aqaraMessanger.MessageReceived += OnMessageReceived;
     }
@@ -197,7 +201,7 @@ public class AutomationService : BaseAqaraService, IAutomationService
 
             if (linkageDetail.IsSuccess)
             {
-                var bindableConditions = _mapperService.MapRange<ConditionAqaraModel ,ConditionBindableModel>(linkageDetail.Result.Conditions.Condition, (m, vm) =>
+                var bindableConditions = _mapperService.MapRange<ConditionAqaraModel ,ConditionBindableModel>(linkageDetail.Result.Conditions.Condition, async (m, vm) =>
                 {
                     vm.Device = devices?.FirstOrDefault(x => x.DeviceId == vm.SubjectId);
 
@@ -206,10 +210,10 @@ public class AutomationService : BaseAqaraService, IAutomationService
                         vm.Device.RoomName = rooms.FirstOrDefault(x => x.Id == vm.Device.PositionId)?.Name;
                     }
 
-                    SetAdditionalInfoForCondition(vm);
+                    await SetAdditionalInfoForConditionAsync(vm);
                 });
 
-                var bindableActions = _mapperService.MapRange<ActionAqaraModel, ActionBindableModel>(linkageDetail.Result.Actions.Action, (m, vm) =>
+                var bindableActions = _mapperService.MapRange<ActionAqaraModel, ActionBindableModel>(linkageDetail.Result.Actions.Action, async (m, vm) =>
                 {
                     vm.Device = devices?.FirstOrDefault(x => x.DeviceId == vm.SubjectId);
 
@@ -218,7 +222,7 @@ public class AutomationService : BaseAqaraService, IAutomationService
                         vm.Device.RoomName = rooms.FirstOrDefault(x => x.Id == vm.Device.PositionId)?.Name;
                     }
 
-                    SetAdditionalInfoForAction(vm);
+                    await SetAdditionalInfoForActionAsync(vm);
                 });
 
                 automation.Relation = linkageDetail.Result.Conditions.Relation;
@@ -229,7 +233,7 @@ public class AutomationService : BaseAqaraService, IAutomationService
         }
     }
 
-    private void SetAdditionalInfoForCondition(ConditionBindableModel condition)
+    private async Task SetAdditionalInfoForConditionAsync(ConditionBindableModel condition)
     {
         if (condition.Device is null)
         {
@@ -243,11 +247,11 @@ public class AutomationService : BaseAqaraService, IAutomationService
             condition.RoomName = condition.Device.RoomName;
         }
 
-        var descriptionCondition = GetDescriptionForCondition(condition);
+        var descriptionCondition = await GetDescriptionForConditionAsync(condition);
 
         if (descriptionCondition != string.Empty)
         {
-            descriptionCondition += ", ";
+            descriptionCondition += " ";
         }
 
         descriptionCondition += GetDescriptionForParams(condition.Params ?? new());
@@ -255,7 +259,7 @@ public class AutomationService : BaseAqaraService, IAutomationService
         condition.Condition = descriptionCondition;
     }
 
-    private void SetAdditionalInfoForAction(ActionBindableModel action)
+    private async Task SetAdditionalInfoForActionAsync(ActionBindableModel action)
     {
         if (action.Device is null)
         {
@@ -269,11 +273,11 @@ public class AutomationService : BaseAqaraService, IAutomationService
             action.RoomName = action.Device.RoomName;
         }
 
-        var descriptionCondition = GetDescriptionForAction(action);
+        var descriptionCondition = await GetDescriptionForActionAsync(action);
 
         if (descriptionCondition != string.Empty)
         {
-            descriptionCondition += ", ";
+            descriptionCondition += " ";
         }
 
         descriptionCondition += GetDescriptionForParams(action.Params ?? new());
@@ -281,23 +285,65 @@ public class AutomationService : BaseAqaraService, IAutomationService
         action.Condition = descriptionCondition;
     }
 
-    private string GetDescriptionForCondition(ConditionBindableModel condition)
+    private async Task<string> GetNameSceneAsync(string id)
+    {
+        var scenarios = await _scenariosService.GetAllScenariosAsync();
+
+        var scenario = scenarios.FirstOrDefault(row => row.SceneId == id);
+
+        if (scenario is null)
+        {
+            var resultOfGettingScenario = await _scenariosService.GetScenarioByIdAsync(id);
+
+            if (resultOfGettingScenario.IsSuccess)
+            {
+                scenario = resultOfGettingScenario.Result;
+            }
+        }
+
+        return scenario?.Name ?? string.Empty;
+    }
+
+    private async Task<string> GetNameAutomationAsync(string id)
+    {
+        var result = string.Empty;
+
+        var automation = _allAutomations.FirstOrDefault(row => row.LinkageId == id);
+
+        if (automation is null)
+        {
+            var resultOfGettingAutomation = await GetLinkageDetailAsync(id);
+
+            if (resultOfGettingAutomation.IsSuccess)
+            {
+                result = resultOfGettingAutomation.Result.Name;
+            }
+        }
+        else
+        {
+            result = automation.Name;
+        }
+
+        return result;
+    }
+
+    private async Task<string> GetDescriptionForConditionAsync(ConditionBindableModel condition)
     {
         var result = condition.Model switch
         {
-            Constants.Aqara.Models.APP_IFTTT_V1 => condition.SubjectId,
+            Constants.Aqara.Models.APP_IFTTT_V1 => await GetNameAutomationAsync(condition.SubjectId),
             _ => string.Empty,
         };
 
         return result;
     }
 
-    private string GetDescriptionForAction(ActionBindableModel action)
+    private async Task<string> GetDescriptionForActionAsync(ActionBindableModel action)
     {
         var result = action.Model switch
         {
-            Constants.Aqara.Models.APP_IFTTT_V1 => action.SubjectId,
-            Constants.Aqara.Models.APP_SCENE_V1 => action.SubjectId,
+            Constants.Aqara.Models.APP_IFTTT_V1 => await GetNameAutomationAsync(action.SubjectId),
+            Constants.Aqara.Models.APP_SCENE_V1 => await GetNameSceneAsync(action.SubjectId),
             _ => string.Empty,
         };
 
