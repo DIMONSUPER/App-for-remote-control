@@ -175,7 +175,7 @@ namespace SmartMirror.ViewModels
         public ICommand ChangeAllowNotificationsCommand => _changeAllowNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnChangeAllowNotificationsCommandAsync);
 
         private ICommand _selectAccessorySourceCommand;
-        public ICommand SelectAccessorySourceCommand => _selectAccessorySourceCommand ??= SingleExecutionCommand.FromFunc<IChipModel>(OnSelectAccessorySourceCommandAsync);
+        public ICommand SelectAccessorySourceCommand => _selectAccessorySourceCommand ??= SingleExecutionCommand.FromFunc<object>(OnSelectAccessorySourceCommandAsync);
 
         #endregion
 
@@ -264,15 +264,13 @@ namespace SmartMirror.ViewModels
                     vm.FontFamily = "InterBold";
                     vm.TapCommand = SelectAccessorySourceCommand;
                 }).ToList<IChipModel>();
+
                 AccessoriesSources = new (accessoriesSources);
             }
         }
 
-        private Task OnSelectAccessorySourceCommandAsync(IChipModel chipModel)
+        private Task OnSelectAccessorySourceCommandAsync(object parameter)
         {
-            chipModel.IsSelected = !chipModel.IsSelected;
-
-            // refresh accesories according new filter
 
             return Task.CompletedTask;
         }

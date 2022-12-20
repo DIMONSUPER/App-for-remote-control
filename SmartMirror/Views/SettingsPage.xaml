@@ -79,9 +79,17 @@
                 <controls:Chip
                     Margin="0, 0, 9, 12"
                     IsChecked="{Binding IsSelected}"
-                    Text="{Binding Text}"
-                    behaviors:TouchBehavior.Command="{Binding TapCommand}"
-                    behaviors:TouchBehavior.CommandParameter="{Binding .}"/>
+                    Text="{Binding Text}">
+
+                    <controls:Chip.GestureRecognizers>
+
+                        <TapGestureRecognizer
+                            Command="{Binding TapCommand}"
+                            CommandParameter="{Binding .}"/>
+
+                    </controls:Chip.GestureRecognizers>
+
+                </controls:Chip>
 
             </DataTemplate>
 
@@ -217,12 +225,26 @@
                                 <StackLayout>
 
                                     <controls:ExpandedMultipleChipSelector
-                                        Margin="0, 0, 0, 30"
+                                        IsVisible="False"
                                         ChipDataTemplateSelector="{StaticResource accessoriesSourcesSelector}"
                                         AllItemsSource="{Binding AccessoriesSources}"
-                                        IsVisible="{Binding SelectedCategory.Type,
-                                            Converter={xct:IsEqualConverter},
-                                            ConverterParameter={Static enums:ECategoryType.Accessories}}"/>
+                                        ItemSelectedCommand="{Binding SelectAccessorySourceCommand}">
+
+                                        <controls:ExpandedMultipleChipSelector.Triggers>
+
+                                            <DataTrigger
+                                                TargetType="controls:ExpandedMultipleChipSelector"
+                                                Binding="{Binding SelectedCategory.Type}"
+                                                Value="{Static enums:ECategoryType.Accessories}">
+
+                                                <Setter Property="Margin" Value="0, 0, 0, 30"/>
+                                                <Setter Property="IsVisible" Value="True"/>
+
+                                            </DataTrigger>
+
+                                        </controls:ExpandedMultipleChipSelector.Triggers>
+
+                                    </controls:ExpandedMultipleChipSelector>
 
                                     <templates:SimpleNotificationsHeaderTemplate
                                         Margin="0, 0, 0, 25"

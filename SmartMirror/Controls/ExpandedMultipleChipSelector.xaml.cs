@@ -19,8 +19,8 @@ public partial class ExpandedMultipleChipSelector : ContentView
     private const float EMPTY_CHIP_WIDTH = 107;
     private const float WRAP_BUTTON_WIDTH = 61;
 
-    private int _visibleChipsInFirstRow = 0;
-    private List<float> _chipWidths = new();
+    private int _visibleChipsCountInFirstRow = 0;
+    private List<float> _chipsWidths = new();
 
     public ExpandedMultipleChipSelector()
 	{
@@ -33,7 +33,7 @@ public partial class ExpandedMultipleChipSelector : ContentView
         propertyName: nameof(IsExpanded),
         returnType: typeof(bool),
         declaringType: typeof(ExpandedMultipleChipSelector),
-        defaultBindingMode: BindingMode.OneWay);
+        defaultBindingMode: BindingMode.OneWayToSource);
 
     public bool IsExpanded
     {
@@ -53,17 +53,17 @@ public partial class ExpandedMultipleChipSelector : ContentView
         set => SetValue(ChipDataTemplateSelectorProperty, value);
     }
 
-    public static readonly BindableProperty AllItemsSourceProperty = BindableProperty.Create(
-        propertyName: nameof(AllItemsSource),
+    public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(
+        propertyName: nameof(ItemsSource),
         returnType: typeof(ObservableCollection<IChipModel>),
         defaultValue: new ObservableCollection<IChipModel>(),
         declaringType: typeof(ExpandedMultipleChipSelector),
         defaultBindingMode: BindingMode.OneWay);
 
-    public ObservableCollection<IChipModel> AllItemsSource
+    public ObservableCollection<IChipModel> ItemsSource
     {
-        get => (ObservableCollection<IChipModel>)GetValue(AllItemsSourceProperty);
-        set => SetValue(AllItemsSourceProperty, value);
+        get => (ObservableCollection<IChipModel>)GetValue(ItemsSourceProperty);
+        set => SetValue(ItemsSourceProperty, value);
     }
 
     public static readonly BindableProperty DisplayedItemsSourceProperty = BindableProperty.Create(
@@ -79,8 +79,23 @@ public partial class ExpandedMultipleChipSelector : ContentView
         set => SetValue(DisplayedItemsSourceProperty, value);
     }
 
+    public static readonly BindableProperty ItemSelectedCommandProperty = BindableProperty.Create(
+        propertyName: nameof(ItemSelectedCommand),
+        returnType: typeof(ICommand),
+        declaringType: typeof(ExpandedMultipleChipSelector),
+        defaultBindingMode: BindingMode.OneWay);
+
+    public ICommand ItemSelectedCommand
+    {
+        get => (ICommand)GetValue(ItemSelectedCommandProperty);
+        set => SetValue(ItemSelectedCommandProperty, value);
+    }
+
     private ICommand _expandCommand;
     public ICommand ExpandCommand => _expandCommand ??= SingleExecutionCommand.FromFunc(OnExpandCommandAsync);
+
+    private ICommand _selectItemCommand;
+    public ICommand SelectItemCommand => _selectItemCommand ??= SingleExecutionCommand.FromFunc<object>(OnSelectItemCommandAsync);
 
     #endregion
 
@@ -90,15 +105,20 @@ public partial class ExpandedMultipleChipSelector : ContentView
     {
         base.OnPropertyChanged(propertyName);
 
-        if (propertyName is nameof(AllItemsSource))
+        if (propertyName is nameof(ItemsSource))
         {
-            _chipWidths = GetChipWidths();
-            _visibleChipsInFirstRow = CalculateDislplayedItemsCountInFirstRow();
+            foreach (var item in ItemsSource)
+            {
+                item.TapCommand = SelectItemCommand;
+            }
+
+            CalculateChipsWidths();
+            CalculateVisibleChipsCountInFirstRow();
             SetDisplayedItemsSource();
         }
         else if (propertyName is nameof(Width))
         {
-            _visibleChipsInFirstRow = CalculateDislplayedItemsCountInFirstRow();
+            CalculateVisibleChipsCountInFirstRow();
             SetDisplayedItemsSource();
         }
     }
@@ -106,6 +126,21 @@ public partial class ExpandedMultipleChipSelector : ContentView
     #endregion
 
     #region -- Private helpers --
+
+    private Task OnSelectItemCommandAsync(object parameter)
+    {
+        if (parameter is IChipModel model)
+        {
+            model.IsSelected = !model.IsSelected;
+        }
+
+        if (ItemSelectedCommand is not null && ItemSelectedCommand.CanExecute(parameter))
+        {
+            ItemSelectedCommand.Execute(parameter);
+        }
+
+        return Task.CompletedTask;
+    }
 
     private Task OnExpandCommandAsync()
     {
@@ -118,50 +153,53 @@ public partial class ExpandedMultipleChipSelector : ContentView
 
     private void SetDisplayedItemsSource()
     {
-        if (_visibleChipsInFirstRow > 0)
+        if (_visibleChipsCountInFirstRow > 0)
         {
-            DisplayedItemsSource = IsExpanded
-                ? new(AllItemsSource)
-                : new(AllItemsSource.Take(_visibleChipsInFirstRow));
-
-            DisplayedItemsSource.Add(new CheckBindableModel
+            if (_visibleChipsCountInFirstRow == ItemsSource.Count)
             {
-                IsSelected = IsExpanded,
-                TapCommand = ExpandCommand,
-            });
+                DisplayedItemsSource = new(ItemsSource);
+            }
+            else
+            {
+                DisplayedItemsSource = IsExpanded
+                    ? new(ItemsSource)
+                    : new(ItemsSource.Take(_visibleChipsCountInFirstRow));
+
+                DisplayedItemsSource.Add(new CheckBindableModel
+                {
+                    IsSelected = IsExpanded,
+                    TapCommand = ExpandCommand,
+                });
+            }
         }
     }
 
-    private List<float> GetChipWidths()
+    private void CalculateChipsWidths()
     {
-        List<float> chipWidths = new();
+        _chipsWidths = new();
 
-        foreach (var item in AllItemsSource)
+        foreach (var item in ItemsSource)
         {
             var chipWidht = StringWidthHelper.CalculateStringWidth(item.Text, item.FontSize, item.FontFamily) + EMPTY_CHIP_WIDTH;
 
-            chipWidths.Add(chipWidht);
+            _chipsWidths.Add(chipWidht);
         }
-
-        return chipWidths;
     }
 
-    private int CalculateDislplayedItemsCountInFirstRow()
+    private void CalculateVisibleChipsCountInFirstRow()
     {
-        var visibleChipsInFirstRow = 0;
+        _visibleChipsCountInFirstRow = 0;
 
-        if (Width > 0 && _chipWidths.Any())
+        if (Width > 0 && _chipsWidths.Any())
         {
-            var availableWidth = Width - WRAP_BUTTON_WIDTH;
-            var accumulateWidth = 0f;
+            var availableWidthForItems = Width - WRAP_BUTTON_WIDTH;
+            var accumulatedItemsWidth = 0f;
 
-            while ((accumulateWidth + _chipWidths[visibleChipsInFirstRow]) < availableWidth)
+            for (int i = 0; i < ItemsSource.Count && (accumulatedItemsWidth + _chipsWidths[_visibleChipsCountInFirstRow]) < availableWidthForItems; i++)
             {
-                accumulateWidth += _chipWidths[visibleChipsInFirstRow++];
+                accumulatedItemsWidth += _chipsWidths[_visibleChipsCountInFirstRow++];
             }
         }
-
-        return visibleChipsInFirstRow;
     }
 
     #endregion
