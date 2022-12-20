@@ -89,6 +89,23 @@
                 public const string LUMI_WEATHER_V1 = "lumi.weather.v1";
             }
 
+            public static class ParamDefinition
+            {
+                public const string PD_USER_ID = "PD.userId";
+                public const string PD_CLIENT_ID = "PD.clientId";
+                public const string PD_FENCE_INFO = "PD.fenceInfo";
+                public const string PD_CITY_ID = "PD.cityId";
+                public const string PD_RES_INDEX = "PD.resIndex";
+
+                //Processing
+                public const string PD_PHONE_MODEL = "PD.phoneModel";
+                public const string PD_MAP_INFO = "PD.mapInfo";
+                public const string PD_NICK_NAME = "PD.nickName";
+                public const string PD_TEMP = "PD.temp";
+                public const string PD_HUMI = "PD.humi";
+                public const string PD_TIMER = "PD.timer";
+            }
+
             public static class EventTypes
             {
                 //Documentation: https://opendoc.aqara.cn/en/docs/developmanual/messagePush/messagePushFormat.html

@@ -11,6 +11,7 @@ using SmartMirror.Services.Settings;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Rooms;
 using SmartMirror.Resources;
+using Android.App;
 
 namespace SmartMirror.Services.Automation;
 
@@ -203,15 +204,6 @@ public class AutomationService : BaseAqaraService, IAutomationService
                     if (vm.Device is not null)
                     {
                         vm.Device.RoomName = rooms.FirstOrDefault(x => x.Id == vm.Device.PositionId)?.Name;
-
-                        if (m.Params is not null)
-                        {
-                            vm.Condition = $"Condition: {vm.TriggerDefinitionId}, {vm.TriggerName}, {vm.SubjectId}, {vm.Model}, {vm.BeginTime}, {vm.EndTime}, {GetConditions(m.Params ?? new())}";
-                        }
-                    }
-                    else
-                    {
-                        vm.Condition = $"Condition: {vm.TriggerDefinitionId}, {vm.TriggerName}, {vm.SubjectId}, {vm.Model}, {vm.BeginTime}, {vm.EndTime}, {GetConditions(m.Params ?? new())}";
                     }
 
                     SetAdditionalInfoForCondition(vm);
@@ -224,15 +216,6 @@ public class AutomationService : BaseAqaraService, IAutomationService
                     if (vm.Device is not null)
                     {
                         vm.Device.RoomName = rooms.FirstOrDefault(x => x.Id == vm.Device.PositionId)?.Name;
-
-                        if (m.Params is not null)
-                        {
-                            vm.Condition = $"Action: {vm.ActionDefinitionId}, {vm.ActionName}, {vm.SubjectId}, {vm.Model}, {vm.DelayTime}, {vm.DelayTimeUnit}, {GetConditions(m.Params ?? new())}";
-                        }
-                    }
-                    else
-                    {
-                        vm.Condition = $"Action: {vm.ActionDefinitionId}, {vm.ActionName}, {vm.SubjectId}, {vm.Model}, {vm.DelayTime}, {vm.DelayTimeUnit}, {GetConditions(m.Params ?? new())}";
                     }
 
                     SetAdditionalInfoForAction(vm);
@@ -244,23 +227,6 @@ public class AutomationService : BaseAqaraService, IAutomationService
                 automation.Description = automation.Conditions.Select(row => row.TriggerName).Aggregate((i, j) => i + ", " + j);
             }
         }
-    }
-
-    private string GetConditions(List<ParamAqaraModel> parameters)
-    {
-        var result = string.Empty;
-
-        if (parameters is not null)
-        {
-            result = "Params: ";
-
-            foreach (var param in parameters)
-            {
-                result += $"{param.ParamId} {param.ParamType} {param.ParamUnit} {param.Value}";
-            }
-        }
-
-        return result;
     }
 
     private void SetAdditionalInfoForCondition(ConditionBindableModel condition)
@@ -276,6 +242,17 @@ public class AutomationService : BaseAqaraService, IAutomationService
             condition.DeviceName = condition.Device.Name;
             condition.RoomName = condition.Device.RoomName;
         }
+
+        var descriptionCondition = GetDescriptionForCondition(condition);
+
+        if (descriptionCondition != string.Empty)
+        {
+            descriptionCondition += ", ";
+        }
+
+        descriptionCondition += GetDescriptionForParams(condition.Params ?? new());
+
+        condition.Condition = descriptionCondition;
     }
 
     private void SetAdditionalInfoForAction(ActionBindableModel action)
@@ -291,6 +268,69 @@ public class AutomationService : BaseAqaraService, IAutomationService
             action.DeviceName = action.Device.Name;
             action.RoomName = action.Device.RoomName;
         }
+
+        var descriptionCondition = GetDescriptionForAction(action);
+
+        if (descriptionCondition != string.Empty)
+        {
+            descriptionCondition += ", ";
+        }
+
+        descriptionCondition += GetDescriptionForParams(action.Params ?? new());
+
+        action.Condition = descriptionCondition;
+    }
+
+    private string GetDescriptionForCondition(ConditionBindableModel condition)
+    {
+        var result = condition.Model switch
+        {
+            Constants.Aqara.Models.APP_IFTTT_V1 => condition.SubjectId,
+            _ => string.Empty,
+        };
+
+        return result;
+    }
+
+    private string GetDescriptionForAction(ActionBindableModel action)
+    {
+        var result = action.Model switch
+        {
+            Constants.Aqara.Models.APP_IFTTT_V1 => action.SubjectId,
+            Constants.Aqara.Models.APP_SCENE_V1 => action.SubjectId,
+            _ => string.Empty,
+        };
+
+        return result;
+    }
+
+    private string GetDescriptionForParams(List<ParamAqaraModel> parameters)
+    {
+        var result = string.Empty;
+
+        if (parameters is not null)
+        {
+            foreach (var param in parameters)
+            {
+                result += param.ParamId switch
+                {
+                    Constants.Aqara.ParamDefinition.PD_PHONE_MODEL => $"{param.Value}, ",
+                    Constants.Aqara.ParamDefinition.PD_MAP_INFO => $"{param.Value}, ",
+                    Constants.Aqara.ParamDefinition.PD_NICK_NAME => $"{param.Value}, ",
+                    Constants.Aqara.ParamDefinition.PD_TEMP => $"{int.Parse(param.Value) / (param.ParamType == "0" ? 100 : 1)} {param.ParamUnit}, ",
+                    Constants.Aqara.ParamDefinition.PD_HUMI => $"{param.Value}{param.ParamUnit}, ",
+                    Constants.Aqara.ParamDefinition.PD_TIMER => $"{DateTimeHelper.ConvertFromAqara(param.Value)}, ",
+                    _ => string.Empty,
+                };
+            }
+
+            if (result != string.Empty)
+            {
+                result = result.Substring(0, result.Length - 2);
+            }
+        }
+
+        return result;
     }
 
     private async Task GetSettingsAutomationsAsync(IEnumerable<AutomationBindableModel> automations)
