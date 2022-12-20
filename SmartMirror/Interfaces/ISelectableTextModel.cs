@@ -5,6 +5,8 @@ namespace SmartMirror.Interfaces
 {
 	public interface ISelectableTextModel : IBaseSelectableModel
     {
+		public string Id { get; set; }
+
 		public string Text { get; set; }
 
 		public string FontFamily { get; set; }

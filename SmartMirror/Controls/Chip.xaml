@@ -7,10 +7,6 @@
     x:DataType="local:Chip"
     x:Name="chip">
 
-    <Border.GestureRecognizers>
-        <TapGestureRecognizer Tapped="OnTapped"/>
-    </Border.GestureRecognizers>
-
     <Border.Triggers>
         <DataTrigger TargetType="Border" Binding="{Binding IsChecked, Source={Reference chip}}" Value="True">
 

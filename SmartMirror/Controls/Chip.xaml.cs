@@ -111,13 +111,4 @@ public partial class Chip : Border
     }
 
     #endregion
-
-    #region -- Private helpers --
-
-    private void OnTapped(Object sender, TappedEventArgs e)
-    {
-        IsChecked = !IsChecked;
-    }
-
-    #endregion
 }

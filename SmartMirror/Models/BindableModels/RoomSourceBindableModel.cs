@@ -6,7 +6,7 @@ namespace SmartMirror.Models.BindableModels
 {
 	public class RoomSourceBindableModel : BindableBase, ISelectableTextModel
     {
-        #region -- Public properties --
+        #region -- ISelectableTextModel implementation --
 
         private string _id;
         public string Id
@@ -14,10 +14,6 @@ namespace SmartMirror.Models.BindableModels
             get => _id;
             set => SetProperty(ref _id, value);
         }
-
-        #endregion
-
-        #region -- ISelectableTextModel implementation --
 
         private string _text;
         public string Text

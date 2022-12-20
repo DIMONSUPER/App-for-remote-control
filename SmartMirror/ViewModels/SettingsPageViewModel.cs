@@ -269,16 +269,22 @@ namespace SmartMirror.ViewModels
             }
         }
 
-        private Task OnAccessorySourceSelectedCommandAsync(object parameter)
+        private async Task OnAccessorySourceSelectedCommandAsync(object parameter)
         {
-            // TODO: filter accessories
-
             if (parameter is ISelectableTextModel chipModel)
             {
+                await LoadAccessoriesFromSelectedRoomsAsync();
 
+                if (_allAccessories.Any())
+                {
+                    DataState = EPageState.LoadingSkeleton;
+                }
+
+                _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    SetElementsSelectedCategory();
+                }));
             }
-
-            return Task.CompletedTask;
         }
 
         private void LoadCategories()
@@ -287,15 +293,15 @@ namespace SmartMirror.ViewModels
             {
                 new()
                 {
-                    Type = ECategoryType.Accessories,
-                    Name = Strings.Accessories,
+                    Type = ECategoryType.Notifications,
+                    Name = Strings.Notifications,
+                    HasImage = false,
                     TapCommand = SelectCategoryCommand,
                 },
                 new()
                 {
-                    Type = ECategoryType.Notifications,
-                    Name = Strings.Notifications,
-                    HasImage = false,
+                    Type = ECategoryType.Accessories,
+                    Name = Strings.Accessories,
                     TapCommand = SelectCategoryCommand,
                 },
                 new()
@@ -430,7 +436,29 @@ namespace SmartMirror.ViewModels
 
         private async Task<bool> LoadAllDevicesAsync()
         {
-            var devices = await _devicesService.GetAllSupportedDevicesAsync();
+            await LoadAccessoriesFromSelectedRoomsAsync();
+
+            var deviceCategory = Categories.FirstOrDefault(c => c.Type == ECategoryType.Accessories);
+
+            deviceCategory.Count = _allAccessories.Count().ToString();
+
+            return true;
+        }
+
+        private async Task LoadAccessoriesFromSelectedRoomsAsync()
+        {
+            var devices = Enumerable.Empty<DeviceBindableModel>();
+
+            var selectedAccessorySources = AccessoriesSources.Where(x => x.IsSelected);
+
+            if (selectedAccessorySources.Any())
+            {
+                devices = await _devicesService.GetAllSupportedDevicesAsync(x => selectedAccessorySources.Any(s => s.Id == x.PositionId));
+            }
+            else
+            {
+                devices = await _devicesService.GetAllSupportedDevicesAsync();
+            }
 
             _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(devices, (m, vm) =>
             {
@@ -438,12 +466,6 @@ namespace SmartMirror.ViewModels
                 vm.Type = ECategoryType.Accessories;
                 vm.TapCommand = OpenAccessorySettingsCommand;
             });
-
-            var deviceCategory = Categories.FirstOrDefault(c => c.Type == ECategoryType.Accessories);
-
-            deviceCategory.Count = _allAccessories.Count().ToString();
-
-            return true;
         }
 
         private async Task<bool> LoadAllScenariosAsync()
