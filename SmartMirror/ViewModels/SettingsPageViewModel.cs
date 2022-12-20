@@ -256,7 +256,7 @@ namespace SmartMirror.ViewModels
             var resultOfGettingAllRooms = await _roomsService.GetAllRoomsAsync();
             var isAnyRoomsLoaded = resultOfGettingAllRooms.Any();
 
-            if (resultOfGettingAllRooms.Any())
+            if (isAnyRoomsLoaded)
             {
                 var accessoriesSources = _mapperService.MapRange<RoomSourceBindableModel>(resultOfGettingAllRooms, (v, vm) =>
                 {

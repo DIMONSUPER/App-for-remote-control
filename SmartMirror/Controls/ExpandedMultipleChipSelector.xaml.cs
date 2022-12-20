@@ -16,8 +16,7 @@ namespace SmartMirror.Controls;
 
 public partial class ExpandedMultipleChipSelector : Grid
 {
-    // 1.5 + 42 + 24 + 1.5
-    private const float EMPTY_CHIP_WIDTH = 108 + 16f;
+    private const float EMPTY_CHIP_WIDTH = 108 + 16;
     private const float WRAP_BUTTON_WIDTH = 52;
 
     private int _visibleChipsCountInFirstRow = 0;
