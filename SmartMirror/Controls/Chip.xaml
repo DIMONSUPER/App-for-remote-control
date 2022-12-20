@@ -12,15 +12,16 @@
 
             <Setter Property="Border.BackgroundColor" Value="{Binding CheckedBackgroundColor, Source={Reference chip}}"/>
             <Setter TargetName="label" Property="Label.Style" Value="{Binding CheckedTextStyle, Source={Reference chip}}"/>
-            <Setter TargetName="stackLayout" Property="StackLayout.Padding" Value="42, 10, 11, 10"/>
-
-        </DataTrigger>
-    </Border.Triggers>
-
-    <HorizontalStackLayout
-        Padding="42, 10"
-        Spacing="24"
-        x:Name="stackLayout"> 
+            <Setter TargetName="stackLayout" Property="StackLayout.Padding" Value="42, 0, 11, 0"/>
+ 
+         </DataTrigger>
+     </Border.Triggers>
+ 
+     <HorizontalStackLayout
+         Padding="42, 0"
+         HeightRequest="49"
+         Spacing="24"
+         x:Name="stackLayout"> 
 
         <Label
             Style="{Binding TextStyle, Source={Reference chip}}"

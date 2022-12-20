@@ -4,7 +4,7 @@ using SmartMirror.Interfaces;
 
 namespace SmartMirror.Models.BindableModels
 {
-	public class SelectedBindableModel : BindableBase, IBaseSelectableModel
+    public class SelectedBindableModel : BindableBase, IBaseSelectableModel
     {
         #region -- IBaseSelectableModel implementation --
 

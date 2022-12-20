@@ -16,16 +16,17 @@ namespace SmartMirror.Controls;
 
 public partial class ExpandedMultipleChipSelector : Grid
 {
-    private const float EMPTY_CHIP_WIDTH = 107;
-    private const float WRAP_BUTTON_WIDTH = 61;
+    // 1.5 + 42 + 24 + 1.5
+    private const float EMPTY_CHIP_WIDTH = 108 + 16f;
+    private const float WRAP_BUTTON_WIDTH = 52;
 
     private int _visibleChipsCountInFirstRow = 0;
     private List<float> _chipsWidths = new();
 
     public ExpandedMultipleChipSelector()
-	{
-		InitializeComponent();
-	}
+    {
+        InitializeComponent();
+    }
 
     #region -- Public properties --
 
@@ -116,7 +117,7 @@ public partial class ExpandedMultipleChipSelector : Grid
             CalculateVisibleChipsCountInFirstRow();
             SetDisplayedItemsSource();
         }
-        else if (propertyName is nameof(Width))
+        else if (propertyName is nameof(Width) && _visibleChipsCountInFirstRow == 0)
         {
             CalculateVisibleChipsCountInFirstRow();
             SetDisplayedItemsSource();
@@ -180,9 +181,9 @@ public partial class ExpandedMultipleChipSelector : Grid
 
         foreach (var item in ItemsSource)
         {
-            var chipWidht = StringWidthHelper.CalculateStringWidth(item.Text, item.FontSize, item.FontFamily) + EMPTY_CHIP_WIDTH;
+            var chipWidth = StringWidthHelper.CalculateStringWidth(item.Text, item.FontSize, item.FontFamily) + EMPTY_CHIP_WIDTH;
 
-            _chipsWidths.Add(chipWidht);
+            _chipsWidths.Add(chipWidth);
         }
     }
 

@@ -2,8 +2,8 @@
 
 public partial class ExpandButtonTemplate : DataTemplate
 {
-	public ExpandButtonTemplate()
-	{
-		InitializeComponent();
-	}
+    public ExpandButtonTemplate()
+    {
+        InitializeComponent();
+    }
 }

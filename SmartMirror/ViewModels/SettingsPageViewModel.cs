@@ -175,7 +175,7 @@ namespace SmartMirror.ViewModels
         public ICommand ChangeAllowNotificationsCommand => _changeAllowNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnChangeAllowNotificationsCommandAsync);
 
         private ICommand _accessorySourceSelectedCommand;
-        public ICommand AccessorySourceSelectedCommand => _accessorySourceSelectedCommand ??= SingleExecutionCommand.FromFunc<object>(OnAccessorySourceSelectedCommandAsync);
+        public ICommand AccessorySourceSelectedCommand => _accessorySourceSelectedCommand ??= SingleExecutionCommand.FromFunc<RoomSourceBindableModel>(OnAccessorySourceSelectedCommandAsync);
 
         #endregion
 
@@ -232,7 +232,6 @@ namespace SmartMirror.ViewModels
         private async void OnAllDevicesChanged(object sender, EventArgs e)
         {
             await LoadAllDevicesAsync();
-            await LoadAccessorySourcesAsync();
         }
 
         private async void OnAllAutomationsChanged(object sender, EventArgs e)
@@ -252,9 +251,10 @@ namespace SmartMirror.ViewModels
             await LoadAccessorySourcesAsync();
         }
 
-        private async Task LoadAccessorySourcesAsync()
+        private async Task<bool> LoadAccessorySourcesAsync()
         {
             var resultOfGettingAllRooms = await _roomsService.GetAllRoomsAsync();
+            var isAnyRoomsLoaded = resultOfGettingAllRooms.Any();
 
             if (resultOfGettingAllRooms.Any())
             {
@@ -267,24 +267,23 @@ namespace SmartMirror.ViewModels
 
                 AccessoriesSources = new (accessoriesSources);
             }
+
+            return isAnyRoomsLoaded;
         }
 
-        private async Task OnAccessorySourceSelectedCommandAsync(object parameter)
+        private async Task OnAccessorySourceSelectedCommandAsync(RoomSourceBindableModel roomSource)
         {
-            if (parameter is ISelectableTextModel chipModel)
+            await LoadAccessoriesFromSelectedRoomsAsync();
+
+            if (_allAccessories.Any())
             {
-                await LoadAccessoriesFromSelectedRoomsAsync();
-
-                if (_allAccessories.Any())
-                {
-                    DataState = EPageState.LoadingSkeleton;
-                }
-
-                _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    SetElementsSelectedCategory();
-                }));
+                DataState = EPageState.LoadingSkeleton;
             }
+
+            _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
+            {
+                SetElementsSelectedCategory();
+            }));
         }
 
         private void LoadCategories()
@@ -417,16 +416,12 @@ namespace SmartMirror.ViewModels
 
             if (IsInternetConnected)
             {
-                isLoaded = await LoadAllDevicesAsync();
+                isLoaded = await LoadAccessorySourcesAsync();
+                isLoaded &= await LoadAllDevicesAsync();
                 isLoaded &= await LoadAllScenariosAsync();
                 isLoaded &= await LoadAllCamerasAsync();
                 isLoaded &= await LoadAllNotificationsAsync();
                 isLoaded &= await LoadAllAutomationsAsync();
-
-                if (isLoaded)
-                {
-                    await LoadAccessorySourcesAsync();
-                }
 
                 CreateProviders();
             }

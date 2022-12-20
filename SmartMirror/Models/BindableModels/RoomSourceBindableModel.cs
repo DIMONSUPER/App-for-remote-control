@@ -4,7 +4,7 @@ using SmartMirror.Interfaces;
 
 namespace SmartMirror.Models.BindableModels
 {
-	public class RoomSourceBindableModel : BindableBase, ISelectableTextModel
+    public class RoomSourceBindableModel : BindableBase, ISelectableTextModel
     {
         #region -- ISelectableTextModel implementation --
 

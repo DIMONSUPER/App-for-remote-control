@@ -3,8 +3,8 @@ using SmartMirror.Models.BindableModels;
 
 namespace SmartMirror.Resources.DataTemplateSelectors
 {
-	public class ChipTemplateSelector : DataTemplateSelector
-	{
+    public class ChipTemplateSelector : DataTemplateSelector
+    {
         #region -- Public properties --
 
         public DataTemplate RoomSourceDataTemplate { get; set; }
@@ -32,4 +32,3 @@ namespace SmartMirror.Resources.DataTemplateSelectors
         #endregion
     }
 }
-

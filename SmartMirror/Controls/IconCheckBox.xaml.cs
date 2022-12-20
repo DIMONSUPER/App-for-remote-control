@@ -2,10 +2,10 @@
 
 public partial class IconCheckBox : Border
 {
-	public IconCheckBox()
-	{
-		InitializeComponent();
-	}
+    public IconCheckBox()
+    {
+        InitializeComponent();
+    }
 
     #region -- Public properties --
 

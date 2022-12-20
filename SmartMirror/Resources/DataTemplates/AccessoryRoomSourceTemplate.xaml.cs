@@ -2,8 +2,8 @@
 
 public partial class AccessoryRoomSourceTemplate : DataTemplate
 {
-	public AccessoryRoomSourceTemplate()
-	{
-		InitializeComponent();
-	}
+    public AccessoryRoomSourceTemplate()
+    {
+        InitializeComponent();
+    }
 }

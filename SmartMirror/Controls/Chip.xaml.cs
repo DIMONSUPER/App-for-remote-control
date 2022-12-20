@@ -2,10 +2,10 @@
 
 public partial class Chip : Border
 {
-	public Chip()
-	{
-		InitializeComponent();
-	}
+    public Chip()
+    {
+        InitializeComponent();
+    }
 
     #region -- Public properties --
 
