@@ -49,8 +49,8 @@ public class EmergencyNotificationDialogViewModel : BaseDialogViewModel
         set => SetProperty(ref _itemIndex, value);
     }
 
-    private INotificationGroupItemModel _currentItem;
-    public INotificationGroupItemModel CurrentItem
+    private NotificationGroupItemBindableModel _currentItem;
+    public NotificationGroupItemBindableModel CurrentItem
     {
         get => _currentItem;
         set => SetProperty(ref _currentItem, value);

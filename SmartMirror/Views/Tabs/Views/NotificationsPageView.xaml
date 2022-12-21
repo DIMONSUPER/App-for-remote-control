@@ -28,11 +28,6 @@
 
             <templates:NotificationSourceTemplate x:Key="notificationSourceTemplate"/>
 
-            <templatesSelectors:NotificationDataTemplateSelector
-                x:Key="notificationTemplateSelector"
-                NotificationHeaderDataTemplate="{x:StaticResource notificationHeaderTemplate}"
-                NotificationDataTemplate="{x:StaticResource notificationTemplate}"/>
-
         </ResourceDictionary>
 
     </views:BaseContentView.Resources>
@@ -116,10 +111,10 @@
                                     HorizontalOptions="CenterAndExpand"
                                     WidthRequest="571"
                                     IsGrouped="True"
-                                    HeaderPosition="{Binding HeaderPostion}"
                                     ItemsSource="{Binding Notifications}"
                                     ItemTemplate="{StaticResource notificationTemplate}"
-                                    GroupHeaderTemplate="{StaticResource notificationHeaderTemplate}">
+                                    GroupHeaderTemplate="{StaticResource notificationHeaderTemplate}"
+                                    x:Name="notificationStikyHeaderCollection">
 
                                     <controls:StickyHeaderCollectionView.ItemsLayout>
                                         <LinearItemsLayout
@@ -132,7 +127,7 @@
                                  <Label
                                      Style="{x:DynamicResource tstyle_i11}"
                                      HorizontalTextAlignment="Center"
-                                     Text="{Binding HeaderName, Converter={StaticResource timeToDaysOfWeekConverter}}"/>
+                                     Text="{Binding NameCurrentGroup, Source={Reference notificationStikyHeaderCollection}, Converter={StaticResource timeToDaysOfWeekConverter}}"/>
 
                             </Grid>
 

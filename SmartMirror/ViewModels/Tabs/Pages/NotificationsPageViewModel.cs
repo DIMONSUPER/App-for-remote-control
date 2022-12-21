@@ -86,8 +86,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
         set => SetProperty(ref _selectedNotificationSource, value);
     }
 
-    private ObservableCollection<NotificationGroupBindableModel> _notifications;
-    public ObservableCollection<NotificationGroupBindableModel> Notifications
+    private ObservableCollection<IGroupableCollection> _notifications;
+    public ObservableCollection<IGroupableCollection> Notifications
     {
         get => _notifications;
         set => SetProperty(ref _notifications, value);
@@ -107,20 +107,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
         set => SetProperty(ref _notificationsState, value);
     }
 
-    private int _headerPostion = -1;
-    public int HeaderPostion
-    {
-        get => _headerPostion;
-        set => SetProperty(ref _headerPostion, value);
-    }
-
-    private string _headerName;
-    public string HeaderName
-    {
-        get => _headerName;
-        set => SetProperty(ref _headerName, value);
-    }
-
     private ICommand _selectNotificationSourceCommand;
     public ICommand SelectNotificationSourceCommand => _selectNotificationSourceCommand ??= SingleExecutionCommand.FromFunc<NotificationSourceBindableModel>(OnSelectNotificationSourceCommandAsync);
 
@@ -136,21 +122,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
     #endregion
 
     #region -- Overrides --
-
-    protected override void OnPropertyChanged(PropertyChangedEventArgs args)
-    {
-        base.OnPropertyChanged(args);
-
-        if (args.PropertyName is nameof(HeaderPostion))
-        {
-            var arrayPosition = HeaderPostion - 1;
-
-            if (arrayPosition > -1 && arrayPosition < Notifications.Count)
-            {
-                HeaderName = Notifications[arrayPosition].GroupName;
-            }
-        }
-    }
 
     public override void Destroy()
     {
@@ -441,13 +412,13 @@ public class NotificationsPageViewModel : BaseTabViewModel
         return isLoaded;
     }
 
-    private ObservableCollection<NotificationGroupBindableModel> GetNotificationGroups(IEnumerable<NotificationGroupItemBindableModel> notifications)
+    private ObservableCollection<IGroupableCollection> GetNotificationGroups(IEnumerable<NotificationGroupItemBindableModel> notifications)
     {
         var notificationGroups = notifications
             .GroupBy(x => x.LastActivityTime.ToString(Constants.Formats.DATE_FORMAT))
             .Select(x => new NotificationGroupBindableModel(x.Key, x.ToList()));
 
-        return new ObservableCollection<NotificationGroupBindableModel>(notificationGroups);
+        return new (notificationGroups);
     }
 
     #endregion

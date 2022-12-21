@@ -1,7 +1,13 @@
-﻿namespace SmartMirror.Controls
+﻿using System.Collections.ObjectModel;
+using SmartMirror.Models.BindableModels;
+using SmartMirror.Interfaces;
+
+namespace SmartMirror.Controls
 {
     public class StickyHeaderCollectionView : CollectionView
     {
+        private int _headerPosition;
+
         public StickyHeaderCollectionView()
         {
             AppendToMapping();
@@ -9,16 +15,17 @@
 
         #region -- Public properties --
 
-        public static readonly BindableProperty HeaderPositionProperty = BindableProperty.Create(
-            propertyName: nameof(HeaderPosition),
-            returnType: typeof(int),
+        public static readonly BindableProperty NameCurrentGroupProperty = BindableProperty.Create(
+            propertyName: nameof(NameCurrentGroup),
+            returnType: typeof(string),
+            defaultValue: string.Empty,
             declaringType: typeof(StickyHeaderCollectionView),
-            defaultBindingMode: BindingMode.TwoWay);
+            defaultBindingMode: BindingMode.OneWayToSource);
 
-        public int HeaderPosition
+        public string NameCurrentGroup
         {
-            get => (int)GetValue(HeaderPositionProperty);
-            set => SetValue(HeaderPositionProperty, value);
+            get => (string)GetValue(NameCurrentGroupProperty);
+            set => SetValue(NameCurrentGroupProperty, value);
         }
 
         #endregion
@@ -42,23 +49,42 @@
             {
                 int topChildPosition = recyclerView.GetChildAdapterPosition(topChild);
 
-                if (topChildPosition != AndroidX.RecyclerView.Widget.RecyclerView.NoPosition)
+                if (topChildPosition != AndroidX.RecyclerView.Widget.RecyclerView.NoPosition
+                    && topChildPosition >= 0 && ItemsSource is ObservableCollection<IGroupableCollection> items)
                 {
-                    if (topChildPosition >= 0 && this.BindingContext is ViewModels.Tabs.Pages.NotificationsPageViewModel notificationsPageViewModel)
-                    {
-                        var headerPosition = 0;
+                    CalculateHeaderPosition(topChildPosition, items);
 
-                        for (int i = 0; topChildPosition >= 0 && i < notificationsPageViewModel.Notifications.Count; i++)
-                        {
-                            topChildPosition -= notificationsPageViewModel.Notifications[i].Count;
-                            topChildPosition--;
-                            headerPosition++;
-                        }
-
-                        HeaderPosition = headerPosition;
-                    }
+                    NameCurrentGroup = GetNameCurrentGroup(items);
                 }
             }
+        }
+
+        private void CalculateHeaderPosition(int topChildPosition, ObservableCollection<IGroupableCollection> items)
+        {
+            var headerPosition = 0;
+
+            for (int i = 0; topChildPosition >= 0 && i < items.Count; i++)
+            {
+                topChildPosition -= items[i].ItemsCount;
+                topChildPosition--;
+                headerPosition++;
+            }
+
+            _headerPosition = headerPosition;
+        }
+
+        private string GetNameCurrentGroup(ObservableCollection<IGroupableCollection> items)
+        {
+            string nameCurrentGroup = string.Empty;
+
+            var arrayPosition = _headerPosition - 1;
+
+            if (arrayPosition > -1 && arrayPosition < items.Count)
+            {
+                nameCurrentGroup = items[arrayPosition].GroupName;
+            }
+
+            return nameCurrentGroup;
         }
 
         #endregion
