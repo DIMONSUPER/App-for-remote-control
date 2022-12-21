@@ -247,16 +247,9 @@ public class AutomationService : BaseAqaraService, IAutomationService
             condition.RoomName = condition.Device.RoomName;
         }
 
-        var descriptionCondition = await GetDescriptionForConditionAsync(condition);
+        condition.Condition = await GetDescriptionForConditionAsync(condition);
 
-        if (descriptionCondition != string.Empty)
-        {
-            descriptionCondition += " ";
-        }
-
-        descriptionCondition += GetDescriptionForParams(condition.Params ?? new());
-
-        condition.Condition = descriptionCondition;
+        condition.Condition = SetDescriptionCondition(condition.Condition, condition.Params);
     }
 
     private async Task SetAdditionalInfoForActionAsync(ActionBindableModel action)
@@ -273,19 +266,24 @@ public class AutomationService : BaseAqaraService, IAutomationService
             action.RoomName = action.Device.RoomName;
         }
 
-        var descriptionCondition = await GetDescriptionForActionAsync(action);
+        action.Condition = await GetDescriptionForActionAsync(action);
 
-        if (descriptionCondition != string.Empty)
-        {
-            descriptionCondition += " ";
-        }
-
-        descriptionCondition += GetDescriptionForParams(action.Params ?? new());
-
-        action.Condition = descriptionCondition;
+        action.Condition = SetDescriptionCondition(action.Condition, action.Params);
     }
 
-    private async Task<string> GetNameSceneAsync(string id)
+    private string SetDescriptionCondition(string description, List<ParamAqaraModel> parameters)
+    {
+        if (description != string.Empty)
+        {
+            description += " ";
+        }
+
+        description += GetDescriptionForParams(parameters ?? new());
+
+        return description;
+    }
+
+    private async Task<string> GetNameScenarioAsync(string id)
     {
         var scenarios = await _scenariosService.GetAllScenariosAsync();
 
@@ -343,7 +341,7 @@ public class AutomationService : BaseAqaraService, IAutomationService
         var result = action.Model switch
         {
             Constants.Aqara.Models.APP_IFTTT_V1 => await GetNameAutomationAsync(action.SubjectId),
-            Constants.Aqara.Models.APP_SCENE_V1 => await GetNameSceneAsync(action.SubjectId),
+            Constants.Aqara.Models.APP_SCENE_V1 => await GetNameScenarioAsync(action.SubjectId),
             _ => string.Empty,
         };
 

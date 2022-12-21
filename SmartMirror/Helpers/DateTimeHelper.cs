@@ -1,4 +1,6 @@
-﻿namespace SmartMirror.Helpers;
+﻿using System.Text;
+
+namespace SmartMirror.Helpers;
 
 public static class DateTimeHelper
 {
@@ -29,43 +31,57 @@ public static class DateTimeHelper
         var month = values[3];
         var week = values[4];
 
-        var result = $"{values[1].PadLeft(2, '0')}:{values[0].PadLeft(2, '0')} ";
+        var result = new StringBuilder($"{values[1].PadLeft(2, '0')}:{values[0].PadLeft(2, '0')} ");
 
         if (week is not ("1,2,3,4,5,6,0" or "*" or "?"))
         {
-            result += week.Length == 1
-                ? "every " + nameDayOfWeek[int.Parse(week)]
-                : "every " + week
-                    .Split(',')
+            if (week.Length == 1)
+            {
+                result.Append("every " + nameDayOfWeek[int.Parse(week)]);
+            }
+            else
+            {
+                result.Append("every " + week.Split(',')
                     .Select(row => nameDayOfWeek[int.Parse(row)])
-                    .Aggregate((i, j) => i + ", " + j);
+                    .Aggregate((i, j) => i + ", " + j));
+            }
         }
         else if (day == "*")
         {
-            result += "every day";
+            result.Append("every day");
         }
         else
         {
-            result += day.Length > 2
-                ? day.Split(',').Aggregate((i, j) => i + ", " + j) + " days"
-                : day + " day";
+            if (day.Length > 2)
+            {
+                result.Append(day.Split(',').Aggregate((i, j) => i + ", " + j) + " days");
+            }
+            else
+            {
+                result.Append(day + " day");
+            }
         }
 
         if (month == "*")
         {
             if (day != "*")
             {
-                result += " in every month";
+                result.Append(" in every month");
             }
         }
         else
         {
-            result += month.Length > 2
-                ? " in " + month.Split(',').Aggregate((i, j) => i + ", " + j) + " months"
-                : " in " + month + " month";
+            if (month.Length > 2)
+            {
+                result.Append(" in " + month.Split(',').Aggregate((i, j) => i + ", " + j) + " months");
+            }
+            else
+            {
+                result.Append(" in " + month + " month");
+            }
         }
         
-        return result;
+        return result.ToString();
     }
 
     #endregion
