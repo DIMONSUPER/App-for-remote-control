@@ -19,8 +19,8 @@
 
             <DataTemplate x:Key="favoriteAutomationsTemplate">
                 <templates:AutomationCardTemplate
-                    WidthRequest="375"
-                    HeightRequest="201"
+                    WidthRequest="368"
+                    HeightRequest="266"
                     InnerPadding="29, 23, 29, 20"/>
 
             </DataTemplate>
@@ -28,6 +28,7 @@
             <DataTemplate x:Key="automationsTemplate">
                 <templates:AutomationCardTemplate
                     IconSize="54"
+                    HeightRequest="231"
                     InnerPadding="22, 17, 22, 15"/>
 
             </DataTemplate>
@@ -56,7 +57,8 @@
         
         <controls:CustomStateView.CompleteContent>
 
-            <ScrollView
+            <controls:CustomScrollView
+                BindingForInvalidateMeasure="{Binding Automations}"
                 VerticalScrollBarVisibility="Never"
                 HorizontalScrollBarVisibility="Never"
                 Padding="0, 0, 0, 30"
@@ -76,7 +78,7 @@
                         Number="{Binding FavoriteAutomations.Count}"/>
 
                     <!-- FAVORITE AUTOMATIONS COLLECTION -->
-                    <ScrollView
+                    <controls:CustomScrollView
                         Margin="0, 16, 0, 0"
                         Orientation="Horizontal"
                         HorizontalScrollBarVisibility="Never"
@@ -89,7 +91,7 @@
                             BindableLayout.ItemTemplate="{StaticResource favoriteAutomationsTemplate}"
                             BindableLayout.ItemsSource="{Binding FavoriteAutomations}"/>
 
-                    </ScrollView>
+                    </controls:CustomScrollView>
 
                     <!-- AUTOMATIONS -->
                     <controls:BadgeTitleView
@@ -134,7 +136,7 @@
 
                 </VerticalStackLayout>
 
-            </ScrollView>
+            </controls:CustomScrollView>
 
         </controls:CustomStateView.CompleteContent>
 

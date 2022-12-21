@@ -25,6 +25,7 @@
             public const string IP_ADDRESS = nameof(IP_ADDRESS);
             public const string PASSWORD = nameof(PASSWORD);
             public const string LOGIN = nameof(LOGIN);
+            public const string NAME = nameof(NAME);
             public const string CONFIRM_ACTION = nameof(CONFIRM_ACTION);
             public const string CONFIRM_TEXT = nameof(CONFIRM_TEXT);
             public const string CANCEL_TEXT = nameof(CANCEL_TEXT);
@@ -71,6 +72,40 @@
                 public const string ILLUMINATION_STATUS = "0.4.85";
             }
 
+            public static class Models
+            {
+                public const string APP_TIMER_V1 = "app.timer.v1";
+                public const string APP_IFTTT_V1 = "app.ifttt.v1";
+                public const string APP_IFTTT_POSITION_USER_ALERT = "app.ifttt.position_user_alert";
+                public const string APP_GEOFENCE_TRIGGER = "app.geofence.trigger";
+                public const string APP_WEATHER_HUMIDITY = "app.weather.humidity";
+                public const string APP_WEATHER_SUN = "app.weather.sun";
+                public const string APP_WEATHER_TEMPERATURE = "app.weather.temperature";
+                public const string APP_WEATHER_PHENOMENON = "app.weather.phenomenon";
+                public const string APP_WEATHER_FORECAST = "app.weather.forecast";
+                public const string APP_GEOFENCE_FORECAST = "app.geofence.forecast";
+                public const string APP_SCENE_V1 = "app.scene.v1";
+                public const string APP_MOBILEPUSH_V1 = "app.mobilepush.v1";
+                public const string LUMI_WEATHER_V1 = "lumi.weather.v1";
+            }
+
+            public static class ParamDefinition
+            {
+                public const string PD_USER_ID = "PD.userId";
+                public const string PD_CLIENT_ID = "PD.clientId";
+                public const string PD_FENCE_INFO = "PD.fenceInfo";
+                public const string PD_CITY_ID = "PD.cityId";
+                public const string PD_RES_INDEX = "PD.resIndex";
+
+                //Processed
+                public const string PD_PHONE_MODEL = "PD.phoneModel";
+                public const string PD_MAP_INFO = "PD.mapInfo";
+                public const string PD_NICK_NAME = "PD.nickName";
+                public const string PD_TEMP = "PD.temp";
+                public const string PD_HUMI = "PD.humi";
+                public const string PD_TIMER = "PD.timer";
+            }
+
             public static class EventTypes
             {
                 //Documentation: https://opendoc.aqara.cn/en/docs/developmanual/messagePush/messagePushFormat.html
@@ -106,6 +141,8 @@
         {
             public const int TIME_TO_ATTEMPT_UPDATE_IN_SECONDS = 15;
             public const int DELAY_MILLISEC_NAVIGATION_COMMAND = 500;
+            public const int CAMERA_TIME_CHECK_SECONDS = 5;
+            public const int CAMERA_NAME_MAX_LENGTH = 32;
         }
 
         public static class Analytics
@@ -116,6 +153,27 @@
         public static class Rings
         {
             public const string DOORBELL = "doorbell.mp3";
+        }
+
+        public static class DahuaParametersNames
+        {
+            public const string USERNAME = "userName";
+            public const string PASSWORD = "password";
+            public const string CLIENT_TYPE = "clientType";
+            public const string DAHUA_3_WEB_3 = "Dahua3.0-Web3.0";
+            public const string AUTHORITY_TYPE = "authorityType";
+            public const string PASSWORD_TYPE = "passwordType";
+            public const string DEFAULT = "Default";
+            public const string ID = "id";
+            public const string SESSION = "session";
+            public const string NAME = "name";
+            public const string VIDEO_COLOR = "VideoColor";
+            public const string ONLY_LOCAL = "onlyLocal";
+            public const string CHANNEL = "channel";
+            public const string TABLE = "table";
+            public const string OPTIONS = "options";
+            public const string ENCODE = "Encode";
+            public const string PARAMS = "params";
         }
     }
 }

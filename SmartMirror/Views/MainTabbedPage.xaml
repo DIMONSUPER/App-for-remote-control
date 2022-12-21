@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <controls:CustomTabbedPage xmlns:controls="clr-namespace:SmartMirror.Controls"
                            xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -8,6 +8,7 @@
                            android:TabbedPage.IsSwipePagingEnabled="True"
                            android:TabbedPage.IsSmoothScrollEnabled="True"
                            android:TabbedPage.ToolbarPlacement="Top"
+                           android:TabbedPage.OffscreenPageLimit="5"
                            NavigationPage.HasNavigationBar="False"
                            Style="{DynamicResource GrayGradientStyle_i1}"
                            SettingsCommand="{Binding SettingsCommand}"
@@ -21,10 +22,10 @@
         <DataTemplate x:DataType="{x:Type Page}">
 
             <Grid HorizontalOptions="Center"
-                  Padding="0, 12">
+                  Margin="0, 12">
 
                 <Label Text="{Binding Title}"
-                       Padding="42,12"
+                       Margin="38, 12"
                        VerticalOptions="Center"
                        Style="{x:DynamicResource tstyle_i10}"/>
 
@@ -39,13 +40,13 @@
         <DataTemplate x:DataType="{x:Type Page}">
 
             <Grid HorizontalOptions="Center"
-                  Padding="0, 12">
+                  Margin="0, 12">
 
                 <BoxView Color="{x:DynamicResource cbg_i3}"
                          CornerRadius="35"/>
 
                 <Label Text="{Binding Title}"
-                       Padding="42,12"
+                       Margin="38, 12"
                        VerticalOptions="Center"
                        Style="{x:DynamicResource tstyle_i9}"/>
 

@@ -24,6 +24,12 @@
     <data name="Automation" xml:space="preserve">
         <value>Automation</value>
     </data>
+    <data name="AllConditionsAreMet" xml:space="preserve">
+        <value>All conditions are met</value>
+    </data>
+    <data name="AnyConditionIsMet" xml:space="preserve">
+        <value>Any condition is met</value>
+    </data>
     <data name="DisplayNotificationsAsPopUpWhileTheAppIsActive" xml:space="preserve">
         <value>Display notifications as a pop-up while the app is active</value>
     </data>
@@ -50,9 +56,6 @@
     </data>
     <data name="PleaseCheckInternet" xml:space="preserve">
         <value>Please, check your internet connection and try again</value>
-    </data>
-    <data name="TryAgain" xml:space="preserve">
-        <value>Try Again</value>
     </data>
     <data name="Synchronization" xml:space="preserve">
         <value>Synchronization</value>
@@ -339,6 +342,12 @@
     <data name="Add" xml:space="preserve">
         <value>Add</value>
     </data>
+    <data name="IF" xml:space="preserve">
+        <value>IF</value>
+    </data>
+    <data name="THEN" xml:space="preserve">
+        <value>THEN</value>
+    </data>
     <data name="NewCamera" xml:space="preserve">
         <value>New Camera</value>
     </data>
@@ -390,7 +399,7 @@
     <data name="All" xml:space="preserve">
         <value>All</value>
     </data>
-     <data name="NoResponseIPAddress" xml:space="preserve">
+    <data name="NoResponseIPAddress" xml:space="preserve">
         <value>No response from IP Address</value>
     </data>
     <data name="EnterLogin" xml:space="preserve">
@@ -411,13 +420,52 @@
     <data name="Wait" xml:space="preserve">
         <value>Wait</value>
     </data>
-      <data name="NoMicrophonePermission" xml:space="preserve">
-    <value>No microphone permission</value>
+    <data name="NoMicrophonePermission" xml:space="preserve">
+        <value>No microphone permission</value>
     </data>
     <data name="OpenSettings" xml:space="preserve">
-      <value>Open Settings</value>
+        <value>Open Settings</value>
     </data>
     <data name="PleaseGrantPermissionForMicrophone" xml:space="preserve">
-      <value>Please go to application Settings to grant the permission for microphone</value>
+        <value>Please go to application Settings to grant the permission for microphone</value>
+    </data>
+    <data name="Brightness" xml:space="preserve">
+        <value>Brightness</value>
+    </data>
+    <data name="Contrast" xml:space="preserve">
+        <value>Contrast</value>
+    </data>
+    <data name="FullScreen" xml:space="preserve">
+        <value>Full Screen</value>
+    </data>
+    <data name="HQ" xml:space="preserve">
+        <value>HQ</value>
+    </data>
+    <data name="Hue" xml:space="preserve">
+        <value>Hue</value>
+    </data>
+    <data name="Mute" xml:space="preserve">
+        <value>Mute</value>
+    </data>
+    <data name="Saturation" xml:space="preserve">
+        <value>Saturation</value>
+    </data>
+    <data name="Saved" xml:space="preserve">
+        <value>Saved</value>
+    </data>
+    <data name="SD" xml:space="preserve">
+        <value>SD</value>
+    </data>
+    <data name="Snapshot" xml:space="preserve">
+        <value>Snapshot</value>
+    </data>
+    <data name="Unmute" xml:space="preserve">
+        <value>Unmute</value>
+    </data>
+    <data name="EnterNameOptional" xml:space="preserve">
+        <value>Enter Name (Optional)</value>
+    </data>
+    <data name="EnterNewName" xml:space="preserve">
+        <value>Enter New Name</value>
     </data>
 </root>

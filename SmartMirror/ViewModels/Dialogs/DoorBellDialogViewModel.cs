@@ -116,9 +116,6 @@ namespace SmartMirror.ViewModels.Dialogs
         private ICommand _videoPaybackErrorCommand;
         public ICommand VideoPaybackErrorCommand => _videoPaybackErrorCommand ??= SingleExecutionCommand.FromFunc(OnVideoPaybackErrorCommandAsync);
 
-        private ICommand _tryAgainCommand;
-        public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
-
         #endregion
 
         #region -- Overrides --
@@ -127,7 +124,7 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             base.OnDialogOpened(parameters);
 
-            if (parameters.TryGetValue(Constants.DialogsParameterKeys.ACCESSORY, out DeviceBindableModel device))
+            if (parameters.TryGetValue(Constants.DialogsParameterKeys.ACCESSORY, out DeviceBindableModel device) && device is not null)
             {
                 Device = device;
 
@@ -228,24 +225,6 @@ namespace SmartMirror.ViewModels.Dialogs
             Toast.Make(Strings.CannotPlayVideo).Show();
 
             return Task.CompletedTask;
-        }
-
-        private async Task OnTryAgainCommandAsync()
-        {
-            DataState = EPageState.NoInternetLoader;
-
-            var isDataLoaded = await LoadCameraAsync();
-
-            if (IsInternetConnected)
-            {
-                (DataState, VideoAction) = isDataLoaded
-                    ? (EPageState.Complete, EVideoAction.Play)
-                    : (EPageState.Loading, EVideoAction.Pause);
-            }
-            else
-            {
-                DataState = EPageState.NoInternet;
-            }
         }
 
         private async Task<bool> LoadCameraAsync()

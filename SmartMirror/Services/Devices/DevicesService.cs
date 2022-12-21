@@ -51,11 +51,13 @@ namespace SmartMirror.Services.Devices
 
         public event EventHandler AllDevicesChanged;
 
-        public async Task<IEnumerable<DeviceBindableModel>> GetAllSupportedDevicesAsync()
+        public async Task<IEnumerable<DeviceBindableModel>> GetAllSupportedDevicesAsync(Func<DeviceBindableModel, bool> condition = null)
         {
             await _devicesTaskCompletionSource.Task;
 
-            return _allSupportedDevices;
+            return condition is null
+                ? _allSupportedDevices
+                : _allSupportedDevices.Where(condition);
         }
 
         public async Task<IEnumerable<DeviceBindableModel>> GetAllDevicesAsync()
@@ -74,8 +76,6 @@ namespace SmartMirror.Services.Devices
             {
                 return result;
             }
-
-            _devicesTaskCompletionSource = new();
 
             System.Diagnostics.Debug.WriteLine($"{nameof(DownloadAllDevicesWithSubInfoAsync)} STARTED");
 

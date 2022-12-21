@@ -58,14 +58,14 @@
                     Grid.Row="1"
                     WidthRequest="571"
                     State="{Binding DataState}"
-                    TryAgainCommand="{Binding TryAgainCommand}"
                     EmptyTitle="{extensions:Translate NoScenarioActionsYet}"
                     DescriptionEmptyState="{extensions:Translate PleaseCheckTheScenariosSettings}"
                     EmptyStateImage="empty_scenarios">
 
                     <controls:CustomStateView.CompleteContent>
 
-                        <CollectionView
+                        <controls:CustomCollectionView
+                            Padding="0, 0, 0, 26"
                             VerticalScrollBarVisibility="Never"
                             ItemTemplate="{x:StaticResource scenarioActionTemplate}"
                             ItemsSource="{Binding ScenarioActions}"/>

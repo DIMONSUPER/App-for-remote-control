@@ -3,8 +3,11 @@ using SmartMirror.Models;
 using SmartMirror.Models.Aqara;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Services.Aqara;
+using SmartMirror.Services.Automation;
+using SmartMirror.Services.Cameras;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Rest;
+using SmartMirror.Services.Scenarios;
 using SmartMirror.Services.Settings;
 using SmartMirror.Interfaces;
 
@@ -13,25 +16,40 @@ namespace SmartMirror.Services.Notifications
     public class NotificationsService : BaseAqaraService, INotificationsService
     {
         private readonly IDevicesService _devicesService;
+        private readonly IAutomationService _automationService;
+        private readonly ICamerasService _camerasService;
+        private readonly IScenariosService _scenariosService;
         private readonly IAqaraMessanger _aqaraMessanger;
         private readonly ISettingsManager _settingsManager;
 
         private TaskCompletionSource<object> _notificationsTaskCompletionSource = new();
         private List<NotificationBindableModel> _allNotifications = new();
+        private List<NotificationBindableModel> _cachedNotifications = new();
 
         public NotificationsService(
             IRestService restService,
             ISettingsManager settingsManager,
             IDevicesService devicesService,
+            IAutomationService automationService,
+            ICamerasService camerasService,
+            IScenariosService scenariosService,
             IAqaraMessanger aqaraMessanger,
             INavigationService navigationService)
             : base(restService, settingsManager, navigationService)
         {
             _devicesService = devicesService;
+            _automationService = automationService;
+            _camerasService = camerasService;
+            _scenariosService = scenariosService;
             _aqaraMessanger = aqaraMessanger;
             _settingsManager = settingsManager;
 
             _aqaraMessanger.MessageReceived += OnMessageReceived;
+
+            _devicesService.AllDevicesChanged += OnAllDevicesChanged;
+            _automationService.AllAutomationsChanged += OnAllAutomationsChanged;
+            _camerasService.AllCamerasChanged += OnAllCamerasChanged;
+            _scenariosService.AllScenariosChanged += OnAllScenariosChanged;
         }
 
         #region -- INotificationsService implementation --
@@ -49,11 +67,20 @@ namespace SmartMirror.Services.Notifications
 
         public Task<AOResult> ChangeAllowNotificationsAsync(bool state)
         {
-            return AOResult.ExecuteTaskAsync(onFailure =>
+            return AOResult.ExecuteTaskAsync(async onFailure =>
             {
                 _settingsManager.NotificationsSettings.IsAllowNotifications = state;
 
-                return Task.CompletedTask;
+                if (state)
+                {
+                    await FilterNotificationsAsync();
+                }
+                else
+                {
+                    _allNotifications = new();
+                }
+
+                AllNotificationsChanged?.Invoke(this, null);
             });
         }
 
@@ -67,8 +94,6 @@ namespace SmartMirror.Services.Notifications
                 return result;
             }
 
-            _notificationsTaskCompletionSource = new();
-
             result = await AOResult.ExecuteTaskAsync(async onFailure =>
             {
                 List<NotificationBindableModel> notifications = new();
@@ -80,7 +105,7 @@ namespace SmartMirror.Services.Notifications
                 foreach (var device in devices)
                 {
                     var resourceIds = supportedDevices
-                        .Where(x => x.IsReceiveNotifications && x.DeviceId == device.DeviceId && x.EditableResourceId is not null)
+                        .Where(x => x.DeviceId == device.DeviceId && x.EditableResourceId is not null)
                         .Select(x => x.EditableResourceId)
                         .ToArray();
 
@@ -100,7 +125,9 @@ namespace SmartMirror.Services.Notifications
 
                 notifications.Sort(Comparer<NotificationBindableModel>.Create((item1, item2) => item2.LastActivityTime.CompareTo(item1.LastActivityTime)));
 
-                _allNotifications = new(notifications);
+                _cachedNotifications = new(notifications);
+
+                await FilterNotificationsAsync();
             });
 
             if (!result.IsSuccess)
@@ -150,7 +177,6 @@ namespace SmartMirror.Services.Notifications
                                 var notification = new NotificationBindableModel
                                 {
                                     Device = device,
-                                    IsShown = device.IsReceiveNotifications,
                                     LastActivityTime = DateTimeHelper.ConvertFromMilliseconds(resource.TimeStamp).ToLocalTime(),
                                     Status = resource.Value,
                                 };
@@ -183,13 +209,61 @@ namespace SmartMirror.Services.Notifications
 
         #region -- Private helpers --
 
+        private async void OnAllScenariosChanged(object sender, EventArgs e)
+        {
+            await FilterNotificationsAsync();
+        }
+
+        private async void OnAllCamerasChanged(object sender, EventArgs e)
+        {
+            await FilterNotificationsAsync();
+        }
+
+        private async void OnAllAutomationsChanged(object sender, EventArgs e)
+        {
+            await FilterNotificationsAsync();
+        }
+
+        private async void OnAllDevicesChanged(object sender, EventArgs e)
+        {
+            await FilterNotificationsAsync();
+        }
+
+        private async Task FilterNotificationsAsync()
+        {
+            _allNotifications = new();
+
+            var devices = await _devicesService.GetAllSupportedDevicesAsync();
+
+            foreach (var notification in _cachedNotifications)
+            {
+                var deviceId = notification.Device.DeviceId;
+                var editableResourceId = notification.Device.EditableResourceId;
+
+                var device = devices.FirstOrDefault(x => x.DeviceId == deviceId && x.EditableResourceId == editableResourceId);
+
+                if (device is not null)
+                {
+                    notification.IsEmergencyNotification = device.IsEmergencyNotification;
+                    notification.IsReceiveNotifications = device.IsReceiveNotifications;
+                    notification.IsShown = device.IsReceiveNotifications;
+                    notification.StatusFormatted = device.AdditionalInfoFormatted;
+
+                    if (notification.IsReceiveNotifications)
+                    {
+                        _allNotifications.Add(notification);
+                    }
+                }
+            }
+        }
+
         private async void OnMessageReceived(object sender, AqaraMessageEventArgs aqaraMessage)
         {
             if (aqaraMessage.EventType is Constants.Aqara.EventTypes.resource_report)
             {
                 var devices = await _devicesService.GetAllSupportedDevicesAsync();
 
-                var device = devices.FirstOrDefault(x => x.IsReceiveNotifications && x.DeviceId == aqaraMessage.DeviceId && x.EditableResourceId == aqaraMessage.ResourceId);
+                var device = devices.FirstOrDefault(x => x.DeviceId == aqaraMessage.DeviceId && x.EditableResourceId == aqaraMessage.ResourceId);
 
                 if (device is not null)
                 {
@@ -202,9 +276,14 @@ namespace SmartMirror.Services.Notifications
                         Status = aqaraMessage.Value,
                     };
 
-                    _allNotifications.Add(notification);
+                    _cachedNotifications.Add(notification);
 
-                    AllNotificationsChanged?.Invoke(this, notification);
+                    if (device.IsReceiveNotifications)
+                    {
+                        _allNotifications.Add(notification);
+
+                        AllNotificationsChanged?.Invoke(this, notification);
+                    }
                 }
             }
         }

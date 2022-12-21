@@ -17,6 +17,19 @@
 
         </stateContanier:StateCondition>
 
+        <!-- TODO Never should be shown -->
+        <!-- NONE STATE -->
+        <stateContanier:StateCondition State="None">
+
+            <Label
+                Text="None state"
+                TextColor="White"
+                FontSize="40"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"/>
+
+        </stateContanier:StateCondition>
+
         <!-- EMPTY STATE -->
         <stateContanier:StateCondition State="Empty">
 
@@ -74,6 +87,7 @@
                 
         </stateContanier:StateCondition>
 
+        <!-- LOADING SKELETON STATE -->
         <stateContanier:StateCondition State="LoadingSkeleton">
 
             <ContentView Background="Transparent"
@@ -101,38 +115,6 @@
                 <Label Margin="0,37,0,0"
                        Style="{DynamicResource tstyle_i4}"
                        Text="{extensions:Translate NoInternetConnection}"
-                       HorizontalOptions="Center"/>
-
-                <Button Style="{DynamicResource ButtonStyle_i1}"
-                        Margin="0,37,0,0"
-                        Text="{extensions:Translate TryAgain}"
-                        Command="{Binding TryAgainCommand, Source={x:Reference stateContanier}}"
-                        WidthRequest="183"/>
-
-            </VerticalStackLayout>
-                
-        </stateContanier:StateCondition>
-
-        <!-- NO INTERNET LOADER STATE -->
-        <stateContanier:StateCondition State="NoInternetLoader">
-
-            <VerticalStackLayout HorizontalOptions="Center"
-                                 VerticalOptions="Center">
-
-                <Frame HasShadow="False"
-                       Padding="30"
-                       HeightRequest="123"
-                       WidthRequest="123"
-                       CornerRadius="11"
-                       BackgroundColor="{StaticResource cbg_i2}">
-
-                    <ActivityIndicator IsRunning="True"/>
-
-                </Frame>
-
-                <Label Margin="0,37,0,0"
-                       Style="{DynamicResource tstyle_i4}"
-                       Text="{extensions:Translate PleaseWait}"
                        HorizontalOptions="Center"/>
 
             </VerticalStackLayout>

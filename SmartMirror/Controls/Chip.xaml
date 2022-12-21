@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Border
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SmartMirror.Controls"
+    x:Class="SmartMirror.Controls.Chip"
+    x:DataType="local:Chip"
+    x:Name="chip">
+
+    <Border.Triggers>
+        <DataTrigger TargetType="Border" Binding="{Binding IsChecked, Source={Reference chip}}" Value="True">
+
+            <Setter Property="Border.BackgroundColor" Value="{Binding CheckedBackgroundColor, Source={Reference chip}}"/>
+            <Setter TargetName="label" Property="Label.Style" Value="{Binding CheckedTextStyle, Source={Reference chip}}"/>
+            <Setter TargetName="stackLayout" Property="StackLayout.Padding" Value="42, 0, 11, 0"/>
+ 
+         </DataTrigger>
+     </Border.Triggers>
+ 
+     <HorizontalStackLayout
+         Padding="42, 0"
+         HeightRequest="49"
+         Spacing="24"
+         x:Name="stackLayout"> 
+
+        <Label
+            Style="{Binding TextStyle, Source={Reference chip}}"
+            VerticalOptions="Center"
+            LineBreakMode="TailTruncation"
+            MaxLines="1"
+            Text="{Binding Text, Source={Reference chip}}"
+            x:Name="label"/>
+
+        <Frame
+            VerticalOptions="Center"
+            HorizontalOptions="EndAndExpand"
+            Padding="4"
+            HasShadow="False"
+            CornerRadius="75"
+            BackgroundColor="{Binding IconColor, Source={Reference chip}}"
+            IsVisible="{Binding IsChecked, Source={Reference chip}}">
+
+            <Image
+                HeightRequest="{Binding IconSizes.Height, Source={Reference chip}}"
+                WidthRequest="{Binding IconSizes.Width, Source={Reference chip}}"
+                Source="{Binding IconSource, Source={Reference chip}}"/>
+
+        </Frame>
+
+    </HorizontalStackLayout>
+
+</Border>

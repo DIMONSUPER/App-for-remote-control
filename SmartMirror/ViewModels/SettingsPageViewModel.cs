@@ -15,6 +15,9 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using SmartMirror.Services.Automation;
 using SmartMirror.Resources;
+using System.Threading;
+using SmartMirror.Helpers.Events;
+using SmartMirror.Services.Rooms;
 
 namespace SmartMirror.ViewModels
 {
@@ -29,6 +32,8 @@ namespace SmartMirror.ViewModels
         private readonly IGoogleService _googleService;
         private readonly INotificationsService _notificationsService;
         private readonly IAutomationService _automationService;
+        private readonly IRoomsService _roomsService;
+        private readonly IEventAggregator _eventAggregator;
 
         private IEnumerable<ImageAndTitleBindableModel> _allAccessories = Enumerable.Empty<ImageAndTitleBindableModel>();
         private IEnumerable<ImageAndTitleBindableModel> _allScenarios = Enumerable.Empty<ImageAndTitleBindableModel>();
@@ -39,6 +44,7 @@ namespace SmartMirror.ViewModels
 
         private CategoryBindableModel _providersCategory;
         private CategoryBindableModel _notificationsCategory;
+
         private IDialogResult _dialogResult;
 
         public SettingsPageViewModel(
@@ -51,6 +57,8 @@ namespace SmartMirror.ViewModels
             IAqaraService aqaraService,
             INotificationsService notificationsService,
             IAutomationService automationService,
+            IRoomsService roomsService,
+            IEventAggregator eventAggregator,
             IGoogleService googleService)
             : base(navigationService)
         {
@@ -63,14 +71,19 @@ namespace SmartMirror.ViewModels
             _googleService = googleService;
             _notificationsService = notificationsService;
             _automationService = automationService;
+            _roomsService = roomsService;
+            _eventAggregator = eventAggregator;
 
             PageState = EPageState.LoadingSkeleton;
 
             _devicesService.AllDevicesChanged += OnAllDevicesChanged;
             _scenariosService.AllScenariosChanged += OnAllScenariosChanged;
             _automationService.AllAutomationsChanged += OnAllAutomationsChanged;
+            _camerasService.AllCamerasChanged += OnAllCamerasChanged;
+            _roomsService.AllRoomsChanged += OnAllRoomsChanged;
 
             LoadCategories();
+
             SelectCategory(SelectedCategory ?? Categories.FirstOrDefault());
         }
 
@@ -85,7 +98,6 @@ namespace SmartMirror.ViewModels
 
         public bool IsDataLoading => PageState
             is EPageState.Loading
-            or EPageState.NoInternetLoader
             or EPageState.LoadingSkeleton;
 
         private CategoryBindableModel _selectedCategory;
@@ -116,6 +128,13 @@ namespace SmartMirror.ViewModels
             set => SetProperty(ref _categoryElements, value);
         }
 
+        private ObservableCollection<ISelectableTextModel> _accessoriesSources = new();
+        public ObservableCollection<ISelectableTextModel> AccessoriesSources
+        {
+            get => _accessoriesSources;
+            set => SetProperty(ref _accessoriesSources, value);
+        }
+
         private ICommand _loginWithAqaraCommand;
         public ICommand LoginWithAqaraCommand => _loginWithAqaraCommand ??= SingleExecutionCommand.FromFunc<SettingsProvidersBindableModel>(OnLoginWithAqaraCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
@@ -143,9 +162,6 @@ namespace SmartMirror.ViewModels
         private ICommand _addNewCameraCommand;
         public ICommand AddNewCameraCommand => _addNewCameraCommand ??= SingleExecutionCommand.FromFunc(OnAddNewCameraCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
-        private ICommand _tryAgainCommand;
-        public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
-
         private ICommand _closeSettingsCommand;
         public ICommand CloseSettingsCommand => _closeSettingsCommand ??= SingleExecutionCommand.FromFunc(OnCloseSettingsCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
@@ -158,9 +174,19 @@ namespace SmartMirror.ViewModels
         private ICommand _changeAllowNotificationsCommand;
         public ICommand ChangeAllowNotificationsCommand => _changeAllowNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnChangeAllowNotificationsCommandAsync);
 
+        private ICommand _accessorySourceSelectedCommand;
+        public ICommand AccessorySourceSelectedCommand => _accessorySourceSelectedCommand ??= SingleExecutionCommand.FromFunc<RoomSourceBindableModel>(OnAccessorySourceSelectedCommandAsync);
+
         #endregion
 
         #region -- Overrides --
+
+        public override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            _eventAggregator.GetEvent<HideTabsTabbedViewEvent>().Publish(true);
+        }
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
@@ -174,6 +200,8 @@ namespace SmartMirror.ViewModels
             _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
             _scenariosService.AllScenariosChanged -= OnAllScenariosChanged;
             _automationService.AllAutomationsChanged -= OnAllAutomationsChanged;
+            _camerasService.AllCamerasChanged -= OnAllCamerasChanged;
+            _roomsService.AllRoomsChanged -= OnAllRoomsChanged;
 
             base.Destroy();
         }
@@ -209,6 +237,53 @@ namespace SmartMirror.ViewModels
         private async void OnAllAutomationsChanged(object sender, EventArgs e)
         {
             await LoadAllAutomationsAsync();
+        }
+
+        private async void OnAllCamerasChanged(object sender, EventArgs e)
+        {
+            await LoadAllCamerasAsync();
+
+            SetElementsSelectedCategory();
+        }
+
+        private async void OnAllRoomsChanged(object sender, EventArgs e)
+        {
+            await LoadAccessorySourcesAsync();
+        }
+
+        private async Task<bool> LoadAccessorySourcesAsync()
+        {
+            var resultOfGettingAllRooms = await _roomsService.GetAllRoomsAsync();
+            var isAnyRoomsLoaded = resultOfGettingAllRooms.Any();
+
+            if (isAnyRoomsLoaded)
+            {
+                var accessoriesSources = _mapperService.MapRange<RoomSourceBindableModel>(resultOfGettingAllRooms, (v, vm) =>
+                {
+                    vm.FontSize = 21;
+                    vm.FontFamily = "InterBold";
+                    vm.TapCommand = AccessorySourceSelectedCommand;
+                }).ToList<ISelectableTextModel>();
+
+                AccessoriesSources = new (accessoriesSources);
+            }
+
+            return isAnyRoomsLoaded;
+        }
+
+        private async Task OnAccessorySourceSelectedCommandAsync(RoomSourceBindableModel roomSource)
+        {
+            await LoadAccessoriesFromSelectedRoomsAsync();
+
+            if (_allAccessories.Any())
+            {
+                DataState = EPageState.LoadingSkeleton;
+            }
+
+            _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
+            {
+                SetElementsSelectedCategory();
+            }));
         }
 
         private void LoadCategories()
@@ -273,12 +348,12 @@ namespace SmartMirror.ViewModels
         private Task OnSelectCategoryCommandAsync(CategoryBindableModel category)
         {
             DataState = EPageState.LoadingSkeleton;
+
             SelectCategory(category);
 
             _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
             {
                 SetElementsSelectedCategory();
-                DataState = EPageState.Complete;
             }));
 
             return Task.CompletedTask;
@@ -341,7 +416,8 @@ namespace SmartMirror.ViewModels
 
             if (IsInternetConnected)
             {
-                isLoaded = await LoadAllDevicesAsync();
+                isLoaded = await LoadAccessorySourcesAsync();
+                isLoaded &= await LoadAllDevicesAsync();
                 isLoaded &= await LoadAllScenariosAsync();
                 isLoaded &= await LoadAllCamerasAsync();
                 isLoaded &= await LoadAllNotificationsAsync();
@@ -355,7 +431,29 @@ namespace SmartMirror.ViewModels
 
         private async Task<bool> LoadAllDevicesAsync()
         {
-            var devices = await _devicesService.GetAllSupportedDevicesAsync();
+            await LoadAccessoriesFromSelectedRoomsAsync();
+
+            var deviceCategory = Categories.FirstOrDefault(c => c.Type == ECategoryType.Accessories);
+
+            deviceCategory.Count = _allAccessories.Count().ToString();
+
+            return true;
+        }
+
+        private async Task LoadAccessoriesFromSelectedRoomsAsync()
+        {
+            var devices = Enumerable.Empty<DeviceBindableModel>();
+
+            var selectedAccessorySources = AccessoriesSources.Where(x => x.IsSelected);
+
+            if (selectedAccessorySources.Any())
+            {
+                devices = await _devicesService.GetAllSupportedDevicesAsync(x => selectedAccessorySources.Any(s => s.Id == x.PositionId));
+            }
+            else
+            {
+                devices = await _devicesService.GetAllSupportedDevicesAsync();
+            }
 
             _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(devices, (m, vm) =>
             {
@@ -363,12 +461,6 @@ namespace SmartMirror.ViewModels
                 vm.Type = ECategoryType.Accessories;
                 vm.TapCommand = OpenAccessorySettingsCommand;
             });
-
-            var deviceCategory = Categories.FirstOrDefault(c => c.Type == ECategoryType.Accessories);
-
-            deviceCategory.Count = _allAccessories.Count().ToString();
-
-            return true;
         }
 
         private async Task<bool> LoadAllScenariosAsync()
@@ -418,10 +510,13 @@ namespace SmartMirror.ViewModels
 
             if (resultOfGettingCameras.IsSuccess)
             {
-                _allCameras = _mapperService.MapRange<ImageAndTitleBindableModel>(resultOfGettingCameras.Result, (m, vm) =>
+                _allCameras = _mapperService.MapRange<CameraBindableModel, ImageAndTitleBindableModel>(resultOfGettingCameras.Result, (m, vm) =>
                 {
                     vm.Model = m;
                     vm.Type = ECategoryType.Cameras;
+                    vm.Name = string.IsNullOrEmpty(m.Name)
+                        ? m.IpAddress
+                        : m.Name;
                     vm.ImageSource = "video_fill_dark";
                     vm.TapCommand = ShowCameraSettingsCommand;
                 });
@@ -542,7 +637,7 @@ namespace SmartMirror.ViewModels
             return true;
         }
 
-        NotificationSettingsGroupBindableModel GetNotificationGroup(IEnumerable<INotifiable> notifications, string groupName, string imageSource = null)
+        private NotificationSettingsGroupBindableModel GetNotificationGroup(IEnumerable<INotifiable> notifications, string groupName, string imageSource = null)
         {
             return new NotificationSettingsGroupBindableModel
             {
@@ -552,33 +647,10 @@ namespace SmartMirror.ViewModels
                 {
                     vm.ImageSource ??= imageSource;
                     vm.Model = m;
-                    vm.IsToggled = (m as INotifiable).IsReceiveNotifications;
+                    vm.IsToggled = m.IsReceiveNotifications;
                     vm.TapCommand = ChangeStatusReceivingNotificationCommand;
                 }))
             };
-        }
-
-        private async Task OnTryAgainCommandAsync()
-        {
-            if (!IsDataLoading)
-            {
-                PageState = EPageState.NoInternetLoader;
-
-                var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
-
-                var isDataLoaded = await TaskRepeater.RepeatAsync(LoadAllDataAsync, executionTime);
-
-                if (IsInternetConnected)
-                {
-                    PageState = EPageState.Complete;
-
-                    SetElementsSelectedCategory();
-                }
-                else
-                {
-                    PageState = EPageState.NoInternet;
-                }
-            }
         }
 
         private Task OnChangeStatusReceivingNotificationCommandAsync(ImageAndTitleBindableModel notificationSettings)
@@ -624,19 +696,12 @@ namespace SmartMirror.ViewModels
             });
         }
 
-        private async Task OnShowCameraSettingsCommandAsync(ImageAndTitleBindableModel camera)
+        private Task OnShowCameraSettingsCommandAsync(ImageAndTitleBindableModel camera)
         {
-            var dialogResult = await _dialogService.ShowDialogAsync(nameof(CameraSettingsDialog), new DialogParameters
+            return _dialogService.ShowDialogAsync(nameof(CameraSettingsDialog), new DialogParameters
             {
                 { Constants.DialogsParameterKeys.CAMERA, camera },
             });
-
-            if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.RESULT, out bool wasDeleted) && wasDeleted)
-            {
-                await LoadAllCamerasAsync();
-
-                SetElementsSelectedCategory();
-            }
         }
 
         private Task OnShowAutomationSettingsCommandAsync(ImageAndTitleBindableModel automation)
@@ -655,6 +720,7 @@ namespace SmartMirror.ViewModels
             });
 
             if (dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.IP_ADDRESS, out string ipAddress)
+                && dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.NAME, out string name)
                 && dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.LOGIN, out string login)
                 && dialogResult.Parameters.TryGetValue(Constants.DialogsParameterKeys.PASSWORD, out string password))
             {
@@ -664,16 +730,11 @@ namespace SmartMirror.ViewModels
                     Login = login,
                     Password = password,
                     CreateTime = DateTime.UtcNow,
-                    Name = ipAddress,
+                    Name = name,
                     IsShown = true,
-                    VideoUrl = $"rtsp://{login}:{password}@{ipAddress}/live"
                 };
 
                 await _camerasService.UpdateCameraAsync(camera);
-
-                await LoadAllCamerasAsync();
-
-                SetElementsSelectedCategory();
             }
         }
 

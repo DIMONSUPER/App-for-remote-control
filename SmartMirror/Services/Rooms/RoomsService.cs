@@ -53,8 +53,6 @@ namespace SmartMirror.Services.Rooms
                 return result;
             }
 
-            _roomsTaskCompletionSource = new();
-
             System.Diagnostics.Debug.WriteLine($"{nameof(DownloadAllRoomsAsync)} STARTED");
 
             result = await AOResult.ExecuteTaskAsync(async onFailure =>

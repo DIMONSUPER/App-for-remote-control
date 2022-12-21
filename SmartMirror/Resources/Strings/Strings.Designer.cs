@@ -112,6 +112,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All conditions are met.
+        /// </summary>
+        internal static string AllConditionsAreMet {
+            get {
+                return ResourceManager.GetString("AllConditionsAreMet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow Notifications.
         /// </summary>
         internal static string AllowNotifications {
@@ -126,6 +135,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Amazon {
             get {
                 return ResourceManager.GetString("Amazon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Any condition is met.
+        /// </summary>
+        internal static string AnyConditionIsMet {
+            get {
+                return ResourceManager.GetString("AnyConditionIsMet", resourceCulture);
             }
         }
         
@@ -189,6 +207,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string BalconyDoor {
             get {
                 return ResourceManager.GetString("BalconyDoor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Brightness.
+        /// </summary>
+        internal static string Brightness {
+            get {
+                return ResourceManager.GetString("Brightness", resourceCulture);
             }
         }
         
@@ -301,6 +328,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contrast.
+        /// </summary>
+        internal static string Contrast {
+            get {
+                return ResourceManager.GetString("Contrast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dining Room.
         /// </summary>
         internal static string DiningRoom {
@@ -405,6 +441,24 @@ namespace SmartMirror.Resources.Strings {
         internal static string EnterLogin {
             get {
                 return ResourceManager.GetString("EnterLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter Name (Optional).
+        /// </summary>
+        internal static string EnterNameOptional {
+            get {
+                return ResourceManager.GetString("EnterNameOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter New Name.
+        /// </summary>
+        internal static string EnterNewName {
+            get {
+                return ResourceManager.GetString("EnterNewName", resourceCulture);
             }
         }
         
@@ -517,6 +571,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Full Screen.
+        /// </summary>
+        internal static string FullScreen {
+            get {
+                return ResourceManager.GetString("FullScreen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Garage.
         /// </summary>
         internal static string Garage {
@@ -607,6 +670,33 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to HQ.
+        /// </summary>
+        internal static string HQ {
+            get {
+                return ResourceManager.GetString("HQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hue.
+        /// </summary>
+        internal static string Hue {
+            get {
+                return ResourceManager.GetString("Hue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IF.
+        /// </summary>
+        internal static string IF {
+            get {
+                return ResourceManager.GetString("IF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To continue using the app, please install our Configuration app on your smartphone..
         /// </summary>
         internal static string InstallConfigurationApp {
@@ -675,6 +765,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Movement {
             get {
                 return ResourceManager.GetString("Movement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mute.
+        /// </summary>
+        internal static string Mute {
+            get {
+                return ResourceManager.GetString("Mute", resourceCulture);
             }
         }
         
@@ -1003,6 +1102,24 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Saturation.
+        /// </summary>
+        internal static string Saturation {
+            get {
+                return ResourceManager.GetString("Saturation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saved.
+        /// </summary>
+        internal static string Saved {
+            get {
+                return ResourceManager.GetString("Saved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scenario actions.
         /// </summary>
         internal static string ScenarioActions {
@@ -1017,6 +1134,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Scenarios {
             get {
                 return ResourceManager.GetString("Scenarios", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SD.
+        /// </summary>
+        internal static string SD {
+            get {
+                return ResourceManager.GetString("SD", resourceCulture);
             }
         }
         
@@ -1084,6 +1210,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Snapshot.
+        /// </summary>
+        internal static string Snapshot {
+            get {
+                return ResourceManager.GetString("Snapshot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Something went wrong.
         /// </summary>
         internal static string SomethingWentWrong {
@@ -1138,20 +1273,20 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to THEN.
+        /// </summary>
+        internal static string THEN {
+            get {
+                return ResourceManager.GetString("THEN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Today.
         /// </summary>
         internal static string Today {
             get {
                 return ResourceManager.GetString("Today", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Try Again.
-        /// </summary>
-        internal static string TryAgain {
-            get {
-                return ResourceManager.GetString("TryAgain", resourceCulture);
             }
         }
         
@@ -1215,6 +1350,15 @@ namespace SmartMirror.Resources.Strings {
         internal static string Unlocked {
             get {
                 return ResourceManager.GetString("Unlocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unmute.
+        /// </summary>
+        internal static string Unmute {
+            get {
+                return ResourceManager.GetString("Unmute", resourceCulture);
             }
         }
         

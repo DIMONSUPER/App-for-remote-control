@@ -1,43 +1,48 @@
-﻿using System;
+﻿using System.Collections.ObjectModel;
 
 namespace SmartMirror.Models.BindableModels;
 
 public class AutomationDetailCardBindableModel : BindableBase
 {
-    private string _name;
-    public string Name
+    private string _deviceName;
+    public string DeviceName
     {
-        get => _name;
-        set => SetProperty(ref _name, value);
+        get => _deviceName;
+        set => SetProperty(ref _deviceName, value);
     }
 
-    private string _iconSource = "pic_gears";
-    public string IconSource
-    {
-        get => _iconSource;
-        set => SetProperty(ref _iconSource, value);
-    }
-
-    // TODO temporally
-    private string _roomName = "Main room";
+    private string _roomName;
     public string RoomName
     {
         get => _roomName;
         set => SetProperty(ref _roomName, value);
     }
 
-    private string _description;
-    public string Description
+    private string _iconSource;
+    public string IconSource
     {
-        get => _description;
-        set => SetProperty(ref _description, value);
+        get => _iconSource;
+        set => SetProperty(ref _iconSource, value);
     }
 
-    // TODO temporally
-    private string _status = "Turn Off";
-    public string Status
+    private string _condition;
+    public string Condition
     {
-        get => _status;
-        set => SetProperty(ref _status, value);
+        get => _condition;
+        set => SetProperty(ref _condition, value);
+    }
+
+    private string _triggerName;
+    public string TriggerName
+    {
+        get => _triggerName;
+        set => SetProperty(ref _triggerName, value);
+    }
+
+    private DeviceBindableModel _device;
+    public DeviceBindableModel Device
+    {
+        get => _device;
+        set => SetProperty(ref _device, value);
     }
 }

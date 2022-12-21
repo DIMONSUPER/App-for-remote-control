@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using SmartMirror.Enums;
 using SmartMirror.Interfaces;
@@ -44,15 +45,22 @@ public class AutomationBindableModel : BindableBase, ITappable, INotifiable
         set => SetProperty(ref _localize, value);
     }
 
-    private LinkageConditionsAqaraModel _conditions;
-    public LinkageConditionsAqaraModel Conditions
+    private List<ConditionBindableModel> _conditions;
+    public List<ConditionBindableModel> Conditions
     {
         get => _conditions;
         set => SetProperty(ref _conditions, value);
     }
 
-    private LinkageActionsAqaraModel _actions;
-    public LinkageActionsAqaraModel Actions
+    private bool _relation;
+    public bool Relation
+    {
+        get => _relation;
+        set => SetProperty(ref _relation, value);
+    }
+
+    private List<ActionBindableModel> _actions;
+    public List<ActionBindableModel> Actions
     {
         get => _actions;
         set => SetProperty(ref _actions, value);

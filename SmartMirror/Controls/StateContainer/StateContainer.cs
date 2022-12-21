@@ -3,9 +3,13 @@ using System.Runtime.CompilerServices;
 
 namespace SmartMirror.Controls.StateContainer
 {
-    [ContentProperty("Conditions")]
+    [ContentProperty(nameof(Conditions))]
     public class StateContainer : ContentView
     {
+        private readonly Grid _currentContentGrid = new();
+
+        #region -- Public properties --
+
         public static readonly BindableProperty StateProperty = BindableProperty.Create(
             propertyName: nameof(State),
             returnType: typeof(object),
@@ -18,10 +22,6 @@ namespace SmartMirror.Controls.StateContainer
             set => SetValue(StateProperty, value);
         }
 
-        private readonly Grid _currentContentGrid = new();
-
-        #region -- Public properties --
-
         public List<StateCondition> Conditions { get; set; } = new();
 
         #endregion
@@ -32,11 +32,14 @@ namespace SmartMirror.Controls.StateContainer
         {
             if (bindable is StateContainer view)
             {
-                view.ChooseStateAsync(oldValue, newValue);
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    view?.ChooseState(oldValue, newValue);
+                });
             }
         }
 
-        private Task ChooseStateAsync(object oldValue, object newValue)
+        private void ChooseState(object oldValue, object newValue)
         {
             if (Content is null)
             {
@@ -45,8 +48,6 @@ namespace SmartMirror.Controls.StateContainer
 
             if (Conditions is not null)
             {
-                var tasks = new List<Task>();
-
                 var newView = Conditions?.FirstOrDefault(condition => condition?.State?.ToString() == newValue?.ToString())?.Content;
 
                 if (newView is not null)
@@ -57,8 +58,6 @@ namespace SmartMirror.Controls.StateContainer
                     _currentContentGrid.Add(newView);
                 }
             }
-
-            return Task.CompletedTask;
         }
 
         #endregion

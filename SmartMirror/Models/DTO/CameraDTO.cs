@@ -35,6 +35,10 @@ public class CameraDTO : IDTO
 
     public string VideoUrl { get; set; }
 
+    public int SubType { get; set; }
+
+    public int Channel { get; set; }
+
     #endregion
 }
 

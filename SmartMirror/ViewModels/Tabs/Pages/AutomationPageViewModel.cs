@@ -8,6 +8,7 @@ using SmartMirror.Services.Automation;
 using SmartMirror.Services.Mapper;
 using SmartMirror.ViewModels.Tabs.Details;
 using SmartMirror.Views.Dialogs;
+using SmartMirror.Resources.Strings;
 
 namespace SmartMirror.ViewModels.Tabs.Pages;
 
@@ -110,13 +111,32 @@ public class AutomationPageViewModel : BaseTabViewModel
 
     private async Task OnRunAutomationCommandAsync(AutomationBindableModel selectedAutomation)
     {
-        // TODO Run Automation temporally
         selectedAutomation.IsExecuting = true;
 
-        await Task.Delay(500);
+        var changeResponse = await _automationService.ChangeLinkageStateAsync(selectedAutomation.LinkageId, !selectedAutomation.Enable);
 
         selectedAutomation.IsExecuting = false;
-        selectedAutomation.Enable = !selectedAutomation.Enable;
+
+        if (changeResponse.IsSuccess)
+        {
+            selectedAutomation.Enable = !selectedAutomation.Enable;
+        }
+        else if (!IsInternetConnected)
+        {
+            await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.TITLE, "FAIL" },
+                { Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.NoInternetConnection}" },
+            });
+        }
+        else
+        {
+            await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
+            {
+                { Constants.DialogsParameterKeys.TITLE, "FAIL" },
+                { Constants.DialogsParameterKeys.DESCRIPTION, changeResponse.Message },
+            });
+        }
     }
 
     private Task OnGoToAutomationDetailsCommandAsync(AutomationBindableModel automation)

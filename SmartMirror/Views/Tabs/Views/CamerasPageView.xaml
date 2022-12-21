@@ -3,10 +3,12 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:templates="clr-namespace:SmartMirror.Resources.DataTemplates"
+    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:vm="clr-namespace:SmartMirror.ViewModels.Tabs.Pages"
     xmlns:views="clr-namespace:SmartMirror.Views.Tabs.Views"
     xmlns:extensions="clr-namespace:SmartMirror.Extensions"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
+    xmlns:enums="clr-namespace:SmartMirror.Enums"
     xmlns:triggerActions="clr-namespace:SmartMirror.TriggerActions"
     xmlns:skeleton="clr-namespace:SmartMirror.Views.Skeletons"
     x:DataType="vm:CamerasPageViewModel"
@@ -16,6 +18,15 @@
 
         <ResourceDictionary>
             <templates:CameraTemplate x:Key="cameraTemplate"/>
+            <Style x:Key="ExpandedSliderStyle_i1" TargetType="controls:ExpandedSlider">
+                <Style.Triggers>
+                    <Trigger TargetType="controls:ExpandedSlider" Property="IsOpened" Value="True">
+                        <Setter Property="Grid.Column" Value="0"/>
+                        <Setter Property="Grid.ColumnSpan" Value="4"/>
+                        <Setter Property="ZIndex" Value="1"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
 
     </views:BaseContentView.Resources>
@@ -32,7 +43,6 @@
 
     <controls:CustomStateView
         State="{Binding DataState}"
-        TryAgainCommand="{Binding TryAgainCommand}"
         LoadingTitle="{extensions:Translate Cameras}"
         EmptyTitle="{extensions:Translate NoCamerasYet}"
         DescriptionEmptyState="{extensions:Translate PleaseCheckTheCamerasSettings}"
@@ -43,6 +53,7 @@
             <Grid
                 ColumnDefinitions="390, *"
                 ColumnSpacing="105"
+                RowSpacing="24"
                 Margin="42, 70, 60, 0">
 
                 <RefreshView 
@@ -58,8 +69,9 @@
                 </RefreshView>
 
                 <Grid 
-                    Grid.Column="1"
-                    Margin="0, 0, 0, 120">
+                    RowDefinitions="386, *"
+                    RowSpacing="24"
+                    Grid.Column="1">
 
                     <Border
                         StrokeThickness="0.75"
@@ -150,6 +162,93 @@
                         </ActivityIndicator.Triggers>
 
                     </ActivityIndicator>
+
+                    <Grid 
+                        Grid.Row="1"
+                        RowDefinitions="Auto, Auto"
+                        ColumnDefinitions="*, *, *, *" 
+                        RowSpacing="20"
+                        IsEnabled="False"
+                        ColumnSpacing="20">
+
+                        <Grid.Triggers>
+                            <DataTrigger TargetType="Grid" Binding="{Binding VideoState}" Value="Playing">
+                                <Setter Property="IsEnabled" Value="True"/>
+                            </DataTrigger>
+                        </Grid.Triggers>
+
+                        <controls:CustomButton
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            IconSource="full_screen"
+                            Text="{extensions:Translate FullScreen}"
+                            Command="{Binding OpenVideoInFullScreenCommand}"/>
+
+                        <controls:CustomButton
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Mode="{Static enums:EButtonMode.Hint}"
+                            IconSource="photo_camera_outline"
+                            ToggledIconSource="check_circle_outline"
+                            Text="{extensions:Translate Snapshot}"
+                            ToggledText="{extensions:Translate Saved}"
+                            Command="{Binding TakeSnapshotCommand}"/>
+
+                        <controls:CustomButton
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            IsToggled="{Binding SelectedCamera.IsMuted}"
+                            Mode="{Static enums:EButtonMode.Toggle}"
+                            IconSource="sound_mute_light"
+                            ToggledIconSource="sound_mute_dark"
+                            Text="{extensions:Translate Mute}"
+                            ToggledText="{extensions:Translate Unmute}"
+                            Command="{Binding MuteVideoCommand}"/>
+
+                        <controls:CustomButton
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            Mode="{Static enums:EButtonMode.Toggle}"
+                            IsToggled="{Binding SelectedCamera.SubType, Converter={xct:IntToBoolConverter}, FallbackValue=False}"
+                            IconSource="high_quality_outline_light"
+                            ToggledIconSource="high_quality_outline_dark"
+                            Text="{extensions:Translate SD}"
+                            ToggledText="{extensions:Translate HQ}"
+                            Command="{Binding SwitchVideoQualityCommand}"/>
+
+                        <controls:ExpandedSlider
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Style="{StaticResource ExpandedSliderStyle_i1}"
+                            IconSource="brightness"
+                            Text="{extensions:Translate Brightness}"
+                            Value="{Binding Brightness}"/>
+
+                        <controls:ExpandedSlider
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource ExpandedSliderStyle_i1}"
+                            IconSource="contrast"
+                            Text="{extensions:Translate Contrast}"
+                            Value="{Binding Contrast}"/>
+
+                        <controls:ExpandedSlider
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Style="{StaticResource ExpandedSliderStyle_i1}"
+                            IconSource="ic_outline_color_lens"
+                            Text="{extensions:Translate Hue}"
+                            Value="{Binding Hue}"/>
+
+                        <controls:ExpandedSlider
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Style="{StaticResource ExpandedSliderStyle_i1}"
+                            IconSource="invert_colors_outline"
+                            Text="{extensions:Translate Saturation}"
+                            Value="{Binding Saturation}"/>
+
+                    </Grid>
 
                 </Grid>
 

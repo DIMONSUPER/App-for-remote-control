@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using SmartMirror.Models.BindableModels;
 using SmartMirror.Helpers;
 using SmartMirror.Enums;
-using SmartMirror.Models.Aqara;
 using SmartMirror.Services.Mapper;
 
 namespace SmartMirror.ViewModels.Tabs.Details;
@@ -12,8 +9,6 @@ namespace SmartMirror.ViewModels.Tabs.Details;
 public class AutomationDetailsPageViewModel : BaseViewModel
 {
     private readonly IMapperService _mapperService;
-
-    private AutomationBindableModel _automationBindableModel;
 
     public AutomationDetailsPageViewModel(
         IMapperService mapperService,
@@ -32,18 +27,36 @@ public class AutomationDetailsPageViewModel : BaseViewModel
         set => SetProperty(ref _automationName, value);
     }
 
-    private ObservableCollection<AutomationDetailCardBindableModel> _automationActions;
-    public ObservableCollection<AutomationDetailCardBindableModel> AutomationActions
+    private bool _relation;
+    public bool Relation
+    {
+        get => _relation;
+        set => SetProperty(ref _relation, value);
+    }
+
+    private List<AutomationDetailCardBindableModel> _automationConditions;
+    public List<AutomationDetailCardBindableModel> AutomationConditions
+    {
+        get => _automationConditions;
+        set => SetProperty(ref _automationConditions, value);
+    }
+
+    private List<AutomationDetailCardBindableModel> _automationActions;
+    public List<AutomationDetailCardBindableModel> AutomationActions
     {
         get => _automationActions;
         set => SetProperty(ref _automationActions, value);
     }
 
+    private AutomationBindableModel _automationBindableModel;
+    public AutomationBindableModel AutomationBindableModel
+    {
+        get => _automationBindableModel;
+        set => SetProperty(ref _automationBindableModel, value);
+    }
+
     private ICommand _goBackCommand;
     public ICommand GoBackCommand => _goBackCommand ??= SingleExecutionCommand.FromFunc(OnGoBackCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
-
-    private ICommand _tryAgainCommand;
-    public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
 
     #endregion
 
@@ -57,7 +70,9 @@ public class AutomationDetailsPageViewModel : BaseViewModel
         {
             DataState = EPageState.LoadingSkeleton;
 
-            _automationBindableModel = automation;
+            AutomationBindableModel = automation;
+
+            Relation = automation.Relation;
 
             LoadAutomationInformationAsync();
         }
@@ -83,20 +98,21 @@ public class AutomationDetailsPageViewModel : BaseViewModel
 
     private Task LoadAutomationInformationAsync()
     {
-        var automationActions = _mapperService.MapRange<AutomationDetailCardBindableModel>(_automationBindableModel.Actions.Action);
-        var automationConditions = _mapperService.MapRange<AutomationDetailCardBindableModel>(_automationBindableModel.Conditions.Condition);
+        var automationActions = _mapperService.MapRange<ActionBindableModel, AutomationDetailCardBindableModel>(_automationBindableModel.Actions, (m, vm) =>
+        {
+            vm.TriggerName = m.ActionName;
+        });
 
-        AutomationActions = new(automationConditions.Concat(automationActions));
+        AutomationActions = new(automationActions);
 
-        DataState = AutomationActions?.Count > 0
+        var automationConditions = _mapperService.MapRange<AutomationDetailCardBindableModel>(_automationBindableModel.Conditions);
+
+        AutomationConditions = new(automationConditions);
+
+        DataState = AutomationActions?.Count > 0 && AutomationConditions?.Count > 0
                 ? EPageState.Complete
                 : EPageState.Empty;
 
-        return Task.CompletedTask;
-    }
-
-    private Task OnTryAgainCommandAsync()
-    {
         return Task.CompletedTask;
     }
 

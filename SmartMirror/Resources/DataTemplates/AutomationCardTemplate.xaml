@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Grid xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-      xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-      xmlns:enums="clr-namespace:SmartMirror.Enums"
       xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
       xmlns:extensions="clr-namespace:SmartMirror.Extensions"
       xmlns:controls="clr-namespace:SmartMirror.Controls"
@@ -45,39 +43,30 @@
             </Border>
 
             <!-- NAME AND DESCRIPTION -->
-            <Grid Grid.Row="1"
-                  Grid.ColumnSpan="2"
-                  HorizontalOptions="Fill"
-                  VerticalOptions="EndAndExpand"
-                  RowDefinitions="Auto, Auto"
-                  RowSpacing="0"
-                  ColumnDefinitions="Auto, *">
+            <StackLayout Grid.Row="1"
+                         Grid.ColumnSpan="2"
+                         HorizontalOptions="Fill"
+                         VerticalOptions="EndAndExpand">
+                    
+                <controls:CustomLabel Style="{DynamicResource tstyle_i11}"
+                                      Text="{Binding Name}"
+                                      LineBreakMode="TailTruncation"
+                                      MaxLines="2"/>
 
-                <Label Grid.Row="0"
-                       Grid.ColumnSpan="2"
-                       Style="{DynamicResource tstyle_i11}"
-                       Text="{Binding Name}"
-                       MaxLines="1"
-                       VerticalOptions="End"
-                       LineBreakMode="TailTruncation"/>
+                <controls:CustomLabel Style="{x:DynamicResource tstyle_i5}"
+                                      LineBreakMode="TailTruncation"
+                                      MaxLines="2"
+                                      Text="{Binding Description}"/>
 
-                <Label Grid.Row="1"
-                       Grid.Column="0"
-                       Style="{x:DynamicResource tstyle_i5}"
-                       MaxLines="1"
-                       VerticalOptions="End"
-                       LineBreakMode="TailTruncation"
-                       Text="{Binding Description}"/>
+            </StackLayout>
 
-                <ActivityIndicator Grid.Row="1"
-                                   Grid.Column="1"
-                                   IsRunning="{Binding IsExecuting}"
-                                   HorizontalOptions="End"
-                                   VerticalOptions="End"
-                                   WidthRequest="32"
-                                   HeightRequest="32"/>
-
-            </Grid>
+            <ActivityIndicator Grid.Row="1"
+                               Grid.Column="1"
+                               IsRunning="{Binding IsExecuting}"
+                               HorizontalOptions="End"
+                               VerticalOptions="End"
+                               WidthRequest="32"
+                               HeightRequest="32"/>
 
             <!-- SWITCH -->
             <StackLayout Grid.Row="0"

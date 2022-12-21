@@ -40,6 +40,13 @@ namespace SmartMirror.ViewModels.Dialogs
             set => SetProperty(ref _title, value);
         }
 
+        private string _cameraName;
+        public string CameraName
+        {
+            get => _cameraName;
+            set => SetProperty(ref _cameraName, value);
+        }
+
         private string _ipAddress;
         public string IPAddress
         {
@@ -199,6 +206,7 @@ namespace SmartMirror.ViewModels.Dialogs
                 RequestClose.Invoke(new DialogParameters
                 {
                     { Constants.DialogsParameterKeys.IP_ADDRESS, IPAddress },
+                    { Constants.DialogsParameterKeys.NAME, CameraName },
                     { Constants.DialogsParameterKeys.LOGIN, Login },
                     { Constants.DialogsParameterKeys.PASSWORD, Password },
                 });

@@ -22,10 +22,6 @@ public class RoomsPageViewModel : BaseTabViewModel
     private readonly IRoomsService _roomsService;
     private readonly IDevicesService _devicesService;
 
-    //TODO Delete when doorbell is implemented
-    private bool _displayDoorbellDialog = true;
-    private readonly object _locker = new();
-
     public RoomsPageViewModel(
         INavigationService navigationService,
         IMapperService mapperService,
@@ -56,9 +52,6 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     private ICommand _accessorieTappedCommand;
     public ICommand AccessorieTappedCommand => _accessorieTappedCommand ??= SingleExecutionCommand.FromFunc<DeviceBindableModel>(OnAccessorieTappedCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
-
-    private ICommand _tryAgainCommand;
-    public ICommand TryAgainCommand => _tryAgainCommand ??= SingleExecutionCommand.FromFunc(OnTryAgainCommandAsync);
 
     private ObservableCollection<DeviceBindableModel> _favoriteAccessories = new();
     public ObservableCollection<DeviceBindableModel> FavoriteAccessories
@@ -95,18 +88,6 @@ public class RoomsPageViewModel : BaseTabViewModel
         await LoadRoomsAndDevicesAndChangeStateAsync();
     }
 
-    private async Task OnTryAgainCommandAsync()
-    {
-        if (!IsDataLoading)
-        {
-            DataState = EPageState.NoInternetLoader;
-
-            var executionTime = TimeSpan.FromSeconds(Constants.Limits.TIME_TO_ATTEMPT_UPDATE_IN_SECONDS);
-
-            var isDataLoaded = await TaskRepeater.RepeatAsync(LoadRoomsAndDevicesAndChangeStateAsync, executionTime);
-        }
-    }
-
     private async Task<bool> LoadRoomsAndDevicesAndChangeStateAsync()
     {
         bool isDataLoaded = false;
@@ -123,9 +104,6 @@ public class RoomsPageViewModel : BaseTabViewModel
                 DataState = isDataLoaded
                     ? EPageState.Complete
                     : EPageState.Empty;
-
-                //TODO Delete when doorbell is implemented
-                await DisplayDoorbellDialogAsync(isDataLoaded);
             }
             else
             {
@@ -185,7 +163,7 @@ public class RoomsPageViewModel : BaseTabViewModel
             {
                 await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
                 {
-                    { Constants.DialogsParameterKeys.TITLE, updateResponse.Result?.Message },
+                    { Constants.DialogsParameterKeys.TITLE, updateResponse.Message },
                     { Constants.DialogsParameterKeys.DESCRIPTION, updateResponse.Result?.MsgDetails },
                 });
             }
@@ -235,33 +213,6 @@ public class RoomsPageViewModel : BaseTabViewModel
             .AddParameter(nameof(RoomBindableModel), room)
             .AddParameter(nameof(AccessorieTappedCommand), AccessorieTappedCommand)
             .NavigateAsync().ContinueWith(x => DataState = EPageState.Complete);
-    }
-
-    private async Task DisplayDoorbellDialogAsync(bool isDataLoaded)
-    {
-        var displayDoorbellDialog = false;
-
-        lock (_locker)
-        {
-            if (_displayDoorbellDialog)
-            {
-                displayDoorbellDialog = true;
-                _displayDoorbellDialog = false;
-            }
-        }
-
-        if (isDataLoaded && displayDoorbellDialog)
-        {
-            var allDevices = await _devicesService.GetAllSupportedDevicesAsync();
-
-            var mockDoorbell = allDevices.FirstOrDefault(row => row.DeviceId == "5000");
-
-            //TODO Delete when doorbell is implemented
-            MainThread.BeginInvokeOnMainThread(async () => await _dialogService.ShowDialogAsync(nameof(DoorBellDialog), new DialogParameters()
-            {
-                { Constants.DialogsParameterKeys.ACCESSORY, mockDoorbell },
-            }));
-        }
     }
 
     #endregion

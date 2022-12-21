@@ -22,7 +22,7 @@ public interface IDevicesService
 
     Task<AOResult<IEnumerable<AttributeNameAqaraResponse>>> GetAttributeNamesForDevices(params string[] devicesId);
 
-    Task<IEnumerable<DeviceBindableModel>> GetAllSupportedDevicesAsync();
+    Task<IEnumerable<DeviceBindableModel>> GetAllSupportedDevicesAsync(Func<DeviceBindableModel, bool> condition = null);
 
     Task<IEnumerable<DeviceBindableModel>> GetAllDevicesAsync();
 
