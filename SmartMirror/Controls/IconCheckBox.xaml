@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Border
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SmartMirror.Controls"
+    x:DataType="local:IconCheckBox"
+    x:Class="SmartMirror.Controls.IconCheckBox"
+    x:Name="iconCheckBox">
+
+    <Border.GestureRecognizers>
+        <TapGestureRecognizer Tapped="OnTapped"/>
+    </Border.GestureRecognizers>
+
+    <Image
+        HeightRequest="{Binding IconSizes.Height, Source={Reference iconCheckBox}}"
+        WidthRequest="{Binding IconSizes.Width, Source={Reference iconCheckBox}}"
+        Source="{Binding IconSource, Source={Reference iconCheckBox}}">
+
+        <Image.Triggers>
+            <DataTrigger TargetType="Image" Binding="{Binding IsChecked, Source={Reference iconCheckBox}}" Value="True">
+                <Setter Property="Source" Value="{Binding CheckedIconSource, Source={Reference iconCheckBox}}"/>
+            </DataTrigger>
+        </Image.Triggers>
+
+    </Image>
+
+</Border>

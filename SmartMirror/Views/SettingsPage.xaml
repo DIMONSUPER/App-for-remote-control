@@ -57,6 +57,14 @@
                 NotificationsDataTemplate="{StaticResource notificationSettingsGroupTemplate}"
                 AutomationDataTemplate="{StaticResource simpleAutomationTemplate}"/>
 
+            <templates:AccessoryRoomSourceTemplate x:Key="accessoryRoomSourceTemplate"/>
+            <templates:ExpandButtonTemplate x:Key="expandButtonTemplate"/>
+
+            <templateSelectors:ChipTemplateSelector
+                x:Key="accessoriesSourcesSelector"
+                RoomSourceDataTemplate="{StaticResource accessoryRoomSourceTemplate}"
+                ExpandButtonDataTemplate="{StaticResource expandButtonTemplate}"/>
+
         </ResourceDictionary>
 
     </views:BaseContentPage.Resources>
@@ -126,129 +134,155 @@
                         ItemsSource="{Binding Categories}"
                         ItemTemplate="{StaticResource categoryTemplate}"/>
 
-                    <controls:CustomStateView
+                    <ScrollView
                         Grid.Column="1"
-                        Margin="0, 60, 0, 0"
-                        State="{Binding DataState}">
+                        Margin="105, 60, 60, 0"
+                        VerticalScrollBarVisibility="Never"
+                        HorizontalScrollBarVisibility="Never">
 
-                        <controls:CustomStateView.LoadingSkeletonContent>
-                            <skeletons:SettingsElementsSkeleton/>
-                        </controls:CustomStateView.LoadingSkeletonContent>
+                        <Grid RowDefinitions="Auto, *">
 
-                        <controls:CustomStateView.Triggers>
+                            <controls:ExpandedMultipleChipSelector
+                                IsVisible="False"
+                                ItemTemplateSelector="{StaticResource accessoriesSourcesSelector}"
+                                ItemsSource="{Binding AccessoriesSources}"
+                                ItemSelectedCommand="{Binding AccessorySourceSelectedCommand}">
 
-                            <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Accessories}">
-                                <Setter Property="EmptyTitle" Value="{extensions:Translate NoAccessoriesYet}"/>
-                                <Setter Property="EmptyStateImage" Value="no_accessories_yet"/>
-                                <Setter Property="LoadingTitle" Value="{extensions:Translate Accessories}"/>
-                                <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheAccessoriesSettings}"/>
-                            </DataTrigger>
+                                <controls:ExpandedMultipleChipSelector.Triggers>
 
-                            <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Scenarios}">
-                                <Setter Property="EmptyTitle" Value="{extensions:Translate NoScenariosYet}"/>
-                                <Setter Property="EmptyStateImage" Value="empty_scenarios"/>
-                                <Setter Property="LoadingTitle" Value="{extensions:Translate Scenarios}"/>
-                                <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheScenariosSettings}"/>
-                            </DataTrigger>
+                                    <DataTrigger
+                                        TargetType="controls:ExpandedMultipleChipSelector"
+                                        Binding="{Binding SelectedCategory.Type}"
+                                        Value="{Static enums:ECategoryType.Accessories}">
 
-                            <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Cameras}">
-                                <Setter Property="EmptyTitle" Value="{extensions:Translate NoCamerasYet}"/>
-                                <Setter Property="EmptyStateImage" Value="video_off"/>
-                                <Setter Property="LoadingTitle" Value="{extensions:Translate Cameras}"/>
-                                <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheCamerasSettings}"/>
-                            </DataTrigger>
+                                        <Setter Property="Margin" Value="0, 0, 0, 30"/>
+                                        <Setter Property="IsVisible" Value="True"/>
 
-                            <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Notifications}">
-                                <Setter Property="EmptyTitle" Value="{extensions:Translate NoNotificationsYet}"/>
-                                <Setter Property="EmptyStateImage" Value="notifications_off"/>
-                                <Setter Property="LoadingTitle" Value="{extensions:Translate Notifications}"/>
-                                <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheNotificationsSettings}"/>
-                            </DataTrigger>
+                                    </DataTrigger>
 
-                            <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Automations}">
-                                <Setter Property="EmptyTitle" Value="{extensions:Translate NoAutomationYet}"/>
-                                <Setter Property="EmptyStateImage" Value="pic_no_automation"/>
-                                <Setter Property="LoadingTitle" Value="{extensions:Translate Automation}"/>
-                                <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheAutomationSettings}"/>
-                            </DataTrigger>
+                                </controls:ExpandedMultipleChipSelector.Triggers>
 
-                        </controls:CustomStateView.Triggers>
+                            </controls:ExpandedMultipleChipSelector>
 
-                        <controls:CustomStateView.CompleteContent>
+                            <controls:CustomStateView
+                                Grid.Row="1"
+                                State="{Binding DataState}">
 
-                            <ScrollView
-                                Margin="105, 0, 60, 0"
-                                VerticalScrollBarVisibility="Never"
-                                HorizontalScrollBarVisibility="Never">
+                                <controls:CustomStateView.LoadingSkeletonContent>
+                                    <skeletons:SettingsElementsSkeleton/>
+                                </controls:CustomStateView.LoadingSkeletonContent>
 
-                                <StackLayout>
+                                <controls:CustomStateView.Triggers>
 
-                                    <templates:SimpleNotificationsHeaderTemplate
-                                        Margin="0, 0, 0, 25"
-                                        IsVisible="{Binding SelectedCategory.Type, Converter={xct:IsEqualConverter}, ConverterParameter={x:Static enums:ECategoryType.Notifications}}"
-                                        IsToggled="{Binding IsAllowNotifications}"
-                                        ImageSource="subtract_bell"
-                                        Title="{extensions:Translate AllowNotifications}"
-                                        behaviors:TouchBehavior.IsAnimation="True"
-                                        behaviors:TouchBehavior.Command="{Binding ChangeAllowNotificationsCommand}"
-                                        behaviors:TouchBehavior.NormalBackgroundColor="{DynamicResource cbg_i2}"
-                                        behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}">
+                                    <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Accessories}">
+                                        <Setter Property="EmptyTitle" Value="{extensions:Translate NoAccessoriesYet}"/>
+                                        <Setter Property="EmptyStateImage" Value="no_accessories_yet"/>
+                                        <Setter Property="LoadingTitle" Value="{extensions:Translate Accessories}"/>
+                                        <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheAccessoriesSettings}"/>
+                                    </DataTrigger>
 
-                                        <templates:SimpleNotificationsHeaderTemplate.Triggers>
-                                            <DataTrigger 
-                                                TargetType="templates:SimpleNotificationsHeaderTemplate"
-                                                Binding="{Binding SelectedCategory.Type}" 
-                                                Value="{Static enums:ECategoryType.Notifications}">
+                                    <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Scenarios}">
+                                        <Setter Property="EmptyTitle" Value="{extensions:Translate NoScenariosYet}"/>
+                                        <Setter Property="EmptyStateImage" Value="empty_scenarios"/>
+                                        <Setter Property="LoadingTitle" Value="{extensions:Translate Scenarios}"/>
+                                        <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheScenariosSettings}"/>
+                                    </DataTrigger>
+
+                                    <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Cameras}">
+                                        <Setter Property="EmptyTitle" Value="{extensions:Translate NoCamerasYet}"/>
+                                        <Setter Property="EmptyStateImage" Value="video_off"/>
+                                        <Setter Property="LoadingTitle" Value="{extensions:Translate Cameras}"/>
+                                        <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheCamerasSettings}"/>
+                                    </DataTrigger>
+
+                                    <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Notifications}">
+                                        <Setter Property="EmptyTitle" Value="{extensions:Translate NoNotificationsYet}"/>
+                                        <Setter Property="EmptyStateImage" Value="notifications_off"/>
+                                        <Setter Property="LoadingTitle" Value="{extensions:Translate Notifications}"/>
+                                        <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheNotificationsSettings}"/>
+                                    </DataTrigger>
+
+                                    <DataTrigger TargetType="controls:CustomStateView" Binding="{Binding SelectedCategory.Type}" Value="{x:Static enums:ECategoryType.Automations}">
+                                        <Setter Property="EmptyTitle" Value="{extensions:Translate NoAutomationYet}"/>
+                                        <Setter Property="EmptyStateImage" Value="pic_no_automation"/>
+                                        <Setter Property="LoadingTitle" Value="{extensions:Translate Automation}"/>
+                                        <Setter Property="DescriptionEmptyState" Value="{extensions:Translate PleaseCheckTheAutomationSettings}"/>
+                                    </DataTrigger>
+
+                                </controls:CustomStateView.Triggers>
+
+                                <controls:CustomStateView.CompleteContent>
+
+                                    <StackLayout>
+
+                                        <templates:SimpleNotificationsHeaderTemplate
+                                            Margin="0, 0, 0, 25"
+                                            IsVisible="{Binding SelectedCategory.Type, Converter={xct:IsEqualConverter}, ConverterParameter={x:Static enums:ECategoryType.Notifications}}"
+                                            IsToggled="{Binding IsAllowNotifications}"
+                                            ImageSource="subtract_bell"
+                                            Title="{extensions:Translate AllowNotifications}"
+                                            behaviors:TouchBehavior.IsAnimation="True"
+                                            behaviors:TouchBehavior.Command="{Binding ChangeAllowNotificationsCommand}"
+                                            behaviors:TouchBehavior.NormalBackgroundColor="{DynamicResource cbg_i2}"
+                                            behaviors:TouchBehavior.PressedBackgroundColor="{DynamicResource cbg_i13}">
+
+                                            <templates:SimpleNotificationsHeaderTemplate.Triggers>
+                                                <DataTrigger 
+                                                    TargetType="templates:SimpleNotificationsHeaderTemplate"
+                                                    Binding="{Binding SelectedCategory.Type}" 
+                                                    Value="{Static enums:ECategoryType.Notifications}">
                                                 
-                                                <Setter Property="Margin" Value="0"/>
+                                                    <Setter Property="Margin" Value="0"/>
                                                 
-                                            </DataTrigger>
-                                        </templates:SimpleNotificationsHeaderTemplate.Triggers>
+                                                </DataTrigger>
+                                            </templates:SimpleNotificationsHeaderTemplate.Triggers>
                                         
-                                    </templates:SimpleNotificationsHeaderTemplate>
+                                        </templates:SimpleNotificationsHeaderTemplate>
 
-                                    <controls:CustomCollectionView
-                                        Margin="0, 0, 1, 0"
-                                        Padding="0, 0, 0, 44"
-                                        ItemsSource="{Binding CategoryElements}"
-                                        ItemTemplate="{StaticResource elementCategoryTemplateSelector}">
+                                        <controls:CustomCollectionView
+                                            Margin="0, 0, 1, 0"
+                                            Padding="0, 0, 0, 44"
+                                            ItemsSource="{Binding CategoryElements}"
+                                            ItemTemplate="{StaticResource elementCategoryTemplateSelector}">
                                         
-                                        <CollectionView.Triggers>
-                                            <DataTrigger
-                                                TargetType="CollectionView" 
-                                                Binding="{Binding SelectedCategory.Type}"
-                                                Value="{Static enums:ECategoryType.Notifications}">
+                                            <CollectionView.Triggers>
+                                                <DataTrigger
+                                                    TargetType="CollectionView" 
+                                                    Binding="{Binding SelectedCategory.Type}"
+                                                    Value="{Static enums:ECategoryType.Notifications}">
                                                 
-                                                <Setter Property="ItemsLayout">
-                                                    <Setter.Value>
+                                                    <Setter Property="ItemsLayout">
+                                                        <Setter.Value>
                                                         
-                                                        <LinearItemsLayout Orientation="Vertical"/>
+                                                            <LinearItemsLayout Orientation="Vertical"/>
                                                         
-                                                    </Setter.Value>
-                                                </Setter>
+                                                        </Setter.Value>
+                                                    </Setter>
                                                 
-                                            </DataTrigger>
-                                        </CollectionView.Triggers>
+                                                </DataTrigger>
+                                            </CollectionView.Triggers>
                                         
-                                        <CollectionView.ItemsLayout>
+                                            <CollectionView.ItemsLayout>
 
-                                            <GridItemsLayout
-                                                Span="2"
-                                                VerticalItemSpacing="25"
-                                                HorizontalItemSpacing="25"
-                                                Orientation="Vertical"/>
+                                                <GridItemsLayout
+                                                    Span="2"
+                                                    VerticalItemSpacing="25"
+                                                    HorizontalItemSpacing="25"
+                                                    Orientation="Vertical"/>
 
-                                        </CollectionView.ItemsLayout>
+                                            </CollectionView.ItemsLayout>
 
-                                    </controls:CustomCollectionView>
+                                        </controls:CustomCollectionView>
 
-                                </StackLayout>
-
-                            </ScrollView>
+                                    </StackLayout>
                             
-                        </controls:CustomStateView.CompleteContent>
+                                </controls:CustomStateView.CompleteContent>
 
-                    </controls:CustomStateView>
+                            </controls:CustomStateView>
+
+                        </Grid>
+
+                </ScrollView>
 
                 </Grid>
 

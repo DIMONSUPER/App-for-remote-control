@@ -407,6 +407,21 @@
 		<MauiXaml Update="Resources\DataTemplates\AutomationDetailCardTemplate.xaml">
 		  <SubType></SubType>
 		</MauiXaml>
+		<MauiXaml Update="Controls\Chip.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Controls\IconCheckBox.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Controls\ExpandedMultipleChipSelector.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\AccessoryRoomSourceTemplate.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Resources\DataTemplates\ExpandButtonTemplate.xaml">
+		  <SubType></SubType>
+		</MauiXaml>
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Update="Resources\Strings\Strings.resx">

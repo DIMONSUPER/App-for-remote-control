@@ -17,6 +17,7 @@ using SmartMirror.Services.Automation;
 using SmartMirror.Resources;
 using System.Threading;
 using SmartMirror.Helpers.Events;
+using SmartMirror.Services.Rooms;
 
 namespace SmartMirror.ViewModels
 {
@@ -31,6 +32,7 @@ namespace SmartMirror.ViewModels
         private readonly IGoogleService _googleService;
         private readonly INotificationsService _notificationsService;
         private readonly IAutomationService _automationService;
+        private readonly IRoomsService _roomsService;
         private readonly IEventAggregator _eventAggregator;
 
         private IEnumerable<ImageAndTitleBindableModel> _allAccessories = Enumerable.Empty<ImageAndTitleBindableModel>();
@@ -55,6 +57,7 @@ namespace SmartMirror.ViewModels
             IAqaraService aqaraService,
             INotificationsService notificationsService,
             IAutomationService automationService,
+            IRoomsService roomsService,
             IEventAggregator eventAggregator,
             IGoogleService googleService)
             : base(navigationService)
@@ -68,6 +71,7 @@ namespace SmartMirror.ViewModels
             _googleService = googleService;
             _notificationsService = notificationsService;
             _automationService = automationService;
+            _roomsService = roomsService;
             _eventAggregator = eventAggregator;
 
             PageState = EPageState.LoadingSkeleton;
@@ -76,6 +80,7 @@ namespace SmartMirror.ViewModels
             _scenariosService.AllScenariosChanged += OnAllScenariosChanged;
             _automationService.AllAutomationsChanged += OnAllAutomationsChanged;
             _camerasService.AllCamerasChanged += OnAllCamerasChanged;
+            _roomsService.AllRoomsChanged += OnAllRoomsChanged;
 
             LoadCategories();
 
@@ -123,6 +128,13 @@ namespace SmartMirror.ViewModels
             set => SetProperty(ref _categoryElements, value);
         }
 
+        private ObservableCollection<ISelectableTextModel> _accessoriesSources = new();
+        public ObservableCollection<ISelectableTextModel> AccessoriesSources
+        {
+            get => _accessoriesSources;
+            set => SetProperty(ref _accessoriesSources, value);
+        }
+
         private ICommand _loginWithAqaraCommand;
         public ICommand LoginWithAqaraCommand => _loginWithAqaraCommand ??= SingleExecutionCommand.FromFunc<SettingsProvidersBindableModel>(OnLoginWithAqaraCommandAsync, true, Constants.Limits.DELAY_MILLISEC_NAVIGATION_COMMAND);
 
@@ -162,6 +174,9 @@ namespace SmartMirror.ViewModels
         private ICommand _changeAllowNotificationsCommand;
         public ICommand ChangeAllowNotificationsCommand => _changeAllowNotificationsCommand ??= SingleExecutionCommand.FromFunc(OnChangeAllowNotificationsCommandAsync);
 
+        private ICommand _accessorySourceSelectedCommand;
+        public ICommand AccessorySourceSelectedCommand => _accessorySourceSelectedCommand ??= SingleExecutionCommand.FromFunc<RoomSourceBindableModel>(OnAccessorySourceSelectedCommandAsync);
+
         #endregion
 
         #region -- Overrides --
@@ -186,6 +201,7 @@ namespace SmartMirror.ViewModels
             _scenariosService.AllScenariosChanged -= OnAllScenariosChanged;
             _automationService.AllAutomationsChanged -= OnAllAutomationsChanged;
             _camerasService.AllCamerasChanged -= OnAllCamerasChanged;
+            _roomsService.AllRoomsChanged -= OnAllRoomsChanged;
 
             base.Destroy();
         }
@@ -228,6 +244,46 @@ namespace SmartMirror.ViewModels
             await LoadAllCamerasAsync();
 
             SetElementsSelectedCategory();
+        }
+
+        private async void OnAllRoomsChanged(object sender, EventArgs e)
+        {
+            await LoadAccessorySourcesAsync();
+        }
+
+        private async Task<bool> LoadAccessorySourcesAsync()
+        {
+            var resultOfGettingAllRooms = await _roomsService.GetAllRoomsAsync();
+            var isAnyRoomsLoaded = resultOfGettingAllRooms.Any();
+
+            if (isAnyRoomsLoaded)
+            {
+                var accessoriesSources = _mapperService.MapRange<RoomSourceBindableModel>(resultOfGettingAllRooms, (v, vm) =>
+                {
+                    vm.FontSize = 21;
+                    vm.FontFamily = "InterBold";
+                    vm.TapCommand = AccessorySourceSelectedCommand;
+                }).ToList<ISelectableTextModel>();
+
+                AccessoriesSources = new (accessoriesSources);
+            }
+
+            return isAnyRoomsLoaded;
+        }
+
+        private async Task OnAccessorySourceSelectedCommandAsync(RoomSourceBindableModel roomSource)
+        {
+            await LoadAccessoriesFromSelectedRoomsAsync();
+
+            if (_allAccessories.Any())
+            {
+                DataState = EPageState.LoadingSkeleton;
+            }
+
+            _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
+            {
+                SetElementsSelectedCategory();
+            }));
         }
 
         private void LoadCategories()
@@ -360,7 +416,8 @@ namespace SmartMirror.ViewModels
 
             if (IsInternetConnected)
             {
-                isLoaded = await LoadAllDevicesAsync();
+                isLoaded = await LoadAccessorySourcesAsync();
+                isLoaded &= await LoadAllDevicesAsync();
                 isLoaded &= await LoadAllScenariosAsync();
                 isLoaded &= await LoadAllCamerasAsync();
                 isLoaded &= await LoadAllNotificationsAsync();
@@ -374,7 +431,29 @@ namespace SmartMirror.ViewModels
 
         private async Task<bool> LoadAllDevicesAsync()
         {
-            var devices = await _devicesService.GetAllSupportedDevicesAsync();
+            await LoadAccessoriesFromSelectedRoomsAsync();
+
+            var deviceCategory = Categories.FirstOrDefault(c => c.Type == ECategoryType.Accessories);
+
+            deviceCategory.Count = _allAccessories.Count().ToString();
+
+            return true;
+        }
+
+        private async Task LoadAccessoriesFromSelectedRoomsAsync()
+        {
+            var devices = Enumerable.Empty<DeviceBindableModel>();
+
+            var selectedAccessorySources = AccessoriesSources.Where(x => x.IsSelected);
+
+            if (selectedAccessorySources.Any())
+            {
+                devices = await _devicesService.GetAllSupportedDevicesAsync(x => selectedAccessorySources.Any(s => s.Id == x.PositionId));
+            }
+            else
+            {
+                devices = await _devicesService.GetAllSupportedDevicesAsync();
+            }
 
             _allAccessories = _mapperService.MapRange<ImageAndTitleBindableModel>(devices, (m, vm) =>
             {
@@ -382,12 +461,6 @@ namespace SmartMirror.ViewModels
                 vm.Type = ECategoryType.Accessories;
                 vm.TapCommand = OpenAccessorySettingsCommand;
             });
-
-            var deviceCategory = Categories.FirstOrDefault(c => c.Type == ECategoryType.Accessories);
-
-            deviceCategory.Count = _allAccessories.Count().ToString();
-
-            return true;
         }
 
         private async Task<bool> LoadAllScenariosAsync()
@@ -564,7 +637,7 @@ namespace SmartMirror.ViewModels
             return true;
         }
 
-        NotificationSettingsGroupBindableModel GetNotificationGroup(IEnumerable<INotifiable> notifications, string groupName, string imageSource = null)
+        private NotificationSettingsGroupBindableModel GetNotificationGroup(IEnumerable<INotifiable> notifications, string groupName, string imageSource = null)
         {
             return new NotificationSettingsGroupBindableModel
             {
@@ -574,7 +647,7 @@ namespace SmartMirror.ViewModels
                 {
                     vm.ImageSource ??= imageSource;
                     vm.Model = m;
-                    vm.IsToggled = (m as INotifiable).IsReceiveNotifications;
+                    vm.IsToggled = m.IsReceiveNotifications;
                     vm.TapCommand = ChangeStatusReceivingNotificationCommand;
                 }))
             };
