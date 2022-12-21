@@ -4,8 +4,8 @@ namespace SmartMirror.Interfaces
 {
     public interface ICategoryElementModel
     {
-        string ImageSource { get; set;  }
+        string ImageSource { get; set; }
 
-        ECategoryType Type { get; set;  }
+        ECategoryType Type { get; set; } 
     }
 }

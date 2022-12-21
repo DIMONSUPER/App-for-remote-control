@@ -102,7 +102,6 @@
 		<None Remove="Microsoft.Extensions.Localization" />
 		<None Remove="Resources\Strings\" />
 		<None Remove="Enums\" />
-		<None Remove="Platforms\Android\Renderers\" />
 		<None Remove="Platforms\Android\Resources\drawable\" />
 		<None Remove="Controls\StateContainer\" />
 		<None Remove="Services\Mapper\" />
@@ -175,7 +174,6 @@
 		<Folder Include="ViewModels\Tabs\" />
 		<Folder Include="Resources\DataTemplates\" />
 		<Folder Include="Extensions\" />
-		<Folder Include="Platforms\Android\Renderers\" />
 		<Folder Include="Controls\StateContainer\" />
 		<Folder Include="Services\Mapper\" />
 		<Folder Include="Services\Settings\" />
@@ -277,6 +275,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Views\Dialogs\ScenarioSettingsDialog.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\ItemsPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\MainTabbedPage.xaml">
 			<Generator>MSBuild:Compile</Generator>

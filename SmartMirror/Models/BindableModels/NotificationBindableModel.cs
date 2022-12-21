@@ -6,7 +6,7 @@ using SmartMirror.Resources.Strings;
 
 namespace SmartMirror.Models.BindableModels
 {
-    public class NotificationGroupItemBindableModel : BindableBase, INotificationGroupItemModel
+    public class NotificationBindableModel : BindableBase
     {
         #region -- Public helpers --
 

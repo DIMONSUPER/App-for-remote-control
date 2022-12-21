@@ -9,6 +9,7 @@ using SmartMirror.Services.Rooms;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using SmartMirror.Resources.Strings;
+using System.ComponentModel;
 
 namespace SmartMirror.ViewModels.Tabs.Pages;
 
@@ -22,14 +23,14 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private List<NotificationSourceBindableModel> _roomsNotificationSource;
     private List<NotificationSourceBindableModel> _deviceNotificationSource;
-    private List<NotificationGroupItemBindableModel> _allNotifications = new();
+    private List<NotificationBindableModel> _allNotifications = new();
 
     public NotificationsPageViewModel(
         INotificationsService notificationsService,
         IDialogService dialogService,
         IMapperService mapperService,
         INavigationService navigationService,
-        IDevicesService devicesService, 
+        IDevicesService devicesService,
         IRoomsService roomsService)
         : base(navigationService)
     {
@@ -37,8 +38,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
         _dialogService = dialogService;
         _mapperService = mapperService;
         _devicesService = devicesService;
-        _roomsService = roomsService; 
-        
+        _roomsService = roomsService;
+
         Title = "Notifications";
         DataState = EPageState.LoadingSkeleton;
 
@@ -85,8 +86,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
         set => SetProperty(ref _selectedNotificationSource, value);
     }
 
-    private ObservableCollection<INotificationGroupItemModel> _notifications;
-    public ObservableCollection<INotificationGroupItemModel> Notifications
+    private ObservableCollection<IGroupableCollection> _notifications;
+    public ObservableCollection<IGroupableCollection> Notifications
     {
         get => _notifications;
         set => SetProperty(ref _notifications, value);
@@ -137,7 +138,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
                 DataState = EPageState.LoadingSkeleton;
 
                 await UpdateAllDataAndChangeStateAsync();
-            } 
+            }
         }
         else
         {
@@ -153,7 +154,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private int SelectedNotificationCategoryIndex => NotificationCategories.IndexOf(SelectedNotificationCategory);
 
-    private async void OnNotificationReceived(object sender, NotificationGroupItemBindableModel notification)
+    private async void OnNotificationReceived(object sender, NotificationBindableModel notification)
     {
         await UpdateAllDataAndChangeStateAsync();
     }
@@ -292,7 +293,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private void FilterNotifications()
     {
-        var notifications = Enumerable.Empty<NotificationGroupItemBindableModel>();
+        var notifications = Enumerable.Empty<NotificationBindableModel>();
 
         bool isAllRoomsOrAccessoriesSelected = string.IsNullOrEmpty(SelectedNotificationSource.Id);
 
@@ -327,7 +328,9 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
         if (notifications.Any())
         {
-            Notifications = new(GetNotificationGroups(notifications));
+            var notificationGroups = _notificationsService.GetNotificationGroups(notifications, x => x.LastActivityTime.ToString(Constants.Formats.DATE_FORMAT));
+
+            Notifications = new(notificationGroups);
             NotificationsState = EPageState.Complete;
         }
         else
@@ -382,32 +385,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
         }
 
         return isLoaded;
-    }
-
-    private ObservableCollection<INotificationGroupItemModel> GetNotificationGroups(IEnumerable<NotificationGroupItemBindableModel> notifications)
-    {
-        var lastTitleGroup = string.Empty;
-
-        var notificationGrouped = new ObservableCollection<INotificationGroupItemModel>();
-
-        foreach (var notificafication in notifications)
-        {
-            var titleGroup = notificafication.LastActivityTime.ToString(Constants.Formats.DATE_FORMAT);
-
-            if (lastTitleGroup != titleGroup)
-            {
-                notificationGrouped.Add(new NotificationGroupTitleBindableModel()
-                {
-                    Title = titleGroup,
-                });
-
-                lastTitleGroup = titleGroup;
-            }
-
-            notificationGrouped.Add(notificafication);
-        }
-
-        return notificationGrouped;
     }
 
     #endregion

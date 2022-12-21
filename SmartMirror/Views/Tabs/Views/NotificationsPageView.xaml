@@ -28,11 +28,6 @@
 
             <templates:NotificationSourceTemplate x:Key="notificationSourceTemplate"/>
 
-            <templatesSelectors:NotificationDataTemplateSelector
-                x:Key="notificationTemplateSelector"
-                NotificationHeaderDataTemplate="{x:StaticResource notificationHeaderTemplate}"
-                NotificationDataTemplate="{x:StaticResource notificationTemplate}"/>
-
         </ResourceDictionary>
 
     </views:BaseContentView.Resources>
@@ -58,13 +53,13 @@
 
             <Grid
                 ColumnDefinitions="auto, *"
-                Margin="42, 34, 0, 0">
+                Margin="42, 64, 0, 0">
 
                 <Grid RowDefinitions="auto, *">
 
                     <controls:TabsSelector
                         Grid.Row="0"
-                        Margin="0, 24, 0, 29"
+                        Margin="0, 0, 0, 29"
                         TabWidth="181"
                         TabNames="{Binding NotificationCategories}"
                         SelectedTabName="{Binding SelectedNotificationCategory}"
@@ -82,7 +77,7 @@
                                 BindingContext="{Binding BindingContext, Source={Reference notificationsPageView}}"
                                 SelectedItem="{Binding SelectedNotificationSource}"/>
                         </CollectionView.Behaviors>
-                        
+
                     </CollectionView>
 
                 </Grid>
@@ -109,20 +104,36 @@
                             Command="{Binding RefreshNotificationsCommand}"
                             x:Name="refreshView">
 
-                            <controls:CustomCollectionView
-                                HorizontalOptions="EndAndExpand"
-                                Padding="0, 0, 0, 28"
-                                ItemsSource="{Binding Notifications}"
-                                ItemTemplate="{StaticResource notificationTemplateSelector}"
-                                WidthRequest="571"
-                                VerticalScrollBarVisibility="Always"
-                                HorizontalScrollBarVisibility="Always"
-                                x:Name="scrollViewNotifications"/>
+                            <Grid WidthRequest="571">
+
+                                <controls:StickyHeaderCollectionView
+                                    HorizontalOptions="CenterAndExpand"
+                                    WidthRequest="571"
+                                    IsGrouped="True"
+                                    ItemsSource="{Binding Notifications}"
+                                    ItemTemplate="{StaticResource notificationTemplate}"
+                                    GroupHeaderTemplate="{StaticResource notificationHeaderTemplate}"
+                                    x:Name="notificationStikyHeaderCollection">
+
+                                    <controls:StickyHeaderCollectionView.ItemsLayout>
+                                        <LinearItemsLayout
+                                            Orientation="Vertical"
+                                            ItemSpacing="18"/>
+                                    </controls:StickyHeaderCollectionView.ItemsLayout>
+
+                                </controls:StickyHeaderCollectionView>
+
+                                 <Label
+                                     Style="{x:DynamicResource tstyle_i11}"
+                                     HorizontalTextAlignment="Center"
+                                     Text="{Binding NameCurrentGroup, Source={Reference notificationStikyHeaderCollection}, Converter={StaticResource timeToDaysOfWeekConverter}}"/>
+
+                            </Grid>
 
                         </RefreshView>
 
                     </controls:CustomStateView.CompleteContent>
-                        
+
                 </controls:CustomStateView>
 
             </Grid>
