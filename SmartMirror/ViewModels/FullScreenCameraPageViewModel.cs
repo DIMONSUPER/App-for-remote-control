@@ -17,7 +17,7 @@ namespace SmartMirror.ViewModels
 
         public FullScreenCameraPageViewModel(
             INavigationService navigationService,
-            ICamerasService camerasService) 
+            ICamerasService camerasService)
             : base(navigationService)
         {
             _camerasService = camerasService;
@@ -53,6 +53,22 @@ namespace SmartMirror.ViewModels
 
         #region -- Overrides --
 
+        protected override void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        {
+            base.OnConnectivityChanged(sender, e);
+
+            if (e.NetworkAccess is NetworkAccess.Internet)
+            {
+                _ = StartRunnerAsync().ConfigureAwait(false);
+            }
+            else
+            {
+                _cameraCancellationTokenSource?.Cancel();
+
+                StopVideo();
+            }
+        }
+
         public override void Initialize(INavigationParameters parameters)
         {
             base.Initialize(parameters);
@@ -63,7 +79,7 @@ namespace SmartMirror.ViewModels
             }
         }
 
-        public override async void OnAppearing()
+        public override void OnAppearing()
         {
             base.OnAppearing();
 
@@ -173,10 +189,10 @@ namespace SmartMirror.ViewModels
                                 _ = PlayCurrentVideoAsync().ConfigureAwait(false);
                             }
 
-                            Camera.IsConnected = true;  
+                            Camera.IsConnected = true;
                         }
                         else if (Camera.IsConnected)
-                        {   
+                        {
                             StopVideo();
 
                             Camera.IsConnected = false;
@@ -198,7 +214,7 @@ namespace SmartMirror.ViewModels
         }
 
         private void OnMediaPlayerStateChanged(object sender, EventArgs e)
-        {   
+        {
             VideoState = MediaPlayer.State is VLCState.Playing
                 ? VLCState.Opening
                 : MediaPlayer.State;
