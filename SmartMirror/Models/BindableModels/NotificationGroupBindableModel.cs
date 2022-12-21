@@ -4,10 +4,10 @@ namespace SmartMirror.Models.BindableModels
 {
     public class NotificationGroupBindableModel : List<NotificationBindableModel>, IGroupableCollection
     {
-        public NotificationGroupBindableModel(string groupName, List<NotificationBindableModel> items) : base(items)
+        public NotificationGroupBindableModel(string groupName, IEnumerable<NotificationBindableModel> items) : base(items)
         {
             GroupName = groupName;
-            ItemsCount = items.Count;
+            ItemsCount = items.Count();
         }
 
         #region -- IGroupableCollection implementation --

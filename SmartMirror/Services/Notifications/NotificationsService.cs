@@ -199,7 +199,7 @@ namespace SmartMirror.Services.Notifications
             {
                 groupableCollections = notifications
                     .GroupBy(keySelector)
-                    .Select(x => new NotificationGroupBindableModel(x.Key, x.ToList()));
+                    .Select(x => new NotificationGroupBindableModel(x.Key, x));
             }
 
             return groupableCollections;

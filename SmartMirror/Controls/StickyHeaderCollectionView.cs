@@ -6,8 +6,6 @@ namespace SmartMirror.Controls
 {
     public class StickyHeaderCollectionView : CollectionView
     {
-        private int _headerPosition;
-
         public StickyHeaderCollectionView()
         {
             AppendToMapping();
@@ -52,14 +50,14 @@ namespace SmartMirror.Controls
                 if (topChildPosition != AndroidX.RecyclerView.Widget.RecyclerView.NoPosition
                     && topChildPosition >= 0 && ItemsSource is ObservableCollection<IGroupableCollection> items)
                 {
-                    CalculateHeaderPosition(topChildPosition, items);
+                    var headerPosition = CalculateHeaderPosition(topChildPosition, items);
 
-                    NameCurrentGroup = GetNameCurrentGroup(items);
+                    NameCurrentGroup = GetNameCurrentGroup(headerPosition, items);
                 }
             }
         }
 
-        private void CalculateHeaderPosition(int topChildPosition, ObservableCollection<IGroupableCollection> items)
+        private int CalculateHeaderPosition(int topChildPosition, ObservableCollection<IGroupableCollection> items)
         {
             var headerPosition = 0;
 
@@ -70,14 +68,14 @@ namespace SmartMirror.Controls
                 headerPosition++;
             }
 
-            _headerPosition = headerPosition;
+            return headerPosition;
         }
 
-        private string GetNameCurrentGroup(ObservableCollection<IGroupableCollection> items)
+        private string GetNameCurrentGroup(int headerPosition, ObservableCollection<IGroupableCollection> items)
         {
             string nameCurrentGroup = string.Empty;
 
-            var arrayPosition = _headerPosition - 1;
+            var arrayPosition = headerPosition - 1;
 
             if (arrayPosition > -1 && arrayPosition < items.Count)
             {
