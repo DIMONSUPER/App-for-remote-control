@@ -1,10 +1,8 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
-using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Plugin.Maui.Audio;
 using SmartMirror.Controls;
 using SmartMirror.Handlers;
-using SmartMirror.Platforms.Android.Renderers;
 using SmartMirror.Platforms.Android.Services;
 using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Automation;
@@ -55,7 +53,7 @@ public static class MauiProgram
             });
 
         builder.Services.AddLocalization();
-
+        
         return builder.Build();
     }
 
@@ -144,9 +142,6 @@ public static class MauiProgram
         handlers.AddHandler(typeof(Video), typeof(VideoHandler));
         handlers.AddHandler(typeof(VideoView), typeof(VideoViewHandler));
         handlers.AddHandler(typeof(CustomTabbedPage), typeof(CustomTabbedViewHandler));
-        handlers.AddCompatibilityRenderer(
-            typeof(StickyHeaderCollectionView), 
-            typeof(StickyHeaderRecyclerViewRenderer<GroupableItemsView, GroupableItemsViewAdapter<GroupableItemsView, IGroupableItemsViewSource>, IGroupableItemsViewSource>));
     }
 
     #endregion

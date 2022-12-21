@@ -83,7 +83,7 @@
                                 BindingContext="{Binding BindingContext, Source={Reference notificationsPageView}}"
                                 SelectedItem="{Binding SelectedNotificationSource}"/>
                         </CollectionView.Behaviors>
-                        
+
                     </CollectionView>
 
                 </Grid>
@@ -110,27 +110,36 @@
                             Command="{Binding RefreshNotificationsCommand}"
                             x:Name="refreshView">
 
-                            <controls:StickyHeaderCollectionView
-                                HorizontalOptions="EndAndExpand"
-                                WidthRequest="571"
-                                SelectionMode="Single"
-                                IsGrouped="True"
-                                ItemsSource="{Binding Notifications}"
-                                ItemTemplate="{StaticResource notificationTemplate}"
-                                GroupHeaderTemplate="{StaticResource notificationHeaderTemplate}">
-                               
-                                <controls:StickyHeaderCollectionView.ItemsLayout>
-                                    <LinearItemsLayout 
-                                        Orientation="Vertical"
-                                        ItemSpacing="18"/>
-                                </controls:StickyHeaderCollectionView.ItemsLayout>
-                                
-                            </controls:StickyHeaderCollectionView>
+                            <Grid WidthRequest="571">
+
+                                <controls:StickyHeaderCollectionView
+                                    HorizontalOptions="CenterAndExpand"
+                                    WidthRequest="571"
+                                    IsGrouped="True"
+                                    HeaderPosition="{Binding HeaderPostion}"
+                                    ItemsSource="{Binding Notifications}"
+                                    ItemTemplate="{StaticResource notificationTemplate}"
+                                    GroupHeaderTemplate="{StaticResource notificationHeaderTemplate}">
+
+                                    <controls:StickyHeaderCollectionView.ItemsLayout>
+                                        <LinearItemsLayout
+                                            Orientation="Vertical"
+                                            ItemSpacing="18"/>
+                                    </controls:StickyHeaderCollectionView.ItemsLayout>
+
+                                </controls:StickyHeaderCollectionView>
+
+                                 <Label
+                                     Style="{x:DynamicResource tstyle_i11}"
+                                     HorizontalTextAlignment="Center"
+                                     Text="{Binding HeaderName, Converter={StaticResource timeToDaysOfWeekConverter}}"/>
+
+                            </Grid>
 
                         </RefreshView>
 
                     </controls:CustomStateView.CompleteContent>
-                        
+
                 </controls:CustomStateView>
 
             </Grid>

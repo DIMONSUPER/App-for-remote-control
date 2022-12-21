@@ -9,6 +9,7 @@ using SmartMirror.Services.Rooms;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using SmartMirror.Resources.Strings;
+using System.ComponentModel;
 
 namespace SmartMirror.ViewModels.Tabs.Pages;
 
@@ -29,7 +30,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
         IDialogService dialogService,
         IMapperService mapperService,
         INavigationService navigationService,
-        IDevicesService devicesService, 
+        IDevicesService devicesService,
         IRoomsService roomsService)
         : base(navigationService)
     {
@@ -37,8 +38,8 @@ public class NotificationsPageViewModel : BaseTabViewModel
         _dialogService = dialogService;
         _mapperService = mapperService;
         _devicesService = devicesService;
-        _roomsService = roomsService; 
-        
+        _roomsService = roomsService;
+
         Title = "Notifications";
         DataState = EPageState.LoadingSkeleton;
 
@@ -106,6 +107,20 @@ public class NotificationsPageViewModel : BaseTabViewModel
         set => SetProperty(ref _notificationsState, value);
     }
 
+    private int _headerPostion = -1;
+    public int HeaderPostion
+    {
+        get => _headerPostion;
+        set => SetProperty(ref _headerPostion, value);
+    }
+
+    private string _headerName;
+    public string HeaderName
+    {
+        get => _headerName;
+        set => SetProperty(ref _headerName, value);
+    }
+
     private ICommand _selectNotificationSourceCommand;
     public ICommand SelectNotificationSourceCommand => _selectNotificationSourceCommand ??= SingleExecutionCommand.FromFunc<NotificationSourceBindableModel>(OnSelectNotificationSourceCommandAsync);
 
@@ -121,6 +136,21 @@ public class NotificationsPageViewModel : BaseTabViewModel
     #endregion
 
     #region -- Overrides --
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs args)
+    {
+        base.OnPropertyChanged(args);
+
+        if (args.PropertyName is nameof(HeaderPostion))
+        {
+            var arrayPosition = HeaderPostion - 1;
+
+            if (arrayPosition > -1 && arrayPosition < Notifications.Count)
+            {
+                HeaderName = Notifications[arrayPosition].GroupName;
+            }
+        }
+    }
 
     public override void Destroy()
     {
@@ -140,7 +170,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
                 DataState = EPageState.LoadingSkeleton;
 
                 await UpdateAllDataAndChangeStateAsync();
-            } 
+            }
         }
         else
         {
