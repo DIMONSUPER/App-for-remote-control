@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace SmartMirror.Models.Aqara;
+﻿namespace SmartMirror.Models.Aqara;
 
 public class LinkageActionsAqaraModel
 {
-    public List<LinkageActionAqaraModel> Action { get; set; }
+    public List<ActionAqaraModel> Action { get; set; }
 }
 

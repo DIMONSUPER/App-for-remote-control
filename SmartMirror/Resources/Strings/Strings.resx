@@ -24,6 +24,12 @@
     <data name="Automation" xml:space="preserve">
         <value>Automation</value>
     </data>
+    <data name="AllConditionsAreMet" xml:space="preserve">
+        <value>All conditions are met</value>
+    </data>
+    <data name="AnyConditionIsMet" xml:space="preserve">
+        <value>Any condition is met</value>
+    </data>
     <data name="DisplayNotificationsAsPopUpWhileTheAppIsActive" xml:space="preserve">
         <value>Display notifications as a pop-up while the app is active</value>
     </data>
@@ -335,6 +341,12 @@
     </data>
     <data name="Add" xml:space="preserve">
         <value>Add</value>
+    </data>
+    <data name="IF" xml:space="preserve">
+        <value>IF</value>
+    </data>
+    <data name="THEN" xml:space="preserve">
+        <value>THEN</value>
     </data>
     <data name="NewCamera" xml:space="preserve">
         <value>New Camera</value>

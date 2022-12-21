@@ -2,6 +2,7 @@
 <DataTemplate
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:controls="clr-namespace:SmartMirror.Controls"
     xmlns:bindablemodels="clr-namespace:SmartMirror.Models.BindableModels"
     x:DataType="bindablemodels:AutomationDetailCardBindableModel"
@@ -33,43 +34,37 @@
 
                 </Border>
 
-                <StackLayout Margin="24, 0">
+                <StackLayout
+                    Margin="24, 0"
+                    MaximumWidthRequest="433">
                     
                     <controls:CustomLabel
                         Style="{DynamicResource tstyle_i11}"
-                        VerticalOptions="Center"
-                        MaximumWidthRequest="200"
-                        MaxLines="2"
                         LineBreakMode="TailTruncation"
+                        MaxLines="2"
                         Text="{Binding DeviceName}"/>
 
                     <controls:CustomLabel
                         Style="{DynamicResource tstyle_i3}"
-                        VerticalOptions="Center"
-                        MaximumWidthRequest="200"
-                        MaxLines="2"
+                        IsVisible="{Binding RoomName, Converter={xct:IsStringNotNullOrEmptyConverter}}"
                         LineBreakMode="TailTruncation"
+                        MaxLines="2"
                         Text="{Binding RoomName}"/>
 
-                    <!--<controls:CustomLabel
+                    <controls:CustomLabel
                         Style="{DynamicResource tstyle_i3}"
-                        VerticalOptions="Center"
-                        MaximumWidthRequest="200"
-                        MaxLines="2"
+                        IsVisible="{Binding Condition, Converter={xct:IsStringNotNullOrEmptyConverter}}"
+                        
+                        
+                        Text="{Binding Condition}"/>
+
+                    <controls:CustomLabel
+                        Style="{DynamicResource tstyle_i8}"
                         LineBreakMode="TailTruncation"
-                        Text="{Binding TriggerName}"/>-->
+                        MaxLines="2"
+                        Text="{Binding TriggerName}"/>
                     
                 </StackLayout>
-
-                <controls:CustomLabel
-                    Style="{DynamicResource tstyle_i8}"
-                    HorizontalOptions="EndAndExpand"
-                    VerticalOptions="Start"
-                    MaximumWidthRequest="225"
-                    MaxLines="2"
-                    LineBreakMode="TailTruncation"
-                    HorizontalTextAlignment="End"
-                    Text="{Binding TriggerName}"/>
 
             </StackLayout>
 

@@ -19,6 +19,7 @@
     <x:Int32 x:Key="tsize_i2">21</x:Int32> <!-- 28px -->
     <x:Int32 x:Key="tsize_i3">18</x:Int32> <!-- 24px -->
     <x:Int32 x:Key="tsize_i4">15</x:Int32> <!-- 20px -->
+    <x:Int32 x:Key="tsize_i5">30</x:Int32> <!-- 40px -->
 
     <!-- CONTENT STYLES INTERMEDIUM-500 FONT-->
     <Style x:Key="InterMedium" TargetType="Label">
@@ -63,6 +64,9 @@
     </Style>
     <Style x:Key="InterBold_Content_20px" TargetType="Label" BasedOn="{StaticResource InterBold}">
         <Setter Property="FontSize" Value="{x:DynamicResource tsize_i4}" />
+    </Style>
+    <Style x:Key="InterBold_Content_40px" TargetType="Label" BasedOn="{StaticResource InterBold}">
+        <Setter Property="FontSize" Value="{x:DynamicResource tsize_i5}" />
     </Style>
 
     <!-- LABEL STYLES -->
@@ -117,6 +121,9 @@
         <Setter Property="TextColor"  Value="{x:DynamicResource tcolor_i10}"/>
     </Style>
     <Style x:Key="tstyle_i16" TargetType="Label" BasedOn="{StaticResource InterBold_Content_20px}"> <!-- Inter700/ 20px/ White -->
+        <Setter Property="TextColor"  Value="{x:DynamicResource tcolor_i10}"/>
+    </Style>
+    <Style x:Key="tstyle_i18" TargetType="Label" BasedOn="{StaticResource InterBold_Content_40px}"> <!-- Inter700/ 40px/ White -->
         <Setter Property="TextColor"  Value="{x:DynamicResource tcolor_i10}"/>
     </Style>
  

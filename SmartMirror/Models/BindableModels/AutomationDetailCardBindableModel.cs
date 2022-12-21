@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace SmartMirror.Models.BindableModels;
 
@@ -26,18 +25,18 @@ public class AutomationDetailCardBindableModel : BindableBase
         set => SetProperty(ref _iconSource, value);
     }
 
+    private string _condition;
+    public string Condition
+    {
+        get => _condition;
+        set => SetProperty(ref _condition, value);
+    }
+
     private string _triggerName;
     public string TriggerName
     {
         get => _triggerName;
         set => SetProperty(ref _triggerName, value);
-    }
-
-    private ObservableCollection<ConditionBindableModel> _conditions;
-    public ObservableCollection<ConditionBindableModel> Conditions
-    {
-        get => _conditions;
-        set => SetProperty(ref _conditions, value);
     }
 
     private DeviceBindableModel _device;

@@ -32,7 +32,7 @@
                     Spacing="12"
                     behaviors:TouchBehavior.Command="{Binding GoBackCommand}">
 
-                    <Image 
+                    <Image
                         VerticalOptions="Center"
                         HeightRequest="24"
                         WidthRequest="24"
@@ -53,7 +53,7 @@
                     HorizontalOptions="Center"
                     Text="{Binding AutomationBindableModel.Name}"/>
 
-                <!-- SCENARIO ACTIONS COLLECTION -->
+                <!-- AUTOMATION CONDITIONS AND ACTIONS COLLECTION -->
                 <controls:CustomStateView
                     Grid.Row="1"
                     WidthRequest="571"
@@ -64,11 +64,66 @@
 
                     <controls:CustomStateView.CompleteContent>
 
-                        <CollectionView
-                            VerticalScrollBarVisibility="Never"
-                            ItemTemplate="{x:StaticResource automationDetailCardTemplate}"
-                            ItemsSource="{Binding AutomationActions}"/>
+                        <controls:CustomScrollView
+                            HorizontalScrollBarVisibility="Never"
+                            VerticalScrollBarVisibility="Never">
 
+                            <StackLayout>
+
+                                <StackLayout
+                                    Orientation="Horizontal"
+                                    Margin="0, 10, 0, 15">
+
+                                    <Label
+                                        Style="{x:DynamicResource tstyle_i18}"
+                                        Text="{extensions:Translate IF}"/>
+
+                                    <Border
+                                        StrokeThickness="0.75"
+                                        StrokeShape="RoundRectangle 36"
+                                        BackgroundColor="{StaticResource cbg_i2}"
+                                        Padding="36, 12"
+                                        HorizontalOptions="EndAndExpand">
+
+                                        <Label
+                                            Style="{x:DynamicResource tstyle_i3}"
+                                            VerticalTextAlignment="Center"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{extensions:Translate AllConditionsAreMet}">
+
+                                            <Label.Triggers>
+
+                                                <DataTrigger Binding="{Binding Relation}" Value="True" TargetType="Label">
+                                                    <Setter Property="Text" Value="{extensions:Translate AnyConditionIsMet}"/>
+                                                </DataTrigger>
+
+                                            </Label.Triggers>
+
+                                         </Label>
+
+                                    </Border>
+
+                                </StackLayout>
+
+                                <CollectionView
+                                    VerticalScrollBarVisibility="Never"
+                                    ItemTemplate="{x:StaticResource automationDetailCardTemplate}"
+                                    ItemsSource="{Binding AutomationConditions}"/>
+
+                                <Label
+                                    Style="{x:DynamicResource tstyle_i18}"
+                                    Margin="0, 50, 0, 15"
+                                    Text="{extensions:Translate THEN}"/>
+
+                                <CollectionView
+                                    VerticalScrollBarVisibility="Never"
+                                    ItemTemplate="{x:StaticResource automationDetailCardTemplate}"
+                                    ItemsSource="{Binding AutomationActions}"/>
+
+                            </StackLayout>
+
+                        </controls:CustomScrollView>
+                        
                     </controls:CustomStateView.CompleteContent>
             
                 </controls:CustomStateView>
