@@ -23,7 +23,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private List<NotificationSourceBindableModel> _roomsNotificationSource;
     private List<NotificationSourceBindableModel> _deviceNotificationSource;
-    private List<NotificationGroupItemBindableModel> _allNotifications = new();
+    private List<NotificationBindableModel> _allNotifications = new();
 
     public NotificationsPageViewModel(
         INotificationsService notificationsService,
@@ -157,7 +157,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private int SelectedNotificationCategoryIndex => NotificationCategories.IndexOf(SelectedNotificationCategory);
 
-    private async void OnNotificationReceived(object sender, NotificationGroupItemBindableModel notification)
+    private async void OnNotificationReceived(object sender, NotificationBindableModel notification)
     {
         await UpdateAllDataAndChangeStateAsync();
     }
@@ -296,7 +296,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
     private void FilterNotifications()
     {
-        var notifications = Enumerable.Empty<NotificationGroupItemBindableModel>();
+        var notifications = Enumerable.Empty<NotificationBindableModel>();
 
         bool isAllRoomsOrAccessoriesSelected = string.IsNullOrEmpty(SelectedNotificationSource.Id);
 
@@ -331,7 +331,9 @@ public class NotificationsPageViewModel : BaseTabViewModel
 
         if (notifications.Any())
         {
-            Notifications = new(GetNotificationGroups(notifications));
+            var notificationGroups = _notificationsService.GetNotificationGroups(notifications, x => x.LastActivityTime.ToString(Constants.Formats.DATE_FORMAT));
+
+            Notifications = new(notificationGroups);
             NotificationsState = EPageState.Complete;
         }
         else
@@ -410,15 +412,6 @@ public class NotificationsPageViewModel : BaseTabViewModel
         }
 
         return isLoaded;
-    }
-
-    private ObservableCollection<IGroupableCollection> GetNotificationGroups(IEnumerable<NotificationGroupItemBindableModel> notifications)
-    {
-        var notificationGroups = notifications
-            .GroupBy(x => x.LastActivityTime.ToString(Constants.Formats.DATE_FORMAT))
-            .Select(x => new NotificationGroupBindableModel(x.Key, x.ToList()));
-
-        return new (notificationGroups);
     }
 
     #endregion

@@ -2,9 +2,9 @@
 
 namespace SmartMirror.Models.BindableModels
 {
-    public class NotificationGroupBindableModel : List<NotificationGroupItemBindableModel>, IGroupableCollection
+    public class NotificationGroupBindableModel : List<NotificationBindableModel>, IGroupableCollection
     {
-        public NotificationGroupBindableModel(string groupName, List<NotificationGroupItemBindableModel> items) : base(items)
+        public NotificationGroupBindableModel(string groupName, List<NotificationBindableModel> items) : base(items)
         {
             GroupName = groupName;
             ItemsCount = items.Count;

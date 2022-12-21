@@ -28,8 +28,8 @@ public class EmergencyNotificationDialogViewModel : BaseDialogViewModel
 
     #region -- Public properties --
 
-    private ObservableCollection<NotificationGroupItemBindableModel> _notifications = new();
-    public ObservableCollection<NotificationGroupItemBindableModel> Notifications
+    private ObservableCollection<NotificationBindableModel> _notifications = new();
+    public ObservableCollection<NotificationBindableModel> Notifications
     {
         get => _notifications;
         set => SetProperty(ref _notifications, value);
@@ -49,8 +49,8 @@ public class EmergencyNotificationDialogViewModel : BaseDialogViewModel
         set => SetProperty(ref _itemIndex, value);
     }
 
-    private NotificationGroupItemBindableModel _currentItem;
-    public NotificationGroupItemBindableModel CurrentItem
+    private NotificationBindableModel _currentItem;
+    public NotificationBindableModel CurrentItem
     {
         get => _currentItem;
         set => SetProperty(ref _currentItem, value);
@@ -77,7 +77,7 @@ public class EmergencyNotificationDialogViewModel : BaseDialogViewModel
     {
         base.OnDialogOpened(parameters);
 
-        if (parameters.TryGetValue(Constants.DialogsParameterKeys.NOTIFICATION, out NotificationGroupItemBindableModel notification))
+        if (parameters.TryGetValue(Constants.DialogsParameterKeys.NOTIFICATION, out NotificationBindableModel notification))
         {
             Notifications.Add(notification);
         }
@@ -107,7 +107,7 @@ public class EmergencyNotificationDialogViewModel : BaseDialogViewModel
         return Task.CompletedTask;
     }
 
-    private void OnNotificationReceived(object sender, NotificationGroupItemBindableModel notification)
+    private void OnNotificationReceived(object sender, NotificationBindableModel notification)
     {
         if (notification is not null && notification.IsEmergencyNotification)
         {

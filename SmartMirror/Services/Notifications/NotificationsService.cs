@@ -6,6 +6,7 @@ using SmartMirror.Services.Aqara;
 using SmartMirror.Services.Devices;
 using SmartMirror.Services.Rest;
 using SmartMirror.Services.Settings;
+using SmartMirror.Interfaces;
 
 namespace SmartMirror.Services.Notifications
 {
@@ -16,7 +17,7 @@ namespace SmartMirror.Services.Notifications
         private readonly ISettingsManager _settingsManager;
 
         private TaskCompletionSource<object> _notificationsTaskCompletionSource = new();
-        private List<NotificationGroupItemBindableModel> _allNotifications = new();
+        private List<NotificationBindableModel> _allNotifications = new();
 
         public NotificationsService(
             IRestService restService,
@@ -35,11 +36,11 @@ namespace SmartMirror.Services.Notifications
 
         #region -- INotificationsService implementation --
 
-        public event EventHandler<NotificationGroupItemBindableModel> AllNotificationsChanged;
+        public event EventHandler<NotificationBindableModel> AllNotificationsChanged;
 
         public bool IsAllowNotifications => _settingsManager.NotificationsSettings.IsAllowNotifications;
 
-        public async Task<IEnumerable<NotificationGroupItemBindableModel>> GetAllNotificationsAsync()
+        public async Task<IEnumerable<NotificationBindableModel>> GetAllNotificationsAsync()
         {
             await _notificationsTaskCompletionSource.Task;
 
@@ -70,7 +71,7 @@ namespace SmartMirror.Services.Notifications
 
             result = await AOResult.ExecuteTaskAsync(async onFailure =>
             {
-                List<NotificationGroupItemBindableModel> notifications = new();
+                List<NotificationBindableModel> notifications = new();
 
                 var devices = await _devicesService.GetAllDevicesAsync();
 
@@ -97,7 +98,7 @@ namespace SmartMirror.Services.Notifications
                     }
                 }
 
-                notifications.Sort(Comparer<NotificationGroupItemBindableModel>.Create((item1, item2) => item2.LastActivityTime.CompareTo(item1.LastActivityTime)));
+                notifications.Sort(Comparer<NotificationBindableModel>.Create((item1, item2) => item2.LastActivityTime.CompareTo(item1.LastActivityTime)));
 
                 _allNotifications = new(notifications);
             });
@@ -114,11 +115,11 @@ namespace SmartMirror.Services.Notifications
             return result;
         }
 
-        public Task<AOResult<IEnumerable<NotificationGroupItemBindableModel>>> GetNotificationsForDeviceAsync(string deviceId, params string[] resourceIds)
+        public Task<AOResult<IEnumerable<NotificationBindableModel>>> GetNotificationsForDeviceAsync(string deviceId, params string[] resourceIds)
         {
             return AOResult.ExecuteTaskAsync(async onFailure =>
             {
-                var result = new List<NotificationGroupItemBindableModel>();
+                var result = new List<NotificationBindableModel>();
 
                 var data = new
                 {
@@ -146,7 +147,7 @@ namespace SmartMirror.Services.Notifications
                         {
                             foreach (var resource in resources)
                             {
-                                var notification = new NotificationGroupItemBindableModel
+                                var notification = new NotificationBindableModel
                                 {
                                     Device = device,
                                     IsShown = device.IsReceiveNotifications,
@@ -160,8 +161,22 @@ namespace SmartMirror.Services.Notifications
                     }
                 }
 
-                return result as IEnumerable<NotificationGroupItemBindableModel>;
+                return result as IEnumerable<NotificationBindableModel>;
             });
+        }
+
+        public IEnumerable<IGroupableCollection> GetNotificationGroups(IEnumerable<NotificationBindableModel> notifications, Func<NotificationBindableModel, string> keySelector)
+        {
+            var groupableCollections = Enumerable.Empty<IGroupableCollection>();
+
+            if (notifications is not null && notifications.Any())
+            {
+                groupableCollections = notifications
+                    .GroupBy(keySelector)
+                    .Select(x => new NotificationGroupBindableModel(x.Key, x.ToList()));
+            }
+
+            return groupableCollections;
         }
 
         #endregion
@@ -178,7 +193,7 @@ namespace SmartMirror.Services.Notifications
 
                 if (device is not null)
                 {
-                    var notification = new NotificationGroupItemBindableModel
+                    var notification = new NotificationBindableModel
                     {
                         Device = device,
                         IsShown = device.IsReceiveNotifications,

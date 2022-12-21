@@ -121,7 +121,7 @@ public class MainTabbedPageViewModel : BaseViewModel
             .NavigateAsync();
     }
 
-    private async void OnShowEmergencyNotificationDialogAsync(object sender, NotificationGroupItemBindableModel notification)
+    private async void OnShowEmergencyNotificationDialogAsync(object sender, NotificationBindableModel notification)
     {
         if (notification is not null && notification.IsEmergencyNotification)
         {
