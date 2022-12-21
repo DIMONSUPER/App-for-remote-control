@@ -61,12 +61,11 @@
                 BindingForInvalidateMeasure="{Binding Automations}"
                 VerticalScrollBarVisibility="Never"
                 HorizontalScrollBarVisibility="Never"
+                Margin="0, 42, 0, 0"
                 Padding="0, 0, 0, 30"
                 x:Name="scrollViewCompleteState">
 
-                <VerticalStackLayout
-                    Padding="0, 42, 0, 0"
-                    Spacing="0">
+                <VerticalStackLayout Spacing="0">
 
                     <!-- FAVORITE AUTOMATIONS -->
                     <controls:BadgeTitleView
