@@ -24,7 +24,7 @@ namespace SmartMirror.Controls
             {
                 if (view is CustomNoBorderEntry)
                 {
-                    var backgroundColor = BackgroundColor ?? Color.FromArgb("#ffffff");
+                    var backgroundColor = BackgroundColor ?? Colors.Transparent;
 
                     handler.PlatformView?.SetPadding(0, 0, 0, 0);
                     handler.PlatformView?.SetBackgroundColor(backgroundColor.ToAndroid());
