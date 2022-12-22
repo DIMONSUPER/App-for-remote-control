@@ -1,9 +1,9 @@
 ﻿using System;
 namespace SmartMirror.Behaviors
 {
-	public class UnfocusableBehavior : Behavior<VisualElement>
-	{
-		private VisualElement _visualElement;
+    public class UnfocusableBehavior : Behavior<VisualElement>
+    {
+        private VisualElement _visualElement;
 
         #region -- Overrides --
 
@@ -37,4 +37,3 @@ namespace SmartMirror.Behaviors
         #endregion
     }
 }
-
