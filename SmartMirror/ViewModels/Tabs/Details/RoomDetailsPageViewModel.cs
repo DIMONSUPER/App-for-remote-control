@@ -9,6 +9,7 @@ using SmartMirror.Views.Dialogs;
 using SmartMirror.Resources.Strings;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using CommunityToolkit.Maui.Alerts;
 
 namespace SmartMirror.ViewModels.Tabs.Details;
 
@@ -37,6 +38,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
         _roomsService.AllRoomsChanged += OnAllRoomsOrDevicesChanged;
         _devicesService.AllDevicesChanged += OnAllRoomsOrDevicesChanged;
+
         DataState = EPageState.LoadingSkeleton;
     }
 
@@ -118,14 +120,31 @@ public class RoomDetailsPageViewModel : BaseViewModel
         }
     }
 
+    protected override async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    {
+        if (IsInternetConnected)
+        {
+            DataState = EPageState.LoadingSkeleton;
+
+            await LoadRoomsAndChangeStateAsync();
+        }
+        else
+        {
+            DataState = EPageState.NoInternet;
+        }
+    }
+
     #endregion
 
     #region -- Private helpers --
 
     private async void OnAllRoomsOrDevicesChanged(object sender, EventArgs e)
     {
-        DataState = EPageState.LoadingSkeleton;
+        await LoadRoomsAndChangeStateAsync();
+    }
 
+    private async Task LoadRoomsAndChangeStateAsync()
+    {
         var rooms = await _roomsService.GetAllRoomsAsync();
 
         foreach (var room in rooms)
@@ -159,41 +178,44 @@ public class RoomDetailsPageViewModel : BaseViewModel
                 room.IsSelected = room.Id == selectedRoom.Id;
             }
 
-            var devices = await _devicesService.GetAllSupportedDevicesAsync();
-
-            var roomDevices = devices.Where(x => x.PositionId == selectedRoom.Id && x.IsShownInRooms);
-
-            foreach (var device in roomDevices)
-            {
-                device.TappedCommand = _accessorieTappedCommand;
-            }
-
-            if (roomDevices.Any())
-            {
-                DataState = EPageState.LoadingSkeleton;
-
-                _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    SelectedRoomDevices = new(roomDevices);
-
-                    DataState = EPageState.Complete;
-                    RoomDeviceState = EPageState.Complete;
-                }));
-            }
-            else
+            if (selectedRoom.DevicesCount == 0)
             {
                 SelectedRoomDevices = new();
 
                 DataState = EPageState.Complete;
-                RoomDeviceState = IsInternetConnected
-                    ? EPageState.Empty
-                    : EPageState.NoInternet;
+                RoomDeviceState = EPageState.Empty;
+            }
+            else
+            {
+                await LoadDevicesForRoom(selectedRoom.Id);
+
+                _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    DataState = EPageState.Complete;
+                    RoomDeviceState = EPageState.Complete;
+                }));
             }
         }
     }
 
+    private async Task LoadDevicesForRoom(string roomId)
+    {
+        var devices = await _devicesService.GetAllSupportedDevicesAsync();
+
+        var roomDevices = devices.Where(x => x.PositionId == roomId && x.IsShownInRooms);
+
+        foreach (var device in roomDevices)
+        {
+            device.TappedCommand = _accessorieTappedCommand;
+        }
+
+        SelectedRoomDevices = new(roomDevices);
+    }
+
     private Task OnRoomSelectedCommandAsync(RoomBindableModel room)
     {
+        DataState = EPageState.LoadingSkeleton;
+
         SelectRoom(room);
 
         return Task.CompletedTask;
