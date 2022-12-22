@@ -267,6 +267,10 @@
         <Setter Property="TextStyle" Value="{DynamicResource tstyle_i9}"/>
     </Style>    
 
+    <Style TargetType="controls:CustomNoBorderEntry">
+        <Setter Property="Keyboard" Value="Chat"/>
+    </Style>
+
     <Style x:Key="CustomNoBorderEntryStyle_i1" TargetType="controls:CustomNoBorderEntry">
         <Setter Property="VerticalOptions" Value="Center"/>
         <Setter Property="Margin" Value="24, 18"/>
