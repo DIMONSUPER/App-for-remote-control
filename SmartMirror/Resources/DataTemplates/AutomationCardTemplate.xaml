@@ -5,8 +5,6 @@
       xmlns:extensions="clr-namespace:SmartMirror.Extensions"
       xmlns:controls="clr-namespace:SmartMirror.Controls"
       xmlns:vm="clr-namespace:SmartMirror.Models.BindableModels"
-      behaviors:TouchBehavior.Command="{Binding TapCommand}"
-      behaviors:TouchBehavior.CommandParameter="{Binding .}"
       x:DataType="vm:AutomationBindableModel"
       x:Class="SmartMirror.Resources.DataTemplates.AutomationCardTemplate"
       x:Name="automationTemplate">
@@ -17,7 +15,12 @@
             StrokeShape="RoundRectangle 9"
             BackgroundColor="{StaticResource cbg_i2}"
             Margin="0,0,0,3"
-            Padding="{Binding InnerPadding, Source={x:Reference automationTemplate}}">
+            Padding="{Binding InnerPadding, Source={x:Reference automationTemplate}}"
+            behaviors:TouchBehavior.Command="{Binding TapCommand}"
+            behaviors:TouchBehavior.CommandParameter="{Binding .}"
+            behaviors:TouchBehavior.IsAnimation="True"
+            behaviors:TouchBehavior.NormalBackgroundColor="{x:DynamicResource cbg_i2}"
+            behaviors:TouchBehavior.PressedBackgroundColor="{x:DynamicResource cbg_i13}">
 
         <Grid RowDefinitions="Auto, *"
               RowSpacing="0"
