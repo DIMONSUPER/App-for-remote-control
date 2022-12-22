@@ -161,11 +161,26 @@ public class RoomsPageViewModel : BaseTabViewModel
             }
             else
             {
-                await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
+                DialogParameters parameters = null;
+
+                if (IsInternetConnected)
                 {
-                    { Constants.DialogsParameterKeys.TITLE, updateResponse.Message },
-                    { Constants.DialogsParameterKeys.DESCRIPTION, updateResponse.Result?.MsgDetails },
-                });
+                    parameters = new DialogParameters
+                    {
+                        { Constants.DialogsParameterKeys.TITLE, updateResponse.Message },
+                        { Constants.DialogsParameterKeys.DESCRIPTION, updateResponse.Result?.MsgDetails },
+                    };
+                }
+                else
+                {
+                    parameters = new DialogParameters
+                    {
+                        { Constants.DialogsParameterKeys.TITLE, "Fail" },
+                        { Constants.DialogsParameterKeys.DESCRIPTION, Strings.ServerIsUnavailable },
+                    };
+                }
+
+                await _dialogService.ShowDialogAsync(nameof(ErrorDialog), parameters);
             }
 
             device.IsExecuting = false;
@@ -195,10 +210,14 @@ public class RoomsPageViewModel : BaseTabViewModel
             }
             else
             {
+                var errorDescription = IsInternetConnected
+                    ? updateResponse.Exception?.Message
+                    : Strings.ServerIsUnavailable;
+
                 await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
                 {
                     { Constants.DialogsParameterKeys.TITLE, Strings.Error},
-                    { Constants.DialogsParameterKeys.DESCRIPTION, updateResponse.Exception?.Message },
+                    { Constants.DialogsParameterKeys.DESCRIPTION, errorDescription},
                 });
             }
         }

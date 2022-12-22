@@ -121,20 +121,16 @@ public class AutomationPageViewModel : BaseTabViewModel
         {
             selectedAutomation.Enable = !selectedAutomation.Enable;
         }
-        else if (!IsInternetConnected)
-        {
-            await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
-            {
-                { Constants.DialogsParameterKeys.TITLE, "FAIL" },
-                { Constants.DialogsParameterKeys.DESCRIPTION, $"{Strings.NoInternetConnection}" },
-            });
-        }
         else
         {
+            var errorDescription = IsInternetConnected
+                ? changeResponse.Message
+                : Strings.NoInternetConnection;
+
             await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
             {
                 { Constants.DialogsParameterKeys.TITLE, "FAIL" },
-                { Constants.DialogsParameterKeys.DESCRIPTION, changeResponse.Message },
+                { Constants.DialogsParameterKeys.DESCRIPTION, errorDescription },
             });
         }
     }

@@ -6,6 +6,7 @@ using SmartMirror.Services.Scenarios;
 using SmartMirror.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using SmartMirror.Resources.Strings;
 
 namespace SmartMirror.ViewModels.Tabs.Details
 {
@@ -116,10 +117,14 @@ namespace SmartMirror.ViewModels.Tabs.Details
             }
             else
             {
+                var errorDescription = IsInternetConnected
+                    ? scenarioDetailInformation.Message
+                    : Strings.ServerIsUnavailable;
+
                 var errorDialogParameters = new DialogParameters
                 {
-                    { Constants.DialogsParameterKeys.TITLE, "Error" },
-                    { Constants.DialogsParameterKeys.DESCRIPTION, scenarioDetailInformation.Message },
+                    { Constants.DialogsParameterKeys.TITLE, Strings.Error },
+                    { Constants.DialogsParameterKeys.DESCRIPTION, errorDescription },
                 };
 
                 MainThread.BeginInvokeOnMainThread(async () => await _dialogService.ShowDialogAsync(nameof(ErrorDialog), errorDialogParameters));

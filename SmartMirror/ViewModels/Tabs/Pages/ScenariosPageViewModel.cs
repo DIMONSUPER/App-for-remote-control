@@ -8,6 +8,7 @@ using SmartMirror.Services.Mapper;
 using SmartMirror.Services.Scenarios;
 using SmartMirror.ViewModels.Tabs.Details;
 using SmartMirror.Views.Dialogs;
+using SmartMirror.Resources.Strings;
 
 namespace SmartMirror.ViewModels.Tabs.Pages;
 
@@ -121,10 +122,14 @@ public class ScenariosPageViewModel : BaseTabViewModel
         }
         else
         {
+            var errorDescription = IsInternetConnected
+                ? resultOfUpdattingScenario.Message
+                : Strings.ServerIsUnavailable;
+
             var errorDialogParameters = new DialogParameters
             {
-                { Constants.DialogsParameterKeys.TITLE, "Error" },
-                { Constants.DialogsParameterKeys.DESCRIPTION, resultOfUpdattingScenario.Message },
+                { Constants.DialogsParameterKeys.TITLE, Strings.Error },
+                { Constants.DialogsParameterKeys.DESCRIPTION, errorDescription },
             };
 
             await _dialogService.ShowDialogAsync(nameof(ErrorDialog), errorDialogParameters);

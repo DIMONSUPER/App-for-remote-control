@@ -189,10 +189,14 @@ namespace SmartMirror.ViewModels.Dialogs
 
             if (verifyResult is EResultStatus.Failed)
             {
+                var errorDescription = IsInternetConnected
+                    ? Strings.NoResponseIPAddress
+                    : Strings.ServerIsUnavailable;
+
                 await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
                 {
                     { Constants.DialogsParameterKeys.TITLE, "FAIL" },
-                    { Constants.DialogsParameterKeys.DESCRIPTION, Strings.NoResponseIPAddress },
+                    { Constants.DialogsParameterKeys.DESCRIPTION, errorDescription },
                 });
             }
         }
@@ -213,10 +217,14 @@ namespace SmartMirror.ViewModels.Dialogs
             }
             else
             {
+                var errorDescription = IsInternetConnected
+                    ? Strings.LoginPasswordIncorrect
+                    : Strings.ServerIsUnavailable;
+
                 await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
                 {
                     { Constants.DialogsParameterKeys.TITLE, "FAIL" },
-                    { Constants.DialogsParameterKeys.DESCRIPTION, Strings.LoginPasswordIncorrect },
+                    { Constants.DialogsParameterKeys.DESCRIPTION, errorDescription },
                 });
             }
         }
