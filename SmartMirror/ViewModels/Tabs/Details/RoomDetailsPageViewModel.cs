@@ -9,7 +9,6 @@ using SmartMirror.Views.Dialogs;
 using SmartMirror.Resources.Strings;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using CommunityToolkit.Maui.Alerts;
 
 namespace SmartMirror.ViewModels.Tabs.Details;
 
