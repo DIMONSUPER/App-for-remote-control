@@ -31,12 +31,11 @@
             Text="{Binding Text, Source={Reference chip}}"
             x:Name="label"/>
 
-        <Frame
-            VerticalOptions="Center"
-            HorizontalOptions="EndAndExpand"
+        <Border
             Padding="4"
-            HasShadow="False"
-            CornerRadius="75"
+            VerticalOptions="Center"
+            StrokeShape="RoundRectangle 75"
+            StrokeThickness="0"
             BackgroundColor="{Binding IconColor, Source={Reference chip}}"
             IsVisible="{Binding IsChecked, Source={Reference chip}}">
 
@@ -45,7 +44,7 @@
                 WidthRequest="{Binding IconSizes.Width, Source={Reference chip}}"
                 Source="{Binding IconSource, Source={Reference chip}}"/>
 
-        </Frame>
+        </Border>
 
     </HorizontalStackLayout>
 
