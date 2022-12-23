@@ -253,8 +253,6 @@
         <Setter Property="BackgroundColor" Value="Transparent"/>
         <Setter Property="CheckedBackgroundColor" Value="{DynamicResource cbg_i3}"/>
         <Setter Property="IconColor" Value="{DynamicResource cbg_i12}"/>
-        <Setter Property="TextStyle" Value="{DynamicResource tstyle_i11}"/>
-        <Setter Property="CheckedTextStyle" Value="{DynamicResource tstyle_i13}"/>
     </Style>
 
     <Style TargetType="controls:ExpandedSlider">
