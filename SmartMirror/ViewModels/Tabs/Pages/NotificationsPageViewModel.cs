@@ -164,7 +164,7 @@ public class NotificationsPageViewModel : BaseTabViewModel
         await UpdateAllDataAndChangeStateAsync();
     }
 
-    private async void OnAllDevicesChanged(object sender, EventArgs e)
+    private async void OnAllDevicesChanged(object sender, DeviceBindableModel device)
     {
         await UpdateAllDataAndChangeStateAsync();
     }

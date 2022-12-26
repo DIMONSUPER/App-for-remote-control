@@ -41,8 +41,8 @@ public class RoomsPageViewModel : BaseTabViewModel
 
         DataState = EPageState.LoadingSkeleton;
 
-        _roomsService.AllRoomsChanged += OnAllRoomsOrDevicesChanged;
-        _devicesService.AllDevicesChanged += OnAllRoomsOrDevicesChanged;
+        _roomsService.AllRoomsChanged += OnAllRoomsChanged;
+        _devicesService.AllDevicesChanged += OnAllDevicesChanged;
     }
 
     #region -- Public properties --
@@ -73,8 +73,8 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     public override void Destroy()
     {
-        _roomsService.AllRoomsChanged -= OnAllRoomsOrDevicesChanged;
-        _devicesService.AllDevicesChanged -= OnAllRoomsOrDevicesChanged;
+        _roomsService.AllRoomsChanged -= OnAllRoomsChanged;
+        _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
 
         base.Destroy();
     }
@@ -83,7 +83,12 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Private helpers --
 
-    private async void OnAllRoomsOrDevicesChanged(object sender, EventArgs e)
+    private async void OnAllRoomsChanged(object sender, EventArgs e)
+    {
+        await LoadRoomsAndDevicesAndChangeStateAsync();
+    }
+
+    private async void OnAllDevicesChanged(object sender, DeviceBindableModel device)
     {
         await LoadRoomsAndDevicesAndChangeStateAsync();
     }

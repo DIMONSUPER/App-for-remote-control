@@ -229,7 +229,7 @@ namespace SmartMirror.ViewModels
             await LoadAllScenariosAsync();
         }
 
-        private async void OnAllDevicesChanged(object sender, EventArgs e)
+        private async void OnAllDevicesChanged(object sender, DeviceBindableModel device)
         {
             await LoadAllDevicesAsync();
         }

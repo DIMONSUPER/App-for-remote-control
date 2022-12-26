@@ -9,6 +9,7 @@ using SmartMirror.Views.Dialogs;
 using SmartMirror.Resources.Strings;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using SmartMirror.Extensions;
 
 namespace SmartMirror.ViewModels.Tabs.Details;
 
@@ -35,8 +36,8 @@ public class RoomDetailsPageViewModel : BaseViewModel
         _roomsService = roomsService;
         _dialogService = dialogService;
 
-        _roomsService.AllRoomsChanged += OnAllRoomsOrDevicesChanged;
-        _devicesService.AllDevicesChanged += OnAllRoomsOrDevicesChanged;
+        _roomsService.AllRoomsChanged += OnAllRoomsChanged;
+        _devicesService.AllDevicesChanged += OnAllDevicesChanged;
 
         DataState = EPageState.LoadingSkeleton;
     }
@@ -76,8 +77,8 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
     public override void Destroy()
     {
-        _roomsService.AllRoomsChanged -= OnAllRoomsOrDevicesChanged;
-        _devicesService.AllDevicesChanged -= OnAllRoomsOrDevicesChanged;
+        _roomsService.AllRoomsChanged -= OnAllRoomsChanged;
+        _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
 
         base.Destroy();
     }
@@ -137,9 +138,25 @@ public class RoomDetailsPageViewModel : BaseViewModel
 
     #region -- Private helpers --
 
-    private async void OnAllRoomsOrDevicesChanged(object sender, EventArgs e)
+    private async void OnAllRoomsChanged(object sender, EventArgs e)
     {
         await LoadRoomsAndChangeStateAsync();
+    }
+
+    private async void OnAllDevicesChanged(object sender, DeviceBindableModel device)
+    {
+        if (device is null)
+        {
+            await LoadRoomsAndChangeStateAsync();
+        }
+        else
+        {
+            SelectedRoomDevices.Update(device);
+
+            RoomDeviceState = SelectedRoomDevices.Count == 0
+                ? EPageState.Empty
+                : EPageState.Complete;
+        }
     }
 
     private async Task LoadRoomsAndChangeStateAsync()
