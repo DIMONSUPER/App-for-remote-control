@@ -203,7 +203,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
             }
             else
             {
-                await LoadDevicesForRoom(selectedRoom.Id);
+                await LoadDevicesForRoomAsync(selectedRoom.Id);
 
                 _ = Task.Run(() => MainThread.BeginInvokeOnMainThread(() =>
                 {
@@ -214,7 +214,7 @@ public class RoomDetailsPageViewModel : BaseViewModel
         }
     }
 
-    private async Task LoadDevicesForRoom(string roomId)
+    private async Task LoadDevicesForRoomAsync(string roomId)
     {
         var devices = await _devicesService.GetAllSupportedDevicesAsync();
 
