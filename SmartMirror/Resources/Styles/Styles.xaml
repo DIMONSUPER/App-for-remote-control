@@ -13,6 +13,7 @@
     <converters:TimeToTimeAgoConverter x:Key="timeToTimeAgoConverter" />
     <converters:TimeToDaysOfWeekConverter x:Key="timeToDaysOfWeekConverter" />
     <converters:DoubleToBottomThiknessConverter x:Key="doubleToBottomThiknessConverter" />
+    <converters:TextToTruncatedTextConverter x:Key="textToTruncatedTextConverter"/>
     
     <!-- TEXT SIZE -->
     <x:Int32 x:Key="tsize_i1">32</x:Int32> <!-- 48px -->
