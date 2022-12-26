@@ -95,9 +95,6 @@ namespace SmartMirror.Services.Mapper
                 cfg.CreateMap<ActionAqaraModel, ActionBindableModel>().ReverseMap();
                 cfg.CreateMap<ActionBindableModel, AutomationDetailCardBindableModel>().ReverseMap();
                 cfg.CreateMap<ConditionBindableModel, AutomationDetailCardBindableModel>().ReverseMap();
-                cfg.CreateMap<RoomBindableModel, RoomSourceBindableModel>()
-                    .ForMember(nameof(ISelectableTextModel.Text), opt => opt.MapFrom(src => src.Name))
-                    .ReverseMap();
             });
 
             return mapperConfiguration.CreateMapper();
@@ -128,6 +125,11 @@ namespace SmartMirror.Services.Mapper
 
             cfg.CreateMap<DeviceBindableModel, NotificationSourceBindableModel>()
                 .ForMember(nameof(NotificationSourceBindableModel.Id), opt => opt.MapFrom(src => src.FullDeviceId))
+                .ReverseMap();
+
+            cfg.CreateMap<RoomBindableModel, RoomSourceBindableModel>()
+                .ForMember(nameof(ISelectableTextModel.IsSelected), opt => opt.MapFrom(src => false))
+                .ForMember(nameof(ISelectableTextModel.Text), opt => opt.MapFrom(src => src.Name))
                 .ReverseMap();
         }
 
