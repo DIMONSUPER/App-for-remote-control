@@ -99,7 +99,7 @@ public partial class ExpandedMultipleChipSelector : Grid
     public ICommand ExpandCommand => _expandCommand ??= SingleExecutionCommand.FromFunc(OnExpandCommandAsync, delayMillisec: 0);
 
     private ICommand _selectItemCommand;
-    public ICommand SelectItemCommand => _selectItemCommand ??= SingleExecutionCommand.FromFunc<ISelectableTextModel>(OnSelectItemCommandAsync, delayMillisec: 0);
+    public ICommand SelectItemCommand => _selectItemCommand ??= SingleExecutionCommand.FromFunc<ISelectableTextModel>(OnSelectItemCommandAsync);
 
     #endregion
 
@@ -137,14 +137,14 @@ public partial class ExpandedMultipleChipSelector : Grid
         {
             selectedModel.IsSelected = !selectedModel.IsSelected;
 
-            RecalculateChipWidthByModel(selectedModel);
-            CalculateChipsCountInFirstRow();
-            SetDisplayedItemsSource();
-
             if (ItemSelectedCommand is not null && ItemSelectedCommand.CanExecute(selectedModel))
             {
                 ItemSelectedCommand.Execute(selectedModel);
             }
+
+            RecalculateChipWidthByModel(selectedModel);
+            CalculateChipsCountInFirstRow();
+            SetDisplayedItemsSource();
         }
 
         return Task.CompletedTask;
