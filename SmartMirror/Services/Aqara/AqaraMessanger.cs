@@ -3,15 +3,14 @@ using SmartMirror.Models.Aqara;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Microsoft.AspNetCore.SignalR.Client;
 using SmartMirror.Models;
 
 namespace SmartMirror.Services.Aqara;
 
 public class AqaraMessanger : IAqaraMessanger
 {
-    private const int UDP_PORT = 7834;
-    private readonly JsonSerializer _serializer = new();
-    private CancellationTokenSource _cancellationTokenSource;
+    private HubConnection _connection;
 
     public AqaraMessanger()
     {
@@ -23,153 +22,32 @@ public class AqaraMessanger : IAqaraMessanger
 
     public event EventHandler StoppedListenning;
 
-    public void StartListening()
+    public async Task StartListeningAsync()
     {
-        _cancellationTokenSource = new();
-
-        var cancellationToken = _cancellationTokenSource.Token;
-
-        var receiver = new UdpClient(UDP_PORT);
-
-        Task.Run(async () =>
-        {
-            try
-            {
-                while (true)
-                {
-                    var data = await receiver.ReceiveAsync(cancellationToken);
-
-                    if (!cancellationToken.IsCancellationRequested)
-                    {
-                        var message = Encoding.UTF8.GetString(data.Buffer);
-
-                        DeserealizeAndInvokeHandler(message);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
-            finally
-            {
-                StoppedListenning?.Invoke(this, EventArgs.Empty);
-                receiver?.Close();
-                receiver?.Dispose();
-                receiver = null;
-                _cancellationTokenSource = null;
-            }
-        }, cancellationToken);
-    }
-
-    public void StopListening()
-    {
-        _cancellationTokenSource?.Cancel();
-    }
-
-    #endregion
-
-    #region -- Private helpers --
-
-    private void DeserealizeAndInvokeHandler(string message)
-    {
-        if (message.Contains(Constants.Aqara.EventTypes.dev_position_assign) && TryDeserealize(message, out MessagePositionChangeResponse messagePositionChangeResponse))
-        {
-            foreach (var subDid in messagePositionChangeResponse.Data.Dids)
-            {
-                MessageReceived?.Invoke(this, new()
-                {
-                    EventType = messagePositionChangeResponse.EventType,
-                    DeviceId = subDid,
-                    Time = messagePositionChangeResponse.Data.Time,
-                    Value = messagePositionChangeResponse.Data.PositionId,
-                });
-            }
-        }
-        else if (TryDeserealize(message, out MessageEventResponse messageEventResponse))
-        {
-            foreach (var eventData in messageEventResponse.Data)
-            {
-                MessageReceived?.Invoke(this, new()
-                {
-                    EventType = messageEventResponse.MsgType,
-                    DeviceId = eventData.SubjectId,
-                    Time = eventData.Time,
-                    ResourceId = eventData.ResourceId,
-                    Value = eventData.Value,
-                });
-            }
-        }
-        else if (TryDeserealize(message, out MessageChangeResponse messageChangeResponse))
-        {
-            if (messageChangeResponse.Data?.ChangeValues is not null && messageChangeResponse.Data.ChangeValues.Any())
-            {
-                foreach (var changeValue in messageChangeResponse.Data?.ChangeValues)
-                {
-                    MessageReceived?.Invoke(this, new()
-                    {
-                        EventType = messageChangeResponse.EventType,
-                        DeviceId = messageChangeResponse.Data.Did,
-                        Time = messageChangeResponse.Time,
-                        ResourceId = changeValue.ResourceId,
-                        Value = changeValue.Name,
-                    });
-                }
-            }
-            else
-            {
-                MessageReceived?.Invoke(this, new()
-                {
-                    EventType = messageChangeResponse.EventType,
-                    DeviceId = messageChangeResponse.Data.Did,
-                    Time = messageChangeResponse.Data.Time,
-                    Value = messageChangeResponse.Data.DeviceName,
-                });
-            }
-        }
-        else if (TryDeserealize(message, out MessageDicsonnectReponse messageDisconnectResponse))
-        {
-            foreach (var subDid in messageDisconnectResponse.Data.SubDids)
-            {
-                MessageReceived?.Invoke(this, new()
-                {
-                    EventType = messageDisconnectResponse.EventType,
-                    DeviceId = messageDisconnectResponse.Data.Did,
-                    Time = messageDisconnectResponse.Data.Time,
-                    ResourceId = subDid,
-                    Value = messageDisconnectResponse.Data.Cause.ToString(),
-                });
-            }
-        }
-        else
-        {
-            System.Diagnostics.Debug.WriteLine($"Failed to serealize {message}");
-        }
-    }
-
-    private bool TryDeserealize<T>(string json, out T target)
-    {
-        var result = false;
-
         try
         {
-            using var stringReader = new StringReader(json);
-            using var reader = new JsonTextReader(stringReader);
+            _connection = new HubConnectionBuilder()
+                .WithUrl("http://159.223.6.80/chat")
+                .WithAutomaticReconnect()
+                .Build();
 
-            target = _serializer.Deserialize<T>(reader);
+            _connection.On<AqaraMessageEventArgs>("ReceiveMessage", (message) =>
+            {
+                MessageReceived?.Invoke(this, message);
+            });
 
-            result = true;
+            await _connection.StartAsync();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            target = default;
         }
+    }
 
-        return result;
+    public async Task StopListeningAsync()
+    {
+        await _connection?.StopAsync();
+
+        StoppedListenning?.Invoke(this, EventArgs.Empty);
     }
 
     #endregion
