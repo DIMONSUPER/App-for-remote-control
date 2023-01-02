@@ -27,11 +27,11 @@ public class AqaraMessanger : IAqaraMessanger
         try
         {
             _connection = new HubConnectionBuilder()
-                .WithUrl("http://159.223.6.80/chat")
+                .WithUrl($"{Constants.OurCloudServer.API_URL}/chat")
                 .WithAutomaticReconnect()
                 .Build();
 
-            _connection.On<AqaraMessageEventArgs>("ReceiveMessage", (message) =>
+            _connection.On<AqaraMessageEventArgs>(Constants.OurCloudServer.RECEIVE_MESSAGE, (message) =>
             {
                 MessageReceived?.Invoke(this, message);
             });

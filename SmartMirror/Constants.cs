@@ -11,6 +11,12 @@
             public const string PRODUCT_DSN = "123456";
         }
 
+        public static class OurCloudServer
+        {
+            public const string API_URL = "http://159.223.6.80";
+            public const string RECEIVE_MESSAGE = "ReceiveMessage";
+        }
+
         public static class DialogsParameterKeys
         {
             public const string RESULT = nameof(RESULT);
