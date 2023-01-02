@@ -8,8 +8,7 @@ public interface IAqaraMessanger
 
     event EventHandler StoppedListenning;
 
-    void StartListening();
+    Task StartListeningAsync();
 
-    void StopListening();
+    Task StopListeningAsync();
 }
-

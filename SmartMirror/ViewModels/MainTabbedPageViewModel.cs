@@ -53,7 +53,7 @@ public class MainTabbedPageViewModel : BaseViewModel
         _automationService = automationService;
         _aqaraMessanger = aqaraMessanger;
 
-        _aqaraMessanger.StartListening();
+        _aqaraMessanger.StartListeningAsync();
 
         _openFullScreenVideoEvent = _eventAggregator.GetEvent<OpenFullScreenCameraEvent>();
         _openFullScreenVideoEvent.Subscribe(OpenFullscreenVideoEventHandler);
@@ -72,7 +72,7 @@ public class MainTabbedPageViewModel : BaseViewModel
 
     public override void Destroy()
     {
-        _aqaraMessanger.StopListening();
+        _aqaraMessanger.StopListeningAsync();
         _openFullScreenVideoEvent.Unsubscribe(OpenFullscreenVideoEventHandler);
 
         base.Destroy();
