@@ -11,7 +11,7 @@
         <DataTrigger TargetType="Border" Binding="{Binding IsChecked, Source={Reference chip}}" Value="True">
 
             <Setter Property="Border.BackgroundColor" Value="{Binding CheckedBackgroundColor, Source={Reference chip}}"/>
-            <Setter TargetName="label" Property="Label.Style" Value="{Binding CheckedTextStyle, Source={Reference chip}}"/>
+            <Setter TargetName="label" Property="Label.TextColor" Value="{Binding CheckedTextColor, Source={Reference chip}}"/>
             <Setter TargetName="stackLayout" Property="StackLayout.Padding" Value="42, 0, 11, 0"/>
  
          </DataTrigger>
@@ -24,8 +24,10 @@
          x:Name="stackLayout"> 
 
         <Label
-            Style="{Binding TextStyle, Source={Reference chip}}"
             VerticalOptions="Center"
+            FontFamily="{Binding FontFamily, Source={Reference chip}}"
+            FontSize="{Binding FontSize, Source={Reference chip}}"
+            TextColor="{Binding TextColor, Source={Reference chip}}"
             LineBreakMode="TailTruncation"
             MaxLines="1"
             Text="{Binding Text, Source={Reference chip}}"
