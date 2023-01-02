@@ -92,10 +92,10 @@ public partial class ExpandedMultipleChipSelector : Grid
     }
 
     private ICommand _expandCommand;
-    public ICommand ExpandCommand => _expandCommand ??= SingleExecutionCommand.FromFunc(OnExpandCommandAsync);
+    public ICommand ExpandCommand => _expandCommand ??= SingleExecutionCommand.FromFunc(OnExpandCommandAsync, delayMillisec: 0);
 
     private ICommand _selectItemCommand;
-    public ICommand SelectItemCommand => _selectItemCommand ??= SingleExecutionCommand.FromFunc<object>(OnSelectItemCommandAsync);
+    public ICommand SelectItemCommand => _selectItemCommand ??= SingleExecutionCommand.FromFunc<object>(OnSelectItemCommandAsync, delayMillisec: 0);
 
     #endregion
 

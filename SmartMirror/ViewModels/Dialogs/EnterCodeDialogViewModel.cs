@@ -5,6 +5,7 @@ using SmartMirror.Services.Blur;
 using SmartMirror.Services.Keyboard;
 using SmartMirror.Views.Dialogs;
 using System.Windows.Input;
+using SmartMirror.Resources.Strings;
 
 namespace SmartMirror.ViewModels.Dialogs;
 
@@ -101,10 +102,14 @@ public class EnterCodeDialogViewModel : BaseDialogViewModel
             {
                 IsLoggingWithCode = false;
 
+                var errorDescription = IsInternetConnected
+                    ? loginWithCodeResponse.Message
+                    : Strings.ServerIsUnavailable;
+
                 await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
                 {
                     { Constants.DialogsParameterKeys.TITLE, "Fail!" },
-                    { Constants.DialogsParameterKeys.DESCRIPTION, loginWithCodeResponse.Message }
+                    { Constants.DialogsParameterKeys.DESCRIPTION, errorDescription }
                 });
             }
         }

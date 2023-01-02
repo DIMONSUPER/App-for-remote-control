@@ -468,4 +468,7 @@
     <data name="EnterNewName" xml:space="preserve">
         <value>Enter New Name</value>
     </data>
+    <data name="ServerIsUnavailable" xml:space="preserve">
+        <value>Server is unavailable. Please check your internet connection.</value>
+    </data>
 </root>

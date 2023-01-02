@@ -110,10 +110,14 @@ namespace SmartMirror.ViewModels
                 }
                 else
                 {
+                    var errorDescription = IsInternetConnected
+                        ? resultOfSendingCodeToMail.Result?.MsgDetails ?? resultOfSendingCodeToMail.Message
+                        : Strings.ServerIsUnavailable;
+
                     dialogResult = await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
                     {
                         { Constants.DialogsParameterKeys.TITLE, "FAIL" },
-                        { Constants.DialogsParameterKeys.DESCRIPTION, resultOfSendingCodeToMail.Result?.MsgDetails ?? resultOfSendingCodeToMail.Message },
+                        { Constants.DialogsParameterKeys.DESCRIPTION, errorDescription },
                     });
                 }
 
