@@ -93,6 +93,8 @@
 
                     <controls:CustomNoBorderEntry
                         Style="{StaticResource CustomNoBorderEntryStyle_i1}"
+                        IsPassword="True"
+                        Keyboard="Text"
                         Text="{Binding Password}"
                         TextColor="{DynamicResource tcolor_i1}"
                         Placeholder="{extensions:Translate EnterPassword}"
