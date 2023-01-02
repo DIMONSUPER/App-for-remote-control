@@ -34,7 +34,7 @@
 
         <EventTrigger Event="Appearing">
 
-            <triggerActions:ScrollToStartEventAction View="{x:Reference scrollViewNotifications}"/>
+            <triggerActions:ScrollToStartEventAction View="{x:Reference notificationStikyHeaderCollection}"/>
 
         </EventTrigger>
 
