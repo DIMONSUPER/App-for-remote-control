@@ -70,6 +70,13 @@
     </views:BaseContentPage.Resources>
 
     <Grid RowDefinitions="Auto, Auto, *">
+
+        <!-- HACK TO CLOSE THE KEYBOARD --> 
+        <controls:CustomNoBorderEntry WidthRequest="1">
+            <controls:CustomNoBorderEntry.Behaviors>
+                <behaviors:UnfocusableBehavior/>
+            </controls:CustomNoBorderEntry.Behaviors>
+        </controls:CustomNoBorderEntry>
         
         <controls:CurrentTimeControl
             Grid.Row="0"

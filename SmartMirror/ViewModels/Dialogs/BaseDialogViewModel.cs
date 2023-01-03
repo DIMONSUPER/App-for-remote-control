@@ -112,11 +112,11 @@ public class BaseDialogViewModel : BindableBase, IDialogAware
 
     #region -- Public helpers --
 
-    public virtual async Task OnCloseCommandAsync(object parameter = null)
+    public virtual Task OnCloseCommandAsync(object parameter = null)
     {
-        await Task.Delay(100);
-
         RequestClose.Invoke();
+
+        return Task.CompletedTask;
     }
 
     #endregion
