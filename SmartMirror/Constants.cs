@@ -149,6 +149,7 @@
             public const int DELAY_MILLISEC_NAVIGATION_COMMAND = 500;
             public const int CAMERA_TIME_CHECK_SECONDS = 5;
             public const int CAMERA_NAME_MAX_LENGTH = 32;
+            public const int CHIP_TEXT_MAX_LENGTH = 20;
         }
 
         public static class Analytics
