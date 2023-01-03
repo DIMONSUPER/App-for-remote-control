@@ -5,6 +5,8 @@ namespace SmartMirror.Converters
 {
     public class TextToTruncatedTextConverter : IValueConverter
     {
+        #region -- IValueConverter implementation --
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var text = value as string;
@@ -21,6 +23,8 @@ namespace SmartMirror.Converters
         {
             return value;
         }
+
+        #endregion
     }
 }
 
