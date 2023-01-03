@@ -137,6 +137,7 @@
 		<None Remove="Models\Dahua\" />
 		<None Remove="System.Reactive.Linq" />
 		<None Remove="Microsoft.AspNetCore.SignalR.Client" />
+		<None Remove="Microsoft.AspNet.SignalR.Client" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.0-preview.1" />
@@ -155,7 +156,7 @@
 		<PackageReference Include="VideoLAN.LibVLC.Android" Version="3.2.0.1" />
 		<PackageReference Include="LibVLCSharp" Version="3.6.7" />
 		<PackageReference Include="System.Reactive.Linq" Version="5.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Controls\" />
