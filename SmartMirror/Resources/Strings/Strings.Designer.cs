@@ -1147,6 +1147,15 @@ namespace SmartMirror.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Server is unavailable. Please check your internet connection..
+        /// </summary>
+        internal static string ServerIsUnavailable {
+            get {
+                return ResourceManager.GetString("ServerIsUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set temperature.
         /// </summary>
         internal static string SetTemperature {

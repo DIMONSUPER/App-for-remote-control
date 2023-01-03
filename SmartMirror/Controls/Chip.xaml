@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SmartMirror.Controls"
+    xmlns:app="clr-namespace:SmartMirror"
     x:Class="SmartMirror.Controls.Chip"
     x:DataType="local:Chip"
     x:Name="chip">
@@ -11,7 +12,7 @@
         <DataTrigger TargetType="Border" Binding="{Binding IsChecked, Source={Reference chip}}" Value="True">
 
             <Setter Property="Border.BackgroundColor" Value="{Binding CheckedBackgroundColor, Source={Reference chip}}"/>
-            <Setter TargetName="label" Property="Label.Style" Value="{Binding CheckedTextStyle, Source={Reference chip}}"/>
+            <Setter TargetName="label" Property="Label.TextColor" Value="{Binding CheckedTextColor, Source={Reference chip}}"/>
             <Setter TargetName="stackLayout" Property="StackLayout.Padding" Value="42, 0, 11, 0"/>
  
          </DataTrigger>
@@ -24,19 +25,22 @@
          x:Name="stackLayout"> 
 
         <Label
-            Style="{Binding TextStyle, Source={Reference chip}}"
             VerticalOptions="Center"
+            FontFamily="{Binding FontFamily, Source={Reference chip}}"
+            FontSize="{Binding FontSize, Source={Reference chip}}"
+            TextColor="{Binding TextColor, Source={Reference chip}}"
             LineBreakMode="TailTruncation"
             MaxLines="1"
-            Text="{Binding Text, Source={Reference chip}}"
+            Text="{Binding Text, Source={Reference chip},
+                Converter={StaticResource textToTruncatedTextConverter},
+                ConverterParameter={Static app:Constants+Limits.CHIP_TEXT_MAX_LENGTH}}"
             x:Name="label"/>
 
-        <Frame
-            VerticalOptions="Center"
-            HorizontalOptions="EndAndExpand"
+        <Border
             Padding="4"
-            HasShadow="False"
-            CornerRadius="75"
+            VerticalOptions="Center"
+            StrokeShape="RoundRectangle 75"
+            StrokeThickness="0"
             BackgroundColor="{Binding IconColor, Source={Reference chip}}"
             IsVisible="{Binding IsChecked, Source={Reference chip}}">
 
@@ -45,7 +49,7 @@
                 WidthRequest="{Binding IconSizes.Width, Source={Reference chip}}"
                 Source="{Binding IconSource, Source={Reference chip}}"/>
 
-        </Frame>
+        </Border>
 
     </HorizontalStackLayout>
 

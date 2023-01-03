@@ -4,7 +4,6 @@
                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                         xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                         xmlns:app="clr-namespace:SmartMirror"
-                        xmlns:triggeractions="clr-namespace:SmartMirror.TriggerActions"
                         xmlns:controls="clr-namespace:SmartMirror.Controls"
                         xmlns:extensions="clr-namespace:SmartMirror.Extensions"
                         xmlns:behaviors="clr-namespace:SmartMirror.Behaviors"
@@ -42,8 +41,7 @@
                         WidthRequest="375"
                         Placeholder="{extensions:Translate EnterIPAddress}"
                         Text="{Binding IPAddress}"
-                        PlaceholderColor="{DynamicResource tcolor_i9}"
-                        x:Name="ipAddressCustomNoBorderEntry">
+                        PlaceholderColor="{DynamicResource tcolor_i9}">
 
                         <controls:CustomNoBorderEntry.Behaviors>
                             <behaviors:FocusEntryBehavior/>
@@ -93,11 +91,12 @@
 
                     <controls:CustomNoBorderEntry
                         Style="{StaticResource CustomNoBorderEntryStyle_i1}"
+                        IsPassword="True"
+                        Keyboard="Text"
                         Text="{Binding Password}"
                         TextColor="{DynamicResource tcolor_i1}"
                         Placeholder="{extensions:Translate EnterPassword}"
-                        PlaceholderColor="{DynamicResource tcolor_i9}"
-                        x:Name="passwordCustomNoBorderEntry"/>
+                        PlaceholderColor="{DynamicResource tcolor_i9}"/>
 
                 </Border>
 
@@ -111,20 +110,7 @@
                         Grid.Column="0"
                         Style="{DynamicResource ButtonStyle_i2}"
                         Text="{extensions:Translate Cancel}"
-                        Command="{Binding CloseCommand}">
-
-                        <Button.Triggers>
-
-                            <EventTrigger Event="Clicked">
-
-                                <triggeractions:UnfocusTriggerAction View="{Reference ipAddressCustomNoBorderEntry}"/>
-                                <triggeractions:UnfocusTriggerAction View="{Reference passwordCustomNoBorderEntry}"/>
-
-                            </EventTrigger>
-
-                        </Button.Triggers>
-
-                    </Button>
+                        Command="{Binding CloseCommand}"/>
 
                     <controls:ButtonLoader
                         Grid.Column="1"

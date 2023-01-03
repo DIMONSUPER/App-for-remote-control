@@ -49,7 +49,7 @@ namespace SmartMirror.Services.Devices
         
         #region -- IDevicesService implementation --
 
-        public event EventHandler AllDevicesChanged;
+        public event EventHandler<DeviceBindableModel> AllDevicesChanged;
 
         public async Task<IEnumerable<DeviceBindableModel>> GetAllSupportedDevicesAsync(Func<DeviceBindableModel, bool> condition = null)
         {
@@ -132,7 +132,7 @@ namespace SmartMirror.Services.Devices
                 _allSupportedDevices = new();
             }
 
-            AllDevicesChanged?.Invoke(this, EventArgs.Empty);
+            AllDevicesChanged?.Invoke(this, null);
 
             System.Diagnostics.Debug.WriteLine($"{nameof(DownloadAllDevicesWithSubInfoAsync)} FINISHED");
 
@@ -181,7 +181,7 @@ namespace SmartMirror.Services.Devices
 
                     if (needChangeEvent)
                     {
-                        AllDevicesChanged?.Invoke(this, EventArgs.Empty);
+                        AllDevicesChanged?.Invoke(this, bindableDevice);
                     }
                 }
             });
@@ -633,14 +633,14 @@ namespace SmartMirror.Services.Devices
             _allSupportedDevices.RemoveAll(x => x.DeviceId == aqaraMessage.DeviceId);
             _allDevices.RemoveAll(x => x.DeviceId == aqaraMessage.DeviceId);
 
-            AllDevicesChanged?.Invoke(this, EventArgs.Empty);
+            AllDevicesChanged?.Invoke(this, null);
         }
 
         private async void OnSubdeviceBind(AqaraMessageEventArgs aqaraMessage)
         {
             await DownloadAllDevicesWithSubInfoAsync();
 
-            AllDevicesChanged?.Invoke(this, EventArgs.Empty);
+            AllDevicesChanged?.Invoke(this, null);
         }
 
         private void OnSubdeviceOffline(AqaraMessageEventArgs aqaraMessage)
@@ -692,7 +692,7 @@ namespace SmartMirror.Services.Devices
             {
                 await DownloadAllDevicesWithSubInfoAsync();
 
-                AllDevicesChanged?.Invoke(this, EventArgs.Empty);
+                AllDevicesChanged?.Invoke(this, null);
             }
         }
 
@@ -709,7 +709,7 @@ namespace SmartMirror.Services.Devices
                 _allDevices.Remove(gateway);
                 _allDevices.RemoveAll(x => x.ParentDid == gateway.DeviceId);
 
-                AllDevicesChanged?.Invoke(this, EventArgs.Empty);
+                AllDevicesChanged?.Invoke(this, null);
             }
         }
 

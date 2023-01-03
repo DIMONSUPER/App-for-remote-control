@@ -26,5 +26,5 @@ public interface IDevicesService
 
     Task<IEnumerable<DeviceBindableModel>> GetAllDevicesAsync();
 
-    event EventHandler AllDevicesChanged;
+    event EventHandler<DeviceBindableModel> AllDevicesChanged;
 }

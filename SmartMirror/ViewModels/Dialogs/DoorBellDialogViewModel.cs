@@ -231,7 +231,7 @@ namespace SmartMirror.ViewModels.Dialogs
         {
             await Task.Delay(1000);
 
-            VideoSource = "https://videos-3.earthcam.com/fecnetwork/15659.flv/chunklist_w999153032.m3u8";
+            VideoSource = "https://videos-3.earthcam.com/fecnetwork/22950.flv/playlist.m3u8";
 
             return true;
         }

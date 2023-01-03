@@ -34,28 +34,56 @@ public partial class Chip : Border
         set => SetValue(IconSizesProperty, value);
     }
 
-    public static readonly BindableProperty TextStyleProperty = BindableProperty.Create(
-        propertyName: nameof(TextStyle),
-        returnType: typeof(Style),
+    public static readonly BindableProperty FontFamilyProperty = BindableProperty.Create(
+        propertyName: nameof(FontFamily),
+        returnType: typeof(string),
+        defaultValue: "InterBold",
         declaringType: typeof(Chip),
         defaultBindingMode: BindingMode.OneWay);
 
-    public Style TextStyle
+    public string FontFamily
     {
-        get => (Style)GetValue(TextStyleProperty);
-        set => SetValue(TextStyleProperty, value);
+        get => (string)GetValue(FontFamilyProperty);
+        set => SetValue(FontFamilyProperty, value);
     }
 
-    public static readonly BindableProperty CheckedTextStyleProperty = BindableProperty.Create(
-        propertyName: nameof(CheckedTextStyle),
-        returnType: typeof(Style),
+    public static readonly BindableProperty FontSizeProperty = BindableProperty.Create(
+        propertyName: nameof(FontSize),
+        returnType: typeof(double),
+        defaultValue: 21d,
         declaringType: typeof(Chip),
         defaultBindingMode: BindingMode.OneWay);
 
-    public Style CheckedTextStyle
+    public double FontSize
     {
-        get => (Style)GetValue(CheckedTextStyleProperty);
-        set => SetValue(CheckedTextStyleProperty, value);
+        get => (double)GetValue(FontSizeProperty);
+        set => SetValue(FontSizeProperty, value);
+    }
+
+    public static readonly BindableProperty TextColorProperty = BindableProperty.Create(
+        propertyName: nameof(TextColor),
+        returnType: typeof(Color),
+        defaultValue: Color.FromArgb("#FFFFFF"),
+        declaringType: typeof(Chip),
+        defaultBindingMode: BindingMode.OneWay);
+
+    public Color TextColor
+    {
+        get => (Color)GetValue(TextColorProperty);
+        set => SetValue(TextColorProperty, value);
+    }
+
+    public static readonly BindableProperty CheckedTextColorProperty = BindableProperty.Create(
+        propertyName: nameof(CheckedTextColor),
+        returnType: typeof(Color),
+        defaultValue: Color.FromArgb("#252525"),
+        declaringType: typeof(Chip),
+        defaultBindingMode: BindingMode.OneWay);
+
+    public Color CheckedTextColor
+    {
+        get => (Color)GetValue(CheckedTextColorProperty);
+        set => SetValue(CheckedTextColorProperty, value);
     }
 
     public static readonly BindableProperty TextProperty = BindableProperty.Create(

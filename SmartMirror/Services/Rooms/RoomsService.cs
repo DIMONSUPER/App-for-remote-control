@@ -166,7 +166,7 @@ namespace SmartMirror.Services.Rooms
             });
         }
 
-        private async void OnAllDevicesChanged(object sender, EventArgs e)
+        private async void OnAllDevicesChanged(object sender, DeviceBindableModel device)
         {
             var devices = await _devicesService.GetAllSupportedDevicesAsync();
 

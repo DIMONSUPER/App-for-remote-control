@@ -41,8 +41,8 @@ public class RoomsPageViewModel : BaseTabViewModel
 
         DataState = EPageState.LoadingSkeleton;
 
-        _roomsService.AllRoomsChanged += OnAllRoomsOrDevicesChanged;
-        _devicesService.AllDevicesChanged += OnAllRoomsOrDevicesChanged;
+        _roomsService.AllRoomsChanged += OnAllRoomsChanged;
+        _devicesService.AllDevicesChanged += OnAllDevicesChanged;
     }
 
     #region -- Public properties --
@@ -73,8 +73,8 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     public override void Destroy()
     {
-        _roomsService.AllRoomsChanged -= OnAllRoomsOrDevicesChanged;
-        _devicesService.AllDevicesChanged -= OnAllRoomsOrDevicesChanged;
+        _roomsService.AllRoomsChanged -= OnAllRoomsChanged;
+        _devicesService.AllDevicesChanged -= OnAllDevicesChanged;
 
         base.Destroy();
     }
@@ -83,7 +83,12 @@ public class RoomsPageViewModel : BaseTabViewModel
 
     #region -- Private helpers --
 
-    private async void OnAllRoomsOrDevicesChanged(object sender, EventArgs e)
+    private async void OnAllRoomsChanged(object sender, EventArgs e)
+    {
+        await LoadRoomsAndDevicesAndChangeStateAsync();
+    }
+
+    private async void OnAllDevicesChanged(object sender, DeviceBindableModel device)
     {
         await LoadRoomsAndDevicesAndChangeStateAsync();
     }
@@ -161,11 +166,26 @@ public class RoomsPageViewModel : BaseTabViewModel
             }
             else
             {
-                await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
+                DialogParameters parameters = null;
+
+                if (IsInternetConnected)
                 {
-                    { Constants.DialogsParameterKeys.TITLE, updateResponse.Message },
-                    { Constants.DialogsParameterKeys.DESCRIPTION, updateResponse.Result?.MsgDetails },
-                });
+                    parameters = new DialogParameters
+                    {
+                        { Constants.DialogsParameterKeys.TITLE, updateResponse.Message },
+                        { Constants.DialogsParameterKeys.DESCRIPTION, updateResponse.Result?.MsgDetails },
+                    };
+                }
+                else
+                {
+                    parameters = new DialogParameters
+                    {
+                        { Constants.DialogsParameterKeys.TITLE, "Fail" },
+                        { Constants.DialogsParameterKeys.DESCRIPTION, Strings.ServerIsUnavailable },
+                    };
+                }
+
+                await _dialogService.ShowDialogAsync(nameof(ErrorDialog), parameters);
             }
 
             device.IsExecuting = false;
@@ -195,10 +215,14 @@ public class RoomsPageViewModel : BaseTabViewModel
             }
             else
             {
+                var errorDescription = IsInternetConnected
+                    ? updateResponse.Exception?.Message
+                    : Strings.ServerIsUnavailable;
+
                 await _dialogService.ShowDialogAsync(nameof(ErrorDialog), new DialogParameters
                 {
                     { Constants.DialogsParameterKeys.TITLE, Strings.Error},
-                    { Constants.DialogsParameterKeys.DESCRIPTION, updateResponse.Exception?.Message },
+                    { Constants.DialogsParameterKeys.DESCRIPTION, errorDescription},
                 });
             }
         }

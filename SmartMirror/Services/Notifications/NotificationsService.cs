@@ -224,7 +224,7 @@ namespace SmartMirror.Services.Notifications
             await FilterNotificationsAsync();
         }
 
-        private async void OnAllDevicesChanged(object sender, EventArgs e)
+        private async void OnAllDevicesChanged(object sender, DeviceBindableModel device)
         {
             await FilterNotificationsAsync();
         }
