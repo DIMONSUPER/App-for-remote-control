@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Android.Widget;
@@ -11,16 +11,20 @@ using SmartMirror.Helpers;
 using Paint = Android.Graphics.Paint;
 using Rect = Android.Graphics.Rect;
 using System.ComponentModel;
+using System.Linq;
 
 namespace SmartMirror.Controls;
 
 public partial class ExpandedMultipleChipSelector : Grid
 {
-    private const float EMPTY_CHIP_WIDTH = 108 + 16;
-    private const float WRAP_BUTTON_WIDTH = 52;
+    private const float EMPTY_CHIP_WIDTH = 88;
+    private const float EMPTY_CHIP_WIDTH_WHEN_SELECTED = 108;
+    private const float CHIP_WIDTH_DIFFERENT = EMPTY_CHIP_WIDTH_WHEN_SELECTED - EMPTY_CHIP_WIDTH;
+    private const float HORIZONTAL_CHIPS_SPACING = 18;
+    private const float EXPAND_BUTTON_WIDTH = 52;
 
-    private int _visibleChipsCountInFirstRow = 0;
     private List<float> _chipsWidths = new();
+    private int _chipsCountInFirstRow = 0;
 
     public ExpandedMultipleChipSelector()
     {
@@ -95,7 +99,7 @@ public partial class ExpandedMultipleChipSelector : Grid
     public ICommand ExpandCommand => _expandCommand ??= SingleExecutionCommand.FromFunc(OnExpandCommandAsync, delayMillisec: 0);
 
     private ICommand _selectItemCommand;
-    public ICommand SelectItemCommand => _selectItemCommand ??= SingleExecutionCommand.FromFunc<object>(OnSelectItemCommandAsync, delayMillisec: 0);
+    public ICommand SelectItemCommand => _selectItemCommand ??= SingleExecutionCommand.FromFunc<ISelectableTextModel>(OnSelectItemCommandAsync);
 
     #endregion
 
@@ -113,12 +117,12 @@ public partial class ExpandedMultipleChipSelector : Grid
             }
 
             CalculateChipsWidths();
-            CalculateVisibleChipsCountInFirstRow();
+            CalculateChipsCountInFirstRow();
             SetDisplayedItemsSource();
         }
-        else if (propertyName is nameof(Width) && _visibleChipsCountInFirstRow == 0)
+        else if (propertyName is nameof(Width) && _chipsCountInFirstRow == 0)
         {
-            CalculateVisibleChipsCountInFirstRow();
+            CalculateChipsCountInFirstRow();
             SetDisplayedItemsSource();
         }
     }
@@ -127,16 +131,20 @@ public partial class ExpandedMultipleChipSelector : Grid
 
     #region -- Private helpers --
 
-    private Task OnSelectItemCommandAsync(object parameter)
+    private Task OnSelectItemCommandAsync(ISelectableTextModel selectedModel)
     {
-        if (parameter is ISelectableTextModel model)
+        if (selectedModel is not null)
         {
-            model.IsSelected = !model.IsSelected;
-        }
+            selectedModel.IsSelected = !selectedModel.IsSelected;
 
-        if (ItemSelectedCommand is not null && ItemSelectedCommand.CanExecute(parameter))
-        {
-            ItemSelectedCommand.Execute(parameter);
+            if (ItemSelectedCommand is not null && ItemSelectedCommand.CanExecute(selectedModel))
+            {
+                ItemSelectedCommand.Execute(selectedModel);
+            }
+
+            RecalculateChipWidthByModel(selectedModel);
+            CalculateChipsCountInFirstRow();
+            SetDisplayedItemsSource();
         }
 
         return Task.CompletedTask;
@@ -153,9 +161,9 @@ public partial class ExpandedMultipleChipSelector : Grid
 
     private void SetDisplayedItemsSource()
     {
-        if (_visibleChipsCountInFirstRow > 0)
+        if (_chipsCountInFirstRow > 0)
         {
-            if (_visibleChipsCountInFirstRow == ItemsSource.Count)
+            if (_chipsCountInFirstRow == ItemsSource.Count)
             {
                 DisplayedItemsSource = new(ItemsSource);
             }
@@ -163,7 +171,7 @@ public partial class ExpandedMultipleChipSelector : Grid
             {
                 DisplayedItemsSource = IsExpanded
                     ? new(ItemsSource)
-                    : new(ItemsSource.Take(_visibleChipsCountInFirstRow));
+                    : new(ItemsSource.Take(_chipsCountInFirstRow));
 
                 DisplayedItemsSource.Add(new SelectedBindableModel
                 {
@@ -180,24 +188,54 @@ public partial class ExpandedMultipleChipSelector : Grid
 
         foreach (var item in ItemsSource)
         {
-            var chipWidth = StringWidthHelper.CalculateStringWidth(item.Text, item.FontSize, item.FontFamily) + EMPTY_CHIP_WIDTH;
+            var chipWidth = StringWidthHelper.CalculateStringWidth(item.Text, item.FontSize, item.FontFamily) + HORIZONTAL_CHIPS_SPACING;
+
+            chipWidth += item.IsSelected
+                ? EMPTY_CHIP_WIDTH_WHEN_SELECTED
+                : EMPTY_CHIP_WIDTH;
 
             _chipsWidths.Add(chipWidth);
         }
     }
 
-    private void CalculateVisibleChipsCountInFirstRow()
+    private void RecalculateChipWidthByModel(ISelectableTextModel model)
     {
-        _visibleChipsCountInFirstRow = 0;
+        var modelIndex = ItemsSource.IndexOf(model);
+
+        if (modelIndex > -1)
+        {
+            _chipsWidths[modelIndex] -= model.IsSelected
+                ? -CHIP_WIDTH_DIFFERENT
+                : CHIP_WIDTH_DIFFERENT;
+        }
+    }
+
+    private void CalculateChipsCountInFirstRow()
+    {
+        _chipsCountInFirstRow = 0;
 
         if (Width > 0 && _chipsWidths.Any())
         {
-            var availableWidthForItems = Width - WRAP_BUTTON_WIDTH;
-            var accumulatedItemsWidth = 0f;
+            var accumulatedWidthForChips = 0f;
+            var isChipsFitInFirstRow = true;
 
-            for (int i = 0; i < ItemsSource.Count && (accumulatedItemsWidth + _chipsWidths[_visibleChipsCountInFirstRow]) < availableWidthForItems; i++)
+            for (int i = 0; isChipsFitInFirstRow && i < _chipsWidths.Count; i++)
             {
-                accumulatedItemsWidth += _chipsWidths[_visibleChipsCountInFirstRow++];
+                var widthForChips = accumulatedWidthForChips + _chipsWidths[_chipsCountInFirstRow];
+
+                isChipsFitInFirstRow = widthForChips < Width;
+
+                if (isChipsFitInFirstRow)
+                {
+                    ++_chipsCountInFirstRow;
+
+                    accumulatedWidthForChips = widthForChips;
+                }
+            }
+
+            if (_chipsCountInFirstRow < ItemsSource.Count && accumulatedWidthForChips + EXPAND_BUTTON_WIDTH > Width)
+            {
+                --_chipsCountInFirstRow;
             }
         }
     }

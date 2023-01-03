@@ -11,6 +11,12 @@
             public const string PRODUCT_DSN = "123456";
         }
 
+        public static class OurCloudServer
+        {
+            public const string API_URL = "http://159.223.6.80";
+            public const string RECEIVE_MESSAGE = "ReceiveMessage";
+        }
+
         public static class DialogsParameterKeys
         {
             public const string RESULT = nameof(RESULT);
@@ -143,6 +149,7 @@
             public const int DELAY_MILLISEC_NAVIGATION_COMMAND = 500;
             public const int CAMERA_TIME_CHECK_SECONDS = 5;
             public const int CAMERA_NAME_MAX_LENGTH = 32;
+            public const int CHIP_TEXT_MAX_LENGTH = 20;
         }
 
         public static class Analytics
