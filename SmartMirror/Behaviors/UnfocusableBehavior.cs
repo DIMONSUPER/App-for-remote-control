@@ -17,10 +17,10 @@ namespace SmartMirror.Behaviors
 
         protected override void OnDetachingFrom(VisualElement bindable)
         {
-            base.OnDetachingFrom(bindable);
-
             _visualElement.Focused -= OnVisualElementFocused;
             _visualElement = null;
+
+            base.OnDetachingFrom(bindable);
         }
 
         #endregion
@@ -29,9 +29,12 @@ namespace SmartMirror.Behaviors
 
         private void OnVisualElementFocused(object sender, FocusEventArgs e)
         {
-            _visualElement.Unfocus();
-            _visualElement.IsEnabled = false;
-            _visualElement.IsEnabled = true;
+            if (_visualElement is not null)
+            {
+                _visualElement.Unfocus();
+                _visualElement.IsEnabled = false;
+                _visualElement.IsEnabled = true;
+            }
         }
 
         #endregion
