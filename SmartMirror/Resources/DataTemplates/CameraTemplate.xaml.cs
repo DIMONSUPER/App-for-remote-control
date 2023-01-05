@@ -45,15 +45,18 @@ public partial class CameraTemplate : Grid
 
     private void UpdateAppearence()
     {
-        cameraStatusLabel.Text = _currentBindingContext.IsConnected ? Strings.Strings.On : Strings.Strings.Off;
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            cameraStatusLabel.Text = _currentBindingContext.IsConnected ? Strings.Strings.On : Strings.Strings.Off;
 
-        videoIcon.Source = GetVideoIconSource(_currentBindingContext.IsConnected, _currentBindingContext.IsSelected);
+            videoIcon.Source = GetVideoIconSource(_currentBindingContext.IsConnected, _currentBindingContext.IsSelected);
 
-        cameraStatusLabel.TextColor = GetCameraStatusTextColor(_currentBindingContext.IsConnected, _currentBindingContext.IsSelected);
+            cameraStatusLabel.TextColor = GetCameraStatusTextColor(_currentBindingContext.IsConnected, _currentBindingContext.IsSelected);
 
-        cameraNameLabel.TextColor = _currentBindingContext.IsSelected ? Color.FromArgb("#252525") : Color.FromArgb("#FFFFFF");
+            cameraNameLabel.TextColor = _currentBindingContext.IsSelected ? Color.FromArgb("#252525") : Color.FromArgb("#FFFFFF");
 
-        mainBorder.BackgroundColor = _currentBindingContext.IsSelected ? Color.FromArgb("#EAEAEA") : Colors.Transparent;
+            mainBorder.BackgroundColor = _currentBindingContext.IsSelected ? Color.FromArgb("#EAEAEA") : Colors.Transparent;
+        });
     }
 
     private Color GetCameraStatusTextColor(bool isConnected, bool isSelected)
