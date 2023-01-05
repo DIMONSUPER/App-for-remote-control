@@ -17,7 +17,9 @@
     <views:BaseContentView.Resources>
 
         <ResourceDictionary>
-            <templates:CameraTemplate x:Key="cameraTemplate"/>
+            <DataTemplate x:Key="cameraTemplate">
+                <templates:CameraTemplate/>
+            </DataTemplate>
             <Style x:Key="ExpandedSliderStyle_i1" TargetType="controls:ExpandedSlider">
                 <Style.Triggers>
                     <Trigger TargetType="controls:ExpandedSlider" Property="IsOpened" Value="True">
