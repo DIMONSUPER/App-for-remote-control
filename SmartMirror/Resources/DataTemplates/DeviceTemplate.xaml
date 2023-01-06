@@ -277,10 +277,12 @@
 
                 </Label>
 
-                <controls:CustomSwitch InputTransparent="True"
+                <controls:CustomSwitch IsEnabled="False"
                                        VerticalOptions="Start"
                                        HorizontalOptions="End"
-                                       Margin="12, 3, 3, 0">
+                                       Margin="12, 3, 3, 0"
+                                       DisabledCommand="{Binding TappedCommand}"
+                                       DisabledCommandParameter="{Binding .}">
 
                     <controls:CustomSwitch.Triggers>
 

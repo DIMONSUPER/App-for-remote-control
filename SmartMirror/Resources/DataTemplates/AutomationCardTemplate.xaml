@@ -103,10 +103,12 @@
                 </Label>
 
                 <controls:CustomSwitch IsToggled="{Binding Enable}"
-                                       InputTransparent="True"
+                                       IsEnabled="False"
                                        VerticalOptions="Start"
                                        HorizontalOptions="End"
-                                       Margin="12, 3, 3, 0"/>
+                                       Margin="12, 3, 3, 0"
+                                       DisabledCommand="{Binding TapCommand}"
+                                       DisabledCommandParameter="{Binding .}"/>
 
             </StackLayout>
 
