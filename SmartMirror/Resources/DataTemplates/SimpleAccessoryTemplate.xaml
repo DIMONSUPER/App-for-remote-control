@@ -41,10 +41,12 @@
 
         <controls:CustomSwitch
             Grid.Column="2"
-            InputTransparent="True"
+            IsEnabled="False"
             Margin="1,0"
             IsVisible="{Binding HasSwitch, Source={x:Reference simpleAccessoryTemplate}}"
-            IsToggled="{Binding IsToggled}"/>
+            IsToggled="{Binding IsToggled}"
+            DisabledCommand="{Binding TapCommand}"
+            DisabledCommandParameter="{Binding .}"/>
 
     </Grid>
 

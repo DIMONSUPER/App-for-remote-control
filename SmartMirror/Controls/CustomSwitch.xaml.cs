@@ -1,12 +1,13 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace SmartMirror.Controls;
 
 public partial class CustomSwitch : ContentView
 {
-	public CustomSwitch()
-	{
-		InitializeComponent();
+    public CustomSwitch()
+    {
+        InitializeComponent();
 
         UpdateSwitchLayout();
     }
@@ -92,7 +93,29 @@ public partial class CustomSwitch : ContentView
         get => (double)GetValue(ThumbSizeProperty);
         set => SetValue(ThumbSizeProperty, value);
     }
-    
+
+    public static readonly BindableProperty DisabledCommandProperty = BindableProperty.Create(
+        propertyName: nameof(DisabledCommand),
+        returnType: typeof(ICommand),
+        declaringType: typeof(CustomSwitch));
+
+    public ICommand DisabledCommand
+    {
+        get => (ICommand)GetValue(DisabledCommandProperty);
+        set => SetValue(DisabledCommandProperty, value);
+    }
+
+    public static readonly BindableProperty DisabledCommandParameterProperty = BindableProperty.Create(
+        propertyName: nameof(DisabledCommandParameter),
+        returnType: typeof(object),
+        declaringType: typeof(CustomSwitch));
+
+    public object DisabledCommandParameter
+    {
+        get => (object)GetValue(DisabledCommandParameterProperty);
+        set => SetValue(DisabledCommandParameterProperty, value);
+    }
+
     #endregion
 
     #region -- Overrides --
@@ -119,8 +142,18 @@ public partial class CustomSwitch : ContentView
     }
 
     private void OnSwitchToggled(System.Object sender, System.EventArgs e)
-	{
-        IsToggled = !IsToggled;
+    {
+        if (IsEnabled)
+        {
+            IsToggled = !IsToggled;
+        }
+        else
+        {
+            if (DisabledCommand is not null && DisabledCommand.CanExecute(DisabledCommandParameter))
+            {
+                DisabledCommand?.Execute(DisabledCommandParameter);
+            }
+        }
     }
 
     #endregion
