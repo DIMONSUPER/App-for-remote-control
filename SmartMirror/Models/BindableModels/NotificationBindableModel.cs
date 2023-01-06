@@ -56,7 +56,7 @@ namespace SmartMirror.Models.BindableModels
         public string StatusFormatted
         {
             get => _statusFormatted;
-            set => SetProperty(ref _statusFormatted, value);
+            private set => SetProperty(ref _statusFormatted, value);
         }
 
         private DateTime _lastActivityTime;
@@ -108,7 +108,7 @@ namespace SmartMirror.Models.BindableModels
                     IconsNames.pic_wall_switch_three_center => Status is "1" ? Strings.TurnedOn : Strings.TurnedOff,
                     IconsNames.pic_wall_switch_three_left => Status is "1" ? Strings.TurnedOn : Strings.TurnedOff,
                     IconsNames.pic_wall_switch_three_right => Status is "1" ? Strings.TurnedOn : Strings.TurnedOff,
-                    IconsNames.pic_motion => Status is "1" ? Strings.TurnedOn : Strings.TurnedOff,
+                    IconsNames.pic_motion => Status is "1" ? Strings.Movement : Strings.NoMovement,
                     IconsNames.pic_dimmer => $"{Strings.ChangedTo} {Status} lux",
                     _ => Status,
                 };

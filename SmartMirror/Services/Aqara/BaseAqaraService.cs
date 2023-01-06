@@ -85,7 +85,7 @@ namespace SmartMirror.Services.Aqara
                 data = data,
             }, GetHeaders());
 
-            if (result.Code is 108 && !string.IsNullOrWhiteSpace(SettingsManager.AqaraAccessSettings.AccessToken))
+            if (result.Code is 108)
             {
                 SettingsManager.AqaraAccessSettings.Clear();
                 await NavigationService.GoBackToRootAsync();

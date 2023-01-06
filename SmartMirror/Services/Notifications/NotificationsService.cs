@@ -247,7 +247,7 @@ namespace SmartMirror.Services.Notifications
                     notification.IsEmergencyNotification = device.IsEmergencyNotification;
                     notification.IsReceiveNotifications = device.IsReceiveNotifications;
                     notification.IsShown = device.IsReceiveNotifications;
-                    notification.StatusFormatted = device.AdditionalInfoFormatted;
+                    notification.Status = device.AdditionalInfo;
 
                     if (notification.IsReceiveNotifications)
                     {
